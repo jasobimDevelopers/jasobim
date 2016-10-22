@@ -25,20 +25,7 @@
         </property>
         <property name="annotatedClasses">
             <list>
-                <value>com.my.spring.model.UserEntity</value>
-                <value>com.my.spring.model.RoleEntity</value>
-                <value>com.my.spring.model.Element</value>
-                <value>com.my.spring.model.ProjectEntity</value>
-                <value>com.my.spring.model.BuildingEntity</value>
-                <value>com.my.spring.model.Message</value>
-                <value>com.my.spring.model.Papers</value>
-          		<value>com.my.spring.model.Messageleave</value>
-          		<value>com.my.spring.model.Messagefiles</value>
-          		<value>com.my.spring.model.PaperType</value>
-          		<value>com.my.spring.model.ProjectExam</value>
-          		<value>com.my.spring.model.FileType</value>
-          	    <value>com.my.spring.model.Files</value>
-          	    <value>com.my.spring.model.Customer</value>
+                <value>com.my.spring.model.User</value>
                 
             </list>
         </property>
