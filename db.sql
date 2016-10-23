@@ -10,13 +10,14 @@ create table user(
     tel varchar(20),
     register_date date
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-#注册
-#登录
-#修改密码 忘记密码 暂时不做
-#修改个人资料   自己
-#查看个人资料   自己 管理员
-#查看用户列表   管理员
-#修改权限       管理员
+ALTER TABLE user add UNIQUE KEY(user_name); 
+#注册                              完成
+#登录                              完成
+#修改密码 忘记密码                   暂时不做
+#修改个人资料   自己                 完成   
+#查看个人资料   自己 管理员           完成   
+#查看用户列表   管理员               完成
+#修改权限       管理员               完成
 
 
 create table file(
@@ -26,7 +27,7 @@ intro text,
 file_type int,
 url varchar(100)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-#不提供接口，值提供服务
+#不提供接口，值提供服务             完成上传文件和删除文件       
 
 create table project(
 id serial primary key,
