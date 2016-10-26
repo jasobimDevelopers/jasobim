@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.service.FileService;
-
-
 @Controller
 @RequestMapping(value="api/test")
 public class TestFileController {

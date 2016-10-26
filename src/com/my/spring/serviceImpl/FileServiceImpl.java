@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.my.spring.DAO.UserDao;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ItemService;
 import com.my.spring.utils.MD5Util;
@@ -18,6 +17,7 @@ import com.my.spring.utils.MD5Util;
 public class FileServiceImpl implements FileService  {
 	@Autowired
 	ItemService itemService;
+	@SuppressWarnings("unused")
 	@Override
 	public String uploadFile(String filePath, MultipartFile file) {
 		

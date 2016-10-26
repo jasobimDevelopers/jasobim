@@ -16,8 +16,6 @@ import com.my.spring.model.User;
 import com.my.spring.service.UserService;
 import com.my.spring.utils.DataWrapper;
 
-
-
 @Controller
 @RequestMapping(value="api/user")
 public class UserController {
