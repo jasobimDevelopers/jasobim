@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<global-method-security pre-post-annotations="enabled" />
+	<!--  <debug />-->
+	<!-- HTTP安全配置 -->
+	<http auto-config="false" entry-point-ref="authenticationEntryPoint"
+		access-denied-page="/denied.html">
+		<intercept-url pattern="/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/index.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/m/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/commons/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/upload/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/cms/**" access="ROLE_USER" />
+		<intercept-url pattern="/adminIndex.html" access="ROLE_USER" />
+		<intercept-url pattern="/backstage/*.html" access="ROLE_USER" />
+		<!-- <form-login login-page="/login.html" default-target-url="/adminIndex.html" 
+			authentication-failure-url="/login.html?error=true" /> -->
+		<logout logout-success-url="/login.html" logout-url="/j_spring_security_logout"
+			delete-cookies="JSESSIONID" />
+		
+		<!--  <custom-filter ref="myLogoutFilter" position="LOGOUT_FILTER" />-->
+		<custom-filter ref="myLoginFilter" position="FORM_LOGIN_FILTER" />
+		<custom-filter ref="mySecurityFilter" before="FILTER_SECURITY_INTERCEPTOR" />
+		<session-management invalid-session-url="/login.html" session-authentication-strategy-ref="sas"/> 
+	</http>
+
+	<beans:bean id="sas"
+		class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+		<beans:property name="maximumSessions" value="1"></beans:property>
+		<beans:property name="exceptionIfMaximumExceeded"
+			value="true"></beans:property>
+		<beans:constructor-arg name="sessionRegistry"
+			ref="sessionRegistry"></beans:constructor-arg>
+	</beans:bean>
+	<beans:bean id="sessionRegistry"
+		class="org.springframework.security.core.session.SessionRegistryImpl"></beans:bean>
+
+	<beans:bean id="myLoginFilter"
+		class="com.manage.jiankangxing.base.filter.MyUsernamePasswordAuthenticationFilter">
+		<beans:property name="authenticationManager" ref="myAuthenticationManager"/>  
+        <beans:property name="authenticationFailureHandler" ref="failureHandler"/>  
+        <beans:property name="authenticationSuccessHandler" ref="successHandler"/>  
+		<beans:property name="sessionAuthenticationStrategy"
+			ref="sas"></beans:property>
+	</beans:bean>
+	
+	  
+    <beans:bean id="successHandler" class="com.manage.jiankangxing.base.handler.MyAuthenticationSuccessHandler">  
+        <beans:property name="defaultTargetUrl" value="/adminIndex.html"/>  
+    </beans:bean>  
+   
+    <beans:bean id="failureHandler" class="com.manage.jiankangxing.base.handler.MySimpleUrlAuthenticationFailureHandler">  
+        <beans:property name="defaultFailureUrl" value="/login.html"/>  
+    </beans:bean> 
+    <!-- 
+      <beans:bean id="myLogoutFilter" class="com.manage.jiankangxing.base.filter.MyCustomLogoutFilter">
+        <beans:property name="filterProcessesUrl" value="/j_spring_security_logout" />
+        <beans:constructor-arg index="0" value="/login.html" />
+        <beans:constructor-arg index="1">
+            <beans:array>
+                 <beans:bean id="securityContextLogoutHandler"
+                     class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+                 <beans:bean id="customLogoutHandler" class="com.manage.jiankangxing.base.handler.MyCustomLogoutHandler" />
+             </beans:array>
+         </beans:constructor-arg>
+     </beans:bean>
+     -->
+	<!-- 1.URL过滤器或方法拦截器：用来拦截URL或者方法资源对其进行验证，其抽象基类为AbstractSecurityInterceptor 
+		2.资源权限获取器：用来取得访问某个URL或者方法所需要的权限，接口为SecurityMetadataSource 3.访问决策器：用来决定用户是否拥有访问权限的关键类，其接口为AccessDecisionManager 
+		调用顺序为：AbstractSecurityInterceptor调用SecurityMetadataSource取得资源的所有可访问权限， 然后再调用AccessDecisionManager来实现决策，确定用户是否有权限访问该资源。 -->
+	<!-- 自定义的filter, 必须包含authenticationManager, accessDecisionManager, securityMetadataSource三个属性 -->
+	<beans:bean id="mySecurityFilter"
+		class="com.manage.jiankangxing.base.security.XaFilterSecurityInterceptor">
+		<beans:property name="authenticationManager" ref="myAuthenticationManager" />
+		<beans:property name="accessDecisionManager" ref="myAccessDecisionManager" />
+		<beans:property name="securityMetadataSource" ref="mySecurityMetadataSource" />
+	</beans:bean>
+
+	<!-- 取HTTP配置中的authenticationManager 设置alias别名 -->
+	<authentication-manager alias="myAuthenticationManager">
+		<authentication-provider user-service-ref="userDetailsManager">
+			<password-encoder hash="md5" />
+		</authentication-provider>
+	</authentication-manager>
+
+
+	<!-- 用户详细信息管理：数据源、用户缓存（通过数据库管理用户、角色、权限、资源） -->
+	<beans:bean id="userDetailsManager"
+		class="com.manage.jiankangxing.base.security.XaUserDetailsService">
+	</beans:bean>
+
+
+	<!-- 访问决策器，决定某个用户具有的角色，是否有足够的权限去访问某个资源。 -->
+	<beans:bean id="myAccessDecisionManager"
+		class="com.manage.jiankangxing.base.security.XaAccessDecisionManagerService" />
+
+
+	<!-- 资源源数据定义，将所有的资源和权限对应关系建立起来，即定义某一资源可以被哪些角色去访问。 -->
+	<beans:bean id="mySecurityMetadataSource" init-method="loadResourceDefine"
+		class="com.manage.jiankangxing.base.security.XaSecurityMetadataSourceService">
+	</beans:bean>
+
+	<beans:bean id="authenticationEntryPoint"
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<beans:property name="loginFormUrl" value="/login.html" />
+	</beans:bean>
+
+
+
+</beans:beans>

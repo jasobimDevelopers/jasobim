@@ -25,8 +25,8 @@
               </property>
        </bean>
        <!-- json Docs start -->
-		<bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
-		<bean class="com.my.spring.utils.SwaggerConfig" />
+	<!-- 	<bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
+		<bean class="com.my.spring.utils.SwaggerConfig" /> -->
 		
 		<!-- Direct static mappings -->
 		<mvc:resources mapping="*.html" location="/" />

@@ -2,7 +2,7 @@ package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.FileTypeDao;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.FileType;
+import com.my.spring.model.File;
 import com.my.spring.service.FileTypeService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class FileTypeServiceImpl implements FileTypeService {
     @Autowired
     FileTypeDao FileTypeDao;
     @Override
-    public DataWrapper<Void> addFileType(FileType fileType) {
+    public DataWrapper<Void> addFileType(File fileType) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         if(!FileTypeDao.addFileType(fileType)) {
             dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -36,7 +36,7 @@ public class FileTypeServiceImpl implements FileTypeService {
     }
 
     @Override
-    public DataWrapper<Void> updateFileType(FileType fileType) {
+    public DataWrapper<Void> updateFileType(File fileType) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         if(!FileTypeDao.updateFileType(fileType)) {
             dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -45,7 +45,7 @@ public class FileTypeServiceImpl implements FileTypeService {
     }
 
     @Override
-    public DataWrapper<List<FileType>> getFileTypeList() {
+    public DataWrapper<List<File>> getFileTypeList() {
         return FileTypeDao.getFileTypeList();
     }
 }

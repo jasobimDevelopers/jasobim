@@ -2,7 +2,7 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProjectDao;
-import com.my.spring.model.ProjectEntity;
+import com.my.spring.model.Project;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -15,10 +15,10 @@ import java.util.List;
  * Created by Administrator on 2016/6/22.
  */
 @Repository
-public class ProjectDaoImpl extends BaseDao<ProjectEntity> implements ProjectDao {
+public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 
     @Override
-    public boolean addProject(ProjectEntity project) {
+    public boolean addProject(Project project) {
         return save(project);
     }
 
@@ -28,17 +28,17 @@ public class ProjectDaoImpl extends BaseDao<ProjectEntity> implements ProjectDao
     }
 
     @Override
-    public boolean updateProject(ProjectEntity project) {
+    public boolean updateProject(Project project) {
         return update(project);
     }
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<ProjectEntity>> getProjectList() {
-        DataWrapper<List<ProjectEntity>> retDataWrapper = new DataWrapper<List<ProjectEntity>>();
-        List<ProjectEntity> ret = new ArrayList<ProjectEntity>();
+    public DataWrapper<List<Project>> getProjectList() {
+        DataWrapper<List<Project>> retDataWrapper = new DataWrapper<List<Project>>();
+        List<Project> ret = new ArrayList<Project>();
         Session session = getSession();
-        Criteria criteria = session.createCriteria(ProjectEntity.class);
+        Criteria criteria = session.createCriteria(Project.class);
 //        criteria.addOrder(Order.desc("publishDate"));
         try {
             ret = criteria.list();
@@ -48,4 +48,10 @@ public class ProjectDaoImpl extends BaseDao<ProjectEntity> implements ProjectDao
         retDataWrapper.setData(ret);
         return retDataWrapper;
     }
+
+	@Override
+	public Project getById(Long id) {
+		// TODO Auto-generated method stub
+		return get(id);
+	}
 }

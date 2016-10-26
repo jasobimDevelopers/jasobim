@@ -1,85 +1,99 @@
 package com.my.spring.DAOImpl;
 
-import com.my.spring.DAO.BaseDao;
-import com.my.spring.DAO.UserDao;
-import com.my.spring.model.UserEntity;
-import com.my.spring.utils.DataWrapper;
+import java.util.List;
+
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.my.spring.DAO.BaseDao;
+import com.my.spring.DAO.UserDao;
+import com.my.spring.model.User;
+import com.my.spring.utils.DaoUtil;
+import com.my.spring.utils.DataWrapper;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
+
 @Repository
-public class UserDaoImpl extends BaseDao<UserEntity> implements UserDao {
+public class UserDaoImpl extends BaseDao<User> implements UserDao {
 
-    @Override
-    public boolean addUser(UserEntity user) {
-        return save(user);
-    }
-
-    @Override
-    public boolean deleteUser(Long id) {
-        return delete(get(id));
-    }
-
-    @Override
-    public boolean updateUser(UserEntity user) {
-        return update(user);
-    }
-
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<UserEntity>> getUserList() {
-        DataWrapper<List<UserEntity>> retDataWrapper = new DataWrapper<List<UserEntity>>();
-        List<UserEntity> ret = new ArrayList<UserEntity>();
+	public User getByUserName(String userName) {
+		// TODO Auto-generated method stub
+		List<User> ret = null;
         Session session = getSession();
-        Criteria criteria = session.createCriteria(UserEntity.class);
-//        criteria.addOrder(Order.desc("publishDate"));
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.eq("userName",userName));
         try {
             ret = criteria.list();
         }catch (Exception e){
             e.printStackTrace();
         }
-        retDataWrapper.setData(ret);
-        return retDataWrapper;
-    }
-
-	@Override
-	public UserEntity findByUserName(String userName) {
-		Session session = getSession();
-        Criteria criteria = session.createCriteria(UserEntity.class);
-        criteria.add(Restrictions.eq("userName", userName));
-        List<UserEntity> result = criteria.list();
-        if (result != null && result.size() > 0) {
-            return (UserEntity) result.get(0);
-        }
-        return null;
+        if (ret != null && ret.size() > 0) {
+			return ret.get(0);
+		}
+		return null;
 	}
 
 	@Override
-	public UserEntity getUserById(Long id) {
-		 return get(id);
+	public boolean addUser(User user) {
+		// TODO Auto-generated method stub
+		return save(user);
 	}
 
 	@Override
-	public UserEntity getUserByToken(String token) {
-		String sql = "select user.* from t_user user,t_token token where token.token = " + token + " and token.user_id = user.id";
+	public User getById(Long id) {
+		// TODO Auto-generated method stub
+		return get(id);
+	}
+
+	@Override
+	public boolean updateUser(User user) {
+		// TODO Auto-generated method stub
+		return update(user);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<List<User>> getUserList(Integer pageSize, Integer pageIndex) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<User>> dataWrapper = new DataWrapper<List<User>>();
+        List<User> ret = null;
         Session session = getSession();
-        Query query = session.createSQLQuery(sql)
-                .addEntity(UserEntity.class);
+        Criteria criteria = session.createCriteria(User.class);
+        
+        if (pageSize == null) {
+			pageSize = 10;
+		}
+        if (pageIndex == null) {
+			pageIndex = 1;
+		}
+        
+        // 取总页数
+        criteria.setProjection(Projections.rowCount());
+        int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
+        int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
 
-        List<UserEntity> userList = query.list();
-        if(userList != null && userList.size() > 0) {
-            return userList.get(0);
-        }else {
-            return null;
+        // 真正取值
+        criteria.setProjection(null);
+        if (pageSize > 0 && pageIndex > 0) {
+            criteria.setMaxResults(pageSize);// 最大显示记录数
+            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
         }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        dataWrapper.setData(ret);
+        dataWrapper.setTotalNumber(totalItemNum);
+        dataWrapper.setCurrentPage(pageIndex);
+        dataWrapper.setTotalPage(totalPageNum);
+        dataWrapper.setNumberPerPage(pageSize);
+
+        return dataWrapper;
 	}
+
 }

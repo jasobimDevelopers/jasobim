@@ -7,9 +7,17 @@ import java.io.Serializable;
  */
 public enum ErrorCodeEnum implements Serializable {
 
-    No_Error("No ERROE!", 0),
-    Error("Unknown error!", 1),
-    Register_Error("Loginfailed error!", 2),
+    No_Error("No Error!", 0),
+    Error("Unknown Error!", 1),
+    Empty_Inputs("Empty Inputs Error!", 2),
+    User_Existed("User Name Existed!",3),
+    User_Not_Existed("User Does not Existed!",4),
+    Password_Error("Password Error",5),
+    User_Not_Logined("User Does not login",6),
+    AUTH_Error("Auth Error",7),
+    //////项目错误
+    Project_Not_Existed("Project Does not Existed!",8),
+    Target_Not_Existed("Target Does not Existed!",9),
     ;
 
     private String label;
