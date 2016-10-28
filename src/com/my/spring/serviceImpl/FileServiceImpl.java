@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.my.spring.DAO.FileDao;
+import com.my.spring.model.Files;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ItemService;
 import com.my.spring.utils.MD5Util;
@@ -17,9 +19,11 @@ import com.my.spring.utils.MD5Util;
 public class FileServiceImpl implements FileService  {
 	@Autowired
 	ItemService itemService;
+	@Autowired
+	FileDao fileDao;
 	@SuppressWarnings("unused")
 	@Override
-	public String uploadFile(String filePath, MultipartFile file) {
+	public String uploadFile(String filePath, MultipartFile file, Integer fileType) {
 		
 		if (file == null || filePath == null || filePath.equals("")) {
 			return null;
@@ -37,6 +41,13 @@ public class FileServiceImpl implements FileService  {
                     + newFileName);
                 // 写入文件
             out.write(file.getBytes());
+            Files files=new Files();
+            files.setDesc((new Date()).toString());
+            String realPath=filePath + "/"+ newFileName;
+            files.setName(newFileName);//////构件的url
+            files.setUrl(realPath);
+            files.setFileType(fileType);
+            fileDao.addFiles(files);
             out.flush();
             out.close();
 
@@ -48,7 +59,7 @@ public class FileServiceImpl implements FileService  {
 	}
 
 	@Override
-	public boolean deleteFile(String filePathAndName) {
+	public boolean deleteFileByPath(String filePathAndName) {
 		// TODO Auto-generated method stub
 		boolean flag = false;
 		File file = new File(filePathAndName);
@@ -60,5 +71,7 @@ public class FileServiceImpl implements FileService  {
         }
         return flag;
 	}
+	
+
 
 }

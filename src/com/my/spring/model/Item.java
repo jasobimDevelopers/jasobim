@@ -15,20 +15,20 @@ public class Item {
     private Integer unitNum;
     private Integer householdNum;
     private String location;//构件所属具体位置（项目A-楼号B-单元C-楼层D-户E）
-    private String bottomElevation;//底部高程
+    private double bottomElevation;//底部高程
     private String size;      //尺寸
     private double length;    //长度
     private String serviceType;//设备类型
     private String familyAndType;
     private String level;    //标高
-    private String offset;   //偏移量
+    private double offset;   //偏移量
     private double area;    //面积
     private String systemType;//系统类型
     private String material;//材质
-    private String selfId;  //模型中对应的id
+    private Long selfId;  //模型中对应的id
     private String name;   //构件名称
     private String typeName;//类型名
-    private Integer professionType;
+    private Integer professionType;//专业类型
 
     @Id
     @GeneratedValue
@@ -103,11 +103,11 @@ public class Item {
 
 	@Basic
 	@Column(name = "bottom_elevation")
-	public String getBottomElevation() {
+	public double getBottomElevation() {
 		return bottomElevation;
 	}
 
-	public void setBottomElevation(String bottomElevation) {
+	public void setBottomElevation(double bottomElevation) {
 		this.bottomElevation = bottomElevation;
 	}
 
@@ -163,11 +163,11 @@ public class Item {
 
 	@Basic
 	@Column(name = "offset")
-	public String getOffset() {
+	public double getOffset() {
 		return offset;
 	}
 
-	public void setOffset(String offset) {
+	public void setOffset(double offset) {
 		this.offset = offset;
 	}
 
@@ -203,11 +203,11 @@ public class Item {
 
 	@Basic
 	@Column(name = "self_id")
-	public String getSelfId() {
+	public Long getSelfId() {
 		return selfId;
 	}
 
-	public void setSelfId(String selfId) {
+	public void setSelfId(Long selfId) {
 		this.selfId = selfId;
 	}
 

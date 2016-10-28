@@ -6,6 +6,7 @@ import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,26 +22,18 @@ public class VideoController {
     @ResponseBody
     public DataWrapper<Void> addVideo(
             @ModelAttribute Video Video,
-            @RequestParam(value = "token",required = true) String token){
-        return VideoService.addVideo(Video,token);
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "file", required = false) MultipartFile file){
+        return VideoService.addVideo(Video,token,file);
     }
     @RequestMapping(value="deleteVideo")
     @ResponseBody
     public DataWrapper<Void> deleteVideo(
             @RequestParam(value = "id",required = true) Long id,
+            @RequestParam(value = "fileid",required = true) Long fileid,
             @RequestParam(value = "token",required = true) String token){
-        return VideoService.deleteVideo(id,token);
+        return VideoService.deleteVideo(id,token,fileid);
     }
-
-    @RequestMapping(value="updateVideo",method = RequestMethod.POST)
-    @ResponseBody
-    public DataWrapper<Void> updateVideo(
-            @ModelAttribute Video Video,
-            @RequestParam(value = "token",required = true) String token){
-       // System.out.println(Video);
-        return VideoService.updateVideo(Video,token);
-    }
-
 
     @RequestMapping(value="getVideoList")
     @ResponseBody

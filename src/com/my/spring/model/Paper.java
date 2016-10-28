@@ -15,7 +15,7 @@ public class Paper {
 	private Long projectId;
 	private Integer buildingNum;
 	private Integer floorNum;
-	private Integer professionType;
+	private Integer professionType;//////专业类型：0 电气 1 暖通 2给排水 3 建筑 
 	private Long fileId;
 	
 	@Id
@@ -69,8 +69,8 @@ public class Paper {
 	public Long getFileId() {
 		return fileId;
 	}
-	public void setFileId(Long fileId) {
-		this.fileId = fileId;
+	public Long setFileId(Long fileId) {
+		return this.fileId = fileId;
 	}
 	
 	

@@ -2,6 +2,8 @@ package com.my.spring.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.User;
@@ -36,11 +39,22 @@ public class UserController {
         return userService.register(user);
     }
 	
-	@RequestMapping(value="/login", method = RequestMethod.GET)
+	@RequestMapping(value="/login", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> Login(
-    		@RequestParam(value="userName",required=true) String userName,
+    		HttpServletRequest request,
+    		@RequestParam(value="username",required=true) String userName,
     		@RequestParam(value="password",required=true) String password) {
+		/*DataWrapper<Void> dataWrapper=*/
+		/*ModelAndView model=new ModelAndView();
+		NavigationController test=new NavigationController();
+		test.mainPage();
+		if(dataWrapper.getToken()!=null){
+		   model.setViewName("test");
+		}else{
+			model.setViewName("login");
+			request.setAttribute("errorMsg", "用户名或密码错误，请重新登陆");
+		}*/
         return userService.login(userName, password);
     }
 	

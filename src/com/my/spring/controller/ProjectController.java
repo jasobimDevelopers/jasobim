@@ -6,6 +6,7 @@ import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,15 +22,17 @@ public class ProjectController {
     @ResponseBody
     public DataWrapper<Void> addProject(
             @ModelAttribute Project project,
-            @RequestParam(value = "token",required = true) String token){
-        return projectService.addProject(project,token);
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "file", required = false) MultipartFile file){
+        return projectService.addProject(project,token,file);
     }
     @RequestMapping(value="deleteProject")
     @ResponseBody
     public DataWrapper<Void> deleteProject(
             @RequestParam(value = "id",required = true) Long id,
+            @RequestParam(value = "modelid",required = false) Long modelid,
             @RequestParam(value = "token",required = true) String token){
-        return projectService.deleteProject(id,token);
+        return projectService.deleteProject(id,token,modelid);
     }
 
     @RequestMapping(value="updateProject",method = RequestMethod.POST)

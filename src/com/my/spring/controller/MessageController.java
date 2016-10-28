@@ -21,14 +21,14 @@ public class MessageController {
     @ResponseBody
     public DataWrapper<Void> addMessage(
             @ModelAttribute Message message,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return messageService.addMessage(message,token);
     }
     @RequestMapping(value="deleteMessage")
     @ResponseBody
     public DataWrapper<Void> deleteMessage(
             @RequestParam(value = "id",required = true) Long id,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return messageService.deleteMessage(id,token);
     }
 
@@ -45,7 +45,7 @@ public class MessageController {
     @RequestMapping(value="getMessageList")
     @ResponseBody
     public DataWrapper<List<Message>> getMessageList(
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return messageService.getMessageList(token);
     }
     ////通过用户id查找留言
@@ -53,7 +53,7 @@ public class MessageController {
     @ResponseBody
     public DataWrapper<List<Message>> getMessageListByUserId(
     		@RequestParam(value = "userId",required = true) Long userId,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return messageService.getMessageListByUserId(userId,token);
     }
 }

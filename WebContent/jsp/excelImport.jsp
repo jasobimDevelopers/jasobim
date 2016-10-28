@@ -15,19 +15,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  }  
  request.getSession().setAttribute("msg", "");  
  %> 
-<head>
+
 <base href="<%=basePath%>">
-<script type="text/javascript" charset="utf-8" src="../js/jquery-1.11.1.js"></script>
-     <title>批量导入客户</title>
- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <body>
-      <div><font color="bule">批量导入客户</font></div>
-      <form action="api/test/testUploadFile" method="post" enctype="multipart/form-data" onsubmit="return check();">
-         <div style="margin: 30px;"><input id="excel_file" type="file" name="file" accept="xlsx" size="80"/>
-         <input id="excel_button" type="submit" value="导入Excel"/></div>
-         <font id="importMsg" color="red"><%=importMsg%></font><input type="hidden"/>
-     </form>
- </body>
+	<head>
+	
+		<script type="text/javascript" charset="utf-8" src="../js/jquery-1.11.1.js"></script>
+		     <title>批量导入客户</title>
+		 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	 </head>
+	 <body>
+	      <div><font color="bule">批量导入客户</font></div>
+	      <form action="api/file/uploadFile" method="post" enctype="multipart/form-data" onsubmit="return check();">
+	         <div style="margin: 30px;"><input id="excel_file" type="file" name="filename" accept="xlsx" size="80"/>
+	         <input id="excel_button" type="submit" value="导入Excel"/></div>
+	         <font id="importMsg" color="red"><%=importMsg%></font><input type="hidden"/>
+	     </form>
+	 </body>
  <script type="text/javascript"> 
  
     function check() {  

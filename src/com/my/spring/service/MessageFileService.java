@@ -5,12 +5,14 @@ import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * Created by Administrator on 2016/6/22.
  */
 public interface MessageFileService {
-	DataWrapper<Void> addMessageFile(MessageFile MessageFile,String token);
+	DataWrapper<Void> addMessageFile(MessageFile MessageFile,String token, MultipartFile file);
     DataWrapper<List<MessageFile>> getMessageFileList(String token);
     DataWrapper<List<MessageFile>> getMessageFileListByUserId(Long userId,String token);
-	DataWrapper<Void> deleteMessageFile(Long id,String token);
+	DataWrapper<Void> deleteMessageFile(Long id, Long fileid, String token);
 }

@@ -21,7 +21,7 @@ public class QuantityController {
     @ResponseBody
     public DataWrapper<Void> addQuantity(
             @ModelAttribute Quantity quantity,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         	///////////////////工程量计算
     	    /*按照楼号计算*/
     	
@@ -31,7 +31,7 @@ public class QuantityController {
     @ResponseBody
     public DataWrapper<Void> deleteQuantity(
             @RequestParam(value = "id",required = true) Long id,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return quantityService.deleteQuantity(id,token);
     }
 
@@ -39,7 +39,7 @@ public class QuantityController {
     @ResponseBody
     public DataWrapper<Void> updateQuantity(
             @ModelAttribute Quantity quantity,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         System.out.println(quantity);
         return quantityService.updateQuantity(quantity,token);
     }
@@ -48,7 +48,7 @@ public class QuantityController {
     @RequestMapping(value="getQuantityList")
     @ResponseBody
     public DataWrapper<List<Quantity>> getQuantityList(
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return quantityService.getQuantityList(token);
     }
     
@@ -56,7 +56,7 @@ public class QuantityController {
     @ResponseBody
     public DataWrapper<Quantity> getQuantityDetailsByAdmin(
     		@RequestParam(value = "id",required = true) Long id,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return quantityService.getQuantityDetailsByAdmin(id, token);
     }
     

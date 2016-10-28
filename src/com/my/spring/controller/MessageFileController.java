@@ -6,6 +6,7 @@ import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,15 +22,17 @@ public class MessageFileController {
     @ResponseBody
     public DataWrapper<Void> addMessageFile(
             @ModelAttribute MessageFile MessageFile,
-            @RequestParam(value = "token",required = false) String token){
-        return messageFileService.addMessageFile(MessageFile,token);
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "file", required = false) MultipartFile file){
+        return messageFileService.addMessageFile(MessageFile,token,file);
     }
     @RequestMapping(value="deleteMessageFile")
     @ResponseBody
     public DataWrapper<Void> deleteMessageFile(
             @RequestParam(value = "id",required = true) Long id,
-            @RequestParam(value = "token",required = false) String token){
-        return messageFileService.deleteMessageFile(id,token);
+            @RequestParam(value = "fileid",required = true) Long fileid,
+            @RequestParam(value = "token",required = true) String token){
+        return messageFileService.deleteMessageFile(id,fileid,token);
     }
 
 
@@ -37,7 +40,7 @@ public class MessageFileController {
     @RequestMapping(value="getMessageFileList")
     @ResponseBody
     public DataWrapper<List<MessageFile>> getMessageFileList(
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return messageFileService.getMessageFileList(token);
     }
     ////通过用户id查找留言
@@ -45,7 +48,7 @@ public class MessageFileController {
     @ResponseBody
     public DataWrapper<List<MessageFile>> getMessageFileListByUserId(
     		@RequestParam(value = "userId",required = true) Long userId,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return messageFileService.getMessageFileListByUserId(userId,token);
     }
 }

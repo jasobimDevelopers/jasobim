@@ -9,11 +9,15 @@ import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/6/22.
@@ -71,7 +75,6 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		Session session = getSession();
         Query query = session.createSQLQuery(sql)
                 .addEntity(Item.class);
-
         List<Item> ItemList = query.list();
         if(ItemList != null && ItemList.size() > 0) {
             return ItemList;
@@ -211,24 +214,24 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		return dataWrapper.getData();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<QuantityPojo>> getSameItem() {
+	public List getSameItem() {
 		String sql = "select count(*) as num,SUM(length) as lengthnum,SUM(area) as areanum,"
 				 +"project_id,building_num,unit_num,floor_num,household_num,system_type,"
 				 +"service_type,family_and_type,size,material,name,type_name from item "
 				 + "GROUP BY project_id,building_num,unit_num,floor_num,household_num,"
 				 + "system_type,service_type,family_and_type,size,material,name,type_name";
-		DataWrapper<List<QuantityPojo>> dataWrapper = new DataWrapper<List<QuantityPojo>>();
+		List dataWrapper = new ArrayList<>();
+		QuantityPojo pojo=new QuantityPojo();
 		Session session=getSession();
 		 try{
-	            Query query=session.createSQLQuery(sql);
-	            dataWrapper.setData(query.list());
-	            session.getTransaction().commit();
-	            session.flush();
+			 Query query = this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.aliasToBean(QuantityPojo.class)); 
+			 dataWrapper.addAll(query.list());
+	            
 	        }catch(Exception e){
 	            e.printStackTrace();
-	            session.getTransaction().rollback();
-	            dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 	        }
 		 
 		return dataWrapper;

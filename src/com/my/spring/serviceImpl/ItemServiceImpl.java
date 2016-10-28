@@ -14,11 +14,13 @@ import com.my.spring.service.ItemService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -120,7 +122,7 @@ public class ItemServiceImpl implements ItemService {
     	
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({ "unused", "unchecked", "rawtypes" })
 	@Override
 	public boolean batchImport(String name, MultipartFile file) {
 		boolean b = false;
@@ -135,51 +137,77 @@ public class ItemServiceImpl implements ItemService {
         if(ItemList != null){
             b = true;
         }
-        
         //迭代添加客户信息（注：实际上这里也可以直接将customerList集合作为参数，在Mybatis的相应映射文件中使用foreach标签进行批量添加。）
         for(Item Item:ItemList){
         	itemDao.addItem(Item);
-        	
-            
-        	
-        	DataWrapper<List<QuantityPojo>> quantitypojo= itemDao.getSameItem();
-        	if(quantitypojo!=null){
-        		for(QuantityPojo items:quantitypojo.getData()){
-        			itemlisttemp.get(i).setProjectId(items.getProjectId());
-        			itemlisttemp.get(i).setBuildingNum(items.getBuildingId());
-        			itemlisttemp.get(i).setFloorNum(items.getFloorId());
-        			itemlisttemp.get(i).setUnitNum(items.getUnitId());
-        			itemlisttemp.get(i).setFamilyAndType(items.getFamilyAndType());
-        			itemlisttemp.get(i).setServiceType(items.getServiceType());
-        			itemlisttemp.get(i).setSystemType(items.getSystemType());
-        			
-        			//itemlisttemp.get(i).setProfessionType(items.getTypename());
-        			
-        			itemlisttemp.get(i).setName(items.getName());
-        			itemlisttemp.get(i).setSize(items.getSize());
-        			itemlisttemp.get(i).setMaterial(items.getMaterial());
-        			if(items.getLengthnum()!=0){
-        				itemlisttemp.get(i).setValue(items.getLengthnum());
-        				itemlisttemp.get(i).setUnit("米（m）");
-        			}
-        			if(items.getAreanum()!=0){
-        				itemlisttemp.get(i).setValue(items.getAreanum());
-        				itemlisttemp.get(i).setUnit("平米（m2）");
-        			}
-        			if(items.getValue()!=0 && items.getAreanum()==0 && items.getLengthnum()==0){
-        				itemlisttemp.get(i).setValue(items.getValue());
-        				itemlisttemp.get(i).setUnit("个");
-        			}
-        			if(quantityDao.findQuantity(itemlisttemp.get(i))){
-        				quantityDao.updateQuantity(itemlisttemp.get(i));
-        			}
-        			i++;
-        			
-        		}
-        		
-        	}
-        	
         }
+            
+        
+    	List quantitypojo= itemDao.getSameItem();
+    	List<QuantityPojo> test=new ArrayList<QuantityPojo>();
+    	for(int j=0;j<quantitypojo.size();j++){
+    		
+    		System.out.println("//////////"+quantitypojo.listIterator().next());
+    	}
+		//System.out.println("//////////"+names);
+    		
+    	
+    	/*query.addScalar("num");
+        query.addScalar("lengthnum");
+        query.addScalar("areanum");
+        query.addScalar("project_id");
+        query.addScalar("building_num");
+        query.addScalar("floor_num");
+        query.addScalar("household_num");
+        query.addScalar("system_type");
+        query.addScalar("service_type");
+        query.addScalar("family_and_type");
+        query.addScalar("size");
+        query.addScalar("material");
+        query.addScalar("name");
+        query.addScalar("type_name");
+        query.setResultTransformer(Transformers.TO_LIST);//返回结果为键值队(map)
+       ;*/
+    	 QuantityPojo pojo=new QuantityPojo();
+    	/*if(quantitypojo.getData()!=null){
+    		for(int k=0;k<test.size();k++){
+    			
+    			test.get(k);
+    			itemlisttemp.get(i).setProjectId(pojo.getProject_id());
+    			itemlisttemp.get(i).setBuildingNum(pojo.getBuilding_id());
+    			itemlisttemp.get(i).setFloorNum(pojo.getFloor_id());
+    			itemlisttemp.get(i).setUnitNum(pojo.getUnit_id());
+    			itemlisttemp.get(i).setFamilyAndType(pojo.getFamily_and_type());
+    			itemlisttemp.get(i).setServiceType(pojo.getService_type());
+    			itemlisttemp.get(i).setSystemType(pojo.getSystem_type());
+    			
+    			//itemlisttemp.get(i).setProfessionType(items.getTypename());
+    			
+    			itemlisttemp.get(i).setName(pojo.getName());
+    			itemlisttemp.get(i).setSize(pojo.getSize());
+    			itemlisttemp.get(i).setMaterial(pojo.getMaterial());
+    			if(pojo.getLengthnum()!=0){
+    				itemlisttemp.get(i).setValue(pojo.getLengthnum());
+    				itemlisttemp.get(i).setUnit("米（m）");
+    			}
+    			if(pojo.getAreanum()!=0){
+    				itemlisttemp.get(i).setValue(pojo.getAreanum());
+    				itemlisttemp.get(i).setUnit("平米（m2）");
+    			}
+    			if(pojo.getNum()!=0 && pojo.getAreanum()==0 && pojo.getLengthnum()==0){
+    				itemlisttemp.get(i).setValue(pojo.getNum());
+    				itemlisttemp.get(i).setUnit("个");
+    			}
+    			if(quantityDao.findQuantity(itemlisttemp.get(i))){
+    				quantityDao.updateQuantity(itemlisttemp.get(i));
+    			}
+    			i++;
+    			
+    		}*/
+    		
+    	//}
+        	
+    
         return b;
 	}
 

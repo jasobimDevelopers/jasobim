@@ -15,7 +15,7 @@ public interface ItemDao {
     boolean deleteItem(Long id);
     boolean updateItem(Item Item);
     DataWrapper<List<Item>> getItemList();
-    DataWrapper<List<QuantityPojo>> getSameItem();
+    List getSameItem();
     List<Item> getItemByLocation(String location);
 	DataWrapper<Void> deleteItemByTypeNameAndProjectId(Long projectid, String typeName, String token);
 	DataWrapper<Void> deleteItemByProjectId(Long projectid, String token);

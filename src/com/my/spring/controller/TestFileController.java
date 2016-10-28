@@ -24,9 +24,10 @@ public class TestFileController {
 	@RequestMapping(value="/testUploadFile", method = RequestMethod.POST)
     @ResponseBody
     public String testUploadFile(
-    		@RequestParam(value = "file", required = true) MultipartFile file) {
-		String filePath = "/Users/dapan/Desktop/testFileService/photo";
-        return fileService.uploadFile(filePath, file);
+    		@RequestParam(value = "type", required = true) Integer type,
+    		@RequestParam(value = "file", required = false) MultipartFile file) {
+		String filePath = "F:\\fileupload";
+        return fileService.uploadFile(filePath, file,type);
     }
 	
 	//删除文件的时候只要把它包含文件名的路径作为参数，即可删除，结果为true or false
@@ -34,8 +35,8 @@ public class TestFileController {
     @ResponseBody
     public boolean testDeleteFile(
     		@RequestParam(value = "fileName", required = true) String fileName) {
-		String filePath = "/Users/dapan/Desktop/testFileService/photo";
-        return fileService.deleteFile(filePath + "/" + fileName);
+		String filePath = "F:\\fileupload";
+        return fileService.deleteFileByPath(filePath + "/" + fileName);
     }
 
 }

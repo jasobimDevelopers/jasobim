@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class NavigationController {
     @RequestMapping(value="/home")
     public String mainPage(){
-        return "/index";
+        return "listfile";
     }
 }

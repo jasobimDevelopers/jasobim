@@ -1,57 +1,61 @@
 package com.my.spring.model;
 
+
+
+//@Entity
+//@Table(name="")
 public class QuantityPojo {
 	
-    private double value;
-	private Long projectId;
-	private Integer buildingId;
-	private Integer unitId;
-	private Integer floorId;
-	private Integer householdId;
+    private Long num;
+	private Long project_id;
+	private Integer building_num;
+	private Integer unit_num;
+	private Integer floor_num;
+	private Integer household_num;
 	private String size;
-	private String serviceType;
-	private String systemType;
-	private String familyAndType;
+	private String service_type;
+	private String system_type;
+	private String family_and_type;
 	private double lengthnum;
 	private double areanum;
 	private String material;
 	private String name;
-	private String typeName;
-	public double getValue() {
-		return value;
+	private String type_name;
+	public Long getNum() {
+		return num;
 	}
-	public void setValue(double value) {
-		this.value = value;
+	public void setNum(Long value) {
+		this.num = value;
 	}
-	public Long getProjectId() {
-		return projectId;
+	public Long getProject_id() {
+		return project_id;
 	}
-	public void setProjectId(Long projectId) {
-		this.projectId = projectId;
+	public void setProject_id(Long project_id) {
+		this.project_id = project_id;
 	}
-	public Integer getBuildingId() {
-		return buildingId;
+	public Integer getBuilding_num() {
+		return building_num;
 	}
-	public void setBuildingId(Integer buildingId) {
-		this.buildingId = buildingId;
+	public void setBuilding_num(Integer building_num) {
+		this.building_num = building_num;
 	}
-	public Integer getUnitId() {
-		return unitId;
+	public Integer getUnit_num() {
+		return unit_num;
 	}
-	public void setUnitId(Integer unitId) {
-		this.unitId = unitId;
+	public void setUnit_num(Integer unit_num) {
+		this.unit_num = unit_num;
 	}
-	public Integer getFloorId() {
-		return floorId;
+	public Integer getFloor_id() {
+		return floor_num;
 	}
-	public void setFloorId(Integer floorId) {
-		this.floorId = floorId;
+	public void setFloor_num(Integer floor_num) {
+		this.floor_num = floor_num;
 	}
-	public Integer getHouseholdId() {
-		return householdId;
+	public Integer getHousehold_num() {
+		return household_num;
 	}
-	public void setHouseholdId(Integer householdId) {
-		this.householdId = householdId;
+	public void setHousehold_num(Integer household_num) {
+		this.household_num = household_num;
 	}
 	public String getSize() {
 		return size;
@@ -59,23 +63,23 @@ public class QuantityPojo {
 	public void setSize(String size) {
 		this.size = size;
 	}
-	public String getServiceType() {
-		return serviceType;
+	public String getService_type() {
+		return service_type;
 	}
-	public void setServiceType(String serviceType) {
-		this.serviceType = serviceType;
+	public void setService_type(String service_type) {
+		this.service_type = service_type;
 	}
-	public String getSystemType() {
-		return systemType;
+	public String getSystem_type() {
+		return system_type;
 	}
-	public void setSystemType(String systemType) {
-		this.systemType = systemType;
+	public void setSystem_type(String system_type) {
+		this.system_type = system_type;
 	}
-	public String getFamilyAndType() {
-		return familyAndType;
+	public String getFamily_and_type() {
+		return family_and_type;
 	}
-	public void setFamilyAndType(String familyAndType) {
-		this.familyAndType = familyAndType;
+	public void setFamily_and_type(String family_and_type) {
+		this.family_and_type = family_and_type;
 	}
 	public double getLengthnum() {
 		return lengthnum;
@@ -101,11 +105,33 @@ public class QuantityPojo {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getTypeName() {
-		return typeName;
+	public String getType_name() {
+		return type_name;
 	}
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
+	public void setType_name(String type_name) {
+		this.type_name = type_name;
 	}
-	
+	public QuantityPojo(){
+		
+	}
+	public QuantityPojo(Long num,Long project_id, Integer building_num,
+    Integer unit_num,Integer floor_num,Integer household_num,String size,
+	 String service_type,String system_type,String family_and_type,
+	 double lengthnum,double areanum,String material,String name,String type_name) {
+		this.num=num;
+		this.project_id=project_id;
+		this.building_num=building_num;
+		this.unit_num=unit_num;
+		this.floor_num=floor_num;
+		this.household_num=household_num;
+		this.size=size;
+		this.service_type=service_type;
+		this.system_type=system_type;
+		this.family_and_type=family_and_type;
+		this.lengthnum=lengthnum;
+		this.areanum=areanum;
+		this.material=material;
+		this.name=name;
+		this.type_name=type_name;
+	}
 }

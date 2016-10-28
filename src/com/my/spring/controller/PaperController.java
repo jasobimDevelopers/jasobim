@@ -6,6 +6,7 @@ import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,15 +22,17 @@ public class PaperController {
     @ResponseBody
     public DataWrapper<Void> addPaper(
             @ModelAttribute Paper paper,
+            @RequestParam(value = "file", required = true) MultipartFile file,
             @RequestParam(value = "token",required = true) String token){
-        return paperService.addPaper(paper,token);
+        return paperService.addPaper(paper,token,file);
     }
     @RequestMapping(value="deletePaper")
     @ResponseBody
     public DataWrapper<Void> deletePaper(
             @RequestParam(value = "id",required = true) Long id,
+            @RequestParam(value = "fileid",required = true) Long fileid,
             @RequestParam(value = "token",required = true) String token){
-        return paperService.deletePaper(id,token);
+        return paperService.deletePaper(id,fileid,token);
     }
 
     @RequestMapping(value="updatePaper",method = RequestMethod.POST)

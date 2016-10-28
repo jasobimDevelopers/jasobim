@@ -2,7 +2,7 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.FileTypeDao;
-import com.my.spring.model.File;
+import com.my.spring.model.Files;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -15,10 +15,10 @@ import java.util.List;
  * Created by Administrator on 2016/6/22.
  */
 @Repository
-public class FileTypeDaoImpl extends BaseDao<File> implements FileTypeDao {
+public class FileTypeDaoImpl extends BaseDao<Files> implements FileTypeDao {
 
     @Override
-    public boolean addFileType(File FileType) {
+    public boolean addFileType(Files FileType) {
         return save(FileType);
     }
 
@@ -28,17 +28,17 @@ public class FileTypeDaoImpl extends BaseDao<File> implements FileTypeDao {
     }
 
     @Override
-    public boolean updateFileType(File FileType) {
+    public boolean updateFileType(Files FileType) {
         return update(FileType);
     }
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<File>> getFileTypeList() {
-        DataWrapper<List<File>> retDataWrapper = new DataWrapper<List<File>>();
-        List<File> ret = new ArrayList<File>();
+    public DataWrapper<List<Files>> getFileTypeList() {
+        DataWrapper<List<Files>> retDataWrapper = new DataWrapper<List<Files>>();
+        List<Files> ret = new ArrayList<Files>();
         Session session = getSession();
-        Criteria criteria = session.createCriteria(File.class);
+        Criteria criteria = session.createCriteria(Files.class);
 //        criteria.addOrder(Order.desc("publishDate"));
         try {
             ret = criteria.list();

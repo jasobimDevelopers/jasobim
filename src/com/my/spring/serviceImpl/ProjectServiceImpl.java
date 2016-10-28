@@ -1,17 +1,21 @@
 package com.my.spring.serviceImpl;
 
+import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.Files;
 import com.my.spring.model.Project;
 import com.my.spring.model.User;
+import com.my.spring.service.FileService;
 import com.my.spring.service.ProjectService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,14 +27,24 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     ProjectDao projectDao;
     @Autowired
+    FileDao fileDao;
+    @Autowired
     UserDao userDao;
+    @Autowired
+    FileService fileService;
+    private String filePath="D:\\fileupload";
+    private Integer fileType=2;
     @Override
-    public DataWrapper<Void> addProject(Project project,String token) {
+    public DataWrapper<Void> addProject(Project project,String token,MultipartFile file) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(project!=null){
+					String path=filePath+"/"+"papers"+"/";
+					String newfilename=fileService.uploadFile(path, file,fileType);
+					DataWrapper<Files> dataWrappers=fileDao.getByName(newfilename);
+					project.setModelId(dataWrappers.getData().getId());
 					if(!projectDao.addProject(project)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else
@@ -49,13 +63,18 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public DataWrapper<Void> deleteProject(Long id,String token) {
+    public DataWrapper<Void> deleteProject(Long id,String token,Long modelid) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(id!=null){
 				if(!projectDao.deleteProject(id)) 
+					{
+					fileDao.deleteFiles(modelid);//删除文件表的信息
+					Files files=fileDao.getById(id);
+					fileService.deleteFileByPath(files.getUrl());///删除实际文件
 		            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+		            }
 				else
 					return dataWrapper;
 			}else{

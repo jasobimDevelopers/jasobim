@@ -26,14 +26,14 @@ public class ItemController {
     @ResponseBody
     public DataWrapper<Void> addItem(
             @ModelAttribute Item item,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return itemService.addItem(item,token);
     }
     @RequestMapping(value="deleteItem")
     @ResponseBody
     public DataWrapper<Void> deleteItem(
-            @RequestParam(value = "id",required = false) Long id,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "id",required = true) Long id,
+            @RequestParam(value = "token",required = true) String token){
         return itemService.deleteItem(id,token);
     }
     @RequestMapping(value="deleteItemByTypeNameAndProjectId")
@@ -41,7 +41,7 @@ public class ItemController {
     public DataWrapper<Void> deleteItemByTypeNameAndProjectId(
             @RequestParam(value = "typename",required = true) String typename,
             @RequestParam(value = "projectId",required = true) Long projectId,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return itemService.deleteItemByTypeNameAndProjectId(projectId,typename,token);
     }
     @RequestMapping(value="deleteItemByProjectId")
@@ -57,7 +57,7 @@ public class ItemController {
     @ResponseBody
     public DataWrapper<Void> updateItem(
             @ModelAttribute Item Item,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         System.out.println(Item);
         return itemService.updateItem(Item,token);
     }

@@ -64,7 +64,7 @@ public class ReadExcel {
        //创建一个目录 （它的路径名由当前 File 对象指定，包括任一必须的父路径。）
        if (!file.exists()) file.mkdirs();
        //新建一个文件
-       File file1 = new File("D:\\fileupload" + new Date().getTime() + ".xlsx"); 
+       File file1 = new File(file +"/"+ new Date().getTime() + ".xls"); 
        //将上传的文件写入新建的文件中
        try {
            cf.getFileItem().write(file1); 
@@ -219,9 +219,11 @@ public class ReadExcel {
                Cell cell = row.getCell(c);
                if (null != cell){
                    if(c==0){
-                	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   item.setSelfId(cell.getStringCellValue());//模型中的id
+                	   String temp=cell.getStringCellValue();
+                	   Long test=Long.valueOf(temp);
+                	   item.setSelfId(test);//模型中的id
                    }else if(c==1){
+                	   
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   item.setLocation(cell.getStringCellValue());//位置
                 	   String temp=cell.getStringCellValue();
@@ -245,13 +247,12 @@ public class ReadExcel {
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   item.setServiceType(cell.getStringCellValue());//构件的设备类型
                    }else if(c==5){
-                	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   item.setBottomElevation(cell.getStringCellValue());//构件的底部标高
+                	   item.setBottomElevation(cell.getNumericCellValue());//构件的底部标高
                    }else if(c==6){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   item.setSize(cell.getStringCellValue());//构件的尺寸
                    }else if(c==7){
-                	   item.setLength(Float.parseFloat(cell.getStringCellValue()));//构件的长度
+                	   item.setLength(cell.getNumericCellValue());//构件的长度
                    }else if(c==8){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   item.setFamilyAndType(cell.getStringCellValue());//构件的类型
@@ -259,10 +260,9 @@ public class ReadExcel {
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   item.setLevel(cell.getStringCellValue());//构件标高
                    }else if(c==10){
-                	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   item.setOffset(cell.getStringCellValue());//构件偏移量
+                	   item.setOffset(cell.getNumericCellValue());//构件偏移量
                    }else if(c==11){
-                	   item.setArea(Double.valueOf(cell.getStringCellValue()));//构件面积
+                	   item.setArea(cell.getNumericCellValue());//构件面积
                    }else if(c==12){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   item.setMaterial(cell.getStringCellValue());//构件材质
@@ -273,7 +273,11 @@ public class ReadExcel {
                }
            }
            //添加客户
-           elementList.add(item);
+           try{
+        	   elementList.add(item);
+           }catch(Exception e){
+        	   e.printStackTrace();
+           }
        }
        return elementList;
   }
