@@ -170,6 +170,17 @@ public class ItemServiceImpl implements ItemService {
     				systemType="";
     			}
     			test.setSystemType(systemType);
+    			String nametype=pojo.getName();
+    			if(nametype.equals("电缆桥架") || nametype.equals("电缆桥架配件") || nametype.equals("电气设备")){
+    				test.setProfessionType(0);
+    			}
+    			if(nametype.equals("管道") || nametype.equals("管道附件") || nametype.equals("管件") || nametype.equals("卫浴装置") || nametype.equals("消火栓箱")){
+    				test.setProfessionType(2);
+    			}
+    			if(nametype.equals("风管") || nametype.equals("风管附件") || nametype.equals("风管管件") || nametype.equals("风管末端") 
+    					|| nametype.equals("柜式离心风机") || nametype.equals("高效低噪声混流风机")){
+    				test.setProfessionType(1);
+    			}
     			//test.setProfessionType(pojo.getType_name());
     			String names=pojo.getName();
     			if(names.equals("") || names==null){

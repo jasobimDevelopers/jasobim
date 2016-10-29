@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by Administrator on 2016/6/22.
  */
@@ -23,16 +25,18 @@ public class PaperController {
     public DataWrapper<Void> addPaper(
             @ModelAttribute Paper paper,
             @RequestParam(value = "file", required = true) MultipartFile file,
+            HttpServletRequest request,
             @RequestParam(value = "token",required = true) String token){
-        return paperService.addPaper(paper,token,file);
+        return paperService.addPaper(paper,token,file,request);
     }
     @RequestMapping(value="deletePaper")
     @ResponseBody
     public DataWrapper<Void> deletePaper(
             @RequestParam(value = "id",required = true) Long id,
+            HttpServletRequest request,
             @RequestParam(value = "fileid",required = true) Long fileid,
             @RequestParam(value = "token",required = true) String token){
-        return paperService.deletePaper(id,fileid,token);
+        return paperService.deletePaper(id,fileid,token,request);
     }
 
     @RequestMapping(value="updatePaper",method = RequestMethod.POST)

@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by Administrator on 2016/6/22.
  */
@@ -23,16 +25,18 @@ public class QuestionFileController {
     public DataWrapper<Void> addQuestionFile(
             @ModelAttribute QuestionFile questionFile,
             @RequestParam(value = "token",required = true) String token,
+            HttpServletRequest request,
             @RequestParam(value = "file", required = true) MultipartFile file){
-        return questionFileService.addQuestionFile(questionFile,token,file);
+        return questionFileService.addQuestionFile(questionFile,token,file,request);
     }
     @RequestMapping(value="deleteQuestionFile")
     @ResponseBody
     public DataWrapper<Void> deleteQuestionFile(
             @RequestParam(value = "id",required = true) Long id,
+            HttpServletRequest request,
             @RequestParam(value = "fileid",required = true) Long fileid,
             @RequestParam(value = "token",required = true) String token){
-        return questionFileService.deleteQuestionFile(id,token,fileid);
+        return questionFileService.deleteQuestionFile(id,token,fileid,request);
     }
 
 

@@ -5,14 +5,16 @@ import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Created by Administrator on 2016/6/22.
  */
 public interface QuestionFileService {
-	DataWrapper<Void> addQuestionFile(QuestionFile questionFile,String token, MultipartFile file);
+	DataWrapper<Void> addQuestionFile(QuestionFile questionFile,String token, MultipartFile file,HttpServletRequest request);
     DataWrapper<List<QuestionFile>> getQuestionFileList(String token);
     DataWrapper<List<QuestionFile>> getQuestionFileListByUserId(Long userId,String token);
-	DataWrapper<Void> deleteQuestionFile(Long id, String token, Long fileid);
+	DataWrapper<Void> deleteQuestionFile(Long id, String token, Long fileid, HttpServletRequest request);
 }

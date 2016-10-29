@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by Administrator on 2016/6/22.
  */
@@ -23,16 +25,18 @@ public class VideoController {
     public DataWrapper<Void> addVideo(
             @ModelAttribute Video Video,
             @RequestParam(value = "token",required = true) String token,
+            HttpServletRequest request,
             @RequestParam(value = "file", required = false) MultipartFile file){
-        return VideoService.addVideo(Video,token,file);
+        return VideoService.addVideo(Video,token,file,request);
     }
     @RequestMapping(value="deleteVideo")
     @ResponseBody
     public DataWrapper<Void> deleteVideo(
             @RequestParam(value = "id",required = true) Long id,
+            HttpServletRequest request,
             @RequestParam(value = "fileid",required = true) Long fileid,
             @RequestParam(value = "token",required = true) String token){
-        return VideoService.deleteVideo(id,token,fileid);
+        return VideoService.deleteVideo(id,token,fileid,request);
     }
 
     @RequestMapping(value="getVideoList")

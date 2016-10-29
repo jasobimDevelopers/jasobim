@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by Administrator on 2016/6/22.
  */
@@ -31,13 +33,13 @@ public class QuestionFileServiceImpl implements QuestionFileService {
     private String filePath = "/files";
     private Integer fileType=2;
     @Override
-    public DataWrapper<Void> addQuestionFile(QuestionFile questionFile,String token,MultipartFile file) {
+    public DataWrapper<Void> addQuestionFile(QuestionFile questionFile,String token,MultipartFile file,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory=SessionManager.getSession(token);
         if(userInMemory!=null){
         	 if(!questionFileDao.addQuestionFile(questionFile)) {
         		 String path=filePath+"/"+"questions";
-				 Files newfile=fileService.uploadFile(path, file,fileType);
+				 Files newfile=fileService.uploadFile(path, file,fileType,request);
 				 questionFile.setFileId(newfile.getId());
                  dataWrapper.setErrorCode(ErrorCodeEnum.Error);
              }
@@ -48,14 +50,14 @@ public class QuestionFileServiceImpl implements QuestionFileService {
     }
 
     @Override
-    public DataWrapper<Void> deleteQuestionFile(Long id,String token,Long fileid) {
+    public DataWrapper<Void> deleteQuestionFile(Long id,String token,Long fileid,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory=SessionManager.getSession(token);
         if(userInMemory!=null){
         	if(!questionFileDao.deleteQuestionFile(id)) {
         		fileDao.deleteFiles(fileid);//删除文件表的信息
 				Files files=fileDao.getById(id);
-				fileService.deleteFileByPath(files.getUrl());///删除实际文件
+				fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
                 dataWrapper.setErrorCode(ErrorCodeEnum.Error);
             }
         }else{

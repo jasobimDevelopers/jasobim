@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by Administrator on 2016/6/22.
  */
@@ -36,7 +38,7 @@ public class QuestionServiceImpl implements QuestionService {
     private String filePath = "/files";
     private Integer fileType=2;
     @Override
-    public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile file) {
+    public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile file,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -46,7 +48,7 @@ public class QuestionServiceImpl implements QuestionService {
 					if(question!=null){
 						if(!questionDao.addQuestion(question)){ 
 							String path=filePath+"/"+"questions";
-						 	Files newfile=fileService.uploadFile(path, file,fileType);
+						 	Files newfile=fileService.uploadFile(path, file,fileType,request);
 						 	QuestionFile questionFile=new QuestionFile();
 						 	questionFile.setQuestionId(question.getId());
 						 	questionFile.setFileId(newfile.getId());

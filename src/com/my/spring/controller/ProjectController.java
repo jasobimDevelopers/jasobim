@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by Administrator on 2016/6/22.
  */
@@ -23,16 +25,18 @@ public class ProjectController {
     public DataWrapper<Void> addProject(
             @ModelAttribute Project project,
             @RequestParam(value = "token",required = true) String token,
+            HttpServletRequest request,
             @RequestParam(value = "file", required = false) MultipartFile file){
-        return projectService.addProject(project,token,file);
+        return projectService.addProject(project,token,file,request);
     }
     @RequestMapping(value="deleteProject")
     @ResponseBody
     public DataWrapper<Void> deleteProject(
             @RequestParam(value = "id",required = true) Long id,
+            HttpServletRequest request,
             @RequestParam(value = "modelid",required = false) Long modelid,
             @RequestParam(value = "token",required = true) String token){
-        return projectService.deleteProject(id,token,modelid);
+        return projectService.deleteProject(id,token,modelid,request);
     }
 
     @RequestMapping(value="updateProject",method = RequestMethod.POST)

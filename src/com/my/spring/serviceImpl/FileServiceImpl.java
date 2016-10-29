@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,22 +27,23 @@ public class FileServiceImpl implements FileService  {
 	FileDao fileDao;
 	@SuppressWarnings("unused")
 	@Override
-	public Files uploadFile(String filePath, MultipartFile file, Integer fileType) {
+	public Files uploadFile(String filePath, MultipartFile file, Integer fileType,HttpServletRequest request) {
 		
 		if (file == null || filePath == null || filePath.equals("")) {
 			return null;
 		}
+		String rootPath = request.getSession().getServletContext().getRealPath("/");
         String newFileName = MD5Util.getMD5String(file.getOriginalFilename() + new Date() + UUID.randomUUID().toString()).replace(".","")
                     + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
         //批量导入。参数：文件名，文件。
 //        boolean b = itemService.batchImport(newFileName,file);
-        File fileDir = new File(filePath);
+        File fileDir = new File(rootPath + filePath);
         Files files=new Files();
         if (!fileDir.exists()) {
             fileDir.mkdirs();
         }
         try {
-            FileOutputStream out = new FileOutputStream(filePath + "/"
+            FileOutputStream out = new FileOutputStream(rootPath + filePath + "/"
                     + newFileName);
                 // 写入文件
             out.write(file.getBytes());
@@ -67,10 +70,11 @@ public class FileServiceImpl implements FileService  {
 	}
 
 	@Override
-	public boolean deleteFileByPath(String filePathAndName) {
+	public boolean deleteFileByPath(String filePathAndName,HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		boolean flag = false;
-		File file = new File(filePathAndName);
+		String rootPath = request.getSession().getServletContext().getRealPath("/");
+		File file = new File(rootPath + filePathAndName);
         try {
             flag = file.delete();
         }catch (Exception e) {

@@ -64,4 +64,10 @@ public class MessageFileDaoImpl extends BaseDao<MessageFile> implements MessageF
 		}
 		return retDataWrapper;
 	}
+
+	@Override
+	public boolean deleteMessageFileByMessageId(Long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

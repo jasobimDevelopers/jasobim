@@ -1,5 +1,7 @@
 package com.my.spring.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,18 +28,21 @@ public class TestFileController {
     @ResponseBody
     public Files testUploadFile(
     		@RequestParam(value = "type", required = true) Integer type,
+    		HttpServletRequest request,
     		@RequestParam(value = "file", required = false) MultipartFile file) {
-		String filePath = "fileupload/testfile";
-        return fileService.uploadFile(filePath, file,type);
+		String filePath = "/fileupload/testfile";
+        return fileService.uploadFile(filePath, file,type,request);
     }
 	
 	//删除文件的时候只要把它包含文件名的路径作为参数，即可删除，结果为true or false
 	@RequestMapping(value="/testDeleteFile", method = RequestMethod.DELETE)
     @ResponseBody
     public boolean testDeleteFile(
-    		@RequestParam(value = "fileName", required = true) String fileName) {
-		String filePath = "F:\\fileupload";
-        return fileService.deleteFileByPath(filePath + "/" + fileName);
+    		@RequestParam(value = "fileName", required = true) String filePathAndName,
+    		HttpServletRequest request) {
+		//根据id去查Files,取出Files里面的url,传参
+		filePathAndName= "/fileupload/testfile/7c8eabdd4c1787f40be437d1367431ce.jpg";
+        return fileService.deleteFileByPath(filePathAndName,request);
     }
 
 }

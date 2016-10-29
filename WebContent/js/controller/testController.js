@@ -12,7 +12,7 @@ myApp.controller("testController",function($scope,testService) {
 		var promise = testService.register(data);
 	    promise.success(function(data,status,config,headers) {
 	    	$scope.result = data;
-			
+			console.log(data);
 	    });
 		
 		promise.error(function() {

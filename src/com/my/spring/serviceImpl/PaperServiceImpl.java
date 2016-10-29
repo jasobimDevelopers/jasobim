@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by Administrator on 2016/6/22.
  */
@@ -40,7 +42,7 @@ public class PaperServiceImpl implements PaperService {
      * */
     
     @Override
-    public DataWrapper<Void> addPaper(Paper paper,String token,MultipartFile file) {
+    public DataWrapper<Void> addPaper(Paper paper,String token,MultipartFile file,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);////验证登录时的session
         if (userInMemory != null) {
@@ -49,7 +51,7 @@ public class PaperServiceImpl implements PaperService {
 				if(paper!=null){////验证上传的实体类是不是为空
 					///////1.文件的上传返回url
 					String path=filePath+"/"+"papers";
-					Files newfile=fileService.uploadFile(path, file,fileType);
+					Files newfile=fileService.uploadFile(path, file,fileType,request);
 					paper.setFileId(newfile.getId());
 					if(!paperDao.addPaper(paper)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -69,7 +71,7 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public DataWrapper<Void> deletePaper(Long id,Long fileid,String token) {
+    public DataWrapper<Void> deletePaper(Long id,Long fileid,String token,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -78,7 +80,7 @@ public class PaperServiceImpl implements PaperService {
 					if(!paperDao.deletePaper(id)){ ///删除图纸表的信息
 						fileDao.deleteFiles(fileid);//删除文件表的信息
 						Files files=fileDao.getById(id);
-						fileService.deleteFileByPath(files.getUrl());///删除实际文件
+						fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					}
 					else

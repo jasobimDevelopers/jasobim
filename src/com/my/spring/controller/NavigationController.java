@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class NavigationController {
     @RequestMapping(value="/home")
     public String mainPage(){
-        return "listfile";
+        return "login";
     }
     
-    @RequestMapping(value="/test_PRF")
+    @RequestMapping(value="/test")
     public String testPage(){
         return "test_prf";
     }

@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by Administrator on 2016/6/22.
  */
@@ -36,7 +38,7 @@ public class MessageServiceImpl implements MessageService {
     private String filePath = "/files";
     private Integer fileType=3;
     @Override
-    public DataWrapper<Void> addMessage(Message message,String token,MultipartFile file) {
+    public DataWrapper<Void> addMessage(Message message,String token,MultipartFile file,HttpServletRequest request) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -45,7 +47,7 @@ public class MessageServiceImpl implements MessageService {
 					if(!messageDao.addMessage(message)) 
 					{
 						String path=filePath+"/"+"messages";
-						Files newfile=fileService.uploadFile(path, file,fileType);
+						Files newfile=fileService.uploadFile(path, file,fileType,request);
 						MessageFile messageFile=new MessageFile ();
 						messageFile.setFileId(newfile.getId());
 						messageFile.setMessageId(message.getId());
@@ -68,14 +70,21 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public DataWrapper<Void> deleteMessage(Long id,String token ) {
+    public DataWrapper<Void> deleteMessage(Long id,String token ,HttpServletRequest request) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(id!=null){
 					if(!messageDao.deleteMessage(id)) 
+					{
+						///////////////////////////////
+						messageFileDao.deleteMessageFileByMessageId(id);
+						fileDao.deleteFiles(id);//删除文件表的信息
+						Files files=fileDao.getById(id);
+						fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}
 					else
 						return dataWrapper;
 			        

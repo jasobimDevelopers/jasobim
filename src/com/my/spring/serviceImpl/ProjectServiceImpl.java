@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by Administrator on 2016/6/22.
  */
@@ -35,14 +37,14 @@ public class ProjectServiceImpl implements ProjectService {
     private String filePath="/files";
     private Integer fileType=2;
     @Override
-    public DataWrapper<Void> addProject(Project project,String token,MultipartFile file) {
+    public DataWrapper<Void> addProject(Project project,String token,MultipartFile file,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(project!=null){
 					String path=filePath+"/"+"projectmodels"+"/";
-					Files newfile=fileService.uploadFile(path, file,fileType);
+					Files newfile=fileService.uploadFile(path, file,fileType,request);
 					project.setModelId(newfile.getId());
 					if(!projectDao.addProject(project))
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -62,7 +64,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public DataWrapper<Void> deleteProject(Long id,String token,Long modelid) {
+    public DataWrapper<Void> deleteProject(Long id,String token,Long modelid,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -71,7 +73,7 @@ public class ProjectServiceImpl implements ProjectService {
 					{
 					fileDao.deleteFiles(modelid);//删除文件表的信息
 					Files files=fileDao.getById(id);
-					fileService.deleteFileByPath(files.getUrl());///删除实际文件
+					fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
 		            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 		            }
 				else
