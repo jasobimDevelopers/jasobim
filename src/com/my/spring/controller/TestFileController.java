@@ -26,7 +26,7 @@ public class TestFileController {
     public String testUploadFile(
     		@RequestParam(value = "type", required = true) Integer type,
     		@RequestParam(value = "file", required = false) MultipartFile file) {
-		String filePath = "F:\\fileupload";
+		String filePath = "fileupload/testfile";
         return fileService.uploadFile(filePath, file,type);
     }
 	

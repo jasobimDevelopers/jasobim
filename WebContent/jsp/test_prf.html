@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body ng-controller="testController">
+	<div>
+		<input type="text" id="userName" ng-model="userName"/><br>
+		<input type="text" id="password" ng-model="password"/><br>
+		<input type="text" id="realName" ng-model="realName"/><br>
+		<button ng-click="register()">注册</button>
+		<div>{{result}}</div>
+	</div>
+	
+	<div>
+		<input type="text" id="userName" ng-model="userName"/><br>
+		<input type="text" id="password" ng-model="password"/><br>
+		<button ng-click="login()">登录</button>
+		<div>{{loginfo}}</div>
+	</div>
+	
+	<div>
+		<input type="file" id="myfile"><br>
+		<button ng-click="upload()">上传</button>
+		<div>{{file}}</div>
+	</div>
+</body>
+
+
+<script src="js/lib/jquery-1.11.1.js"></script>
+<script src="js/lib/angular.min.js"></script>
+
+<script src="js/app.js"></script>
+
+<script src="js/service/testService.js"></script>
+
+<script src="js/controller/testController.js"></script>
+</html>

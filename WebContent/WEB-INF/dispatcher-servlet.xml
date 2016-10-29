@@ -14,7 +14,7 @@
 
        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
               <property name="prefix" value="/jsp/"/>
-              <property name="suffix" value=".jsp"/>
+              <property name="suffix" value=".html"/>
        </bean>
        <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
               <property name="messageConverters">

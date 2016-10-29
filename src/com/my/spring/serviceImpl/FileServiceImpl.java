@@ -31,7 +31,7 @@ public class FileServiceImpl implements FileService  {
         String newFileName = MD5Util.getMD5String(file.getOriginalFilename() + new Date() + UUID.randomUUID().toString()).replace(".","")
                     + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
         //批量导入。参数：文件名，文件。
-        boolean b = itemService.batchImport(newFileName,file);
+//        boolean b = itemService.batchImport(newFileName,file);
         File fileDir = new File(filePath);
         if (!fileDir.exists()) {
             fileDir.mkdirs();
@@ -41,6 +41,9 @@ public class FileServiceImpl implements FileService  {
                     + newFileName);
                 // 写入文件
             out.write(file.getBytes());
+            out.flush();
+            out.close();
+            
             Files files=new Files();
             files.setDesc((new Date()).toString());
             String realPath=filePath + "/"+ newFileName;
@@ -48,8 +51,7 @@ public class FileServiceImpl implements FileService  {
             files.setUrl(realPath);
             files.setFileType(fileType);
             fileDao.addFiles(files);
-            out.flush();
-            out.close();
+            
 
         } catch (Exception e) {
             e.printStackTrace();

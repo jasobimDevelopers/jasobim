@@ -12,4 +12,9 @@ public class NavigationController {
     public String mainPage(){
         return "listfile";
     }
+    
+    @RequestMapping(value="/test_PRF")
+    public String testPage(){
+        return "test_prf";
+    }
 }

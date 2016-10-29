@@ -39,7 +39,7 @@ public class UserController {
         return userService.register(user);
     }
 	
-	@RequestMapping(value="/login", method = RequestMethod.POST)
+	@RequestMapping(value="/login", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> Login(
     		HttpServletRequest request,
