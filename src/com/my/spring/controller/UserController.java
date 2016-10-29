@@ -41,20 +41,21 @@ public class UserController {
 	
 	@RequestMapping(value="/login", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView Login(
+    public DataWrapper<Void> Login(
     		HttpServletRequest request,
     		@RequestParam(value="username",required=true) String userName,
     		@RequestParam(value="password",required=true) String password) {
-		ModelAndView model=new ModelAndView();
-		NavigationController test=new NavigationController();
-		test.mainPage();
-		if(userService.login(userName, password).getToken()!=null){
-		   model.setViewName("test");
-		}else{
-			model.setViewName("login");
-			request.setAttribute("errorMsg", "用户名或密码错误，请重新登陆");
-		}
-        return model;
+//		ModelAndView model=new ModelAndView();
+//		NavigationController test=new NavigationController();
+//		test.mainPage();
+//		if(userService.login(userName, password).getToken()!=null){
+//		   model.setViewName("test");
+//		}else{
+//			model.setViewName("login");
+//			request.setAttribute("errorMsg", "用户名或密码错误，请重新登陆");
+//		}
+//        return model;
+		return userService.login(userName, password);
     }
 	
 	/**
