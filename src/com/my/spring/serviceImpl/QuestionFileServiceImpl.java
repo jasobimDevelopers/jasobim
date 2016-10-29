@@ -28,7 +28,7 @@ public class QuestionFileServiceImpl implements QuestionFileService {
     FileDao fileDao;
     @Autowired
     FileService fileService;
-    private String filePath="D:\\fileupload";
+    private String filePath = "/files";
     private Integer fileType=2;
     @Override
     public DataWrapper<Void> addQuestionFile(QuestionFile questionFile,String token,MultipartFile file) {
@@ -36,10 +36,9 @@ public class QuestionFileServiceImpl implements QuestionFileService {
         User userInMemory=SessionManager.getSession(token);
         if(userInMemory!=null){
         	 if(!questionFileDao.addQuestionFile(questionFile)) {
-        		 String path=filePath+"/"+"questions"+"/";
-					String newfilename=fileService.uploadFile(path, file,fileType);
-					DataWrapper<Files> dataWrappers=fileDao.getByName(newfilename);
-					questionFile.setFileId(dataWrappers.getData().getId());
+        		 String path=filePath+"/"+"questions";
+				 Files newfile=fileService.uploadFile(path, file,fileType);
+				 questionFile.setFileId(newfile.getId());
                  dataWrapper.setErrorCode(ErrorCodeEnum.Error);
              }
         }else{

@@ -29,7 +29,7 @@ public class MessageFileServiceImpl implements MessageFileService {
     FileDao fileDao;
     @Autowired
     FileService fileService;
-    private String filePath="D:\\fileupload";
+    private String filePath = "/files";
     private Integer fileType=3;
     @Override
     public DataWrapper<Void> addMessageFile(MessageFile messageFile,String token,MultipartFile file) {
@@ -40,10 +40,9 @@ public class MessageFileServiceImpl implements MessageFileService {
 				///////验证是不是管理员身份
 				if(messageFile!=null){////验证上传的实体类是不是为空
 					///////1.文件的上传返回url
-					String path=filePath+"/"+"messages"+"/";
-					String newfilename=fileService.uploadFile(path, file,fileType);
-					DataWrapper<Files> dataWrappers=fileDao.getByName(newfilename);
-					messageFile.setFileId(dataWrappers.getData().getId());
+					String path=filePath+"/"+"messages";
+					Files newfile=fileService.uploadFile(path, file,fileType);
+					messageFile.setFileId(newfile.getId());
 					if(!messageFileDao.addMessageFile(messageFile)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else

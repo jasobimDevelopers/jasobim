@@ -34,6 +34,7 @@
                 <value>com.my.spring.model.MessageFile</value>
                 <value>com.my.spring.model.Building</value>
                 <value>com.my.spring.model.QuestionFile</value>
+                <value>com.my.spring.model.Quantity</value>
                 <value>com.my.spring.model.Files</value>
                 <!-- <value>com.my.spring.model.QuantityPojo</value> -->
             </list>

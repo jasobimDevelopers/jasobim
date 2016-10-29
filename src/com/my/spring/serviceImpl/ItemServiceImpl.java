@@ -143,71 +143,70 @@ public class ItemServiceImpl implements ItemService {
         }
             
         
-    	List quantitypojo= itemDao.getSameItem();
-    	List<QuantityPojo> test=new ArrayList<QuantityPojo>();
-    	for(int j=0;j<quantitypojo.size();j++){
-    		
-    		System.out.println("//////////"+quantitypojo.listIterator().next());
-    	}
-		//System.out.println("//////////"+names);
+    	DataWrapper<List <QuantityPojo>> quantitypojo= itemDao.getSameItem();
     		
     	
-    	/*query.addScalar("num");
-        query.addScalar("lengthnum");
-        query.addScalar("areanum");
-        query.addScalar("project_id");
-        query.addScalar("building_num");
-        query.addScalar("floor_num");
-        query.addScalar("household_num");
-        query.addScalar("system_type");
-        query.addScalar("service_type");
-        query.addScalar("family_and_type");
-        query.addScalar("size");
-        query.addScalar("material");
-        query.addScalar("name");
-        query.addScalar("type_name");
-        query.setResultTransformer(Transformers.TO_LIST);//返回结果为键值队(map)
-       ;*/
-    	 QuantityPojo pojo=new QuantityPojo();
-    	/*if(quantitypojo.getData()!=null){
-    		for(int k=0;k<test.size();k++){
-    			
-    			test.get(k);
-    			itemlisttemp.get(i).setProjectId(pojo.getProject_id());
-    			itemlisttemp.get(i).setBuildingNum(pojo.getBuilding_id());
-    			itemlisttemp.get(i).setFloorNum(pojo.getFloor_id());
-    			itemlisttemp.get(i).setUnitNum(pojo.getUnit_id());
-    			itemlisttemp.get(i).setFamilyAndType(pojo.getFamily_and_type());
-    			itemlisttemp.get(i).setServiceType(pojo.getService_type());
-    			itemlisttemp.get(i).setSystemType(pojo.getSystem_type());
-    			
-    			//itemlisttemp.get(i).setProfessionType(items.getTypename());
-    			
-    			itemlisttemp.get(i).setName(pojo.getName());
-    			itemlisttemp.get(i).setSize(pojo.getSize());
-    			itemlisttemp.get(i).setMaterial(pojo.getMaterial());
+    	if(quantitypojo.getData()!=null){
+    		for(QuantityPojo pojo:quantitypojo.getData()){
+    			Quantity test=new Quantity();
+    			Long st=pojo.getProject_id();
+    			test.setProjectId(st);
+    			test.setBuildingNum(pojo.getBuilding_num());
+    			test.setFloorNum(pojo.getFloor_num());
+    			test.setUnitNum(pojo.getUnit_num());
+    			test.setHouseholdNum(pojo.getHousehold_num());
+    			String familyAndType=pojo.getFamily_and_type();
+    			if(familyAndType.equals("") || familyAndType==null){
+    				familyAndType="";
+    			}
+    			test.setFamilyAndType(familyAndType);
+    			String serviceType=pojo.getService_type();
+    			if(serviceType.equals("") || serviceType==null){
+    				serviceType="";
+    			}
+    			test.setServiceType(serviceType);
+    			String systemType=pojo.getSystem_type();
+    			if(systemType.equals("") || systemType==null){
+    				systemType="";
+    			}
+    			test.setSystemType(systemType);
+    			//test.setProfessionType(pojo.getType_name());
+    			String names=pojo.getName();
+    			if(names.equals("") || names==null){
+    				names="";
+    			}
+    			test.setName(names);
+    			String size=pojo.getSize();
+    			if(size.equals("") || size==null){
+    				size="";
+    			}
+    			test.setSize(size);
+    			String material=pojo.getMaterial();
+    			if(material==null || material.equals("")){
+    				material="";
+    			}
+    			test.setMaterial(material);
     			if(pojo.getLengthnum()!=0){
-    				itemlisttemp.get(i).setValue(pojo.getLengthnum());
-    				itemlisttemp.get(i).setUnit("米（m）");
+    				test.setValue(pojo.getLengthnum());
+    				test.setUnit("米（m）");
     			}
     			if(pojo.getAreanum()!=0){
-    				itemlisttemp.get(i).setValue(pojo.getAreanum());
-    				itemlisttemp.get(i).setUnit("平米（m2）");
+    				test.setValue(pojo.getAreanum());
+    				test.setUnit("平米（m2）");
     			}
     			if(pojo.getNum()!=0 && pojo.getAreanum()==0 && pojo.getLengthnum()==0){
-    				itemlisttemp.get(i).setValue(pojo.getNum());
-    				itemlisttemp.get(i).setUnit("个");
+    				test.setValue(pojo.getNum());
+    				test.setUnit("个");
     			}
-    			if(quantityDao.findQuantity(itemlisttemp.get(i))){
-    				quantityDao.updateQuantity(itemlisttemp.get(i));
+    			if(quantityDao.findQuantity(test)){
+    				quantityDao.updateQuantity(test);
+    			}else{
+    				quantityDao.addQuantity(test);
     			}
-    			i++;
-    			
-    		}*/
+    		}
     		
-    	//}
+    	}
         	
-    
         return b;
 	}
 

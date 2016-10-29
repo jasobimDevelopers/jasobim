@@ -32,7 +32,7 @@ public class VideoServiceImpl implements VideoService {
     FileDao fileDao;
     @Autowired
     FileService fileService;
-    private String filePath="D:\\fileupload";
+    private String filePath="/files";
     private Integer fileType=4;
     @Override
     public DataWrapper<Void> addVideo(Video video,String token,MultipartFile file) {
@@ -42,9 +42,8 @@ public class VideoServiceImpl implements VideoService {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(video!=null){
 					String path=filePath+"/"+"videos"+"/";
-					String newfilename=fileService.uploadFile(path, file,fileType);
-					DataWrapper<Files> dataWrappers=fileDao.getByName(newfilename);
-					video.setFileId(dataWrappers.getData().getId());
+					Files newfile=fileService.uploadFile(path, file,fileType);
+					video.setFileId(newfile.getId());
 					if(!videoDao.addVideo(video)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else

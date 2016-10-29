@@ -12,6 +12,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -216,18 +217,33 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List getSameItem() {
+	public DataWrapper<List<QuantityPojo>> getSameItem() {
 		String sql = "select count(*) as num,SUM(length) as lengthnum,SUM(area) as areanum,"
 				 +"project_id,building_num,unit_num,floor_num,household_num,system_type,"
 				 +"service_type,family_and_type,size,material,name,type_name from item "
 				 + "GROUP BY project_id,building_num,unit_num,floor_num,household_num,"
 				 + "system_type,service_type,family_and_type,size,material,name,type_name";
-		List dataWrapper = new ArrayList<>();
-		QuantityPojo pojo=new QuantityPojo();
+		DataWrapper<List<QuantityPojo>> dataWrapper=new DataWrapper<List<QuantityPojo>>();
 		Session session=getSession();
 		 try{
-			 Query query = this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.aliasToBean(QuantityPojo.class)); 
-			 dataWrapper.addAll(query.list());
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("num",StandardBasicTypes.LONG)
+					 .addScalar("lengthnum", StandardBasicTypes.DOUBLE)
+					 .addScalar("areanum",StandardBasicTypes.DOUBLE)
+					 .addScalar("project_id",StandardBasicTypes.LONG)
+					 .addScalar("building_num", StandardBasicTypes.INTEGER)
+					 .addScalar("unit_num", StandardBasicTypes.INTEGER)
+					 .addScalar("floor_num", StandardBasicTypes.INTEGER)
+					 .addScalar("household_num", StandardBasicTypes.INTEGER)
+					 .addScalar("system_type", StandardBasicTypes.STRING)
+					 .addScalar("service_type", StandardBasicTypes.STRING)
+					 .addScalar("family_and_type", StandardBasicTypes.STRING)
+					 .addScalar("size", StandardBasicTypes.STRING)
+					 .addScalar("material", StandardBasicTypes.STRING)
+					 .addScalar("type_name", StandardBasicTypes.STRING)
+					 .addScalar("name", StandardBasicTypes.STRING)
+					 .setResultTransformer(Transformers.aliasToBean(QuantityPojo.class)); 
+			 dataWrapper.setData(query.list());
 	            
 	        }catch(Exception e){
 	            e.printStackTrace();

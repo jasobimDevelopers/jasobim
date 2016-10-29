@@ -58,28 +58,28 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		return get(id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean findQuantity(Quantity quantity) {
 		String sql = "select * from quantity as a where a.project_id="+quantity.getProjectId()
 		+" and a.building_num="+quantity.getBuildingNum()+" and a.unit_num="+quantity.getUnitNum()
 		+" and a.floor_num="+quantity.getFloorNum()+" and a.household_num="+quantity.getHouseholdNum()
-		+" and a.name="+quantity.getName()+" and a.size="+quantity.getSize()+" and a.material="
-		+quantity.getMaterial()+" and a.service_type="+quantity.GetServiceType()
-		+" and a.system_type="+quantity.getSystemType()+" and a.family_and_type="
-		+quantity.getFamilyAndType();
+		+" and a.name='"+quantity.getName()+"' and a.size='"+quantity.getSize()+"' and a.material='"
+		+quantity.getMaterial()+"' and a.service_type='"+quantity.GetServiceType()
+		+"' and a.system_type='"+quantity.getSystemType()+"' and a.family_and_type='"
+		+quantity.getFamilyAndType()+"' and a.profession_type="+quantity.getProfessionType();
 		DataWrapper<List<QuantityPojo>> dataWrapper = new DataWrapper<List<QuantityPojo>>();
 		Session session=getSession();
 		 try{
 	            Query query=session.createSQLQuery(sql);
-	            if(query.list()!=null){
+	            dataWrapper.setData(query.list());
+	            if(dataWrapper.getData()!=null&&dataWrapper.getData().size()>0){
 	            	return true;
 	            }
-	            session.getTransaction().commit();
-	            session.flush();
 	        }catch(Exception e){
+	        	dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 	            e.printStackTrace();
-	            session.getTransaction().rollback();
-	            dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	           
 	        }
 		
 		return false;

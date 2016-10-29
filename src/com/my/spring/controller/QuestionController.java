@@ -6,6 +6,7 @@ import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,8 +22,9 @@ public class QuestionController {
     @ResponseBody
     public DataWrapper<Void> addQuestion(
             @ModelAttribute Question question,
-            @RequestParam(value = "token",required = true) String token){
-        return questionService.addQuestion(question,token);
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "file", required = false) MultipartFile file){
+        return questionService.addQuestion(question,token,file);
     }
     @RequestMapping(value="deleteQuestion")
     @ResponseBody
