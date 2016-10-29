@@ -32,7 +32,7 @@ public class PaperServiceImpl implements PaperService {
     FileDao fileDao;
     @Autowired
     FileService fileService;
-    private String filePath="D:\\fileupload";
+    private String filePath = "/files";
     private Integer fileType=1;
     /*
      * 图纸信息上传添加
@@ -48,10 +48,9 @@ public class PaperServiceImpl implements PaperService {
 				///////验证是不是管理员身份
 				if(paper!=null){////验证上传的实体类是不是为空
 					///////1.文件的上传返回url
-					String path=filePath+"/"+"papers"+"/";
-					String newfilename=fileService.uploadFile(path, file,fileType);
-					DataWrapper<Files> dataWrappers=fileDao.getByName(newfilename);
-					paper.setFileId(dataWrappers.getData().getId());
+					String path=filePath+"/"+"papers";
+					Files newfile=fileService.uploadFile(path, file,fileType);
+					paper.setFileId(newfile.getId());
 					if(!paperDao.addPaper(paper)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else

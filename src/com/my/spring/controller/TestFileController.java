@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.my.spring.model.Files;
 import com.my.spring.service.FileService;
 @Controller
 @RequestMapping(value="api/test")
@@ -23,10 +24,10 @@ public class TestFileController {
 	//那么在使用的时候，可以通过该路径访问  http://localhost:8080/JasoBIM/upload/user1/file.jpg
 	@RequestMapping(value="/testUploadFile", method = RequestMethod.POST)
     @ResponseBody
-    public String testUploadFile(
+    public Files testUploadFile(
     		@RequestParam(value = "type", required = true) Integer type,
     		@RequestParam(value = "file", required = false) MultipartFile file) {
-		String filePath = "F:\\fileupload";
+		String filePath = "/files";
         return fileService.uploadFile(filePath, file,type);
     }
 	

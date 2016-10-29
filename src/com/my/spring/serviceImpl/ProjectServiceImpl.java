@@ -32,7 +32,7 @@ public class ProjectServiceImpl implements ProjectService {
     UserDao userDao;
     @Autowired
     FileService fileService;
-    private String filePath="D:\\fileupload";
+    private String filePath="/files";
     private Integer fileType=2;
     @Override
     public DataWrapper<Void> addProject(Project project,String token,MultipartFile file) {
@@ -41,11 +41,10 @@ public class ProjectServiceImpl implements ProjectService {
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(project!=null){
-					String path=filePath+"/"+"papers"+"/";
-					String newfilename=fileService.uploadFile(path, file,fileType);
-					DataWrapper<Files> dataWrappers=fileDao.getByName(newfilename);
-					project.setModelId(dataWrappers.getData().getId());
-					if(!projectDao.addProject(project)) 
+					String path=filePath+"/"+"projectmodels"+"/";
+					Files newfile=fileService.uploadFile(path, file,fileType);
+					project.setModelId(newfile.getId());
+					if(!projectDao.addProject(project))
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else
 						return dataWrapper;

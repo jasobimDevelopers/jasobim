@@ -2,6 +2,8 @@ package com.my.spring.serviceImpl;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -23,7 +25,7 @@ public class FileServiceImpl implements FileService  {
 	FileDao fileDao;
 	@SuppressWarnings("unused")
 	@Override
-	public String uploadFile(String filePath, MultipartFile file, Integer fileType) {
+	public Files uploadFile(String filePath, MultipartFile file, Integer fileType) {
 		
 		if (file == null || filePath == null || filePath.equals("")) {
 			return null;
@@ -33,6 +35,7 @@ public class FileServiceImpl implements FileService  {
         //批量导入。参数：文件名，文件。
         boolean b = itemService.batchImport(newFileName,file);
         File fileDir = new File(filePath);
+        Files files=new Files();
         if (!fileDir.exists()) {
             fileDir.mkdirs();
         }
@@ -41,8 +44,11 @@ public class FileServiceImpl implements FileService  {
                     + newFileName);
                 // 写入文件
             out.write(file.getBytes());
-            Files files=new Files();
-            files.setDesc((new Date()).toString());
+            
+            Date date=new Date();
+            DateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time=format.format(date);
+            files.setDesc(time);
             String realPath=filePath + "/"+ newFileName;
             files.setName(newFileName);//////构件的url
             files.setUrl(realPath);
@@ -55,7 +61,7 @@ public class FileServiceImpl implements FileService  {
             e.printStackTrace();
             return null;
         }
-        return newFileName;
+        return files;
 	}
 
 	@Override

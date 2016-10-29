@@ -1,17 +1,22 @@
 package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.QuestionDao;
+import com.my.spring.DAO.QuestionFileDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.Files;
 import com.my.spring.model.Question;
+import com.my.spring.model.QuestionFile;
 import com.my.spring.model.User;
+import com.my.spring.service.FileService;
 import com.my.spring.service.QuestionService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,9 +28,15 @@ public class QuestionServiceImpl implements QuestionService {
     @Autowired
     QuestionDao questionDao;
     @Autowired
+    QuestionFileDao questionFileDao;
+    @Autowired
     UserDao userDao;
+    @Autowired
+    FileService fileService;
+    private String filePath = "/files";
+    private Integer fileType=2;
     @Override
-    public DataWrapper<Void> addQuestion(Question question,String token) {
+    public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile file) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -33,8 +44,15 @@ public class QuestionServiceImpl implements QuestionService {
 			if (userInDB != null) {
 				if(userInDB.getUserType()==UserTypeEnum.Admin.getType()){
 					if(question!=null){
-						if(!questionDao.addQuestion(question)) 
+						if(!questionDao.addQuestion(question)){ 
+							String path=filePath+"/"+"questions";
+						 	Files newfile=fileService.uploadFile(path, file,fileType);
+						 	QuestionFile questionFile=new QuestionFile();
+						 	questionFile.setQuestionId(question.getId());
+						 	questionFile.setFileId(newfile.getId());
+						 	questionFileDao.addQuestionFile(questionFile);
 				            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						}
 						else
 							return dataWrapper;
 				        

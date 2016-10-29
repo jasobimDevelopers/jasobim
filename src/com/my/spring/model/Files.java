@@ -11,10 +11,10 @@ public class Files {
     private Long id;
     private String name;
     private String intro;
-    private Integer fileType;//////0.模型文件 1.图纸文件  2.问题文件 3.留言文件  4.交底 5.图片
+    private Integer fileType;//////0.模型文件 1.图纸文件  2.问题文件 3.留言文件  4.交底 5.图片 6.构件excel
     private String url;
     @Id
-    @GeneratedValue
+    @GeneratedValue///
     @Column(name = "id")
     public Long getId() {
         return id;
@@ -44,7 +44,7 @@ public class Files {
 	}
 
 	@Basic
-	@Column(name = "desc")
+	@Column(name = "intro")
 	public String getDesc() {
 		return intro;
 	}

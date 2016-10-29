@@ -45,7 +45,7 @@ public class QuantityPojo {
 	public void setUnit_num(Integer unit_num) {
 		this.unit_num = unit_num;
 	}
-	public Integer getFloor_id() {
+	public Integer getFloor_num() {
 		return floor_num;
 	}
 	public void setFloor_num(Integer floor_num) {
