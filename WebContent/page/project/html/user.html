@@ -1,0 +1,57 @@
+<div ng-controller="UserController">
+<div id="content">
+	<div id="include_header">
+    	
+        	<div id="usernames">
+     			<span class="inputtext">用户名</span><input type="text" id="usernamess" />
+            	<span class="inputtext">用户昵称</span><input type="text" id="nickname" />
+                <span class="inputtext">邮箱地址</span><input type="text" id="adress" />
+                <span class="inputtext">电话号码</span><input type="text" id="mobile" />
+                <button id="find" ng-model="find" value=""></button>
+                <button id="add" ng-model="add" value="" onclick="showaddUser()"><span id="findtext">添加用户</span></button>
+            </div>
+           
+    </div>
+	<div class="container">
+		<div id="include_bodys">
+			<table class="table-striped table table-bordered">
+				<tbody>
+					<tr>
+						<th ng-repeat="userTitle in userTitles">{{userTitle}}</th>
+	
+					</tr>
+					<tr ng-repeat = "userInfo in userList">
+						<td>{{userInfo.id}}</td>
+						<td>{{userInfo.userName}}</td>
+						<td>{{userInfo.realName}}</td>
+						<td>{{userInfo.userType}}</td>
+						<td>{{userInfo.email}}</td>
+						<td>{{userInfo.tel}}</td>
+						<td>{{userInfo.registerDate}}</td>
+						<td class="tds" >
+	                        <button id="editbutton" ng-click="userChangeClick(userInfo.id)">
+	                        </button>
+	                        <button id="deletebutton" ng-click="deleteUser(userInfo.id)">
+	                        </button>
+	                    </td>
+					</tr>
+				</tbody>
+				</table>
+			</div>
+			<div id="bottom">
+                    	<button class="pageindex" ng-model="indexup"><span>上一页</span></button>
+                        <button class="yema"><a href="">1</a></button>
+                        <button class="yema"><a href="">2</a></button>
+                        <button class="yema"><a href="">3</a></button>
+                        <button class="yema"><a href="">4</a></button>
+                        <button class="yema"><a href="">5</a></button>
+                        <button class="yema"><a href="">6</a></button>
+                        <button class="yema"><a href="">7</a></button>
+                        <button class="indexnext"><span>下一页</span></button>
+                        <span>共__页</span>
+                        <span>到__页</span>
+                        <button id="pagesubmit" ng-model="pagesubmit"></button>
+        	</div>
+		</div>
+	</div>
+</div>

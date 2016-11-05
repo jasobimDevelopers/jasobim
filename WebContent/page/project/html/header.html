@@ -1,0 +1,42 @@
+<!-- <div id="content">
+			<div id="header">
+				<div id="header_content">
+					
+					<input type="hidden" value="${sessionScope.token}" name="token" id="token">
+				
+					<div id="imagelogo">
+					<img src="../../images/logo.png" id="logo" id="logo"/>
+					</div>
+					<div id="menu">
+						<button id="usermanager" ng-click="getUserList()"><span>用户管理</span></button>
+				   
+						<button id="projectmanager" ng-click="getProjectList()"><span>项目工程管理</span></button>
+					 </div>
+					 <div id="portrait">
+						<a href=""><img src="../images/u=2706075778,3807742174&fm=21&gp=0.jpg" id="portrait_image"/></a>
+					 </div>
+				</div>
+			</div>
+</div> -->
+ <div ng-controller="HeaderController">
+	 <nav class="navbar">
+	 
+	 	<div class="collapse navbar-collapse navbar-left navbar-inverse navbar-fixed-top">
+		 	<div class="container">
+			 	<div id="content">
+		 			<div id="imagelogo">
+						<img src="page/project/images/logo.png" id="logo" id="logo"/>
+					</div>
+			 		<ul class="nav navbar-nav">
+		                    <li class= "collapse-li-main" ng-repeat="headerItem in headerItems">
+		                        <a href="{{headerItem.page}}" id="menutext">{{headerItem.name}}</a>
+		                    </li>
+		            </ul>
+		            <div id="portrait">
+							<a href=""><img src="page/project/images/icon.jpg" id="portrait_image"/></a>
+				    </div>
+			 	</div>
+		 	</div>
+	 	</div>
+	 </nav>
+</div> 

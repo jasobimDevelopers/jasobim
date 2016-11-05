@@ -1,0 +1,60 @@
+
+
+	<div id="addcontent_project">
+        <div id="addhead">
+        	<div id="addprojecttitle" style="float:left;margin-top:10px;"><span>添加新项目</span></div>
+            <div id="returnproject" style="float:right; margin-top:10px;">
+            	<a href="userList.jsp"><span>返回项目列表</span>
+            	</a>
+            	<div onclick="hideaddprojectHtml()" style="float:right;margin-left:10px;">
+            		<a href=""><img src="page/project/images/删除.png"></a>
+            	</div>
+           	</div>
+        </div>
+        <div id="adduserbody">
+        	<div class="addinput">
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;项目名称:</span><input type="text" ng-model="inputname" id="inputname" />
+            </div>
+            <div class="addinput">
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;项目编码:</span><input type="password" ng-model="inputpassword" id="inputpassword" />
+            </div>
+            <div class="addinput">
+            	<span>&nbsp;&nbsp;&nbsp;&nbsp;施工单位:</span><input type="text" ng-model="inputnick" id="inputnick" />
+            </div>
+            <div class="addinput">
+        		<span>项目负责人:</span><input type="text" ng-model="inputadress" id="inputadress" />
+            </div>
+            <div class="addinput">
+            	<span>&nbsp;&nbsp;&nbsp;&nbsp;建设单位:</span><input type="text" ng-model="inputtel" id="inputtel" />
+            </div>
+            <div class="addinput">
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;施工地点:</span><input type="text" ng-model="inputname" id="inputname" />
+            </div>
+            <div class="addinput">
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;项目简介:</span><input type="password" ng-model="inputpassword" id="inputpassword"/>
+            </div>
+            <div class="addinput">
+            	<span>&nbsp;&nbsp;&nbsp;&nbsp;设计单位:</span><input type="text" ng-model="inputnick" id="inputnick" />
+            </div>
+            <div class="addinput">
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;项目版本:</span><input type="text" ng-model="inputadress" id="inputadress" />
+            </div>
+            <div class="addinput">
+            	<span>&nbsp;&nbsp;&nbsp;&nbsp;施工时间:</span><input type="text" ng-model="inputtel" id="inputtel" />
+            </div>
+            <div class="addinput">
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;施工周期:</span><input type="text" ng-model="inputname" id="inputname" />
+            </div>
+            
+            <div class="addinput">
+            	<span style="float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模型上传:</span><input style="float:left" type="file" ng-model="inputicon" id="inputicon" />
+            </div>
+            <div class="addinput">
+            	<span style="float:left;margin-top:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;图片上传:</span><input style="float:left;margin-top:10px;" type="file" ng-model="inputicon" id="inputicon" />
+            </div>
+            <div id="addbutton"  style="margin-top:118px;">
+            	<input type="button" ng-model="addProject()" class="btn btn-default" onlick="" value="确定" />
+                <input type="button" ng-model="resetProject()" class="btn btn-default" value="取消" />
+            </div>
+        </div>
+	</div>

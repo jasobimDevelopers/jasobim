@@ -1,0 +1,69 @@
+<div ng-controller="ProjectController">
+<div id="content">
+	<div id="include_header">
+    	
+        	<div id="projectnames">
+     			<span class="inputtext">&nbsp&nbsp项目名:</span><input type="text" id="projectName" />
+            	<span class="inputtext">&nbsp项目编码:</span><input type="text" id="projectNum" />
+                <span class="inputtext">&nbsp施工单位:</span><input type="text" id="constructionUnit" />
+                <span class="inputtext">项目负责人:</span><input type="text" id="leader" />
+                <span class="inputtext">&nbsp建设单位:</span><input type="text" id="buildingUnit" />
+            	<span class="inputtext">&nbsp施工地点:</span><input type="text" id="place" />
+                <span class="inputtext">&nbsp项目简介:</span><input type="text" id="description" />
+                <span class="inputtext">&nbsp设计单位:</span><input type="text" id="designUnit" />
+                <span class="inputtext">&nbsp&nbsp&nbsp版本:</span><input type="text" id="version" />
+            	<span class="inputtext">&nbsp施工时间:</span><input type="text" id="startDate" />
+                <span class="inputtext">&nbsp施工周期:</span><input type="text" id="phase" />
+                
+                <button id="find" ng-model="find" value=""></button>
+                <button id="add" ng-model="add" value="" ><a href="" onclick="showaddProjectHtml()"><span id="findtext">添加项目</span></a></button>
+            </div>
+           
+    </div>
+	<div class="container">
+		<div id="include_bodys">
+			<table class="table-striped table table-bordered">
+				<tbody>
+					<tr>
+						<th ng-repeat="projectTitle in projectTitles">{{projectTitle}}</th>
+	
+					</tr>
+					<tr ng-repeat = "projectInfo in projectList">
+						<td>{{projectInfo.name}}</td>
+						<td>{{projectInfo.num}}</td>
+						<td>{{projectInfo.constructionUnit}}</td>
+						<td>{{projectInfo.leader}}</td>
+						<td>{{projectInfo.buildingUnit}}</td>
+						<td>{{projectInfo.place}}</td>
+						<td>{{projectInfo.description}}</td>
+						<td>{{projectInfo.designUnit}}</td>
+						<td>{{projectInfo.version}}</td>
+						<td>{{projectInfo.startDate}}</td>
+						<td>{{projectInfo.phase}}</td>
+						<td class="tds" >
+	                        <button id="editbutton" ng-click="projectChangeClick(projectInfo.id)">
+	                        </button>
+	                        <button id="deletebutton" ng-click="deleteProject(projectInfo.id)">
+	                        </button>
+	                    </td>
+					</tr>
+				</tbody>
+				</table>
+			</div>
+			<div id="bottom">
+                    	<button class="pageindex" ng-model="indexup"><span>上一页</span></button>
+                        <button class="yema"><a href="">1</a></button>
+                        <button class="yema"><a href="">2</a></button>
+                        <button class="yema"><a href="">3</a></button>
+                        <button class="yema"><a href="">4</a></button>
+                        <button class="yema"><a href="">5</a></button>
+                        <button class="yema"><a href="">6</a></button>
+                        <button class="yema"><a href="">7</a></button>
+                        <button class="indexnext"><span>下一页</span></button>
+                        <span>共__页</span>
+                        <span>到__页</span>
+                        <button id="pagesubmit" ng-model="pagesubmit"></button>
+        	</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,207 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin: 0px;
+	padding: 0px;
+}
+body{
+	background:url(../images/adminbk.png) no-repeat fixed center;
+	margin:0 auto;
+	padding:0;
+	background-color:#B1BECD;
+}
+button{
+	border:none;
+	outline:none;
+}
+a:link {
+text-decoration: none;
+color: #F60;
+}
+a:visited {
+text-decoration: none;
+}
+a:hover {
+text-decoration: none;
+}
+a:active {
+text-decoration: none;
+font-size: 14px;
+font-weight: bold;
+}
+
+#projectnames .inputtext{
+	margin-left:0px;
+	margin-right:3px;
+	margin-bottom:12px;
+}
+#projectnames input{
+	margin-right:25px;
+	height:30px;
+	margin-bottom:20px;
+}
+#content{
+	width:100%;
+	height:61px;
+	margin:0 auto;
+}
+
+li{
+	margin:0 400px;
+
+}
+#menutext{
+	font-size:18px;
+	font-family:微软雅黑;
+}
+.ng-scope{
+	margin:0 auto;
+}
+#header{
+	background-color:#333;
+	height: 60px;
+	width:100%;
+}
+#header_content{
+	width:1200px;
+	margin:0 auto;
+}
+#logo{
+	margin-top:10px;
+}
+
+#usermanager{
+	background:none;
+	margin:8px auto;
+	height:18px;
+	width:100px;
+	font-size:16px;
+	color:#FFF;
+	margin-right:121px;
+}
+#projectmanager{
+	background:none;
+	margin:18px auto;
+	height:18px;
+	width:100px;
+	font-size:16px;
+	color:#FFF;
+}
+#imagelogo,#menu,#portrait{
+	float:left;
+}
+#imagelogo{
+	margin-right:300px;
+}
+#portrait{
+	margin-left:340px;
+}
+#portrait_image{
+	margin:10px 0px;
+	height:40px;
+	width:40px;
+}
+#menu{
+	margin-left:200px;
+}
+
+
+#bodys{
+	height:800px;
+	width:100%;
+	text-align:center
+}
+
+
+#include_header,#include_bodys{
+	width:1100px;
+	margin:0px auto;
+}
+#include_header{
+	padding-top:35px;
+	border-bottom:1px solid gray;
+	padding-left:10px;
+}
+
+#username,#nickname,#adress,#mobile,#find,#images{
+	margin-left:5px;
+	margin-right:38px;
+}
+#usernamess,#nickname,#adress,#mobile{
+	height:31px;
+	width:125px;
+	font-size:14px;
+}
+#find{
+	background:url(../images/%E6%9F%A5%E6%89%BE%E6%8C%89%E9%92%AE.png) no-repeat;
+	height:34px;
+	width:75px;
+	margin-top:20px;
+	float:right;
+}
+#add{
+	margin-top:35px;
+	padding-left:30px;
+	background:url(../images/%E6%B7%BB%E5%8A%A0%E6%8C%89%E9%92%AE.png) no-repeat;
+	margin-left:950px;
+	margin-bottom:10px;
+}
+#findtext{
+	font-size:16px;
+	color:#1ABC9C;
+	font-family:黑体;
+}
+table 
+{  
+ 	border:1px #999 solid;
+	border-spacing: 15px;   
+} 
+.ths,.tds{
+	text-align:left;
+	height:30px;
+	width:201px; 
+	font-size:14px;
+	font-family:黑体;
+}
+#editbutton{
+	height:25px;
+	width:20px;
+	background:url(../images/%E4%BF%AE%E6%94%B9.png) no-repeat;
+}
+#deletebutton{
+	height:25px;
+	width:20px;
+	background:url(../images/%E5%88%A0%E9%99%A4.png) no-repeat;
+}
+#bottom{
+	text-align:center;
+	margin-top: 50px;
+}
+$bottom a,bottom span{
+	text-decoration:none;
+	border: 1px solid #f9d52b;
+	padding::5px 7px;
+	color:#767675;
+	cursor: pointer;
+}
+#bottom a:hover,#bottom span:hover{
+	color:red;
+}
+#pagesubmit{
+	background:url(../images/%E7%A1%AE%E5%AE%9A%E6%8C%89%E9%92%AE.png) no-repeat;
+	height:25px;
+	width:55px;
+}
+#pageindex:hover{
+	background:#1ABC9C;
+}
+#pageindex{
+	height:25px;
+	width:60px;
+	
+}
+#yema{
+ height:10px;
+ width:10px;
+ background:#FFF;
+}
