@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
 			user.setId(null);
 			user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
 			user.setUserType(UserTypeEnum.User.getType());
+			//user.setUserType(user.getUserType());
 			user.setRegisterDate(new Date(System.currentTimeMillis()));
 			if(!userDao.addUser(user)) {
 				dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -147,6 +148,7 @@ public class UserServiceImpl implements UserService {
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+		dataWrapper = userDao.getUserList(pageSize, pageIndex);
 		return dataWrapper;
 	}
 
@@ -170,6 +172,48 @@ public class UserServiceImpl implements UserService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<User>> findUserLike(User user, String token) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<User>> dataWrapper = new DataWrapper<List<User>>();
+		User adminInMemory = SessionManager.getSession(token);
+		if(adminInMemory!=null){
+			if(user!=null){
+				dataWrapper=userDao.findUserLike(user);
+				if(dataWrapper!=null && dataWrapper.getData().size()>0){
+					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+			
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<Void> deleteUser(Long userId, String token) {
+		DataWrapper<Void> dataWrapper=new DataWrapper<Void>();
+		User userInMemory=SessionManager.getSession(token);
+		if(userInMemory!=null){
+			User adminInDB = userDao.getById(userInMemory.getId());
+			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
+				if(userDao.deleteUser(userId)){
+					dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
+				}else{
+					dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return null;
 	}
 
 }

@@ -46,12 +46,14 @@ public class MessageServiceImpl implements MessageService {
 				if(message!=null){
 					if(!messageDao.addMessage(message)) 
 					{
-						String path=filePath+"/"+"messages";
-						Files newfile=fileService.uploadFile(path, file,fileType,request);
-						MessageFile messageFile=new MessageFile ();
-						messageFile.setFileId(newfile.getId());
-						messageFile.setMessageId(message.getId());
-						messageFileDao.addMessageFile(messageFile);
+						if(file!=null){
+							String path=filePath+"/"+"messages";
+							Files newfile=fileService.uploadFile(path, file,fileType,request);
+							MessageFile messageFile=new MessageFile ();
+							messageFile.setFileId(newfile.getId());
+							messageFile.setMessageId(message.getId());
+							messageFileDao.addMessageFile(messageFile);
+						}
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					}
 					else
@@ -76,13 +78,17 @@ public class MessageServiceImpl implements MessageService {
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(id!=null){
+					Message message=messageDao.getById(id);
 					if(!messageDao.deleteMessage(id)) 
 					{
 						///////////////////////////////
-						messageFileDao.deleteMessageFileByMessageId(id);
-						fileDao.deleteFiles(id);//删除文件表的信息
-						Files files=fileDao.getById(id);
-						fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
+						DataWrapper<List<MessageFile>> dataWrappers=messageFileDao.deleteMessageFileByMessageId(message.getId());
+						for(MessageFile e:dataWrappers.getData()){
+							fileDao.deleteFiles(e.getFileId());//删除文件表的信息
+							Files files=fileDao.getById(e.getFileId());
+							fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
+						}
+						
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					}
 					else

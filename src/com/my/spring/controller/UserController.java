@@ -3,6 +3,7 @@ package com.my.spring.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,24 +39,22 @@ public class UserController {
     		@ModelAttribute User user) {
         return userService.register(user);
     }
+	@RequestMapping(value="/findUserLike", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<List<User>> findUserLike(
+    		@ModelAttribute User user,
+    		@RequestParam(value="token",required=true) String token) {
+        return userService.findUserLike(user, token);
+    }
 	
 	@RequestMapping(value="/login", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> Login(
     		HttpServletRequest request,
-    		@RequestParam(value="username",required=true) String userName,
+    		@RequestParam(value="username",required=true) String username,
     		@RequestParam(value="password",required=true) String password) {
-//		ModelAndView model=new ModelAndView();
-//		NavigationController test=new NavigationController();
-//		test.mainPage();
-//		if(userService.login(userName, password).getToken()!=null){
-//		   model.setViewName("test");
-//		}else{
-//			model.setViewName("login");
-//			request.setAttribute("errorMsg", "用户名或密码错误，请重新登陆");
-//		}
-//        return model;
-		return userService.login(userName, password);
+		DataWrapper<Void> test=userService.login(username, password);
+		return test;
     }
 	
 	/**
@@ -82,12 +81,20 @@ public class UserController {
 	
 	
 	//管理员获取其他用户的个人详情
-	@RequestMapping(value="/admin/getUserDetails/{userId}", method = RequestMethod.GET)
+	@RequestMapping(value="/admin/getUserDetails", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<User> getUserDetailsByAdmin(
     		@PathVariable(value="userId") Long userId,
     		@RequestParam(value="token",required=true) String token) {
         return userService.getUserDetailsByAdmin(userId,token);
+    }
+	//管理员删除用户的个人信息
+	@RequestMapping(value="/admin/deleteUser", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<Void> deleteUserByAdmin(
+	    		@PathVariable(value="userId") Long userId,
+	    		@RequestParam(value="token",required=true) String token) {
+	        return userService.deleteUser(userId,token);
     }
 	
 	//管理员获取用户列表

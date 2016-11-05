@@ -2,6 +2,8 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.QuestionFileDao;
+import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.MessageFile;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
@@ -63,5 +65,25 @@ public class QuestionFileDaoImpl extends BaseDao<QuestionFile> implements Questi
 			retDataWrapper.setData(ret);
 		}
 		return retDataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<QuestionFile>> deleteQuestionFileByQuestionId(Long id) {
+		DataWrapper<List<QuestionFile>> questionFiles=new DataWrapper<List<QuestionFile>>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(MessageFile.class);
+        criteria.add(Restrictions.eq("messageId",id));
+        try {
+        	questionFiles.setData( criteria.list());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (questionFiles.getData() != null && questionFiles.getData().size() > 0) {
+        	questionFiles.setErrorCode(ErrorCodeEnum.Error);
+			return questionFiles;
+		}else{
+			questionFiles.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+		}
+		return questionFiles;
 	}
 }

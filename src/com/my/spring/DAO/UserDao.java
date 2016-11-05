@@ -9,7 +9,9 @@ import java.util.List;
 public interface UserDao {
 	User getByUserName(String userName);
 	User getById(Long id);
+	boolean deleteUser(Long userid);
 	boolean addUser(User user);
 	boolean updateUser(User user);
 	DataWrapper<List<User>> getUserList(Integer pageSize, Integer pageIndex);
+	DataWrapper<List<User>> findUserLike(User user);
 }

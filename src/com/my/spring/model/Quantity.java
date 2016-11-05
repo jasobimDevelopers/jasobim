@@ -22,6 +22,7 @@ public class Quantity {
     private String systemType;//系统类型
     private String serviceType;//设备类型
     private String size;
+    private String typeName;
     private String material;//材质
     @Id
     @GeneratedValue
@@ -91,6 +92,15 @@ public class Quantity {
 
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
+    }
+    @Basic
+    @Column(name = "type_name")
+    public String GetTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
     @Basic
     @Column(name = "size")

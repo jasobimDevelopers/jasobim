@@ -43,9 +43,11 @@ public class ProjectServiceImpl implements ProjectService {
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(project!=null){
-					String path=filePath+"/"+"projectmodels"+"/";
-					Files newfile=fileService.uploadFile(path, file,fileType,request);
-					project.setModelId(newfile.getId());
+					if(file!=null){
+						String path=filePath+"/"+"projectmodels"+"/";
+						Files newfile=fileService.uploadFile(path, file,fileType,request);
+						project.setModelId(newfile.getId());
+					}
 					if(!projectDao.addProject(project))
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else
@@ -138,6 +140,26 @@ public class ProjectServiceImpl implements ProjectService {
 			} else {
 				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 			}
+		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<Project>> findProjectLike(Project project, String token) {
+		DataWrapper<List<Project>> dataWrapper = new DataWrapper<List<Project>>();
+		User adminInMemory = SessionManager.getSession(token);
+		if(adminInMemory!=null){
+			if(project!=null){
+				dataWrapper=projectDao.findProjectLike(project);
+				if(dataWrapper!=null && dataWrapper.getData().size()>0){
+					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+			
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
 		return dataWrapper;
 	}
 }

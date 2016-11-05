@@ -12,16 +12,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "question")
 public class Question {
-	private Long id;
-	private Integer questionType;
-	private Long userId;
-	private String name;
-	private String trades;
-	private String intro;
-	private Date questionDate;
-	private Integer priority;
-	private Integer state;
-	private String codeInformation;
+	private Long id;       ////问题编号
+	private Integer questionType;////问题类型
+	private Long userId;  ///问题提交人id
+	private String name;  ///问题名称
+	private String trades;///问题专业
+	private String intro; //////问题内容
+	private Date questionDate;/////问题的创建时间
+	private Integer priority;////问题等级
+	private Integer state;   ///问题的状态
+	private String codeInformation;/////图片的二维码信息
 	
 	@Id
     @GeneratedValue

@@ -1,11 +1,13 @@
 package com.my.spring.serviceImpl;
 
+import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.QuestionFileDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
+import com.my.spring.model.MessageFile;
 import com.my.spring.model.Question;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.model.User;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,31 +37,39 @@ public class QuestionServiceImpl implements QuestionService {
     @Autowired
     UserDao userDao;
     @Autowired
+    FileDao fileDao;
+    @Autowired
     FileService fileService;
     private String filePath = "/files";
     private Integer fileType=2;
     @Override
     public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile file,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-        User userInMemory = SessionManager.getSession(token);
+ /*       User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			User userInDB = userDao.getById(userInMemory.getId());
 			if (userInDB != null) {
-				if(userInDB.getUserType()==UserTypeEnum.Admin.getType()){
+				if(userInDB.getUserType()==UserTypeEnum.Admin.getType()){*/
 					if(question!=null){
-						if(!questionDao.addQuestion(question)){ 
-							String path=filePath+"/"+"questions";
-						 	Files newfile=fileService.uploadFile(path, file,fileType,request);
-						 	QuestionFile questionFile=new QuestionFile();
-						 	questionFile.setQuestionId(question.getId());
-						 	questionFile.setFileId(newfile.getId());
-						 	questionFileDao.addQuestionFile(questionFile);
-				            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						if(question.getQuestionDate()==null){
+							question.setQuestionDate(new Date(System.currentTimeMillis()));
 						}
-						else
+						if(questionDao.addQuestion(question)){ 
+							if(file!=null){
+								String path=filePath+"/"+"questions";
+							 	Files newfile=fileService.uploadFile(path, file,fileType,request);
+							 	QuestionFile questionFile=new QuestionFile();
+							 	questionFile.setQuestionId(question.getId());
+							 	questionFile.setFileId(newfile.getId());
+							 	questionFileDao.addQuestionFile(questionFile);
+							}
+						}
+						else{
+							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 							return dataWrapper;
+						}
 				        
-					}else{
+					}/*else{
 						dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 					}
 				}else{
@@ -69,12 +80,12 @@ public class QuestionServiceImpl implements QuestionService {
 			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
-		}
+		}*/
         return dataWrapper;
     }
 
     @Override
-    public DataWrapper<Void> deleteQuestion(Long id,String token) {
+    public DataWrapper<Void> deleteQuestion(Long id,String token,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -82,8 +93,17 @@ public class QuestionServiceImpl implements QuestionService {
 			if (userInDB != null) {
 				if(userInDB.getUserType()==UserTypeEnum.Admin.getType()){
 					if(id!=null){
+						QuestionFile questionFile=new QuestionFile();
 						if(!questionDao.deleteQuestion(id)) 
+						{
+							DataWrapper<List<QuestionFile>> dataWrappers=questionFileDao.deleteQuestionFileByQuestionId(questionFile.getId());
+							for(QuestionFile e:dataWrappers.getData()){
+								fileDao.deleteFiles(e.getFileId());//删除文件表的信息
+								Files files=fileDao.getById(e.getFileId());
+								fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
+							}
 				            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						}
 						else
 							return dataWrapper;
 				        

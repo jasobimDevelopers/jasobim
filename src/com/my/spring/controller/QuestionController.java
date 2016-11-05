@@ -33,8 +33,9 @@ public class QuestionController {
     @ResponseBody
     public DataWrapper<Void> deleteQuestion(
             @RequestParam(value = "id",required = true) Long id,
+            HttpServletRequest request,
             @RequestParam(value = "token",required = true) String token){
-        return questionService.deleteQuestion(id,token);
+        return questionService.deleteQuestion(id,token,request);
     }
 
     @RequestMapping(value="updateQuestion",method = RequestMethod.POST)

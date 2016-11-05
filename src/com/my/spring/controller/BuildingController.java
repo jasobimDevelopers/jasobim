@@ -38,6 +38,7 @@ public class BuildingController {
             @ModelAttribute Building building,
             @RequestParam(value = "token",required = true) String token){
        // System.out.println(building);
+    	////////building 的id不能为空
         return buildingService.updateBuilding(building,token);
     }
 

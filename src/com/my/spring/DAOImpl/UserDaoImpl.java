@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -94,6 +95,37 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         dataWrapper.setNumberPerPage(pageSize);
 
         return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<User>> findUserLike(User user) {
+		List<User> ret = null;
+		DataWrapper<List<User>> users=new DataWrapper<List<User>>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.like("userName",user.getUserName()))
+        .add(Restrictions.like("password", user.getPassword()))
+        .add(Restrictions.like("realName", user.getRealName()))
+        .add(Restrictions.like("email", user.getEmail()))
+        .add(Restrictions.like("tel", user.getTel()));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+			users.setData(ret);;
+		}else{
+			users.setErrorCode(ErrorCodeEnum.Error);
+		}
+		return users;
+	}
+
+	@Override
+	public boolean deleteUser(Long userid) {
+		// TODO Auto-generated method stub
+		String hql="delete from User where id="+userid;
+		return delete(hql);
 	}
 
 }

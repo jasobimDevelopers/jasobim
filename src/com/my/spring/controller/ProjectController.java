@@ -29,6 +29,14 @@ public class ProjectController {
             @RequestParam(value = "file", required = false) MultipartFile file){
         return projectService.addProject(project,token,file,request);
     }
+    @RequestMapping(value="findProjectLike", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<Project>> findProjectLike(
+            @ModelAttribute Project project,
+            @RequestParam(value = "token",required = true) String token){
+        return projectService.findProjectLike(project,token);
+    }
+    
     @RequestMapping(value="deleteProject")
     @ResponseBody
     public DataWrapper<Void> deleteProject(
@@ -49,14 +57,14 @@ public class ProjectController {
     }
 
 
-    @RequestMapping(value="getProjectList")
+    @RequestMapping(value="getProjectList",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<Project>> getProjectList(
     		@RequestParam(value = "token",required = true) String token)
     {
         return projectService.getProjectList(token);
     }
-    @RequestMapping(value="getProjectDetails/{projectId}")
+    @RequestMapping(value="getProjectDetails")
     @ResponseBody
     public DataWrapper<Project> getProjectDetailsByAdmin(
     		@PathVariable(value="projectId") Long projectId,

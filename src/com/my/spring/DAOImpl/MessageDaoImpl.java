@@ -70,4 +70,10 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 		}
 		return retDataWrapper;
 	}
+
+	@Override
+	public Message getById(Long id) {
+		// TODO Auto-generated method stub
+		return get(id);
+	}
 }

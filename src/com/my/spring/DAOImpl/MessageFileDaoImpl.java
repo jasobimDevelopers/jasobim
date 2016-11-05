@@ -2,7 +2,9 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.MessageFileDao;
+import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.MessageFile;
+import com.my.spring.model.User;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -66,8 +68,22 @@ public class MessageFileDaoImpl extends BaseDao<MessageFile> implements MessageF
 	}
 
 	@Override
-	public boolean deleteMessageFileByMessageId(Long id) {
-		// TODO Auto-generated method stub
-		return false;
+	public DataWrapper<List<MessageFile>> deleteMessageFileByMessageId(Long id) {
+		DataWrapper<List<MessageFile>> messageFiles=new DataWrapper<List<MessageFile>>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(MessageFile.class);
+        criteria.add(Restrictions.eq("messageId",id));
+        try {
+        	messageFiles.setData( criteria.list());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (messageFiles.getData() != null && messageFiles.getData().size() > 0) {
+        	messageFiles.setErrorCode(ErrorCodeEnum.Error);
+			return messageFiles;
+		}else{
+			messageFiles.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+		}
+		return messageFiles;
 	}
 }

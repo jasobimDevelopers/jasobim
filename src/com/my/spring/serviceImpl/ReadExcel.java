@@ -213,7 +213,6 @@ public class ReadExcel {
            Row row = sheet.getRow(r);
            if (row == null) continue;
            item = new Item();
-           
            //循环Excel的列
            for(int c = 0; c <this.totalCells; c++){    
                Cell cell = row.getCell(c);
@@ -223,20 +222,24 @@ public class ReadExcel {
                 	   Long test=Long.valueOf(temp);
                 	   item.setSelfId(test);//模型中的id
                    }else if(c==1){
-                	   
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   item.setLocation(cell.getStringCellValue());//位置
                 	   String temp=cell.getStringCellValue();
-                	   int projectid=Integer.valueOf(temp.substring(temp.indexOf("A")+1,temp.indexOf("B")));
-                	   int buildingid=Integer.valueOf(temp.substring(temp.indexOf("B")+1,temp.indexOf("C")));
-                	   int unitid=Integer.valueOf(temp.substring(temp.indexOf("C")+1,temp.indexOf("D")));
-                	   int floorid=Integer.valueOf(temp.substring(temp.indexOf("D")+1,temp.indexOf("E")));
-                	   int householdid=Integer.valueOf(temp.substring(temp.indexOf("E")+1));
-                	   item.setBuildingNum(buildingid);
-                	   item.setFloorNum(floorid);
-                	   item.setHouseholdNum(householdid);
-                	   item.setProjectId(new Long((long)projectid));
-                	   item.setUnitNum(unitid);
+                	   if(temp!=null && !(temp.equals(""))){
+	                	   item.setLocation(cell.getStringCellValue());//位置
+	                	   int projectid=Integer.valueOf(temp.substring(temp.indexOf("A")+1,temp.indexOf("B")));
+	                	   int buildingid=Integer.valueOf(temp.substring(temp.indexOf("B")+1,temp.indexOf("C")));
+	                	   int unitid=Integer.valueOf(temp.substring(temp.indexOf("C")+1,temp.indexOf("D")));
+	                	   int floorid=Integer.valueOf(temp.substring(temp.indexOf("D")+1,temp.indexOf("E")));
+	                	   int householdid=Integer.valueOf(temp.substring(temp.indexOf("E")+1));
+	                	   item.setBuildingNum(buildingid);
+	                	   item.setFloorNum(floorid);
+	                	   item.setHouseholdNum(householdid);
+	                	   item.setProjectId(new Long((long)projectid));
+	                	   item.setUnitNum(unitid);
+                	   }/*else{
+                		   elementList=null;
+                		   return elementList;
+                	   }*/
                    }else if(c==2){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   item.setName(cell.getStringCellValue());//构件名称

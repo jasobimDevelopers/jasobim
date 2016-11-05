@@ -52,7 +52,7 @@ public class Building {
 	}
 
 	@Basic
-	@Column(name = "preoject_id")
+	@Column(name = "project_id")
 	public Long getPreojectId() {
 		return preojectId;
 	}

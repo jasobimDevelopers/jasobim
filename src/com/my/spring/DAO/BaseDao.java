@@ -116,11 +116,19 @@ public class BaseDao<T>{
      *
      * @param hql
      */
-    public void delete(String hql) {
+    public boolean delete(String hql) {
         Session session = getSession();
+        try{
         session.beginTransaction();
         session.delete(hql);
         session.getTransaction().commit();
+        session.flush();
+        }catch(Exception e){
+        	e.printStackTrace();
+            session.getTransaction().rollback();
+            return false;
+        }
+        return true;
     }
 
     /**

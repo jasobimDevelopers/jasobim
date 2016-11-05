@@ -2,6 +2,8 @@ package com.my.spring.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -9,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Item;
 import com.my.spring.service.ItemService;
 import com.my.spring.utils.DataWrapper;
@@ -22,6 +26,21 @@ import com.my.spring.utils.DataWrapper;
 public class ItemController {
     @Autowired
     ItemService itemService;
+    @RequestMapping(value="uploadItem", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> uploadItem(
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam(value = "token",required = true) String token,
+            HttpServletRequest request){
+    	String filePath = "/fileupload/items";
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    	if(itemService.batchImport(filePath, file,token,request)){
+        	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
+        }else{
+        	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+        }
+        return dataWrapper;
+    }
     @RequestMapping(value="addItem", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addItem(

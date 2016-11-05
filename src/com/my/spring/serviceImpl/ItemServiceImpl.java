@@ -6,12 +6,15 @@ import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QuantityDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.Files;
 import com.my.spring.model.Item;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.model.User;
+import com.my.spring.service.FileService;
 import com.my.spring.service.ItemService;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.SessionManager;
 
 import org.hibernate.transform.Transformers;
@@ -19,9 +22,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by Administrator on 2016/6/22.
@@ -36,7 +47,8 @@ public class ItemServiceImpl implements ItemService {
     ProjectDao projectDao;
     @Autowired
     BuildingDao buildingDao;
-    
+    @Autowired
+    FileService fileSerivce;
     @Override
     public DataWrapper<Void> addItem(Item item,String token) {
     	 DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -122,102 +134,117 @@ public class ItemServiceImpl implements ItemService {
     	
     }
 
-    @SuppressWarnings({ "unused", "unchecked", "rawtypes" })
 	@Override
-	public boolean batchImport(String name, MultipartFile file) {
+	public boolean batchImport(String name, MultipartFile file,String token,HttpServletRequest request) {
+		if (file == null || name == null || name.equals("")) {
+			return false;
+		}
+		int type=6;
+		DataWrapper<Void> dataWrapper=new DataWrapper<Void>();
 		boolean b = false;
-		int i=0;
-		List<Quantity> itemlisttemp=new ArrayList<Quantity>();
-        //创建处理EXCEL
-        ReadExcel readExcel=new ReadExcel();
-        
-        //解析excel，获取客户信息集合。
-        List<Item> ItemList = readExcel.getExcelInfo(name ,file);
-
-        if(ItemList != null){
-            b = true;
-        }
-        //迭代添加客户信息（注：实际上这里也可以直接将customerList集合作为参数，在Mybatis的相应映射文件中使用foreach标签进行批量添加。）
-        for(Item Item:ItemList){
-        	itemDao.addItem(Item);
-        }
-            
-        
-    	DataWrapper<List <QuantityPojo>> quantitypojo= itemDao.getSameItem();
-    		
-    	
-    	if(quantitypojo.getData()!=null){
-    		for(QuantityPojo pojo:quantitypojo.getData()){
-    			Quantity test=new Quantity();
-    			Long st=pojo.getProject_id();
-    			test.setProjectId(st);
-    			test.setBuildingNum(pojo.getBuilding_num());
-    			test.setFloorNum(pojo.getFloor_num());
-    			test.setUnitNum(pojo.getUnit_num());
-    			test.setHouseholdNum(pojo.getHousehold_num());
-    			String familyAndType=pojo.getFamily_and_type();
-    			if(familyAndType.equals("") || familyAndType==null){
-    				familyAndType="";
-    			}
-    			test.setFamilyAndType(familyAndType);
-    			String serviceType=pojo.getService_type();
-    			if(serviceType.equals("") || serviceType==null){
-    				serviceType="";
-    			}
-    			test.setServiceType(serviceType);
-    			String systemType=pojo.getSystem_type();
-    			if(systemType.equals("") || systemType==null){
-    				systemType="";
-    			}
-    			test.setSystemType(systemType);
-    			String nametype=pojo.getName();
-    			if(nametype.equals("电缆桥架") || nametype.equals("电缆桥架配件") || nametype.equals("电气设备")){
-    				test.setProfessionType(0);
-    			}
-    			if(nametype.equals("管道") || nametype.equals("管道附件") || nametype.equals("管件") || nametype.equals("卫浴装置") || nametype.equals("消火栓箱")){
-    				test.setProfessionType(2);
-    			}
-    			if(nametype.equals("风管") || nametype.equals("风管附件") || nametype.equals("风管管件") || nametype.equals("风管末端") 
-    					|| nametype.equals("柜式离心风机") || nametype.equals("高效低噪声混流风机")){
-    				test.setProfessionType(1);
-    			}
-    			//test.setProfessionType(pojo.getType_name());
-    			String names=pojo.getName();
-    			if(names.equals("") || names==null){
-    				names="";
-    			}
-    			test.setName(names);
-    			String size=pojo.getSize();
-    			if(size.equals("") || size==null){
-    				size="";
-    			}
-    			test.setSize(size);
-    			String material=pojo.getMaterial();
-    			if(material==null || material.equals("")){
-    				material="";
-    			}
-    			test.setMaterial(material);
-    			if(pojo.getLengthnum()!=0){
-    				test.setValue(pojo.getLengthnum());
-    				test.setUnit("米（m）");
-    			}
-    			if(pojo.getAreanum()!=0){
-    				test.setValue(pojo.getAreanum());
-    				test.setUnit("平米（m2）");
-    			}
-    			if(pojo.getNum()!=0 && pojo.getAreanum()==0 && pojo.getLengthnum()==0){
-    				test.setValue(pojo.getNum());
-    				test.setUnit("个");
-    			}
-    			if(quantityDao.findQuantity(test)){
-    				quantityDao.updateQuantity(test);
-    			}else{
-    				quantityDao.addQuantity(test);
-    			}
-    		}
-    		
-    	}
-        	
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null){
+			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
+				String rootPath = request.getSession().getServletContext().getRealPath("/");
+		        String newFileName = MD5Util.getMD5String(file.getOriginalFilename() + new Date() + UUID.randomUUID().toString()).replace(".","")
+		                    + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+		        //创建处理EXCEL
+		        ReadExcel readExcel=new ReadExcel();
+		        
+		        //解析excel，构件信息集合。
+		        List<Item> ItemList = readExcel.getExcelInfo(newFileName ,file);
+		        fileSerivce.uploadFile(name, file, type, request);
+		        if(ItemList != null){
+		            b = true;
+		            //迭代添加构件信息
+			        for(Item Item:ItemList){
+			        	itemDao.addItem(Item);
+			        }
+			            
+			        
+			    	DataWrapper<List <QuantityPojo>> quantitypojo= itemDao.getSameItem();
+			    		
+			    	
+			    	if(quantitypojo.getData()!=null){
+			    		for(QuantityPojo pojo:quantitypojo.getData()){
+			    			Quantity test=new Quantity();
+			    			Long st=pojo.getProject_id();
+			    			test.setProjectId(st);
+			    			test.setBuildingNum(pojo.getBuilding_num());
+			    			test.setFloorNum(pojo.getFloor_num());
+			    			test.setUnitNum(pojo.getUnit_num());
+			    			test.setHouseholdNum(pojo.getHousehold_num());
+			    			String familyAndType=pojo.getFamily_and_type();
+			    			test.setTypeName(pojo.getType_name());
+			    			if(familyAndType.equals("") || familyAndType==null){
+			    				familyAndType="";
+			    			}
+			    			test.setFamilyAndType(familyAndType);
+			    			String serviceType=pojo.getService_type();
+			    			if(serviceType.equals("") || serviceType==null){
+			    				serviceType="";
+			    			}
+			    			test.setServiceType(serviceType);
+			    			String systemType=pojo.getSystem_type();
+			    			if(systemType.equals("") || systemType==null){
+			    				systemType="";
+			    			}
+			    			test.setSystemType(systemType);
+			    			String nametype=pojo.getName();
+			    			if(nametype.equals("电缆桥架") || nametype.equals("电缆桥架配件") || nametype.equals("电气设备")){
+			    				test.setProfessionType(0);
+			    			}
+			    			if(nametype.equals("管道") || nametype.equals("管道附件") || nametype.equals("管件") || nametype.equals("卫浴装置") || nametype.equals("消火栓箱")){
+			    				test.setProfessionType(2);
+			    			}
+			    			if(nametype.equals("风管") || nametype.equals("风管附件") || nametype.equals("风管管件") || nametype.equals("风道末端") 
+			    					|| nametype.equals("柜式离心风机") || nametype.equals("高效低噪声混流风机")){
+			    				test.setProfessionType(1);
+			    			}
+			    			String names=pojo.getName();
+			    			if(names.equals("") || names==null){
+			    				names="";
+			    			}
+			    			test.setName(names);
+			    			String size=pojo.getSize();
+			    			if(size.equals("") || size==null){
+			    				size="";
+			    			}
+			    			test.setSize(size);
+			    			String material=pojo.getMaterial();
+			    			if(material==null || material.equals("")){
+			    				material="";
+			    			}
+			    			test.setMaterial(material);
+			    			if(pojo.getLengthnum()!=0){
+			    				test.setValue(pojo.getLengthnum());
+			    				test.setUnit("米（m）");
+			    			}
+			    			if(pojo.getAreanum()!=0){
+			    				test.setValue(pojo.getAreanum());
+			    				test.setUnit("平米（m2）");
+			    			}
+			    			if(pojo.getNum()!=0 && pojo.getAreanum()==0 && pojo.getLengthnum()==0){
+			    				test.setValue(pojo.getNum());
+			    				test.setUnit("个");
+			    			}
+			    			if(quantityDao.findQuantity(test)){
+			    				quantityDao.updateQuantity(test);
+			    			}else{
+			    				quantityDao.addQuantity(test);
+			    			}
+			    		}
+			    		
+			    	}
+		        }
+		      
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+			
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
         return b;
 	}
 
@@ -313,4 +340,5 @@ public class ItemServiceImpl implements ItemService {
 		}
 		return dataWrapper;
 	}
+
 }

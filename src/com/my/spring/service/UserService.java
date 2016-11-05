@@ -15,5 +15,6 @@ public interface UserService {
 	DataWrapper<User> getUserDetailsByAdmin(Long userId,String token);
 	DataWrapper<List<User>> getUserList(Integer pageIndex, Integer pageSize,String token);
 	DataWrapper<Void> changeUserTypeByAdmin(Long userId, Integer userType, String token);
-
+	DataWrapper<List<User>> findUserLike(User user,String token);
+	DataWrapper<Void> deleteUser(Long userId, String token);
 }

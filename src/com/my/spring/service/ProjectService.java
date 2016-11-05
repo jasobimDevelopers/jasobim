@@ -16,6 +16,7 @@ public interface ProjectService {
     DataWrapper<Void> addProject(Project project, String token, MultipartFile file,HttpServletRequest request);
     DataWrapper<Void> updateProject(Project project,String token);
     DataWrapper<List<Project>> getProjectList(String token);
+    DataWrapper<List<Project>> findProjectLike(Project project,String token);
 	DataWrapper<Project> getProjectDetailsByAdmin(Long projectId,String token);
 	DataWrapper<Void> deleteProject(Long id, String token, Long modelid, HttpServletRequest request);
 }

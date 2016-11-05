@@ -78,7 +78,7 @@ public class BuidlingServiceImpl implements BuildingService {
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
-				if(building!=null){
+ 				if(building!=null){
 					if(!buildingDao.updateBuilding(building)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else

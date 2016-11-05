@@ -10,6 +10,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class NavigationController {
     @RequestMapping(value="/home")
     public String mainPage(){
+        return "home";
+    }
+    @RequestMapping(value="/userList")
+    public String userPage(){
+        return "home";
+    }
+    @RequestMapping(value="/projectList")
+    public String projectPage(){
+        return "home";
+    }
+    @RequestMapping(value="/login")
+    public String loginPage(){
         return "login";
     }
     
