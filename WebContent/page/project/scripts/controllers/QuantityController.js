@@ -18,6 +18,7 @@ function UserController($scope,UserService) {
   	UserService.updateUser(user,token).then(function(result){
        $scope.updateUserInfo=result.data;
     });
+  }
   
  $scope.findUser = function(userId,token){
     UserService.findUser(userId,token).then(function(result){
