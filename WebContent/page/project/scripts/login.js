@@ -41,9 +41,9 @@ function deleteCookie(name)
 
 function login(){
 	$.ajax({
-		url:"/testJasobim/api/user/login?username="+$("#username").val()+"&password="+ $("#password").val(),
-		method:"GET",
-		type:"json",
+		url:"api/user/login?username="+$("#username").val()+"&password="+ $("#password").val(),
+		type:"GET",
+		dataType:'json',
 		success:function(data){
 			console.log(data);
 			if(data.token!=null){
