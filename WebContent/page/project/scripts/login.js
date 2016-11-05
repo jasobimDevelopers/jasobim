@@ -40,20 +40,18 @@ function deleteCookie(name)
 }
 
 function login(){
-	$.ajax({
-		url:"api/user/login?username="+$("#username").val()+"&password="+ $("#password").val(),
-		type:"GET",
-		dataType:'json',
-		success:function(data){
-			console.log(data);
-			if(data.token!=null){
-				setCookie('token',data.token);
-				alert(getCookie('token'));
-				window.location.href="home";
-			}
-			else{
-				alert("用户名和密码错误，请重新输入！");
-			}
-		}
-	});
+	 $.ajax({
+         type: "GET",
+         url: "api/user/login",
+         data: {username:$("#username").val(), password:$("#password").val()},
+         dataType: "json",
+         success: function(data){
+        	 if(data.token!=null) {
+ 				setCookie('token',data.token);
+ 				window.location.href="home";
+ 			} else {
+ 				alert("用户名和密码错误，请重新输入！");
+ 			}
+         }
+     });
 }
