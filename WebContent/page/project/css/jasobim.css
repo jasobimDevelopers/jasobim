@@ -133,7 +133,7 @@ li{
 	font-size:14px;
 }
 #find{
-	background:url(../images/%E6%9F%A5%E6%89%BE%E6%8C%89%E9%92%AE.png) no-repeat;
+	background:url(../images/findButton.png) no-repeat;
 	height:34px;
 	width:75px;
 	margin-top:20px;
@@ -142,7 +142,7 @@ li{
 #add{
 	margin-top:35px;
 	padding-left:30px;
-	background:url(../images/%E6%B7%BB%E5%8A%A0%E6%8C%89%E9%92%AE.png) no-repeat;
+	background:url(../images/addButton.png) no-repeat;
 	margin-left:950px;
 	margin-bottom:10px;
 }
@@ -166,12 +166,12 @@ table
 #editbutton{
 	height:25px;
 	width:20px;
-	background:url(../images/%E4%BF%AE%E6%94%B9.png) no-repeat;
+	background:url(../images/editIcon.png) no-repeat;
 }
 #deletebutton{
 	height:25px;
 	width:20px;
-	background:url(../images/%E5%88%A0%E9%99%A4.png) no-repeat;
+	background:url(../images/deleteIcon.png) no-repeat;
 }
 #bottom{
 	text-align:center;
@@ -184,24 +184,14 @@ $bottom a,bottom span{
 	color:#767675;
 	cursor: pointer;
 }
+#table-buton{
+	float:right;
+}
 #bottom a:hover,#bottom span:hover{
 	color:red;
 }
-#pagesubmit{
-	background:url(../images/%E7%A1%AE%E5%AE%9A%E6%8C%89%E9%92%AE.png) no-repeat;
-	height:25px;
-	width:55px;
-}
-#pageindex:hover{
-	background:#1ABC9C;
-}
-#pageindex{
-	height:25px;
-	width:60px;
-	
-}
-#yema{
- height:10px;
- width:10px;
- background:#FFF;
-}
+#userPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
+#userPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+#userPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+#userPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+#userPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}

@@ -1,4 +1,5 @@
 <div ng-controller="ProjectController">
+<div ng-include="'page/project/html/projectInfo.html'" style="display:none;  z-index:1;"  id="projectInfo"></div>
 <div id="content">
 	<div id="include_header">
     	
@@ -15,8 +16,8 @@
             	<span class="inputtext">&nbsp施工时间:</span><input type="text" id="startDate" />
                 <span class="inputtext">&nbsp施工周期:</span><input type="text" id="phase" />
                 
-                <button id="find" ng-model="find" value=""></button>
-                <button id="add" ng-model="add" value="" ><a href="" onclick="showaddProjectHtml()"><span id="findtext">添加项目</span></a></button>
+                <a href=""><button id="find" ng-click="projectFind()" ></button></a>
+                <a href=""><button id="add" ng-click="showProjectAdd()"  ><span id="findtext">添加项目</span></button></a>
             </div>
            
     </div>
@@ -28,7 +29,8 @@
 						<th ng-repeat="projectTitle in projectTitles">{{projectTitle}}</th>
 	
 					</tr>
-					<tr ng-repeat = "projectInfo in projectList">
+					<tr ng-repeat = "projectInfo in ProjectList">
+					    <td>{{$index+1}}</td>
 						<td>{{projectInfo.name}}</td>
 						<td>{{projectInfo.num}}</td>
 						<td>{{projectInfo.constructionUnit}}</td>
@@ -49,21 +51,10 @@
 					</tr>
 				</tbody>
 				</table>
+				<div id="table-buton" >
+					<div id="userPageCode"></div>
+				</div>
 			</div>
-			<div id="bottom">
-                    	<button class="pageindex" ng-model="indexup"><span>上一页</span></button>
-                        <button class="yema"><a href="">1</a></button>
-                        <button class="yema"><a href="">2</a></button>
-                        <button class="yema"><a href="">3</a></button>
-                        <button class="yema"><a href="">4</a></button>
-                        <button class="yema"><a href="">5</a></button>
-                        <button class="yema"><a href="">6</a></button>
-                        <button class="yema"><a href="">7</a></button>
-                        <button class="indexnext"><span>下一页</span></button>
-                        <span>共__页</span>
-                        <span>到__页</span>
-                        <button id="pagesubmit" ng-model="pagesubmit"></button>
-        	</div>
 		</div>
 	</div>
 </div>

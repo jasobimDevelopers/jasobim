@@ -2,44 +2,44 @@
 
 	<div id="addcontent">
         <div id="addhead">
-        	<div id="addusertitle"><span>添加新用户</span></div>
+        	<div id="addusertitle"><span>{{title}}</span></div>
             <div id="returnuser">
-            	<a href="userList.jsp"><span>返回用户列表</span>
+            	<a href="" ng-click="returnUserlist()"><span>返回用户列表</span>
             	</a>
             	<div onclick="hideadduserHtml()" style="float:right;margin-left:10px;">
-            		<a href=""><img src="page/project/images/删除.png"></a>
+            		<a href=""><img src="page/project/images/deleteIcon.png"></a>
             	</div>
            	</div>
         </div>
         <div id="adduserbody">
         	<div class="addinput">
-        		<span>&nbsp;&nbsp;&nbsp;用户名:</span><input type="text" ng-model="inputname" id="inputname" />
+        		<span>&nbsp;&nbsp;&nbsp;用户名:</span><input type="text" ng-model="findUserInfo.userName" id="inputname" />
             </div>
             <div class="addinput">
-        		<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;密码:</span><input type="password" ng-model="inputpassword" id="inputpassword" />
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;密码:</span><input type="password" ng-model="findUserInfo.password" id="inputpassword" />
             </div>
             <div class="addinput">
-            	<span>真实姓名:</span><input type="text" ng-model="inputnick" id="inputnick" />
+            	<span>真实姓名:</span><input type="text"  id="inputnick" ng-model="findUserInfo.realName"/>
             </div>
             <div class="addinput">
-        		<span>邮箱地址:</span><input type="text" ng-model="inputadress" id="inputadress" />
+        		<span>邮箱地址:</span><input type="text"  id="inputadress" ng-model="findUserInfo.email"/>
             </div>
             <div class="addinput">
-            	<span>手机号码:</span><input type="text" ng-model="inputtel" id="inputtel" />
+            	<span>手机号码:</span><input type="text"  id="inputtel" ng-model="findUserInfo.tel"/>
             </div>
             <div class="addinput">
-        		<span>用户角色:</span><select type="text" ng-model="inputrole" id="inputrole">
+        		<span>用户角色:</span><select type="text" ng-model="findUserInfo.userType" id="inputrole">
         									<option value="0"><span>超级管理员</span></option>
         									<option value="1"><span>管理员</span></option>
         									
         		</select>
             </div>
             <div class="addinput">
-            	<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;头像上传:</span><input style="float:right" type="file" ng-model="inputicon" id="inputicon" />
+            	<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;头像上传:</span><input style="float:right" type="file" ng-model="findUserInfo.icon" id="inputicon" />
             </div>
             <div id="addbutton" style="margin-top:86px;">
-            	<input class="btn btn-default" type="button" ng-model="register()" onlick="" value="确定" />
-                <input type="button" ng-model="resetUser()" class="btn btn-default" value="取消" />
+            	<input class="btn btn-default" type="button" ng-click="addUserByAdmin()" value="确定" />
+                <input type="button" ng-click="resetUser()" class="btn btn-default" value="重置" />
             </div>
         </div>
 	</div>

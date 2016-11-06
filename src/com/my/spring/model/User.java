@@ -4,6 +4,8 @@ import java.sql.Date;
 
 import javax.persistence.*;
 
+
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -81,7 +83,7 @@ public class User {
 	}
 	
 	@Basic
-    @Column(name = "register_date")
+    @Column(name = "register_date") 
 	public Date getRegisterDate() {
 		return registerDate;
 	}

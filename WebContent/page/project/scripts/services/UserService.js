@@ -1,6 +1,10 @@
 var token=getCookie('token');
 angular.module('Demo')
   .service('UserService', function UserService($http, $q) {
+	  
+	  var transform = function(data){
+          return $.param(data);
+      }
 
 //	var username=document.getElementById("username");
 //	var password=document.getElementById("password");
@@ -26,18 +30,52 @@ angular.module('Demo')
             });
         return deferred.promise;
         };*/
-    //獲取用戶列表
-    this.getUserList = function() {
+    /////注册用户
+    this.register = function(user) {
 
         var deferred = $q.defer();
         console.log("读取UserList数据");
-        $http.get('api/user/admin/getUserList?token='+getCookie('token'))
+        $http.post('api/user/admin/getUserList?token='+getCookie('token'))
             .success(function(data, status, headers, config){
                 console.log(data);
                 if(data.callStatus == "SUCCEED"){
                     deferred.resolve(data);
                     self.userList = data;
+               
+                }else{
+                    alert("数据读取失败");
+                }
+                
+            })
+            .error(function(data, status, headers, config){
+                deferred.reject(data);
+            });
+        return deferred.promise;
+        };
+    //獲取用戶列表
+    this.getUserList = function(pageSize,pageIndex,user) {
 
+        var deferred = $q.defer();
+        console.log("读取UserList数据");
+        var api = 'api/user/admin/getUserList?token='+getCookie('token') + "&pageSize=" + pageSize + "&pageIndex="+pageIndex;
+        if(user.userName !== undefined && trimStr(user.userName) != '') {
+        	api += "&userName="+trimStr(user.userName);
+        }
+        if(user.realName !== undefined && trimStr(user.realName) != ''){
+        	api += "&realName="+trimStr(user.realName);
+        }
+        if(user.email !==undefined && trimStr(user.email) != ''){
+        	api += "&email="+ trimStr(user.email);
+        }
+        if(user.tel !==undefined && trimStr(user.tel) != ''){
+        	api += "&tel="+ trimStr(user.tel);
+        }
+        $http.get(encodeURI(api))
+            .success(function(data, status, headers, config){
+                if(data.callStatus == "SUCCEED"){
+                    deferred.resolve(data);
+                    self.userList = data;
+               
                 }else{
                     alert("数据读取失败");
                 }
@@ -59,7 +97,7 @@ angular.module('Demo')
                 if(data.callStatus == "SUCCEED"){
                     deferred.resolve(data);
                     self.deleteUserInfo = data;
-
+                    alert("数据删除成功");
                 }else{
                     alert("数据删除失败");
                 }
@@ -72,18 +110,25 @@ angular.module('Demo')
         };
         ///////更新用户信息
         this.updateUser = function(user,token) {
-        
-        var deferred = $q.defer();
-        console.log("更新User数据");
-        $http.post('api/user/update',user)
+        	var deferred = $q.defer();
+        	console.log("更新User数据");
+        	delete user.registerDate;
+//        	var nuser = {};
+//        	nuser.id = user.id;
+//        	nuser.realName = user.realName;
+        	$http.post('api/user/admin/updateUser?token='+token,user,
+        		{
+        			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        			transformRequest: transform
+        		})
             .success(function(data, status, headers, config){
-                console.log(data);
+            	console.log(data);
                 if(data.callStatus == "SUCCEED"){
                     deferred.resolve(data);
                     self.updateUserInfo = data;
-
+                    alert("更新成功")
                 }else{
-                    alert("数据更新失败");
+                    alert("数据更新失败("+data.errorCode+")");
                 }
                 
             })
@@ -92,6 +137,34 @@ angular.module('Demo')
             });
         return deferred.promise;
         };
+        ///////增加用户信息
+        this.addUserByAdmin = function(findUserInfo,token) {
+            var deferred = $q.defer();
+            
+            
+            console.log("查找User数据");
+            $http.post('api/user/admin/addUser?token='+token,findUserInfo,
+            		{
+            			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+            			transformRequest: transform
+            		})
+                .success(function(data, status, headers, config){
+  
+                    if(data.callStatus == "SUCCEED"){
+                        deferred.resolve(data);
+                        alert("添加成功")
+                        self.findUserInfo = data;
+                    
+                    }else{
+                        alert("数据添加失败("+data.errorCode+")");
+                    }
+                    
+                })
+                .error(function(data, status, headers, config){
+                    deferred.reject(data);
+                });
+            return deferred.promise;
+            };
         ///////查找用户信息
         this.findUser = function(userId,token) {
         
@@ -103,7 +176,7 @@ angular.module('Demo')
                 if(data.callStatus == "SUCCEED"){
                     deferred.resolve(data);
                     self.findUserInfo = data;
-
+                
                 }else{
                     alert("数据查找失败");
                 }
@@ -115,42 +188,3 @@ angular.module('Demo')
         return deferred.promise;
         };
 });
-//存储cookies
-function setCookie(name,value,expiredays) 
-{ 
-  var argv = setCookie.arguments; 
-  var argc = setCookie.arguments.length; 
-  var LargeExpDate = new Date (); 
-  var expires = (argc > 2) ? argv[2] : expiredays ; 
-  if(expires!=null) 
-  { 
-      LargeExpDate.setTime(LargeExpDate.getTime() + (expires*1000*3600*24));         
-  } 
-  document.cookie = name + "=" + escape (value)+((expires == null) ? "" : ("; expires=" +LargeExpDate.toGMTString())); 
-}
-
-//获取cookies
-function getCookie(Name) 
-{ 
-  var search = Name + "=" 
-  if(document.cookie.length > 0) 
-  { 
-      offset = document.cookie.indexOf(search) 
-      if(offset != -1) 
-      { 
-          offset += search.length 
-          end = document.cookie.indexOf(";", offset) 
-          if(end == -1) end = document.cookie.length 
-          return unescape(document.cookie.substring(offset, end)) 
-      } 
-      else return "" 
-  } 
-} 
-
-//删除cookies
-function deleteCookie(name) 
-{ 
-  var expdate = new Date(); 
-  expdate.setTime(expdate.getTime() - (86400 * 1000 * 1)); 
-  setCookie(name, "", expdate); 
-}

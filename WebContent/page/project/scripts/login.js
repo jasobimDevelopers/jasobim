@@ -48,7 +48,7 @@ function login(){
          success: function(data){
         	 if(data.token!=null) {
  				setCookie('token',data.token);
- 				window.location.href="home";
+ 				window.location.href="userList";
  			} else {
  				alert("用户名和密码错误，请重新输入！");
  			}

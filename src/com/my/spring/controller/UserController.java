@@ -39,6 +39,13 @@ public class UserController {
     		@ModelAttribute User user) {
         return userService.register(user);
     }
+	@RequestMapping(value="/admin/addUser", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> addUser(
+    		@ModelAttribute User user,
+    		@RequestParam(value="token",required=true) String token) {
+        return userService.addUser(user,token);
+    }
 	@RequestMapping(value="/findUserLike", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<List<User>> findUserLike(
@@ -84,7 +91,7 @@ public class UserController {
 	@RequestMapping(value="/admin/getUserDetails", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<User> getUserDetailsByAdmin(
-    		@PathVariable(value="userId") Long userId,
+    		@RequestParam(value="userId",required=true) Long userId,
     		@RequestParam(value="token",required=true) String token) {
         return userService.getUserDetailsByAdmin(userId,token);
     }
@@ -92,7 +99,7 @@ public class UserController {
 	@RequestMapping(value="/admin/deleteUser", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteUserByAdmin(
-	    		@PathVariable(value="userId") Long userId,
+    		@RequestParam(value="userId",required=true) Long userId,
 	    		@RequestParam(value="token",required=true) String token) {
 	        return userService.deleteUser(userId,token);
     }
@@ -103,8 +110,9 @@ public class UserController {
     public DataWrapper<List<User>> getUserListByAdmin(
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute User user,
     		@RequestParam(value="token",required=true) String token) {
-        return userService.getUserList(pageIndex,pageSize,token);
+        return userService.getUserList(pageIndex,pageSize,user,token);
     }
 	
 	//修改用户权限
@@ -119,7 +127,13 @@ public class UserController {
 		}
         return userService.changeUserTypeByAdmin(userId,userType,token);
     }
-	
+	@RequestMapping(value="/admin/updateUser", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> changeUserTypeByAdmin(
+    		@ModelAttribute User user,
+    		@RequestParam(value="token",required=true) String token) {
+        return userService.updateUserByAdmin(user, token);
+    }
 	
 
 }

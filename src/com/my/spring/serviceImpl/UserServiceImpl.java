@@ -99,6 +99,36 @@ public class UserServiceImpl implements UserService {
 		}
 		return dataWrapper;
 	}
+	
+	@Override
+	public DataWrapper<Void> updateUserByAdmin(User user, String token) {
+		// TODO Auto-generated method stub
+		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+		User adminInMemory = SessionManager.getSession(token);
+		if (adminInMemory != null && adminInMemory.getUserType() == UserTypeEnum.Admin.getType()) {
+			User userInDB = userDao.getById(user.getId());
+			if (userInDB != null) {
+				if(user.getRealName() != null && !user.getRealName().equals("")) {
+					userInDB.setRealName(user.getRealName());
+				}
+				if (user.getEmail() != null && !user.getEmail().equals("")) {
+					userInDB.setEmail(user.getEmail());
+				}
+				if (user.getTel() != null && !user.getTel().equals("")) {
+					userInDB.setTel(user.getTel());
+				}
+				
+				if (!userDao.updateUser(userInDB)) {
+					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}
+			} else {
+				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);
+			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+		}
+		return dataWrapper;
+	}
 
 	@Override
 	public DataWrapper<User> getUserDetails(String token) {
@@ -134,21 +164,20 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataWrapper<List<User>> getUserList(Integer pageIndex, Integer pageSize, String token) {
+	public DataWrapper<List<User>> getUserList(Integer pageIndex, Integer pageSize, User user, String token) {
 		// TODO Auto-generated method stub
 		DataWrapper<List<User>> dataWrapper = new DataWrapper<List<User>>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
 			User adminInDB = userDao.getById(adminInMemory.getId());
 			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
-				dataWrapper = userDao.getUserList(pageSize, pageIndex);
+				dataWrapper = userDao.getUserList(pageSize, pageIndex,user);
 			} else {
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
-		dataWrapper = userDao.getUserList(pageSize, pageIndex);
 		return dataWrapper;
 	}
 
@@ -213,7 +242,40 @@ public class UserServiceImpl implements UserService {
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
-		return null;
+		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<Void> addUser(User user,String token) {
+		DataWrapper<Void> dataWrapper = new DataWrapper<>();
+		User userInMemory=SessionManager.getSession(token);
+		if(userInMemory!=null){
+			User adminInDB = userDao.getById(userInMemory.getId());
+			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
+				if (user.getUserName() == null ||user.getUserName().equals("")
+						|| user.getPassword() == null || user.getPassword().equals("")
+						|| user.getRealName() == null || user.getRealName().equals("")) {
+					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+				} else if(userDao.getByUserName(user.getUserName()) != null) {
+					dataWrapper.setErrorCode(ErrorCodeEnum.User_Existed);
+				} else {
+					user.setId(null);
+					user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
+					//user.setUserType(user.getUserType());
+					user.setRegisterDate(new Date(System.currentTimeMillis()));
+					if(!userDao.addUser(user)) {
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}
+					
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		
+		return dataWrapper;
 	}
 
 }

@@ -13,8 +13,10 @@ public interface UserService {
 	DataWrapper<Void> updateUser(User user,String token);
 	DataWrapper<User> getUserDetails(String token);
 	DataWrapper<User> getUserDetailsByAdmin(Long userId,String token);
-	DataWrapper<List<User>> getUserList(Integer pageIndex, Integer pageSize,String token);
+	DataWrapper<List<User>> getUserList(Integer pageIndex, Integer pageSize,User user,String token);
 	DataWrapper<Void> changeUserTypeByAdmin(Long userId, Integer userType, String token);
 	DataWrapper<List<User>> findUserLike(User user,String token);
 	DataWrapper<Void> deleteUser(Long userId, String token);
+	DataWrapper<Void> addUser(User user,String token);
+	DataWrapper<Void> updateUserByAdmin(User user,String token);
 }

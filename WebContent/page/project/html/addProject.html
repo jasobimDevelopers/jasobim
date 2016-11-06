@@ -7,7 +7,7 @@
             	<a href="userList.jsp"><span>返回项目列表</span>
             	</a>
             	<div onclick="hideaddprojectHtml()" style="float:right;margin-left:10px;">
-            		<a href=""><img src="page/project/images/删除.png"></a>
+            		<a href=""><img src="page/project/images/deleteIcon.png"></a>
             	</div>
            	</div>
         </div>
@@ -53,8 +53,8 @@
             	<span style="float:left;margin-top:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;图片上传:</span><input style="float:left;margin-top:10px;" type="file" ng-model="inputicon" id="inputicon" />
             </div>
             <div id="addbutton"  style="margin-top:118px;">
-            	<input type="button" ng-model="addProject()" class="btn btn-default" onlick="" value="确定" />
-                <input type="button" ng-model="resetProject()" class="btn btn-default" value="取消" />
+            	<input type="button" ng-click="addProject()" class="btn btn-default" value="确定" />
+                <input type="button" ng-click="resetProject()" class="btn btn-default" value="取消" />
             </div>
         </div>
 	</div>

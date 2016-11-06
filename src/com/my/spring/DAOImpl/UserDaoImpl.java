@@ -58,12 +58,25 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<User>> getUserList(Integer pageSize, Integer pageIndex) {
+	public DataWrapper<List<User>> getUserList(Integer pageSize, Integer pageIndex,User user) {
 		// TODO Auto-generated method stub
 		DataWrapper<List<User>> dataWrapper = new DataWrapper<List<User>>();
         List<User> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
+        if(user.getUserName() != null && user.getUserName() != "") {
+        	criteria.add(Restrictions.like("userName", "%" + user.getUserName() + "%"));
+        }
+        
+        if(user.getRealName() != null && user.getRealName() != "") {
+        	criteria.add(Restrictions.like("realName", "%" + user.getRealName() + "%"));
+        }
+        if(user.getEmail() != null && user.getEmail() != "") {
+        	criteria.add(Restrictions.like("email", "%" + user.getEmail() + "%"));
+        }
+        if(user.getTel() != null && user.getTel() != "") {
+        	criteria.add(Restrictions.like("tel", "%" + user.getTel() + "%"));
+        }
         
         if (pageSize == null) {
 			pageSize = 10;
@@ -124,8 +137,8 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 	@Override
 	public boolean deleteUser(Long userid) {
 		// TODO Auto-generated method stub
-		String hql="delete from User where id="+userid;
-		return delete(hql);
+		
+		return delete(get(userid));
 	}
 
 }

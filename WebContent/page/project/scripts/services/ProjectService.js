@@ -14,7 +14,7 @@ angular.module('Demo')
                 console.log(data);
                 if(data.callStatus == "SUCCEED"){
                     deferred.resolve(data);
-                    self.projectList = data;
+                    self.ProjectList = data;
 
                 }else{
                     alert("数据读取失败");

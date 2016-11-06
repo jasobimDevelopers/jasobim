@@ -7,9 +7,26 @@
 		<div class="bt_menu" onclick="project_video()"><span>安全技术交底</span></div>
 		<div class="bt_menu" onclick="project_question()"><span>问题列表</span></div>
 	</div>
-
+	
+	<script>
+		var total = 21;
+		var sizePerPage = 5;
+		var totalPage = Math.ceil(total/sizePerPage);
+		var arr = new Array();
+		for(var i = 0; i < totalPage; i++) {
+			arr[i] = new Array();
+			for(var j = 0; j < 5; j++) {
+				if(i*5+(j+1) <= total) {
+					arr[i][j] = i*5+(j+1);
+				} else {
+					break;
+				}
+			}
+		}
+		console.log(arr);
+	</script>
 	<div id="project_body">
-		<div id="projectDetail_body_self" style="display:block;">
+		<div id="projectDetail_body_self" style="display:none;">
 			<div id="self_menu">
 				<div id="selfli">
 					<div class="selfli_text"><span>工程名称：</span></div>
@@ -50,7 +67,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="projectDetail_body_item" style="display:none;">
+		<div id="projectDetail_body_item" style="display:block;">
 			<div id="item_menu">
 				<div id="item_menuli_first">
 					<div><span>专业</span></div>
@@ -69,7 +86,7 @@
 					<div><button class="btn btn-default">全部</button></div>
 					<div>
 						<select class="myselect">
-	    					<option value="#1 - #5" selected="selected">#1 - #5</option>
+	    					<option value="#1 - #5" selected="selected">#1 -#10</option>
 	    					<option value="#1">#1</option>
 	    					<option value="#2">#2</option>
 	    					<option value="#3">#3</option>
