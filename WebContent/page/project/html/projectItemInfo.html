@@ -25,11 +25,11 @@
 					</div>
 					<div class="item_menuli">
 						<div><span>栋号</span></div>
-						<div><button class="btn btn-default">全部{{userType}}</button></div>
+						<div><button class="btn btn-default">全部</button></div>
 						<div ng-repeat="buildingNumber in buildingArray">
-							<select class="myselect" type="text" ng-model="userType">
-		    					<option value="#1 - #5" selected="selected">#{{$index*5+1}} -#{{$index*5+5}}</option>
-		    					<option value="1" ng-repeat=" number in buildingNumber">#{{number}}</option>
+							<select class="myselect" type="text" ng-change="test(building$index)"  ng-model="building$index">
+		    					<option value="title" selected="selected">#{{$index*5+1}} -#{{$index*5+5}}</option>
+		    					<option value="{{number}}" ng-repeat=" number in buildingNumber">#{{number}}</option>
 		    				</select>
 	    				</div>
 						
