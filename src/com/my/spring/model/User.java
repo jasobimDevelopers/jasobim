@@ -16,6 +16,7 @@ public class User {
     private Integer userType;
     private String email;
     private String tel;
+    private Long userIcon;
     private Date registerDate;
     
     @Id
@@ -89,6 +90,15 @@ public class User {
 	}
 	public void setRegisterDate(Date registerDate) {
 		this.registerDate = registerDate;
+	}
+	
+	@Basic
+    @Column(name = "user_icon") 
+	public Long getUserIcon() {
+		return userIcon;
+	}
+	public void setUserIcon(Long userIcon) {
+		this.userIcon = userIcon;
 	}
     
     

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.my.spring.enums.UserTypeEnum;
@@ -43,8 +44,11 @@ public class UserController {
     @ResponseBody
     public DataWrapper<Void> addUser(
     		@ModelAttribute User user,
+    		HttpServletRequest request,
+    		//@RequestParam(value = "file", required = false) MultipartFile file,
     		@RequestParam(value="token",required=true) String token) {
-        return userService.addUser(user,token);
+		MultipartFile file=null;
+        return userService.addUser(user,token,file,request);
     }
 	@RequestMapping(value="/findUserLike", method = RequestMethod.POST)
     @ResponseBody
@@ -131,8 +135,11 @@ public class UserController {
     @ResponseBody
     public DataWrapper<Void> changeUserTypeByAdmin(
     		@ModelAttribute User user,
+    		HttpServletRequest request,
+    		@RequestParam(value = "file", required = false) MultipartFile file,
     		@RequestParam(value="token",required=true) String token) {
-        return userService.updateUserByAdmin(user, token);
+   
+		return userService.updateUserByAdmin(user, token,file,request);
     }
 	
 

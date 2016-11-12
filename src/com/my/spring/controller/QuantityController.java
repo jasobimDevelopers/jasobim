@@ -17,7 +17,7 @@ import java.util.List;
 public class QuantityController {
     @Autowired
     QuantityService quantityService;
-    @RequestMapping(value="addQuantity", method = RequestMethod.POST)
+    @RequestMapping(value="/addQuantity", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addQuantity(
             @ModelAttribute Quantity quantity,
@@ -27,7 +27,7 @@ public class QuantityController {
     	
     	return quantityService.addQuantity(quantity,token);
     }
-    @RequestMapping(value="deleteQuantity")
+    @RequestMapping(value="/deleteQuantity")
     @ResponseBody
     public DataWrapper<Void> deleteQuantity(
             @RequestParam(value = "id",required = true) Long id,
@@ -35,7 +35,7 @@ public class QuantityController {
         return quantityService.deleteQuantity(id,token);
     }
 
-    @RequestMapping(value="updateQuantity",method = RequestMethod.POST)
+    @RequestMapping(value="/updateQuantity",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateQuantity(
             @ModelAttribute Quantity quantity,
@@ -45,14 +45,15 @@ public class QuantityController {
     }
 
 
-    @RequestMapping(value="getQuantityList")
+    @RequestMapping(value="/getQuantityList",method =RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<Quantity>> getQuantityList(
+    		@RequestParam(value = "projectId",required = true) Long projectId,
             @RequestParam(value = "token",required = true) String token){
-        return quantityService.getQuantityList(token);
+        return quantityService.getQuantityList(projectId,token);
     }
     
-    @RequestMapping(value="getQuantityDetailsByAdmin")
+    @RequestMapping(value="/getQuantityDetailsByAdmin")
     @ResponseBody
     public DataWrapper<Quantity> getQuantityDetailsByAdmin(
     		@RequestParam(value = "id",required = true) Long id,

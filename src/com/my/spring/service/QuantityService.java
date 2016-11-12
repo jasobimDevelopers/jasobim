@@ -13,5 +13,5 @@ public interface QuantityService {
     DataWrapper<Void> deleteQuantity(Long id,String token);
     DataWrapper<Void> updateQuantity(Quantity quantity,String token);
 	DataWrapper<Quantity> getQuantityDetailsByAdmin(Long quantityId,String token);
-	DataWrapper<List<Quantity>> getQuantityList(String token);
+	DataWrapper<List<Quantity>> getQuantityList(Long projectId,String token);
 }

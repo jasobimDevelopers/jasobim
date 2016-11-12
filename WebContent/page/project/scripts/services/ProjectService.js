@@ -7,7 +7,7 @@
     }
   var self=this;
 
-  /////注册用户
+  /////增加项目
   this.register = function(Project) {
 
       var deferred = $q.defer();
@@ -30,28 +30,49 @@
       return deferred.promise;
       };
   //獲取用戶列表
-  this.getProjectList = function(pageSize,pageIndex,Project) {
+  this.getProjectList = function(pageSize,pageIndex,project) {
 
       var deferred = $q.defer();
       console.log("读取ProjectList数据");
-      var api = 'api/Project/admin/getProjectList?token='+getCookie('token') + "&pageSize=" + pageSize + "&pageIndex="+pageIndex;
-      if(Project.ProjectName !== undefined && trimStr(Project.ProjectName) != '') {
-      	api += "&ProjectName="+trimStr(Project.ProjectName);
+      var api = 'api/project/admin/getProjectList?token='+getCookie('token') + "&pageSize=" + pageSize + "&pageIndex="+pageIndex;
+      if(project.name !== undefined && trimStr(project.name) !== '') {
+      	api += "&name="+trimStr(project.name);
       }
-      if(Project.realName !== undefined && trimStr(Project.realName) != ''){
-      	api += "&realName="+trimStr(Project.realName);
+      if(project.num !== undefined && trimStr(project.num) !== ''){
+      	api += "&num="+trimStr(Project.realName);
       }
-      if(Project.email !==undefined && trimStr(Project.email) != ''){
-      	api += "&email="+ trimStr(Project.email);
+      if(project.constructionUnit !==undefined && trimStr(project.constructionUnit) !== ''){
+      	api += "&constructionUnit="+ trimStr(project.constructionUnit);
       }
-      if(Project.tel !==undefined && trimStr(Project.tel) != ''){
-      	api += "&tel="+ trimStr(Project.tel);
+      if(project.buildingUnit !==undefined && trimStr(project.buildingUnit) !== ''){
+      	api += "&buildingUnit="+ trimStr(project.buildingUnit);
+      }
+      if(project.leader !== undefined && trimStr(project.leader) !== '') {
+        	api += "&leader="+trimStr(project.leader);
+        }
+     if(project.place !== undefined && trimStr(project.place) !== ''){
+    	api += "&place="+trimStr(project.place);
+     }
+     if(project.description !==undefined && trimStr(project.description) !== ''){
+    	api += "&description="+ trimStr(project.description);
+     }
+     if(project.designUnit !==undefined && trimStr(project.designUnit) !== ''){
+    	api += "&designUnit="+ trimStr(project.designUnit);
+     }
+     if(project.version !== undefined && trimStr(project.version) !== ''){
+     	api += "&version="+trimStr(project.version);
+      }
+      if(project.startDate !==undefined && trimStr(project.startDate) !== ''){
+     	api += "&startDate="+ trimStr(project.startDate);
+      }
+      if(project.phase !==undefined && trimStr(project.phase) !== ''){
+     	api += "&phase="+ trimStr(project.phase);
       }
       $http.get(encodeURI(api))
           .success(function(data, status, headers, config){
               if(data.callStatus == "SUCCEED"){
                   deferred.resolve(data);
-                  self.ProjectList = data;
+                  self.projectList = data;
              
               }else{
                   alert("数据读取失败");
@@ -63,12 +84,12 @@
           });
       return deferred.promise;
       };
-      //////删除用户信息
-   this.deleteProject = function(ProjectId) {
+      //////删除项目信息
+   this.deleteProject = function(projectId,token) {
       
       var deferred = $q.defer();
       console.log("删除Project数据");
-      $http.get('api/Project/admin/deleteProject?ProjectId='+ProjectId+'&token='+getCookie('token'))
+      $http.get('api/project/admin/deleteProject?projectId='+projectId+'&token='+token)
           .success(function(data, status, headers, config){
               console.log(data);
               if(data.callStatus == "SUCCEED"){
@@ -85,15 +106,14 @@
           });
       return deferred.promise;
       };
-      ///////更新用户信息
-      this.updateProject = function(Project,token) {
+      ///////更新项目信息
+      this.updateProject = function(project,token) {
       	var deferred = $q.defer();
       	console.log("更新Project数据");
-      	delete Project.registerDate;
 //	          	var nProject = {};
 //	          	nProject.id = Project.id;
 //	          	nProject.realName = Project.realName;
-      	$http.post('api/Project/admin/updateProject?token='+token,Project,
+      	$http.post('api/project/admin/updateProject?token='+token,project,
       		{
       			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
       			transformRequest: transform
@@ -114,13 +134,13 @@
           });
       return deferred.promise;
       };
-      ///////增加用户信息
+      ///////增加项目信息
       this.addProjectByAdmin = function(findProjectInfo,token) {
           var deferred = $q.defer();
           
           
-          console.log("查找Project数据");
-          $http.post('api/Project/admin/addProject?token='+token,findProjectInfo,
+          console.log("添加Project数据");
+          $http.post('api/project/admin/addProject?token='+token,findProjectInfo,
           		{
           			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
           			transformRequest: transform
@@ -142,12 +162,12 @@
               });
           return deferred.promise;
           };
-      ///////查找用户信息
-      this.findProject = function(ProjectId,token) {
+      ///////查找项目信息
+      this.findProject = function(projectId,token) {
       
       var deferred = $q.defer();
       console.log("查找Project数据");
-      $http.get('api/Project/admin/getProjectDetails?ProjectId='+ProjectId+'&token='+token)
+      $http.get('api/project/admin/getProjectDetails?projectId='+projectId+'&token='+token)
           .success(function(data, status, headers, config){
               console.log(data);
               if(data.callStatus == "SUCCEED"){
@@ -164,4 +184,64 @@
               });
           return deferred.promise;
           };
+          //////////////////////////////
+          ///////查找项目里的楼栋信息
+          this.getBuildingList = function(projectId) {
+          
+          var deferred = $q.defer();
+          console.log("查找Project数据");
+          $http.get('api/building/admin/getBuildingByProjectId?projectId='+projectId)
+              .success(function(data, status, headers, config){
+                  console.log(data);
+                  if(data.callStatus == "SUCCEED"){
+                      deferred.resolve(data);
+                      self.buildingInfo = data;
+                  
+                  }else{
+                      alert("数据查找失败");
+                      }
+                      
+                  })
+                  .error(function(data, status, headers, config){
+                      deferred.reject(data);
+                  });
+              return deferred.promise;
+              };
+              //////////////////////////////
+          
+          //////*项目构件信息操作*///////
+          //获取构件信息列表
+          this.getItemList = function(projectId,pageSize,pageIndex,item) {
+
+              var deferred = $q.defer();
+              console.log("读取ProjectList数据");
+              var api = 'api/item/admin/getItemList?token='+getCookie('token')+'&projectId='+projectId + "&pageSize=" + pageSize + "&pageIndex="+pageIndex;
+              /*if(item.buildingNum !== undefined && trimStr(item.buildingNum) !== '') {
+              	api += "&name="+trimStr(project.buildingNum);
+              }
+              if(item.floorNum !== undefined && trimStr(item.floorNum) !== ''){
+              	api += "&num="+trimStr(Project.floorNum);
+              }
+              if(project.householdNum !==undefined && trimStr(project.householdNum) !== ''){
+              	api += "&householdNum="+ trimStr(project.householdNum);
+              }
+              if(project.professionType !==undefined && trimStr(project.professionType) !== ''){
+                	api += "&professionType="+ trimStr(project.professionType);
+                }*/
+              $http.get(encodeURI(api))
+                  .success(function(data, status, headers, config){
+                      if(data.callStatus == "SUCCEED"){
+                          deferred.resolve(data);
+                          self.projectList = data;
+                     
+                      }else{
+                          alert("数据读取失败");
+                      }
+                      
+                  })
+                  .error(function(data, status, headers, config){
+                      deferred.reject(data);
+                  });
+              return deferred.promise;
+              };
   });

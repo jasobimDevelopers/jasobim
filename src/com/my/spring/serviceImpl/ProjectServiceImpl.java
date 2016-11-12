@@ -37,16 +37,21 @@ public class ProjectServiceImpl implements ProjectService {
     private String filePath="/files";
     private Integer fileType=2;
     @Override
-    public DataWrapper<Void> addProject(Project project,String token,MultipartFile file,HttpServletRequest request) {
+    public DataWrapper<Void> addProject(Project project,String token,MultipartFile modelfile,MultipartFile picfile,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(project!=null){
-					if(file!=null){
+					if(modelfile!=null){
 						String path=filePath+"/"+"projectmodels"+"/";
-						Files newfile=fileService.uploadFile(path, file,fileType,request);
+						Files newfile=fileService.uploadFile(path, modelfile,fileType,request);
 						project.setModelId(newfile.getId());
+					}
+					if(picfile!=null){
+						String path=filePath+"/"+"projectpics"+"/";
+						Files newfile=fileService.uploadFile(path, picfile,fileType,request);
+						project.setPicId(newfile.getId());
 					}
 					if(!projectDao.addProject(project))
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -83,6 +88,8 @@ public class ProjectServiceImpl implements ProjectService {
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
         return dataWrapper;
     }
@@ -110,11 +117,17 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public DataWrapper<List<Project>> getProjectList(String token) {
+    public DataWrapper<List<Project>> getProjectList(Integer pageIndex, Integer pageSize, Project project, String token) {
     	DataWrapper<List<Project>> dataWrapper=new DataWrapper<List<Project>>();
     	User userInMemory =SessionManager.getSession(token);
     	if (userInMemory != null) {
-    		return projectDao.getProjectList();
+    		User adminInDB = userDao.getById(userInMemory.getId());
+			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
+				dataWrapper=projectDao.getProjectList(pageSize, pageIndex,project);
+			} else {
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+    		 
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

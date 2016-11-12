@@ -2,59 +2,59 @@
 
 	<div id="addcontent_project">
         <div id="addhead">
-        	<div id="addprojecttitle" style="float:left;margin-top:10px;"><span>添加新项目</span></div>
+        	<div id="addprojecttitle" style="float:left;margin-top:10px;"><span style="font-size:18px;font-family:微软雅黑;">{{projectTitle}}</span></div>
             <div id="returnproject" style="float:right; margin-top:10px;">
-            	<a href="userList.jsp"><span>返回项目列表</span>
+            	<a href="" ng-click="returnProjectlist()"><span>返回项目列表</span>
             	</a>
-            	<div onclick="hideaddprojectHtml()" style="float:right;margin-left:10px;">
-            		<a href=""><img src="page/project/images/deleteIcon.png"></a>
+            	<div  style="float:right;margin-left:10px;">
+            		<a href="" ng-click="hideaddprojectHtml()"><img src="page/project/images/deleteIcon.png"></a>
             	</div>
            	</div>
         </div>
         <div id="adduserbody">
         	<div class="addinput">
-        		<span>&nbsp;&nbsp;&nbsp;&nbsp;项目名称:</span><input type="text" ng-model="inputname" id="inputname" />
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;项目名称:</span><input type="text" ng-model="findProjectInfo.name" id="inputname" />
             </div>
             <div class="addinput">
-        		<span>&nbsp;&nbsp;&nbsp;&nbsp;项目编码:</span><input type="password" ng-model="inputpassword" id="inputpassword" />
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;项目编码:</span><input type="text" ng-model="findProjectInfo.num" id="inputpassword" />
             </div>
             <div class="addinput">
-            	<span>&nbsp;&nbsp;&nbsp;&nbsp;施工单位:</span><input type="text" ng-model="inputnick" id="inputnick" />
+            	<span>&nbsp;&nbsp;&nbsp;&nbsp;施工单位:</span><input type="text" ng-model="findProjectInfo.constructionUnit" id="inputnick" />
             </div>
             <div class="addinput">
-        		<span>项目负责人:</span><input type="text" ng-model="inputadress" id="inputadress" />
+        		<span>项目负责人:</span><input type="text" ng-model="findProjectInfo.leader" id="inputadress" />
             </div>
             <div class="addinput">
-            	<span>&nbsp;&nbsp;&nbsp;&nbsp;建设单位:</span><input type="text" ng-model="inputtel" id="inputtel" />
+            	<span>&nbsp;&nbsp;&nbsp;&nbsp;建设单位:</span><input type="text" ng-model="findProjectInfo.buildingUnit" id="inputtel" />
             </div>
             <div class="addinput">
-        		<span>&nbsp;&nbsp;&nbsp;&nbsp;施工地点:</span><input type="text" ng-model="inputname" id="inputname" />
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;施工地点:</span><input type="text" ng-model="findProjectInfo.place" id="inputname" />
             </div>
             <div class="addinput">
-        		<span>&nbsp;&nbsp;&nbsp;&nbsp;项目简介:</span><input type="password" ng-model="inputpassword" id="inputpassword"/>
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;项目简介:</span><input type="text" ng-model="findProjectInfo.description" id="inputpassword"/>
             </div>
             <div class="addinput">
-            	<span>&nbsp;&nbsp;&nbsp;&nbsp;设计单位:</span><input type="text" ng-model="inputnick" id="inputnick" />
+            	<span>&nbsp;&nbsp;&nbsp;&nbsp;设计单位:</span><input type="text" ng-model="findProjectInfo.designUnit" id="inputnick" />
             </div>
             <div class="addinput">
-        		<span>&nbsp;&nbsp;&nbsp;&nbsp;项目版本:</span><input type="text" ng-model="inputadress" id="inputadress" />
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;项目版本:</span><input type="text" ng-model="findProjectInfo.version" id="inputadress" />
             </div>
             <div class="addinput">
-            	<span>&nbsp;&nbsp;&nbsp;&nbsp;施工时间:</span><input type="text" ng-model="inputtel" id="inputtel" />
+            	<span>&nbsp;&nbsp;&nbsp;&nbsp;施工时间:</span><input type="text" ng-model="findProjectInfo.startDate" id="inputtel" />
             </div>
             <div class="addinput">
-        		<span>&nbsp;&nbsp;&nbsp;&nbsp;施工周期:</span><input type="text" ng-model="inputname" id="inputname" />
+        		<span>&nbsp;&nbsp;&nbsp;&nbsp;施工周期:</span><input type="text" ng-model="findProjectInfo.phase" id="inputname" />
             </div>
             
             <div class="addinput">
-            	<span style="float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模型上传:</span><input style="float:left" type="file" ng-model="inputicon" id="inputicon" />
+            	<span style="float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模型上传:</span><input style="float:left" type="file" ng-model="findProjectInfo.leader" id="inputicon" />
             </div>
             <div class="addinput">
-            	<span style="float:left;margin-top:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;图片上传:</span><input style="float:left;margin-top:10px;" type="file" ng-model="inputicon" id="inputicon" />
+            	<span style="float:left;margin-top:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;图片上传:</span><input style="float:left;margin-top:10px;" type="file" ng-model="findProjectInfo.leader" id="inputicon" />
             </div>
             <div id="addbutton"  style="margin-top:118px;">
-            	<input type="button" ng-click="addProject()" class="btn btn-default" value="确定" />
-                <input type="button" ng-click="resetProject()" class="btn btn-default" value="取消" />
+            	<input type="button" ng-click="addProjectByAdmin()" class="btn btn-default" value="确定" />
+                <input type="button" ng-click="resetProject()" class="btn btn-default" value="重置" />
             </div>
         </div>
 	</div>

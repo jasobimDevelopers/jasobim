@@ -112,17 +112,14 @@ angular.module('Demo')
         this.updateUser = function(user,token) {
         	var deferred = $q.defer();
         	console.log("更新User数据");
-        	delete user.registerDate;
-//        	var nuser = {};
-//        	nuser.id = user.id;
-//        	nuser.realName = user.realName;
         	$http.post('api/user/admin/updateUser?token='+token,user,
-        		{
-        			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-        			transformRequest: transform
-        		})
+        			{
+//    			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+//    			transformRequest: transform
+        		headers: {'Content-Type':undefined},
+                transformRequest: angular.identity 
+    		})
             .success(function(data, status, headers, config){
-            	console.log(data);
                 if(data.callStatus == "SUCCEED"){
                     deferred.resolve(data);
                     self.updateUserInfo = data;
@@ -135,6 +132,27 @@ angular.module('Demo')
             .error(function(data, status, headers, config){
                 deferred.reject(data);
             });
+        	/*$http({
+        		method: 'POST',
+    			url: 'api/user/admin/updateUser?token='+token,
+    			headers: {
+    				'Content-Type': undefined
+    			},
+    			transformRequest: angular.identity,
+    			data:user
+    		   
+        		  }).success(function(d) {
+        		    //请求成功
+        			  if(data.callStatus == "SUCCEED"){
+                        deferred.resolve(data);
+                        self.updateUserInfo = data;
+                        alert("更新成功")
+                    }else{
+                        alert("数据更新失败("+data.errorCode+")");
+                    }
+        		  }).error(function(data, status) {
+        			  deferred.reject(data);
+        		  });*/
         return deferred.promise;
         };
         ///////增加用户信息

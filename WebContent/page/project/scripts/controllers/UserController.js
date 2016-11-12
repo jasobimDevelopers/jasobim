@@ -1,13 +1,12 @@
 var token=getCookie('token');
-function hideadduserHtml(){
-	$("#addUserHtml").css("display","none");
-}
+
 
 function UserController($scope,UserService) {
 	
   console.log("载入UserController");
   $scope.currentPage = 1;
   $scope.userTofind = {};
+  $scope.findUserInfo = {};
   $scope.userTitles=["序号","id","用户名","真实姓名","权限","邮箱","电话","注册日期","操作"];
   ///////分页获取用户列表
   $scope.getUserList = function(pageSize,pageIndex,user) {
@@ -15,7 +14,6 @@ function UserController($scope,UserService) {
 	  	  $scope.userList = result.data;
 	      $scope.currentPage = result.currentPage;
 	      $scope.totalPage = result.totalPage;
-
 	      $scope.userPage($scope.totalPage,$scope.currentPage);
 	  });
   }
@@ -30,7 +28,6 @@ function UserController($scope,UserService) {
 	      current:iCurrent,
 
 	      backFn:function(p){
-	    	  alert(p);
 	    	  $scope.getUserList(pageSize,p,$scope.userTofind);
 	    	  
 	      }
@@ -43,23 +40,11 @@ function UserController($scope,UserService) {
 	  document.getElementById("addUserHtml").style.display = 'block';
       $scope.title="增加用户";
   }
-  
-///用户注册
-  $scope.register=function(){
-//	  console.log($scope.findUserInfo);
-//	  UserService.
-  }
-//  if(UserService.userList){
-//	 $scope.userList = UserService.userList.data;
-//     $scope.currentPage = UserService.userList.currentPage;
-//     $scope.totalPage = UserService.userList.currentPage;
-//  }else{
-//  	UserService.getUserList().then(function (result){
-//  	  $scope.userList = result.data;
-//      $scope.currentPage = result.currentPage;
-//      $scope.totalPage = result.currentPage;
-//  	})
-//  }
+  //////隐藏 用户添加界面
+  $scope.hideadduserHtml= function(){
+		$scope.findUserInfo = {};
+		document.getElementById("addUserHtml").style.display = 'none';
+	}
   ///////更新用户
   $scope.updateUser = function(user){
   	UserService.updateUser(user,token).then(function(result){
@@ -78,7 +63,7 @@ function UserController($scope,UserService) {
  $scope.deleteUser = function(userid){
 	  	UserService.deleteUser(userid,token).then(function(result){
 	       $scope.deleteUserInfo=result.data;
-	       $scope.getUserList();
+	       $scope.getUserList(pageSize,$scope.currentPage,$scope.userTofind);
 	       
 	    });
  }
@@ -95,6 +80,7 @@ function UserController($scope,UserService) {
  /////增加用户
  $scope.addUserByAdmin = function(){
 	 if($scope.title=="增加用户"){
+		 findUserInfo = {};
 		 findUserInfo=$scope.findUserInfo;
 		 UserService.addUserByAdmin(findUserInfo,token).then(function(result){
 		       $scope.addUserByAdminInfo=result.data;
@@ -104,7 +90,19 @@ function UserController($scope,UserService) {
 	 }
 	 if($scope.title=="更新用户")
 	{
-		 UserService.updateUser($scope.findUserInfo,token).then(function(result){
+		 var formData = new FormData();
+		 formData.append('id', $scope.findUserInfo.id);
+		 var userIcon = document.querySelector('input[type=file]').files[0];
+		 formData.append('file',userIcon);
+		 formData.append('userName',$scope.findUserInfo.userName);
+		 formData.append('realName',$scope.findUserInfo.realName);
+		 formData.append('eamil',$scope.findUserInfo.email);
+		 formData.append('tel',$scope.findUserInfo.tel);
+		 if($scope.findUserInfo.userType != null && ($scope.findUserInfo.userType==0 ||$scope.findUserInfo.userType ==1)) {
+			 formData.append('userType',$scope.findUserInfo.userType);
+		 }
+		 
+		 UserService.updateUser(formData,token).then(function(result){
 		       $scope.updateUserInfo=result.data;
 		       $scope.getUserList(pageSize,1,$scope.userTofind);
 		       

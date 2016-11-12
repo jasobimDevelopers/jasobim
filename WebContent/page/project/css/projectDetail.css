@@ -51,8 +51,6 @@ font-weight: bold;
 }
 
 #project_body{
-	background:url(../images/border.png) no-repeat;
-	background-size:100% 100%;
 	width:1200px;
 	margin:0 auto;
 }
@@ -62,8 +60,13 @@ font-weight: bold;
 #projectDetail_body_self{
 	background:url(../images/selfIcon.png) no-repeat;
 	border:1px solid #CCCCCC;
-	height:800px;
+	height:1100px;
 	width:1200px;
+	margin:0 auto;
+}
+#selfContent{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
 	margin:0 auto;
 }
 #self_menu{
@@ -82,20 +85,58 @@ font-weight: bold;
 }
 #selfliModel{
 	width:566px;
-	height:30px;
+	height:50px;
 	float: left;
 	margin-left:270px;
 	margin-top: 120px;
 	font-size: 18px;
 	font-family: 微软雅黑;
 }
-
+#selfliModel div{
+	float:left;
+	width:130px;
+}
+#selfliModel div{
+	text-align:right;
+}
+.projectInfoContentInput{
+	width:256px;
+	height:30px;
+	border:1px solid gray;
+	background-color:#F9F9F9;
+}
+#projectInfoDescInput{
+	width:256px;
+	height:120px;
+	border:1px solid gray;
+	background-color:#F9F9F9;
+}
+#selfli div{
+	float:left;
+	margin:0 8px;
+	
+}
+.selfli_text{
+	width:130px;
+	text-align:right;
+}
+#selfAdd{
+	width:670px;
+	height:100px;
+	text-align:right;
+	margin-top:50px;
+}
 /*标题具体内容----项目的构件信息*/
 
 #projectDetail_body_item{
 	background:url(../images/itemIcon.png) no-repeat;
-	height:800px;
-	width:1300px;
+	height:930px;
+	width:1186px;
+	margin:0 auto;
+}
+#itemContent{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
 	margin:0 auto;
 }
 #item_menu{
@@ -134,6 +175,9 @@ font-weight: bold;
 } 
 #item_content{
 	background: url(../images/itemIcon.png) no-repeat;
+	width:1110px;
+	margin-top:10px;
+	margin-left:46px;
 }
 /*标题具体内容----项目的图纸信息*/
 
@@ -141,6 +185,11 @@ font-weight: bold;
 	background:url(../images/paperIcon.png) no-repeat;
 	height:600px;
 	width:1200px;
+	margin:0 auto;
+}
+#paperContent{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
 	margin:0 auto;
 }
 #paper_header div{
@@ -185,6 +234,11 @@ font-weight: bold;
 	width:1200px;
 	margin:0 auto;
 }
+#quantityContent{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
+	margin:0 auto;
+}
 #quantity_menu{
 	padding-top:44px;
 	padding-left:47px; 
@@ -211,6 +265,11 @@ font-weight: bold;
 	background:url(../images/videoIcon.png) no-repeat;
 	height:600px;
 	width:1200px;
+	margin:0 auto;
+}
+#videoContent{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
 	margin:0 auto;
 }
 #video_menu{
@@ -247,6 +306,11 @@ font-weight: bold;
 	width:1200px;
 	margin:0 auto;
 	padding-left:50px;
+}
+#questionContent{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
+	margin:0 auto;
 }
 .questionlist{
 	background:url(../images/问题底板.png) no-repeat;

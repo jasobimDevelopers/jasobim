@@ -9,6 +9,7 @@ import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -37,11 +38,12 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<Quantity>> getQuantityList() {
+    public DataWrapper<List<Quantity>> getQuantityList(Long projectId) {
         DataWrapper<List<Quantity>> retDataWrapper = new DataWrapper<List<Quantity>>();
         List<Quantity> ret = new ArrayList<Quantity>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Quantity.class);
+        criteria.add(Restrictions.eq("projectId", projectId));
 //        criteria.addOrder(Order.desc("publishDate"));
         try {
             ret = criteria.list();

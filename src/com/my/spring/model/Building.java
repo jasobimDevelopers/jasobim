@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class Building {
 	private Long id;
 	private String name;
-	private Long preojectId;
+	private Long projectId;
 	private Integer buildingNum;
 	private Integer floorNum;
 	private double area;
@@ -53,12 +53,12 @@ public class Building {
 
 	@Basic
 	@Column(name = "project_id")
-	public Long getPreojectId() {
-		return preojectId;
+	public Long getProjectId() {
+		return projectId;
 	}
 
-	public void setPreojectId(Long preojectId) {
-		this.preojectId = preojectId;
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 	@Basic
 	@Column(name = "floor_num")

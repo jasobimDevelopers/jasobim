@@ -48,4 +48,10 @@ public class BuildingController {
     public DataWrapper<List<Building>> getBuildingList(){
         return buildingService.getBuildingList();
     }
+    @RequestMapping(value="/admin/getBuildingByProjectId",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<Building> getBuildingByProjectId(
+    		@RequestParam(value = "projectId",required = true) Long projectId){
+        return buildingService.getBuildingByProjectId(projectId);
+    }
 }

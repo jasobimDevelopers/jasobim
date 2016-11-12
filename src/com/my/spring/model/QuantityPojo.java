@@ -21,6 +21,7 @@ public class QuantityPojo {
 	private String material;
 	private String name;
 	private String type_name;
+	private Integer profession_type;
 	public Long getNum() {
 		return num;
 	}
@@ -133,5 +134,11 @@ public class QuantityPojo {
 		this.material=material;
 		this.name=name;
 		this.type_name=type_name;
+	}
+	public Integer getProfession_type() {
+		return profession_type;
+	}
+	public void setProfession_type(Integer profession_type) {
+		this.profession_type = profession_type;
 	}
 }

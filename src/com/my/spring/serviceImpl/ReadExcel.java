@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.my.spring.utils.WDWUtil;
+import com.my.spring.model.Building;
 import com.my.spring.model.Item;
 
 public class ReadExcel {
@@ -29,6 +30,8 @@ public class ReadExcel {
     private int totalCells = 0; 
     //错误信息接收器
     private String errorMsg;
+    ///////全局变量
+
     //构造方法
     public ReadExcel(){}
     //获取总行数
@@ -207,7 +210,8 @@ public class ReadExcel {
        }
        
        List<Item> elementList=new ArrayList<Item>();
-       Item item;            
+       Item item;    
+       Building building = null;
       //循环Excel行数,从第二行开始。标题不入库
        for(int r=1;r<totalRows;r++){
            Row row = sheet.getRow(r);
@@ -236,13 +240,24 @@ public class ReadExcel {
 	                	   item.setHouseholdNum(householdid);
 	                	   item.setProjectId(new Long((long)projectid));
 	                	   item.setUnitNum(unitid);
-                	   }/*else{
-                		   elementList=null;
-                		   return elementList;
-                	   }*/
+                	   }
+                	   
                    }else if(c==2){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   item.setName(cell.getStringCellValue());//构件名称
+                	   String name=cell.getStringCellValue();
+                	   item.setName(name);//构件名称
+                	   if(name.equals("电缆桥架") || name.equals("电缆桥架配件") || name.equals("电气设备")){
+                		 item.setProfessionType(0);  
+                	   }
+                	   if(name.equals("风管") || name.equals("风管附件") || name.equals("风管管件") || name.equals("风道末端") || name.equals("柜式离心风机") || name.equals("高效低噪声混流风机")){
+                		   item.setProfessionType(1);
+                	   }
+                	   if(name.equals("消火栓箱")){
+                		   item.setProfessionType(3);
+                	   }
+                	   if(name.equals("卫浴装置")){
+                		   item.setProfessionType(2);
+                	   }
                    }else if(c==3){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   item.setTypeName(cell.getStringCellValue());//构件类型名称
@@ -275,7 +290,18 @@ public class ReadExcel {
                    }
                }
            }
-           //添加客户
+           //添加 构件信息
+           if(item.getName().equals("管道") || item.getName().equals("管件") ||item.getName().equals("管道附件")){
+        	   if(item.getSystemType().equals("消火栓给水系统") || item.getSystemType().equals("湿式自动喷水灭火系统")){
+        		   item.setProfessionType(3);
+        	   }else{
+        		   item.setProfessionType(2);
+        	   }
+           }
+           
+           
+           
+           
            try{
         	   elementList.add(item);
            }catch(Exception e){

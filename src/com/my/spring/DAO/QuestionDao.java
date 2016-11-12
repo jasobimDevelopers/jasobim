@@ -12,6 +12,6 @@ public interface QuestionDao {
     boolean addQuestion(Question question);
     boolean deleteQuestion(Long id);
     boolean updateQuestion(Question question);
-    DataWrapper<List<Question>> getQuestionList();
+    DataWrapper<List<Question>> getQuestionList(Long projectId);
     Question getById(Long id);
 }

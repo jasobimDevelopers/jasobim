@@ -119,11 +119,16 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public DataWrapper<List<Paper>> getPaperList(String token) {
+    public DataWrapper<List<Paper>> getPaperList(Long projectId,String token) {
     	DataWrapper<List<Paper>> dataWrapper = new DataWrapper<List<Paper>>();
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
-	        	return paperDao.getPaperList();
+	        	if(userInMemory.getUserType()!=UserTypeEnum.Admin.getType()){
+	        		dataWrapper= paperDao.getPaperList(projectId);
+	        	}else{
+	        		dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+	        	}
+	        	
 			} else {
 				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 			}

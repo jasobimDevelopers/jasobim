@@ -64,17 +64,17 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         List<User> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
-        if(user.getUserName() != null && user.getUserName() != "") {
+        if(user.getUserName() != null && !user.getUserName().equals("")) {
         	criteria.add(Restrictions.like("userName", "%" + user.getUserName() + "%"));
         }
         
-        if(user.getRealName() != null && user.getRealName() != "") {
+        if(user.getRealName() != null && !user.getRealName().equals("")) {
         	criteria.add(Restrictions.like("realName", "%" + user.getRealName() + "%"));
         }
-        if(user.getEmail() != null && user.getEmail() != "") {
+        if(user.getEmail() != null && !user.getEmail().equals("")) {
         	criteria.add(Restrictions.like("email", "%" + user.getEmail() + "%"));
         }
-        if(user.getTel() != null && user.getTel() != "") {
+        if(user.getTel() != null && !user.getTel().equals("")) {
         	criteria.add(Restrictions.like("tel", "%" + user.getTel() + "%"));
         }
         
@@ -110,6 +110,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         return dataWrapper;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<User>> findUserLike(User user) {
 		List<User> ret = null;

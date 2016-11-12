@@ -48,12 +48,13 @@ public class QuestionController {
     }
 
 
-    @RequestMapping(value="getQuestionList")
+    @RequestMapping(value="/admin/getQuestionList",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<Question>> getQuestionList(
+    		@RequestParam(value = "projectId",required = true) Long	projectId,
     		@RequestParam(value = "token",required = true) String token)
     {
-        return questionService.getQuestionList(token);
+        return questionService.getQuestionList(projectId,token);
     }
     @RequestMapping(value="getQuestionDetails/{questionId}")
     @ResponseBody

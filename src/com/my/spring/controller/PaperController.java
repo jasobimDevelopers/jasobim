@@ -49,11 +49,12 @@ public class PaperController {
     }
 
 
-    @RequestMapping(value="getPaperList")
+    @RequestMapping(value="getPaperList",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<Paper>> getPaperList(
+    		@RequestParam(value="projectId",required=true) Long projectId,
     		@RequestParam(value="token",required=true) String token){
-        return paperService.getPaperList(token);
+        return paperService.getPaperList(projectId,token);
     }
     @RequestMapping(value="getPaperDetails/{paperId}")
     @ResponseBody

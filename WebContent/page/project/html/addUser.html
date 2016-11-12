@@ -6,13 +6,14 @@
             <div id="returnuser">
             	<a href="" ng-click="returnUserlist()"><span>返回用户列表</span>
             	</a>
-            	<div onclick="hideadduserHtml()" style="float:right;margin-left:10px;">
-            		<a href=""><img src="page/project/images/deleteIcon.png"></a>
+            	<div  style="float:right;margin-left:10px;">
+            		<a href="" ng-click="hideadduserHtml()"><img src="page/project/images/deleteIcon.png"></a>
             	</div>
            	</div>
         </div>
         <div id="adduserbody">
         	<div class="addinput">
+        		<input type="hidden" ng-model="findUserInfo.id" id="userId"/>
         		<span>&nbsp;&nbsp;&nbsp;用户名:</span><input type="text" ng-model="findUserInfo.userName" id="inputname" />
             </div>
             <div class="addinput">
@@ -35,7 +36,7 @@
         		</select>
             </div>
             <div class="addinput">
-            	<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;头像上传:</span><input style="float:right" type="file" ng-model="findUserInfo.icon" id="inputicon" />
+            	<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;头像上传:</span><input style="float:right" type="file"  id="inputicon" />
             </div>
             <div id="addbutton" style="margin-top:86px;">
             	<input class="btn btn-default" type="button" ng-click="addUserByAdmin()" value="确定" />

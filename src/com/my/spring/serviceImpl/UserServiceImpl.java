@@ -3,13 +3,18 @@ package com.my.spring.serviceImpl;
 import java.sql.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.Files;
 import com.my.spring.model.User;
+import com.my.spring.service.FileService;
 import com.my.spring.service.UserService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
@@ -22,7 +27,10 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserDao userDao;
-
+	@Autowired
+	FileService fileService;
+	private String filePath="/files";
+    private Integer fileType=5;
 	@Override
 	public DataWrapper<Void> register(User user) {
 		// TODO Auto-generated method stub
@@ -101,13 +109,18 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public DataWrapper<Void> updateUserByAdmin(User user, String token) {
+	public DataWrapper<Void> updateUserByAdmin(User user, String token,MultipartFile file,HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null && adminInMemory.getUserType() == UserTypeEnum.Admin.getType()) {
 			User userInDB = userDao.getById(user.getId());
 			if (userInDB != null) {
+				if(file !=null){
+						String path=filePath+"/"+"projectmodels"+"/";
+						Files newfile=fileService.uploadFile(path, file,fileType,request);
+						userInDB.setUserIcon(newfile.getId());
+				}
 				if(user.getRealName() != null && !user.getRealName().equals("")) {
 					userInDB.setRealName(user.getRealName());
 				}
@@ -246,7 +259,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataWrapper<Void> addUser(User user,String token) {
+	public DataWrapper<Void> addUser(User user,String token,MultipartFile file, HttpServletRequest request) {
 		DataWrapper<Void> dataWrapper = new DataWrapper<>();
 		User userInMemory=SessionManager.getSession(token);
 		if(userInMemory!=null){
@@ -259,6 +272,11 @@ public class UserServiceImpl implements UserService {
 				} else if(userDao.getByUserName(user.getUserName()) != null) {
 					dataWrapper.setErrorCode(ErrorCodeEnum.User_Existed);
 				} else {
+					if(file !=null){
+						String path=filePath+"/"+"projectmodels"+"/";
+						Files newfile=fileService.uploadFile(path, file,fileType,request);
+						user.setUserIcon(newfile.getId());
+					}
 					user.setId(null);
 					user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
 					//user.setUserType(user.getUserType());

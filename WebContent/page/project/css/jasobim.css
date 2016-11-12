@@ -45,7 +45,10 @@ font-weight: bold;
 	height:61px;
 	margin:0 auto;
 }
-
+#projectContent{
+	width:100%;
+	margin:0 auto;
+}
 li{
 	margin:0 400px;
 
@@ -91,10 +94,10 @@ li{
 	float:left;
 }
 #imagelogo{
-	margin-right:300px;
+	margin-right:160px;
 }
 #portrait{
-	margin-left:340px;
+	margin-left:200px;
 }
 #portrait_image{
 	margin:10px 0px;
@@ -158,8 +161,7 @@ table
 } 
 .ths,.tds{
 	text-align:left;
-	height:30px;
-	width:201px; 
+	height:30px; 
 	font-size:14px;
 	font-family:黑体;
 }
@@ -190,8 +192,8 @@ $bottom a,bottom span{
 #bottom a:hover,#bottom span:hover{
 	color:red;
 }
-#userPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
-#userPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
-#userPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
-#userPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
-#userPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+#userPageCode,#projectPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
+#userPageCode a,#projectPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+#userPageCode a:hover,#projectPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+#userPageCode span.current,#projectPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+#userPageCode span.disabled,#projectPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}

@@ -4,9 +4,10 @@ import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.ItemDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QuantityDao;
+import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
-import com.my.spring.model.Files;
+import com.my.spring.model.Building;
 import com.my.spring.model.Item;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
@@ -17,18 +18,11 @@ import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.SessionManager;
 
-import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +35,8 @@ import javax.servlet.http.HttpServletRequest;
 public class ItemServiceImpl implements ItemService {
     @Autowired
     ItemDao itemDao;
+    @Autowired
+    UserDao userDao;
     @Autowired
     QuantityDao quantityDao;
     @Autowired
@@ -122,11 +118,15 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public DataWrapper<List<Item>> getItemList(String token) {
+    public DataWrapper<List<Item>> getItemList(Long projectId,Integer pageIndex, Integer pageSize, Item item,String token) {
     	DataWrapper<List<Item>> dataWrapper = new DataWrapper<List<Item>>();
-        User userInMemory = SessionManager.getSession(token);
-        if (userInMemory != null) {
-        	return itemDao.getItemList();
+        User adminInMemory = SessionManager.getSession(token);
+        if (adminInMemory != null) {
+        	User adminInDB = userDao.getById(adminInMemory.getId());
+        	if(adminInDB.getUserType()== UserTypeEnum.Admin.getType()){
+        		dataWrapper =itemDao.getItemList(projectId,pageSize, pageIndex,item);
+        	}
+        	
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -142,10 +142,10 @@ public class ItemServiceImpl implements ItemService {
 		int type=6;
 		DataWrapper<Void> dataWrapper=new DataWrapper<Void>();
 		boolean b = false;
+		Building building = new Building();
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null){
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
-				String rootPath = request.getSession().getServletContext().getRealPath("/");
 		        String newFileName = MD5Util.getMD5String(file.getOriginalFilename() + new Date() + UUID.randomUUID().toString()).replace(".","")
 		                    + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 		        //创建处理EXCEL
@@ -153,8 +153,39 @@ public class ItemServiceImpl implements ItemService {
 		        
 		        //解析excel，构件信息集合。
 		        List<Item> ItemList = readExcel.getExcelInfo(newFileName ,file);
-		        fileSerivce.uploadFile(name, file, type, request);
+		        int []tempb =new int[ItemList.size()];
+		        int []tempf =new int[ItemList.size()];
+		        int []temph =new int[ItemList.size()];
 		        if(ItemList != null){
+		        	fileSerivce.uploadFile(name, file, type, request);
+		        	int i=0;
+		        	long projectId=ItemList.get(0).getProjectId();
+			        for(Item Item:ItemList){
+			        	tempb[i]=Item.getBuildingNum();
+			        	tempf[i]=Item.getFloorNum();
+			        	temph[i]=Item.getHouseholdNum();
+			        	i++;
+			        }
+			       
+			        int buildingNum=0;
+			        int floorNum=0;
+			        int householdNum=0;
+			        for(int j=0;j<ItemList.size();j++){
+			        	if(buildingNum<tempb[j]){
+			        		buildingNum=tempb[j];
+			        	}
+			        	if(floorNum<tempf[j]){
+			        		floorNum=tempf[j];
+			        	}
+			        	if(householdNum<temph[j]){
+			        		householdNum=temph[j];
+			        	}
+			        }
+			        building.setProjectId(projectId);
+			        building.setBuildingNum(buildingNum);
+			        building.setFloorNum(floorNum);
+			        building.setHouseholdNum(householdNum);
+			        buildingDao.addBuilding(building);	        
 		            b = true;
 		            //迭代添加构件信息
 			        for(Item Item:ItemList){
@@ -190,17 +221,7 @@ public class ItemServiceImpl implements ItemService {
 			    				systemType="";
 			    			}
 			    			test.setSystemType(systemType);
-			    			String nametype=pojo.getName();
-			    			if(nametype.equals("电缆桥架") || nametype.equals("电缆桥架配件") || nametype.equals("电气设备")){
-			    				test.setProfessionType(0);
-			    			}
-			    			if(nametype.equals("管道") || nametype.equals("管道附件") || nametype.equals("管件") || nametype.equals("卫浴装置") || nametype.equals("消火栓箱")){
-			    				test.setProfessionType(2);
-			    			}
-			    			if(nametype.equals("风管") || nametype.equals("风管附件") || nametype.equals("风管管件") || nametype.equals("风道末端") 
-			    					|| nametype.equals("柜式离心风机") || nametype.equals("高效低噪声混流风机")){
-			    				test.setProfessionType(1);
-			    			}
+			    			test.setProfessionType(pojo.getProfession_type());
 			    			String names=pojo.getName();
 			    			if(names.equals("") || names==null){
 			    				names="";
@@ -339,6 +360,12 @@ public class ItemServiceImpl implements ItemService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return dataWrapper;
+	}
+
+	@Override
+	public Long getItemByBase() {
+		
+		return itemDao.getItemByBase();
 	}
 
 }

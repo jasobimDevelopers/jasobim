@@ -1,6 +1,7 @@
 package com.my.spring.controller;
 
 import com.my.spring.model.Project;
+import com.my.spring.model.User;
 import com.my.spring.service.ProjectService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,17 @@ import javax.servlet.http.HttpServletRequest;
 public class ProjectController {
     @Autowired
     ProjectService projectService;
-    @RequestMapping(value="addProject", method = RequestMethod.POST)
+    @RequestMapping(value="/admin/addProject", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addProject(
             @ModelAttribute Project project,
             @RequestParam(value = "token",required = true) String token,
-            HttpServletRequest request,
-            @RequestParam(value = "file", required = false) MultipartFile file){
-        return projectService.addProject(project,token,file,request);
+            HttpServletRequest request){
+           // @RequestParam(value = "file", required = false) MultipartFile modelfile,
+          //  @RequestParam(value = "file", required = false) MultipartFile picfile){
+            MultipartFile picfile=null;
+            MultipartFile modelfile=null;
+        return projectService.addProject(project,token,modelfile,picfile,request);
     }
     @RequestMapping(value="findProjectLike", method = RequestMethod.GET)
     @ResponseBody
@@ -37,17 +41,17 @@ public class ProjectController {
         return projectService.findProjectLike(project,token);
     }
     
-    @RequestMapping(value="deleteProject")
+    @RequestMapping(value="/admin/deleteProject")
     @ResponseBody
     public DataWrapper<Void> deleteProject(
-            @RequestParam(value = "id",required = true) Long id,
+            @RequestParam(value = "projectId",required = true) Long projectId,
             HttpServletRequest request,
             @RequestParam(value = "modelid",required = false) Long modelid,
             @RequestParam(value = "token",required = true) String token){
-        return projectService.deleteProject(id,token,modelid,request);
+        return projectService.deleteProject(projectId,token,modelid,request);
     }
 
-    @RequestMapping(value="updateProject",method = RequestMethod.POST)
+    @RequestMapping(value="admin/updateProject",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateProject(
             @ModelAttribute Project project,
@@ -56,18 +60,20 @@ public class ProjectController {
         return projectService.updateProject(project,token);
     }
 
-
-    @RequestMapping(value="getProjectList",method = RequestMethod.GET)
+    @RequestMapping(value="/admin/getProjectList",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<Project>> getProjectList(
-    		@RequestParam(value = "token",required = true) String token)
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Project project,
+    		@RequestParam(value="token",required=true) String token)
     {
-        return projectService.getProjectList(token);
+        return projectService.getProjectList(pageIndex,pageSize,project,token);
     }
-    @RequestMapping(value="getProjectDetails")
+    @RequestMapping(value="/admin/getProjectDetails",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Project> getProjectDetailsByAdmin(
-    		@PathVariable(value="projectId") Long projectId,
+    		@RequestParam(value="projectId",required=true) Long projectId,
     		@RequestParam(value="token",required=true) String token){
         return projectService.getProjectDetailsByAdmin(projectId,token);
     }

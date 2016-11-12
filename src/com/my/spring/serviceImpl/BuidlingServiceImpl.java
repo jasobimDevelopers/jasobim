@@ -100,4 +100,10 @@ public class BuidlingServiceImpl implements BuildingService {
     public DataWrapper<List<Building>> getBuildingList() {
         return buildingDao.getBuildingList();
     }
+
+	@Override
+	public DataWrapper<Building> getBuildingByProjectId(Long projectId) {
+		// TODO Auto-generated method stub
+		return buildingDao.getBuildingByProjectId(projectId);
+	}
 }

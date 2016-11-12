@@ -6,6 +6,7 @@ import com.my.spring.model.Question;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -34,11 +35,12 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<Question>> getQuestionList() {
+    public DataWrapper<List<Question>> getQuestionList(Long projectId) {
         DataWrapper<List<Question>> retDataWrapper = new DataWrapper<List<Question>>();
         List<Question> ret = new ArrayList<Question>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Question.class);
+        criteria.add(Restrictions.eq("projectId", projectId));
 //        criteria.addOrder(Order.desc("publishDate"));
         try {
             ret = criteria.list();

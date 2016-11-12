@@ -7,7 +7,6 @@ import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
-import com.my.spring.model.MessageFile;
 import com.my.spring.model.Question;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.model.User;
@@ -148,11 +147,15 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public DataWrapper<List<Question>> getQuestionList(String token) {
+    public DataWrapper<List<Question>> getQuestionList(Long projectId,String token) {
     	DataWrapper<List<Question>> datawrapper=new DataWrapper<List<Question>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
-    		return questionDao.getQuestionList();
+    		if(userInMemory.getUserType() == UserTypeEnum.Admin.getType()){
+    			datawrapper= questionDao.getQuestionList(projectId);
+    		}else{
+    			datawrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+    		}
     	}else{
     		datawrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}

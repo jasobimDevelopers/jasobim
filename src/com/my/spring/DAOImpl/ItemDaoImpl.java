@@ -6,11 +6,15 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Item;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
+import com.my.spring.model.User;
+import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
@@ -43,19 +47,56 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<Item>> getItemList() {
+    public DataWrapper<List<Item>> getItemList(Long projectId,Integer pageSize, Integer pageIndex,Item item) {
         DataWrapper<List<Item>> retDataWrapper = new DataWrapper<List<Item>>();
         List<Item> ret = new ArrayList<Item>();
-        
         Session session = getSession();
         Criteria criteria = session.createCriteria(Item.class);
-//        criteria.addOrder(Order.desc("publishDate"));
+        ///////////////////////////////
+        criteria.add(Restrictions.eq("projectId", projectId));
+        if(item.getProfessionType()!=null){
+        	criteria.add(Restrictions.like("professionType", "%" + item.getProfessionType()+ "%"));
+        }
+        if(item.getBuildingNum()!=null){
+        	criteria.add(Restrictions.like("buildingNum", item.getBuildingNum()));
+        }
+        if(item.getHouseholdNum()!=null){
+        	criteria.add(Restrictions.like("householdNum", item.getHouseholdNum()));
+        }
+        if(item.getFloorNum()!=null){
+        	criteria.add(Restrictions.like("floorNum", item.getFloorNum()));
+        }
+        	
+        /////////////////////////////////////
+   
+        if (pageSize == null) {
+			pageSize = 10;
+		}
+        if (pageIndex == null) {
+			pageIndex = 1;
+		}
+        
+        // 取总页数
+        criteria.setProjection(Projections.rowCount());
+        int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
+        int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
+
+        // 真正取值
+        criteria.setProjection(null);
+        if (pageSize > 0 && pageIndex > 0) {
+            criteria.setMaxResults(pageSize);// 最大显示记录数
+            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+        }
         try {
             ret = criteria.list();
         }catch (Exception e){
             e.printStackTrace();
         }
         retDataWrapper.setData(ret);
+        retDataWrapper.setTotalNumber(totalItemNum);
+        retDataWrapper.setCurrentPage(pageIndex);
+        retDataWrapper.setTotalPage(totalPageNum);
+        retDataWrapper.setNumberPerPage(pageSize);
         return retDataWrapper;
     }
 
@@ -220,7 +261,7 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 	public DataWrapper<List<QuantityPojo>> getSameItem() {
 		String sql = "select count(*) as num,SUM(length) as lengthnum,SUM(area) as areanum,"
 				 +"project_id,building_num,unit_num,floor_num,household_num,system_type,"
-				 +"service_type,family_and_type,size,material,name,type_name from item "
+				 +"service_type,family_and_type,size,material,name,type_name,profession_type from item "
 				 + "GROUP BY project_id,building_num,unit_num,floor_num,household_num,"
 				 + "system_type,service_type,family_and_type,size,material,name,type_name";
 		DataWrapper<List<QuantityPojo>> dataWrapper=new DataWrapper<List<QuantityPojo>>();
@@ -242,6 +283,7 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 					 .addScalar("material", StandardBasicTypes.STRING)
 					 .addScalar("type_name", StandardBasicTypes.STRING)
 					 .addScalar("name", StandardBasicTypes.STRING)
+					 .addScalar("profession_type", StandardBasicTypes.INTEGER)
 					 .setResultTransformer(Transformers.aliasToBean(QuantityPojo.class)); 
 			 dataWrapper.setData(query.list());
 	            
@@ -251,5 +293,13 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 	        }
 		 
 		return dataWrapper;
+	}
+
+	@Override
+	public Long getItemByBase() {
+		Session session=getSession();
+		int flag=4;
+		Query query=session.createQuery("select count(*) from item where floor_num<"+flag);
+		return (Long) query.list().get(0);
 	}
 }

@@ -72,7 +72,7 @@ public class ItemController {
     }
 
 
-    @RequestMapping(value="updateItem",method = RequestMethod.POST)
+    @RequestMapping(value="/admin/updateItem",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateItem(
             @ModelAttribute Item Item,
@@ -82,11 +82,15 @@ public class ItemController {
     }
 
 
-    @RequestMapping(value="getItemList")
+    @RequestMapping(value="/admin/getItemList")
     @ResponseBody
     public DataWrapper<List<Item>> getItemList(
+    		@RequestParam(value="projectId",required=true) Long projectId,
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Item item,
             @RequestParam(value = "token",required = false) String token){
-        return itemService.getItemList(token);
+        return itemService.getItemList(projectId,pageIndex,pageSize,item,token);
     }
     @RequestMapping(value="getItemById")
     @ResponseBody
@@ -106,6 +110,14 @@ public class ItemController {
     		@RequestParam(value = "householdNum",required = false) Long householdNum,
     		@RequestParam(value = "token",required = false) String token){
         return itemService.getItemByOthers(projectId,typeName,buildingNum,floorNum,unitNum,householdNum,token);
+    }
+    /*
+     * 查询项目地下层层数
+     * */
+    @RequestMapping(value="/getItemByBase",method=RequestMethod.GET)
+    @ResponseBody
+    public Long getItemByBase(){
+        return itemService.getItemByBase();
     }
 
 }
