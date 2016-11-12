@@ -5,12 +5,14 @@ function projectInfo(){
 	document.getElementById("projectInfoHtml").style.display = 'block';
 }
 
-function test() {
-	alert(1);
-}
 ////////////////////////////////
 function ProjectController($scope,ProjectService) {
-	$scope.userType="#1 - #5";
+	
+	$scope.test = function(index) {
+		alert(index);
+	}
+	
+	
 	console.log("载入ProjectController");
 	$scope.currentPage = 1;
 	$scope.ProjectTofind = {};
