@@ -4,14 +4,11 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ItemDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Item;
-import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
-import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -20,9 +17,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2016/6/22.
@@ -117,7 +112,8 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		Session session = getSession();
         Query query = session.createSQLQuery(sql)
                 .addEntity(Item.class);
-        List<Item> ItemList = query.list();
+        @SuppressWarnings("unchecked")
+		List<Item> ItemList = query.list();
         if(ItemList != null && ItemList.size() > 0) {
             return ItemList;
         }else {
@@ -126,6 +122,7 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 	}
 
 	////输入project_id和type_name删除，并删除quantity里面project_id和name一致的
+	@SuppressWarnings("unused")
 	@Override
 	public DataWrapper<Void> deleteItemByTypeNameAndProjectId(Long projectId, String typeName, String token) {
 		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -144,6 +141,7 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		return dataWrapper;
 	}
     //////////根据项目id删除构件和相应的工程量
+	@SuppressWarnings("unused")
 	@Override
 	public DataWrapper<Void> deleteItemByProjectId(Long projectId, String token) {
 		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -164,11 +162,13 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 
 	@Override
 	public Item getItemById(Long id) {
+		@SuppressWarnings("unused")
 		DataWrapper<Item> dataWrapper = new DataWrapper<Item>();
 		return get(id);
 	}
 
 	//////工程量条件提取
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Item> getItemByOthers(Long projectId, Long typeName, Long buildingNum, Long floorNum,
 			Long unitNum, Long householdNum) {
@@ -296,10 +296,10 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 	}
 
 	@Override
-	public Long getItemByBase() {
+	public Long getItemByBase(Long projectId) {
 		Session session=getSession();
 		int flag=4;
-		Query query=session.createQuery("select count(*) from item where floor_num<"+flag);
-		return (Long) query.list().get(0);
+		Query query=session.createSQLQuery("select count(distinct(floor_num)) from item where project_id=" + projectId + " and floor_num<"+flag);
+		return  Long.parseLong(query.list().get(0).toString());
 	}
 }

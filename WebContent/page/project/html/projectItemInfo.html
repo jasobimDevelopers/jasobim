@@ -20,14 +20,14 @@
 				<div id="item_menu">
 					<div id="item_menuli_first">
 						<div><span>专业</span></div>
-						<div><button class="btn btn-default">全部</button></div>
-						<div ng-repeat="phase in projectPhaseInfo"><button class="btn btn-default">{{phase.name}}</button></div>
+						<div><button class="btn btn-default" ng-click="setzhuanye('all')">全部</button></div>
+						<div ng-repeat="phase in projectPhaseInfo"><button class="btn btn-default" ng-click="setzhuanye(phase.name)">{{phase.name}}</button></div>
 					</div>
 					<div class="item_menuli">
 						<div><span>栋号</span></div>
 						<div><button class="btn btn-default">全部</button></div>
 						<div ng-repeat="buildingNumber in buildingArray">
-							<select class="myselect" type="text" ng-change="test(building$index)"  ng-model="building$index">
+							<select class="myselect" type="text" ng-change="test(building[$index])"  ng-model="building[$index]">
 		    					<option value="title" selected="selected">#{{$index*5+1}} -#{{$index*5+5}}</option>
 		    					<option value="{{number}}" ng-repeat=" number in buildingNumber">#{{number}}</option>
 		    				</select>
@@ -37,48 +37,14 @@
 					<div class="item_menuli">
 						<div><span>楼层</span></div>
 						<div><button class="btn btn-default">全部</button></div>
-						<div><button class="btn btn-default">B1</button></div>
-						<div><button class="btn btn-default">B2</button></div>
-						<div>
-							<select class="myselect">
-		    					<option value="F1 - F5" selected="selected">F1 - F5</option>
-		    					<option value="F1">F1</option>
-		    					<option value="F2">F2</option>
-		    					<option value="F3">F3</option>
-		    					<option value="F4">F4</option>
-		    					<option value="F5">F5</option>
+						<div ng-repeat="buildingDown in buildingDownArray[0]"><button class="btn btn-default" >B{{buildingDown}}</button></div>
+						<div ng-repeat="floorNumber in floorArray">
+							<select class="myselect" type="text" ng-change="test(floors[$index])"  ng-model="floors[$index]">
+		    					<option value="title" selected="selected">F{{$index*5+1}} -F{{$index*5+5}}</option>
+		    					<option value="{{numbers}}" ng-repeat=" numbers in floorNumber">F{{numbers}}</option>
 		    				</select>
 	    				</div>
-						<div>
-							<select class="myselect">
-		    					<option value="F6 - F10" selected="selected">F6 - F10</option>
-		    					<option value="F6">F6</option>
-		    					<option value="F7">F7</option>
-		    					<option value="F8">F8</option>
-		    					<option value="F9">F9</option>
-		    					<option value="F10">F10</option>
-		    				</select>
-	    				</div>
-						<div>
-							<select class="myselect">
-		    					<option value="F11 - F15" selected="selected">F11 - F15</option>
-		    					<option value="F11">F11</option>
-		    					<option value="F12">F12</option>
-		    					<option value="F13">F13</option>
-		    					<option value="F14">F14</option>
-		    					<option value="F15">F15</option>
-		    				</select>
-	    				</div>
-						<div>
-							<select class="myselect">
-		    					<option value="F16 - F20" selected="selected">F16 - F20</option>
-		    					<option value="F16">F16</option>
-		    					<option value="F17">F17</option>
-		    					<option value="F18">F18</option>
-		    					<option value="F19">F19</option>
-		    					<option value="F20">F20</option>
-		    				</select>
-	    				</div>
+						
 					</div>
 					<div class="item_menuli">
 						<div><span>户型</span></div>

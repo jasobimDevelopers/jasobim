@@ -8,8 +8,9 @@ function projectInfo(){
 ////////////////////////////////
 function ProjectController($scope,ProjectService) {
 	
-	$scope.test = function(index) {
-		alert(index);
+	$scope.setzhuanye = function(value) {
+		alert(value);
+		quzhi();
 	}
 	
 	
@@ -18,10 +19,24 @@ function ProjectController($scope,ProjectService) {
 	$scope.ProjectTofind = {};
 	$scope.findProjectInfo = {};
 	var buildingInfo = {};
+	var buildingDownInfo=null;
+	$scope.building = [];
+	$scope.floors =[];
+	var introduced=null;
 	var projectId=null;
 	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","设计单位","施工地点","项目简介","建设单位","版本","施工时间","施工周期","操作"];
 	$scope.itemTitles=["序号","构件名称","底部高程","系统类型","尺寸","长度","设备类型","所属类别","标高","偏移量","面积","材质","类型名","操作"];
 	//////显示增加项目界面
+	
+	
+	
+	
+	
+	for(var i = 0 ; i < 100;i++) {
+		  $scope.building[i] = "title";
+		  $scope.floors[i] = "title";
+	 }
+	
 	$scope.showProjectAdd = function(){
 		$scope.findProjectInfo = {};
 		document.getElementById("addProjectHtml").style.display = 'block';
@@ -46,9 +61,11 @@ function ProjectController($scope,ProjectService) {
 	      $scope.projectTitle="更新项目";
 	    });
 	    $scope.getBuildingList(projectId);
+	    $scope.getBuildingDown(projectId);
 	      $scope.buildingArray=menuArray(buildingInfo.buildingNum);
 		  $scope.floorArray=menuArray(buildingInfo.floorNum);
 		  $scope.householdArray=menuArray(buildingInfo.householdNum);
+		  $scope.buildingDownArray=menuArray(buildingDownInfo);
 	 }
 ////////分页回调函数
 	  $scope.projectPage = function(iPageCount,iCurrent) {
@@ -152,9 +169,16 @@ function ProjectController($scope,ProjectService) {
 	  * 
 	 */
 	 ////////////////////////
+	 /*获取该项目的楼栋信息*/
 	 $scope.getBuildingList = function(projectId){
 		 ProjectService.getBuildingList(projectId).then(function(result){
 		       buildingInfo=result.data;    
+		    });
+	 }
+	 /*获取该项目的楼层信息*/
+	 $scope.getBuildingDown = function(projectId){
+		 ProjectService.getBuildingDown(projectId).then(function(result){
+			 buildingDownInfo=result;    
 		    });
 	 }
 	 function menuArray(total)
@@ -164,6 +188,7 @@ function ProjectController($scope,ProjectService) {
 		var arr = new Array();
 		for(var i = 0; i < totalPage; i++)
 		{
+			
 			arr[i] = new Array();
 			for(var j = 0; j < 5; j++) 
 			{
@@ -192,15 +217,19 @@ function ProjectController($scope,ProjectService) {
 	 $scope.getProjectItemList = function(projectId,pageSize,pageIndex,item) {
 		  ProjectService.getItemList(projectId,pageSize,pageIndex,item).then(function (result){
 			  $scope.getBuildingList(projectId);
-			 
+			  $scope.getBuildingDown(projectId);
 		  	  $scope.projectItemList = result.data;
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
 		      $scope.projectPage($scope.totalPage,$scope.currentPage);
 		  });
 		  $scope.buildingArray=menuArray(buildingInfo.buildingNum);
+		  
+		  
 		  $scope.floorArray=menuArray(buildingInfo.floorNum);
 		  $scope.householdArray=menuArray(buildingInfo.householdNum);
+		  $scope.buildingDownArray=menuArray(buildingDownInfo);
+		 // $scope.introducedArray=
 	  }
 ////////分页回调函数
 	  $scope.projectPage = function(iPageCount,iCurrent) {

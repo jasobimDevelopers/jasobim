@@ -363,9 +363,12 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public Long getItemByBase() {
-		
-		return itemDao.getItemByBase();
+	public Long getItemByBase(Long projectId,String token) {
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory != null && userInMemory.getUserType() ==UserTypeEnum.Admin.getType() ) {
+			return itemDao.getItemByBase(projectId);
+		}
+		return null;
 	}
 
 }

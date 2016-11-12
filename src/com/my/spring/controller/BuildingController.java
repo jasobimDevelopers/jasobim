@@ -51,7 +51,8 @@ public class BuildingController {
     @RequestMapping(value="/admin/getBuildingByProjectId",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Building> getBuildingByProjectId(
-    		@RequestParam(value = "projectId",required = true) Long projectId){
-        return buildingService.getBuildingByProjectId(projectId);
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+    		@RequestParam(value = "token",required = true) String token){
+        return buildingService.getBuildingByProjectId(projectId,token);
     }
 }

@@ -116,8 +116,11 @@ public class ItemController {
      * */
     @RequestMapping(value="/getItemByBase",method=RequestMethod.GET)
     @ResponseBody
-    public Long getItemByBase(){
-        return itemService.getItemByBase();
+    public Long getItemByBase(
+    	@RequestParam(value = "projectId",required = true) Long projectId,
+    	@RequestParam(value = "token",required = true) String token
+    		){
+        return itemService.getItemByBase(projectId,token);
     }
 
 }

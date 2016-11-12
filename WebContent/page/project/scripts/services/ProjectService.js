@@ -190,7 +190,7 @@
           
           var deferred = $q.defer();
           console.log("查找Project数据");
-          $http.get('api/building/admin/getBuildingByProjectId?projectId='+projectId)
+          $http.get('api/building/admin/getBuildingByProjectId?projectId='+projectId+"&token="+token)
               .success(function(data, status, headers, config){
                   console.log(data);
                   if(data.callStatus == "SUCCEED"){
@@ -208,6 +208,29 @@
               return deferred.promise;
               };
               //////////////////////////////
+              
+              ///////获取地下层操作
+              this.getBuildingDown = function(projectId) {
+                  
+                  var deferred = $q.defer();
+                  console.log("查找Project数据");
+                  $http.get('api/item/getItemByBase?projectId='+projectId+"&token="+token)
+                      .success(function(data, status, headers, config){
+                          console.log(data);
+                          if(data!=null){
+                              deferred.resolve(data);
+                              self.buildingDownInfo = data;
+                          
+                          }else{
+                              alert("数据查找失败");
+                              }
+                              
+                          })
+                          .error(function(data, status, headers, config){
+                              deferred.reject(data);
+                          });
+                      return deferred.promise;
+                      };
           
           //////*项目构件信息操作*///////
           //获取构件信息列表
