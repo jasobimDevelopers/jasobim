@@ -363,10 +363,20 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public Long getItemByBase(Long projectId,String token) {
+	public Long getItemByBase(Long projectId,Long buildingId,String token) {
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory != null && userInMemory.getUserType() ==UserTypeEnum.Admin.getType() ) {
-			return itemDao.getItemByBase(projectId);
+			return itemDao.getItemByBase(projectId,buildingId);
+		}
+		return null;
+	}
+
+	@Override
+	public List<Object> getHouseHoldType(Long projectId, Long buildingId, Long floorId, String token) {
+		// TODO Auto-generated method stub
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory != null && userInMemory.getUserType() ==UserTypeEnum.Admin.getType() ) {
+			return itemDao.getHouseHoldType(projectId, buildingId, floorId);
 		}
 		return null;
 	}

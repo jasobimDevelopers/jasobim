@@ -118,9 +118,21 @@ public class ItemController {
     @ResponseBody
     public Long getItemByBase(
     	@RequestParam(value = "projectId",required = true) Long projectId,
+    	@RequestParam(value = "buildingId",required = true) Long buildingId,
     	@RequestParam(value = "token",required = true) String token
     		){
-        return itemService.getItemByBase(projectId,token);
+        return itemService.getItemByBase(projectId,buildingId,token);
+    }
+    
+    @RequestMapping(value="/getHouseHoldType",method=RequestMethod.GET)
+    @ResponseBody
+    public List<Object> getHouseHoldType(
+    	@RequestParam(value = "projectId",required = true) Long projectId,
+    	@RequestParam(value = "buildingId",required = true) Long buildingId,
+    	@RequestParam(value = "floorId",required = true) Long floorId,
+    	@RequestParam(value = "token",required = true) String token
+    		){
+        return itemService.getHouseHoldType(projectId, buildingId, floorId, token);
     }
 
 }

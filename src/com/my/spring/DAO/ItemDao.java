@@ -21,5 +21,6 @@ public interface ItemDao {
 	Item getItemById(Long id);
 	List<Item> getItemByOthers(Long projectId, Long typeName, Long buildingNum, Long floorNum,
 			Long unitNum, Long householdNum);
-	Long getItemByBase(Long projectId);
+	Long getItemByBase(Long projectId,Long buildingId);
+	List<Object> getHouseHoldType(Long projectId,Long buildingId,Long floorId);
 }

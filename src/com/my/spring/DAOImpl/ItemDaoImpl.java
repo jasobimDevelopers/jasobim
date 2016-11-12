@@ -296,10 +296,18 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 	}
 
 	@Override
-	public Long getItemByBase(Long projectId) {
+	public Long getItemByBase(Long projectId,Long buildingId) {
 		Session session=getSession();
 		int flag=4;
-		Query query=session.createSQLQuery("select count(distinct(floor_num)) from item where project_id=" + projectId + " and floor_num<"+flag);
+		Query query=session.createSQLQuery("select count(distinct(floor_num)) from item where project_id=" + projectId + " and building_num=" + buildingId + " and floor_num<"+flag);
 		return  Long.parseLong(query.list().get(0).toString());
+	}
+
+	@Override
+	public List<Object> getHouseHoldType(Long projectId, Long buildingId, Long floorId) {
+		// TODO Auto-generated method stub
+		Session session=getSession();
+		Query query=session.createSQLQuery("select distinct(household_num) from item where project_id=" + projectId + " and building_num=" + buildingId + " and floor_num="+floorId);
+		return  query.list();
 	}
 }

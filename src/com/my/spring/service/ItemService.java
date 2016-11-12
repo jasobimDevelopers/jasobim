@@ -23,5 +23,6 @@ public interface ItemService {
 	DataWrapper<Item> getItemById(Long id, String token);
 	DataWrapper<List<Item>> getItemByOthers(Long projectId, Long typeName, Long buildingNum, Long floorNum,
 			Long unitNum, Long householdNum, String token);
-	Long getItemByBase(Long projectId, String token);
+	Long getItemByBase(Long projectId, Long buildingId,String token);
+	List<Object> getHouseHoldType(Long projectId, Long buildingId, Long floorId,String token);
 }
