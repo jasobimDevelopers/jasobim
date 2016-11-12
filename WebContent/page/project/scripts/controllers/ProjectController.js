@@ -16,13 +16,17 @@ function ProjectController($scope,ProjectService) {
 	$scope.ProjectTofind = {};
 	$scope.findProjectInfo = {};
 	var buildingInfo = {};
+	var projectId=null;
 	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","设计单位","施工地点","项目简介","建设单位","版本","施工时间","施工周期","操作"];
 	$scope.itemTitles=["序号","构件名称","底部高程","系统类型","尺寸","长度","设备类型","所属类别","标高","偏移量","面积","材质","类型名","操作"];
 	//////显示增加项目界面
 	$scope.showProjectAdd = function(){
 		$scope.findProjectInfo = {};
 		document.getElementById("addProjectHtml").style.display = 'block';
+	    document.getElementById("containers").style.display = 'none';
+	    document.getElementById("include_header").style.display = 'none';
 	    $scope.projectTitle="增加项目";
+	    
 	}
 	//////隐藏增加项目界面
 	$scope.hideaddprojectHtml=function(){
@@ -44,17 +48,7 @@ function ProjectController($scope,ProjectService) {
 		  $scope.floorArray=menuArray(buildingInfo.floorNum);
 		  $scope.householdArray=menuArray(buildingInfo.householdNum);
 	 }
-	  
-	  ///////分页获取项目列表
-	$scope.getProjectList = function(pageSize,pageIndex,project) {
-		  ProjectService.getProjectList(pageSize,pageIndex,project).then(function (result){
-		  	  $scope.projectList = result.data;
-		      $scope.currentPage = result.currentPage;
-		      $scope.totalPage = result.totalPage;
-		      $scope.projectPage($scope.totalPage,$scope.currentPage);
-		  });
-	  }
-	  ////////分页回调函数
+////////分页回调函数
 	  $scope.projectPage = function(iPageCount,iCurrent) {
 		  $("#projectPageCode").remove();
 		  $("#table-buton").append("<div id=\"projectPageCode\"></div>");
@@ -69,6 +63,16 @@ function ProjectController($scope,ProjectService) {
 		    	  
 		      }
 
+		  });
+	  }
+	  
+	  ///////分页获取项目列表
+	$scope.getProjectList = function(pageSize,pageIndex,project) {
+		  ProjectService.getProjectList(pageSize,pageIndex,project).then(function (result){
+		  	  $scope.projectList = result.data;
+		      $scope.currentPage = result.currentPage;
+		      $scope.totalPage = result.totalPage;
+		      $scope.projectPage($scope.totalPage,$scope.currentPage);
 		  });
 	  }
 	  
@@ -198,9 +202,9 @@ function ProjectController($scope,ProjectService) {
 	  }
 ////////分页回调函数
 	  $scope.projectPage = function(iPageCount,iCurrent) {
-		  $("#projectPageCode").remove();
-		  $("#table-buton").append("<div id=\"projectPageCode\"></div>");
-		  $("#projectPageCode").createPage({
+		  $("#projectItemPageCode").remove();
+		  $("#table-buton").append("<div id=\"projectItemPageCode\"></div>");
+		  $("#projectItemPageCode").createPage({
 
 		      pageCount:iPageCount,
 
