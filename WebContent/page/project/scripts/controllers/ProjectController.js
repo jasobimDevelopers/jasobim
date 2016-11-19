@@ -13,6 +13,13 @@ function selectValue(index){
 	//obj[index].selected=true;
 }
 
+function setModel(model) {
+	angular.element(model).scope().$parent.$parent.modelFiles = model.files[0];
+}
+function setPic(pic) {
+	angular.element(pic).scope().$parent.$parent.picFiles = pic.files[0];
+}
+
 ////////////////////////////////
 function ProjectController($scope,ProjectService) {
 	console.log("载入ProjectController");
@@ -227,6 +234,8 @@ function ProjectController($scope,ProjectService) {
 	 $scope.resetProject = function(){
 		 $scope.findProjectInfo = {};
 	 }
+	 
+	 
 
 	 /////增加项目
 	 $scope.addProjectByAdmin = function(){
@@ -241,17 +250,36 @@ function ProjectController($scope,ProjectService) {
 		 }
 		 if($scope.projectTitle=="更新项目")
 		{
-			 ///var modelFile = document.querySelector('input[type=file]').files[0];
-			 var modelFile=document.getElementById("tt");
-			 console.log('prf');
-			 console.log(modelFile);
-			 var picFile=document.getElementById("projectInfoss").value;
-//			 alert(picFile);
+			 var formData = new FormData();
+			 for (var key in $scope.findProjectInfo) {
+				   if($scope.findProjectInfo[key] != null) {
+					   formData.append(key, $scope.findProjectInfo[key]);
+				   }
+			 }
+	
+			
+			 if($scope.modelFiles == undefined) {
+				 formData.append('modelFile',null);
+			 } else {
+				 formData.append('modelFile',$scope.modelFiles);
+			 }
+			 if($scope.picFiles == undefined) {
+				 formData.append('picFile',null);
+			 } else {
+				 formData.append('picFile',$scope.picFiles);
+			 }
+			 
+//			 var modelFile=$scope.modelFiles;
+//			 var picFile=$scope.picFiles;
+//			 console.log(modelFile);
+//			 $scope.findProjectInfo.modelFile = modelFile;
+//			 $scope.findProjectInfo.picFile = picFile;
+//			 alert($scope.test);
 			 //var picFile = document.querySelector('input[type=file]').files[1];
-//			 ProjectService.updateProject($scope.findProjectInfo,token,modelFile,picFile).then(function(result){
-//			       $scope.updateProjectInfo=result.data;
-//			       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
-//			    });
+			 ProjectService.updateProject(formData,token).then(function(result){
+			       $scope.updateProjectInfo=result.data;
+			       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
+			    });
 		}
 		 
 	 }

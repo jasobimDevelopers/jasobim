@@ -106,16 +106,17 @@
       return deferred.promise;
       };
       ///////更新项目信息
-      this.updateProject = function(project,token,modelFile,picFile) {
+      this.updateProject = function(project,token) {
+    	  console.log(project);
       	var deferred = $q.defer();
       	console.log("更新Project数据");
 //	          	var nProject = {};
 //	          	nProject.id = Project.id;
 //	          	nProject.realName = Project.realName;
-      	$http.post('api/project/admin/updateProject?token='+token+'&modelFile='+modelFile+'&picFile='+picFile,project,
+      	$http.post('api/project/admin/updateProject?token='+token,project,
       		{
-      			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-      			transformRequest: transform
+      		headers: {'Content-Type':undefined},
+            transformRequest: angular.identity 
       		})
           .success(function(data, status, headers, config){
           	console.log(data);
