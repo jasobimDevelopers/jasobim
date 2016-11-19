@@ -20,7 +20,7 @@
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>施工地点：</span></div>
-						<div class="projectInfoContent"><input type="text" value="{{findProjectInfo.place}}" class="projectInfoContentInput"/></div>
+						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.place" class="projectInfoContentInput"/></div>
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>建设单位：</span></div>
@@ -47,19 +47,20 @@
 						<div id="projectInfoDesc"><textarea id="projectInfoDescInput">{{findProjectInfo.description}}</textarea></div>
 					</div>
 					<div id="selfliModel" >
-						<div class="selfli_text" ><span>模型上传：</span></div>
-						<div><input type="file" id="testfile" /></div>
+						<div class="selfli_text"><span>模型上传：</span></div>
+						<div><input type="file" id="testfile" onchange="setModel(this)"/></div>
 						
 					</div>
 					<div id="selfliPic" >
-						<div class="selfli_text" ><span>图片上传：</span></div>
-						<div><input type="file" id="picFile"></div>
+						<div class="selfli_text"><span>图片上传：</span></div>
+						<div><input type="file" id="picFile" onchange="setPic(this)"/></div>
 					</div>
 					<div id="tt" >
-						<div class="selfli_text" ><span>测试：</span></div>
-						<div><input type="text" id="pppp" value=''></div>
+					<div class="selfli_text" ><span>1上1：</span></div>
+						<div><input type="text" id="test" ng-model="$parent.$parent.test"></div>
 					</div>
 				</div>
+				
 		</div>
 		<div id="selfAdd">
 	            	<input type="button" ng-click="addProjectByAdmin()"  class="btn btn-default" value="确定" />

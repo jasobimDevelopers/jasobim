@@ -29,19 +29,19 @@ public class ItemController {
     @RequestMapping(value="/admin/uploadItem", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> uploadItem(
-            @RequestParam(value = "fileList", required = false) List<MultipartFile> fileList,
+            @RequestParam(value = "fileList", required = false) MultipartFile[] fileList,
             @RequestParam(value = "token",required = true) String token,
             
             HttpServletRequest request){
-    	String filePath = "/fileupload/items";
+//    	String filePath = "/fileupload/items";
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-    	for(int i=0;i<fileList.size();i++){
-    		if(itemService.batchImport(filePath, fileList.get(i),token,request)){
-            	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
-            }else{
-            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-            }
-    	}
+//    	for(int i=0;i<fileList.size();i++){
+//    		if(itemService.batchImport(filePath, fileList.get(i),token,request)){
+//            	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
+//            }else{
+//            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+//            }
+//    	}
     	
         return dataWrapper;
     }
