@@ -46,9 +46,6 @@ public class QuestionServiceImpl implements QuestionService {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			User userInDB = userDao.getById(userInMemory.getId());
-			if (userInDB != null) {
-				if(userInDB.getUserType()==UserTypeEnum.Admin.getType()){
 					if(question!=null){
 						if(question.getQuestionDate()==null){
 							question.setQuestionDate(new Date(System.currentTimeMillis()));
@@ -68,15 +65,7 @@ public class QuestionServiceImpl implements QuestionService {
 							return dataWrapper;
 						}
 				        
-					}else{
-						dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 					}
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-				}
-			} else {
-				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);
-			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

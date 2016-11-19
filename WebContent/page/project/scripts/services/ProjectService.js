@@ -394,7 +394,7 @@
 	                 
 	                 var deferred = $q.defer();
 	                 console.log("删除Project数据");
-	                 $http.get('api/question/admin/deleteQuestion?projectId='+projectId+'&token='+token+'&questionId='+questionId)
+	                 $http.get('api/question/admin/deleteQuestion?projectId='+projectId+'&token='+getCookie('token')+'&questionId='+questionId)
 	                     .success(function(data, status, headers, config){
 	                         console.log(data);
 	                         if(data.callStatus == "SUCCEED"){
@@ -411,4 +411,32 @@
 	                     });
 	                 return deferred.promise;
 	                 };
+	           ///////上传构件信息表
+	                 this.uploadItemFile = function(fileArray) {
+	                     var deferred = $q.defer();
+	                     
+	                     
+	                     console.log("添加Project数据");
+	                     $http.post('api/item/admin/uploadItem?token='+getCookie('token')+"&fileList="+fileArray,
+	                     		{
+	                     			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+	                     			transformRequest: transform
+	                     		})
+	                         .success(function(data, status, headers, config){
+
+	                             if(data.callStatus == "SUCCEED"){
+	                                 deferred.resolve(data);
+	                                 alert("添加成功")
+	                                 self.uploadItemInfo = data;
+	                             
+	                             }else{
+	                                 alert("数据添加失败("+data.errorCode+")");
+	                             }
+	                             
+	                         })
+	                         .error(function(data, status, headers, config){
+	                             deferred.reject(data);
+	                         });
+	                     return deferred.promise;
+	                     };
   });

@@ -107,11 +107,9 @@ public class BuidlingServiceImpl implements BuildingService {
 		DataWrapper<Building> dataWrapper = new DataWrapper<Building>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
+			
 				dataWrapper=buildingDao.getBuildingByProjectId(projectId);
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
+			
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

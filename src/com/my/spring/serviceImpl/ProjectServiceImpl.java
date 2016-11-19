@@ -134,9 +134,7 @@ public class ProjectServiceImpl implements ProjectService {
     	DataWrapper<List<Project>> dataWrapper=new DataWrapper<List<Project>>();
     	List<ProjectPojo> pojoproject=new ArrayList<ProjectPojo>();
     	User userInMemory =SessionManager.getSession(token);
-    	if (userInMemory != null) {
-    		User adminInDB = userDao.getById(userInMemory.getId());
-			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
+    	if (userInMemory != null) {	
 				dataWrapper=projectDao.getProjectList(pageSize, pageIndex,project);
 				for(int i=0;i<dataWrapper.getData().size();i++){
 					ProjectPojo projectpojo=new ProjectPojo();
@@ -166,10 +164,6 @@ public class ProjectServiceImpl implements ProjectService {
     			dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
     			dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
     			dataWrappers.setTotalPage(dataWrapper.getTotalPage());
-			} else {
-				dataWrappers.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
-    		 
 		} else {
 			dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -181,7 +175,6 @@ public class ProjectServiceImpl implements ProjectService {
 		DataWrapper<Project> dataWrapper = new DataWrapper<Project>();
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
-				if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 					if(projectId!=null){
 						Project project=projectDao.getById(projectId);
 						if(project==null) 
@@ -189,9 +182,6 @@ public class ProjectServiceImpl implements ProjectService {
 						else
 							dataWrapper.setData(project);
 					}
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-				}
 			} else {
 				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 			}

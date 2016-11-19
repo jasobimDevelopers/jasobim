@@ -219,7 +219,7 @@ font-weight: bold;
 #paper_content{
 	width:1110px;
 	margin-top:10px;
-	margin-left:46px;
+	margin-left:47px;
 }
 #video_content{
 	width:1110px;
@@ -261,6 +261,7 @@ font-weight: bold;
 	font-family: 微软雅黑;
 	font-size:18px;
 	padding-top:7px;
+	margin-right:41px;
 }
 #paper_header{
 	padding-top:44px;
@@ -443,14 +444,14 @@ font-weight: bold;
 	background: url(../images/itemUploadIcon.png) no-repeat;
 	height:200px;
 	width:800px;
-	margin-left:170px;
+	margin-left:260px;
 	margin-top: 68px;
 }
 .uploadMenuHead{
 	background: url(../images/itemUploadIcon.png) no-repeat 1px;
 	height:200px;
 	width:800px;
-	margin-left:170px;
+	margin-left:260px;
 	margin-top:25px;
 	padding-top:86px;
 }
@@ -461,7 +462,7 @@ font-weight: bold;
 	background: url(../images/itemUploadIcon.png) no-repeat;
 	height:150px;
 	width:800px;
-	margin-left:170px;
+	margin-left:260px;
 }
 .uploadMenu_xiaofang div{
 	float:left;
@@ -473,7 +474,7 @@ font-weight: bold;
 	background: url(../images/itemUploadIcon.png) no-repeat;
 	height:200px;
 	width:800px;
-	margin-left:170px;
+	margin-left:260px;
 }
 .uploadMenu_quantity div{
 	float:left;
