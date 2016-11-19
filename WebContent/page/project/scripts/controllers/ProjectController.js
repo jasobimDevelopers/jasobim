@@ -1,31 +1,136 @@
 ////////////////项目详情信息和项目基本信息页面切换
+var index;
 function projectInfo(){
 	document.getElementById("include_header").style.display = 'none';
 	document.getElementById("containers").style.display = 'none';
 	document.getElementById("projectInfoHtml").style.display = 'block';
 }
+function selectValue(index){
+	var obj=$(".myselect");
+	for(i=0;i<obj.length;i++){
+	        obj[i].selected = false;
+	}
+	//obj[index].selected=true;
+}
 
 ////////////////////////////////
 function ProjectController($scope,ProjectService) {
-	
-	$scope.setzhuanye = function(value) {
-		alert(value);
-		quzhi();
-	}
-	
-	
 	console.log("载入ProjectController");
 	$scope.currentPage = 1;
 	$scope.ProjectTofind = {};
 	$scope.findProjectInfo = {};
 	var buildingInfo = {};
-	var buildingDownInfo=null;
 	$scope.building = [];
 	$scope.floors =[];
 	var introduced=null;
 	var projectId=null;
 	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","设计单位","施工地点","项目简介","建设单位","版本","施工时间","施工周期","操作"];
 	$scope.itemTitles=["序号","构件名称","底部高程","系统类型","尺寸","长度","设备类型","所属类别","标高","偏移量","面积","材质","类型名","操作"];
+	$scope.quantityTitles=["序号","构件名称","专业","系统类型","数值","单位","楼栋号","楼层号","单元号","户型","familyAndType","设备类型","尺寸","设备名称","材质"];
+	$scope.questionTitles=["序号","问题类型","问题提交人","问题标题","专业","内容","问题创建时间","问题等级","问题状态","操作"];
+	$scope.videoTitles=["序号","交底地址","楼栋号","专业","操作"];
+	$scope.paperTitles=["序号","图纸信息","楼栋号","楼层","专业","操作"];
+	$scope.flag=["工程量页面","构件信息页面","图纸信息页面","问题列表页面","安全交底页面"];
+	$scope.phase="all";
+	$scope.buildingId="all";
+	$scope.floorId="all";
+	$scope.householdId="all";
+	$scope.questionType="all";
+	$scope.questionPriority="all";
+	$scope.questionStatus="all";
+	$scope.buildingNumInfo=null;
+	$scope.buildingDownInfo=null;
+	var item = "";
+	var quantity = "";
+	var video = "";
+	var question="";
+	var paper="";
+	/////按问题类型搜索
+	$scope.setQuestionOfType = function(type,flag){
+		$scope.questionType=type;
+		$scope.getProjectQuestionList($scope.projectid,10,1,question);
+	}
+	/////按问题级别搜索
+	$scope.setQuestionOfPriority = function(priority,flag){
+		$scope.questionPriority=priority;
+		$scope.getProjectQuestionList($scope.projectid,10,1,question);
+	}
+	/////按问题状态搜索
+	$scope.setQuestionOfStatus = function(status,flag){
+		$scope.questionStatus=status;
+		$scope.getProjectQuestionList($scope.projectid,10,1,question);
+	}
+	/////按专业自动搜索
+	$scope.setPhase = function(phase,flag) {
+		$scope.phase = phase;
+		if(flag=="构件信息页面"){
+			$scope.getProjectItemList($scope.projectid,10,1,item);
+		}
+		if(flag=="工程量页面"){
+			$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
+		}
+		if(flag=="图纸信息页面"){
+			$scope.getProjectPaperList($scope.projectid,10,1,paper);
+		}
+		if(flag=="安全交底页面"){
+			$scope.getProjectVideoList($scope.projectid,10,1,video);
+		}
+		
+	}
+	/////按楼栋号自动搜索
+	$scope.setBuildingNum = function(building,flag) {
+		$scope.buildingId = building;	
+		selectValue(building);
+	   // $scope.getBuildingNum($scope.projectid,building);
+		ProjectService.getBuildingNum($scope.projectid,building).then(function(result){
+			 $scope.buildingNumInfo=result;  
+
+			 ProjectService.getBuildingDown($scope.projectid,building).then(function(result){
+				 $scope.buildingDownInfo=result;   
+				 if(flag=="构件信息页面"){
+					 $scope.getProjectItemList($scope.projectid,10,1,item);
+				 }
+				 if(flag=="工程量页面"){
+					 $scope.getProjectQuantityList($scope.projectid,10,1,quantity);
+				 }
+				 if(flag="安全交底页面"){
+					 $scope.getProjectVideoList($scope.projectid,10,1,video);
+				 }
+				 if(flag=="图纸信息页面"){
+					 $scope.getProjectPaperList($scope.projectid,10,1,paper);
+				 }
+			    });
+			 
+	    });
+	}
+	/////按楼层号自动搜索
+	$scope.setFloorNum = function(floor,flag) {
+		$scope.floorId=floor;
+		if(flag=="构件信息页面"){
+			$scope.getProjectItemList($scope.projectid,10,1,item);
+		}
+		if(flag=="工程量页面"){
+			$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
+		}
+		if(flag=="图纸信息页面"){
+			$scope.getProjectPaperList($scope.projectid,10,1,paper);
+		}
+	}
+	//////按户型自动搜索
+	$scope.setHouseholdNum = function(household,flag) {
+		$scope.householdId=household;
+		if(flag=="构件信息页面"){
+			$scope.getProjectItemList($scope.projectid,10,1,item);
+		}
+		if(flag=="工程量页面"){
+			$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
+		}
+		if(flag=="图纸信息页面"){
+			
+		}
+	}
+	
+
 	//////显示增加项目界面
 	
 	
@@ -61,24 +166,23 @@ function ProjectController($scope,ProjectService) {
 	      $scope.projectTitle="更新项目";
 	    });
 	    $scope.getBuildingList(projectId);
-	    $scope.getBuildingDown(projectId);
-	      $scope.buildingArray=menuArray(buildingInfo.buildingNum);
-		  $scope.floorArray=menuArray(buildingInfo.floorNum);
-		  $scope.householdArray=menuArray(buildingInfo.householdNum);
-		  $scope.buildingDownArray=menuArray(buildingDownInfo);
+	    //	    $scope.getBuildingDown(projectId);
+	    //	    $scope.buildingArray=menuArray(buildingInfo.buildingNum);
 	 }
-////////分页回调函数
+	////////分页回调函数
 	  $scope.projectPage = function(iPageCount,iCurrent) {
 		  $("#projectPageCode").remove();
-		  $("#table-buton").append("<div id=\"projectPageCode\"></div>");
+		  $("#table-buton1").append("<div id=\"projectPageCode\"></div>");
+		  
 		  $("#projectPageCode").createPage({
-
+			  
 		      pageCount:iPageCount,
 
 		      current:iCurrent,
 
 		      backFn:function(p){
-		    	  $scope.getProjectList(pageSize,p,$scope.projectTofind);
+		    	  console.log($scope.ProjectTofind);
+		    	  $scope.getProjectList(pageSize,p,$scope.ProjectTofind);
 		    	  
 		      }
 
@@ -137,11 +241,17 @@ function ProjectController($scope,ProjectService) {
 		 }
 		 if($scope.projectTitle=="更新项目")
 		{
-			 ProjectService.updateProject($scope.findProjectInfo,token).then(function(result){
-			       $scope.updateProjectInfo=result.data;
-			       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
-			       
-			    });
+			 ///var modelFile = document.querySelector('input[type=file]').files[0];
+			 var modelFile=document.getElementById("tt");
+			 console.log('prf');
+			 console.log(modelFile);
+			 var picFile=document.getElementById("projectInfoss").value;
+//			 alert(picFile);
+			 //var picFile = document.querySelector('input[type=file]').files[1];
+//			 ProjectService.updateProject($scope.findProjectInfo,token,modelFile,picFile).then(function(result){
+//			       $scope.updateProjectInfo=result.data;
+//			       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
+//			    });
 		}
 		 
 	 }
@@ -158,10 +268,11 @@ function ProjectController($scope,ProjectService) {
 	 }
 	 //////////////////////////////项目详情信息
 	 $scope.projectInfoHead=[{name:"基本信息"},{name:"构件信息"},{name:"图纸信息"},{name:"工程量信息"},{name:"安全技术交底"},{name:"问题列表"}];
-	 $scope.projectPhaseInfo=[{name:"电气"},{name:"给排水"},{name:"暖通"},{name:"消防"}];
-	 $scope.projectHouseholdInfo=[{name:"A型"},{name:"B型"},{name:"C型"},{name:"D型"}];
+	 $scope.projectPhaseInfo=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"}];
+	 $scope.projectHouseholdInfo=[{name:"A型"},{name:"B型"},{name:"C型"},{name:"D型"},{name:"E型"}];
 	 $scope.projectQuestionOfType=[{name:"安全"},{name:"质量"},{name:"其他"}];
-	 $scope.projectQuestionOfStatus=[{name:"一般"},{name:"重要"},{name:"紧急"}];
+	 $scope.projectQuestionOfPriority=[{name:"一般"},{name:"重要"},{name:"紧急"}];
+	 $scope.projectQuestionOfStatus=[{name:"待解决"},{name:"已解决"}];
 	 /////////////////////////
 	 /*
 	  * 菜单的选择操作
@@ -172,29 +283,35 @@ function ProjectController($scope,ProjectService) {
 	 /*获取该项目的楼栋信息*/
 	 $scope.getBuildingList = function(projectId){
 		 ProjectService.getBuildingList(projectId).then(function(result){
-		       buildingInfo=result.data;    
+		       $scope.buildingInfo=result.data;    
 		    });
 	 }
 	 /*获取该项目的楼层信息*/
-	 $scope.getBuildingDown = function(projectId){
-		 ProjectService.getBuildingDown(projectId).then(function(result){
-			 buildingDownInfo=result;    
+	 $scope.getBuildingNum = function(projectId,buildingId){
+		 ProjectService.getBuildingNum(projectId,buildingId).then(function(result){
+			 $scope.buildingNumInfo=result;    
+		    });
+	 }
+	 /*获取该项目的楼层地下层信息*/
+	 $scope.getBuildingDown = function(projectId,buildingId){
+		 ProjectService.getBuildingDown(projectId,buildingId).then(function(result){
+			 $scope.buildingDownInfo=result;    
 		    });
 	 }
 	 function menuArray(total)
 	 {
-		var sizePerPage = 5;
+		var sizePerPage = 10;
 		var totalPage = Math.ceil(total/sizePerPage);
 		var arr = new Array();
 		for(var i = 0; i < totalPage; i++)
 		{
 			
 			arr[i] = new Array();
-			for(var j = 0; j < 5; j++) 
+			for(var j = 0; j < 10; j++) 
 			{
-				if(i*5+(j+1) <= total) 
+				if(i*10+(j+1) <= total) 
 				{
-					arr[i][j] = i*5+(j+1);
+					arr[i][j] = i*10+(j+1);
 				} else 
 				{
 					break;
@@ -205,7 +322,7 @@ function ProjectController($scope,ProjectService) {
 		return arr;
 	 }
 
-/////////////////
+	 /////////////////
 	 /*
 	  * 
 	  * 构件信息操作
@@ -215,41 +332,56 @@ function ProjectController($scope,ProjectService) {
 	 */
 	 ////////////////////////构件信息分页获取
 	 $scope.getProjectItemList = function(projectId,pageSize,pageIndex,item) {
+		
+		  $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+		 
+		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
+		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo-1);
+		 if($scope.phase!="all") {
+			 item+= "&professionType=" + $scope.phase;
+		 }
+		 if($scope.buildingId!="all"){
+			 item+= "&buildingNum=" + $scope.buildingId;
+		 }
+		 if($scope.floorId!="all"){
+			 item+= "&floorNum=" + $scope.floorId;
+		 }
+		 if($scope.householdId!="all"){
+			 item+= "&householdNum=" + $scope.householdId;
+		 }
 		  ProjectService.getItemList(projectId,pageSize,pageIndex,item).then(function (result){
-			  $scope.getBuildingList(projectId);
-			  $scope.getBuildingDown(projectId);
 		  	  $scope.projectItemList = result.data;
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
-		      $scope.projectPage($scope.totalPage,$scope.currentPage);
+		      $scope.itemPage($scope.totalPage,$scope.currentPage);
 		  });
-		  $scope.buildingArray=menuArray(buildingInfo.buildingNum);
-		  
-		  
-		  $scope.floorArray=menuArray(buildingInfo.floorNum);
-		  $scope.householdArray=menuArray(buildingInfo.householdNum);
-		  $scope.buildingDownArray=menuArray(buildingDownInfo);
-		 // $scope.introducedArray=
 	  }
-////////分页回调函数
-	  $scope.projectPage = function(iPageCount,iCurrent) {
-		  $("#projectItemPageCode").remove();
-		  $("#table-buton").append("<div id=\"projectItemPageCode\"></div>");
-		  $("#projectItemPageCode").createPage({
+	  ////////////////构件信息查看
+	 $scope.itemChangeClick= function(itemId){
+		 ProjectService.getItemById($scope.projectid,itemId).then(function (result){
+		  	  $scope.itemDetailInfo = result.data;
+		  });
+	 }
+	 ///////////////构件信息删除
+	 
+	 
+	  ////////分页回调函数
+	  $scope.itemPage = function(iPageCount,iCurrent) {
+		  $("#itemPageCode").remove();
+		  $("#table-buton").append("<div id=\"itemPageCode\"></div>");
+		  $("#itemPageCode").createPage({
 
 		      pageCount:iPageCount,
 
 		      current:iCurrent,
 
 		      backFn:function(p){
-		    	  $scope.getProjectItemList(projectId,pageSize,p,$scope.buildingInfo);
-		    	  
+		    	  $scope.getProjectItemList($scope.projectid,pageSize,p,item);
 		      }
-
 		  });
 	  }
 	 
-/////////////////
+	  /////////////////
 	 /*
 	  * 
 	  * 图纸列表信息操作
@@ -257,16 +389,44 @@ function ProjectController($scope,ProjectService) {
 	  * 
 	  * 
 	 */
+	  ////////图纸分页回调函数
+	  $scope.paperPage = function(iPageCount,iCurrent) {
+		  $("#paperPageCode").remove();
+		  $("#table-buton6").append("<div id=\"paperPageCode\"></div>");
+		  $("#paperPageCode").createPage({
+
+		      pageCount:iPageCount,
+
+		      current:iCurrent,
+
+		      backFn:function(p){
+		    	  $scope.getProjectPaperList($scope.projectid,pageSize,p,paper);
+		      }
+		  });
+	  }
 	 ////////////////////////图纸列表信息分页获取
-	 $scope.getProjectPaperList = function(pageSize,pageIndex,paper) {
-		  ProjectService.getPaperList(pageSize,pageIndex,paper).then(function (result){
+	 $scope.getProjectPaperList = function(projectId,pageSize,pageIndex,paper) {
+		 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+		 
+		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
+		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo-1);
+		 if($scope.phase!="all") {
+			 paper+= "professionType=" + $scope.phase;
+		 }
+		 if($scope.buildingId!="all"){
+			 paper+= "&buildingNum=" + $scope.buildingId;
+		 }
+		 if($scope.floorId!="all"){
+			 paper+= "&floorNum=" + $scope.floorId;
+		 }
+		  ProjectService.getPaperList(projectId,pageSize,pageIndex,paper).then(function (result){
 		  	  $scope.projectPaperList = result.data;
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
 		      $scope.paperPage($scope.totalPage,$scope.currentPage);
 		  });
 	  }
-/////////////////
+	 /////////////////
 	 /*
 	  * 
 	  * 工程量信息操作
@@ -275,15 +435,61 @@ function ProjectController($scope,ProjectService) {
 	  * 
 	 */
 	 ////////////////////////工程量信息分页获取
-	 $scope.getProjectQuantityList = function(pageSize,pageIndex,quantity) {
-		  ProjectService.getQuantityList(pageSize,pageIndex,quantity).then(function (result){
+	 $scope.getProjectQuantityList = function(projectId,pageSize,pageIndex,quantity) {
+		
+		  $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+		  $scope.floorArray=menuArray($scope.buildingNumInfo);
+		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
+		 if($scope.phase!="all") {
+			 quantity+= "professionType=" + $scope.phase;
+		 }
+		 if($scope.buildingId!="all"){
+			 quantity+= "&buildingNum=" + $scope.buildingId;
+		 }
+		 if($scope.floorId!="all"){
+			 quantity+= "&floorNum=" + $scope.floorId;
+		 }
+		 if($scope.householdId!="all"){
+			 quantity+= "&householdNum=" + $scope.householdId;
+		 }
+		  ProjectService.getQuantityList($scope.projectid,pageSize,pageIndex,quantity).then(function (result){
 		  	  $scope.projectQuantityList = result.data;
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
 		      $scope.quantityPage($scope.totalPage,$scope.currentPage);
 		  });
 	  }
-/////////////////
+	 /////////////////
+	 ////////工程量分页回调函数
+	  $scope.quantityPage = function(iPageCount,iCurrent) {
+		  $("#quantityPageCode").remove();
+		  $("#table-buton3").append("<div id=\"quantityPageCode\"></div>");
+		  $("#quantityPageCode").createPage({
+
+		      pageCount:iPageCount,
+
+		      current:iCurrent,
+
+		      backFn:function(p){
+		    	  $scope.getProjectQuantityList($scope.projectid,pageSize,p,quantity);
+		      }
+		  });
+	  }
+	  ////////问题分页回调函数
+	  $scope.questionPage = function(iPageCount,iCurrent) {
+		  $("#questionPageCode").remove();
+		  $("#table-buton4").append("<div id=\"questionPageCode\"></div>");
+		  $("#questionPageCode").createPage({
+
+		      pageCount:iPageCount,
+
+		      current:iCurrent,
+
+		      backFn:function(p){
+		    	  $scope.getProjectQuestionList($scope.projectid,pageSize,p,question);
+		      }
+		  });
+	  }
 	 /*
 	  * 
 	  * 安全技术交底操作
@@ -292,15 +498,39 @@ function ProjectController($scope,ProjectService) {
 	  * 
 	 */
 	 ////////////////////////安全交底分页获取
+	  ////////交底分页回调函数
+	  $scope.videoPage = function(iPageCount,iCurrent) {
+		  $("#videoPageCode").remove();
+		  $("#table-buton5").append("<div id=\"videoPageCode\"></div>");
+		  $("#videoPageCode").createPage({
+
+		      pageCount:iPageCount,
+
+		      current:iCurrent,
+
+		      backFn:function(p){
+		    	  $scope.getProjectVideoList($scope.projectid,pageSize,p,video);
+		      }
+		  });
+	  }
+	  //////交底分页获取
 	 $scope.getProjectVideoList = function(pageSize,pageIndex,video) {
+		 
+		 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+		 if($scope.phase!="all") {
+			 video+= "professionType=" + $scope.phase;
+		 }
+		 if($scope.buildingId!="all"){
+			 video+= "&buildingNum=" + $scope.buildingId;
+		 }
 		  ProjectService.getVideoList(pageSize,pageIndex,video).then(function (result){
-		  	  $scope.projectVideoList = result.data;
+		  	  $scope.videoList = result.data;
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
 		      $scope.videoPage($scope.totalPage,$scope.currentPage);
 		  });
 	  }
-/////////////////
+	 /////////////////
 	 /*
 	  * 
 	  * 问题列表操作
@@ -310,14 +540,30 @@ function ProjectController($scope,ProjectService) {
 	 */
 	 ////////////////////////问题列表分页获取
 	 $scope.getProjectQuestionList = function(pageSize,pageIndex,question) {
-		  ProjectService.getQuestionList(pageSize,pageIndex,question).then(function (result){
+		 if($scope.questionType!="all") {
+			 question+= "questionType=" + $scope.questionType;
+		 }
+		 if($scope.questionPriority!="all"){
+			 question+= "&priority=" + $scope.questionPriority;
+		 }
+		 if($scope.questionStatus!="all"){
+			 question+= "&state=" + $scope.questionStatus;
+		 }
+		  ProjectService.getQuestionList($scope.projectid,pageSize,pageIndex,question).then(function (result){
 		  	  $scope.projectQuestionList = result.data;
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
 		      $scope.questionPage($scope.totalPage,$scope.currentPage);
 		  });
 	  }
-	 
+	 /////删除问题
+	 $scope.deleteQuestion = function(questionid){
+		  	ProjectService.deleteQuestion(questionid,$scope.projectid).then(function(result){
+		       $scope.deleteQuestionInfo=result.data;
+		       $scope.getProjectQuestionList(pageSize,1,question);
+		       
+		    });
+	 }
 	 
 	 $scope.projectInfoChange = function(projectType){
 		 if(projectType == "基本信息"){
@@ -378,14 +624,8 @@ function ProjectController($scope,ProjectService) {
 			 document.getElementById("projectVideoInfoHtml").style.display = 'none';
 			 document.getElementById("projectQuestionInfo").style.display = 'block';
 			 var question=null;
-			 $scope.getProjectQuestionList($scope.findProjectInfo.id,pageSize,1,question);
+			 $scope.getProjectQuestionList(pageSize,1,question);
 		 }
 	 }
-	
-	 
-	 
-	 
-	 
-	 
 	 
 }

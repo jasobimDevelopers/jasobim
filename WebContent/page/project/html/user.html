@@ -10,8 +10,7 @@
                 <span class="inputtext">电话号码</span><input type="text" id="mobile" ng-model="userTofind.tel"/>
                 <button id="find" ng-click="find()" value=""></button>
                 <button id="add"  ng-click="showaddUser()"><span id="findtext">添加用户</span></button>
-            </div>
-           
+            </div>        
     </div>
 	<div class="container">
 		<div id="include_bodys">
@@ -26,7 +25,7 @@
 						<td>{{userInfo.id}}</td>
 						<td>{{userInfo.userName}}</td>
 						<td>{{userInfo.realName}}</td>
-						<td>{{userInfo.userType}}</td>
+						<td>{{roleList[userInfo.userType].name}}</td>
 						<td>{{userInfo.email}}</td>
 						<td>{{userInfo.tel}}</td>
 						<td>{{userInfo.registerDate}}</td>

@@ -1,6 +1,7 @@
 package com.my.spring.service;
 
 import com.my.spring.model.Paper;
+import com.my.spring.model.PaperPojo;
 import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface PaperService {
     DataWrapper<Void> updatePaper(Paper paper,String token);
 	DataWrapper<Paper> getPaperDetailsByAdmin(Long paperId,String token);
-	DataWrapper<List<Paper>> getPaperList(Long projectId,String token);
+	DataWrapper<List<PaperPojo>> getPaperList(Long projectId,String token, Integer pageIndex, Integer pageSize, Paper paper);
 	DataWrapper<Void> addPaper(Paper paper, String token, MultipartFile file,
 			HttpServletRequest request);
 	DataWrapper<Void> deletePaper(Long id, Long fileid, String token, HttpServletRequest request);

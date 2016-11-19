@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface MessageService {
     //DataWrapper<Void> updateMessage(Message message,String token);
-    DataWrapper<List<Message>> getMessageList(String token);
+    DataWrapper<List<Message>> getMessageList(String token, Long projectId, Integer pageIndex, Integer pageSize, Message message);
     DataWrapper<List<Message>> getMessageListByUserId(Long userId,String token);
 	DataWrapper<Void> addMessage(Message message, String token, MultipartFile file, 
 			HttpServletRequest request);

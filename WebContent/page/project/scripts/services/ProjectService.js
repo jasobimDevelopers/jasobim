@@ -6,7 +6,6 @@
         return $.param(data);
     }
   var self=this;
-
   /////增加项目
   this.register = function(Project) {
 
@@ -39,7 +38,7 @@
       	api += "&name="+trimStr(project.name);
       }
       if(project.num !== undefined && trimStr(project.num) !== ''){
-      	api += "&num="+trimStr(Project.realName);
+      	api += "&num="+trimStr(project.num);
       }
       if(project.constructionUnit !==undefined && trimStr(project.constructionUnit) !== ''){
       	api += "&constructionUnit="+ trimStr(project.constructionUnit);
@@ -107,13 +106,13 @@
       return deferred.promise;
       };
       ///////更新项目信息
-      this.updateProject = function(project,token) {
+      this.updateProject = function(project,token,modelFile,picFile) {
       	var deferred = $q.defer();
       	console.log("更新Project数据");
 //	          	var nProject = {};
 //	          	nProject.id = Project.id;
 //	          	nProject.realName = Project.realName;
-      	$http.post('api/project/admin/updateProject?token='+token,project,
+      	$http.post('api/project/admin/updateProject?token='+token+'&modelFile='+modelFile+'&picFile='+picFile,project,
       		{
       			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
       			transformRequest: transform
@@ -210,11 +209,11 @@
               //////////////////////////////
               
               ///////获取地下层操作
-              this.getBuildingDown = function(projectId) {
+              this.getBuildingDown = function(projectId,buildingId) {
                   
                   var deferred = $q.defer();
                   console.log("查找Project数据");
-                  $http.get('api/item/getItemByBase?projectId='+projectId+"&token="+token)
+                  $http.get('api/item/getItemByBase?projectId='+projectId+"&token="+token+"&buildingId="+buildingId)
                       .success(function(data, status, headers, config){
                           console.log(data);
                           if(data!=null){
@@ -231,26 +230,57 @@
                           });
                       return deferred.promise;
                       };
-          
+              ///////////////获取楼层总数
+              this.getBuildingNum = function(projectId,buildingId) {
+                  
+                  var deferred = $q.defer();
+                  console.log("查找Project数据");
+                  $http.get('api/item/getItemByBuidlingNum?projectId='+projectId+"&token="+token+"&buildingId="+buildingId)
+                      .success(function(data, status, headers, config){
+                          console.log(data);
+                          if(data!=null){
+                              deferred.resolve(data);
+                              self.buildingNumInfo = data;
+                          
+                          }else{
+                              alert("数据查找失败");
+                              }
+                              
+                          })
+                          .error(function(data, status, headers, config){
+                              deferred.reject(data);
+                          });
+                      return deferred.promise;
+                      };
           //////*项目构件信息操作*///////
+                      
+           ///获取构件的详细信息
+              this.getItemById = function(itemId){
+            	  var deferred = $q.defer();
+                  console.log("读取item数据");
+                  var api = 'api/item/getItemById?token='+getCookie('token')+'&itemId='+itemId;
+                  $http.get(encodeURI(api))
+                      .success(function(data, status, headers, config){
+                          if(data.callStatus == "SUCCEED"){
+                              deferred.resolve(data);
+                              self.itemDetailInfo = data;
+                         
+                          }else{
+                              alert("数据读取失败");
+                          }
+                          
+                      })
+                      .error(function(data, status, headers, config){
+                          deferred.reject(data);
+                      });
+                  return deferred.promise;
+                  };
           //获取构件信息列表
-          this.getItemList = function(projectId,pageSize,pageIndex,item) {
+              this.getItemList = function(projectId,pageSize,pageIndex,sql) {
 
               var deferred = $q.defer();
-              console.log("读取ProjectList数据");
-              var api = 'api/item/admin/getItemList?token='+getCookie('token')+'&projectId='+projectId + "&pageSize=" + pageSize + "&pageIndex="+pageIndex;
-              /*if(item.buildingNum !== undefined && trimStr(item.buildingNum) !== '') {
-              	api += "&name="+trimStr(project.buildingNum);
-              }
-              if(item.floorNum !== undefined && trimStr(item.floorNum) !== ''){
-              	api += "&num="+trimStr(Project.floorNum);
-              }
-              if(project.householdNum !==undefined && trimStr(project.householdNum) !== ''){
-              	api += "&householdNum="+ trimStr(project.householdNum);
-              }
-              if(project.professionType !==undefined && trimStr(project.professionType) !== ''){
-                	api += "&professionType="+ trimStr(project.professionType);
-                }*/
+              console.log("读取ProjectItemList数据");
+              var api = 'api/item/admin/getItemList?token='+getCookie('token')+'&projectId='+projectId + "&pageSize=" + pageSize + "&pageIndex="+pageIndex +"&"+ sql;
               $http.get(encodeURI(api))
                   .success(function(data, status, headers, config){
                       if(data.callStatus == "SUCCEED"){
@@ -267,4 +297,118 @@
                   });
               return deferred.promise;
               };
+              //////////////////////
+              ////工程量信息获取
+              //获取工程量信息列表
+              this.getQuantityList = function(projectId,pageSize,pageIndex,sql) {
+
+              var deferred = $q.defer();
+              console.log("读取ProjectQuantityList数据");
+              var api = 'api/quantity/getQuantityList?token='+getCookie('token')+'&projectId='+projectId + "&pageSize=" + pageSize + "&pageIndex="+pageIndex + "&"+sql;
+              $http.get(encodeURI(api))
+                  .success(function(data, status, headers, config){
+                      if(data.callStatus == "SUCCEED"){
+                          deferred.resolve(data);
+                          self.quantityList = data;
+                     
+                      }else{
+                          alert("数据读取失败");
+                      }
+                      
+                  })
+                  .error(function(data, status, headers, config){
+                      deferred.reject(data);
+                  });
+              return deferred.promise;
+              };
+              /////获取交底信息列表
+              
+              this.getVideoList = function(projectId,pageSize,pageIndex,sql) {
+
+                  var deferred = $q.defer();
+                  console.log("读取ProjectVideoList数据");
+                  var api = 'api/video/admin/getVideoList?token='+getCookie('token')+'&projectId='+projectId + "&pageSize=" + pageSize + "&pageIndex="+pageIndex +"&"+ sql;
+                  $http.get(encodeURI(api))
+                      .success(function(data, status, headers, config){
+                          if(data.callStatus == "SUCCEED"){
+                              deferred.resolve(data);
+                              self.videoList = data;
+                         
+                          }else{
+                              alert("数据读取失败");
+                          }
+                          
+                      })
+                      .error(function(data, status, headers, config){
+                          deferred.reject(data);
+                      });
+                  return deferred.promise;
+                  };
+              /////获取图纸信息列表
+              
+              this.getPaperList = function(projectId,pageSize,pageIndex,sql) {
+
+                  var deferred = $q.defer();
+                  console.log("读取ProjectPaperList数据");
+                  var api = 'api/paper/admin/getPaperList?token='+getCookie('token')+'&projectId='+projectId + "&pageSize=" + pageSize + "&pageIndex="+pageIndex +"&"+ sql;
+                  $http.get(encodeURI(api))
+                      .success(function(data, status, headers, config){
+                          if(data.callStatus == "SUCCEED"){
+                              deferred.resolve(data);
+                              self.paperList = data;
+                         
+                          }else{
+                              alert("数据读取失败");
+                          }
+                          
+                      })
+                      .error(function(data, status, headers, config){
+                          deferred.reject(data);
+                      });
+                  return deferred.promise;
+                  };
+             /////获取问题信息列表
+	          this.getQuestionList = function(projectId,pageSize,pageIndex,sql) {
+	
+	              var deferred = $q.defer();
+	              console.log("读取ProjectMessageList数据");
+	              var api = 'api/question/admin/getQuestionList?token='+getCookie('token')+'&projectId='+projectId + "&pageSize=" + pageSize + "&pageIndex="+pageIndex+"&"+ sql;
+	              $http.get(encodeURI(api))
+	                  .success(function(data, status, headers, config){
+	                      if(data.callStatus == "SUCCEED"){
+	                          deferred.resolve(data);
+	                          self.questionList = data;
+	                     
+	                      }else{
+	                          alert("数据读取失败");
+	                      }
+	                      
+	                  })
+	                  .error(function(data, status, headers, config){
+	                      deferred.reject(data);
+	                  });
+	              return deferred.promise;
+	              };
+	              //////删除问题信息
+	              this.deleteQuestion = function(questionId,projectId) {
+	                 
+	                 var deferred = $q.defer();
+	                 console.log("删除Project数据");
+	                 $http.get('api/question/admin/deleteQuestion?projectId='+projectId+'&token='+token+'&questionId='+questionId)
+	                     .success(function(data, status, headers, config){
+	                         console.log(data);
+	                         if(data.callStatus == "SUCCEED"){
+	                             deferred.resolve(data);
+	                             self.deleteQuestionInfo = data;
+	                             alert("数据删除成功");
+	                         }else{
+	                             alert("数据删除失败");
+	                         }
+	                         
+	                     })
+	                     .error(function(data, status, headers, config){
+	                         deferred.reject(data);
+	                     });
+	                 return deferred.promise;
+	                 };
   });

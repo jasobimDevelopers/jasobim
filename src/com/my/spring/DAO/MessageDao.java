@@ -14,6 +14,6 @@ public interface MessageDao {
     boolean deleteMessage(Long id);
     boolean updateMessage(Message message);
     Message getById(Long id);
-    DataWrapper<List<Message>> getMessageList();
+    DataWrapper<List<Message>> getMessageList(Long projectId, Integer pageIndex, Integer pageSize, Message message);
     DataWrapper<List<Message>> getMessageListByUserId(Long userId);
 }

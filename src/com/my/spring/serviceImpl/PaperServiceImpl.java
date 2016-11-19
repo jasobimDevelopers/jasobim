@@ -7,6 +7,7 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.Paper;
+import com.my.spring.model.PaperPojo;
 import com.my.spring.model.User;
 import com.my.spring.service.FileService;
 import com.my.spring.service.PaperService;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -119,20 +121,41 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public DataWrapper<List<Paper>> getPaperList(Long projectId,String token) {
+    public DataWrapper<List<PaperPojo>> getPaperList(Long projectId,String token,Integer pageIndex, Integer pageSize, Paper paper) {
+    	DataWrapper<List<PaperPojo>> dataWrappers = new DataWrapper<List<PaperPojo>>();
+    	List<PaperPojo> papers=new ArrayList<PaperPojo>();
+    	
     	DataWrapper<List<Paper>> dataWrapper = new DataWrapper<List<Paper>>();
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
-	        	if(userInMemory.getUserType()!=UserTypeEnum.Admin.getType()){
-	        		dataWrapper= paperDao.getPaperList(projectId);
+	        	if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
+	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper);
+	        		for(int i=0;i<dataWrapper.getData().size();i++){
+	        			PaperPojo papernew=new PaperPojo();
+	        			papernew.setProjectId(projectId);
+	        			papernew.setBuildingNum(dataWrapper.getData().get(i).getBuildingNum());
+	        			papernew.setProfessionType(dataWrapper.getData().get(i).getProfessionType());
+	        			papernew.setFloorNum(dataWrapper.getData().get(i).getFloorNum());
+	        			Files file=fileDao.getById(dataWrapper.getData().get(i).getFileId());
+	        			if(file!=null){
+	        				papernew.setUrl(file.getUrl());
+	        			}
+	        			papers.add(i,papernew);
+	        		}
+	        		dataWrappers.setData(papers);
+	        		dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
+	    			dataWrappers.setCallStatus(dataWrapper.getCallStatus());
+	    			dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
+	    			dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
+	    			dataWrappers.setTotalPage(dataWrapper.getTotalPage());
 	        	}else{
-	        		dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+	        		dataWrappers.setErrorCode(ErrorCodeEnum.AUTH_Error);
 	        	}
 	        	
 			} else {
-				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+				dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 			}
-        return dataWrapper;
+        return dataWrappers;
     }
 
 	@Override
@@ -147,7 +170,6 @@ public class PaperServiceImpl implements PaperService {
 				            dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 						else
 							dataWrapper.setData(paper);
-				        
 					}
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);

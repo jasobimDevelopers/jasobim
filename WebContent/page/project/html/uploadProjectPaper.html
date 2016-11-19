@@ -1,32 +1,16 @@
 <div id="paperContent">
-	<div id="projectDetail_body_paper">
-				<div id="paper_header">
-					<div id="item_menuli_first">
-						<div><span>专业</span></div>
-						<div><button class="btn btn-default">全部</button></div>
-						<div><button class="btn btn-default">建筑</button></div>
-						<div><button class="btn btn-default">电气</button></div>
-						<div><button class="btn btn-default">给排水</button></div>
-						<div><button class="btn btn-default">暖通</button></div>
-						<div><button class="btn btn-default">消防</button></div>
-						<div><button class="btn btn-default">弱电</button></div>
-					</div>
-					<div class="paper_menuli">
+	<div id="projectDetail_paperupload">
+				<div id="paper_headers">
+					<div class="paper_menuli_upload">
 						<div><span>栋号</span></div>
-						<div><button class="btn btn-default">全部</button></div>
 						<div>
 							<select class="myselect">
-		    					<option value="#1 - #5" selected="selected">#1 - #5</option>
+		    					<option value="#1 - #10" selected="selected">#1 - #10</option>
 		    					<option value="#1">#1</option>
 		    					<option value="#2">#2</option>
 		    					<option value="#3">#3</option>
 		    					<option value="#4">#4</option>
 		    					<option value="#5">#5</option>
-		    				</select>
-	    				</div>
-						<div>
-							<select class="myselect">
-		    					<option value="#6 - #10" selected="selected">#6 - #10</option>
 		    					<option value="#6">#6</option>
 		    					<option value="#7">#7</option>
 		    					<option value="#8">#8</option>
@@ -36,17 +20,12 @@
 	    				</div>
 						<div>
 							<select class="myselect">
-		    					<option value="#11 - #15" selected="selected">#11 - #15</option>
+		    					<option value="#11 - #20" selected="selected">#11 - #20</option>
 		    					<option value="#11">#11</option>
 		    					<option value="#12">#12</option>
 		    					<option value="#13">#13</option>
 		    					<option value="#14">#14</option>
 		    					<option value="#15">#15</option>
-		    				</select>
-	    				</div>
-						<div>
-							<select class="myselect">
-		    					<option value="#16 - #20" selected="selected">#16 - #20</option>
 		    					<option value="#16">#16</option>
 		    					<option value="#17">#17</option>
 		    					<option value="#18">#18</option>
@@ -54,33 +33,50 @@
 		    					<option value="#20">#20</option>
 		    				</select>
 	    				</div>
-						
-					</div>
-					
+						<div>
+							<select class="myselect">
+		    					<option value="#21 - #30" selected="selected">#21 - #30</option>
+		    				
+		    				</select>
+	    				</div>
+	    				<div>
+							<select class="myselect">
+		    					<option value="#31 - #40" selected="selected">#31 - #40</option>
+		    					<option value="#21">#21</option>
+		    					<option value="#22">#22</option>
+		    					<option value="#23">#23</option>
+		    					<option value="#24">#24</option>
+		    					<option value="#25">#25</option>
+		    					<option value="#26">#26</option>
+		    					<option value="#27">#27</option>
+		    					<option value="#28">#28</option>
+		    					<option value="#29">#29</option>
+		    					<option value="#30">#30</option>
+		    				</select>
+	    				</div>
+					</div>	
 				</div>
 				<div id="paper_content">
 					<div id="paperlist">
-						<div class="paperfile">
-						
-							<label>
-								<div><input name="Fruit" type="checkbox" value="" /></div>
-								<div><img src="page/project/images/icon.jpg"></div>
-								
-							</label> 
-							<label>
-								<div><img src="page/project/images/icon.jpg"></div>
-								<div><input name="Fruit" type="checkbox" value="" /></div>
-							</label> 
-							<label>
-								<div><img src="page/project/images/icon.jpg"></div>
-								<div><input name="Fruit" type="checkbox" value="" /></div>
-							</label> 
-						</div>
+						<div><span>电气专业&nbsp&nbsp&nbsp</span></div>
+						<div><input type="file" id="paper_dianqi" /></div>
+					</div>
+					<div id="paperlist">
+						<div><span>暖通专业&nbsp&nbsp&nbsp</span></div>
+						<div><input type="file" id="paper_nuantong" /></div>
+					</div>
+					<div id="paperlist">
+						<div><span>给排水专业</span></div>
+						<div><input type="file" id="paper_geipaishui" /></div>
+					</div>
+					<div id="paperlist">
+						<div><span>消防专业&nbsp&nbsp&nbsp</span></div>
+						<div><input type="file" id="paper_xiaofang" /></div>
 					</div>
 				</div>
 				<div id="paper_button">
-					<span>下载选中的项目</span>
-					<button type="button" class="btn btn-default">下载</button>
+					<button type="button" class="btn btn-default">上传</button>
+					<button type="button" class="btn btn-default">取消</button>
 				</div>
 	</div>
 </div>

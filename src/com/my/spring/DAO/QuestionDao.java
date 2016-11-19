@@ -10,8 +10,8 @@ import java.util.List;
  */
 public interface QuestionDao {
     boolean addQuestion(Question question);
-    boolean deleteQuestion(Long id);
+    boolean deleteQuestion(Long id,Long projectId);
     boolean updateQuestion(Question question);
-    DataWrapper<List<Question>> getQuestionList(Long projectId);
+    DataWrapper<List<Question>> getQuestionList(Long projectId, Integer pageIndex, Integer pageSize, Question question);
     Question getById(Long id);
 }

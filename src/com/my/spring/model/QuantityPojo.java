@@ -16,8 +16,8 @@ public class QuantityPojo {
 	private String service_type;
 	private String system_type;
 	private String family_and_type;
-	private double lengthnum;
-	private double areanum;
+	private Double lengthnum;
+	private Double areanum;
 	private String material;
 	private String name;
 	private String type_name;

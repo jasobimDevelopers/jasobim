@@ -6,6 +6,7 @@ import com.my.spring.DAO.VideoDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Video;
+import com.my.spring.model.VideoPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.User;
 import com.my.spring.service.FileService;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +46,7 @@ public class VideoServiceImpl implements VideoService {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(video!=null){
 					if(file!=null){
-						String path=filePath+"/"+"videos"+"/";
+						String path=filePath+"/"+"videos";
 						Files newfile=fileService.uploadFile(path, file,fileType,request);
 						video.setFileId(newfile.getId());
 					}
@@ -94,11 +96,40 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public DataWrapper<List<Video>> getVideoList(String token) {
-    	DataWrapper<List<Video>> dataWrapper=new DataWrapper<List<Video>>();
+    public DataWrapper<List<VideoPojo>> getVideoList(String token, Long projectId, Integer pageIndex, Integer pageSize, Video video) {
+    	DataWrapper<List<VideoPojo>> dataWrapper=new DataWrapper<List<VideoPojo>>();
+    	List<VideoPojo> videopojo=new ArrayList<VideoPojo>();
+    	
+    	DataWrapper<List<Video>> dataWrappers=new DataWrapper<List<Video>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
-    		 return videoDao.getVideoList();
+    		User adminInDB = userDao.getById(userInMemory.getId());
+    		if(adminInDB.getUserType() == UserTypeEnum.Admin.getType()){
+    			
+    			dataWrappers=videoDao.getVideoList(projectId, pageIndex, pageSize, video);
+    			for(int i=0;i<dataWrappers.getData().size();i++){
+    				VideoPojo videoPojo=new VideoPojo();
+    				Integer temp=dataWrappers.getData().get(i).getBuildingNum();
+    				Integer professiontype=dataWrappers.getData().get(i).getProfessionType();
+    				videoPojo.setProjectId(projectId);
+    				videoPojo.setBuildingNum(temp);
+    				videoPojo.setProfessionType(professiontype);
+    				Files file=fileDao.getById(dataWrappers.getData().get(i).getFileId());
+    				if(file!=null){
+    					videoPojo.setUrl(file.getUrl());
+    				}
+    				videopojo.add(i,videoPojo);
+    			}
+    			dataWrapper.setData(videopojo);
+    			dataWrapper.setCurrentPage(dataWrappers.getCurrentPage());
+    			dataWrapper.setCallStatus(dataWrappers.getCallStatus());
+    			dataWrapper.setNumberPerPage(dataWrappers.getNumberPerPage());
+    			dataWrapper.setTotalNumber(dataWrappers.getTotalNumber());
+    			dataWrapper.setTotalPage(dataWrappers.getTotalPage());
+    			
+    		}else{
+    			dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+    		}
     	}else{
     		dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}

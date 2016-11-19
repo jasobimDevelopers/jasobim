@@ -12,7 +12,7 @@ public interface QuantityDao {
 	  boolean addQuantity(Quantity quantity);
 	    boolean deleteQuantity(Long id);
 	    boolean updateQuantity(Quantity quantity);
-	    DataWrapper<List<Quantity>> getQuantityList(Long projectId);
+	    DataWrapper<List<Quantity>> getQuantityList(Long projectId,Integer pageSize, Integer pageIndex,Quantity quantity);
 	    Quantity getById(Long id);
 		boolean findQuantity(Quantity quantity);
 }

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class QuestionFileController {
     @Autowired
     QuestionFileService questionFileService;
-    @RequestMapping(value="addQuestionFile", method = RequestMethod.POST)
+    @RequestMapping(value="/addQuestionFile", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addQuestionFile(
             @ModelAttribute QuestionFile questionFile,
@@ -29,7 +29,7 @@ public class QuestionFileController {
             @RequestParam(value = "file", required = true) MultipartFile file){
         return questionFileService.addQuestionFile(questionFile,token,file,request);
     }
-    @RequestMapping(value="deleteQuestionFile")
+    @RequestMapping(value="/deleteQuestionFile")
     @ResponseBody
     public DataWrapper<Void> deleteQuestionFile(
             @RequestParam(value = "id",required = true) Long id,
@@ -41,14 +41,14 @@ public class QuestionFileController {
 
 
 
-    @RequestMapping(value="getQuestionFileList")
+    @RequestMapping(value="/getQuestionFileList")
     @ResponseBody
     public DataWrapper<List<QuestionFile>> getQuestionFileList(
             @RequestParam(value = "token",required = true) String token){
         return questionFileService.getQuestionFileList(token);
     }
     ////通过用户id查找留言
-    @RequestMapping(value="getQuestionFileListByUserId")
+    @RequestMapping(value="/getQuestionFileListByUserId")
     @ResponseBody
     public DataWrapper<List<QuestionFile>> getQuestionFileListByUserId(
     		@RequestParam(value = "userId",required = true) Long userId,

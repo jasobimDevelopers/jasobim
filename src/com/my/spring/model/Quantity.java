@@ -10,8 +10,8 @@ import javax.persistence.*;
 public class Quantity {
     private Long id;
     private String name;
-    private Integer professionType;//0 电气  1 暖通 2 给排水  3 消防
-    private double value;
+    private Integer professionType;//0 电气  1 暖通 2 给排水  3 消防 4建筑
+    private Double value;
     private Long projectId;
     private String unit;
     private Integer buildingNum;//楼号

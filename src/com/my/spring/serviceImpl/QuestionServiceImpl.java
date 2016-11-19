@@ -44,11 +44,11 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile file,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
- /*       User userInMemory = SessionManager.getSession(token);
+        User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			User userInDB = userDao.getById(userInMemory.getId());
 			if (userInDB != null) {
-				if(userInDB.getUserType()==UserTypeEnum.Admin.getType()){*/
+				if(userInDB.getUserType()==UserTypeEnum.Admin.getType()){
 					if(question!=null){
 						if(question.getQuestionDate()==null){
 							question.setQuestionDate(new Date(System.currentTimeMillis()));
@@ -68,7 +68,7 @@ public class QuestionServiceImpl implements QuestionService {
 							return dataWrapper;
 						}
 				        
-					}/*else{
+					}else{
 						dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 					}
 				}else{
@@ -79,12 +79,12 @@ public class QuestionServiceImpl implements QuestionService {
 			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
-		}*/
+		}
         return dataWrapper;
     }
 
     @Override
-    public DataWrapper<Void> deleteQuestion(Long id,String token,HttpServletRequest request) {
+    public DataWrapper<Void> deleteQuestion(Long id,String token,HttpServletRequest request, Long projectId) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -93,7 +93,7 @@ public class QuestionServiceImpl implements QuestionService {
 				if(userInDB.getUserType()==UserTypeEnum.Admin.getType()){
 					if(id!=null){
 						QuestionFile questionFile=new QuestionFile();
-						if(!questionDao.deleteQuestion(id)) 
+						if(!questionDao.deleteQuestion(id,projectId)) 
 						{
 							DataWrapper<List<QuestionFile>> dataWrappers=questionFileDao.deleteQuestionFileByQuestionId(questionFile.getId());
 							for(QuestionFile e:dataWrappers.getData()){
@@ -147,12 +147,12 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public DataWrapper<List<Question>> getQuestionList(Long projectId,String token) {
+    public DataWrapper<List<Question>> getQuestionList(Long projectId,String token, Integer pageIndex, Integer pageSize, Question question) {
     	DataWrapper<List<Question>> datawrapper=new DataWrapper<List<Question>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		if(userInMemory.getUserType() == UserTypeEnum.Admin.getType()){
-    			datawrapper= questionDao.getQuestionList(projectId);
+    			datawrapper= questionDao.getQuestionList(projectId,pageIndex,pageSize,question);
     		}else{
     			datawrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
     		}

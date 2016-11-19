@@ -64,6 +64,7 @@ font-weight: bold;
 	width:1200px;
 	margin:0 auto;
 }
+
 #selfContent{
 	background:url(../images/border.png) no-repeat;
 	background-size:100% 100%;
@@ -92,7 +93,19 @@ font-weight: bold;
 	font-size: 18px;
 	font-family: 微软雅黑;
 }
+#selfliPic{
+	width:566px;
+	height:50px;
+	float: left;
+	margin-left:270px;
+	font-size: 18px;
+	font-family: 微软雅黑;
+}
 #selfliModel div{
+	float:left;
+	width:130px;
+}
+#selfliPic div{
 	float:left;
 	width:130px;
 }
@@ -130,7 +143,7 @@ font-weight: bold;
 
 #projectDetail_body_item{
 	background:url(../images/itemIcon.png) no-repeat;
-	height:930px;
+	height:1262px;
 	width:1186px;
 	margin:0 auto;
 }
@@ -153,6 +166,30 @@ font-weight: bold;
 	border-left:1px solid #CCCCCC;
 	border-right:1px solid #CCCCCC;
 }
+.item_menulisss{
+	float:left;
+	height:66px;
+	width:1109px;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+}
+.item_menuli_video{
+	float:left;
+	height:66px;
+	width:1109px;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+}
+#quantity_item_menuli{
+	float:left;
+	height:66px;
+	width:1109px;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+}
 #item_menuli_first{
 	width:1109px;
 	float:left;
@@ -167,7 +204,7 @@ font-weight: bold;
 	font-size:18px;
 	margin:8px 15px;
 }
-.item_menuli div{
+.item_menuli div,#quantity_item_menuli div,.item_menuli_video div,.item_menulisss div{
 	float: left;
 	font-family: 微软雅黑;
 	font-size:18px;
@@ -179,11 +216,38 @@ font-weight: bold;
 	margin-top:10px;
 	margin-left:46px;
 }
+#paper_content{
+	width:1110px;
+	margin-top:10px;
+	margin-left:46px;
+}
+#video_content{
+	width:1110px;
+	margin-top:10px;
+}
+#projectPageCode{
+	float:right;
+}
+#videoPageCode{
+	float:right;
+}
+#paperlist{
+	background: url(../images/itemUploadIcon.png) no-repeat 25px 15px;
+	height:100px;
+}
+#paperlist div{
+	margin-left: 50px;
+	margin-top: 15px;
+	float: left;
+	font-size: 18px;
+	font-family: 微软雅黑;
+	text-align: right;
+}
 /*标题具体内容----项目的图纸信息*/
 
 #projectDetail_body_paper{
 	background:url(../images/paperIcon.png) no-repeat;
-	height:600px;
+	height:950px;
 	width:1200px;
 	margin:0 auto;
 }
@@ -192,12 +256,11 @@ font-weight: bold;
 	background-size:100% 100%;
 	margin:0 auto;
 }
-#paper_header div{
+#paper_header div,#paper_headers div{
 	float:left;
 	font-family: 微软雅黑;
 	font-size:18px;
-	margin:0px 15px;
-	padding-top:13px;
+	padding-top:7px;
 }
 #paper_header{
 	padding-top:44px;
@@ -206,21 +269,26 @@ font-weight: bold;
 	height:196px;
 	
 }
-#paper_content{
-	padding-left:47px;
-	margin:10px 0;
+#paper_headers{
+	padding-top:44px;
+	padding-left:130px;
+	width:1110px;
+	height:144px;
+	
 }
 .paperfile div{
 	float: right
 }
 .paper_menuli{
 	float:left;
+	width:1109px;
+	padding-bottom:30px;
+}
+.paper_menuli_upload{
+	float:left;
 	height:88px;
 	width:1109px;
 	padding-bottom:30px;
-	border-left:1px solid #CCCCCC;
-	border-right:1px solid #CCCCCC;
-	border-bottom:1px solid #CCCCCC;
 }
 #paper_button{
 	margin-left:450px;
@@ -230,7 +298,7 @@ font-weight: bold;
 
 #projectDetail_body_quantity{
 	background:url(../images/biaotikuang.png) no-repeat;
-	height:600px;
+	height:1100px;
 	width:1200px;
 	margin:0 auto;
 }
@@ -259,11 +327,17 @@ font-weight: bold;
 	font-size:18px;
 	margin:8px 15px;
 } 
+#quantity_content{
+	background: url(../images/biaotikuang.png) no-repeat;
+	width:1110px;
+	margin-top:10px;
+	margin-left:46px;
+}
 /*标题具体内容----项目的安全技术交底信息*/
 
 #projectDetail_body_video{
 	background:url(../images/videoIcon.png) no-repeat;
-	height:600px;
+	height:875px;
 	width:1200px;
 	margin:0 auto;
 }
@@ -278,18 +352,15 @@ font-weight: bold;
 	width:1110px;
 	height:302px;
 }
-#video_contents,#video_buttons{
+#video_contents{
 	width:1200px;
-	height:400px;
+	height:140px;
 	margin:0 auto;
 }
 #video_buttons{
-	margin-left:400px;
+	
 }
-.video_content{
-	float:left;
-	margin:50px 50px;
-}
+
 #video_bnts{
 	float:left;
 }
@@ -302,10 +373,14 @@ font-weight: bold;
 #projectDetail_body_question{
 	background:url(../images/questionIcon.png) no-repeat;
 	padding-top:5px;
-	height:600px;
+	height:950px;
 	width:1200px;
 	margin:0 auto;
 	padding-left:50px;
+}
+#questionTbodyContent{
+	width:1109px;
+	margin-top:100px;
 }
 #questionContent{
 	background:url(../images/border.png) no-repeat;
@@ -337,9 +412,16 @@ font-weight: bold;
 	width:1109px;
 	border-left:1px solid #CCCCCC;
 	border-right:1px solid #CCCCCC;
+}
+.question_menuli_bottom{
+	float:left;
+	height:66px;
+	width:1109px;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
 	border-bottom:1px solid #CCCCCC;
 }
-.question_menulis div,.question_menuli div{
+.question_menulis div,.question_menuli div,.question_menuli_bottom div{
 	float: left;
 	font-family: 微软雅黑;
 	font-size:18px;
@@ -349,4 +431,83 @@ font-weight: bold;
 	margin-top:70px;
 	height:130px;
 	width:1180px;
+}
+/*构件信息上传*/
+#projectDetail_itemupload{
+	background:url(../images/itemUpload.png) no-repeat;
+	height:1100px;
+	width:1200px;
+	margin:0 auto;
+}
+.uploadMenu{
+	background: url(../images/itemUploadIcon.png) no-repeat;
+	height:200px;
+	width:800px;
+	margin-left:170px;
+	margin-top: 68px;
+}
+.uploadMenuHead{
+	background: url(../images/itemUploadIcon.png) no-repeat 1px;
+	height:200px;
+	width:800px;
+	margin-left:170px;
+	margin-top:25px;
+	padding-top:86px;
+}
+.uploadMenuHead div{
+	float:left;
+}
+.uploadMenu_xiaofang{
+	background: url(../images/itemUploadIcon.png) no-repeat;
+	height:150px;
+	width:800px;
+	margin-left:170px;
+}
+.uploadMenu_xiaofang div{
+	float:left;
+}
+.uploadMenu div{
+	float:left;
+}
+.uploadMenu_quantity{
+	background: url(../images/itemUploadIcon.png) no-repeat;
+	height:200px;
+	width:800px;
+	margin-left:170px;
+}
+.uploadMenu_quantity div{
+	float:left;
+}
+.uploadTitle{
+	width:200px;
+	text-align: right;
+	margin-right: 30px;
+}
+.uploadText{
+	font-size:16px;
+	font-family:微软雅黑;
+	margin-right: 100px;
+	margin-left:100px;
+	text-align:right;
+}
+.uploadText div{
+	margin-top: 8px;
+}
+
+.phaseTitle{
+	font-family: 微软雅黑;
+	font-size: 18px;
+	margin-left: 14px;
+}
+#itemupload{
+	margin-left: 310px;
+	margin-top:55px;
+}
+/*图纸信息上传*/
+#projectDetail_paperupload{
+	background:url(../images/paperUpload.png) no-repeat;
+	border:1px solid #CCCCCC;
+	height:730px;
+	width:1200px;
+	margin:0 auto;
 }

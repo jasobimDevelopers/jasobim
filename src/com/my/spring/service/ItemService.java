@@ -25,4 +25,5 @@ public interface ItemService {
 			Long unitNum, Long householdNum, String token);
 	Long getItemByBase(Long projectId, Long buildingId,String token);
 	List<Object> getHouseHoldType(Long projectId, Long buildingId, Long floorId,String token);
+	Long getItemByBuidlingNum(Long projectId, Long buildingId, String token);
 }

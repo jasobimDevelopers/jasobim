@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class QuestionController {
     @Autowired
     QuestionService questionService;
-    @RequestMapping(value="addQuestion", method = RequestMethod.POST)
+    @RequestMapping(value="/addQuestion", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addQuestion(
             @ModelAttribute Question question,
@@ -29,16 +29,17 @@ public class QuestionController {
             @RequestParam(value = "file", required = false) MultipartFile file){
         return questionService.addQuestion(question,token,file,request);
     }
-    @RequestMapping(value="deleteQuestion")
+    @RequestMapping(value="/admin/deleteQuestion")
     @ResponseBody
     public DataWrapper<Void> deleteQuestion(
-            @RequestParam(value = "id",required = true) Long id,
+            @RequestParam(value = "questionId",required = true) Long questionId,
+            @RequestParam(value = "projectId",required = true) Long projectId,
             HttpServletRequest request,
             @RequestParam(value = "token",required = true) String token){
-        return questionService.deleteQuestion(id,token,request);
+        return questionService.deleteQuestion(questionId,token,request,projectId);
     }
 
-    @RequestMapping(value="updateQuestion",method = RequestMethod.POST)
+    @RequestMapping(value="/updateQuestion",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateQuestion(
             @ModelAttribute Question question,
@@ -51,12 +52,15 @@ public class QuestionController {
     @RequestMapping(value="/admin/getQuestionList",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<Question>> getQuestionList(
-    		@RequestParam(value = "projectId",required = true) Long	projectId,
+    		@RequestParam(value="projectId",required=true) Long projectId,
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Question question,
     		@RequestParam(value = "token",required = true) String token)
     {
-        return questionService.getQuestionList(projectId,token);
+        return questionService.getQuestionList(projectId,token,pageIndex,pageSize,question);
     }
-    @RequestMapping(value="getQuestionDetails/{questionId}")
+    @RequestMapping(value="/getQuestionDetails/{questionId}")
     @ResponseBody
     public DataWrapper<Question> getQuestionDetailsByAdmin(
     		@PathVariable(value="questionId") Long questionId,

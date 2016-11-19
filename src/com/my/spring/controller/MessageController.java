@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class MessageController {
     @Autowired
     MessageService messageService;
-    @RequestMapping(value="addMessage", method = RequestMethod.POST)
+    @RequestMapping(value="/addMessage", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addMessage(
             @ModelAttribute Message message,
@@ -29,7 +29,7 @@ public class MessageController {
             @RequestParam(value = "file", required = false) MultipartFile file){
         return messageService.addMessage(message,token,file,request);
     }
-    @RequestMapping(value="deleteMessage")
+    @RequestMapping(value="/deleteMessage")
     @ResponseBody
     public DataWrapper<Void> deleteMessage(
             @RequestParam(value = "id",required = true) Long id,
@@ -48,14 +48,18 @@ public class MessageController {
     }*/
 
 
-    @RequestMapping(value="getMessageList")
+    @RequestMapping(value="/admin/getMessageList", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<Message>> getMessageList(
-            @RequestParam(value = "token",required = true) String token){
-        return messageService.getMessageList(token);
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Message message){
+        return messageService.getMessageList(token,projectId,pageIndex,pageSize,message);
     }
     ////通过用户id查找留言
-    @RequestMapping(value="getMessageListByUserId")
+    @RequestMapping(value="/getMessageListByUserId")
     @ResponseBody
     public DataWrapper<List<Message>> getMessageListByUserId(
     		@RequestParam(value = "userId",required = true) Long userId,

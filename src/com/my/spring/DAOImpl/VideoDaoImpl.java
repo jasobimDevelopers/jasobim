@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.VideoDao;
-import com.my.spring.model.Project;
 import com.my.spring.model.Video;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -58,14 +57,26 @@ public class VideoDaoImpl extends BaseDao<Video> implements VideoDao {
 		return update(Video);
 	}
 
+	@Override
+	public boolean deleteVideo(Long id) {
+		return delete(get(id));
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<Video>> getVideoList(Integer pageSize, Integer pageIndex) {
-		// TODO Auto-generated method stub
-		DataWrapper<List<Video>> dataWrapper = new DataWrapper<List<Video>>();
-        List<Video> ret = null;
+	public DataWrapper<List<Video>> getVideoList(Long projectId, Integer pageIndex, Integer pageSize, Video video) {
+		DataWrapper<List<Video>> retDataWrapper = new DataWrapper<List<Video>>();
+        List<Video> ret = new ArrayList<Video>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Video.class);
+//        criteria.addOrder(Order.desc("publishDate"));
+        if(video.getProfessionType()!=null){
+        	criteria.add(Restrictions.eq("professionType", video.getProfessionType()));
+        }
+        if(video.getBuildingNum()!=null){
+        	criteria.add(Restrictions.eq("buildingNum", video.getBuildingNum()));
+        }
+        criteria.add(Restrictions.eq("projectId", projectId));
         
         if (pageSize == null) {
 			pageSize = 10;
@@ -90,33 +101,11 @@ public class VideoDaoImpl extends BaseDao<Video> implements VideoDao {
         }catch (Exception e){
             e.printStackTrace();
         }
-        dataWrapper.setData(ret);
-        dataWrapper.setTotalNumber(totalItemNum);
-        dataWrapper.setCurrentPage(pageIndex);
-        dataWrapper.setTotalPage(totalPageNum);
-        dataWrapper.setNumberPerPage(pageSize);
-
-        return dataWrapper;
-	}
-
-	@Override
-	public boolean deleteVideo(Long id) {
-		return delete(get(id));
-	}
-
-	@Override
-	public DataWrapper<List<Video>> getVideoList() {
-		DataWrapper<List<Video>> retDataWrapper = new DataWrapper<List<Video>>();
-        List<Video> ret = new ArrayList<Video>();
-        Session session = getSession();
-        Criteria criteria = session.createCriteria(Project.class);
-//        criteria.addOrder(Order.desc("publishDate"));
-        try {
-            ret = criteria.list();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         retDataWrapper.setData(ret);
+        retDataWrapper.setTotalNumber(totalItemNum);
+        retDataWrapper.setCurrentPage(pageIndex);
+        retDataWrapper.setTotalPage(totalPageNum);
+        retDataWrapper.setNumberPerPage(pageSize);
         return retDataWrapper;
 	}
 

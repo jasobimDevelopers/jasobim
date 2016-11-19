@@ -50,16 +50,16 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
         ///////////////////////////////
         criteria.add(Restrictions.eq("projectId", projectId));
         if(item.getProfessionType()!=null){
-        	criteria.add(Restrictions.like("professionType", "%" + item.getProfessionType()+ "%"));
+        	criteria.add(Restrictions.eq("professionType", item.getProfessionType()));
         }
         if(item.getBuildingNum()!=null){
-        	criteria.add(Restrictions.like("buildingNum", item.getBuildingNum()));
+        	criteria.add(Restrictions.eq("buildingNum", item.getBuildingNum()));
         }
         if(item.getHouseholdNum()!=null){
-        	criteria.add(Restrictions.like("householdNum", item.getHouseholdNum()));
+        	criteria.add(Restrictions.eq("householdNum", item.getHouseholdNum()));
         }
         if(item.getFloorNum()!=null){
-        	criteria.add(Restrictions.like("floorNum", item.getFloorNum()));
+        	criteria.add(Restrictions.eq("floorNum", item.getFloorNum()));
         }
         	
         /////////////////////////////////////
@@ -302,7 +302,15 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		Query query=session.createSQLQuery("select count(distinct(floor_num)) from item where project_id=" + projectId + " and building_num=" + buildingId + " and floor_num<"+flag);
 		return  Long.parseLong(query.list().get(0).toString());
 	}
+	
+	@Override
+	public Long getItemByBuidlingNum(Long projectId,Long buildingId) {
+		Session session=getSession();
+		Query query=session.createSQLQuery("select count(distinct(floor_num)) from item where project_id=" + projectId+ " and building_num=" + buildingId);
+		return  Long.parseLong(query.list().get(0).toString());
+	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object> getHouseHoldType(Long projectId, Long buildingId, Long floorId) {
 		// TODO Auto-generated method stub

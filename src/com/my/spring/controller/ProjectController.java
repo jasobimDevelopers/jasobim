@@ -1,7 +1,7 @@
 package com.my.spring.controller;
 
 import com.my.spring.model.Project;
-import com.my.spring.model.User;
+import com.my.spring.model.ProjectPojo;
 import com.my.spring.service.ProjectService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +26,12 @@ public class ProjectController {
     public DataWrapper<Void> addProject(
             @ModelAttribute Project project,
             @RequestParam(value = "token",required = true) String token,
-            HttpServletRequest request){
-           // @RequestParam(value = "file", required = false) MultipartFile modelfile,
-          //  @RequestParam(value = "file", required = false) MultipartFile picfile){
-            MultipartFile picfile=null;
-            MultipartFile modelfile=null;
-        return projectService.addProject(project,token,modelfile,picfile,request);
+            HttpServletRequest request,
+            @RequestParam(value = "modelFile", required = false) MultipartFile modelFile,
+            @RequestParam(value = "picFile", required = false) MultipartFile picFile){
+        return projectService.addProject(project,token,modelFile,picFile,request);
     }
-    @RequestMapping(value="findProjectLike", method = RequestMethod.GET)
+    @RequestMapping(value="/findProjectLike", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<Project>> findProjectLike(
             @ModelAttribute Project project,
@@ -51,18 +49,20 @@ public class ProjectController {
         return projectService.deleteProject(projectId,token,modelid,request);
     }
 
-    @RequestMapping(value="admin/updateProject",method = RequestMethod.POST)
+    @RequestMapping(value="/admin/updateProject",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateProject(
             @ModelAttribute Project project,
-            @RequestParam(value = "token",required = true) String token){
-        System.out.println(project);
-        return projectService.updateProject(project,token);
+            HttpServletRequest request,
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "modelFile", required = false) MultipartFile modelFile,
+            @RequestParam(value = "picFile", required = false) MultipartFile picFile){
+        return projectService.updateProject(project,token,modelFile,picFile,request);
     }
 
     @RequestMapping(value="/admin/getProjectList",method = RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<List<Project>> getProjectList(
+    public DataWrapper<List<ProjectPojo>> getProjectList(
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute Project project,

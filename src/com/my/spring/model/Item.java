@@ -15,14 +15,14 @@ public class Item {
     private Integer unitNum;
     private Integer householdNum;
     private String location;//构件所属具体位置（项目A-楼号B-单元C-楼层D-户E）
-    private double bottomElevation;//底部高程
+    private Double bottomElevation;//底部高程
     private String size;      //尺寸
-    private double length;    //长度
+    private Double length;    //长度
     private String serviceType;//设备类型
     private String familyAndType;
     private String level;    //标高
-    private double offset;   //偏移量
-    private double area;    //面积
+    private Double offset;   //偏移量
+    private Double area;    //面积
     private String systemType;//系统类型
     private String material;//材质
     private Long selfId;  //模型中对应的id

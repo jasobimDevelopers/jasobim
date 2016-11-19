@@ -370,6 +370,14 @@ public class ItemServiceImpl implements ItemService {
 		}
 		return null;
 	}
+	@Override
+	public Long getItemByBuidlingNum(Long projectId,Long buildingId,String token) {
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory != null && userInMemory.getUserType() ==UserTypeEnum.Admin.getType() ) {
+			return itemDao.getItemByBuidlingNum(projectId,buildingId);
+		}
+		return null;
+	}
 
 	@Override
 	public List<Object> getHouseHoldType(Long projectId, Long buildingId, Long floorId, String token) {

@@ -26,7 +26,7 @@ import com.my.spring.utils.DataWrapper;
 public class ItemController {
     @Autowired
     ItemService itemService;
-    @RequestMapping(value="uploadItem", method = RequestMethod.POST)
+    @RequestMapping(value="/uploadItem", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> uploadItem(
             @RequestParam(value = "file", required = false) MultipartFile file,
@@ -41,21 +41,21 @@ public class ItemController {
         }
         return dataWrapper;
     }
-    @RequestMapping(value="addItem", method = RequestMethod.POST)
+    @RequestMapping(value="/addItem", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addItem(
             @ModelAttribute Item item,
             @RequestParam(value = "token",required = true) String token){
         return itemService.addItem(item,token);
     }
-    @RequestMapping(value="deleteItem")
+    @RequestMapping(value="/deleteItem")
     @ResponseBody
     public DataWrapper<Void> deleteItem(
             @RequestParam(value = "id",required = true) Long id,
             @RequestParam(value = "token",required = true) String token){
         return itemService.deleteItem(id,token);
     }
-    @RequestMapping(value="deleteItemByTypeNameAndProjectId")
+    @RequestMapping(value="/deleteItemByTypeNameAndProjectId")
     @ResponseBody
     public DataWrapper<Void> deleteItemByTypeNameAndProjectId(
             @RequestParam(value = "typename",required = true) String typename,
@@ -63,7 +63,7 @@ public class ItemController {
             @RequestParam(value = "token",required = true) String token){
         return itemService.deleteItemByTypeNameAndProjectId(projectId,typename,token);
     }
-    @RequestMapping(value="deleteItemByProjectId")
+    @RequestMapping(value="/deleteItemByProjectId")
     @ResponseBody
     public DataWrapper<Void> deleteItemByProjectId(
             @RequestParam(value = "projectId",required = true) Long projectId,
@@ -82,7 +82,7 @@ public class ItemController {
     }
 
 
-    @RequestMapping(value="/admin/getItemList")
+    @RequestMapping(value="/admin/getItemList", method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<Item>> getItemList(
     		@RequestParam(value="projectId",required=true) Long projectId,
@@ -92,14 +92,14 @@ public class ItemController {
             @RequestParam(value = "token",required = false) String token){
         return itemService.getItemList(projectId,pageIndex,pageSize,item,token);
     }
-    @RequestMapping(value="getItemById")
+    @RequestMapping(value="/getItemById",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Item> getItemById(
-    		@RequestParam(value = "id",required = true) Long id,
+    		@RequestParam(value = "itemId",required = true) Long itemId,
             @RequestParam(value = "token",required = false) String token){
-        return itemService.getItemById(id,token);
+        return itemService.getItemById(itemId,token);
     }
-    @RequestMapping(value="getItemByOthers")
+    @RequestMapping(value="/getItemByOthers")
     @ResponseBody
     public DataWrapper<List<Item>> getItemByOthers(
     		@RequestParam(value = "projectId",required = true) Long projectId,
@@ -112,7 +112,7 @@ public class ItemController {
         return itemService.getItemByOthers(projectId,typeName,buildingNum,floorNum,unitNum,householdNum,token);
     }
     /*
-     * 查询项目地下层层数
+     * 查询项目相应栋号下的地下层层数
      * */
     @RequestMapping(value="/getItemByBase",method=RequestMethod.GET)
     @ResponseBody
@@ -122,6 +122,18 @@ public class ItemController {
     	@RequestParam(value = "token",required = true) String token
     		){
         return itemService.getItemByBase(projectId,buildingId,token);
+    }
+    /*
+     * 查询项目相应栋号楼层数
+     * */
+    @RequestMapping(value="/getItemByBuidlingNum",method=RequestMethod.GET)
+    @ResponseBody
+    public Long getItemByBuidlingNum(
+    	@RequestParam(value = "projectId",required = true) Long projectId,
+    	@RequestParam(value = "buildingId",required = true) Long buildingId,
+    	@RequestParam(value = "token",required = true) String token
+    		){
+        return itemService.getItemByBuidlingNum(projectId,buildingId,token);
     }
     
     @RequestMapping(value="/getHouseHoldType",method=RequestMethod.GET)

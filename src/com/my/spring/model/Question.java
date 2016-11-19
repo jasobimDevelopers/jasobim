@@ -13,14 +13,15 @@ import javax.persistence.Table;
 @Table(name = "question")
 public class Question {
 	private Long id;       ////问题编号
-	private Integer questionType;////问题类型
+	private Long projectId;////项目工程id
+	private Integer questionType;////问题类型(0.安全1.质量2.其他)
 	private Long userId;  ///问题提交人id
 	private String name;  ///问题名称
 	private String trades;///问题专业
 	private String intro; //////问题内容
 	private Date questionDate;/////问题的创建时间
-	private Integer priority;////问题等级
-	private Integer state;   ///问题的状态
+	private Integer priority;////问题等级 (0.一般 1.重要 2.紧急)
+	private Integer state;   ///问题的状态(0.待解决 1.已解决)
 	private String codeInformation;/////图片的二维码信息
 	
 	@Id
@@ -31,6 +32,15 @@ public class Question {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	@Basic
+    @Column(name = "project_id")
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 	
 	@Basic

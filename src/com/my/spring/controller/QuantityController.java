@@ -49,16 +49,19 @@ public class QuantityController {
     @ResponseBody
     public DataWrapper<List<Quantity>> getQuantityList(
     		@RequestParam(value = "projectId",required = true) Long projectId,
-            @RequestParam(value = "token",required = true) String token){
-        return quantityService.getQuantityList(projectId,token);
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Quantity quantity){
+        return quantityService.getQuantityList(projectId,token,pageIndex,pageSize,quantity);
     }
     
     @RequestMapping(value="/getQuantityDetailsByAdmin")
     @ResponseBody
     public DataWrapper<Quantity> getQuantityDetailsByAdmin(
-    		@RequestParam(value = "id",required = true) Long id,
+    		@RequestParam(value = "id",required = true) Long quantityId,
             @RequestParam(value = "token",required = true) String token){
-        return quantityService.getQuantityDetailsByAdmin(id, token);
+        return quantityService.getQuantityDetailsByAdmin(quantityId, token);
     }
     
     

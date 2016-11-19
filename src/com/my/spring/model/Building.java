@@ -15,11 +15,11 @@ public class Building {
 	private Long projectId;
 	private Integer buildingNum;
 	private Integer floorNum;
-	private double area;
+	private Double area;
 	private Integer householdNum;
 	private Integer unitNum;
 	private String description;
-	private double height;
+	private Double height;
 	@Id
     @GeneratedValue
     @Column(name = "id")

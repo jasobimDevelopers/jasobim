@@ -170,6 +170,11 @@ table
 	width:20px;
 	background:url(../images/editIcon.png) no-repeat;
 }
+#uploadbutton{
+	height:25px;
+	width:20px;
+	background:url(../images/downloadIcon.png) no-repeat;
+}
 #deletebutton{
 	height:25px;
 	width:20px;
@@ -179,7 +184,7 @@ table
 	text-align:center;
 	margin-top: 50px;
 }
-$bottom a,bottom span{
+#bottom a,bottom span{
 	text-decoration:none;
 	border: 1px solid #f9d52b;
 	padding::5px 7px;
@@ -189,11 +194,27 @@ $bottom a,bottom span{
 #table-buton{
 	float:right;
 }
+#table-buton3{
+	float:right;
+}
+#table-buton4{
+	float:right;
+}
+#table-buton5{
+	float:right;
+}
+#table-buton6{
+	float:right;
+}
 #bottom a:hover,#bottom span:hover{
 	color:red;
 }
-#userPageCode,#projectPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
-#userPageCode a,#projectPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
-#userPageCode a:hover,#projectPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
-#userPageCode span.current,#projectPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
-#userPageCode span.disabled,#projectPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+#userPageCode,#projectPageCode,#itemPageCode,#quantityPageCode,#questionPageCode,#videoPageCode,#paperPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
+#userPageCode a,#projectPageCode a,#itemPageCode a,#quantityPageCode a,#questionPageCode a,#videoPageCode a,#paperPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+#userPageCode a:hover,#projectPageCode a:hover,#itemPageCode a:hover,#quantityPageCode a:hover,
+#questionPageCode a:hover,#videoPageCode a:hover,#paperPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+#userPageCode span.current,#itemPageCode span.current,#projectPageCode span.current,
+#quantityPageCode span.current,#questionPageCode span.current,#videoPageCode span.current,#paperPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+#userPageCode span.disabled,#projectPageCode span.disabled,#itemPageCode span.disabled,
+#quantityPageCode span.disabled,#questionPageCode span.disabled,#projectPageCode span.disabled,#videoPageCode span.disabled,
+#paperPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}

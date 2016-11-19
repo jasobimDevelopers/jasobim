@@ -1,6 +1,7 @@
 package com.my.spring.controller;
 
 import com.my.spring.model.Paper;
+import com.my.spring.model.PaperPojo;
 import com.my.spring.service.PaperService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PaperController {
     @Autowired
     PaperService paperService;
-    @RequestMapping(value="addPaper", method = RequestMethod.POST)
+    @RequestMapping(value="/addPaper", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addPaper(
             @ModelAttribute Paper paper,
@@ -29,7 +30,7 @@ public class PaperController {
             @RequestParam(value = "token",required = true) String token){
         return paperService.addPaper(paper,token,file,request);
     }
-    @RequestMapping(value="deletePaper")
+    @RequestMapping(value="/deletePaper")
     @ResponseBody
     public DataWrapper<Void> deletePaper(
             @RequestParam(value = "id",required = true) Long id,
@@ -39,7 +40,7 @@ public class PaperController {
         return paperService.deletePaper(id,fileid,token,request);
     }
 
-    @RequestMapping(value="updatePaper",method = RequestMethod.POST)
+    @RequestMapping(value="/updatePaper",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updatePaper(
             @ModelAttribute Paper paper,
@@ -49,14 +50,17 @@ public class PaperController {
     }
 
 
-    @RequestMapping(value="getPaperList",method = RequestMethod.GET)
+    @RequestMapping(value="/admin/getPaperList",method = RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<List<Paper>> getPaperList(
+    public DataWrapper<List<PaperPojo>> getPaperList(
     		@RequestParam(value="projectId",required=true) Long projectId,
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Paper paper,
     		@RequestParam(value="token",required=true) String token){
-        return paperService.getPaperList(projectId,token);
+        return paperService.getPaperList(projectId,token,pageIndex,pageSize,paper);
     }
-    @RequestMapping(value="getPaperDetails/{paperId}")
+    @RequestMapping(value="/getPaperDetails/{paperId}")
     @ResponseBody
     public DataWrapper<Paper> getPaperDetailsByAdmin(
     		@PathVariable(value="paperId") Long paperId,

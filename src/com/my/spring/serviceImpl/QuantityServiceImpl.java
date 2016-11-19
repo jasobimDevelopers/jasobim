@@ -93,12 +93,12 @@ public class QuantityServiceImpl implements QuantityService {
     }
 
     @Override
-    public DataWrapper<List<Quantity>> getQuantityList(Long projectId,String token) {
+    public DataWrapper<List<Quantity>> getQuantityList(Long projectId,String token,Integer pageIndex,Integer pageSize,Quantity quantity) {
     	DataWrapper<List<Quantity>> datawrapper=new DataWrapper<List<Quantity>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
-    			datawrapper=quantityDao.getQuantityList(projectId);
+    			datawrapper=quantityDao.getQuantityList(projectId,pageSize, pageIndex,quantity);
     		}else{
     			datawrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
     		}

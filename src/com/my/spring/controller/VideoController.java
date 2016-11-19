@@ -1,6 +1,7 @@
 package com.my.spring.controller;
 
 import com.my.spring.model.Video;
+import com.my.spring.model.VideoPojo;
 import com.my.spring.service.VideoService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +21,16 @@ import javax.servlet.http.HttpServletRequest;
 public class VideoController {
     @Autowired
     VideoService VideoService;
-    @RequestMapping(value="addVideo", method = RequestMethod.POST)
+    @RequestMapping(value="/addVideo", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addVideo(
-            @ModelAttribute Video Video,
+            @ModelAttribute Video video,
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request,
             @RequestParam(value = "file", required = false) MultipartFile file){
-        return VideoService.addVideo(Video,token,file,request);
+        return VideoService.addVideo(video,token,file,request);
     }
-    @RequestMapping(value="deleteVideo")
+    @RequestMapping(value="/deleteVideo")
     @ResponseBody
     public DataWrapper<Void> deleteVideo(
             @RequestParam(value = "id",required = true) Long id,
@@ -39,11 +40,15 @@ public class VideoController {
         return VideoService.deleteVideo(id,token,fileid,request);
     }
 
-    @RequestMapping(value="getVideoList")
+    @RequestMapping(value="/admin/getVideoList")
     @ResponseBody
-    public DataWrapper<List<Video>> getVideoList(
+    public DataWrapper<List<VideoPojo>> getVideoList(
+    		@RequestParam(value="projectId",required=true) Long projectId,
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Video video,
     		@RequestParam(value = "token",required = true) String token
     		){
-        return VideoService.getVideoList(token);
+        return VideoService.getVideoList(token,projectId,pageIndex,pageSize,video);
     }
 }

@@ -12,6 +12,6 @@ public interface PaperDao {
     boolean addPaper(Paper Paper);
     boolean deletePaper(Long id);
     boolean updatePaper(Paper Paper);
-    DataWrapper<List<Paper>> getPaperList(Long projecId);
+    DataWrapper<List<Paper>> getPaperList(Long projecId, Integer pageSize, Integer pageIndex, Paper paper);
     Paper getById(Long id);
 }

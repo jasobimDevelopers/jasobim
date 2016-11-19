@@ -13,8 +13,8 @@ public class Video {
 	private Long id;
 	private Long fileId;
 	private Long projectId;
-	private Long buildingId;
-	
+	private Integer buildingNum;
+	private Integer professionType;
 	@Id
     @GeneratedValue
     @Column(name = "id")
@@ -43,12 +43,21 @@ public class Video {
 	}
 	
 	@Basic
-    @Column(name = "building_id")
-	public Long getBuildingId() {
-		return buildingId;
+    @Column(name = "profession_type")
+	public Integer getProfessionType() {
+		return professionType;
 	}
-	public void setBuildingId(Long buildingId) {
-		this.buildingId = buildingId;
+	public void setProfessionType(Integer professionType) {
+		this.professionType = professionType;
+	}
+	
+	@Basic
+    @Column(name = "building_num")
+	public Integer getBuildingNum() {
+		return buildingNum;
+	}
+	public void setBuildingNum(Integer buildingNum) {
+		this.buildingNum = buildingNum;
 	}
 	
 

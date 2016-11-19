@@ -17,14 +17,14 @@ import java.util.List;
 public class BuildingController {
     @Autowired
     BuildingService buildingService;
-    @RequestMapping(value="addBuilding", method = RequestMethod.POST)
+    @RequestMapping(value="/addBuilding", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addBuilding(
             @ModelAttribute Building building,
             @RequestParam(value = "token",required = true) String token){
         return buildingService.addBuilding(building,token);
     }
-    @RequestMapping(value="deleteBuilding")
+    @RequestMapping(value="/deleteBuilding")
     @ResponseBody
     public DataWrapper<Void> deleteBuilding(
             @RequestParam(value = "id",required = true) Long id,
@@ -32,7 +32,7 @@ public class BuildingController {
         return buildingService.deleteBuilding(id,token);
     }
 
-    @RequestMapping(value="updateBuilding",method = RequestMethod.POST)
+    @RequestMapping(value="/updateBuilding",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateBuilding(
             @ModelAttribute Building building,
@@ -43,7 +43,7 @@ public class BuildingController {
     }
 
 
-    @RequestMapping(value="getBuildingList")
+    @RequestMapping(value="/getBuildingList")
     @ResponseBody
     public DataWrapper<List<Building>> getBuildingList(){
         return buildingService.getBuildingList();

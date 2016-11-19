@@ -8,6 +8,7 @@ function UserController($scope,UserService) {
   $scope.userTofind = {};
   $scope.findUserInfo = {};
   $scope.userTitles=["序号","id","用户名","真实姓名","权限","邮箱","电话","注册日期","操作"];
+  $scope.roleList=[{name:"超级管理员"},{name:"管理员"}];
   ///////分页获取用户列表
   $scope.getUserList = function(pageSize,pageIndex,user) {
 	  UserService.getUserList(pageSize,pageIndex,user).then(function (result){
@@ -93,6 +94,7 @@ function UserController($scope,UserService) {
 		 var formData = new FormData();
 		 formData.append('id', $scope.findUserInfo.id);
 		 var userIcon = document.querySelector('input[type=file]').files[0];
+		 //var test=document.getElementById("inputicon").value;
 		 formData.append('file',userIcon);
 		 formData.append('userName',$scope.findUserInfo.userName);
 		 formData.append('realName',$scope.findUserInfo.realName);

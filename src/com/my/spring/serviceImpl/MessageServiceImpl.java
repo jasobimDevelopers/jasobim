@@ -131,18 +131,12 @@ public class MessageServiceImpl implements MessageService {
     }*/
 
     @Override
-    public DataWrapper<List<Message>> getMessageList(String token ) {
+    public DataWrapper<List<Message>> getMessageList(String token , Long projectId, Integer pageIndex, Integer pageSize, Message message) {
     	DataWrapper<List<Message>> dataWrapper = new DataWrapper<List<Message>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
-				
-				if(messageDao.getMessageList()==null) 
-		            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-				else
-					return messageDao.getMessageList();
-			        
-				
+					dataWrapper=messageDao.getMessageList(projectId,pageIndex,pageSize,message);
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
