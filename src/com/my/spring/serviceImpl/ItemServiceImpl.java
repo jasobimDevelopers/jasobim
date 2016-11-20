@@ -194,7 +194,6 @@ public class ItemServiceImpl implements ItemService {
 			        List <Quantity> quantityOldList=new ArrayList<Quantity>();
 			    	DataWrapper<List <QuantityPojo>> quantitypojo= itemDao.getSameItem();
 			    	quantityOldList=quantityDao.getAllQuantity();
-			    	int j=0;
 			    	if(quantitypojo.getData()!=null){
 			    		for(QuantityPojo pojo:quantitypojo.getData()){
 			    			
@@ -205,35 +204,40 @@ public class ItemServiceImpl implements ItemService {
 			    			test.setFloorNum(pojo.getFloor_num());
 			    			test.setUnitNum(pojo.getUnit_num());
 			    			test.setHouseholdNum(pojo.getHousehold_num());
+//			    			test.setTypeName(pojo.getType_name());
 			    			String familyAndType=pojo.getFamily_and_type();
-			    			test.setTypeName(pojo.getType_name());
-			    			if(familyAndType.equals("") || familyAndType==null){
+			    			String typeName=pojo.getType_name();
+			    			if(typeName==null){
+			    				typeName="";
+			    			}
+//			    			test.setTypeName(typeName);
+			    			if(familyAndType==null){
 			    				familyAndType="";
 			    			}
 			    			test.setFamilyAndType(familyAndType);
 			    			String serviceType=pojo.getService_type();
-			    			if(serviceType.equals("") || serviceType==null){
+			    			if(serviceType==null){
 			    				serviceType="";
 			    			}
 			    			test.setServiceType(serviceType);
 			    			String systemType=pojo.getSystem_type();
-			    			if(systemType.equals("") || systemType==null){
+			    			if(systemType==null){
 			    				systemType="";
 			    			}
 			    			test.setSystemType(systemType);
 			    			test.setProfessionType(pojo.getProfession_type());
 			    			String names=pojo.getName();
-			    			if(names.equals("") || names==null){
+			    			if(names==null){
 			    				names="";
 			    			}
 			    			test.setName(names);
 			    			String size=pojo.getSize();
-			    			if(size.equals("") || size==null){
+			    			if(size==null){
 			    				size="";
 			    			}
 			    			test.setSize(size);
 			    			String material=pojo.getMaterial();
-			    			if(material==null || material.equals("")){
+			    			if(material.equals("")){
 			    				material="";
 			    			}
 			    			test.setMaterial(material);
@@ -249,6 +253,9 @@ public class ItemServiceImpl implements ItemService {
 			    				test.setValue(pojo.getNum());
 			    				test.setUnit("个");
 			    			}
+			    			if(quantityOldList.size()==0){
+			    				quantityList.add(test);
+			    			}
 			    			for(int k=0;k<quantityOldList.size();k++){
 			    				if(quantityOldList.get(k).getProjectId()==test.getProjectId() 
 			    						&& quantityOldList.get(k).getBuildingNum()==test.getBuildingNum()
@@ -258,7 +265,7 @@ public class ItemServiceImpl implements ItemService {
 			    						&& quantityOldList.get(k).getProfessionType()==test.getProfessionType()
 			    						&& quantityOldList.get(k).getMaterial().equals(test.getMaterial())
 			    						&& quantityOldList.get(k).getFamilyAndType().equals(test.getFamilyAndType())
-			    						&& quantityOldList.get(k).GetServiceType().equals(test.GetServiceType())
+			    						&& quantityOldList.get(k).getServiceType().equals(test.getServiceType())
 			    						&& quantityOldList.get(k).getSystemType().equals(test.getSystemType())
 			    						&& quantityOldList.get(k).getSize().equals(test.getSize())
 			    						&& quantityOldList.get(k).getUnitNum()==test.getUnitNum()
