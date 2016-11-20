@@ -29,6 +29,7 @@ function ProjectController($scope,ProjectService) {
 	var buildingInfo = {};
 	$scope.building = [];
 	$scope.floors =[];
+	var fileArray=[];
 	var introduced=null;
 	var projectId=null;
 	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","设计单位","施工地点","项目简介","建设单位","版本","施工时间","施工周期","操作"];
@@ -250,6 +251,7 @@ function ProjectController($scope,ProjectService) {
 		 }
 		 if($scope.projectTitle=="更新项目")
 		{
+			 alert($scope.test);
 			 var formData = new FormData();
 			 for (var key in $scope.findProjectInfo) {
 				   if($scope.findProjectInfo[key] != null) {
@@ -257,25 +259,19 @@ function ProjectController($scope,ProjectService) {
 				   }
 			 }
 	
-			
-			 if($scope.modelFiles == undefined) {
+
+			 if($scope.modelFiles == undefined || $scope.modelFiles == null) {
 				 formData.append('modelFile',null);
 			 } else {
 				 formData.append('modelFile',$scope.modelFiles);
 			 }
-			 if($scope.picFiles == undefined) {
+			 if($scope.picFiles == undefined || $scope.picFiles == null) {
 				 formData.append('picFile',null);
 			 } else {
 				 formData.append('picFile',$scope.picFiles);
 			 }
 			 
-//			 var modelFile=$scope.modelFiles;
-//			 var picFile=$scope.picFiles;
-//			 console.log(modelFile);
-//			 $scope.findProjectInfo.modelFile = modelFile;
-//			 $scope.findProjectInfo.picFile = picFile;
-//			 alert($scope.test);
-			 //var picFile = document.querySelector('input[type=file]').files[1];
+
 			 ProjectService.updateProject(formData,token).then(function(result){
 			       $scope.updateProjectInfo=result.data;
 			       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
@@ -360,7 +356,7 @@ function ProjectController($scope,ProjectService) {
 	 */
 	 ////////////////////////构件信息分页获取
 	 $scope.getProjectItemList = function(projectId,pageSize,pageIndex,item) {
-		
+		  
 		  $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		 
 		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
@@ -377,6 +373,17 @@ function ProjectController($scope,ProjectService) {
 		 if($scope.householdId!="all"){
 			 item+= "&householdNum=" + $scope.householdId;
 		 }
+		  ProjectService.getItemList(projectId,pageSize,pageIndex,item).then(function (result){
+		  	  $scope.projectItemList = result.data;
+		      $scope.currentPage = result.currentPage;
+		      $scope.totalPage = result.totalPage;
+		      $scope.itemPage($scope.totalPage,$scope.currentPage);
+		  });
+	  }
+	 ////////////////////////初始化构件信息分页获取
+	 $scope.InitProjectItemList = function(projectId,pageSize,pageIndex) {
+		  
+		  $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		  ProjectService.getItemList(projectId,pageSize,pageIndex,item).then(function (result){
 		  	  $scope.projectItemList = result.data;
 		      $scope.currentPage = result.currentPage;
@@ -610,7 +617,7 @@ function ProjectController($scope,ProjectService) {
 			 document.getElementById("projectVideoInfoHtml").style.display = 'none';
 			 document.getElementById("projectQuestionInfo").style.display = 'none';
 			 var item=null;
-			 $scope.getProjectItemList($scope.findProjectInfo.id,pageSize,1,item);
+			 $scope.InitProjectItemList($scope.findProjectInfo.id,pageSize,1,item);
 			
 			 
 		 }
@@ -654,6 +661,48 @@ function ProjectController($scope,ProjectService) {
 			 var question=null;
 			 $scope.getProjectQuestionList(pageSize,1,question);
 		 }
+	 }
+	 $scope.uploadItemFile=function(){
+		 
+		 //电缆桥架
+		 fileArray[0]=document.getElementById("qiaojia").files[0];	
+		 //电缆桥架配件
+		 fileArray[1]=document.getElementById("qiaojia_fujian").files[0];	  
+		 //电气设备
+		 fileArray[2]=document.getElementById("dianqi_shebei").value;	  
+		 //风管	
+		 fileArray[3]=document.getElementById("fengguan").value;			  
+		 //风管配件
+		 fileArray[4]=document.getElementById("fengguan_peijian").value;			 
+		 //风管附件
+		 fileArray[5]=document.getElementById("fengguan_fujian").value;			  
+		 //风管末端
+		 fileArray[6]=document.getElementById("fengguan_moduan").value;			  
+		 //机械设备
+		 fileArray[7]=document.getElementById("jixie_shebei").value;			  
+		 //管道
+		 fileArray[8]=document.getElementById("guandao").value;			  
+		 //管件
+		 fileArray[9]=document.getElementById("guanjian").value;			  
+		 //管道附件
+		 fileArray[10]=document.getElementById("guandao_fujian").value;			  
+		 //卫浴装置
+		 fileArray[11]=document.getElementById("weiyu_zhuangzhi").value;			  
+		 //消防栓
+		 fileArray[12]=document.getElementById("xiaofangshuan").value;			  
+		 //喷淋
+		 fileArray[13]=document.getElementById("penlin").value;			 
+		 //工程量
+		 fileArray[14]=document.getElementById("gongchengliang").value;	
+//		 console.log(typeof(fileArray));
+		 var formData = new FormData();
+		 formData.append("fileList",fileArray[0]);
+		 formData.append("fileList",fileArray[1]);
+		 ProjectService.uploadItemFile(formData).then(function(result){
+		       $scope.uploadItemInfo=result.data;
+		     
+		       
+		    });
 	 }
 	 
 }

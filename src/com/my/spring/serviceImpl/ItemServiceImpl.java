@@ -122,11 +122,7 @@ public class ItemServiceImpl implements ItemService {
     	DataWrapper<List<Item>> dataWrapper = new DataWrapper<List<Item>>();
         User adminInMemory = SessionManager.getSession(token);
         if (adminInMemory != null) {
-        	User adminInDB = userDao.getById(adminInMemory.getId());
-        	if(adminInDB.getUserType()== UserTypeEnum.Admin.getType()){
-        		dataWrapper =itemDao.getItemList(projectId,pageSize, pageIndex,item);
-        	}
-        	
+        	dataWrapper =itemDao.getItemList(projectId,pageSize, pageIndex,item);
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -191,8 +187,6 @@ public class ItemServiceImpl implements ItemService {
 			        for(Item Item:ItemList){
 			        	itemDao.addItem(Item);
 			        }
-			            
-			        
 			    	DataWrapper<List <QuantityPojo>> quantitypojo= itemDao.getSameItem();
 			    		
 			    	
@@ -365,7 +359,7 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public Long getItemByBase(Long projectId,Long buildingId,String token) {
 		User userInMemory = SessionManager.getSession(token);
-		if(userInMemory != null && userInMemory.getUserType() ==UserTypeEnum.Admin.getType() ) {
+		if(userInMemory != null) {
 			return itemDao.getItemByBase(projectId,buildingId);
 		}
 		return null;
@@ -373,7 +367,7 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public Long getItemByBuidlingNum(Long projectId,Long buildingId,String token) {
 		User userInMemory = SessionManager.getSession(token);
-		if(userInMemory != null && userInMemory.getUserType() ==UserTypeEnum.Admin.getType() ) {
+		if(userInMemory != null ) {
 			return itemDao.getItemByBuidlingNum(projectId,buildingId);
 		}
 		return null;
@@ -383,7 +377,7 @@ public class ItemServiceImpl implements ItemService {
 	public List<Object> getHouseHoldType(Long projectId, Long buildingId, Long floorId, String token) {
 		// TODO Auto-generated method stub
 		User userInMemory = SessionManager.getSession(token);
-		if(userInMemory != null && userInMemory.getUserType() ==UserTypeEnum.Admin.getType() ) {
+		if(userInMemory != null) {
 			return itemDao.getHouseHoldType(projectId, buildingId, floorId);
 		}
 		return null;

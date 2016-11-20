@@ -103,9 +103,6 @@ public class VideoServiceImpl implements VideoService {
     	DataWrapper<List<Video>> dataWrappers=new DataWrapper<List<Video>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
-    		User adminInDB = userDao.getById(userInMemory.getId());
-    		if(adminInDB.getUserType() == UserTypeEnum.Admin.getType()){
-    			
     			dataWrappers=videoDao.getVideoList(projectId, pageIndex, pageSize, video);
     			for(int i=0;i<dataWrappers.getData().size();i++){
     				VideoPojo videoPojo=new VideoPojo();
@@ -126,10 +123,6 @@ public class VideoServiceImpl implements VideoService {
     			dataWrapper.setNumberPerPage(dataWrappers.getNumberPerPage());
     			dataWrapper.setTotalNumber(dataWrappers.getTotalNumber());
     			dataWrapper.setTotalPage(dataWrappers.getTotalPage());
-    			
-    		}else{
-    			dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-    		}
     	}else{
     		dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}

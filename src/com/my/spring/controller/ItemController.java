@@ -26,19 +26,23 @@ import com.my.spring.utils.DataWrapper;
 public class ItemController {
     @Autowired
     ItemService itemService;
-    @RequestMapping(value="/uploadItem", method = RequestMethod.POST)
+    @RequestMapping(value="/admin/uploadItem", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> uploadItem(
-            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam(value = "fileList", required = false) MultipartFile[] fileList,
             @RequestParam(value = "token",required = true) String token,
+            
             HttpServletRequest request){
-    	String filePath = "/fileupload/items";
+//    	String filePath = "/fileupload/items";
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-    	if(itemService.batchImport(filePath, file,token,request)){
-        	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
-        }else{
-        	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-        }
+//    	for(int i=0;i<fileList.size();i++){
+//    		if(itemService.batchImport(filePath, fileList.get(i),token,request)){
+//            	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
+//            }else{
+//            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+//            }
+//    	}
+    	
         return dataWrapper;
     }
     @RequestMapping(value="/addItem", method = RequestMethod.POST)
