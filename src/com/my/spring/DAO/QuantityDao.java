@@ -16,4 +16,5 @@ public interface QuantityDao {
 	    Quantity getById(Long id);
 		boolean findQuantity(Quantity quantity);
 		boolean addQuantityList(List<Quantity> quantityList);
+		List<Quantity> getAllQuantity();
 }

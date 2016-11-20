@@ -191,9 +191,13 @@ public class ItemServiceImpl implements ItemService {
 		            //迭代添加构件信息
 			        itemDao.addItemList(ItemList);
 			        List <Quantity> quantityList=new ArrayList<Quantity>();
+			        List <Quantity> quantityOldList=new ArrayList<Quantity>();
 			    	DataWrapper<List <QuantityPojo>> quantitypojo= itemDao.getSameItem();
+			    	quantityOldList=quantityDao.getAllQuantity();
+			    	int j=0;
 			    	if(quantitypojo.getData()!=null){
 			    		for(QuantityPojo pojo:quantitypojo.getData()){
+			    			
 			    			Quantity test=new Quantity();
 			    			Long st=pojo.getProject_id();
 			    			test.setProjectId(st);
@@ -245,10 +249,26 @@ public class ItemServiceImpl implements ItemService {
 			    				test.setValue(pojo.getNum());
 			    				test.setUnit("个");
 			    			}
-			    			if(quantityDao.findQuantity(test)){
-			    				quantityDao.updateQuantity(test);
-			    			}else{
-			    				quantityList.add(test);
+			    			for(int k=0;k<quantityOldList.size();k++){
+			    				if(quantityOldList.get(k).getProjectId()==test.getProjectId() 
+			    						&& quantityOldList.get(k).getBuildingNum()==test.getBuildingNum()
+			    						&& quantityOldList.get(k).getFloorNum()==test.getFloorNum()
+			    						&& quantityOldList.get(k).getHouseholdNum()==test.getHouseholdNum()
+			    						&& quantityOldList.get(k).getName().equals(test.getName())
+			    						&& quantityOldList.get(k).getProfessionType()==test.getProfessionType()
+			    						&& quantityOldList.get(k).getMaterial().equals(test.getMaterial())
+			    						&& quantityOldList.get(k).getFamilyAndType().equals(test.getFamilyAndType())
+			    						&& quantityOldList.get(k).GetServiceType().equals(test.GetServiceType())
+			    						&& quantityOldList.get(k).getSystemType().equals(test.getSystemType())
+			    						&& quantityOldList.get(k).getSize().equals(test.getSize())
+			    						&& quantityOldList.get(k).getUnitNum()==test.getUnitNum()
+			    						)
+			    				{
+			    					test.setId(quantityOldList.get(k).getId());
+				    				quantityDao.updateQuantity(test);
+				    			}else{
+				    				quantityList.add(test);
+				    			}
 			    			}
 			    		}
 			    		quantityDao.addQuantityList(quantityList);

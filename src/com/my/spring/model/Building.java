@@ -72,11 +72,11 @@ public class Building {
 
 	@Basic
 	@Column(name = "area")
-	public double getArea() {
+	public Double getArea() {
 		return area;
 	}
 
-	public void setArea(double area) {
+	public void setArea(Double area) {
 		this.area = area;
 	}
 
@@ -112,11 +112,11 @@ public class Building {
 
 	@Basic
 	@Column(name = "height")
-	public double getHeight() {
+	public Double getHeight() {
 		return height;
 	}
 
-	public void setHeight(double height) {
+	public void setHeight(Double height) {
 		this.height = height;
 	}
 

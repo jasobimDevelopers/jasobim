@@ -131,4 +131,22 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		// TODO Auto-generated method stub
 		return saveList(quantityList);
 	}
+
+	@Override
+	public List<Quantity> getAllQuantity() {
+		String sql = "select * from quantity ";
+		List<Quantity> dataWrapper = new ArrayList<Quantity>();
+		Session session=getSession();
+		try{
+	            Query query=session.createSQLQuery(sql);
+	            dataWrapper=query.list();
+	            if(dataWrapper!=null&&dataWrapper.size()>0){
+	            	return dataWrapper;
+	            }
+	    }catch(Exception e){
+	            e.printStackTrace();
+	    }
+		
+		return null;
+	}
 }
