@@ -22,6 +22,8 @@ public class BaseDao<T>{
     private SessionFactory sessionFactory;
 
     private Class<T> entityClass;
+    
+   // private List<Class<T>> entityClassList;
     /**
      * 通过反射获取子类确定的泛型类
      */
@@ -80,6 +82,32 @@ public class BaseDao<T>{
         try{
             session.beginTransaction();
             session.save(entity);
+            session.getTransaction().commit();
+            session.flush();
+        }catch(Exception e){
+            e.printStackTrace();
+            session.getTransaction().rollback();
+
+            return false;
+        }
+        return true;
+    }
+    /**
+     * 保存PO
+     *
+     * @param entity
+     */
+    public boolean saveList(List<T> entityList) {
+        Session session = getSession();
+        try{
+            session.beginTransaction();
+            for(int i=0;i<entityList.size();i++){
+            	session.save(entityList.get(i));
+            	if(i%100==0){
+            		session.flush();
+            		session.clear();
+            	}
+            }
             session.getTransaction().commit();
             session.flush();
         }catch(Exception e){

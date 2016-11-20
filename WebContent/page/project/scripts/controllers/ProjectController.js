@@ -241,25 +241,12 @@ function ProjectController($scope,ProjectService) {
 	 /////增加项目
 	 $scope.addProjectByAdmin = function(){
 		 if($scope.projectTitle=="增加项目"){
-			 findProjectInfo = {};
-			 findProjectInfo=$scope.findProjectInfo;
-			 ProjectService.addProjectByAdmin(findProjectInfo,token).then(function(result){
-			       $scope.addProjectByAdminInfo=result.data;
-			       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
-			       
-			    });
-		 }
-		 if($scope.projectTitle=="更新项目")
-		{
-			 alert($scope.test);
 			 var formData = new FormData();
 			 for (var key in $scope.findProjectInfo) {
 				   if($scope.findProjectInfo[key] != null) {
 					   formData.append(key, $scope.findProjectInfo[key]);
 				   }
 			 }
-	
-
 			 if($scope.modelFiles == undefined || $scope.modelFiles == null) {
 				 formData.append('modelFile',null);
 			 } else {
@@ -270,10 +257,35 @@ function ProjectController($scope,ProjectService) {
 			 } else {
 				 formData.append('picFile',$scope.picFiles);
 			 }
+			 ProjectService.addProjectByAdmin(formData,token).then(function(result){
+			       $scope.addProjectByAdminInfo=result.data;
+			       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
+			       
+			    });
+		 }
+		 if($scope.projectTitle=="更新项目")
+		{
 			 
-
+			 var formData = new FormData();
+			 for (var key in $scope.findProjectInfo) {
+				   if($scope.findProjectInfo[key] != null) {
+					   formData.append(key, $scope.findProjectInfo[key]);
+				   }
+			 }
+			 if($scope.modelFiles == undefined || $scope.modelFiles == null) {
+				 formData.append('modelFile',null);
+			 } else {
+				 formData.append('modelFile',$scope.modelFiles);
+			 }
+			 if($scope.picFiles == undefined || $scope.picFiles == null) {
+				 formData.append('picFile',null);
+			 } else {
+				 formData.append('picFile',$scope.picFiles);
+			 }
 			 ProjectService.updateProject(formData,token).then(function(result){
+				 
 			       $scope.updateProjectInfo=result.data;
+			       document.getElementById("projectItemInfoAdd").style.display = 'block';
 			       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
 			    });
 		}
@@ -669,35 +681,36 @@ function ProjectController($scope,ProjectService) {
 		 //电缆桥架配件
 		 fileArray[1]=document.getElementById("qiaojia_fujian").files[0];	  
 		 //电气设备
-		 fileArray[2]=document.getElementById("dianqi_shebei").value;	  
+		 fileArray[2]=document.getElementById("dianqi_shebei").files[0];	  
 		 //风管	
-		 fileArray[3]=document.getElementById("fengguan").value;			  
+		 fileArray[3]=document.getElementById("fengguan").files[0];			  
 		 //风管配件
-		 fileArray[4]=document.getElementById("fengguan_peijian").value;			 
+		 fileArray[4]=document.getElementById("fengguan_peijian").files[0];			 
 		 //风管附件
-		 fileArray[5]=document.getElementById("fengguan_fujian").value;			  
+		 fileArray[5]=document.getElementById("fengguan_fujian").files[0];			  
 		 //风管末端
-		 fileArray[6]=document.getElementById("fengguan_moduan").value;			  
+		 fileArray[6]=document.getElementById("fengguan_moduan").files[0];			  
 		 //机械设备
-		 fileArray[7]=document.getElementById("jixie_shebei").value;			  
+		 fileArray[7]=document.getElementById("jixie_shebei").files[0];			  
 		 //管道
-		 fileArray[8]=document.getElementById("guandao").value;			  
+		 fileArray[8]=document.getElementById("guandao").files[0];			  
 		 //管件
-		 fileArray[9]=document.getElementById("guanjian").value;			  
+		 fileArray[9]=document.getElementById("guanjian").files[0];			  
 		 //管道附件
-		 fileArray[10]=document.getElementById("guandao_fujian").value;			  
+		 fileArray[10]=document.getElementById("guandao_fujian").files[0];			  
 		 //卫浴装置
-		 fileArray[11]=document.getElementById("weiyu_zhuangzhi").value;			  
+		 fileArray[11]=document.getElementById("weiyu_zhuangzhi").files[0];			  
 		 //消防栓
-		 fileArray[12]=document.getElementById("xiaofangshuan").value;			  
+		 fileArray[12]=document.getElementById("xiaofangshuan").files[0];			  
 		 //喷淋
-		 fileArray[13]=document.getElementById("penlin").value;			 
+		 fileArray[13]=document.getElementById("penlin").files[0];			 
 		 //工程量
-		 fileArray[14]=document.getElementById("gongchengliang").value;	
+		 fileArray[14]=document.getElementById("gongchengliang").files[0];	
 //		 console.log(typeof(fileArray));
 		 var formData = new FormData();
-		 formData.append("fileList",fileArray[0]);
-		 formData.append("fileList",fileArray[1]);
+		 for(var i=0;i<fileArray.length;i++){
+			 formData.append("fileList",fileArray[i]);
+		 }
 		 ProjectService.uploadItemFile(formData).then(function(result){
 		       $scope.uploadItemInfo=result.data;
 		     

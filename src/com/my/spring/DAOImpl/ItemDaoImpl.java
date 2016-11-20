@@ -318,4 +318,10 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		Query query=session.createSQLQuery("select distinct(household_num) from item where project_id=" + projectId + " and building_num=" + buildingId + " and floor_num="+floorId);
 		return  query.list();
 	}
+
+	@Override
+	public boolean addItemList(List<Item> itemList) {
+		// TODO Auto-generated method stub
+		return saveList(itemList);
+	}
 }

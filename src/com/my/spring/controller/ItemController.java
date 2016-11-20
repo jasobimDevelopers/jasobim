@@ -33,15 +33,15 @@ public class ItemController {
             @RequestParam(value = "token",required = true) String token,
             
             HttpServletRequest request){
-//    	String filePath = "/fileupload/items";
+    	String filePath = "/fileupload/items";
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-//    	for(int i=0;i<fileList.size();i++){
-//    		if(itemService.batchImport(filePath, fileList.get(i),token,request)){
-//            	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
-//            }else{
-//            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-//            }
-//    	}
+    	for(int i=0;i<fileList.length;i++){
+    		if(itemService.batchImport(filePath, fileList[i],token,request)){
+            	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
+            }else{
+            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+            }
+    	}
     	
         return dataWrapper;
     }

@@ -24,4 +24,5 @@ public interface ItemDao {
 	Long getItemByBase(Long projectId,Long buildingId);
 	List<Object> getHouseHoldType(Long projectId,Long buildingId,Long floorId);
 	Long getItemByBuidlingNum(Long projectId, Long buildingId);
+	boolean addItemList(List<Item> itemList);
 }

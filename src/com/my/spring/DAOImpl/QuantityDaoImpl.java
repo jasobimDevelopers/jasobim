@@ -111,18 +111,24 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		+quantity.getFamilyAndType()+"' and a.profession_type="+quantity.getProfessionType();
 		DataWrapper<List<QuantityPojo>> dataWrapper = new DataWrapper<List<QuantityPojo>>();
 		Session session=getSession();
-		 try{
+		try{
 	            Query query=session.createSQLQuery(sql);
 	            dataWrapper.setData(query.list());
 	            if(dataWrapper.getData()!=null&&dataWrapper.getData().size()>0){
 	            	return true;
 	            }
-	        }catch(Exception e){
+	    }catch(Exception e){
 	        	dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 	            e.printStackTrace();
 	           
-	        }
+	    }
 		
 		return false;
+	}
+
+	@Override
+	public boolean addQuantityList(List<Quantity> quantityList) {
+		// TODO Auto-generated method stub
+		return saveList(quantityList);
 	}
 }

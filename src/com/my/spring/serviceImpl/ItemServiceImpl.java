@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -130,6 +131,7 @@ public class ItemServiceImpl implements ItemService {
     	
     }
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean batchImport(String name, MultipartFile file,String token,HttpServletRequest request) {
 		if (file == null || name == null || name.equals("")) {
@@ -149,10 +151,12 @@ public class ItemServiceImpl implements ItemService {
 		        
 		        //解析excel，构件信息集合。
 		        List<Item> ItemList = readExcel.getExcelInfo(newFileName ,file);
+		        ////////查询楼栋总数，楼层最大值，户型最大值
 		        int []tempb =new int[ItemList.size()];
 		        int []tempf =new int[ItemList.size()];
 		        int []temph =new int[ItemList.size()];
 		        if(ItemList != null){
+		        	 b = true;
 		        	fileSerivce.uploadFile(name, file, type, request);
 		        	int i=0;
 		        	long projectId=ItemList.get(0).getProjectId();
@@ -181,15 +185,13 @@ public class ItemServiceImpl implements ItemService {
 			        building.setBuildingNum(buildingNum);
 			        building.setFloorNum(floorNum);
 			        building.setHouseholdNum(householdNum);
-			        buildingDao.addBuilding(building);	        
-		            b = true;
+			        buildingDao.addBuilding(building);	
+			        //////////////////
+		           
 		            //迭代添加构件信息
-			        for(Item Item:ItemList){
-			        	itemDao.addItem(Item);
-			        }
+			        itemDao.addItemList(ItemList);
+			        List <Quantity> quantityList=new ArrayList<Quantity>();
 			    	DataWrapper<List <QuantityPojo>> quantitypojo= itemDao.getSameItem();
-			    		
-			    	
 			    	if(quantitypojo.getData()!=null){
 			    		for(QuantityPojo pojo:quantitypojo.getData()){
 			    			Quantity test=new Quantity();
@@ -246,10 +248,10 @@ public class ItemServiceImpl implements ItemService {
 			    			if(quantityDao.findQuantity(test)){
 			    				quantityDao.updateQuantity(test);
 			    			}else{
-			    				quantityDao.addQuantity(test);
+			    				quantityList.add(test);
 			    			}
 			    		}
-			    		
+			    		quantityDao.addQuantityList(quantityList);
 			    	}
 		        }
 		      

@@ -114,8 +114,8 @@
 //	          	nProject.realName = Project.realName;
       	$http.post('api/project/admin/updateProject?token='+token,project,
       		{
-      		headers: {'Content-Type':undefined},
-            transformRequest: angular.identity 
+	      		headers: {'Content-Type':undefined},
+	            transformRequest: angular.identity 
       		})
           .success(function(data, status, headers, config){
           	console.log(data);
@@ -131,7 +131,7 @@
           .error(function(data, status, headers, config){
               deferred.reject(data);
           });
-      return deferred.promise;
+      	  return deferred.promise;
       };
       ///////增加项目信息
       this.addProjectByAdmin = function(findProjectInfo,token) {
@@ -141,14 +141,15 @@
           console.log("添加Project数据");
           $http.post('api/project/admin/addProject?token='+token,findProjectInfo,
           		{
-          			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          			transformRequest: transform
+        	  		headers: {'Content-Type':undefined},
+        	  		transformRequest: angular.identity 
+
           		})
               .success(function(data, status, headers, config){
 
                   if(data.callStatus == "SUCCEED"){
                       deferred.resolve(data);
-                      alert("添加成功")
+                      alert("项目基本信息添加成功，请继续添加项目构件信息")
                       self.findProjectInfo = data;
                   
                   }else{
@@ -159,7 +160,7 @@
               .error(function(data, status, headers, config){
                   deferred.reject(data);
               });
-          return deferred.promise;
+          	  return deferred.promise;
           };
       ///////查找项目信息
       this.findProject = function(projectId,token) {
@@ -416,7 +417,7 @@
 	                     var deferred = $q.defer();
 	                     
 	                     
-	                     console.log("添加Project数据");
+	                     console.log("上传构件数据");
 	                     $http.post('api/item/admin/uploadItem?token='+getCookie('token'),fileArray,
 	                    		 {
 	                    	 		headers: {'Content-Type':undefined},
@@ -426,7 +427,7 @@
 
 	                             if(data.callStatus == "SUCCEED"){
 	                                 deferred.resolve(data);
-	                                 alert("添加成功")
+	                                 alert("上传构件信息成功，请继续上传图纸信息")
 	                                 self.uploadItemInfo = data;
 	                             
 	                             }else{
