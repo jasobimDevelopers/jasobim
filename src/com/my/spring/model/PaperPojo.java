@@ -7,8 +7,16 @@ public class PaperPojo {
     private Integer floorNum;
     private String url;
     private Integer professionType;
+    private String originName;
+    
     
 	
+	public String getOriginName() {
+		return originName;
+	}
+	public void setOriginName(String originName) {
+		this.originName = originName;
+	}
 	public Long getProjectId() {
 		return projectId;
 	}

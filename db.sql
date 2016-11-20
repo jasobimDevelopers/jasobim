@@ -134,6 +134,7 @@ foreign key(file_id) references file(id),
 foreign key(project_id) references project(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 #？
+alter table paper add column origin_name varchar(300);
 
 
 

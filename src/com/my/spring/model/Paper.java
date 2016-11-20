@@ -17,7 +17,17 @@ public class Paper {
 	private Integer floorNum;
 	private Integer professionType;//////专业类型：0 电气 1 暖通 2给排水 3 建筑 
 	private Long fileId;
+	private String originName;
 	
+	
+	@Basic
+    @Column(name = "origin_name")
+	public String getOriginName() {
+		return originName;
+	}
+	public void setOriginName(String originName) {
+		this.originName = originName;
+	}
 	@Id
     @GeneratedValue
     @Column(name = "id")
