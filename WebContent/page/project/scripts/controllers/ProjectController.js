@@ -5,13 +5,13 @@ function projectInfo(){
 	document.getElementById("containers").style.display = 'none';
 	document.getElementById("projectInfoHtml").style.display = 'block';
 }
-function selectValue(index){
-	var obj=$(".myselect");
-	for(i=0;i<obj.length;i++){
-	        obj[i].selected = false;
-	}
-	//obj[index].selected=true;
-}
+//function selectValue(index){
+//	var obj=$(".myselect");
+//	for(i=0;i<obj.length;i++){
+//	        obj[i].selected = false;
+//	}
+//	obj[index].selected=true;
+//}
 
 function setModel(model) {
 	angular.element(model).scope().$parent.$parent.modelFiles = model.files[0];
@@ -86,9 +86,9 @@ function ProjectController($scope,ProjectService) {
 		
 	}
 	/////按楼栋号自动搜索
-	$scope.setBuildingNum = function(building,flag) {
+	$scope.setBuildingNum = function(building,flag,index) {
 		$scope.buildingId = building;	
-		selectValue(building);
+//		selectValue(building);
 	   // $scope.getBuildingNum($scope.projectid,building);
 		ProjectService.getBuildingNum($scope.projectid,building).then(function(result){
 			 $scope.buildingNumInfo=result;  
@@ -108,6 +108,7 @@ function ProjectController($scope,ProjectService) {
 					 $scope.getProjectPaperList($scope.projectid,10,1,paper);
 				 }
 			    });
+			 
 			 
 	    });
 	}
@@ -354,7 +355,6 @@ function ProjectController($scope,ProjectService) {
 				}
 			}
 		}
-		console.log(arr);
 		return arr;
 	 }
 
@@ -368,8 +368,11 @@ function ProjectController($scope,ProjectService) {
 	 */
 	 ////////////////////////构件信息分页获取
 	 $scope.getProjectItemList = function(projectId,pageSize,pageIndex,item) {
+		 if($scope.buildingArray == undefined || $scope.buildingArray.length==0) {
+			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+		 }
+		
 		  
-		  $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		 
 		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
 		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo-1);
@@ -394,8 +397,10 @@ function ProjectController($scope,ProjectService) {
 	  }
 	 ////////////////////////初始化构件信息分页获取
 	 $scope.InitProjectItemList = function(projectId,pageSize,pageIndex) {
+		 if($scope.buildingArray == undefined || $scope.buildingArray.length == 0) {
+			  $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);  
+		 }
 		  
-		  $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		  ProjectService.getItemList(projectId,pageSize,pageIndex,item).then(function (result){
 		  	  $scope.projectItemList = result.data;
 		      $scope.currentPage = result.currentPage;
@@ -453,8 +458,9 @@ function ProjectController($scope,ProjectService) {
 	  }
 	 ////////////////////////图纸列表信息分页获取
 	 $scope.getProjectPaperList = function(projectId,pageSize,pageIndex,paper) {
-		 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
-		 
+		 if($scope.buildingArray == undefined || $scope.buildingArray.length ==0) {
+			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+		 }
 		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
 		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo-1);
 		 if($scope.phase!="all") {
@@ -483,8 +489,10 @@ function ProjectController($scope,ProjectService) {
 	 */
 	 ////////////////////////工程量信息分页获取
 	 $scope.getProjectQuantityList = function(projectId,pageSize,pageIndex,quantity) {
-		
-		  $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+		 if($scope.buildingArray == undefined || $scope.buildingArray.length == 0) {
+			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+		 }
+		  
 		  $scope.floorArray=menuArray($scope.buildingNumInfo);
 		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
 		 if($scope.phase!="all") {
@@ -562,8 +570,12 @@ function ProjectController($scope,ProjectService) {
 	  }
 	  //////交底分页获取
 	 $scope.getProjectVideoList = function(pageSize,pageIndex,video) {
+		 if($scope.buildingArray == undefined || $scope.buildingArray.length ==0) {
+			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+		 }
+			
 		 
-		 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+		 
 		 if($scope.phase!="all") {
 			 video+= "professionType=" + $scope.phase;
 		 }
