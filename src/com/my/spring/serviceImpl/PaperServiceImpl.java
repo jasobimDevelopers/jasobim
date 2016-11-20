@@ -36,7 +36,7 @@ public class PaperServiceImpl implements PaperService {
     FileDao fileDao;
     @Autowired
     FileService fileService;
-    private String filePath = "/files";
+    private String filePath = "files";
     private Integer fileType=1;
     /*
      * 图纸信息上传添加
@@ -55,6 +55,12 @@ public class PaperServiceImpl implements PaperService {
 					String path=filePath+"/"+"papers";
 					Files newfile=fileService.uploadFile(path, file,fileType,request);
 					paper.setFileId(newfile.getId());
+					
+					String originName = file.getOriginalFilename();
+					if (originName.contains(".")) {
+						originName = originName.substring(0, originName.lastIndexOf("."));
+					}
+					paper.setOriginName(originName);
 					if(!paperDao.addPaper(paper)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else
@@ -136,6 +142,7 @@ public class PaperServiceImpl implements PaperService {
 	        			papernew.setBuildingNum(dataWrapper.getData().get(i).getBuildingNum());
 	        			papernew.setProfessionType(dataWrapper.getData().get(i).getProfessionType());
 	        			papernew.setFloorNum(dataWrapper.getData().get(i).getFloorNum());
+	        			papernew.setOriginName(dataWrapper.getData().get(i).getOriginName());
 	        			Files file=fileDao.getById(dataWrapper.getData().get(i).getFileId());
 	        			if(file!=null){
 	        				papernew.setUrl(file.getUrl());

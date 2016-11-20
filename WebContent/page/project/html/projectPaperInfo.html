@@ -39,13 +39,15 @@
 								</tr>
 								<tr ng-repeat = "projectPaper in projectPaperList">
 								    <td>{{$index+1}}</td>
-									<td>{{projectPaper.url}}</td>
+									<td>{{projectPaper.originName}}</td>
 									<td>{{projectPaper.buildingNum}}</td>
 									<td>{{projectPaper.floorNum}}</td>
 									<td>{{projectPhaseInfo[projectPaper.professionType].name}}</td>
 									<td class="tds" >
-				                         <button id="uploadbutton" ng-click="paperChangeClick(projectPaper.id)">
+									    <a href="{{projectPaper.url}}" target="_blank" download="{{projectPaper.originName}}">
+				                         <button id="uploadbutton">
 			                        	</button>
+			                        	</a>
 				                        <button id="deletebutton" ng-click="deleteItem(projectPaper.id)">
 				                        </button>
 				                    </td>
