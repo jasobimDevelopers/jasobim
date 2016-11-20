@@ -37,13 +37,13 @@ public class FileServiceImpl implements FileService  {
                     + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
         //批量导入。参数：文件名，文件。
 //        boolean b = itemService.batchImport(newFileName,file);
-        File fileDir = new File(rootPath + filePath);
+        File fileDir = new File(rootPath + "/" + filePath);
         Files files=new Files();
         if (!fileDir.exists()) {
             fileDir.mkdirs();
         }
         try {
-            FileOutputStream out = new FileOutputStream(rootPath + filePath + "/"
+            FileOutputStream out = new FileOutputStream(rootPath + "/" + filePath + "/"
                     + newFileName);
                 // 写入文件
             out.write(file.getBytes());
