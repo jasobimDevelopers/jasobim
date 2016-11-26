@@ -29,13 +29,11 @@
 		</div>
 		
 		<button onClick="getHtml()">获得里面的html值 </button>
-		
-		
+
 		
 	</body>
 
 	<script type="text/javascript">
-	var titlePicPath = "";
 	var thisAction = {};
 	$("#txtEditor").htmlarea({
     // Override/Specify the Toolbar buttons to show
@@ -60,6 +58,9 @@
             	     /*    $('#contentFile').change();  
             	        this.pasteHTML('1');  */
                    
+                	},
+                	onloaded : function() {
+                		thisAction = this;
                 	}
             	}
         	]
@@ -71,19 +72,21 @@
 		if(contentFile != null && contentFile != undefined) {
 			var formData = new FormData();
 	 		formData.append("file",contentFile);
-	 		formData.append("token","SKddc9360e-b1cd-4aef-a669-d21ad1758170");
+	 		formData.append("token","SK84aee6ba-15ea-4318-b061-0c9a950f93bf");
 	 		formData.append("messageId","17");
-	 		uploadFile(formData,thisAction);
+	 		uploadFile(formData);
 		}
 		
 	}
 	
 	
 	function getHtml() {
+		console.log(thisAction.toHtmlString());
+
 		alert(thisAction.toHtmlString());
 	}
 	
-	function uploadFile(formData,thisAction) {
+	function uploadFile(formData) {
 		
 		$.ajax({  
 		    url : "api/messageFile/addMessageFile", 
@@ -96,7 +99,7 @@
 		    		$("#contentFile").remove();
 		  			$("#contentFileDiv").append('<input type = "file" id="contentFile" onchange="contentFileChange()"/>');
 
-		    		thisAction.pasteHTML('<img src="/JasoBIM' + data.data.urlList + '" />');
+		    		thisAction.pasteHTML('<img src="/testJasobim' + data.data.urlList + '" />');
 		    	}
 		           
 		       
