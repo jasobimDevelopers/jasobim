@@ -1,13 +1,17 @@
 package com.my.spring.controller;
 
+import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Quantity;
 import com.my.spring.service.QuantityService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by Administrator on 2016/6/22.
@@ -17,6 +21,22 @@ import java.util.List;
 public class QuantityController {
     @Autowired
     QuantityService quantityService;
+    @RequestMapping(value="/admin/uploadItem", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> uploadItem(
+            @RequestParam(value = "fileList", required = false) MultipartFile file,
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "projectId",required = true) Long projectId,
+            HttpServletRequest request){
+    	String filePath = "/fileupload/quantitys";
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    	if(quantityService.batchImport(filePath, file,token,request,projectId)){
+            	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
+        }else{
+            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+        }
+        return dataWrapper;
+    }
     @RequestMapping(value="/addQuantity", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addQuantity(

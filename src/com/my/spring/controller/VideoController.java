@@ -1,5 +1,7 @@
 package com.my.spring.controller;
 
+import com.my.spring.enums.CallStatusEnum;
+import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Video;
 import com.my.spring.model.VideoPojo;
 import com.my.spring.service.VideoService;
@@ -21,14 +23,23 @@ import javax.servlet.http.HttpServletRequest;
 public class VideoController {
     @Autowired
     VideoService VideoService;
-    @RequestMapping(value="/addVideo", method = RequestMethod.POST)
+    @RequestMapping(value="/admin/addVideo", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addVideo(
             @ModelAttribute Video video,
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request,
-            @RequestParam(value = "file", required = false) MultipartFile file){
-        return VideoService.addVideo(video,token,file,request);
+            @RequestParam(value = "fileList", required = false) MultipartFile[] fileList){
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    	for(int i=0;i<fileList.length;i++){
+    		dataWrapper=VideoService.addVideo(video, token, fileList[i], request);
+    		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
+            	return dataWrapper;
+            }else{
+            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+            }
+    	}
+        return dataWrapper;
     }
     @RequestMapping(value="/deleteVideo")
     @ResponseBody

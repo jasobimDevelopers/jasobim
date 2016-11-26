@@ -14,4 +14,5 @@ public interface BuildingDao {
     boolean updateBuilding(Building building);
     DataWrapper<List<Building>> getBuildingList();
 	DataWrapper<Building> getBuildingByProjectId(Long projectId);
+	boolean deleteBuildingByProjectId(Long id);
 }

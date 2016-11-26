@@ -13,6 +13,7 @@ public class QuestionFile {
 	private Long id;
 	private Long fileId;
 	private Long questionId;
+	private String originName;
 	
 	@Id
     @GeneratedValue
@@ -40,6 +41,15 @@ public class QuestionFile {
 	}
 	public void setQuestionId(Long questionId) {
 		this.questionId = questionId;
+	}
+	
+	@Basic
+    @Column(name = "origin_name")
+	public String getOriginName() {
+		return originName;
+	}
+	public void setOriginName(String originName) {
+		this.originName = originName;
 	}
 	
 

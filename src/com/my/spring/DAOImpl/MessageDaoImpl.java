@@ -37,7 +37,7 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<Message>> getMessageList(Long projectId, Integer pageIndex, Integer pageSize, Message message) {
+    public DataWrapper<List<Message>> getMessageList( Integer pageIndex, Integer pageSize, Message message) {
         DataWrapper<List<Message>> retDataWrapper = new DataWrapper<List<Message>>();
         List<Message> ret = new ArrayList<Message>();
         Session session = getSession();
@@ -47,7 +47,9 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
         if(message.getUserId()!=null){
         	criteria.add(Restrictions.eq("userId", message.getUserId()));
         }
-        	
+        if(message.getQuestionId()!=null){
+        	criteria.add(Restrictions.eq("questionId", message.getQuestionId()));
+        }	
         /////////////////////////////////////
    
         if (pageSize == null) {

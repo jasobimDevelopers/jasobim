@@ -14,4 +14,5 @@ public interface PaperDao {
     boolean updatePaper(Paper Paper);
     DataWrapper<List<Paper>> getPaperList(Long projecId, Integer pageSize, Integer pageIndex, Paper paper);
     Paper getById(Long id);
+	boolean deletePaperByProjectId(Long id);
 }

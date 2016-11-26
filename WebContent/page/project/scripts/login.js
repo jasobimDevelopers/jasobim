@@ -46,10 +46,13 @@ function login(){
          data: {username:$("#username").val(), password:$("#password").val()},
          dataType: "json",
          success: function(data){
-        	 if(data.token!=null) {
- 				setCookie('token',data.token);
- 				window.location.href="userList";
- 			} else {
+        	 if(data.token!=null) 
+        	 {
+        		/* setCookie('userIcon',data.data.userIcon);
+        		 setCookie('userName',data.data.userName);*/
+ 				 setCookie('token',data.token);
+ 				 window.location.href="userList";
+ 			 } else {
  				alert("用户名和密码错误，请重新输入！");
  			}
          }

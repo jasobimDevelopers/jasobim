@@ -1,5 +1,5 @@
 <div id="videoContent">
-	<div id="projectDetail_body_video">
+	<div id="projectDetail_body_videos">
 		<div id="video_menu">
 			<div id="video_contents">
 				<div id="item_menuli_first">
@@ -11,7 +11,7 @@
 					<div><span>栋号</span></div>
 					<div><button class="btn btn-default" ng-click="setBuildingNum('all',flag[4])">全部</button></div>
 					<div ng-repeat="buildingNumber in buildingArray">
-						<select class="myselect" type="text" ng-change="setBuildingNum(building[$index],flag[4])" onclick="selectValue()"  ng-model="building[$index]">
+						<select class="myselect" type="text" ng-change="setBuildingNum(building[$index],flag[4])"  ng-model="building[$index]">
 	    					<option value="title" >#{{$index*10+1}} -#{{$index*10+10}}</option>
 	    					<option value="{{number}}" ng-repeat="number in buildingNumber" >#{{number}}</option>
 	    				</select>
@@ -28,12 +28,14 @@
 							<tr ng-repeat = "projectVideo in videoList">
 							    <td>{{$index+1}}</td>
 							    <!-- <td>{{projectVideo.name}}</td> -->
-								<td>{{projectVideo.url}}</td>
+								<td>{{projectVideo.originName}}</td>
 								<td>{{projectVideo.buildingNum}}</td>
 								<td>{{projectVideo.professionType}}</td>
 								<td class="tds" >
-			                        <button id="uploadbutton" ng-click="videoChangeClick(projectItem.id)">
-			                        </button>
+			                        <a href="{{projectVideo.url}}" target="_blank" download="{{projectVideo.originName}}">
+				                         <button id="uploadbutton">
+			                        	</button>
+			                        </a>
 			                        <button id="deletebutton" ng-click="deleteItem(projectItem.id)">
 			                        </button>
 			                    </td>

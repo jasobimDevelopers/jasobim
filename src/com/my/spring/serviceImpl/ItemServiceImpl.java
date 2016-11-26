@@ -5,6 +5,7 @@ import com.my.spring.DAO.ItemDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QuantityDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Building;
@@ -131,9 +132,8 @@ public class ItemServiceImpl implements ItemService {
     	
     }
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public boolean batchImport(String name, MultipartFile file,String token,HttpServletRequest request) {
+	public boolean batchImport(String name, MultipartFile file,String token,HttpServletRequest request,Long projectId) {
 		if (file == null || name == null || name.equals("")) {
 			return false;
 		}
@@ -155,11 +155,11 @@ public class ItemServiceImpl implements ItemService {
 		        int []tempb =new int[ItemList.size()];
 		        int []tempf =new int[ItemList.size()];
 		        int []temph =new int[ItemList.size()];
-		        if(ItemList != null){
+		        if(ItemList.size()>0){
 		        	 b = true;
 		        	fileSerivce.uploadFile(name, file, type, request);
 		        	int i=0;
-		        	long projectId=ItemList.get(0).getProjectId();
+		        	
 			        for(Item Item:ItemList){
 			        	tempb[i]=Item.getBuildingNum();
 			        	tempf[i]=Item.getFloorNum();
@@ -171,6 +171,7 @@ public class ItemServiceImpl implements ItemService {
 			        int floorNum=0;
 			        int householdNum=0;
 			        for(int j=0;j<ItemList.size();j++){
+			        	ItemList.get(j).setProjectId(projectId);
 			        	if(buildingNum<tempb[j]){
 			        		buildingNum=tempb[j];
 			        	}
@@ -185,15 +186,17 @@ public class ItemServiceImpl implements ItemService {
 			        building.setBuildingNum(buildingNum);
 			        building.setFloorNum(floorNum);
 			        building.setHouseholdNum(householdNum);
-			        buildingDao.addBuilding(building);	
+			        if(buildingDao.getBuildingByProjectId(projectId).getCallStatus()==CallStatusEnum.SUCCEED){
+			        	buildingDao.updateBuilding(buildingDao.getBuildingByProjectId(projectId).getData());
+			        }else{
+			        	buildingDao.addBuilding(building);	
+			        }
 			        //////////////////
 		           
 		            //迭代添加构件信息
 			        itemDao.addItemList(ItemList);
 			        List <Quantity> quantityList=new ArrayList<Quantity>();
-			        List <Quantity> quantityOldList=new ArrayList<Quantity>();
 			    	DataWrapper<List <QuantityPojo>> quantitypojo= itemDao.getSameItem();
-			    	quantityOldList=quantityDao.getAllQuantity();
 			    	if(quantitypojo.getData()!=null){
 			    		for(QuantityPojo pojo:quantitypojo.getData()){
 			    			
@@ -253,31 +256,9 @@ public class ItemServiceImpl implements ItemService {
 			    				test.setValue(pojo.getNum());
 			    				test.setUnit("个");
 			    			}
-			    			if(quantityOldList.size()==0){
-			    				quantityList.add(test);
-			    			}
-			    			for(int k=0;k<quantityOldList.size();k++){
-			    				if(quantityOldList.get(k).getProjectId()==test.getProjectId() 
-			    						&& quantityOldList.get(k).getBuildingNum()==test.getBuildingNum()
-			    						&& quantityOldList.get(k).getFloorNum()==test.getFloorNum()
-			    						&& quantityOldList.get(k).getHouseholdNum()==test.getHouseholdNum()
-			    						&& quantityOldList.get(k).getName().equals(test.getName())
-			    						&& quantityOldList.get(k).getProfessionType()==test.getProfessionType()
-			    						&& quantityOldList.get(k).getMaterial().equals(test.getMaterial())
-			    						&& quantityOldList.get(k).getFamilyAndType().equals(test.getFamilyAndType())
-			    						&& quantityOldList.get(k).getServiceType().equals(test.getServiceType())
-			    						&& quantityOldList.get(k).getSystemType().equals(test.getSystemType())
-			    						&& quantityOldList.get(k).getSize().equals(test.getSize())
-			    						&& quantityOldList.get(k).getUnitNum()==test.getUnitNum()
-			    						)
-			    				{
-			    					test.setId(quantityOldList.get(k).getId());
-				    				quantityDao.updateQuantity(test);
-				    			}else{
-				    				quantityList.add(test);
-				    			}
-			    			}
+			    			quantityList.add(test);
 			    		}
+			    		quantityDao.deleteQuantityByProjectId(projectId);
 			    		quantityDao.addQuantityList(quantityList);
 			    	}
 		        }

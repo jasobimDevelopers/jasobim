@@ -31,12 +31,12 @@ public class ItemController {
     public DataWrapper<Void> uploadItem(
             @RequestParam(value = "fileList", required = false) MultipartFile[] fileList,
             @RequestParam(value = "token",required = true) String token,
-            
+            @RequestParam(value = "projectId",required = true) Long projectId,
             HttpServletRequest request){
     	String filePath = "/fileupload/items";
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
     	for(int i=0;i<fileList.length;i++){
-    		if(itemService.batchImport(filePath, fileList[i],token,request)){
+    		if(itemService.batchImport(filePath, fileList[i],token,request,projectId)){
             	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
             }else{
             	dataWrapper.setErrorCode(ErrorCodeEnum.Error);

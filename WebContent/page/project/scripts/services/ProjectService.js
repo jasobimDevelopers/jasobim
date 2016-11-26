@@ -28,7 +28,7 @@
           });
       return deferred.promise;
       };
-  //獲取用戶列表
+  //获取项目列表
   this.getProjectList = function(pageSize,pageIndex,project) {
 
       var deferred = $q.defer();
@@ -176,10 +176,8 @@
               
               }else{
                   alert("数据查找失败");
-                  }
-                  
-              })
-              .error(function(data, status, headers, config){
+              }
+              }).error(function(data, status, headers, config){
                   deferred.reject(data);
               });
           return deferred.promise;
@@ -368,6 +366,27 @@
                       });
                   return deferred.promise;
                   };
+                  //////删除图纸信息
+                  this.deleteProjectPaper = function(paperId) {
+                     
+                     var deferred = $q.defer();
+                     console.log("删除Project数据");
+                     $http.get('api/paper/admin/deletePaper?&token='+token+'&id='+paperId)
+                         .success(function(data, status, headers, config){
+                             console.log(data);
+                             if(data.callStatus == "SUCCEED"){
+                                 deferred.resolve(data);
+                                 self.deleteProjectPaperInfo = data;
+                                 alert("数据删除成功");
+                             }else{
+                                 alert("数据删除失败");
+                             }
+                         })
+                         .error(function(data, status, headers, config){
+                             deferred.reject(data);
+                         });
+                     return deferred.promise;
+                     };
              /////获取问题信息列表
 	          this.getQuestionList = function(projectId,pageSize,pageIndex,sql) {
 	
@@ -413,12 +432,12 @@
 	                 return deferred.promise;
 	                 };
 	           ///////上传构件信息表
-	                 this.uploadItemFile = function(fileArray) {
+	                 this.uploadItemFile = function(fileArray,projectId) {
 	                     var deferred = $q.defer();
 	                     
 	                     
 	                     console.log("上传构件数据");
-	                     $http.post('api/item/admin/uploadItem?token='+getCookie('token'),fileArray,
+	                     $http.post('api/item/admin/uploadItem?token='+getCookie('token')+"&projectId="+projectId,fileArray,
 	                    		 {
 	                    	 		headers: {'Content-Type':undefined},
 	                    	 		transformRequest: angular.identity 
@@ -440,4 +459,60 @@
 	                         });
 	                     return deferred.promise;
 	                     };
+	            ////////////上传图纸信息
+	                     this.uploadPaperFile = function(fileArray,buildingNum,floorNum,projectId) {
+		                     var deferred = $q.defer();
+		                     
+		                     
+		                     console.log("上传图纸数据");
+		                     $http.post('api/paper/admin/uploadPaper?token='+getCookie('token')+"&buildingNum="+buildingNum+"&floorNum="+floorNum+"&projectId="+projectId,fileArray,
+		                    		 {
+		                    	 		headers: {'Content-Type':undefined},
+		                    	 		transformRequest: angular.identity 
+		                    		 })
+		                         .success(function(data, status, headers, config){
+
+		                             if(data.callStatus == "SUCCEED"){
+		                                 deferred.resolve(data);
+		                                 alert("上传图纸信息成功，请继续上传交底信息")
+		                                 self.uploadPaperInfo = data;
+		                             
+		                             }else{
+		                                 alert("数据添加失败("+data.errorCode+")");
+		                             }
+		                             
+		                         })
+		                         .error(function(data, status, headers, config){
+		                             deferred.reject(data);
+		                         });
+		                     return deferred.promise;
+		                     };
+		          /////////////上传交底信息
+		                     this.uploadVideoFile = function(fileArray,professionType,projectId) {
+			                     var deferred = $q.defer();
+			                     
+			                     
+			                     console.log("上传图纸数据");
+			                     $http.post('api/video/admin/addVideo?token='+getCookie('token')+"&professionType="+professionType+"&projectId="+projectId,fileArray,
+			                    		 {
+			                    	 		headers: {'Content-Type':undefined},
+			                    	 		transformRequest: angular.identity 
+			                    		 })
+			                         .success(function(data, status, headers, config){
+
+			                             if(data.callStatus == "SUCCEED"){
+			                                 deferred.resolve(data);
+			                                 alert("上传交底信息成功")
+			                                 self.uploadVideoInfo = data;
+			                             
+			                             }else{
+			                                 alert("数据添加失败("+data.errorCode+")");
+			                             }
+			                             
+			                         })
+			                         .error(function(data, status, headers, config){
+			                             deferred.reject(data);
+			                         });
+			                     return deferred.promise;
+			                     };
   });

@@ -1,6 +1,7 @@
 package com.my.spring.serviceImpl;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.User;
+import com.my.spring.model.UserPojo;
 import com.my.spring.service.FileService;
 import com.my.spring.service.UserService;
 import com.my.spring.utils.DataWrapper;
@@ -29,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	UserDao userDao;
 	@Autowired
 	FileService fileService;
-	private String filePath="/files";
+	private String filePath="files";
     private Integer fileType=5;
 	@Override
 	public DataWrapper<Void> register(User user) {
@@ -117,7 +119,7 @@ public class UserServiceImpl implements UserService {
 			User userInDB = userDao.getById(user.getId());
 			if (userInDB != null) {
 				if(file !=null){
-						String path=filePath+"/"+"projectmodels"+"/";
+						String path=filePath+"/"+"userIcons"+"/";
 						Files newfile=fileService.uploadFile(path, file,fileType,request);
 						userInDB.setUserIcon(newfile.getId());
 				}
@@ -159,32 +161,85 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataWrapper<User> getUserDetailsByAdmin(Long userId, String token) {
+	public DataWrapper<UserPojo> getUserDetailsByAdmin(Long userId, String token) {
 		// TODO Auto-generated method stub
+		DataWrapper<UserPojo> dataWrappers = new DataWrapper<UserPojo>();
 		DataWrapper<User> dataWrapper = new DataWrapper<User>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
 			User adminInDB = userDao.getById(adminInMemory.getId());
 			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
 				dataWrapper.setData(userDao.getById(userId));
+				if(dataWrapper.getData()!=null){
+					UserPojo userpojo=new UserPojo();
+					userpojo.setEmail(dataWrapper.getData().getEmail());
+					userpojo.setId(dataWrapper.getData().getId());
+					userpojo.setPassword(dataWrapper.getData().getPassword());
+					userpojo.setRealName(dataWrapper.getData().getRealName());
+					userpojo.setRegisterDate(dataWrapper.getData().getRegisterDate());
+					userpojo.setTel(dataWrapper.getData().getTel());
+					userpojo.setUserName(dataWrapper.getData().getUserName());
+					userpojo.setUserType(dataWrapper.getData().getUserType());
+					userpojo.setUserIcon(dataWrapper.getData().getUserIcon());
+					if(dataWrapper.getData().getUserIcon()!=null){
+						Files file=new Files();
+						file=fileService.getById(dataWrapper.getData().getUserIcon());
+						if(file!=null){
+							userpojo.setUserIconUrl(file.getUrl());
+						}
+					}
+					dataWrappers.setData(userpojo);
+				}
 			} else {
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+				dataWrappers.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
 		} else {
-			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+			dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
-		return dataWrapper;
+		return dataWrappers;
 	}
 
 	@Override
-	public DataWrapper<List<User>> getUserList(Integer pageIndex, Integer pageSize, User user, String token) {
+	public DataWrapper<List<UserPojo>> getUserList(Integer pageIndex, Integer pageSize, User user, String token) {
 		// TODO Auto-generated method stub
-		DataWrapper<List<User>> dataWrapper = new DataWrapper<List<User>>();
+		DataWrapper<List<UserPojo>> dataWrapper = new DataWrapper<List<UserPojo>>();
+		List<UserPojo> userpojoList=new ArrayList<UserPojo>();
+		DataWrapper<List<User>> userList=new DataWrapper<List<User>>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
 			User adminInDB = userDao.getById(adminInMemory.getId());
 			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
-				dataWrapper = userDao.getUserList(pageSize, pageIndex,user);
+				userList=userDao.getUserList(pageSize, pageIndex,user);
+				if(userList.getData().size()>0){
+					for(int i=0;i<userList.getData().size();i++){
+						UserPojo userpojo=new UserPojo();
+						userpojo.setEmail(userList.getData().get(i).getEmail());
+						userpojo.setId(userList.getData().get(i).getId());
+						userpojo.setPassword(userList.getData().get(i).getPassword());
+						userpojo.setRealName(userList.getData().get(i).getRealName());
+						userpojo.setTel(userList.getData().get(i).getTel());
+						userpojo.setRegisterDate(userList.getData().get(i).getRegisterDate());
+						userpojo.setUserName(userList.getData().get(i).getUserName());
+						userpojo.setUserType(userList.getData().get(i).getUserType());
+						userpojo.setUserIcon(userList.getData().get(i).getUserIcon());
+						if(userList.getData().get(i).getUserIcon()!=null){
+							Files file=fileService.getById(userList.getData().get(i).getUserIcon());
+							if(file!=null){
+								userpojo.setUserIconUrl(file.getUrl());
+							}
+						}
+						
+						userpojoList.add(i, userpojo);
+					}
+					dataWrapper.setData(userpojoList);
+					dataWrapper.setCallStatus(userList.getCallStatus());
+					dataWrapper.setCurrentPage(userList.getCurrentPage());
+					dataWrapper.setErrorCode(userList.getErrorCode());
+					dataWrapper.setNumberPerPage(userList.getNumberPerPage());
+					dataWrapper.setTotalNumber(userList.getTotalNumber());
+					dataWrapper.setTotalPage(userList.getTotalPage());
+				}
+				
 			} else {
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}

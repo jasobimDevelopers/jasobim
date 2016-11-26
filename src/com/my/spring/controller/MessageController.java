@@ -1,6 +1,9 @@
-package com.my.spring.controller;
+ package com.my.spring.controller;
 
+import com.my.spring.enums.CallStatusEnum;
+import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Message;
+import com.my.spring.model.MessagePojo;
 import com.my.spring.service.MessageService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +29,15 @@ public class MessageController {
             @ModelAttribute Message message,
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request,
-            @RequestParam(value = "file", required = false) MultipartFile file){
-        return messageService.addMessage(message,token,file,request);
+            @RequestParam(value = "file", required = false) MultipartFile[] file){
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+		dataWrapper=messageService.addMessage(message,token,file,request);
+		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
+            	return dataWrapper;
+    	}else{
+    		dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+    	}
+        return dataWrapper;
     }
     @RequestMapping(value="/deleteMessage")
     @ResponseBody
@@ -50,13 +60,12 @@ public class MessageController {
 
     @RequestMapping(value="/admin/getMessageList", method = RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<List<Message>> getMessageList(
-    		@RequestParam(value = "projectId",required = true) Long projectId,
+    public DataWrapper<List<MessagePojo>> getMessageList(
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute Message message){
-        return messageService.getMessageList(token,projectId,pageIndex,pageSize,message);
+        return messageService.getMessageList(token,pageIndex,pageSize,message);
     }
     ////通过用户id查找留言
     @RequestMapping(value="/getMessageListByUserId")

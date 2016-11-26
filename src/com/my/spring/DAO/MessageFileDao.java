@@ -13,5 +13,6 @@ public interface MessageFileDao {
     boolean deleteMessageFile(Long id);
     DataWrapper<List<MessageFile>> getMessageFileList();
     DataWrapper<List<MessageFile>> getMessageFileListByUserId(Long userId);
+    DataWrapper<List<MessageFile>> getMessageFileListByMessageId(Long messageId);
     DataWrapper<List<MessageFile>> deleteMessageFileByMessageId(Long id);
 }

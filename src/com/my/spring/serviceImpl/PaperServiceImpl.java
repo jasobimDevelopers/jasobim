@@ -139,6 +139,7 @@ public class PaperServiceImpl implements PaperService {
 	        		for(int i=0;i<dataWrapper.getData().size();i++){
 	        			PaperPojo papernew=new PaperPojo();
 	        			papernew.setProjectId(projectId);
+	        			papernew.setId(dataWrapper.getData().get(i).getId());
 	        			papernew.setBuildingNum(dataWrapper.getData().get(i).getBuildingNum());
 	        			papernew.setProfessionType(dataWrapper.getData().get(i).getProfessionType());
 	        			papernew.setFloorNum(dataWrapper.getData().get(i).getFloorNum());
@@ -181,6 +182,39 @@ public class PaperServiceImpl implements PaperService {
 			} else {
 				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 			}
+		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<Void> deletePaperByAdmin(Long id, String token, HttpServletRequest request) {
+		DataWrapper<Void> dataWrapper=new DataWrapper<Void>();
+		User userInMemory=SessionManager.getSession(token);
+		if(userInMemory!=null)
+		{
+			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType())
+			{
+				if(id!=null)
+				{
+					Paper papers=paperDao.getById(id);
+					Long fileid=papers.getFileId();
+					if(paperDao.deletePaper(id))
+					{ ///删除图纸表的信息
+						Files files=fileDao.getById(fileid);
+						fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
+						fileDao.deleteFiles(papers.getFileId());//删除文件表的信息
+						
+					}else{
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}
+				}else{
+					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
 		return dataWrapper;
 	}
 }

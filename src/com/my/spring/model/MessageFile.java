@@ -13,6 +13,7 @@ public class MessageFile {
 	private Long id;
 	private Long fileId;
 	private Long messageId;
+	private String originName;
 	
 	@Id
     @GeneratedValue
@@ -40,6 +41,15 @@ public class MessageFile {
 	}
 	public void setMessageId(Long messageId) {
 		this.messageId = messageId;
+	}
+	
+	@Basic
+    @Column(name = "origin_name")
+	public String getOriginName() {
+		return originName;
+	}
+	public void setOriginName(String originName) {
+		this.originName = originName;
 	}
 	
 	

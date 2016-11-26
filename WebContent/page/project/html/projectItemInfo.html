@@ -9,7 +9,7 @@
 					</div>
 					<div class="item_menuli">
 						<div><span>栋号</span></div>
-						<div><button class="btn btn-default" ng-click="setBuildingNum('all',flag[1])">全部1</button></div>
+						<div><button class="btn btn-default" ng-click="setBuildingNum('all',flag[1])">全部</button></div>
 						<div ng-repeat="buildingNumber in buildingArray">
 							<select class="myselect" type="text" ng-change="setBuildingNum(building[$index],flag[1],$index)"   ng-model="building[$index]">
 		    					<option value="title" >#{{$index*10+1}} -#{{$index*10+10}} </option>

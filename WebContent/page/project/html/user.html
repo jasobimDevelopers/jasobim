@@ -22,9 +22,10 @@
 					</tr>
 					<tr ng-repeat = "userInfo in userList">
 						<td>{{$index+1}}</td>
-						<td>{{userInfo.id}}</td>
+						<!-- <td>{{userInfo.id}}</td> -->
 						<td>{{userInfo.userName}}</td>
 						<td>{{userInfo.realName}}</td>
+						<td class="usericon"><img width="100px" height="90px"  src="{{userInfo.userIconUrl}}" /></td>
 						<td>{{roleList[userInfo.userType].name}}</td>
 						<td>{{userInfo.email}}</td>
 						<td>{{userInfo.tel}}</td>

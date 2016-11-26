@@ -9,6 +9,7 @@ import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.Question;
 import com.my.spring.model.QuestionFile;
+import com.my.spring.model.QuestionPojo;
 import com.my.spring.model.User;
 import com.my.spring.service.FileService;
 import com.my.spring.service.QuestionService;
@@ -39,33 +40,41 @@ public class QuestionServiceImpl implements QuestionService {
     FileDao fileDao;
     @Autowired
     FileService fileService;
-    private String filePath = "/files";
+    private String filePath = "files";
     private Integer fileType=2;
     @Override
-    public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile file,HttpServletRequest request) {
+    public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile[] fileList,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-					if(question!=null){
-						if(question.getQuestionDate()==null){
-							question.setQuestionDate(new Date(System.currentTimeMillis()));
+        	question.setUserId(userInMemory.getId());
+        	if(question.getQuestionDate()==null){
+				question.setQuestionDate(new Date(System.currentTimeMillis()));
+			}
+        	
+			if(question!=null){
+				if(!questionDao.addQuestion(question)){ 
+					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					return dataWrapper;
+				}else if(fileList.length>0)
+				{
+					for(int k=0;k<fileList.length;k++){
+						
+						String path=filePath+"/"+"questions";
+					 	Files newfile=fileService.uploadFile(path, fileList[k],fileType,request);
+					 	QuestionFile questionFile=new QuestionFile();
+					 	questionFile.setQuestionId(question.getId());
+					 	questionFile.setFileId(newfile.getId());
+					 	String originName = fileList[k].getOriginalFilename();
+						if (originName.contains(".")) {
+							originName = originName.substring(0, originName.lastIndexOf("."));
 						}
-						if(questionDao.addQuestion(question)){ 
-							if(file!=null){
-								String path=filePath+"/"+"questions";
-							 	Files newfile=fileService.uploadFile(path, file,fileType,request);
-							 	QuestionFile questionFile=new QuestionFile();
-							 	questionFile.setQuestionId(question.getId());
-							 	questionFile.setFileId(newfile.getId());
-							 	questionFileDao.addQuestionFile(questionFile);
-							}
-						}
-						else{
-							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-							return dataWrapper;
-						}
-				        
+						questionFile.setOriginName(originName);
+					 	questionFileDao.addQuestionFile(questionFile);
 					}
+						
+				}	
+			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -109,7 +118,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public DataWrapper<Void> updateQuestion(Question question,String token) {
+    public DataWrapper<Void> updateQuestion(Question question,String token,MultipartFile[] file,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -117,11 +126,27 @@ public class QuestionServiceImpl implements QuestionService {
 			if (userInDB != null) {
 				if(userInDB.getUserType()==UserTypeEnum.Admin.getType()){
 					if(question!=null){
-						if(!questionDao.updateQuestion(question)) 
-				            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						Question questionOld=new Question();
+						questionOld=questionDao.getById(question.getId());
+						if(questionOld!=null) 
+						{
+							if(file.length>0){
+								for(int i=0;i<file.length;i++){
+									String path=filePath+"/"+"questions";
+								 	Files newfile=fileService.uploadFile(path, file[i],fileType,request);
+								 	QuestionFile questionFile=new QuestionFile();
+								 	questionFile.setQuestionId(question.getId());
+								 	questionFile.setFileId(newfile.getId());
+								 	questionFileDao.addQuestionFile(questionFile);
+								}
+							}
+							questionDao.updateQuestion(question);
+						}
 						else
+						{
+							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 							return dataWrapper;
-				        
+						}
 					}
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
@@ -136,8 +161,8 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public DataWrapper<List<Question>> getQuestionList(Long projectId,String token, Integer pageIndex, Integer pageSize, Question question) {
-    	DataWrapper<List<Question>> datawrapper=new DataWrapper<List<Question>>();
+    public DataWrapper<List<QuestionPojo>> getQuestionList(Long projectId,String token, Integer pageIndex, Integer pageSize, Question question) {
+    	DataWrapper<List<QuestionPojo>> datawrapper=new DataWrapper<List<QuestionPojo>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		if(userInMemory.getUserType() == UserTypeEnum.Admin.getType()){

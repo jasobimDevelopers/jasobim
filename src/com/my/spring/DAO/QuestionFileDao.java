@@ -11,6 +11,7 @@ import java.util.List;
 public interface QuestionFileDao {
 	boolean addQuestionFile(QuestionFile questionFile);
     boolean deleteQuestionFile(Long id);
+    DataWrapper<List<QuestionFile>> getQuestionFileByQuestionId(Long questionId);
     DataWrapper<List<QuestionFile>> getQuestionFileList();
     DataWrapper<List<QuestionFile>> getQuestionFileListByUserId(Long userId);
 	DataWrapper<List<QuestionFile>> deleteQuestionFileByQuestionId(Long id);

@@ -36,7 +36,9 @@
         		</select>
             </div>
             <div class="addinput">
-            	<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;头像上传:</span><input style="float:right" type="file"  id="inputicon" />
+            	<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;头像上传:</span>
+            	<img width="100px" height="90px" src="{{findUserInfo.userIconUrl}}" />
+            	<input style="float:right" type="file"  id="inputicon" />
             </div>
             <div id="addbutton" style="margin-top:86px;">
             	<input class="btn btn-default" type="button" ng-click="addUserByAdmin()" value="确定" />

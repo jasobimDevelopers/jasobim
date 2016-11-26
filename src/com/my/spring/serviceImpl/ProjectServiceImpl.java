@@ -1,13 +1,22 @@
 package com.my.spring.serviceImpl;
 
+import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.FileDao;
+import com.my.spring.DAO.ItemDao;
+import com.my.spring.DAO.PaperDao;
 import com.my.spring.DAO.ProjectDao;
+import com.my.spring.DAO.QuantityDao;
+import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
+import com.my.spring.model.Item;
+import com.my.spring.model.Paper;
 import com.my.spring.model.Project;
 import com.my.spring.model.ProjectPojo;
+import com.my.spring.model.Quantity;
+import com.my.spring.model.Question;
 import com.my.spring.model.User;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ProjectService;
@@ -31,6 +40,16 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     ProjectDao projectDao;
     @Autowired
+    BuildingDao buidlingDao;
+    @Autowired
+    ItemDao itemDao;
+    @Autowired
+    PaperDao paperDao;
+    @Autowired
+    QuantityDao quantityDao;
+    @Autowired
+    QuestionDao questionDao;
+    @Autowired
     FileDao fileDao;
     @Autowired
     UserDao userDao;
@@ -39,8 +58,8 @@ public class ProjectServiceImpl implements ProjectService {
     private String filePath="/files";
     private Integer fileType=2;
     @Override
-    public DataWrapper<Void> addProject(Project project,String token,MultipartFile modelfile,MultipartFile picfile,HttpServletRequest request) {
-        DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    public DataWrapper<Project> addProject(Project project,String token,MultipartFile modelfile,MultipartFile picfile,HttpServletRequest request) {
+        DataWrapper<Project> dataWrapper = new DataWrapper<Project>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
@@ -55,11 +74,13 @@ public class ProjectServiceImpl implements ProjectService {
 						Files newfile=fileService.uploadFile(path, picfile,fileType,request);
 						project.setPicId(newfile.getId());
 					}
-					if(!projectDao.addProject(project))
-			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-					else
+					if(projectDao.addProject(project)){
+						dataWrapper=projectDao.findProjectLike(project);
+					}
+					else{
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 						return dataWrapper;
-			        
+					}
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}
@@ -73,23 +94,74 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public DataWrapper<Void> deleteProject(Long id,String token,Long modelid,HttpServletRequest request) {
+    public DataWrapper<Void> deleteProject(Long id,String token,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+        Project projects=projectDao.getById(id);
+        Long modelId=projects.getModelId();
+        Long picId=projects.getPicId();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			if(id!=null){
-				if(!projectDao.deleteProject(id)) 
+        	if(userInMemory.getUserType()==UserTypeEnum.Admin.getType())
+        	{
+				if(id!=null)
+				{
+					/////判断项目下的构件信息是否存在，存在删除，不存在不做处理
+					Item item=new Item();
+					if(itemDao.getItemList(id, 10, 1, item).getTotalNumber()>0)
 					{
-					fileDao.deleteFiles(modelid);//删除文件表的信息
-					Files files=fileDao.getById(id);
-					fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
-		            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-		            }
-				else
-					return dataWrapper;
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
+						itemDao.deleteItemByPorjectId(id);//////删除项目对应的构件
+					}
+				    /////判断项目下的图纸信息是否存在，存在删除，不存在不做处理
+					Paper paper=new Paper();
+					if(paperDao.getPaperList(id, 10, 1, paper).getTotalNumber()>0)
+					{
+						paperDao.deletePaperByProjectId(id);/////删除项目对应的图纸
+					}
+					/////判断项目下的问题信息是否存在，存在删除，不存在不做处理
+					Question question=new Question();
+					if(questionDao.getQuestionList(id, 10, 1, question).getTotalNumber()>0){
+						questionDao.deleteQuestionByProjectId(id);
+					}
+					//////判断项目下的工程量信息是否存在，存在删除，不存在不做处理
+					Quantity quantity=new Quantity();
+					if(quantityDao.getQuantityList(id, 10, 1, quantity).getTotalNumber()>0){
+						quantityDao.deleteQuantityByProjectId(id);
+					}
+					//////判断项目下的楼栋信息是否存在，存在删除，不存在不做处理
+					if(buidlingDao.getBuildingByProjectId(id).getData()!=null){
+						buidlingDao.deleteBuildingByProjectId(id);
+					}
+					if(modelId!=null){
+						/////有模型文件时删除模型文件
+						if(fileDao.deleteFiles(modelId))
+						{
+							Files files=fileDao.getById(id);
+							fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
+						}else{
+							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						}
+					}
+					if(picId!=null){
+						///有图片时删除图片文件
+						if(fileDao.deleteFiles(picId))
+						{
+							Files files=fileDao.getById(id);
+							fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
+							
+						}else{
+							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						}
+					}
+					if(!projectDao.deleteProject(id))
+					{
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}
+				}else{
+					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+				}
+        	}else{
+        		dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+        	}
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -173,22 +245,22 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public DataWrapper<Project> getProjectDetailsByAdmin(Long projectId, String token) {
 		DataWrapper<Project> dataWrapper = new DataWrapper<Project>();
-		 User userInMemory = SessionManager.getSession(token);
-	        if (userInMemory != null) {
-					if(projectId!=null){
-						Project project=projectDao.getById(projectId);
-						if(project==null) 
-				            dataWrapper.setErrorCode(ErrorCodeEnum.Project_Not_Existed);
-						else
-							dataWrapper.setData(project);
-					}
-			} else {
-				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
-			}
+		User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+				if(projectId!=null){
+					Project project=projectDao.getById(projectId);
+					if(project==null) 
+			            dataWrapper.setErrorCode(ErrorCodeEnum.Project_Not_Existed);
+					else
+						dataWrapper.setData(project);
+				}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
 		return dataWrapper;
 	}
 
-	@Override
+	/*@Override
 	public DataWrapper<List<Project>> findProjectLike(Project project, String token) {
 		DataWrapper<List<Project>> dataWrapper = new DataWrapper<List<Project>>();
 		User adminInMemory = SessionManager.getSession(token);
@@ -206,5 +278,5 @@ public class ProjectServiceImpl implements ProjectService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return dataWrapper;
-	}
+	}*/
 }

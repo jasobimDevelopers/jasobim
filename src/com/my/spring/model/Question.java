@@ -24,6 +24,8 @@ public class Question {
 	private Integer state;   ///问题的状态(0.待解决 1.已解决)
 	private String codeInformation;/////图片的二维码信息
 	
+	
+	
 	@Id
     @GeneratedValue
     @Column(name = "id")

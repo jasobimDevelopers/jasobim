@@ -159,4 +159,21 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
         }
 		return ret;
 	}
+
+	@Override
+	public boolean deleteQuantityByProjectId(Long id) {
+		String sql = "delete from quantity where project_id="+id;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+	}
 }

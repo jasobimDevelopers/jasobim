@@ -16,14 +16,11 @@ button{
 }
 a:link {
 text-decoration: none;
-color: #F60;
 }
 a:visited {
 text-decoration: none;
 }
-a:hover {
-text-decoration: none;
-}
+
 a:active {
 text-decoration: none;
 font-size: 14px;
@@ -179,6 +176,9 @@ table
 	height:25px;
 	width:20px;
 	background:url(../images/deleteIcon.png) no-repeat;
+}
+.usericon{
+	padding:0;
 }
 #bottom{
 	text-align:center;

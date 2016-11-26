@@ -12,7 +12,7 @@
 							<div><span>栋号</span></div>
 							<div><button class="btn btn-default" ng-click="setBuildingNum('all',flag[2])">全部</button></div>
 							<div ng-repeat="buildingNumber in buildingArray">
-								<select class="myselect" type="text" ng-change="setBuildingNum(building[$index],flag[2])" onclick="selectValue()"  ng-model="building[$index]">
+								<select class="myselect" type="text" ng-change="setBuildingNum(building[$index],flag[2],$index)"  ng-model="building[$index]">
 			    					<option value="title" >#{{$index*10+1}} -#{{$index*10+10}}</option>
 			    					<option value="{{number}}" ng-repeat="number in buildingNumber" >#{{number}}</option>
 			    				</select>
@@ -45,11 +45,13 @@
 									<td>{{projectPhaseInfo[projectPaper.professionType].name}}</td>
 									<td class="tds" >
 									    <a href="{{projectPaper.url}}" target="_blank" download="{{projectPaper.originName}}">
-				                         <button id="uploadbutton">
-			                        	</button>
+					                        <button id="uploadbutton">
+				                        	</button>
 			                        	</a>
-				                        <button id="deletebutton" ng-click="deleteItem(projectPaper.id)">
-				                        </button>
+			                        	<a href="">
+					                        <button id="deletebutton" ng-click="deletePaper(projectPaper.id)">
+					                        </button>
+				                        </a>
 				                    </td>
 								</tr>
 							</tbody>

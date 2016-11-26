@@ -86,4 +86,26 @@ public class QuestionFileDaoImpl extends BaseDao<QuestionFile> implements Questi
 		}
 		return questionFiles;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<List<QuestionFile>> getQuestionFileByQuestionId(Long questionId) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<QuestionFile>> retDataWrapper = new DataWrapper<List<QuestionFile>>();
+        
+        //ret=find("select * from User where userId=?"+userId);
+		List<QuestionFile> ret = null;
+		Session session = getSession();
+		Criteria criteria = session.createCriteria(QuestionFile.class);
+		criteria.add(Restrictions.eq("questionId",questionId));
+		try {
+			ret = criteria.list();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		if (ret != null && ret.size() > 0) {
+			retDataWrapper.setData(ret);
+		}
+		return retDataWrapper;
+	}
 }
