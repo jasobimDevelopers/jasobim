@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.my.spring.DAO.QuantityDao;
 import com.my.spring.model.Files;
 import com.my.spring.service.FileService;
 @Controller
@@ -17,6 +18,9 @@ import com.my.spring.service.FileService;
 public class TestFileController {
 	@Autowired
 	FileService fileService;
+	
+	@Autowired
+	QuantityDao quantityDao;
 	
 	//fileService提供服务，不提供接口，本文件下的接口皆为测试，需删除
 	//上传文件服务，需要输入文件的目标路径和文件内容，其中文件的目标路径不包含文件名，示例如下filePath
@@ -43,6 +47,17 @@ public class TestFileController {
 		//根据id去查Files,取出Files里面的url,传参
 		filePathAndName= "/fileupload/testfile/7c8eabdd4c1787f40be437d1367431ce.jpg";
         return fileService.deleteFileByPath(filePathAndName,request);
+    }
+	
+	@RequestMapping(value="/testExportFile", method = RequestMethod.GET)
+    @ResponseBody
+	public boolean testExportTable(
+  
+    		HttpServletRequest request) {
+		//根据id去查Files,取出Files里面的url,传参
+//		String filePath = request.getSession().getServletContext().getRealPath("/") + "/test.xls";
+		String filePath = "d:/test.xls";
+        return quantityDao.exportQuantity(filePath);
     }
 
 }

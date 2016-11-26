@@ -27,7 +27,7 @@ public class NavigationController {
     
     @RequestMapping(value="/test")
     public String testPage(){
-        return "test_prf";
+        return "test/test";
     }
     @RequestMapping(value="/projectQuestionList")
     public String questionPage(){

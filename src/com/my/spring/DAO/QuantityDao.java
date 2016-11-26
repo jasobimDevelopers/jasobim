@@ -17,5 +17,7 @@ public interface QuantityDao {
 		boolean findQuantity(Quantity quantity);
 		boolean addQuantityList(List<Quantity> quantityList);
 		List<Quantity> getAllQuantity();
+		
+		boolean exportQuantity(String filePath);
 		boolean deleteQuantityByProjectId(Long id);
 }
