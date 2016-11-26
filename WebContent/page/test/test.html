@@ -35,10 +35,12 @@
 	</body>
 
 	<script type="text/javascript">
-	var titlePicPath = "";
 	var thisAction = {};
 	$("#txtEditor").htmlarea({
     // Override/Specify the Toolbar buttons to show
+   		  loaded: function () {
+   			thisAction = this;
+   		 },
    		 toolbar: [
     		["bold", "italic", "underline", "horizontalrule","|", "forecolor"],
       	 	["h1", "h2", "h3", "h4", "h5", "h6"],
@@ -55,7 +57,6 @@
 
                 	// The callback function to execute when the toolbar button is clicked
                 	action: function (btn) {
-                		thisAction = this;
         	            $('#contentFile').click(); 
             	     /*    $('#contentFile').change();  
             	        this.pasteHTML('1');  */
