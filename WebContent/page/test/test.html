@@ -71,7 +71,7 @@
 		if(contentFile != null && contentFile != undefined) {
 			var formData = new FormData();
 	 		formData.append("file",contentFile);
-	 		formData.append("token","SKd71701e3-aea2-4bec-85f3-b50fba9ae491");
+	 		formData.append("token","SKddc9360e-b1cd-4aef-a669-d21ad1758170");
 	 		formData.append("messageId","17");
 	 		uploadFile(formData,thisAction);
 		}
@@ -92,11 +92,11 @@
 		    processData : false,  
 		    contentType : false,  
 		    success : function(data) {  
-		    	if(data.errorCode == 0) {
+		    	if(data.errorCode == "No_Error") {
 		    		$("#contentFile").remove();
 		  			$("#contentFileDiv").append('<input type = "file" id="contentFile" onchange="contentFileChange()"/>');
 
-		    		thisAction.pasteHTML('<img src="/DWMMemberShip' + data.data + '" />');
+		    		thisAction.pasteHTML('<img src="/JasoBIM' + data.data.urlList + '" />');
 		    	}
 		           
 		       
