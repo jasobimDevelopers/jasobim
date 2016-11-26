@@ -149,4 +149,20 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		
 		return null;
 	}
+
+	@Override
+	public boolean exportQuantity(String filePath) {
+		// TODO Auto-generated method stub
+		String sql = "select * from quantity into outfile '" + filePath + "';";
+		Session session=getSession();
+		try{
+	        Query query=session.createSQLQuery(sql);
+	        query.list();
+	    }catch(Exception e){
+	        e.printStackTrace();
+	        return false;
+	    }
+		
+		return true;
+	}
 }
