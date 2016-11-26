@@ -5,6 +5,7 @@ import com.my.spring.DAO.ItemDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QuantityDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Building;
@@ -131,9 +132,8 @@ public class ItemServiceImpl implements ItemService {
     	
     }
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public boolean batchImport(String name, MultipartFile file,String token,HttpServletRequest request) {
+	public boolean batchImport(String name, MultipartFile file,String token,HttpServletRequest request,Long projectId) {
 		if (file == null || name == null || name.equals("")) {
 			return false;
 		}
@@ -155,11 +155,11 @@ public class ItemServiceImpl implements ItemService {
 		        int []tempb =new int[ItemList.size()];
 		        int []tempf =new int[ItemList.size()];
 		        int []temph =new int[ItemList.size()];
-		        if(ItemList != null){
+		        if(ItemList.size()>0){
 		        	 b = true;
 		        	fileSerivce.uploadFile(name, file, type, request);
 		        	int i=0;
-		        	long projectId=ItemList.get(0).getProjectId();
+		        	
 			        for(Item Item:ItemList){
 			        	tempb[i]=Item.getBuildingNum();
 			        	tempf[i]=Item.getFloorNum();
@@ -171,6 +171,7 @@ public class ItemServiceImpl implements ItemService {
 			        int floorNum=0;
 			        int householdNum=0;
 			        for(int j=0;j<ItemList.size();j++){
+			        	ItemList.get(j).setProjectId(projectId);
 			        	if(buildingNum<tempb[j]){
 			        		buildingNum=tempb[j];
 			        	}
@@ -185,16 +186,17 @@ public class ItemServiceImpl implements ItemService {
 			        building.setBuildingNum(buildingNum);
 			        building.setFloorNum(floorNum);
 			        building.setHouseholdNum(householdNum);
-			        buildingDao.addBuilding(building);	
+			        if(buildingDao.getBuildingByProjectId(projectId).getCallStatus()==CallStatusEnum.SUCCEED){
+			        	buildingDao.updateBuilding(buildingDao.getBuildingByProjectId(projectId).getData());
+			        }else{
+			        	buildingDao.addBuilding(building);	
+			        }
 			        //////////////////
 		           
 		            //迭代添加构件信息
 			        itemDao.addItemList(ItemList);
 			        List <Quantity> quantityList=new ArrayList<Quantity>();
-			        List <Quantity> quantityOldList=new ArrayList<Quantity>();
 			    	DataWrapper<List <QuantityPojo>> quantitypojo= itemDao.getSameItem();
-			    	quantityOldList=quantityDao.getAllQuantity();
-			    	int j=0;
 			    	if(quantitypojo.getData()!=null){
 			    		for(QuantityPojo pojo:quantitypojo.getData()){
 			    			
@@ -205,35 +207,40 @@ public class ItemServiceImpl implements ItemService {
 			    			test.setFloorNum(pojo.getFloor_num());
 			    			test.setUnitNum(pojo.getUnit_num());
 			    			test.setHouseholdNum(pojo.getHousehold_num());
+//			    			test.setTypeName(pojo.getType_name());
 			    			String familyAndType=pojo.getFamily_and_type();
-			    			test.setTypeName(pojo.getType_name());
-			    			if(familyAndType.equals("") || familyAndType==null){
+			    			String typeName=pojo.getType_name();
+			    			if(typeName==null){
+			    				typeName="";
+			    			}
+//			    			test.setTypeName(typeName);
+			    			if(familyAndType==null){
 			    				familyAndType="";
 			    			}
 			    			test.setFamilyAndType(familyAndType);
 			    			String serviceType=pojo.getService_type();
-			    			if(serviceType.equals("") || serviceType==null){
+			    			if(serviceType==null){
 			    				serviceType="";
 			    			}
 			    			test.setServiceType(serviceType);
 			    			String systemType=pojo.getSystem_type();
-			    			if(systemType.equals("") || systemType==null){
+			    			if(systemType==null){
 			    				systemType="";
 			    			}
 			    			test.setSystemType(systemType);
 			    			test.setProfessionType(pojo.getProfession_type());
 			    			String names=pojo.getName();
-			    			if(names.equals("") || names==null){
+			    			if(names==null){
 			    				names="";
 			    			}
 			    			test.setName(names);
 			    			String size=pojo.getSize();
-			    			if(size.equals("") || size==null){
+			    			if(size==null){
 			    				size="";
 			    			}
 			    			test.setSize(size);
 			    			String material=pojo.getMaterial();
-			    			if(material==null || material.equals("")){
+			    			if(material.equals("")){
 			    				material="";
 			    			}
 			    			test.setMaterial(material);
@@ -249,28 +256,9 @@ public class ItemServiceImpl implements ItemService {
 			    				test.setValue(pojo.getNum());
 			    				test.setUnit("个");
 			    			}
-			    			for(int k=0;k<quantityOldList.size();k++){
-			    				if(quantityOldList.get(k).getProjectId()==test.getProjectId() 
-			    						&& quantityOldList.get(k).getBuildingNum()==test.getBuildingNum()
-			    						&& quantityOldList.get(k).getFloorNum()==test.getFloorNum()
-			    						&& quantityOldList.get(k).getHouseholdNum()==test.getHouseholdNum()
-			    						&& quantityOldList.get(k).getName().equals(test.getName())
-			    						&& quantityOldList.get(k).getProfessionType()==test.getProfessionType()
-			    						&& quantityOldList.get(k).getMaterial().equals(test.getMaterial())
-			    						&& quantityOldList.get(k).getFamilyAndType().equals(test.getFamilyAndType())
-			    						&& quantityOldList.get(k).GetServiceType().equals(test.GetServiceType())
-			    						&& quantityOldList.get(k).getSystemType().equals(test.getSystemType())
-			    						&& quantityOldList.get(k).getSize().equals(test.getSize())
-			    						&& quantityOldList.get(k).getUnitNum()==test.getUnitNum()
-			    						)
-			    				{
-			    					test.setId(quantityOldList.get(k).getId());
-				    				quantityDao.updateQuantity(test);
-				    			}else{
-				    				quantityList.add(test);
-				    			}
-			    			}
+			    			quantityList.add(test);
 			    		}
+			    		quantityDao.deleteQuantityByProjectId(projectId);
 			    		quantityDao.addQuantityList(quantityList);
 			    	}
 		        }

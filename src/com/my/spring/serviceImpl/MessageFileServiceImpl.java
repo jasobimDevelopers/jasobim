@@ -6,6 +6,7 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.MessageFile;
+import com.my.spring.model.MessageFilePojo;
 import com.my.spring.model.User;
 import com.my.spring.service.FileService;
 import com.my.spring.service.MessageFileService;
@@ -34,32 +35,44 @@ public class MessageFileServiceImpl implements MessageFileService {
     private String filePath = "/files";
     private Integer fileType=3;
     @Override
-    public DataWrapper<Void> addMessageFile(MessageFile messageFile,String token,MultipartFile file,HttpServletRequest request) {
-    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    public DataWrapper<MessageFilePojo> addMessageFile(MessageFile messageFile,String token,MultipartFile file,HttpServletRequest request) {
+    	DataWrapper<MessageFile> dataWrapper = new DataWrapper<MessageFile>();
+    	DataWrapper<MessageFilePojo> dataWrappers = new DataWrapper<MessageFilePojo>();
         User userInMemory = SessionManager.getSession(token);////验证登录时的session
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				///////验证是不是管理员身份
 				if(messageFile!=null){////验证上传的实体类是不是为空
 					///////1.文件的上传返回url
-					String path=filePath+"/"+"messages";
-					Files newfile=fileService.uploadFile(path, file,fileType,request);
-					messageFile.setFileId(newfile.getId());
-					if(!messageFileDao.addMessageFile(messageFile)) 
-			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-					else
-						return dataWrapper;
+					if(file!=null){
+						MessageFilePojo messageFilePojo=new MessageFilePojo();
+						String path=filePath+"/"+"messages";
+						Files newfile=fileService.uploadFile(path, file,fileType,request);
+						messageFile.setFileId(newfile.getId());
+						if(!messageFileDao.addMessageFile(messageFile)) 
+				            dataWrappers.setErrorCode(ErrorCodeEnum.Error);
+						else{
+							messageFilePojo.setFileId(messageFile.getFileId());
+							messageFilePojo.setId(messageFile.getId());
+							messageFilePojo.setMessageId(messageFile.getMessageId());
+							messageFilePojo.setOriginName(messageFile.getOriginName());
+							messageFilePojo.setUrlList(newfile.getUrl());
+							dataWrappers.setData(messageFilePojo);
+						}
+					}
+					
+					
 			        
 				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+					dataWrappers.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}
 			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+				dataWrappers.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
 		} else {
-			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+			dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
-        return dataWrapper;
+        return dataWrappers;
     }
 
     @Override

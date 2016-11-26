@@ -29,4 +29,8 @@ public class NavigationController {
     public String testPage(){
         return "test/test";
     }
+    @RequestMapping(value="/projectQuestionList")
+    public String questionPage(){
+        return "home";
+    }
 }

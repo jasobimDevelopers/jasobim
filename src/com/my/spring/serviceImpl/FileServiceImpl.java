@@ -83,6 +83,24 @@ public class FileServiceImpl implements FileService  {
         }
         return flag;
 	}
+
+	@Override
+	public Files getById(Long id) {
+		// TODO Auto-generated method stub
+		return fileDao.getById(id);
+	}
+
+	@Override
+	public boolean deleteFileById(Long id) {
+		// TODO Auto-generated method stub
+		return fileDao.deleteFiles(id);
+	}
+
+	@Override
+	public boolean addFile(Files file) {
+		// TODO Auto-generated method stub
+		return fileDao.addFiles(file);
+	}
 	
 
 

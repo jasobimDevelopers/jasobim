@@ -29,9 +29,16 @@ function ProjectController($scope,ProjectService) {
 	var buildingInfo = {};
 	$scope.building = [];
 	$scope.floors =[];
+	$scope.buildings=[];
+	$scope.buildingVideoB=[];
+	$scope.buildingVideoF=[];
+	$scope.buildingN=[];
 	var fileArray=[];
+	var fileArray1=[];
 	var introduced=null;
 	var projectId=null;
+	$scope.number=null;
+	$scope.numbers=null;
 	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","设计单位","施工地点","项目简介","建设单位","版本","施工时间","施工周期","操作"];
 	$scope.itemTitles=["序号","构件名称","底部高程","系统类型","尺寸","长度","设备类型","所属类别","标高","偏移量","面积","材质","类型名","操作"];
 	$scope.quantityTitles=["序号","构件名称","专业","系统类型","数值","单位","楼栋号","楼层号","单元号","户型","familyAndType","设备类型","尺寸","设备名称","材质"];
@@ -46,6 +53,8 @@ function ProjectController($scope,ProjectService) {
 	$scope.questionType="all";
 	$scope.questionPriority="all";
 	$scope.questionStatus="all";
+	$scope.buildingNumArray=null;
+	$scope.floorNumArray=null;
 	$scope.buildingNumInfo=null;
 	$scope.buildingDownInfo=null;
 	var item = "";
@@ -56,17 +65,17 @@ function ProjectController($scope,ProjectService) {
 	/////按问题类型搜索
 	$scope.setQuestionOfType = function(type,flag){
 		$scope.questionType=type;
-		$scope.getProjectQuestionList($scope.projectid,10,1,question);
+		$scope.getProjectQuestionList(10,1,question);
 	}
 	/////按问题级别搜索
 	$scope.setQuestionOfPriority = function(priority,flag){
 		$scope.questionPriority=priority;
-		$scope.getProjectQuestionList($scope.projectid,10,1,question);
+		$scope.getProjectQuestionList(10,1,question);
 	}
 	/////按问题状态搜索
 	$scope.setQuestionOfStatus = function(status,flag){
 		$scope.questionStatus=status;
-		$scope.getProjectQuestionList($scope.projectid,10,1,question);
+		$scope.getProjectQuestionList(10,1,question);
 	}
 	/////按专业自动搜索
 	$scope.setPhase = function(phase,flag) {
@@ -88,11 +97,8 @@ function ProjectController($scope,ProjectService) {
 	/////按楼栋号自动搜索
 	$scope.setBuildingNum = function(building,flag,index) {
 		$scope.buildingId = building;	
-//		selectValue(building);
-	   // $scope.getBuildingNum($scope.projectid,building);
 		ProjectService.getBuildingNum($scope.projectid,building).then(function(result){
 			 $scope.buildingNumInfo=result;  
-
 			 ProjectService.getBuildingDown($scope.projectid,building).then(function(result){
 				 $scope.buildingDownInfo=result;   
 				 if(flag=="构件信息页面"){
@@ -101,7 +107,7 @@ function ProjectController($scope,ProjectService) {
 				 if(flag=="工程量页面"){
 					 $scope.getProjectQuantityList($scope.projectid,10,1,quantity);
 				 }
-				 if(flag="安全交底页面"){
+				 if(flag=="安全交底页面"){
 					 $scope.getProjectVideoList($scope.projectid,10,1,video);
 				 }
 				 if(flag=="图纸信息页面"){
@@ -149,6 +155,10 @@ function ProjectController($scope,ProjectService) {
 	for(var i = 0 ; i < 100;i++) {
 		  $scope.building[i] = "title";
 		  $scope.floors[i] = "title";
+		  $scope.buildings[i] ="title";
+		  $scope.buildingN[i] ="title";
+		  $scope.buildingVideoB[i] ="title";
+		  $scope.buildingVideoF[i] ="title";
 	 }
 	
 	$scope.showProjectAdd = function(){
@@ -168,15 +178,12 @@ function ProjectController($scope,ProjectService) {
 	    ProjectService.findProject(projectId,token).then(function(result){
 	      $scope.findProjectInfo=result.data;
 	      $scope.projectid=projectId;
-	     
 	      document.getElementById("projectInfoHtml").style.display = 'block';
 	      document.getElementById("containers").style.display = 'none';
 	      document.getElementById("include_header").style.display = 'none';
 	      $scope.projectTitle="更新项目";
 	    });
 	    $scope.getBuildingList(projectId);
-	    //	    $scope.getBuildingDown(projectId);
-	    //	    $scope.buildingArray=menuArray(buildingInfo.buildingNum);
 	 }
 	////////分页回调函数
 	  $scope.projectPage = function(iPageCount,iCurrent) {
@@ -259,9 +266,10 @@ function ProjectController($scope,ProjectService) {
 				 formData.append('picFile',$scope.picFiles);
 			 }
 			 ProjectService.addProjectByAdmin(formData,token).then(function(result){
-			       $scope.addProjectByAdminInfo=result.data;
+			       $scope.addProjectByAdminInfo=result.data; 
+			       $scope.projectid=result.data.id;
 			       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
-			       
+			       document.getElementById("projectItemInfoAdd").style.display = 'block';
 			    });
 		 }
 		 if($scope.projectTitle=="更新项目")
@@ -456,6 +464,14 @@ function ProjectController($scope,ProjectService) {
 		      }
 		  });
 	  }
+	  //////////////图纸信息删除功能
+	  $scope.deletePaper=function(paperId){
+		  ProjectService.deleteProjectPaper(paperId).then(function(result){
+		       $scope.deleteProjectPaperInfo=result.data;
+		       $scope.getProjectPaperList($scope.projectid,pageSize,1,paper);
+		       
+		    });
+	  }
 	 ////////////////////////图纸列表信息分页获取
 	 $scope.getProjectPaperList = function(projectId,pageSize,pageIndex,paper) {
 		 if($scope.buildingArray == undefined || $scope.buildingArray.length ==0) {
@@ -492,9 +508,9 @@ function ProjectController($scope,ProjectService) {
 		 if($scope.buildingArray == undefined || $scope.buildingArray.length == 0) {
 			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		 }
+		 $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
+		 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo-1);
 		  
-		  $scope.floorArray=menuArray($scope.buildingNumInfo);
-		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
 		 if($scope.phase!="all") {
 			 quantity+= "professionType=" + $scope.phase;
 		 }
@@ -541,7 +557,7 @@ function ProjectController($scope,ProjectService) {
 		      current:iCurrent,
 
 		      backFn:function(p){
-		    	  $scope.getProjectQuestionList($scope.projectid,pageSize,p,question);
+		    	  $scope.getProjectQuestionList(pageSize,p,question);
 		      }
 		  });
 	  }
@@ -689,45 +705,190 @@ function ProjectController($scope,ProjectService) {
 	 $scope.uploadItemFile=function(){
 		 
 		 //电缆桥架
-		 fileArray[0]=document.getElementById("qiaojia").files[0];	
+		 if(document.getElementById("qiaojia").files[0]!==null){
+			 fileArray[0]=document.getElementById("qiaojia").files[0];	
+		 }
 		 //电缆桥架配件
-		 fileArray[1]=document.getElementById("qiaojia_fujian").files[0];	  
+		 if(document.getElementById("qiaojia_fujian").files[0]!==null){
+			 fileArray[1]=document.getElementById("qiaojia_fujian").files[0];	
+		 }
 		 //电气设备
-		 fileArray[2]=document.getElementById("dianqi_shebei").files[0];	  
+		 if(document.getElementById("dianqi_shebei").files[0]!==null){
+			 fileArray[2]=document.getElementById("dianqi_shebei").files[0];	 
+		 }
 		 //风管	
-		 fileArray[3]=document.getElementById("fengguan").files[0];			  
+		 if(document.getElementById("fengguan").files[0]!==null){
+			 fileArray[3]=document.getElementById("fengguan").files[0];	
+		 }
 		 //风管配件
-		 fileArray[4]=document.getElementById("fengguan_peijian").files[0];			 
+		 if(document.getElementById("fengguan_peijian").files[0]!==null){
+			 fileArray[4]=document.getElementById("fengguan_peijian").files[0];	
+		 }
 		 //风管附件
-		 fileArray[5]=document.getElementById("fengguan_fujian").files[0];			  
+		 if(document.getElementById("fengguan_fujian").files[0]!==null){
+			 fileArray[5]=document.getElementById("fengguan_fujian").files[0];	
+		 }
 		 //风管末端
-		 fileArray[6]=document.getElementById("fengguan_moduan").files[0];			  
+		 if(document.getElementById("fengguan_moduan").files[0]!==null){
+			 fileArray[6]=document.getElementById("fengguan_moduan").files[0];	
+		 }
 		 //机械设备
-		 fileArray[7]=document.getElementById("jixie_shebei").files[0];			  
+		 if(document.getElementById("jixie_shebei").files[0]!==null){
+			 fileArray[7]=document.getElementById("jixie_shebei").files[0];		
+		 }
 		 //管道
-		 fileArray[8]=document.getElementById("guandao").files[0];			  
+		 if(document.getElementById("guandao").files[0]!==null){
+			 fileArray[8]=document.getElementById("guandao").files[0];	
+		 }
 		 //管件
-		 fileArray[9]=document.getElementById("guanjian").files[0];			  
+		 if(document.getElementById("guanjian").files[0]!==null){
+			 fileArray[9]=document.getElementById("guanjian").files[0];		
+		 }
 		 //管道附件
-		 fileArray[10]=document.getElementById("guandao_fujian").files[0];			  
+		 if(document.getElementById("guandao_fujian").files[0]!==null){
+			 fileArray[10]=document.getElementById("guandao_fujian").files[0];	
+		 }
 		 //卫浴装置
-		 fileArray[11]=document.getElementById("weiyu_zhuangzhi").files[0];			  
+		 if(document.getElementById("weiyu_zhuangzhi").files[0]!==null){
+			 fileArray[11]=document.getElementById("weiyu_zhuangzhi").files[0];	
+		 }
 		 //消防栓
-		 fileArray[12]=document.getElementById("xiaofangshuan").files[0];			  
+		 if(document.getElementById("xiaofangshuan").files[0]!==null){
+			 fileArray[12]=document.getElementById("xiaofangshuan").files[0];	
+		 }
 		 //喷淋
-		 fileArray[13]=document.getElementById("penlin").files[0];			 
+		 if(document.getElementById("penlin").files[0]!==null){
+			 fileArray[13]=document.getElementById("penlin").files[0];
+		 }		 
 		 //工程量
-		 fileArray[14]=document.getElementById("gongchengliang").files[0];	
+		 if(document.getElementById("gongchengliang").files[0]!==null){
+			 fileArray[14]=document.getElementById("gongchengliang").files[0];	
+		 }
 //		 console.log(typeof(fileArray));
 		 var formData = new FormData();
 		 for(var i=0;i<fileArray.length;i++){
 			 formData.append("fileList",fileArray[i]);
 		 }
-		 ProjectService.uploadItemFile(formData).then(function(result){
-		       $scope.uploadItemInfo=result.data;
-		     
-		       
+		 ProjectService.uploadItemFile(formData,$scope.projectid).then(function(result){
+		       $scope.uploadItemInfo=result.data;	 
+		       document.getElementById("projectPaperInfoAdd").style.display = 'block';
 		    });
 	 }
-	 
+	 ////////////上传图纸信息
+	 //////
+	 $scope.floorNumArray=menuArray(40);
+	 $scope.buildingNumArray=menuArray(20);
+
+	 $scope.setBuildingNumber = function(buildingss) {
+		 $scope.number=buildingss;
+	 }
+	 $scope.setFloorNumber = function(buildingss) {
+		 $scope.numbers=buildingss;
+	 }
+	 $scope.uploadPaperFile=function(){
+		
+		 if($scope.number!=null && $scope.numbers!=null && $scope.number!="title" && $scope.numbers!="title"){
+			 var formData = new FormData();
+			 if(document.getElementById("paper_dianqi").files[0]!=undefined){
+				 fileArray1[0]=document.getElementById("paper_dianqi").files[0];
+			 }
+			 if(document.getElementById("paper_nuantong").files[0]!=undefined){
+				 fileArray1[1]=document.getElementById("paper_nuantong").files[0];
+			 }
+			 if(document.getElementById("paper_geipaishui").files[0]!=undefined){
+				 fileArray1[2]=document.getElementById("paper_geipaishui").files[0];
+			 }
+			 if(document.getElementById("paper_xiaofang").files[0]!=undefined){
+				 fileArray1[3]=document.getElementById("paper_xiaofang").files[0];
+			 }
+			 for(var i=0;i<fileArray1.length;i++){
+				 formData.append("fileList",fileArray1[i]);
+			 }
+			 ProjectService.uploadPaperFile(formData,$scope.number,$scope.numbers,$scope.projectid).then(function(result){
+				       $scope.uploadPaperFile=result.data;	 
+				       document.getElementById("projectVideoInfoAdd").style.display = 'block';
+				    });
+			 
+		 }else{
+			 alert("请输入图纸对应的楼栋号和楼层号！")
+		 }
+		 
+		 
+	 }
+	 ////////////////////安全交底上传
+	 $scope.uploadVideoFile=function(){
+			
+		
+			 var formData = new FormData();
+			 var professionType=null;
+			 if(document.getElementById("video_dianqi").files[0]!=undefined){
+				 fileArray1[0]=document.getElementById("video_dianqi").files[0];
+				 professionType=0;
+			 }
+			 if(document.getElementById("video_nuantong").files[0]!=undefined){
+				 fileArray1[1]=document.getElementById("video_nuantong").files[0];
+				 professionType=1;
+			 }
+			 if(document.getElementById("video_geipaishui").files[0]!=undefined){
+				 fileArray1[2]=document.getElementById("video_geipaishui").files[0];
+				 professionType=2;
+			 }
+			 if(document.getElementById("paper_xiaofang").files[0]!=undefined){
+				 fileArray1[3]=document.getElementById("video_xiaofang").files[0];
+				 professionType=3;
+			 }
+			 for(var i=0;i<fileArray1.length;i++){
+				 formData.append("fileList",fileArray1[i]);
+			 }
+			 if(professionType!=null){
+				 ProjectService.uploadVideoFile(formData,professionType,$scope.projectid).then(function(result){
+				       $scope.uploadPaperFile=result.data;	      
+				       
+				    });
+			 }
+		 }
+	 	///////交底上传信息重置
+	     $scope.resetVideoFile=function(){
+	    	 document.getElementById("video_dianqi").value=null;
+	    	 document.getElementById("video_nuantong").value=null;
+	    	 document.getElementById("video_geipaishui").value=null;
+	    	 document.getElementById("video_xiaofang").value=null;
+	     }
+	     //////构件信息重置
+	     $scope.resetItemFile=function(){
+			 document.getElementById("qiaojia").value=null;	
+			 document.getElementById("qiaojia_fujian").value=null;	
+			 document.getElementById("dianqi_shebei").value=null;	
+			 document.getElementById("fengguan").value=null;	
+			 document.getElementById("fengguan_peijian").value=null;	
+			 document.getElementById("fengguan_fujian").value=null;	
+			 document.getElementById("fengguan_moduan").value=null;	
+			 document.getElementById("jixie_shebei").value=null;	
+			 document.getElementById("guanjian").value=null;	
+			 document.getElementById("guandao_fujian").value=null;	
+			 document.getElementById("weiyu_zhuangzhi").value=null;	
+			 document.getElementById("xiaofangshuan").value=null;	
+			 document.getElementById("penlin").value=null;	
+			 document.getElementById("gongchengliang").value=null;	
+	     }
+	     ///////图纸信息重置
+	     $scope.resetPaperFile=function(){
+			 document.getElementById("paper_dianqi").value=null;	
+			 document.getElementById("paper_nuantong").value=null;	
+			 document.getElementById("paper_geipaishui").value=null;	
+			 document.getElementById("paper_xiaofang").value=null;	
+			 document.getElementById("buildingN").value=null;	
+			 document.getElementById("floorN").value=null;	
+	     }
+		 
+	    //////返回项目列表
+	     $scope.returnProject=function(){
+	    	 $scope.findProjectInfo = {};
+	 		document.getElementById("addProjectHtml").style.display = 'none';
+	 	    document.getElementById("containers").style.display = 'block';
+	 	    document.getElementById("include_header").style.display = 'block';
+	 	    document.getElementById("projectVideoInfoAdd").style.display = 'none';
+	 	    document.getElementById("projectPaperInfoAdd").style.display = 'none';
+	 	    document.getElementById("projectItemInfoAdd").style.display = 'none';
+	     }
 }

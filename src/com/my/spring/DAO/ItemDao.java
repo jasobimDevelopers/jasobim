@@ -13,6 +13,7 @@ public interface ItemDao {
     boolean addItem(Item Item);
     boolean deleteItem(Long id);
     boolean updateItem(Item Item);
+    boolean deleteItemByPorjectId(Long projectId);
     DataWrapper<List<Item>> getItemList(Long projectId, Integer pageSize, Integer pageIndex, Item item);
     DataWrapper<List<QuantityPojo>> getSameItem();
     List<Item> getItemByLocation(String location);

@@ -1,6 +1,7 @@
 package com.my.spring.service;
 
 import com.my.spring.model.MessageFile;
+import com.my.spring.model.MessageFilePojo;
 import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
@@ -15,8 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 public interface MessageFileService {
     DataWrapper<List<MessageFile>> getMessageFileList(String token);
     DataWrapper<List<MessageFile>> getMessageFileListByUserId(Long userId,String token);
-	DataWrapper<Void> addMessageFile(MessageFile messageFile, String token, MultipartFile file,
+	DataWrapper<MessageFilePojo> addMessageFile(MessageFile messageFile, String token, MultipartFile file,
 			HttpServletRequest request);
 	DataWrapper<Void> deleteMessageFile(Long id, Long fileid, String token, 
 			HttpServletRequest request);
+	
 }

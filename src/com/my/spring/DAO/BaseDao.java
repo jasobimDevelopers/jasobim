@@ -81,9 +81,11 @@ public class BaseDao<T>{
         Session session = getSession();
         try{
             session.beginTransaction();
+            session.clear();
             session.save(entity);
             session.getTransaction().commit();
             session.flush();
+            session.clear();
         }catch(Exception e){
             e.printStackTrace();
             session.getTransaction().rollback();
@@ -110,6 +112,7 @@ public class BaseDao<T>{
             }
             session.getTransaction().commit();
             session.flush();
+            session.clear();
         }catch(Exception e){
             e.printStackTrace();
             session.getTransaction().rollback();
@@ -168,9 +171,11 @@ public class BaseDao<T>{
         Session session = getSession();
         try{
             session.beginTransaction();
+            session.clear();
             session.update(entity);
             session.getTransaction().commit();
             session.flush();
+            session.clear();
         }catch(Exception e){
             e.printStackTrace();
             session.getTransaction().rollback();

@@ -1,5 +1,7 @@
 package com.my.spring.controller;
 
+import com.my.spring.enums.CallStatusEnum;
+import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Paper;
 import com.my.spring.model.PaperPojo;
 import com.my.spring.service.PaperService;
@@ -21,14 +23,24 @@ import javax.servlet.http.HttpServletRequest;
 public class PaperController {
     @Autowired
     PaperService paperService;
-    @RequestMapping(value="/addPaper", method = RequestMethod.POST)
+
+    @RequestMapping(value="/admin/uploadPaper", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addPaper(
             @ModelAttribute Paper paper,
-            @RequestParam(value = "file", required = true) MultipartFile file,
+            @RequestParam(value = "fileList", required = true) MultipartFile[] fileList,
             HttpServletRequest request,
             @RequestParam(value = "token",required = true) String token){
-        return paperService.addPaper(paper,token,file,request);
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    	for(int i=0;i<fileList.length;i++){
+    		dataWrapper=paperService.addPaper(paper, token, fileList[i], request);
+    		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
+            	return dataWrapper;
+            }else{
+            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+            }
+    	}
+        return dataWrapper;
     }
     @RequestMapping(value="/deletePaper")
     @ResponseBody
@@ -39,7 +51,16 @@ public class PaperController {
             @RequestParam(value = "token",required = true) String token){
         return paperService.deletePaper(id,fileid,token,request);
     }
-
+    
+    @RequestMapping(value="/admin/deletePaper")
+    @ResponseBody
+    public DataWrapper<Void> deletePaperByAdmin(
+            @RequestParam(value = "id",required = true) Long id,
+            HttpServletRequest request,
+            @RequestParam(value = "token",required = true) String token){
+        return paperService.deletePaperByAdmin(id,token,request);
+    }
+    
     @RequestMapping(value="/updatePaper",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updatePaper(

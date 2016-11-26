@@ -6,6 +6,7 @@ import com.my.spring.model.Paper;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -90,5 +91,22 @@ public class PaperDaoImpl extends BaseDao<Paper> implements PaperDao {
 	public Paper getById(Long id) {
 		// TODO Auto-generated method stub
 		return get(id);
+	}
+
+	@Override
+	public boolean deletePaperByProjectId(Long id) {
+		String sql = "delete from paper where project_id="+id;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
 	}
 }

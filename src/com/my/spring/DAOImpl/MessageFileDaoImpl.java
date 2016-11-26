@@ -86,4 +86,24 @@ public class MessageFileDaoImpl extends BaseDao<MessageFile> implements MessageF
 		}
 		return messageFiles;
 	}
+
+	@Override
+	public DataWrapper<List<MessageFile>> getMessageFileListByMessageId(Long messageId) {
+		DataWrapper<List<MessageFile>> retDataWrapper = new DataWrapper<List<MessageFile>>();
+        
+        //ret=find("select * from User where userId=?"+userId);
+		List<MessageFile> ret = null;
+	    Session session = getSession();
+	    Criteria criteria = session.createCriteria(MessageFile.class);
+	    criteria.add(Restrictions.eq("messageId",messageId));
+	    try {
+	        ret = criteria.list();
+	    }catch (Exception e){
+	        e.printStackTrace();
+	    }
+	    if (ret != null && ret.size() > 0) {
+			retDataWrapper.setData(ret);
+		}
+		return retDataWrapper;
+	}
 }

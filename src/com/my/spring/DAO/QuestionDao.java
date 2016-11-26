@@ -1,6 +1,7 @@
 package com.my.spring.DAO;
 
 import com.my.spring.model.Question;
+import com.my.spring.model.QuestionPojo;
 import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
@@ -11,7 +12,8 @@ import java.util.List;
 public interface QuestionDao {
     boolean addQuestion(Question question);
     boolean deleteQuestion(Long id,Long projectId);
+    boolean deleteQuestionByProjectId(Long projectId);
     boolean updateQuestion(Question question);
-    DataWrapper<List<Question>> getQuestionList(Long projectId, Integer pageIndex, Integer pageSize, Question question);
+    DataWrapper<List<QuestionPojo>> getQuestionList(Long projectId, Integer pageIndex, Integer pageSize, Question question);
     Question getById(Long id);
 }

@@ -19,4 +19,5 @@ public interface QuantityDao {
 		List<Quantity> getAllQuantity();
 		
 		boolean exportQuantity(String filePath);
+		boolean deleteQuantityByProjectId(Long id);
 }

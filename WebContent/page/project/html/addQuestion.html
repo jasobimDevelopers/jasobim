@@ -1,0 +1,62 @@
+
+
+	<div id="addcontent_question">
+        <div id="addhead">
+        	<div id="addusertitle"><span>问题详情</span></div>
+            <div id="returnuser">
+            	<a href="" ng-click="returnQuestionlist()"><span style="color:#86B5D7">返回问题列表</span>
+            	</a>
+            	<div  style="float:right;margin-left:10px;">
+            		<a href="" ng-click="hideAddQuestionHtml()"><img src="page/project/images/deleteIcon.png"></a>
+            	</div>
+           	</div>
+        </div>
+        <div id="adduserbody">
+        	<div class="addinput_question">
+        		<div><span>问题编号:</span></div>
+        		<div><input type="text" ng-model="findQuestionInfo.id" id="inputname" /></div>
+            </div>
+            <div class="addinput_question">
+        		<div><span>问题名称:</span></div>
+        		<div><input type="password" ng-model="findQuestionInfo.name" id="inputpassword" /></div>
+            </div>
+            <div class="addinput_question">
+            	<div><span>所属专业:</span></div>
+            	<div><input type="text"  id="inputnick" ng-model="findQuestionInfo.trades"/></div>
+            </div>
+            <div class="addinput_question">
+            	<div><span>问题类型:</span></div>
+            	<div><input type="text"  id="inputadress" ng-model="findQuestionInfo.questionType"/></div>
+            </div>
+            <div class="addinput_question">
+            	<div><span>问题详情:</span></div>
+            	<div><input type="text"  id="inputtel" ng-model="findQuestionInfo.intro"/></div>
+            </div>
+            <div class="addinput_question">
+            	<div><span>现场图片:</span></div>
+            	<div><input type="file"  id="inputicon" /></div>
+            </div>
+            <div class="addinput_question">
+            	<div><span>查看二维码:</span></div>
+            	<div><img width="100px" height="100px" src="{{}}" /></div>
+            </div>
+            <div id="addbutton" style="margin-top:86px;display:none;">
+            	<input class="btn btn-default" type="button" ng-click="addQuestionByAdmin()" value="确定" />
+                <input type="button" ng-click="resetQuestion()" class="btn btn-default" value="重置" />
+            </div>
+        </div>
+        <div id="message_leave">
+        	<div id="message_head">
+        		<div>留言板</div>
+        	</div>
+        	<div id="message_content">
+        		
+        		<div id="userIntro">
+        			<div id="usernamessss"><span>王卓</span></div>
+        			<div id="usercontent"><span>该问题都不是问题</span></div>
+        		</div>
+        		<div id="usericon"><img width="100px" height="100px" src="page/project/images/icon.jpg" /></div>
+        	</div>
+        	<div id="message_area"></div>
+        </div>
+	</div>

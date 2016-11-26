@@ -1,7 +1,7 @@
 package com.my.spring.model;
 
 public class PaperPojo {
-	
+	private Long id;
     private Long projectId;
     private Integer buildingNum;
     private Integer floorNum;
@@ -56,6 +56,12 @@ public class PaperPojo {
 	}
 	public void setFloorNum(Integer floorNum) {
 		this.floorNum = floorNum;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 }

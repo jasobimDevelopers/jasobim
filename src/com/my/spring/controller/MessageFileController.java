@@ -1,6 +1,7 @@
 package com.my.spring.controller;
 
 import com.my.spring.model.MessageFile;
+import com.my.spring.model.MessageFilePojo;
 import com.my.spring.service.MessageFileService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 public class MessageFileController {
     @Autowired
     MessageFileService messageFileService;
-    @RequestMapping(value="addMessageFile", method = RequestMethod.POST)
+    @RequestMapping(value="/addMessageFile", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Void> addMessageFile(
+    public DataWrapper<MessageFilePojo> addMessageFile(
             @ModelAttribute MessageFile MessageFile,
             HttpServletRequest request,
             @RequestParam(value = "token",required = true) String token,

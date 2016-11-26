@@ -324,4 +324,21 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		// TODO Auto-generated method stub
 		return saveList(itemList);
 	}
+
+	@Override
+	public boolean deleteItemByPorjectId(Long projectId) {
+		String sql = "delete from item where project_id="+projectId;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+	}
 }

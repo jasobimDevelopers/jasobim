@@ -5,6 +5,7 @@ import com.my.spring.DAO.QuantityDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
+import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
@@ -106,7 +107,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		+" and a.building_num="+quantity.getBuildingNum()+" and a.unit_num="+quantity.getUnitNum()
 		+" and a.floor_num="+quantity.getFloorNum()+" and a.household_num="+quantity.getHouseholdNum()
 		+" and a.name='"+quantity.getName()+"' and a.size='"+quantity.getSize()+"' and a.material='"
-		+quantity.getMaterial()+"' and a.service_type='"+quantity.GetServiceType()
+		+quantity.getMaterial()+"' and a.service_type='"+quantity.getServiceType()
 		+"' and a.system_type='"+quantity.getSystemType()+"' and a.family_and_type='"
 		+quantity.getFamilyAndType()+"' and a.profession_type="+quantity.getProfessionType();
 		DataWrapper<List<QuantityPojo>> dataWrapper = new DataWrapper<List<QuantityPojo>>();
@@ -134,20 +135,46 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 
 	@Override
 	public List<Quantity> getAllQuantity() {
-		String sql = "select * from quantity ";
-		List<Quantity> dataWrapper = new ArrayList<Quantity>();
+//		String sql = "select * from quantity ";
+//		List<Quantity> dataWrapper = new ArrayList<Quantity>();
+//		Session session=getSession();
+//		try{
+//	            
+//	            dataWrapper=query.list();
+//	            if(dataWrapper!=null&&dataWrapper.size()>0){
+//	            	return dataWrapper;
+//	            }
+//	    }catch(Exception e){
+//	            e.printStackTrace();
+//	    }
+//		
+//		return null;
+		List<Quantity> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Quantity.class);
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		return ret;
+	}
+
+	@Override
+	public boolean deleteQuantityByProjectId(Long id) {
+		String sql = "delete from quantity where project_id="+id;
 		Session session=getSession();
-		try{
-	            Query query=session.createSQLQuery(sql);
-	            dataWrapper=query.list();
-	            if(dataWrapper!=null&&dataWrapper.size()>0){
-	            	return dataWrapper;
-	            }
-	    }catch(Exception e){
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
 	            e.printStackTrace();
-	    }
-		
-		return null;
+	        }
+		 
+		return false;
 	}
 
 	@Override

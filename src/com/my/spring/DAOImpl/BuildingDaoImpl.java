@@ -6,6 +6,7 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Building;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -70,5 +71,22 @@ public class BuildingDaoImpl extends BaseDao<Building> implements BuildingDao {
 			dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 		}
 		return dataWrapper;
+	}
+
+	@Override
+	public boolean deleteBuildingByProjectId(Long id) {
+		String sql = "delete from building where id="+id+" and project_id="+id;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
 	}
 }

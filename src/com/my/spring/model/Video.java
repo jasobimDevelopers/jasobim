@@ -15,6 +15,8 @@ public class Video {
 	private Long projectId;
 	private Integer buildingNum;
 	private Integer professionType;
+	private String originName;
+	
 	@Id
     @GeneratedValue
     @Column(name = "id")
@@ -58,6 +60,15 @@ public class Video {
 	}
 	public void setBuildingNum(Integer buildingNum) {
 		this.buildingNum = buildingNum;
+	}
+	
+	@Basic
+    @Column(name = "origin_name")
+	public String getOriginName() {
+		return originName;
+	}
+	public void setOriginName(String originName) {
+		this.originName = originName;
 	}
 	
 

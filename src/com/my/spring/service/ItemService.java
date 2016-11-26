@@ -18,7 +18,7 @@ public interface ItemService {
     DataWrapper<Void> deleteItemByTypeNameAndProjectId(Long projectid,String typeName,String token);
     DataWrapper<Void> updateItem(Item Item,String token);
     DataWrapper<List<Item>> getItemList(Long projectId,Integer pageIndex, Integer pageSize, Item item, String token);
-    public boolean batchImport(String name,MultipartFile file,String token,HttpServletRequest request);
+    public boolean batchImport(String name,MultipartFile file,String token,HttpServletRequest request, Long projectId);
 	DataWrapper<Void> deleteItemByProjectId(Long projectId, String token);
 	DataWrapper<Item> getItemById(Long id, String token);
 	DataWrapper<List<Item>> getItemByOthers(Long projectId, Long typeName, Long buildingNum, Long floorNum,

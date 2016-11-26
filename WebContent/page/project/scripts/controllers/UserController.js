@@ -1,13 +1,13 @@
 var token=getCookie('token');
-
-
+var userIcon=getCookie('token');
+var userName=getCookie('userName');
 function UserController($scope,UserService) {
 	
   console.log("载入UserController");
   $scope.currentPage = 1;
   $scope.userTofind = {};
   $scope.findUserInfo = {};
-  $scope.userTitles=["序号","id","用户名","真实姓名","权限","邮箱","电话","注册日期","操作"];
+  $scope.userTitles=["序号","用户名","真实姓名","头像","权限","邮箱","电话","注册日期","操作"];
   $scope.roleList=[{name:"超级管理员"},{name:"管理员"}];
   ///////分页获取用户列表
   $scope.getUserList = function(pageSize,pageIndex,user) {

@@ -15,6 +15,7 @@ public class Message {
 	private Long id;
 	private String content;
 	private Date messageDate;
+	private Long questionId;
 	private Long userId;
 	
 	@Id
@@ -52,6 +53,15 @@ public class Message {
 	}
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+	
+	@Basic
+    @Column(name = "question_id")
+	public Long getQuestionId() {
+		return questionId;
+	}
+	public void setQuestionId(Long questionId) {
+		this.questionId = questionId;
 	}
 	
 

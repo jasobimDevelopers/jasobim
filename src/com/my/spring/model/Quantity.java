@@ -22,8 +22,10 @@ public class Quantity {
     private String systemType;//系统类型
     private String serviceType;//设备类型
     private String size;
-    private String typeName;
+//    private String typeName;
     private String material;//材质
+    
+    
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -86,22 +88,22 @@ public class Quantity {
     }
     @Basic
     @Column(name = "service_type")
-    public String GetServiceType() {
+    public String getServiceType() {
         return serviceType;
     }
 
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
-    @Basic
-    @Column(name = "type_name")
-    public String GetTypeName() {
-        return typeName;
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
+//    @Basic
+//    @Column(name = "type_name")
+//    public String GetTypeName() {
+//        return typeName;
+//    }
+//
+//    public void setTypeName(String typeName) {
+//        this.typeName = typeName;
+//    }
     @Basic
     @Column(name = "size")
     public String getSize() {

@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.User;
+import com.my.spring.model.UserPojo;
 import com.my.spring.service.UserService;
 import com.my.spring.utils.DataWrapper;
 
@@ -92,7 +93,7 @@ public class UserController {
 	//管理员获取其他用户的个人详情
 	@RequestMapping(value="/admin/getUserDetails", method = RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<User> getUserDetailsByAdmin(
+    public DataWrapper<UserPojo> getUserDetailsByAdmin(
     		@RequestParam(value="userId",required=true) Long userId,
     		@RequestParam(value="token",required=true) String token) {
         return userService.getUserDetailsByAdmin(userId,token);
@@ -109,7 +110,7 @@ public class UserController {
 	//管理员获取用户列表
 	@RequestMapping(value="/admin/getUserList", method = RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<List<User>> getUserListByAdmin(
+    public DataWrapper<List<UserPojo>> getUserListByAdmin(
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute User user,

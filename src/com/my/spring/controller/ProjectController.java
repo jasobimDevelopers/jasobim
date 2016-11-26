@@ -23,7 +23,7 @@ public class ProjectController {
     ProjectService projectService;
     @RequestMapping(value="/admin/addProject", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Void> addProject(
+    public DataWrapper<Project> addProject(
             @ModelAttribute Project project,
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request,
@@ -31,22 +31,21 @@ public class ProjectController {
             @RequestParam(value = "picFile", required = false) MultipartFile picFile){
         return projectService.addProject(project,token,modelFile,picFile,request);
     }
-    @RequestMapping(value="/findProjectLike", method = RequestMethod.GET)
+    /*@RequestMapping(value="/findProjectLike", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<Project>> findProjectLike(
             @ModelAttribute Project project,
             @RequestParam(value = "token",required = true) String token){
         return projectService.findProjectLike(project,token);
     }
-    
+    */
     @RequestMapping(value="/admin/deleteProject")
     @ResponseBody
     public DataWrapper<Void> deleteProject(
             @RequestParam(value = "projectId",required = true) Long projectId,
             HttpServletRequest request,
-            @RequestParam(value = "modelid",required = false) Long modelid,
             @RequestParam(value = "token",required = true) String token){
-        return projectService.deleteProject(projectId,token,modelid,request);
+        return projectService.deleteProject(projectId,token,request);
     }
 
     @RequestMapping(value="/admin/updateProject",method = RequestMethod.POST)

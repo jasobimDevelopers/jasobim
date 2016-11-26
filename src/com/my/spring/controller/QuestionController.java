@@ -1,6 +1,9 @@
 package com.my.spring.controller;
 
+import com.my.spring.enums.CallStatusEnum;
+import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Question;
+import com.my.spring.model.QuestionPojo;
 import com.my.spring.service.QuestionService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +29,16 @@ public class QuestionController {
             @ModelAttribute Question question,
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request,
-            @RequestParam(value = "file", required = false) MultipartFile file){
-        return questionService.addQuestion(question,token,file,request);
+            @RequestParam(value = "file", required = false) MultipartFile[] file
+            ){
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+		dataWrapper=questionService.addQuestion(question,token,file,request);
+		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
+            	return dataWrapper;
+    	}else{
+    		dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+    	}
+        return dataWrapper;
     }
     @RequestMapping(value="/admin/deleteQuestion")
     @ResponseBody
@@ -43,16 +54,24 @@ public class QuestionController {
     @ResponseBody
     public DataWrapper<Void> updateQuestion(
             @ModelAttribute Question question,
-            @RequestParam(value = "token",required = true) String token){
-        System.out.println(question);
-        return questionService.updateQuestion(question,token);
+            @RequestParam(value = "token",required = true) String token,
+            HttpServletRequest request,
+            @RequestParam(value = "file", required = false) MultipartFile[] file){
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    	dataWrapper=questionService.updateQuestion(question,token,file,request);
+    	if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
+            	return dataWrapper;
+        }else{
+            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+        }
+        return dataWrapper;
     }
 
 
     @RequestMapping(value="/admin/getQuestionList",method = RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<List<Question>> getQuestionList(
-    		@RequestParam(value="projectId",required=true) Long projectId,
+    public DataWrapper<List<QuestionPojo>> getQuestionList(
+    		@RequestParam(value="projectId",required=false) Long projectId,
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute Question question,

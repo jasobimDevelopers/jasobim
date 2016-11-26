@@ -14,7 +14,6 @@
 }
 a:link {
 text-decoration: none;
-color: #F60;
 }
 a:visited {
 text-decoration: none;
@@ -219,7 +218,12 @@ font-weight: bold;
 #paper_content{
 	width:1110px;
 	margin-top:10px;
-	margin-left:47px;
+	margin-left:50px;
+}
+#paper_contents{
+	width:1110px;
+	margin-top:80px;
+	margin-left:210px;
 }
 #video_content{
 	width:1110px;
@@ -256,7 +260,7 @@ font-weight: bold;
 	background-size:100% 100%;
 	margin:0 auto;
 }
-#paper_header div,#paper_headers div{
+#paper_header div,#paper_headers div,#paper_headerss div{
 	float:left;
 	font-family: 微软雅黑;
 	font-size:18px;
@@ -265,14 +269,21 @@ font-weight: bold;
 }
 #paper_header{
 	padding-top:44px;
-	padding-left:47px;
+	padding-left:52px;
 	width:1110px;
 	height:196px;
 	
 }
 #paper_headers{
 	padding-top:44px;
-	padding-left:130px;
+	padding-left:50px;
+	width:1110px;
+	height:144px;
+	
+}
+#paper_headerss{
+	padding-top:44px;
+	padding-left:260px;
 	width:1110px;
 	height:144px;
 	
@@ -338,13 +349,18 @@ font-weight: bold;
 
 #projectDetail_body_video{
 	background:url(../images/videoIcon.png) no-repeat;
-	height:875px;
+	height:650px;
+	width:1200px;
+	margin:0 auto;
+}
+#projectDetail_body_videos{
+	background:url(../images/videoIcon.png) no-repeat;
+	height:850px;
 	width:1200px;
 	margin:0 auto;
 }
 #videoContent{
-	background:url(../images/border.png) no-repeat;
-	background-size:100% 100%;
+	background:url(../images/backgroundUpload.png);
 	margin:0 auto;
 }
 #video_menu{
@@ -435,7 +451,7 @@ font-weight: bold;
 }
 /*构件信息上传*/
 #projectDetail_itemupload{
-	background:url(../images/itemUpload.png) no-repeat;
+	background:url(../images/backgroundUpload.png);
 	height:1100px;
 	width:1200px;
 	margin:0 auto;
@@ -506,9 +522,21 @@ font-weight: bold;
 }
 /*图纸信息上传*/
 #projectDetail_paperupload{
-	background:url(../images/paperUpload.png) no-repeat;
+	background:url(../images/backgroundUpload.png);
 	border:1px solid #CCCCCC;
 	height:730px;
 	width:1200px;
 	margin:0 auto;
+}
+
+#uploadVideoBottom{
+	background:url(../images/addPorjectBottom.png) no-repeat;
+	height:60px;
+	width:1200px;
+	text-align:center;
+	font-size:22px;
+	font-family:微软雅黑;
+	padding-top:4px;
+	margin-top:360px;
+	
 }

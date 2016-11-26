@@ -3,11 +3,13 @@ package com.my.spring.serviceImpl;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.MessageDao;
 import com.my.spring.DAO.MessageFileDao;
+import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageFile;
+import com.my.spring.model.MessagePojo;
 import com.my.spring.model.User;
 import com.my.spring.service.FileService;
 import com.my.spring.service.MessageService;
@@ -18,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,30 +38,44 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     FileDao fileDao;
     @Autowired
+    UserDao userDao;
+    @Autowired
     FileService fileService;
     private String filePath = "/files";
     private Integer fileType=3;
     @Override
-    public DataWrapper<Void> addMessage(Message message,String token,MultipartFile file,HttpServletRequest request) {
+    public DataWrapper<Void> addMessage(Message message,String token,MultipartFile[] file,HttpServletRequest request) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(message!=null){
-					if(!messageDao.addMessage(message)) 
+					message.setUserId(userInMemory.getId());
+					if(message.getMessageDate()==null){
+						message.setMessageDate(new Date(System.currentTimeMillis()));
+					}
+					if(messageDao.addMessage(message)) 
 					{
-						if(file!=null){
-							String path=filePath+"/"+"messages";
-							Files newfile=fileService.uploadFile(path, file,fileType,request);
-							MessageFile messageFile=new MessageFile ();
-							messageFile.setFileId(newfile.getId());
-							messageFile.setMessageId(message.getId());
-							messageFileDao.addMessageFile(messageFile);
+						if(file.length>0){
+							for(int i=0;i<file.length;i++){
+								String path=filePath+"/"+"messages";
+								Files newfile=fileService.uploadFile(path, file[i],fileType,request);
+								MessageFile messageFile=new MessageFile ();
+								messageFile.setFileId(newfile.getId());
+								String originName = file[i].getOriginalFilename();
+								if (originName.contains(".")) {
+									originName = originName.substring(0, originName.lastIndexOf("."));
+								}
+								messageFile.setOriginName(originName);
+								messageFile.setMessageId(message.getId());
+								messageFileDao.addMessageFile(messageFile);
+							}
+							
 						}
-			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+			           
 					}
 					else
-						return dataWrapper;
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);;
 			        
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -131,16 +149,59 @@ public class MessageServiceImpl implements MessageService {
     }*/
 
     @Override
-    public DataWrapper<List<Message>> getMessageList(String token , Long projectId, Integer pageIndex, Integer pageSize, Message message) {
+    public DataWrapper<List<MessagePojo>> getMessageList(String token , Integer pageIndex, Integer pageSize, Message message) {
+    	DataWrapper<List<MessagePojo>> dataWrappers = new DataWrapper<List<MessagePojo>>();
     	DataWrapper<List<Message>> dataWrapper = new DataWrapper<List<Message>>();
+    	DataWrapper<List<MessageFile>> dataWrapperfile=new DataWrapper<List<MessageFile>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			
-					dataWrapper=messageDao.getMessageList(projectId,pageIndex,pageSize,message);
+				dataWrapper=messageDao.getMessageList(pageIndex,pageSize,message);
+				if(dataWrapper.getData()!=null){
+					
+					List<MessagePojo> messagePojoList = new ArrayList<MessagePojo>();
+					for(int i=0;i<dataWrapper.getData().size();i++){
+						MessagePojo messagePojo =new MessagePojo();
+						messagePojo.setContent(dataWrapper.getData().get(i).getContent());
+						messagePojo.setMessageDate(dataWrapper.getData().get(i).getMessageDate());
+						messagePojo.setQuestionId(dataWrapper.getData().get(i).getQuestionId());
+						messagePojo.setId(dataWrapper.getData().get(i).getId());
+						if(dataWrapper.getData().get(i).getUserId()!=null){
+							messagePojo.setUserId(dataWrapper.getData().get(i).getUserId());
+							User user= new User();
+							user=userDao.getById(dataWrapper.getData().get(i).getUserId());
+							if(user!=null){
+								messagePojo.setUserName(user.getUserName());
+							}
+							
+						}
+						dataWrapperfile=messageFileDao.getMessageFileListByMessageId(dataWrapper.getData().get(i).getId());
+						if(dataWrapperfile.getData()!=null && dataWrapperfile.getData().size()>0){
+							int length=dataWrapperfile.getData().size();
+							String[] filenameList =new String[length];
+							for(int j=0;j<dataWrapperfile.getData().size();j++){
+								String filename=dataWrapperfile.getData().get(j).getOriginName();
+								filenameList[j]=filename;
+							}
+							messagePojo.setFileNameList(filenameList);
+						}
+						if(messagePojo!=null){
+							messagePojoList.add(messagePojo);
+						}
+					}
+					if(messagePojoList!=null && messagePojoList.size()>0){
+						dataWrappers.setData(messagePojoList);
+						dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
+						dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
+						dataWrappers.setTotalPage(dataWrapper.getTotalPage());
+						dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
+					}else{
+						dataWrappers.setErrorCode(ErrorCodeEnum.Error);
+					}
+				}
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
-        return dataWrapper;
+        return dataWrappers;
     }
 
 	@Override

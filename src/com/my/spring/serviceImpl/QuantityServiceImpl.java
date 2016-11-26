@@ -2,18 +2,29 @@ package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.QuantityDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.Building;
+import com.my.spring.model.Item;
 import com.my.spring.model.Quantity;
+import com.my.spring.model.QuantityPojo;
 import com.my.spring.model.User;
 import com.my.spring.service.QuantityService;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.SessionManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by Administrator on 2016/6/22.
@@ -127,5 +138,36 @@ public class QuantityServiceImpl implements QuantityService {
 				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 			}
 		return dataWrapper;
+	}
+
+	@Override
+	public boolean batchImport(String filePath, MultipartFile file, String token, HttpServletRequest request,
+			Long projectId) {
+		if (file == null || filePath == null || filePath.equals("")) {
+			return false;
+		}
+		DataWrapper<Void> dataWrapper=new DataWrapper<Void>();
+		boolean b = false;
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null){
+			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
+		        String newFileName = MD5Util.getMD5String(file.getOriginalFilename() + new Date() + UUID.randomUUID().toString()).replace(".","")
+		                    + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+		        //创建处理EXCEL
+		        ReadQuantityExcel readExcel=new ReadQuantityExcel();
+		        
+		        //解析excel，构件信息集合。
+		        List<Quantity> quantityList = readExcel.getExcelInfo(newFileName ,file);
+	    		quantityDao.deleteQuantityByProjectId(projectId);
+	    		quantityDao.addQuantityList(quantityList);
+		
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+			
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return b;
 	}
 }

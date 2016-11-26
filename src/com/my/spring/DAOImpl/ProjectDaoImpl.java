@@ -120,33 +120,58 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<Project>> findProjectLike(Project project) {
+	public DataWrapper<Project> findProjectLike(Project project) {
 		
 			List<Project> ret = null;
-			DataWrapper<List<Project>> projects=new DataWrapper<List<Project>>();
+			DataWrapper<Project> projects=new DataWrapper<Project>();
 	        Session session = getSession();
 	        Criteria criteria = session.createCriteria(Project.class);
-	        criteria.add(Restrictions.like("name",project.getName()))
-	        .add(Restrictions.like("num", project.getNum()))
-	        .add(Restrictions.like("constructionUnit", project.getConstructionUnit()))
-	        .add(Restrictions.like("leader", project.getLeader()))
-	        .add(Restrictions.like("buildingUnit", project.getBuildingUnit()))
-	        .add(Restrictions.like("picId", project.getPicId()))
-	        .add(Restrictions.like("modelId", project.getModelId()))
-	        .add(Restrictions.like("place", project.getPlace()))
-	        .add(Restrictions.like("description", project.getDescription()))
-	        .add(Restrictions.like("designUnit", project.getDesignUnit()))
-	        .add(Restrictions.like("version", project.getVersion()))
-	        .add(Restrictions.like("startDate", project.getStartDate()))
-	        .add(Restrictions.like("phase", project.getPhase()));
-	        
+	        if(project.getName()!=null){
+	        	criteria.add(Restrictions.eq("name",project.getName()));
+	        }
+	        if(project.getNum()!=null){
+	        	criteria.add(Restrictions.eq("num", project.getNum()));
+	        }
+	        if(project.getConstructionUnit()!=null){
+	        	criteria.add(Restrictions.eq("constructionUnit", project.getConstructionUnit()));
+	        }
+	        if(project.getLeader()!=null){
+	        	criteria.add(Restrictions.eq("leader", project.getLeader()));
+	        }
+	        if(project.getBuildingUnit()!=null){
+	        	criteria.add(Restrictions.eq("buildingUnit", project.getBuildingUnit()));
+	        }
+	        if(project.getPicId()!=null){
+	        	criteria.add(Restrictions.eq("picId", project.getPicId()));
+	        }
+	        if(project.getModelId()!=null){
+	        	criteria.add(Restrictions.eq("modelId", project.getModelId()));
+	        }
+	        if(project.getPlace()!=null){
+	        	criteria.add(Restrictions.eq("place", project.getPlace()));
+	        }
+	        if(project.getDescription()!=null){
+	        	criteria.add(Restrictions.eq("description", project.getDescription()));
+	        }
+	        if(project.getDesignUnit()!=null){
+	        	criteria.add(Restrictions.eq("designUnit", project.getDesignUnit()));
+	        }
+	        if(project.getVersion()!=null){
+	        	criteria.add(Restrictions.eq("version", project.getVersion()));
+	        }
+	        if(project.getStartDate()!=null){
+	        	criteria.add(Restrictions.eq("startDate", project.getStartDate()));
+	        }
+	        if(project.getPhase()!=null){
+	        	 criteria.add(Restrictions.eq("phase", project.getPhase()));
+	        }
 	        try {
 	            ret = criteria.list();
 	        }catch (Exception e){
 	            e.printStackTrace();
 	        }
 	        if (ret != null && ret.size() > 0) {
-	        	projects.setData(ret);;
+	        	projects.setData(ret.get(0));;
 			}else{
 				projects.setErrorCode(ErrorCodeEnum.Error);
 			}

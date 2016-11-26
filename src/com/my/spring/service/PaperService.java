@@ -20,4 +20,5 @@ public interface PaperService {
 	DataWrapper<Void> addPaper(Paper paper, String token, MultipartFile file,
 			HttpServletRequest request);
 	DataWrapper<Void> deletePaper(Long id, Long fileid, String token, HttpServletRequest request);
+	DataWrapper<Void> deletePaperByAdmin(Long id, String token, HttpServletRequest request);
 }

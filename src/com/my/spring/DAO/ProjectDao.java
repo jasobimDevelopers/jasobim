@@ -14,5 +14,5 @@ public interface ProjectDao {
     boolean updateProject(Project project);
     DataWrapper<List<Project>> getProjectList(Integer pageSize, Integer pageIndex, Project project);
     Project getById(Long id);
-	DataWrapper<List<Project>> findProjectLike(Project project);
+	DataWrapper<Project> findProjectLike(Project project);
 }
