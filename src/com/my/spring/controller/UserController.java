@@ -59,11 +59,11 @@ public class UserController {
 	
 	@RequestMapping(value="/login", method = RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<Void> Login(
+    public DataWrapper<User> Login(
     		HttpServletRequest request,
     		@RequestParam(value="username",required=true) String username,
     		@RequestParam(value="password",required=true) String password) {
-		DataWrapper<Void> test=userService.login(username, password);
+		DataWrapper<User> test=userService.login(username, password);
 		return test;
     }
 	

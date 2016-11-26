@@ -51,7 +51,13 @@ function login(){
         		/* setCookie('userIcon',data.data.userIcon);
         		 setCookie('userName',data.data.userName);*/
  				 setCookie('token',data.token);
- 				 window.location.href="userList";
+ 				 setCookie('userName',data.data.userName);
+ 				 if(data.data.userType==0){
+ 					window.location.href="userList";
+ 				 }
+ 				 else{
+ 					 alert("用户界面筹建中！");
+ 				 }
  			 } else {
  				alert("用户名和密码错误，请重新输入！");
  			}

@@ -58,9 +58,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataWrapper<Void> login(String userName, String password) {
+	public DataWrapper<User> login(String userName, String password) {
 		// TODO Auto-generated method stub
-		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+		DataWrapper<User> dataWrapper = new DataWrapper<User>();
 		if (userName == null || password == null 
 				||userName.equals("") || password.equals("")) {
 			dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -74,6 +74,10 @@ public class UserServiceImpl implements UserService {
 				SessionManager.removeSessionByUserId(user.getId());
 				String token = SessionManager.newSession(user);
 				dataWrapper.setToken(token);
+				User users=new User();
+				users.setUserName(user.getUserName());
+				users.setUserType(user.getUserType());
+				dataWrapper.setData(users);
 			}
 		}
 		
