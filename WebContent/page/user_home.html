@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html lang="en"  ng-app="Demo">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+<!-- -->
+	<script src="page/user_project/scripts/utils/cookie.js"></script>
+	<script src="page/user_project/scripts/utils/para.js"></script>
+<!--  -->
+<!--jquery && bootstrap-->
+    <script src="page/common/jquery/jquery-1.11.1.js"></script>
+    <script src="page/common/jquery/jquery.page.js"></script>
+    <link href="page/common/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="data:text/css;charset=utf-8," data-href="page/common/bootstrap-3.3.5-dist/css/bootstrap-theme.min.css" rel="stylesheet" id="bs-theme-stylesheet">
+    <script src="page/common/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+	<script src="page/common/jquery/jquery.circliful.min.js"></script>
+	<script src="page/common/jquery/jquery.circliful.js"></script>
+<!--angular-->
+    <script src="page/common/angular/angular.js"></script>
+    <script src="page/common/angular/angular-route.js"></script>
+    <script src="page/common/angular/angular-file-upload.min.js"></script>
+<!-- css -->
+    <link href="page/user_project/css/style.css" rel="stylesheet" />
+    <link href="page/user_project/css/adduser.css" rel="stylesheet" />
+    <link href="page/user_project/css/jasobim.css" rel="stylesheet" />
+    <link href="page/user_project/css/projectDetail.css" rel="stylesheet" />
+    <link href="page/user_project/css/questionDetail.css" rel="stylesheet" />
+    <link href="page/user_project/css/jquery.circliful.css" rel="stylesheet">
+<!-- app.js -->
+    <script src="page/user_project/scripts/app.js"></script>
+<!-- controller.js -->
+	<script src="page/user_project/scripts/controllers/QuestionController.js"></script>
+    <script src="page/user_project/scripts/controllers/MainController.js"></script>
+    <script src="page/user_project/scripts/controllers/HeaderController.js"></script>
+    <script src="page/user_project/scripts/controllers/UserController.js"></script>
+    <script src="page/user_project/scripts/controllers/ProjectController.js"></script>
+<!-- service.js -->
+	<script src="page/user_project/scripts/services/QuestionService.js"></script>
+    <script src="page/user_project/scripts/services/DemoService.js"></script>
+    <script src="page/user_project/scripts/services/UserService.js"></script>
+    <script src="page/user_project/scripts/services/ProjectService.js"></script>
+<!-- directive.js -->
+    <script src="page/user_project/scripts/directives/DemoDirectives.js"></script>
+<!-- filter.js -->
+    <script src="page/user_project/scripts/filters/DemoFilter.js"></script>
+</head>
+<body ng-controller="MainController">
+<div ng-include="'page/user_project/html/header.html'" style="position:relative; z-index:2;"></div>
+<div ng-include="'page/user_project/html/user.html'" ng-if="currentPath == 'userList'" style="position:relative; z-index:0;" ></div>
+<div ng-include="'page/user_project/html/projectList.html'" ng-if="currentPath == 'projectList'" style="position:relative; z-index:0;" id="projectListHtml"></div>
+<div ng-include="'page/user_project/html/projectQuestionList.html'" ng-if="currentPath == 'projectQuestionList'" style="position:relative; z-index:0;" id="questionListHtml"></div>
+</body>
+</html>

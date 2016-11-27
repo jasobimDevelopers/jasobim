@@ -9,52 +9,41 @@ function QuestionController($scope,QuestionService) {
 	$scope.currentPage = 1;
 	$scope.findQuestionInfo = {};
 	$scope.questionTitles=["序号","问题类型","问题提交人","问题标题","专业","内容","问题创建时间","问题等级","问题状态","操作"];
-	
-	$scope.restStyle = function (a,b,c,d) {
-		a ? document.getElementById("questionOfProject").style.display = 'none' :'';
-		b ? document.getElementById("questionOfType").style.display = 'none' : '';
-		c ? document.getElementById("questionOfPority").style.display = 'none': '';
-		d ? document.getElementById("questionOfStatu").style.display = 'none': '';
-	}
 	$scope.showProjects=function(){
 		$scope.getProjectLists(pageSize,pageIndex,project);
-		$scope.restStyle(false,true,true,true);
-		var idom = document.getElementById("questionOfProject");
-		console.log(idom.style.display);
-		if(idom.style.display == 'none') {
-			idom.style.display = 'block';
+		if(document.getElementById("questionOfProject").style.display == 'none') {
+			document.getElementById("questionOfProject").style.display = 'block';
 		} else {
-			idom.style.display = 'none';
+			document.getElementById("questionOfProject").style.display = 'none';
 		}
+		
+		//$("#li_icon_project").css("background","url(liIconGreen.png) no-repeat 10px 20px");
+		document.getElementById("questionOfType").style.display = 'none';
+		document.getElementById("questionOfPority").style.display = 'none';
+		document.getElementById("questionOfStatu").style.display = 'none';
+		
 	}
-	
 	
 	$scope.showQuestionType=function(){
-		$scope.restStyle(true,false,true,true);
-		var idom = document.getElementById("questionOfType");
-		if(idom.style.display == 'none') {
-			idom.style.display = 'block';
-		} else {
-			idom.style.display = 'none';
-		}
+		document.getElementById("questionOfProject").style.display = 'none';
+		document.getElementById("questionOfType").style.display = 'block';
+		//$("#li_icon_type").css("background","url(liIconGreen.png) no-repeat 10px 20px");
+		document.getElementById("questionOfPority").style.display = 'none';
+		document.getElementById("questionOfStatu").style.display = 'none';
 	}
 	$scope.showQuestionPority=function (){
-		$scope.restStyle(true,true,false,true);
-		var idom = document.getElementById("questionOfPority");
-		if(idom.style.display == 'none') {
-			idom.style.display = 'block';
-		} else {
-			idom.style.display = 'none';
-		}
+		document.getElementById("questionOfProject").style.display = 'none';
+		document.getElementById("questionOfType").style.display = 'none';
+		document.getElementById("questionOfPority").style.display = 'block';
+		//$("#li_icon_pority").css("background","url(liIconGreen.png) no-repeat 10px 20px");
+		document.getElementById("questionOfStatu").style.display = 'none';
 	}
 	$scope.showQuestionStatu=function (){
-		$scope.restStyle(true,true,true,false);
-		var idom = document.getElementById("questionOfStatu");
-		if(idom.style.display == 'none') {
-			idom.style.display = 'block';
-		} else {
-			idom.style.display = 'none';
-		}
+		document.getElementById("questionOfProject").style.display = 'none';
+		document.getElementById("questionOfType").style.display = 'none';
+		document.getElementById("questionOfPority").style.display = 'none';
+		document.getElementById("questionOfStatu").style.display = 'block';
+		//$("#li_icon_statu").css("background","url(liIconGreen.png) no-repeat 10px 20px");
 	}
 	 ////////问题分页回调函数
 	  $scope.questionPage = function(iPageCount,iCurrent) {

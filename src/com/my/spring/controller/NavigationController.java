@@ -33,4 +33,19 @@ public class NavigationController {
     public String questionPage(){
         return "home";
     }
+    
+    
+    @RequestMapping(value="/user_home")
+    public String userMainPage(){
+        return "user_home";
+    }
+    @RequestMapping(value="/user_projectList")
+    public String userProjectPage(){
+        return "user_home";
+    }
+    
+    @RequestMapping(value="/user_projectQuestionList")
+    public String userQuestionPage(){
+        return "user_home";
+    }
 }

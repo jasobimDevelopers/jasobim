@@ -91,7 +91,10 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         Session session = getSession();
         Criteria criteria = session.createCriteria(Question.class);
 //        criteria.addOrder(Order.desc("publishDate"));
-        criteria.add(Restrictions.eq("projectId", question.getProjectId()));
+        if(projectId!=null){
+            criteria.add(Restrictions.eq("projectId", question.getProjectId()));
+        }
+
         if(question.getPriority()!=null){
         	criteria.add(Restrictions.eq("priority", question.getPriority()));
         }

@@ -1,0 +1,18 @@
+<div id="projectDetail">
+	<div id="projectDetail_head">
+		<div style="display:none"><span>{{projectTitle}}</span></div>
+		<div style="display:none" ng-model="findProjectInfo.id"></div>
+		<input type="hidden" ng-model="projectid"/>
+		<div class="bt_menu" ng-click="projectInfoChange(headerItem.name)" ng-repeat="headerItem in projectInfoHead"><span>{{headerItem.name}}</span></div>
+	</div>
+	
+
+	<div id="project_body">
+		<div ng-include="'page/project/html/projectSelfInfo.html'" style="display:block;position:absolute; z-index:1;" id="projectSelfInfoHtml"></div>
+		<div ng-include="'page/project/html/projectItemInfo.html'" style="display:none;position:absolute; z-index:1;" id="projectItemInfoHtml"></div>
+		<div ng-include="'page/project/html/projectPaperInfo.html'" style="display:none;position:absolute; z-index:1;" id="projectPaperInfoHtml"></div>
+		<div ng-include="'page/project/html/projectQuantityInfo.html'" style="display:none;position:absolute; z-index:1;" id="projectQuantityInfoHtml"></div>
+		<div ng-include="'page/project/html/projectVideoInfo.html'" style="display:none;position:absolute;  z-index:1;" id="projectVideoInfoHtml"></div>
+		<div ng-include="'page/project/html/projectQuestionInfo.html'" style="display:none;position:absolute; z-index:1;" id="projectQuestionInfo"></div>
+	</div>
+</div>

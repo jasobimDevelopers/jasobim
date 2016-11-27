@@ -1,0 +1,220 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin: 0px;
+	padding: 0px;
+}
+body{
+	background:url(../images/adminbk.png) no-repeat fixed center;
+	margin:0 auto;
+	padding:0;
+	background-color:#B1BECD;
+}
+button{
+	border:none;
+	outline:none;
+}
+a:link {
+text-decoration: none;
+}
+a:visited {
+text-decoration: none;
+}
+
+a:active {
+text-decoration: none;
+font-size: 14px;
+font-weight: bold;
+}
+
+#projectnames .inputtext{
+	margin-left:0px;
+	margin-right:3px;
+	margin-bottom:12px;
+}
+#projectnames input{
+	margin-right:25px;
+	height:30px;
+	margin-bottom:20px;
+}
+#content{
+	width:100%;
+	height:61px;
+	margin:0 auto;
+}
+#projectContent{
+	width:100%;
+	margin:0 auto;
+}
+li{
+	margin:0 400px;
+
+}
+#menutext{
+	font-size:18px;
+	font-family:微软雅黑;
+}
+.ng-scope{
+	margin:0 auto;
+}
+#header{
+	background-color:#333;
+	height: 60px;
+	width:100%;
+}
+#header_content{
+	width:1200px;
+	margin:0 auto;
+}
+#logo{
+	margin-top:10px;
+}
+
+#usermanager{
+	background:none;
+	margin:8px auto;
+	height:18px;
+	width:100px;
+	font-size:16px;
+	color:#FFF;
+	margin-right:121px;
+}
+#projectmanager{
+	background:none;
+	margin:18px auto;
+	height:18px;
+	width:100px;
+	font-size:16px;
+	color:#FFF;
+}
+#imagelogo,#menu,#portrait{
+	float:left;
+}
+#imagelogo{
+	margin-right:160px;
+}
+#portrait{
+	margin-left:200px;
+}
+#portrait_image{
+	margin:10px 0px;
+	height:40px;
+	width:40px;
+}
+#menu{
+	margin-left:200px;
+}
+
+
+#bodys{
+	height:800px;
+	width:100%;
+	text-align:center
+}
+
+
+#include_header,#include_bodys{
+	width:1100px;
+	margin:0px auto;
+}
+#include_header{
+	padding-top:35px;
+	border-bottom:1px solid gray;
+	padding-left:10px;
+}
+
+#username,#nickname,#adress,#mobile,#find,#images{
+	margin-left:5px;
+	margin-right:38px;
+}
+#usernamess,#nickname,#adress,#mobile{
+	height:31px;
+	width:125px;
+	font-size:14px;
+}
+#find{
+	background:url(../images/findButton.png) no-repeat;
+	height:34px;
+	width:75px;
+	margin-top:20px;
+	float:right;
+}
+#add{
+	margin-top:35px;
+	padding-left:30px;
+	background:url(../images/addButton.png) no-repeat;
+	margin-left:950px;
+	margin-bottom:10px;
+}
+#findtext{
+	font-size:16px;
+	color:#1ABC9C;
+	font-family:黑体;
+}
+table 
+{  
+ 	border:1px #999 solid;
+	border-spacing: 15px;   
+} 
+.ths,.tds{
+	text-align:left;
+	height:30px; 
+	font-size:14px;
+	font-family:黑体;
+}
+#editbutton{
+	height:25px;
+	width:20px;
+	background:url(../images/editIcon.png) no-repeat;
+}
+#uploadbutton{
+	height:25px;
+	width:20px;
+	background:url(../images/downloadIcon.png) no-repeat;
+}
+#deletebutton{
+	height:25px;
+	width:20px;
+	background:url(../images/deleteIcon.png) no-repeat;
+}
+.usericon{
+	padding:0;
+}
+#bottom{
+	text-align:center;
+	margin-top: 50px;
+}
+#bottom a,bottom span{
+	text-decoration:none;
+	border: 1px solid #f9d52b;
+	padding::5px 7px;
+	color:#767675;
+	cursor: pointer;
+}
+#table-buton{
+	float:right;
+}
+#table-buton3{
+	float:right;
+}
+#table-buton4{
+	float:right;
+}
+#table-buton5{
+	float:right;
+}
+#table-buton6{
+	float:right;
+}
+#bottom a:hover,#bottom span:hover{
+	color:red;
+}
+#userPageCode,#projectPageCode,#itemPageCode,#quantityPageCode,#questionPageCode,#videoPageCode,#paperPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
+#userPageCode a,#projectPageCode a,#itemPageCode a,#quantityPageCode a,#questionPageCode a,#videoPageCode a,#paperPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+#userPageCode a:hover,#projectPageCode a:hover,#itemPageCode a:hover,#quantityPageCode a:hover,
+#questionPageCode a:hover,#videoPageCode a:hover,#paperPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+#userPageCode span.current,#itemPageCode span.current,#projectPageCode span.current,
+#quantityPageCode span.current,#questionPageCode span.current,#videoPageCode span.current,#paperPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+#userPageCode span.disabled,#projectPageCode span.disabled,#itemPageCode span.disabled,
+#quantityPageCode span.disabled,#questionPageCode span.disabled,#projectPageCode span.disabled,#videoPageCode span.disabled,
+#paperPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}

@@ -305,6 +305,7 @@ function ProjectController($scope,ProjectService) {
 		 $scope.currentPage = 1;
 		 $scope.getProjectList(pageSize,$scope.currentPage,$scope.ProjectTofind);
 	 }
+	 //////初始化获取项目列表
 	 $scope.getProjectList(pageSize,$scope.currentPage,$scope.ProjectTofind);
 
 	 $scope.projectInfo = function(){

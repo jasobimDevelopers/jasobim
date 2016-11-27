@@ -1,0 +1,22 @@
+<div ng-controller="HeaderController">
+	 <nav class="navbar">
+	 
+	 	<div class="collapse navbar-collapse navbar-left navbar-inverse navbar-fixed-top">
+		 	<div class="container">
+			 	<div id="content">
+		 			<div id="imagelogo">
+						<img src="page/project/images/logo.png" id="logo" id="logo"/>
+					</div>
+			 		<ul class="nav navbar-nav">
+		                    <li class= "collapse-li-main" ng-repeat="headerItem in headerItems">
+		                        <a href="{{headerItem.page}}" id="menutext">{{headerItem.name}}</a>
+		                    </li>
+		            </ul>
+		            <div id="portrait">
+							<a href=""><img src="page/project/images/icon.jpg" id="portrait_image"/></a>
+				    </div>
+			 	</div>
+		 	</div>
+	 	</div>
+	 </nav>
+</div> 

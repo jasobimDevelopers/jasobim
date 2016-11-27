@@ -1,0 +1,61 @@
+<div ng-controller="ProjectController">
+<div ng-include="'page/project/html/addProject.html'" style="display:none;position:absolute; top:0px; left:400px; z-index:1;" id="addProjectHtml"></div>
+<div ng-include="'page/project/html/projectInfo.html'" style="display:none;position:absolute; top:0px; left:400px; z-index:1;" id="projectInfoHtml"></div>
+<div id="projectContent">
+		<div id="include_header" style="display:block">
+	    	
+	        	<div id="projectnames">
+	     			<span class="inputtext">&nbsp项目名称:</span><input type="text" id="projectName" ng-model="ProjectTofind.name"/>
+	            	<span class="inputtext">&nbsp项目编码:</span><input type="text" id="projectNum" ng-model="ProjectTofind.num"/>
+	                <span class="inputtext">&nbsp施工单位:</span><input type="text" id="constructionUnit" ng-model="ProjectTofind.constructionUnit"/>
+	                <span class="inputtext">项目负责人:</span><input type="text" id="leader" ng-model="ProjectTofind.leader"/>
+	                <span class="inputtext">&nbsp建设单位:</span><input type="text" id="buildingUnit" ng-model="ProjectTofind.buildingUnit"/>
+	            	<span class="inputtext">&nbsp施工地点:</span><input type="text" id="place" ng-model="ProjectTofind.place"/>
+	                <span class="inputtext">&nbsp项目简介:</span><input type="text" id="description" ng-model="ProjectTofind.description"/>
+	                <span class="inputtext">&nbsp&nbsp&nbsp设计单位:</span><input type="text" id="designUnit" ng-model="ProjectTofind.designUnit"/>
+	                <span class="inputtext">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp版本:</span><input type="text" id="version" ng-model="ProjectTofind.version"/>
+	            	<span class="inputtext">&nbsp施工时间:</span><input type="text" id="startDate" ng-model="ProjectTofind.startDate"/>
+	                <span class="inputtext">&nbsp施工周期:</span><input type="text" id="phase" ng-model="ProjectTofind.phase"/>
+	                
+	                <a href=""><button id="find" ng-click="projectFind()" ></button></a>
+	                <a href=""><button id="add" ng-click="showProjectAdd()"  ><span id="findtext">添加项目</span></button></a>
+	            </div>
+	           
+	    </div>
+		<div class="container" style="display:block" id="containers">
+			<div id="include_bodys">
+				<table class="table-striped table table-bordered">
+					<tbody>
+						<tr>
+							<th ng-repeat="projectTitle in projectTitles">{{projectTitle}}</th>
+		
+						</tr>
+						<tr ng-repeat = "projectInfo in projectList">
+						    <td>{{$index+1}}</td>
+							<td>{{projectInfo.name}}</td>
+							<td>{{projectInfo.num}}</td>
+							<td>{{projectInfo.constructionUnit}}</td>
+							<td>{{projectInfo.leader}}</td>
+							<td>{{projectInfo.buildingUnit}}</td>
+							<td>{{projectInfo.place}}</td>
+							<td>{{projectInfo.description}}</td>
+							<td>{{projectInfo.designUnit}}</td>
+							<td>{{projectInfo.version}}</td>
+							<td>{{projectInfo.startDate}}</td>
+							<td>{{projectInfo.phase}}</td>
+							<td class="tds" >
+		                        <button id="editbutton" ng-click="projectChangeClick(projectInfo.id)">
+		                        </button>
+		                        <button id="deletebutton" ng-click="deleteProject(projectInfo.id)">
+		                        </button>
+		                    </td>
+						</tr>
+					</tbody>
+				</table>
+			<div id="table-buton1" >
+				<div id="projectPageCode"></div>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>

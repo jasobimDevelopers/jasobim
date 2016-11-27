@@ -1,0 +1,140 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin: 0px;
+	padding: 0px;
+}
+body{
+	background:url(../images/backgrounds.png) no-repeat fixed center;
+	margin:0 auto;
+	padding:0;
+	background-color:#fff;
+}
+#bodys{
+	margin:0 auto;
+	height:900px;
+	width:1300px;
+}
+#error{
+	color:red;
+	font-size:12px;
+	font-family:微软雅黑;
+}
+#left{
+	height:550px;
+	width:460px;
+	float:left;
+	margin-top:180px;
+	margin-left:110px;
+	
+}
+.inputtext{
+	font-family:微软雅黑;
+	margin-left:30px;
+	margin-left:45px;
+	font-size:14px;
+	color:#8C8C8C;
+}
+#username{
+	margin-top:195px;
+	width:200px;
+	height:30px;
+	outline:none;
+	border:none;
+}
+#password{
+	margin-top:25px;
+	width:200px;
+	height:30px;
+	border:none;
+	outline:none;
+}
+
+#right{
+	background:url(../images/loginbackground.png) no-repeat 75px 50px,
+	url(../images/userlogin.png) no-repeat 190px 120px,
+	url(../images/imagetwo.png) no-repeat 105px 190px,
+	url(../images/imageone.png) no-repeat 105px 246px;
+	height:550px;
+	width:420px;
+	float:left;
+	position:relative;
+	margin-top:180px;
+}
+#right1,#right2{
+	margin-left:75px;
+}
+
+#right3{
+	height:30px;
+	margin-top:16px;
+	margin-left:157px;
+	width:200px;
+}
+#remeber{
+	margin-left:5px;
+	font-size:12px;
+	font-family:微软雅黑;
+}
+#forget{
+	font-size:12px;
+	font-family:微软雅黑;
+}
+#right3-2{
+	float:left;
+	font-family:微软雅黑;
+	font-size:14px;
+	margin:0px 10px;
+}
+#right3-1{
+	float:left;
+	font-family:微软雅黑;
+	font-size:14px;
+	margin-top:2px;
+	margin-bottom:2px;
+	margin-right:10px;
+}
+a{
+	text-decoration:none;
+	color:#494949;
+}
+a:visited{
+	
+text-decoration:none;
+}
+a:hover{
+color:#4FB8E1;
+}
+a:active{
+text-decoration:none;
+}
+#check{
+	opaticy:50%;
+	background-color:white;
+	height:14px;
+	width:14px;
+}
+#check,#remeber{
+	float:left;
+}
+#right4{
+	margin-left:100px;
+	margin-top:15px;
+	height:60px;
+	width:290px;
+}
+#submit:hover{
+	color:#4FB8E1;
+}
+#submit{
+	background:url(../images/submit.png) no-repeat 0px 3px;
+	height:60px;
+	width:290px;
+	font-size:18px;
+	font-family:微软雅黑;
+	color:#014883;
+	text-align:center;
+	border:none;
+	outline:none;
+	cursor:pointer;
+}

@@ -1,0 +1,342 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin: 0px;
+	padding: 0px;
+}
+body{
+	background:url(../images/adminbk.png) no-repeat fixed center;
+	margin:0 auto;
+	padding:0;
+	background-color:#B1BECD;
+}
+button{
+	border:none;
+	outline:none;
+}
+a:link {
+text-decoration: none;
+}
+a:visited {
+text-decoration: none;
+}
+
+a:active {
+text-decoration: none;
+font-size: 16px;
+font-weight: bold;
+}
+/* select {
+  Chrome和Firefox里面的边框是不一样的，所以复写了一下
+  border: solid 1px #000;
+
+  很关键：将默认的select选择框样式清除
+  appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+
+  在选择框的最右侧中间显示小箭头图片
+  background: url("http://ourjs.github.io/static/2015/arrow.png") no-repeat scroll right center transparent;
+
+
+  为下拉小箭头留出一点位置，避免被文字覆盖
+  padding-right: 14px;
+}
+
+
+清除ie的默认选择框样式清除，隐藏下拉箭头
+select::-ms-expand { display: none; } */
+#select_content ul{
+	list-style-type:none;
+}
+#select_content ul{
+	float:left;
+}
+#select_content ul li{
+	border:1px solid gray;
+	text-align:center;
+	padding-top:15px;
+	font-size:16px;
+	font-family:微软雅黑;
+	width:151px;
+	height:50px;
+	background-color:#1BBC9B;
+	font-size:16px;
+	font-family:微软雅黑;
+	margin:0;
+}
+#select_content ul li a:link {
+text-decoration: none;
+}
+#questionOfProject{
+	position:absolute;
+	top:100px;
+}
+#questionOfType{
+	position:absolute;
+	left:152px;
+	top:100px;
+}
+
+#questionOfPority{
+	position:absolute; 
+	left:303px;
+	top:100px;
+}
+#questionOfStatu{
+	position:absolute;
+	left:454px;
+	top:100px;
+}
+#addQuestionIcon{
+}
+
+#questionList_head{
+	margin:5px auto;
+	height:120px;
+	width:1202px;
+	padding-top:50px;
+}
+#question_table_head{
+	margin:0px auto;
+	margin-top:130px;
+	width:1202px;
+	padding-top:20px;
+}
+#question_table_head div{
+	float:left;
+	font-size:16px;
+	font-family:微软雅黑;
+}
+#addQuestionTitle{
+	height:50px;
+	padding-top:12px;
+	padding-left:48px;
+	font-size:16px;
+	font-family:微软雅黑;
+	width:784px;
+	border:1px solid gray;
+	background-color:#EEEFF3;
+}
+#addQuestionLi{
+	width:575px;
+}
+#addQuestionIcon{
+	margin-top:-4px;
+	padding-left:27px;
+	width:49px;
+	height:30px;
+}
+#addQuestionText{
+	width:40px;
+}
+#questionData{
+	background-color:#EEEFF3;
+	font-size:16px;
+	font-family:微软雅黑;
+	height:50px;
+	width:325px;
+	padding-top:12px;
+	padding-left:60px;
+	border-top:1px solid gray;
+	border-right:1px solid gray;
+	border-bottom:1px solid gray;
+}
+
+#question_select{
+	background-color:#1BBC9B;
+	border:1px solid gray;
+	width:606px;
+	height:50px;
+}
+#question_select select{
+	height:50px;
+ /*    border-top-style: none; 
+    border-right-style: none; 
+    border-left-style: none; 
+    border-bottom-style: none; */
+	background-color:#1BBC9B;
+	height:30px;
+	width:60px;
+}
+#question_find{
+	background-color:#1BBC9B;
+	width:328px;
+	margin-left:175px;
+	height:50px;
+	border-radius: 6px;
+}
+#findTitle{
+	height:50px;
+	width:250px;
+	padding-top:10px;
+	font-size:16px;
+	font-family:微软雅黑;
+	padding-left:10px;
+	float:left;
+}
+#findTitle div{
+	float:left;
+}
+#findTitle div input{
+	width:205px;
+	background-color:#1BBC9B;
+	height:30px;
+	border-width:0px;
+}
+#findIcon{
+	padding-top:10px;
+	height:50px;
+	width:78px;
+	padding-left:37px;
+}
+#questionList_head div{
+	float:left;
+}
+.li_head{
+	border:1px solid gray;
+	width:151px;
+	height:49px;
+}
+.li_title{
+	width:85px;
+	height:49px;
+	padding-left:52px;
+	padding-top:11px;
+	font-size:16px;
+	font-family:微软雅黑;
+}
+.li_icon_project,.li_icon_type,.li_icon_pority,.li_icon_statu{
+	background:url(../images/liIconWhite.png) no-repeat 10px 20px;
+	height:49px;
+	width:54px;
+}
+#table_heads div{
+	float:left;
+}
+#table_heads{
+	height:80px;
+	width:1200px;
+	border:1px solid red;
+}
+#table_contents{
+	width:1200px;
+	height:600px;
+	border:1px solid red;
+}
+#table_contents div{
+	float:left;
+}
+#table_content{
+	width:784px;
+	height:600px;
+	background-color:white;
+	border-left:1px solid gray;
+	border-right:1px solid gray;
+	border-bottom:1px solid gray;
+}
+#questionList_content{
+	width:1202px;
+	margin:0 auto;
+}
+#questionList_content div{
+	float:left;
+}
+#table-buton8{
+	float:right;
+}
+#dataShow{
+	padding-left:55px;
+	height:600px;
+	width:325px ! important;
+	background-color:white;
+	color:black ! important;
+}
+#dataShow span{
+	color:black ! important;
+}
+#dataShow div{
+	margin-top:13px;
+}
+#questionsPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
+#questionsPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+
+#questionsPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+#questionsPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+#questionsPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+/*问题增加页面样式*/
+
+
+.addinput_question{
+	margin:20px 90px;
+	height:50px;
+	width:600px;
+}
+.addinput_question div{
+	float:left;
+}
+.addinput_question input{
+	margin-left:20px;
+	height:32px;
+	width:300px;
+}
+#addcontent_question{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
+	height:970px;
+	width:1000px;
+	margin:30px auto;
+	margin-left:25px;
+}
+
+#message_head{
+	background:url(../images/itemUploadIcon.png) no-repeat 4px 0px;
+	padding-left:20px;
+	height:30px;
+	font-size:18px;
+	font-family:微软雅黑;
+}
+#usericon{
+	width:100px;
+    height:100px;
+    overflow:hidden;
+    border-radius:53px;
+    border:1px solid gray;
+    background:url(../images/bkCircle.png) no-repeat;
+}
+#message_leave{
+	height:800px;
+	margin-top:160px;
+}
+#usernamessss{
+	width:118px;
+	height:75px;
+	padding-top:30px;
+	margin-right:580px;
+	font-size:16px;
+	font-family:微软雅黑;
+	padding-left:20px;
+}
+#usercontent{
+	width:698px;
+	height:20px;
+	font-size:16px;
+	font-family:微软雅黑;
+	padding-left:20px;
+}
+#message_area{
+	width:800px;
+	height:200px;
+	border:1px solid red;
+}
+#message_content{
+	width:800px;
+	height:104px;
+}
+#message_content div{
+	float:right;
+}
+#userIntro{
+	height:180px;
+	width:698px;
+}

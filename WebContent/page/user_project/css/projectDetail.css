@@ -1,0 +1,542 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin: 0px;
+	padding: 0px;
+}
+.myselect{
+	height:33px;
+	width:97px;
+	font-size: 15px;
+	border-radius:3px;
+    -webkit-border-radius:3px;
+    -moz-border-radius :3px;
+}
+a:link {
+text-decoration: none;
+}
+a:visited {
+text-decoration: none;
+}
+a:hover {
+text-decoration: none;
+}
+a:active {
+text-decoration: none;
+font-size: 14px;
+font-weight: bold;
+}
+#projectDetail{
+	margin:0 auto;
+	width:100%;
+}
+#projectDetail_head{
+	height:100px;
+	width:1110px;
+	margin:0 auto;
+}
+.bt_menu{
+	width:108px;
+	height:30px;
+	padding-top:5px;
+	float:left;
+	text-align: center;
+    margin:15px 35px;
+    font-size:16px;
+    font-family: 微软雅黑;
+}
+.bt_menu:hover{
+	background-color:#4FB8E1;
+}
+
+#project_body{
+	width:1200px;
+	margin:0 auto;
+}
+
+/*标题具体内容----项目的基本信息*/
+
+#projectDetail_body_self{
+	background:url(../images/selfIcon.png) no-repeat;
+	border:1px solid #CCCCCC;
+	height:1100px;
+	width:1200px;
+	margin:0 auto;
+}
+
+#selfContent{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
+	margin:0 auto;
+}
+#self_menu{
+	padding-top:44px;
+	margin-left:46px;
+	width:1110px;
+	height:302px;
+}
+#selfli{
+	width:566px;
+	height:30px;
+	float: left;
+	margin:17px 270px;
+	font-size: 18px;
+	font-family: 微软雅黑;
+}
+#selfliModel{
+	width:566px;
+	height:50px;
+	float: left;
+	margin-left:270px;
+	margin-top: 120px;
+	font-size: 18px;
+	font-family: 微软雅黑;
+}
+#selfliPic{
+	width:566px;
+	height:50px;
+	float: left;
+	margin-left:270px;
+	font-size: 18px;
+	font-family: 微软雅黑;
+}
+#selfliModel div{
+	float:left;
+	width:130px;
+}
+#selfliPic div{
+	float:left;
+	width:130px;
+}
+#selfliModel div{
+	text-align:right;
+}
+.projectInfoContentInput{
+	width:256px;
+	height:30px;
+	border:1px solid gray;
+	background-color:#F9F9F9;
+}
+#projectInfoDescInput{
+	width:256px;
+	height:120px;
+	border:1px solid gray;
+	background-color:#F9F9F9;
+}
+#selfli div{
+	float:left;
+	margin:0 8px;
+	
+}
+.selfli_text{
+	width:130px;
+	text-align:right;
+}
+#selfAdd{
+	width:670px;
+	height:100px;
+	text-align:right;
+	margin-top:50px;
+}
+/*标题具体内容----项目的构件信息*/
+
+#projectDetail_body_item{
+	background:url(../images/itemIcon.png) no-repeat;
+	height:1262px;
+	width:1186px;
+	margin:0 auto;
+}
+#itemContent{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
+	margin:0 auto;
+}
+#item_menu{
+	padding-top:44px;
+	margin-left:46px;
+	width:1110px;
+	height:302px;
+	border-bottom:1px solid #CCCCCC;
+}
+.item_menuli{
+	float:left;
+	height:66px;
+	width:1109px;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+}
+.item_menulisss{
+	float:left;
+	height:66px;
+	width:1109px;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+}
+.item_menuli_video{
+	float:left;
+	height:66px;
+	width:1109px;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+}
+#quantity_item_menuli{
+	float:left;
+	height:66px;
+	width:1109px;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+}
+#item_menuli_first{
+	width:1109px;
+	float:left;
+	margin-top:10px;
+	border-top:1px solid #CCCCCC;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+}
+#item_menuli_first div{
+	float: left;
+	font-family: 微软雅黑;
+	font-size:18px;
+	margin:8px 15px;
+}
+.item_menuli div,#quantity_item_menuli div,.item_menuli_video div,.item_menulisss div{
+	float: left;
+	font-family: 微软雅黑;
+	font-size:18px;
+	margin:8px 15px;
+} 
+#item_content{
+	background: url(../images/itemIcon.png) no-repeat;
+	width:1110px;
+	margin-top:10px;
+	margin-left:46px;
+}
+#paper_content{
+	width:1110px;
+	margin-top:10px;
+	margin-left:50px;
+}
+#paper_contents{
+	width:1110px;
+	margin-top:80px;
+	margin-left:210px;
+}
+#video_content{
+	width:1110px;
+	margin-top:10px;
+}
+#projectPageCode{
+	float:right;
+}
+#videoPageCode{
+	float:right;
+}
+#paperlist{
+	background: url(../images/itemUploadIcon.png) no-repeat 25px 15px;
+	height:100px;
+}
+#paperlist div{
+	margin-left: 50px;
+	margin-top: 15px;
+	float: left;
+	font-size: 18px;
+	font-family: 微软雅黑;
+	text-align: right;
+}
+/*标题具体内容----项目的图纸信息*/
+
+#projectDetail_body_paper{
+	background:url(../images/paperIcon.png) no-repeat;
+	height:950px;
+	width:1200px;
+	margin:0 auto;
+}
+#paperContent{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
+	margin:0 auto;
+}
+#paper_header div,#paper_headers div,#paper_headerss div{
+	float:left;
+	font-family: 微软雅黑;
+	font-size:18px;
+	padding-top:7px;
+	margin-right:41px;
+}
+#paper_header{
+	padding-top:44px;
+	padding-left:52px;
+	width:1110px;
+	height:196px;
+	
+}
+#paper_headers{
+	padding-top:44px;
+	padding-left:50px;
+	width:1110px;
+	height:144px;
+	
+}
+#paper_headerss{
+	padding-top:44px;
+	padding-left:260px;
+	width:1110px;
+	height:144px;
+	
+}
+.paperfile div{
+	float: right
+}
+.paper_menuli{
+	float:left;
+	width:1109px;
+	padding-bottom:30px;
+}
+.paper_menuli_upload{
+	float:left;
+	height:88px;
+	width:1109px;
+	padding-bottom:30px;
+}
+#paper_button{
+	margin-left:450px;
+	margin-top:50px;
+}
+/*标题具体内容----项目的工程量信息*/
+
+#projectDetail_body_quantity{
+	background:url(../images/biaotikuang.png) no-repeat;
+	height:1100px;
+	width:1200px;
+	margin:0 auto;
+}
+#quantityContent{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
+	margin:0 auto;
+}
+#quantity_menu{
+	padding-top:44px;
+	padding-left:47px; 
+	width:1110px;
+	height:302px;
+}
+#quantity_menuli{
+	float:left;
+	height:66px;
+	width:1109px;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+}
+#quantity_menuli div{
+	float: left;
+	font-family: 微软雅黑;
+	font-size:18px;
+	margin:8px 15px;
+} 
+#quantity_content{
+	background: url(../images/biaotikuang.png) no-repeat;
+	width:1110px;
+	margin-top:10px;
+	margin-left:46px;
+}
+/*标题具体内容----项目的安全技术交底信息*/
+
+#projectDetail_body_video{
+	background:url(../images/videoIcon.png) no-repeat;
+	height:650px;
+	width:1200px;
+	margin:0 auto;
+}
+#projectDetail_body_videos{
+	background:url(../images/videoIcon.png) no-repeat;
+	height:850px;
+	width:1200px;
+	margin:0 auto;
+}
+#videoContent{
+	background:url(../images/backgroundUpload.png);
+	margin:0 auto;
+}
+#video_menu{
+	padding-top:44px;
+	margin-left:46px;
+	width:1110px;
+	height:302px;
+}
+#video_contents{
+	width:1200px;
+	height:140px;
+	margin:0 auto;
+}
+#video_buttons{
+	
+}
+
+#video_bnts{
+	float:left;
+}
+#video_bnt button{
+	margin-right: 100px;
+}
+
+/*标题具体内容----项目的问题列表信息*/
+
+#projectDetail_body_question{
+	background:url(../images/questionIcon.png) no-repeat;
+	padding-top:5px;
+	height:950px;
+	width:1200px;
+	margin:0 auto;
+	padding-left:50px;
+}
+#questionTbodyContent{
+	width:1109px;
+	margin-top:100px;
+}
+#questionContent{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
+	margin:0 auto;
+}
+.questionlist{
+	background:url(../images/问题底板.png) no-repeat;
+	background-size:100% 100%; 
+	height:150px;
+	width:150px;
+	margin:100px 25px;
+	float: left;
+}
+.questionlist div{
+	text-align: center;
+}
+.question_menulis{
+	width:1109px;
+	float:left;
+	margin-top:10px;
+	border-top:1px solid #CCCCCC;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+}
+.question_menuli{
+	float:left;
+	height:66px;
+	width:1109px;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+}
+.question_menuli_bottom{
+	float:left;
+	height:66px;
+	width:1109px;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+}
+.question_menulis div,.question_menuli div,.question_menuli_bottom div{
+	float: left;
+	font-family: 微软雅黑;
+	font-size:18px;
+	margin:8px 15px;
+}
+#question_head{
+	margin-top:70px;
+	height:130px;
+	width:1180px;
+}
+/*构件信息上传*/
+#projectDetail_itemupload{
+	background:url(../images/backgroundUpload.png);
+	height:1100px;
+	width:1200px;
+	margin:0 auto;
+}
+.uploadMenu{
+	background: url(../images/itemUploadIcon.png) no-repeat;
+	height:200px;
+	width:800px;
+	margin-left:260px;
+	margin-top: 68px;
+}
+.uploadMenuHead{
+	background: url(../images/itemUploadIcon.png) no-repeat 1px;
+	height:200px;
+	width:800px;
+	margin-left:260px;
+	margin-top:25px;
+	padding-top:86px;
+}
+.uploadMenuHead div{
+	float:left;
+}
+.uploadMenu_xiaofang{
+	background: url(../images/itemUploadIcon.png) no-repeat;
+	height:150px;
+	width:800px;
+	margin-left:260px;
+}
+.uploadMenu_xiaofang div{
+	float:left;
+}
+.uploadMenu div{
+	float:left;
+}
+.uploadMenu_quantity{
+	background: url(../images/itemUploadIcon.png) no-repeat;
+	height:200px;
+	width:800px;
+	margin-left:260px;
+}
+.uploadMenu_quantity div{
+	float:left;
+}
+.uploadTitle{
+	width:200px;
+	text-align: right;
+	margin-right: 30px;
+}
+.uploadText{
+	font-size:16px;
+	font-family:微软雅黑;
+	margin-right: 100px;
+	margin-left:100px;
+	text-align:right;
+}
+.uploadText div{
+	margin-top: 8px;
+}
+
+.phaseTitle{
+	font-family: 微软雅黑;
+	font-size: 18px;
+	margin-left: 14px;
+}
+#itemupload{
+	margin-left: 310px;
+	margin-top:55px;
+}
+/*图纸信息上传*/
+#projectDetail_paperupload{
+	background:url(../images/backgroundUpload.png);
+	border:1px solid #CCCCCC;
+	height:730px;
+	width:1200px;
+	margin:0 auto;
+}
+
+#uploadVideoBottom{
+	background:url(../images/addPorjectBottom.png) no-repeat;
+	height:60px;
+	width:1200px;
+	text-align:center;
+	font-size:22px;
+	font-family:微软雅黑;
+	padding-top:4px;
+	margin-top:360px;
+	
+}

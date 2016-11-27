@@ -56,6 +56,7 @@ function login(){
  					window.location.href="userList";
  				 }
  				 else{
+ 					window.location.href="user_projectList";
  					 alert("用户界面筹建中！");
  				 }
  			 } else {
