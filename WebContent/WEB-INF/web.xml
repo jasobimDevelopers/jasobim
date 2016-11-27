@@ -79,7 +79,10 @@
         <servlet-name>default</servlet-name>
         <url-pattern>*.eot</url-pattern>
     </servlet-mapping>
-
+	<servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.xls</url-pattern>
+    </servlet-mapping>
     <!--<filter>-->
     <!--<filter-name>Set Character Encoding</filter-name>-->
     <!--<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>-->
