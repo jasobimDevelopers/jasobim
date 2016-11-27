@@ -19,4 +19,5 @@ public interface QuantityService {
 	DataWrapper<Quantity> getQuantityDetailsByAdmin(Long quantityId,String token);
 	DataWrapper<List<Quantity>> getQuantityList(Long projectId,String token,Integer pageIndex,Integer pageSize,Quantity quantity);
 	boolean batchImport(String filePath, MultipartFile file, String token, HttpServletRequest request, Long projectId);
+	DataWrapper<String> exportQuantity(Long projectId,String token, HttpServletRequest request);
 }

@@ -18,6 +18,6 @@ public interface QuantityDao {
 		boolean addQuantityList(List<Quantity> quantityList);
 		List<Quantity> getAllQuantity();
 		
-		boolean exportQuantity(String filePath);
+		boolean exportQuantity(String filePath,Long projectId);
 		boolean deleteQuantityByProjectId(Long id);
 }
