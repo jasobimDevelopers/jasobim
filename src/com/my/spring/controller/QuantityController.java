@@ -84,5 +84,14 @@ public class QuantityController {
         return quantityService.getQuantityDetailsByAdmin(quantityId, token);
     }
     
+    @RequestMapping(value="/exportQuantity")
+    @ResponseBody
+    public DataWrapper<String> exportQuantity(
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "token",required = true) String token,
+            HttpServletRequest request) {
+        return quantityService.exportQuantity(projectId, token, request);
+    }
+    
     
 }

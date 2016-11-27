@@ -1,22 +1,25 @@
 package com.my.spring.DAOImpl;
 
-import com.my.spring.DAO.BaseDao;
-import com.my.spring.DAO.QuantityDao;
-import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.Quantity;
-import com.my.spring.model.QuantityPojo;
-import com.my.spring.model.User;
-import com.my.spring.utils.DaoUtil;
-import com.my.spring.utils.DataWrapper;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.ParameterMode;
+
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.procedure.ProcedureCall;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.my.spring.DAO.BaseDao;
+import com.my.spring.DAO.QuantityDao;
+import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.Quantity;
+import com.my.spring.model.QuantityPojo;
+import com.my.spring.utils.DaoUtil;
+import com.my.spring.utils.DataWrapper;
 
 /**
  * Created by Administrator on 2016/6/22.
@@ -178,13 +181,15 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 	}
 
 	@Override
-	public boolean exportQuantity(String filePath) {
+	public boolean exportQuantity(String filePath,Long projectId) {
 		// TODO Auto-generated method stub
-		String sql = "select * from quantity into outfile '" + filePath + "';";
+		
 		Session session=getSession();
 		try{
-	        Query query=session.createSQLQuery(sql);
-	        query.list();
+			ProcedureCall procedureCall = session.createStoredProcedureCall("exportQuantity");
+			procedureCall.registerParameter("file_path", String.class, ParameterMode.IN).bindValue(filePath);
+			procedureCall.registerParameter("project_id", Long.class, ParameterMode.IN).bindValue(projectId);
+			procedureCall.getOutputs();
 	    }catch(Exception e){
 	        e.printStackTrace();
 	        return false;

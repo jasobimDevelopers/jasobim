@@ -56,8 +56,8 @@ public class TestFileController {
     		HttpServletRequest request) {
 		//根据id去查Files,取出Files里面的url,传参
 //		String filePath = request.getSession().getServletContext().getRealPath("/") + "/test.xls";
-		String filePath = "d:/test.xls";
-        return quantityDao.exportQuantity(filePath);
+		String filePath = "E:/test.xls";
+        return quantityDao.exportQuantity(filePath,new Long(1));
     }
 
 }
