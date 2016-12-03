@@ -186,28 +186,27 @@ public class QuantityServiceImpl implements QuantityService {
 		if(userInMemory!=null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()) {
 				String filePath = "E:/JasoBim/BimAppDocument/apache-tomcat-8.0.39/webapps/testJasobim" + "/out/" + projectId + "/";
-//				String filePath = "E:/out/project_" + projectId + "/";
 				File fileDir = new File(filePath);
 		        if (!fileDir.exists()) {
 		            fileDir.mkdirs();
 		        }
 		        String tempFile = filePath + "quantitty_temp.xls";
 		        String file = filePath + "quantitty.xls";
-		        String header = "id\t"
-		        		+ "name\t"
-		        		+ "profession_type\t"
-		        		+ "value\t"
-		        		+ "unit\t"
-		        		+ "project_id\t"
-		        		+ "building_num\t"
-		        		+ "floor_num\t"
-		        		+ "unit_num\t"
-		        		+ "household_num\t"
-		        		+ "family_and_type\t"
-		        		+ "system_type\t"
-		        		+ "service_type\t"
-		        		+ "size\t"
-		        		+ "material\n";
+		        String header = "序号\t"
+		        		+ "名称\t"
+		        		+ "专业\t"
+		        		+ "数值\t"
+		        		+ "单位\t"
+		        		+ "项目编号\t"
+		        		+ "楼栋号\t"
+		        		+ "楼层号\t"
+		        		+ "单元号\t"
+		        		+ "户型\t"
+		        		+ "familyAndType\t"
+		        		+ "系统类型\t"
+		        		+ "设备类型\t"
+		        		+ "尺寸\t"
+		        		+ "材质\n";
 		        FileOperationsUtil.deleteFile(tempFile);
 		        FileOperationsUtil.deleteFile(file);
 		        if (quantityDao.exportQuantity(tempFile, projectId)) {
