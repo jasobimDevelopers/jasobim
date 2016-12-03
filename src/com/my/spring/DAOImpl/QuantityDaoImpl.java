@@ -364,15 +364,17 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 	public DataWrapper<List<Quantity>> testGroupBy() {
 		// TODO Auto-generated method stub
 		Session session = getSession();
+		DataWrapper<List<Quantity>> dataWrapper = new DataWrapper<List<Quantity>>();
 		Criteria criteria = session.createCriteria(Quantity.class);
 		criteria.add(Restrictions.eq("projectId", new Long(79)));
 		criteria.setProjection(
-				Projections.projectionList().add(Projections.groupProperty("projectId"))
+				Projections.projectionList().add(Projections.property("householdNum"))
+											.add(Projections.groupProperty("projectId"))
 											.add(Projections.groupProperty("systemType"))
 											.add(Projections.groupProperty("serviceType"))
 											.add(Projections.groupProperty("material"))
 				);
-		DataWrapper<List<Quantity>> dataWrapper = new DataWrapper<List<Quantity>>();
+		criteria.setResultTransformer(Transformers.aliasToBean(Quantity.class)); 
 		dataWrapper.setData(criteria.list());
 		return dataWrapper;
 	}
