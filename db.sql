@@ -221,5 +221,5 @@ EXECUTE stmtinsert;
 end//
 DELIMITER ;
 				 
-				 
+	select * from tsble where xx group by x into outside 'filepath'			 
 				 

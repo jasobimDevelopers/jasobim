@@ -253,7 +253,7 @@ public class ItemServiceImpl implements ItemService {
 			    				test.setUnit("平米（m2）");
 			    			}
 			    			if(pojo.getNum()!=0 && pojo.getAreanum()==0 && pojo.getLengthnum()==0){
-			    				test.setValue(pojo.getNum());
+			    				test.setValue(new Double(pojo.getNum()));
 			    				test.setUnit("个");
 			    			}
 			    			quantityList.add(test);

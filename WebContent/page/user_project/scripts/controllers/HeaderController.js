@@ -15,4 +15,8 @@ function HeaderController($scope,DataService,$filter) {
   $scope.userName=userName;
   $scope.userIcon=userIcon;
   
+  $scope.logout = function() {
+	  window.location.href = "login";
+  }
+  
 }

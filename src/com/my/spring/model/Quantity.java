@@ -11,7 +11,7 @@ public class Quantity {
     private Long id;
     private String name;
     private Integer professionType;//0 电气  1 暖通 2 给排水  3 消防 4建筑
-    private Double value;
+    private Double  value;
     private Long projectId;
     private String unit;
     private Integer buildingNum;//楼号
@@ -26,7 +26,18 @@ public class Quantity {
     private String material;//材质
     
     
-    @Id
+    
+    @Basic
+    @Column(name = "value")
+    public Double getValue() {
+		return value;
+	}
+
+	public void setValue(Double value) {
+		this.value = value;
+	}
+
+	@Id
     @GeneratedValue
     @Column(name = "id")
     public Long getId() {
@@ -37,15 +48,7 @@ public class Quantity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "value")
-    public double getValue() {
-        return value;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
-    }
+    
 
     @Basic
     @Column(name = "project_id")

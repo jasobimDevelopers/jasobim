@@ -51,24 +51,46 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
     	DataWrapper<List<Quantity>> retDataWrapper = new DataWrapper<List<Quantity>>();
         List<Quantity> ret = new ArrayList<Quantity>();
         Session session = getSession();
-        /*ProjectionList projectionList=Projections.projectionList();
-        projectionList.add(Projections.groupProperty("projectId"));
-        projectionList.add(Projections.groupProperty("systemType"));
-        projectionList.add(Projections.groupProperty("serviceType"));
-        projectionList.add(Projections.groupProperty("familyAndType"));
-        projectionList.add(Projections.groupProperty("size"));
-        projectionList.add(Projections.groupProperty("material"));
-        projectionList.add(Projections.groupProperty("name"));
-        projectionList.add(Projections.groupProperty("typeName"));
-        projectionList.add(Projections.groupProperty("professionType"));
-        Quantity ticket = new Quantity(); 
-		ticket.setProjectId(projectId);
-		Criteria criteria = session.createCriteria(Quantity.class); 
-		criteria.add(Example.create(ticket)); */
         Criteria criteria = session.createCriteria(Quantity.class);
+        ProjectionList projectionList = Projections.projectionList();
+		projectionList.add(Projections.property("value").as("value"))
+						.add(Projections.property("unit").as("unit"))
+						.add(Projections.property("projectId").as("projectId"))
+						.add(Projections.property("systemType").as("systemType"))
+						.add(Projections.property("serviceType").as("serviceType"))
+						.add(Projections.property("familyAndType").as("familyAndType"))
+						.add(Projections.property("size").as("size"))	
+						.add(Projections.property("material").as("material"))
+						.add(Projections.property("name").as("name"))
+						.add(Projections.property("typeName").as("typeName"))
+								
+						.add(Projections.groupProperty("projectId"))
+						.add(Projections.groupProperty("systemType"))
+						.add(Projections.groupProperty("serviceType"))
+						.add(Projections.groupProperty("familyAndType"))
+						.add(Projections.groupProperty("size"))
+						.add(Projections.groupProperty("material"))
+						.add(Projections.groupProperty("name"))
+						.add(Projections.groupProperty("typeName"));
+		if(quantity.getProfessionType()!=null){
+			projectionList.add(Projections.property("professionType").as("professionType"))
+						  .add(Projections.groupProperty("professionType"));
+		}
+		if(quantity.getBuildingNum()!=null){
+			projectionList.add(Projections.groupProperty("buildingNum"))
+			              .add(Projections.property("buildingNum").as("buildingNum"));
+		}	
+		if(quantity.getFloorNum()!=null){
+			projectionList.add(Projections.groupProperty("floorNum"))
+						  .add(Projections.property("floorNum").as("floorNum"));
+		}
+		if(quantity.getHouseholdNum()!=null){
+			projectionList.add(Projections.groupProperty("householdNum"))
+						  .add(Projections.property("householdNum").as("householdNum"));;
+		}
         ///////////////////////////////
         criteria.add(Restrictions.eq("projectId", projectId));
-        //criteria.setProjection(projectionList);
+        criteria.setProjection(projectionList);
         if(quantity.getProfessionType()!=null){
         	criteria.add(Restrictions.eq("professionType", quantity.getProfessionType()));
         }
@@ -92,18 +114,15 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		}
         
         
-        // 取总页数
-        criteria.setProjection(Projections.rowCount());
-        int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
-        int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
-
-        // 真正取值
-        criteria.setProjection(null);
-       
-        if (pageSize > 0 && pageIndex > 0) {
-            criteria.setMaxResults(pageSize);// 最大显示记录数
-            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
-        }
+        int totalItemNum =  criteria.list().size();
+		int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
+		
+		
+		criteria.setResultTransformer(Transformers.aliasToBean(Quantity.class));
+		if (pageSize > 0 && pageIndex > 0) {
+			criteria.setMaxResults(pageSize);// 最大显示记录数
+			criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+		 }
         try {
             ret = criteria.list();
         }catch (Exception e){
@@ -306,7 +325,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 			    				test.setUnit("平米（m2）");
 			    			}
 			    			if(pojo.getNum()!=0 && pojo.getAreanum()==0 && pojo.getLengthnum()==0){
-			    				test.setValue(pojo.getNum());
+			    				test.setValue(new Double(pojo.getNum()));
 			    				test.setUnit("个");
 			    			}
 			    			quantityList.add(test);

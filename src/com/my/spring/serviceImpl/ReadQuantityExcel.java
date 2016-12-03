@@ -282,7 +282,7 @@ public class ReadQuantityExcel {
                 	   int num=0;
                 	   num=Integer.valueOf(cell.getStringCellValue());
                 	   if(num!=0){
-                		   quantity.setValue(num);
+                		   quantity.setValue(new Double(num));
                 		   quantity.setUnit("个");
                 	   }
                    }
