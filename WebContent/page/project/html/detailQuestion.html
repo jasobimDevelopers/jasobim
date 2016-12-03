@@ -73,7 +73,7 @@
         		</div>
         	</div>
         	<div id="message_area">
-        		<div id="messageImg"><input type="file" id="imgMessge"/></div>
+        		<div id="messageImg" ng-click="chooseImgMessage()"><input type="file" id="imgMessge"/></div>
         		<div><input id="messageArea" cols="50" rows="5" onblur="if(this.value == ''){this.style.color = '#ACA899'; this.value = '我也说一句...'; }" 
     					onfocus="if(this.value == '我也说一句...'){this.value =''; this.style.color = '#000000'; }" 
                         style="color:#ACA899;" value="我也说一句..."/></div>
@@ -81,3 +81,9 @@
         	</div>
         </div>
 	</div>
+	<style>
+	
+	#imgMessge {
+    			visibility: hidden;    /* 隐藏 */
+			}
+	</style>
