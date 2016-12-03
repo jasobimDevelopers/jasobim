@@ -101,9 +101,7 @@ function QuestionController($scope,QuestionService) {
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
 		      $scope.questionPage($scope.totalPage,$scope.currentPage);
-		      $('#myStat').circliful();
-				$('#myStat1').circliful();
-				$('#myStat2').circliful();
+		      
 		  });
 	  }
 	 /////初始化获取问题列表

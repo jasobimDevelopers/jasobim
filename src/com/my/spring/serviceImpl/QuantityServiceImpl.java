@@ -16,7 +16,6 @@ import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Quantity;
-import com.my.spring.model.QuantityPojo;
 import com.my.spring.model.User;
 import com.my.spring.service.QuantityService;
 import com.my.spring.utils.DataWrapper;
@@ -186,8 +185,8 @@ public class QuantityServiceImpl implements QuantityService {
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()) {
-//				String filePath = request.getSession().getServletContext().getRealPath("/") + "/out/" + projectId + "/";
-				String filePath = "E:/out/project_" + projectId + "/";
+				String filePath = "E:/JasoBim/BimAppDocument/apache-tomcat-8.0.39/webapps/testJasobim" + "/out/" + projectId + "/";
+//				String filePath = "E:/out/project_" + projectId + "/";
 				File fileDir = new File(filePath);
 		        if (!fileDir.exists()) {
 		            fileDir.mkdirs();
@@ -215,7 +214,7 @@ public class QuantityServiceImpl implements QuantityService {
 					String content = FileOperationsUtil.readFile(tempFile);
 					String newContent = header + content;
 					FileOperationsUtil.writeFile(file, newContent, false);
-					dataWrapper.setData(file);
+					dataWrapper.setData("out/" + projectId + "/quantitty.xls");
 				} else {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}
