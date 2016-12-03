@@ -24,4 +24,6 @@ public interface QuantityDao {
 		boolean deleteQuantityByProjectId(Long id);
 		DataWrapper<List<Quantity>> getQuantityListNum(Long projectId, Integer pageSize, Integer pageIndex,
 				Quantity quantity);
+		
+		DataWrapper<List<Quantity>> testGroupBy();
 }
