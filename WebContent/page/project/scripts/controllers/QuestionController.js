@@ -109,7 +109,7 @@ function QuestionController($scope,QuestionService) {
 	  }
 	 
 	 $scope.drawCircle = function() {
-		 document.getElementById("myStat").attributes["data-percent"].value = $scope.questionList[0].sortPercent;
+		  document.getElementById("myStat").attributes["data-percent"].value = $scope.questionList[0].sortPercent;
 	      document.getElementById("myStat").attributes["data-text"].value = $scope.questionList[0].sortPercent + "%";
 	      document.getElementById("myStat1").attributes["data-percent"].value = $scope.questionList[0].importantPercent;
 	      document.getElementById("myStat1").attributes["data-text"].value = $scope.questionList[0].importantPercent + "%";

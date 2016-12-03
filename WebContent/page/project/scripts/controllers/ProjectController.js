@@ -919,7 +919,7 @@ function ProjectController($scope,ProjectService) {
 	    	 if(document.getElementById("biangeng_import").files[0]!==null){
 	    		 file=document.getElementById("biangeng_import").files[0];	
 				 var formData = new FormData();
-				 formData.append("fileList",file);
+				 formData.append("file",file);
 				 ProjectService.uploadOtherQuantity(formData,$scope.findProjectInfo.id).then(function(result){
 					       $scope.uploadOtherQuantitys=result.data;	 
 					       var quantity=null;

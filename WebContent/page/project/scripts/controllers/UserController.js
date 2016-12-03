@@ -1,5 +1,5 @@
 var token=getCookie('token');
-var userIcon=getCookie('token');
+var userIcon=getCookie('userIcon');
 var userName=getCookie('userName');
 function UserController($scope,UserService) {
 	

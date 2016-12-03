@@ -11,6 +11,7 @@ function HeaderController($scope,DataService,$filter) {
 	  $scope.uservisible = false;
 	  $scope.projectvisible = true;
   }*/
+  console.log(userIcon);
   $scope.userName=userName;
-  $scope.userIcon="files/userIcons/"+userIcon;
+  $scope.userIcon=userIcon;
 }
