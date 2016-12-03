@@ -179,8 +179,8 @@ public class QuantityServiceImpl implements QuantityService {
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()) {
-//				String filePath = request.getSession().getServletContext().getRealPath("/") + "/out/" + projectId + "/";
-				String filePath = "E:/out/project_" + projectId + "/";
+				String filePath = request.getSession().getServletContext().getRealPath("/") + "/out/" + projectId + "/";
+//				String filePath = "E:/out/project_" + projectId + "/";
 				File fileDir = new File(filePath);
 		        if (!fileDir.exists()) {
 		            fileDir.mkdirs();
