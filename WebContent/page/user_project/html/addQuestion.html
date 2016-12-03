@@ -11,26 +11,54 @@
             	</div>
            	</div>
         </div>
-        <div id="adduserbody">
-        	<div class="addinput_question">
+        <div id="addquestionbody">
+        	<div class="addinput_question" style="display:none;">
         		<div><span>问题编号:</span></div>
-        		<div><input type="text" ng-model="findQuestionInfo.id" id="inputname" /></div>
+        		<div><input type="text" ng-model="findQuestionInfo.id" id="inputname"/></div>
+            </div>
+            <div class="addinput_question">
+        		<div><span>项目名称:</span></div>
+        		<div>
+        			<select type="text" ng-model="findQuestionInfo.projectId" class="addquestionSelect">
+        				<option ng-repeat="projectinfo in projectLists" value="{{projectinfo.id}}">{{projectinfo.name}}</option>
+        			</select>
+        		</div>
             </div>
             <div class="addinput_question">
         		<div><span>问题名称:</span></div>
-        		<div><input type="password" ng-model="findQuestionInfo.name" id="inputpassword" /></div>
+        		<div><input type="text" ng-model="findQuestionInfo.name" id="inputpassword" /></div>
             </div>
             <div class="addinput_question">
             	<div><span>所属专业:</span></div>
-            	<div><input type="text"  id="inputnick" ng-model="findQuestionInfo.trades"/></div>
+            	<div><input type="text"  id="inputnick" ng-model="findQuestionInfo.trades" /></div>
             </div>
             <div class="addinput_question">
-            	<div><span>问题类型:</span></div>
-            	<div><input type="text"  id="inputadress" ng-model="findQuestionInfo.questionType"/></div>
+            	<div>
+            		<span>问题类型:</span>
+            	</div>
+            	<div>
+            		<select type="text" ng-model="findQuestionInfo.questionType" class="addquestionSelect">
+            			<option value="0">质量</option>
+            			<option value="1">安全</option>
+            			<option value="2">其他</option>
+            		</select>
+            	</div>
+            </div>
+            <div class="addinput_question">
+            	<div>
+            		<span>问题等级:</span>
+            	</div>
+            	<div>
+            		<select  type="text" ng-model="findQuestionInfo.priority" class="addquestionSelect">
+            			<option value="0">一般</option>
+            			<option value="1">重要</option>
+            			<option value="2">紧急</option>
+            		</select>
+            	</div>
             </div>
             <div class="addinput_question">
             	<div><span>问题详情:</span></div>
-            	<div><input type="text"  id="inputtel" ng-model="findQuestionInfo.intro"/></div>
+            	<div><textarea id="inputdetail" ng-model="findQuestionInfo.intro" ></textarea></div>
             </div>
             <div class="addinput_question">
             	<div><span>现场图片:</span></div>
@@ -40,23 +68,10 @@
             	<div><span>查看二维码:</span></div>
             	<div><img width="100px" height="100px" src="{{}}" /></div>
             </div>
-            <div id="addbutton" style="margin-top:86px;display:none;">
+            <div id="addbutton" style="margin-top:86px;">
             	<input class="btn btn-default" type="button" ng-click="addQuestionByAdmin()" value="确定" />
                 <input type="button" ng-click="resetQuestion()" class="btn btn-default" value="重置" />
             </div>
         </div>
-        <div id="message_leave">
-        	<div id="message_head">
-        		<div>留言板</div>
-        	</div>
-        	<div id="message_content">
-        		
-        		<div id="userIntro">
-        			<div id="usernamessss"><span>王卓</span></div>
-        			<div id="usercontent"><span>该问题都不是问题</span></div>
-        		</div>
-        		<div id="usericon"><img width="100px" height="100px" src="page/project/images/icon.jpg" /></div>
-        	</div>
-        	<div id="message_area"></div>
-        </div>
+        
 	</div>

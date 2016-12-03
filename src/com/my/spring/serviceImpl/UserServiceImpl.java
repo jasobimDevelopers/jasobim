@@ -58,9 +58,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataWrapper<User> login(String userName, String password) {
+	public DataWrapper<UserPojo> login(String userName, String password) {
 		// TODO Auto-generated method stub
-		DataWrapper<User> dataWrapper = new DataWrapper<User>();
+		DataWrapper<UserPojo> dataWrapper = new DataWrapper<UserPojo>();
 		if (userName == null || password == null 
 				||userName.equals("") || password.equals("")) {
 			dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -74,9 +74,14 @@ public class UserServiceImpl implements UserService {
 				SessionManager.removeSessionByUserId(user.getId());
 				String token = SessionManager.newSession(user);
 				dataWrapper.setToken(token);
-				User users=new User();
+				UserPojo users=new UserPojo();
 				users.setUserName(user.getUserName());
 				users.setUserType(user.getUserType());
+				Files file=new Files();
+				file=fileService.getById(user.getUserIcon());
+				if(file!=null){
+					users.setUserIconUrl(file.getUrl());
+				}
 				dataWrapper.setData(users);
 			}
 		}
@@ -127,6 +132,9 @@ public class UserServiceImpl implements UserService {
 						Files newfile=fileService.uploadFile(path, file,fileType,request);
 						userInDB.setUserIcon(newfile.getId());
 				}
+				if(user.getUserName() != null && !user.getUserName().equals("")) {
+					userInDB.setUserName(user.getUserName());
+				}
 				if(user.getRealName() != null && !user.getRealName().equals("")) {
 					userInDB.setRealName(user.getRealName());
 				}
@@ -136,7 +144,13 @@ public class UserServiceImpl implements UserService {
 				if (user.getTel() != null && !user.getTel().equals("")) {
 					userInDB.setTel(user.getTel());
 				}
-				
+				if(user.getPassword() !=null && !user.getPassword().equals("")){
+					userInDB.setPassword(user.getPassword());
+				}
+				if(user.getUserType() !=null && !user.getUserType().equals(""))
+				{
+					userInDB.setUserType(user.getUserType());
+				}
 				if (!userDao.updateUser(userInDB)) {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}

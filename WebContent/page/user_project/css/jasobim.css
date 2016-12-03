@@ -39,8 +39,12 @@ font-weight: bold;
 }
 #content{
 	width:100%;
+	padding-left:150px;
 	height:61px;
 	margin:0 auto;
+}
+li{
+	width:184px;
 }
 #projectContent{
 	width:100%;
@@ -94,12 +98,17 @@ li{
 	margin-right:160px;
 }
 #portrait{
-	margin-left:200px;
+	margin-left:80px;
+	padding-top:5px;
+	color:white;
+	font-family:微软雅黑;
+	font-size:16px;
 }
 #portrait_image{
-	margin:10px 0px;
-	height:40px;
-	width:40px;
+	height:23px;
+	width:24px;
+	margin-right:10px;
+	margin-bottom:10px;
 }
 #menu{
 	margin-left:200px;
@@ -208,6 +217,26 @@ table
 }
 #bottom a:hover,#bottom span:hover{
 	color:red;
+}
+#head_home_ul a{
+	color:white ! important;
+}
+#home_head{
+	
+	background:url(../images/headbk.png) repeat-x;
+}
+#out_login{
+	height:39px;
+	width:50px;
+	font-size:22px;
+	margin-top:13px;
+	color:white;
+	padding-left:10px;
+}
+#headBackground{
+	background:url(../images/headBackground.png) no-repeat;
+	width:100%;
+	height:204px;
 }
 #userPageCode,#projectPageCode,#itemPageCode,#quantityPageCode,#questionPageCode,#videoPageCode,#paperPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
 #userPageCode a,#projectPageCode a,#itemPageCode a,#quantityPageCode a,#questionPageCode a,#videoPageCode a,#paperPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}

@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 public class MessageController {
     @Autowired
     MessageService messageService;
-    @RequestMapping(value="/addMessage", method = RequestMethod.POST)
+    @RequestMapping(value="/admin/addMessage", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addMessage(
             @ModelAttribute Message message,
@@ -39,7 +39,7 @@ public class MessageController {
     	}
         return dataWrapper;
     }
-    @RequestMapping(value="/deleteMessage")
+    @RequestMapping(value="/deleteMessage",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteMessage(
             @RequestParam(value = "id",required = true) Long id,
@@ -48,14 +48,14 @@ public class MessageController {
         return messageService.deleteMessage(id,token,request);
     }
 
-   /* @RequestMapping(value="updateMessage",method = RequestMethod.POST)
+    @RequestMapping(value="/admin/updateMessage",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateMessage(
             @ModelAttribute Message message,
             @RequestParam(value = "token",required = false) String token){
         System.out.println(message);
         return messageService.updateMessage(message,token);
-    }*/
+    }
 
 
     @RequestMapping(value="/admin/getMessageList", method = RequestMethod.GET)
@@ -74,5 +74,21 @@ public class MessageController {
     		@RequestParam(value = "userId",required = true) Long userId,
             @RequestParam(value = "token",required = true) String token){
         return messageService.getMessageListByUserId(userId,token);
+    }
+    ////通过留言id查找留言
+    @RequestMapping(value="/admin/getMessageById",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<Message> getMessageListById(
+    		@RequestParam(value = "id",required = true) Long id,
+            @RequestParam(value = "token",required = true) String token){
+        return messageService.getMessageListById(id,token);
+    }
+    ////通过问题id查找留言
+    @RequestMapping(value="/getMessageListByQuestionId")
+    @ResponseBody
+    public DataWrapper<List<Message>> getMessageListByQuestionId(
+    		@RequestParam(value = "questionId",required = true) Long questionId,
+            @RequestParam(value = "token",required = true) String token){
+        return messageService.getMessageListByQuestionId(questionId,token);
     }
 }

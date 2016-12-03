@@ -22,7 +22,7 @@ public class Quantity {
     private String systemType;//系统类型
     private String serviceType;//设备类型
     private String size;
-//    private String typeName;
+    private String typeName;
     private String material;//材质
     
     
@@ -181,6 +181,16 @@ public class Quantity {
 
 	public void setFamilyAndType(String familyAndType) {
 		this.familyAndType = familyAndType;
+	}
+
+	@Basic
+    @Column(name = "type_name")
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 	
    

@@ -47,6 +47,7 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
         List<Item> ret = new ArrayList<Item>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Item.class);
+        
         ///////////////////////////////
         criteria.add(Restrictions.eq("projectId", projectId));
         if(item.getProfessionType()!=null){
@@ -65,14 +66,16 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
         /////////////////////////////////////
    
         if (pageSize == null) {
-			pageSize = 10;
+			pageSize = 1000;
 		}
         if (pageIndex == null) {
 			pageIndex = 1;
 		}
         
         // 取总页数
+        
         criteria.setProjection(Projections.rowCount());
+        
         int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
         int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
 

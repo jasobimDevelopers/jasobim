@@ -24,9 +24,11 @@ function setPic(pic) {
 function ProjectController($scope,ProjectService) {
 	console.log("载入ProjectController");
 	$scope.currentPage = 1;
+	$scope.flagAll=-1;
 	$scope.ProjectTofind = {};
 	$scope.findProjectInfo = {};
 	var buildingInfo = {};
+	$scope.quantityUrl="";
 	$scope.building = [];
 	$scope.floors =[];
 	$scope.buildings=[];
@@ -385,17 +387,30 @@ function ProjectController($scope,ProjectService) {
 		 
 		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
 		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo-1);
-		 if($scope.phase!="all") {
+		 if($scope.phase!="allProfessionType") {
 			 item+= "&professionType=" + $scope.phase;
 		 }
-		 if($scope.buildingId!="all"){
+		 if($scope.phase=="allProfessionType"){
+			 item+= "&professionType=" + $scope.flagAll;
+		 }
+		 if($scope.buildingId!="allBuildingNum"){
 			 item+= "&buildingNum=" + $scope.buildingId;
 		 }
-		 if($scope.floorId!="all"){
+		 if($scope.phase=="allBuildingNum"){
+			 item+= "&buildingNum=" + $scope.flagAll;
+		 }
+		 
+		 if($scope.floorId!="allFloorNum"){
 			 item+= "&floorNum=" + $scope.floorId;
 		 }
-		 if($scope.householdId!="all"){
+		 if($scope.floorId=="allFloorNum"){
+			 item+= "&floorNum=" + $scope.flagAll;
+		 }
+		 if($scope.householdId!="allHouseholdNum"){
 			 item+= "&householdNum=" + $scope.householdId;
+		 }
+		 if($scope.householdId=="allHouseholdNum"){
+			 item+= "&householdNum=" + $scope.flagAll;
 		 }
 		  ProjectService.getItemList(projectId,pageSize,pageIndex,item).then(function (result){
 		  	  $scope.projectItemList = result.data;
@@ -640,7 +655,12 @@ function ProjectController($scope,ProjectService) {
 		       
 		    });
 	 }
-	 
+	 /////导出工程量
+	 $scope.getProjectQuantityExcel=function(){
+		 ProjectService.getProjectQuantityExcel($scope.projectid).then(function (result){
+		  	  $scope.quantityUrl = result.data;
+		  });
+	 }
 	 $scope.projectInfoChange = function(projectType){
 		 if(projectType == "基本信息"){
 			 document.getElementById("projectSelfInfoHtml").style.display = 'block';
@@ -681,6 +701,7 @@ function ProjectController($scope,ProjectService) {
 			 document.getElementById("projectQuestionInfo").style.display = 'none';
 			 var quantity=null;
 			 $scope.getProjectQuantityList($scope.findProjectInfo.id,pageSize,1,quantity);
+			 $scope.getProjectQuantityExcel();
 		 }
 		 if(projectType == "安全技术交底"){
 			 document.getElementById("projectSelfInfoHtml").style.display = 'none';
@@ -891,5 +912,20 @@ function ProjectController($scope,ProjectService) {
 	 	    document.getElementById("projectVideoInfoAdd").style.display = 'none';
 	 	    document.getElementById("projectPaperInfoAdd").style.display = 'none';
 	 	    document.getElementById("projectItemInfoAdd").style.display = 'none';
+	     }
+	     /////////////////其他工程量的导入
+	     $scope.importQuantity = function(){
+	    	 var file="";
+	    	 if(document.getElementById("biangeng_import").files[0]!==null){
+	    		 file=document.getElementById("biangeng_import").files[0];	
+				 var formData = new FormData();
+				 formData.append("fileList",file);
+				 ProjectService.uploadOtherQuantity(formData,$scope.findProjectInfo.id).then(function(result){
+					       $scope.uploadOtherQuantitys=result.data;	 
+					       var quantity=null;
+						   $scope.getProjectQuantityList($scope.findProjectInfo.id,pageSize,1,quantity);
+			     });
+				
+			 }
 	     }
 }

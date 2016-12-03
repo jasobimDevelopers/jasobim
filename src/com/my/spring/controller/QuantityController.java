@@ -2,6 +2,7 @@ package com.my.spring.controller;
 
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Quantity;
+import com.my.spring.model.QuantityPojo;
 import com.my.spring.service.QuantityService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +22,16 @@ import javax.servlet.http.HttpServletRequest;
 public class QuantityController {
     @Autowired
     QuantityService quantityService;
-    @RequestMapping(value="/admin/uploadItem", method = RequestMethod.POST)
+    @RequestMapping(value="/admin/uploadQuantity", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> uploadItem(
-            @RequestParam(value = "fileList", required = false) MultipartFile file,
+            @RequestParam(value = "file", required = true) MultipartFile file,
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value = "projectId",required = true) Long projectId,
             HttpServletRequest request){
     	String filePath = "/fileupload/quantitys";
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-    	if(quantityService.batchImport(filePath, file,token,request,projectId)){
+    	if(quantityService.batchImport(filePath, file,token,projectId,request)){
             	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
         }else{
             	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -75,6 +76,16 @@ public class QuantityController {
     		@ModelAttribute Quantity quantity){
         return quantityService.getQuantityList(projectId,token,pageIndex,pageSize,quantity);
     }
+    @RequestMapping(value="/getQuantityListNum",method =RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<Quantity>> getQuantityListNum(
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Quantity quantity){
+        return quantityService.getQuantityListNum(projectId,token,pageIndex,pageSize,quantity);
+    }
     
     @RequestMapping(value="/getQuantityDetailsByAdmin")
     @ResponseBody
@@ -84,12 +95,12 @@ public class QuantityController {
         return quantityService.getQuantityDetailsByAdmin(quantityId, token);
     }
     
-    @RequestMapping(value="/exportQuantity")
+    @RequestMapping(value="/exportQuantity",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<String> exportQuantity(
     		@RequestParam(value = "projectId",required = true) Long projectId,
             @RequestParam(value = "token",required = true) String token,
-            HttpServletRequest request) {
+            HttpServletRequest request){
         return quantityService.exportQuantity(projectId, token, request);
     }
     

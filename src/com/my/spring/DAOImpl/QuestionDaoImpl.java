@@ -19,6 +19,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +59,25 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         
     }
 	@Override
+    public boolean deleteQuestion(Long id) {
+    	String sql = "delete from question where id="+id;
+		Session session=getSession();
+		boolean bool=false;
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 int temp=query.executeUpdate();
+			 if(temp==1){
+				 bool =true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return bool;
+        
+    }
+	@Override
     public boolean deleteQuestionByProjectId(Long projectId) {
     	String sql = "delete from question where project_id="+projectId;
 		Session session=getSession();
@@ -87,10 +107,10 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
     	DataWrapper<List<QuestionFile>> retDataWrapperPojos = new DataWrapper<List<QuestionFile>>();
         List<Question> ret = new ArrayList<Question>();
         List<QuestionPojo> retpojo = new ArrayList<QuestionPojo>();
-        
+      
         Session session = getSession();
         Criteria criteria = session.createCriteria(Question.class);
-//        criteria.addOrder(Order.desc("publishDate"));
+       
         if(projectId!=null){
             criteria.add(Restrictions.eq("projectId", question.getProjectId()));
         }
@@ -115,13 +135,17 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         criteria.setProjection(Projections.rowCount());
         int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
         int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
-
-        // 真正取值
+       
         criteria.setProjection(null);
+       
         if (pageSize > 0 && pageIndex > 0) {
             criteria.setMaxResults(pageSize);// 最大显示记录数
             criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+            /////////////
+            
         }
+        //////////////
+       
         try {
             ret = criteria.list();
         }catch (Exception e){
@@ -129,13 +153,13 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         }
         for(int i=0;i<ret.size();i++)
         {
-        	String[] fileLists=new String[10];
-        	String[] fileNameLists=new String[10];
-        	int flag=0;
         	QuestionPojo questionpojo=new QuestionPojo();
         	retDataWrapperPojos=questionFileDao.getQuestionFileByQuestionId(ret.get(i).getId());
         	if(retDataWrapperPojos.getData()!=null)
         	{
+        		String[] fileLists=new String[retDataWrapperPojos.getData().size()];
+            	String[] fileNameLists=new String[retDataWrapperPojos.getData().size()];
+            	int flag=0;
         		for(int j=0;j<retDataWrapperPojos.getData().size();j++)
         		{
         			Long fileId=retDataWrapperPojos.getData().get(j).getFileId();
@@ -169,7 +193,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         	questionpojo.setQuestionDate(ret.get(i).getQuestionDate());
         	questionpojo.setQuestionType(ret.get(i).getQuestionType());
         	questionpojo.setState(ret.get(i).getState());
-        	questionpojo.setTrades(ret.get(i).getTrades());
+        	questionpojo.setTrades(ret.get(i).getTrades());        	        	
         	retpojo.add(i, questionpojo);
         }
         retDataWrapperPojo.setData(retpojo);
@@ -185,5 +209,42 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 	public Question getById(Long id) {
 		// TODO Auto-generated method stub
 		return get(id);
+	}
+
+	@Override
+	public Long getQuestionListOfSort() {
+		Session session=getSession();
+		int flag=0;
+		Query query=session.createSQLQuery("select count(*) from question where priority=" + flag);
+		return  Long.parseLong(query.list().get(0).toString());
+	}
+
+	@Override
+	public Long getQuestionListOfImportant() {
+		Session session=getSession();
+		int flag=1;
+		Query query=session.createSQLQuery("select count(*) from question where priority=" + flag);
+		return  Long.parseLong(query.list().get(0).toString());
+	}
+
+	@Override
+	public Long getQuestionListOfUrgent() {
+		Session session=getSession();
+		int flag=2;
+		Query query=session.createSQLQuery("select count(*) from question where priority=" + flag);
+		return  Long.parseLong(query.list().get(0).toString());
+	}
+
+	@Override
+	public Long getQuestionList() {
+		Session session=getSession();
+		Query query=session.createSQLQuery("select count(*) from question");
+		return  Long.parseLong(query.list().get(0).toString());
+	}
+
+	@Override
+	public DataWrapper<List<Question>> getQuestionListByLike(String content) {
+		String sql="SELECT * FROM question WHERE CONCAT(IFNULL(name,''),IFNULL(intro,''),IFNULL(trades,''),IFNULL(question_date,'')) LIKE '%"+content+"%'" ; 
+		return null;
 	}
 }

@@ -214,7 +214,7 @@ function ProjectController($scope,ProjectService) {
 		      $scope.projectPage($scope.totalPage,$scope.currentPage);
 		  });
 	  }
-	  
+	$scope.getProjectList(pageSize,1,"");
 	  
 	  ////显示更新项目界面
 	 $scope.ProjectChangeClick = function(ProjectId){
@@ -892,4 +892,5 @@ function ProjectController($scope,ProjectService) {
 	 	    document.getElementById("projectPaperInfoAdd").style.display = 'none';
 	 	    document.getElementById("projectItemInfoAdd").style.display = 'none';
 	     }
+	
 }

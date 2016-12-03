@@ -4,63 +4,59 @@
 				<div id="self_menu">
 					<div id="selfli">
 						<div class="selfli_text"><span>工程名称：</span> </div>
-						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.name" class="projectInfoContentInput"/></div>
+						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.name" class="projectInfoContentInput" readonly="readonly"/></div>
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>工程编码：</span></div>
-						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.num" class="projectInfoContentInput"/></div>
+						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.num" class="projectInfoContentInput"/ readonly="readonly"></div>
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>施工单位：</span></div>
-						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.constructionUnit" class="projectInfoContentInput"/></div>
+						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.constructionUnit" class="projectInfoContentInput" readonly="readonly"/></div>
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>项目负责人：</span></div>
-						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.leader" class="projectInfoContentInput"/></div>
+						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.leader" class="projectInfoContentInput" readonly="readonly"/></div>
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>施工地点：</span></div>
-						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.place" class="projectInfoContentInput"/></div>
+						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.place" class="projectInfoContentInput" readonly="readonly"/></div>
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>建设单位：</span></div>
-						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.buildingUnit" class="projectInfoContentInput"/></div>
+						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.buildingUnit" class="projectInfoContentInput" readonly="readonly"/></div>
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>设计单位：</span></div>
-						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.designUnit" class="projectInfoContentInput"/></div>
+						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.designUnit" class="projectInfoContentInput" readonly="readonly"/></div>
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>施工时间：</span></div>
-						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.startDate" class="projectInfoContentInput"/></div>
+						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.startDate" class="projectInfoContentInput" readonly="readonly"/></div>
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>施工周期：</span></div>
-						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.phase" class="projectInfoContentInput"/></div>
+						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.phase" class="projectInfoContentInput" readonly="readonly"/></div>
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>版本：</span></div>
-						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.version" class="projectInfoContentInput"/></span></div>
+						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.version" class="projectInfoContentInput" readonly="readonly"/></span></div>
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>项目工程简介：</span></div>
-						<div id="projectInfoDesc"><textarea id="projectInfoDescInput" ng-model="$parent.$parent.findProjectInfo.description"></textarea></div>
+						<div id="projectInfoDesc"><textarea id="projectInfoDescInput" ng-model="$parent.$parent.findProjectInfo.description" readonly="readonly"></textarea></div>
 					</div>
 					<div id="selfliModel" >
 						<div class="selfli_text"><span>模型上传：</span></div>
-						<div><input type="file" id="testfile" onchange="setModel(this)"/></div>
+						<div><input type="file" id="testfile" onchange="setModel(this)" readonly="readonly"/></div>
 						
 					</div>
 					<div id="selfliPic" >
 						<div class="selfli_text"><span>图片上传：</span></div>
-						<div><input type="file" id="picFile" onchange="setPic(this)"/></div>
+						<div><input type="file" id="picFile" onchange="setPic(this)" readonly="readonly"/></div>
 					</div>
 				</div>
 				
 		</div>
-		<div id="selfAdd">
-	            	<input type="button" ng-click="addProjectByAdmin()"  class="btn btn-default" value="确定" />
-	                <input type="button" ng-click="resetProject()" class="btn btn-default" value="重置" />
-    	</div>
 	</div>
 </div>

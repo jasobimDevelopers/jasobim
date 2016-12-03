@@ -16,8 +16,10 @@ public class QuestionPojo {
 	private Integer state;   ///问题的状态(0.待解决 1.已解决)
 	private String codeInformation;/////图片的二维码信息
 	private String[] fileList;////问题照片
-	private String[] originName;
-	
+	private String[] originName;///问题照片的名称
+	private int sortPercent;/////一般问题的百分比
+	private int importantPercent;/////重要问题的百分比
+	private int urgentPercent;//////紧急问题的百分比
 	public Long getId() {
 		return id;
 	}
@@ -114,6 +116,24 @@ public class QuestionPojo {
 	}
 	public void setOriginName(String[] originName) {
 		this.originName = originName;
+	}
+	public int getSortPercent() {
+		return sortPercent;
+	}
+	public void setSortPercent(int sortPercent) {
+		this.sortPercent = sortPercent;
+	}
+	public int getImportantPercent() {
+		return importantPercent;
+	}
+	public void setImportantPercent(int importantPercent) {
+		this.importantPercent = importantPercent;
+	}
+	public int getUrgentPercent() {
+		return urgentPercent;
+	}
+	public void setUrgentPercent(int urgentPercent) {
+		this.urgentPercent = urgentPercent;
 	}
 	
 	

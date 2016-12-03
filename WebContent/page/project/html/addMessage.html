@@ -1,0 +1,25 @@
+
+
+	<div id="addcontent_message">
+        <div id="addhead_message">
+        	<div id="addusertitle"><span>留言修改</span></div>
+            <div id="returnuser">
+            	<a href="" ng-click="returnMessagelist()"><span>返回留言信息列表</span>
+            	</a>
+            	<div  style="float:right;margin-left:10px;">
+            		<a href="" ng-click="returnMessagelist()"><img src="page/project/images/deleteIcon.png"></a>
+            	</div>
+           	</div>
+        </div>
+        <div id="adduserbody">
+        	<div class="addinput_message">
+        		<input type="hidden" ng-model="findMessageInfo.id" id="messageId"/>
+        		<span>&nbsp;&nbsp;&nbsp;消息内容:</span><input type="text" ng-model="findMessageInfo.content" id="inputContent" />
+            </div>
+           
+            <div id="addbutton" style="margin-top:86px;">
+            	<input class="btn btn-default" type="button" ng-click="updateMessageByAdmin(findMessageInfo.id,findMessageInfo.questionId)" value="确定" />
+                <input type="button" ng-click="resetMessage()" class="btn btn-default" value="重置" />
+            </div>
+        </div>
+	</div>

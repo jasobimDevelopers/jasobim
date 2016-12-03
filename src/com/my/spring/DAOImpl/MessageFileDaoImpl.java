@@ -7,6 +7,7 @@ import com.my.spring.model.MessageFile;
 import com.my.spring.model.User;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -68,30 +69,25 @@ public class MessageFileDaoImpl extends BaseDao<MessageFile> implements MessageF
 	}
 
 	@Override
-	public DataWrapper<List<MessageFile>> deleteMessageFileByMessageId(Long id) {
-		DataWrapper<List<MessageFile>> messageFiles=new DataWrapper<List<MessageFile>>();
-        Session session = getSession();
-        Criteria criteria = session.createCriteria(MessageFile.class);
-        criteria.add(Restrictions.eq("messageId",id));
-        try {
-        	messageFiles.setData( criteria.list());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        if (messageFiles.getData() != null && messageFiles.getData().size() > 0) {
-        	messageFiles.setErrorCode(ErrorCodeEnum.Error);
-			return messageFiles;
-		}else{
-			messageFiles.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
-		}
-		return messageFiles;
+	public boolean deleteMessageFileByMessageId(Long id) {
+		String sql = "delete from message_file where message_id="+id;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
 	}
 
 	@Override
 	public DataWrapper<List<MessageFile>> getMessageFileListByMessageId(Long messageId) {
 		DataWrapper<List<MessageFile>> retDataWrapper = new DataWrapper<List<MessageFile>>();
-        
-        //ret=find("select * from User where userId=?"+userId);
 		List<MessageFile> ret = null;
 	    Session session = getSession();
 	    Criteria criteria = session.createCriteria(MessageFile.class);
@@ -105,5 +101,24 @@ public class MessageFileDaoImpl extends BaseDao<MessageFile> implements MessageF
 			retDataWrapper.setData(ret);
 		}
 		return retDataWrapper;
+	}
+
+	@Override
+	public boolean deleteMessageFileByMessageIds(Long id) {
+		String sql = "delete from message_file where message_id="+id;
+		Session session=getSession();
+		boolean bool=false;
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 int temp=query.executeUpdate();
+			 if(temp==1){
+				 bool=true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return bool;
 	}
 }

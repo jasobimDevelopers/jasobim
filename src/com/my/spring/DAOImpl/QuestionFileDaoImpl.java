@@ -7,6 +7,7 @@ import com.my.spring.model.MessageFile;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -68,32 +69,26 @@ public class QuestionFileDaoImpl extends BaseDao<QuestionFile> implements Questi
 	}
 
 	@Override
-	public DataWrapper<List<QuestionFile>> deleteQuestionFileByQuestionId(Long id) {
-		DataWrapper<List<QuestionFile>> questionFiles=new DataWrapper<List<QuestionFile>>();
-        Session session = getSession();
-        Criteria criteria = session.createCriteria(MessageFile.class);
-        criteria.add(Restrictions.eq("messageId",id));
-        try {
-        	questionFiles.setData( criteria.list());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        if (questionFiles.getData() != null && questionFiles.getData().size() > 0) {
-        	questionFiles.setErrorCode(ErrorCodeEnum.Error);
-			return questionFiles;
-		}else{
-			questionFiles.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
-		}
-		return questionFiles;
+	public boolean deleteQuestionFileByQuestionId(Long id) {
+		String sql = "delete from question_file where question_id="+id;
+		Session session=getSession();
+		boolean temp=false;
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 int tem=query.executeUpdate();
+			 if(tem==1){
+				 temp = true;
+			 }
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		return temp;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<QuestionFile>> getQuestionFileByQuestionId(Long questionId) {
-		// TODO Auto-generated method stub
 		DataWrapper<List<QuestionFile>> retDataWrapper = new DataWrapper<List<QuestionFile>>();
-        
-        //ret=find("select * from User where userId=?"+userId);
 		List<QuestionFile> ret = null;
 		Session session = getSession();
 		Criteria criteria = session.createCriteria(QuestionFile.class);

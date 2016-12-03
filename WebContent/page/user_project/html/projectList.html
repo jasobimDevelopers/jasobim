@@ -1,6 +1,6 @@
 <div ng-controller="ProjectController">
-<div ng-include="'page/project/html/addProject.html'" style="display:none;position:absolute; top:0px; left:400px; z-index:1;" id="addProjectHtml"></div>
-<div ng-include="'page/project/html/projectInfo.html'" style="display:none;position:absolute; top:0px; left:400px; z-index:1;" id="projectInfoHtml"></div>
+<div ng-include="'page/user_project/html/addProject.html'" style="display:none;position:absolute; top:0px; left:400px; z-index:1;" id="addProjectHtml"></div>
+<div ng-include="'page/user_project/html/projectInfo.html'" style="display:none;position:absolute; top:0px; left:400px; z-index:1;" id="projectInfoHtml"></div>
 <div id="projectContent">
 		<div id="include_header" style="display:block">
 	    	
@@ -18,7 +18,7 @@
 	                <span class="inputtext">&nbsp施工周期:</span><input type="text" id="phase" ng-model="ProjectTofind.phase"/>
 	                
 	                <a href=""><button id="find" ng-click="projectFind()" ></button></a>
-	                <a href=""><button id="add" ng-click="showProjectAdd()"  ><span id="findtext">添加项目</span></button></a>
+	                <button id="add" ng-click="showProjectAdd()"  ><span id="findtext"></span></button>
 	            </div>
 	           
 	    </div>
@@ -45,8 +45,6 @@
 							<td>{{projectInfo.phase}}</td>
 							<td class="tds" >
 		                        <button id="editbutton" ng-click="projectChangeClick(projectInfo.id)">
-		                        </button>
-		                        <button id="deletebutton" ng-click="deleteProject(projectInfo.id)">
 		                        </button>
 		                    </td>
 						</tr>

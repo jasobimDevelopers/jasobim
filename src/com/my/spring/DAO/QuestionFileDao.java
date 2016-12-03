@@ -14,5 +14,5 @@ public interface QuestionFileDao {
     DataWrapper<List<QuestionFile>> getQuestionFileByQuestionId(Long questionId);
     DataWrapper<List<QuestionFile>> getQuestionFileList();
     DataWrapper<List<QuestionFile>> getQuestionFileListByUserId(Long userId);
-	DataWrapper<List<QuestionFile>> deleteQuestionFileByQuestionId(Long id);
+	boolean deleteQuestionFileByQuestionId(Long id);
 }

@@ -40,6 +40,7 @@ public class QuestionController {
     	}
         return dataWrapper;
     }
+    //////根据项目id和问题id删除问题
     @RequestMapping(value="/admin/deleteQuestion")
     @ResponseBody
     public DataWrapper<Void> deleteQuestion(
@@ -49,8 +50,16 @@ public class QuestionController {
             @RequestParam(value = "token",required = true) String token){
         return questionService.deleteQuestion(questionId,token,request,projectId);
     }
-
-    @RequestMapping(value="/updateQuestion",method = RequestMethod.POST)
+    //////根据问题id删除问题
+    @RequestMapping(value="/admin/deleteQuestionById")
+    @ResponseBody
+    public DataWrapper<Void> deleteQuestionById(
+            @RequestParam(value = "questionId",required = true) Long questionId,
+            HttpServletRequest request,
+            @RequestParam(value = "token",required = true) String token){
+        return questionService.deleteQuestion(questionId,token,request);
+    }
+    @RequestMapping(value="/admin/updateQuestion",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateQuestion(
             @ModelAttribute Question question,
@@ -79,12 +88,19 @@ public class QuestionController {
     {
         return questionService.getQuestionList(projectId,token,pageIndex,pageSize,question);
     }
-    @RequestMapping(value="/getQuestionDetails/{questionId}")
+    @RequestMapping(value="/getQuestionDetails",method = RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<Question> getQuestionDetailsByAdmin(
-    		@PathVariable(value="questionId") Long questionId,
+    public DataWrapper<Question> getQuestionDetails(
+    		@RequestParam(value="questionId",required=true) Long questionId,
     		@RequestParam(value="token",required=true) String token){
         return questionService.getQuestionDetailsByAdmin(questionId,token);
+    }
+    @RequestMapping(value="/getQuestionsByLike",method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<Question>> getQuestionsByLike(
+    		@RequestParam(value="content",required=true) String content,
+    		@RequestParam(value="token",required=true) String token){
+        return questionService.getQuestionsByLike(content,token);
     }
     
 }

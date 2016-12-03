@@ -20,7 +20,10 @@ text-decoration: none;
 a:visited {
 text-decoration: none;
 }
-
+#table-buton10{
+width:1200px;
+height:30px;
+}
 a:active {
 text-decoration: none;
 font-size: 16px;
@@ -242,7 +245,7 @@ text-decoration: none;
 #questionList_content div{
 	float:left;
 }
-#table-buton8{
+#table-buton10{
 	float:right;
 }
 #dataShow{
@@ -258,7 +261,7 @@ text-decoration: none;
 #dataShow div{
 	margin-top:13px;
 }
-#questionsPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
+#questionsPageCode{padding: 15px 20px;text-align: left;color: #ccc; width:800px;padding-left:500px;}
 #questionsPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
 
 #questionsPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
@@ -268,7 +271,7 @@ text-decoration: none;
 
 
 .addinput_question{
-	margin:20px 90px;
+	margin:25px 90px;
 	height:50px;
 	width:600px;
 }
@@ -283,7 +286,7 @@ text-decoration: none;
 #addcontent_question{
 	background:url(../images/border.png) no-repeat;
 	background-size:100% 100%;
-	height:970px;
+	height:100%;
 	width:1000px;
 	margin:30px auto;
 	margin-left:25px;
@@ -294,11 +297,15 @@ text-decoration: none;
 	padding-left:20px;
 	height:30px;
 	font-size:18px;
+	margin-left:100px;
+	width:800px;
+	border-bottom: 1px solid gray;
 	font-family:微软雅黑;
+	margin-bottom:20px;
 }
 #usericon{
-	width:100px;
-    height:100px;
+	width:70px;
+    height:70px;
     overflow:hidden;
     border-radius:53px;
     border:1px solid gray;
@@ -309,34 +316,146 @@ text-decoration: none;
 	margin-top:160px;
 }
 #usernamessss{
-	width:118px;
-	height:75px;
-	padding-top:30px;
-	margin-right:580px;
+	padding-top:18px;
 	font-size:16px;
+	width:654px;
 	font-family:微软雅黑;
 	padding-left:20px;
 }
 #usercontent{
-	width:698px;
-	height:20px;
 	font-size:16px;
 	font-family:微软雅黑;
+	width:654px;
 	padding-left:20px;
+	padding-top: 9px;
 }
 #message_area{
-	width:800px;
-	height:200px;
-	border:1px solid red;
+	width:807px;
+	height:80px;
+	margin-left:95px;
+	margin-top:90px;
+}
+#message_area div{
+	float:left;
 }
 #message_content{
-	width:800px;
-	height:104px;
+	width:860px;
+	margin-left:72px;
+	overflow:auto;
+    overflow-x: hidden;
+	height:400px; 
 }
 #message_content div{
-	float:right;
+	float:left;
 }
 #userIntro{
-	height:180px;
-	width:698px;
+	height:75px;
+	margin-left:28px;
+	width:799px;
+}
+#inputtype{
+	width:300px;
+	height:31px;
+	margin-left:16px;
+}
+#inputdetail{
+	width:299px;
+	height:64px;
+	margin-left:21px;
+}
+
+#messageImg{
+	background:url(../images/bkOfmessage.png) no-repeat 4px;
+	opacity: 0.7;
+	width:41px;
+	margin-right:10px;
+	height:43px;
+	border:1px solid gray;
+	border-radius: 20px;
+}
+#messageArea{
+	width:690px;
+	height:43px;
+	border:1px solid gray;
+}
+#messageText{
+	margin-left:10px;
+	font-size:17px;
+	font-family:微软雅黑;
+	text-align:center;
+	padding-top:9px;
+	width:52px;
+	height:43px;
+	border:1px solid gray;
+}
+#imageMessage{
+    border-radius: 35px;
+    width: 70px;
+    height: 70px;
+    border: 1px solid gray;
+    overflow:hidden;
+}
+imageMessage img{
+	border-radius: 35px;
+}
+#imgMessge{
+	opacity:0;
+	width:40px;
+	height:43px;
+}
+#messageUsername{
+	width:654px;
+	height:70px;
+}
+#action{
+    text-align: center;
+    padding-top: 43px;
+	height:70px;
+	width:75px;
+	font-family:微软雅黑;
+	font-size:16px;
+}
+
+#addcontent_message{
+	background:url(../images/border.png) no-repeat;
+	background-size:100% 100%;
+	height:338px;
+	width:684px;
+	margin:30px auto;
+}
+#addhead_message{
+	padding-left:10px;
+	margin:0 auto;
+	height:51px;
+	width:596px;
+	border-bottom:1px solid #999;
+}
+.addinput_message{
+	margin:79px 50px;
+}
+.addinput_message input{
+	margin-left:20px;
+	height:32px;
+	width:300px;
+}
+
+.addinput_message span{
+	font-size:18px;
+	
+}
+.addinput_message .addbutton{
+	width:70px;
+	height:32px;
+	float:left;
+}
+#addquestionbody{
+	margin:20px auto;
+	text-align:center;
+	height:720px;
+	width:600px;
+}
+.addquestionSelect{
+	width:299px;
+	height:34px;
+	margin-left:20px;
 }

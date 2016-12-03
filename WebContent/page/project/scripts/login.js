@@ -52,12 +52,12 @@ function login(){
         		 setCookie('userName',data.data.userName);*/
  				 setCookie('token',data.token);
  				 setCookie('userName',data.data.userName);
+ 				 setCookie('userIcon',data.data.userIconUrl);
  				 if(data.data.userType==0){
  					window.location.href="userList";
  				 }
  				 else{
  					window.location.href="user_projectList";
- 					 alert("用户界面筹建中！");
  				 }
  			 } else {
  				alert("用户名和密码错误，请重新输入！");

@@ -95,6 +95,10 @@ li{
 }
 #portrait{
 	margin-left:200px;
+	
+}
+#portrait span{
+color:white ! important;
 }
 #portrait_image{
 	margin:10px 0px;

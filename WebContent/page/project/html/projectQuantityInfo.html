@@ -59,9 +59,20 @@
 							</tr>
 						</tbody>
 					</table>
+					<div id="quantityAction">
+							<div id="quantityImport">
+								<div id="imgBiangen"><a href="#" id="quantity_button" ng-click="importQuantity()">变更签证</a></div>
+								<div id="biangeng_file"><input type="file" id="biangeng_import"/></div>
+							</div>
+							<a href="{{quantityUrl}}" target="_blank" download="{{quantityExcel.originName}}">
+								<div id="quantityUpdate"><span>下载</span></div>
+							</a>
+					</div>
 					<div id="table-buton3" >
 						<div id=quantityPageCode></div>
+						
 					</div>
+					
 				</div>
 	</div>
 </div>

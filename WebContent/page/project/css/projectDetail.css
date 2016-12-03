@@ -310,7 +310,7 @@ font-weight: bold;
 
 #projectDetail_body_quantity{
 	background:url(../images/biaotikuang.png) no-repeat;
-	height:1100px;
+	height:1300px;
 	width:1200px;
 	margin:0 auto;
 }
@@ -539,4 +539,54 @@ font-weight: bold;
 	padding-top:4px;
 	margin-top:360px;
 	
+}
+/*工程量变更和下载*/
+#quantityImport{
+	
+	width:280px;
+	margin-right:75px;
+	padding-top:5px;
+	height:30px;
+	
+}
+#quantityImport div{
+	float:left;
+}
+#imgBiangen{
+	background:url(../images/biangeng@2x.png) no-repeat;
+	height:30px;
+	padding-top:5px;
+	width:74px;
+}
+#quantityUpdate{
+	background:url(../images/xiazai@2x.png) no-repeat 0px 6px;
+	padding-top:11px;
+	width:72px;
+	height:50px;
+	
+}
+#biangeng_file{
+	height:30px;
+	width:200px;
+	padding-top:5px;
+	overflow:hidden;
+}
+#quantityAction{
+	width:1100px;height:55px;
+}
+#quantityImportFile{
+	opacity: 0;
+    width: 70px;
+    height: 30px;
+}
+#quantityAction div{
+	text-align:center;
+	float:left;
+}
+#quantityImport div{
+	float:left;
+}
+#quantity_button{
+	height:30px;
+	width:60px;
 }

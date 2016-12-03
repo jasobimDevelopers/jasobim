@@ -245,7 +245,7 @@ public class ItemServiceImpl implements ItemService {
 			    			}
 			    			test.setMaterial(material);
 			    			if(pojo.getLengthnum()!=0){
-			    				test.setValue(pojo.getLengthnum());
+			    				test.setValue((pojo.getLengthnum()/1000));
 			    				test.setUnit("米（m）");
 			    			}
 			    			if(pojo.getAreanum()!=0){

@@ -487,7 +487,7 @@
 		                         });
 		                     return deferred.promise;
 		                     };
-		          /////////////上传交底信息
+		          /////////////上传图纸信息
 		                     this.uploadVideoFile = function(fileArray,professionType,projectId) {
 			                     var deferred = $q.defer();
 			                     
@@ -515,4 +515,51 @@
 			                         });
 			                     return deferred.promise;
 			                     };
+		/////上传预算的工程量
+			                     this.uploadOtherQuantity = function(formData,projectId){
+			                    	 var deferred = $q.defer();
+				                     console.log("上传构件数据");
+				                     $http.post('api/quantity/admin/uploadQuantity?token='+getCookie('token')+"&projectId="+projectId,formData,
+				                    		 {
+				                    	 		headers: {'Content-Type':undefined},
+				                    	 		transformRequest: angular.identity 
+				                    		 })
+				                         .success(function(data, status, headers, config){
+
+				                             if(data.callStatus == "SUCCEED"){
+				                                 deferred.resolve(data);
+				                                 alert("上传预算工程量信息成功！")
+				                                 self.uploadQuantityInfo = data;
+				                             
+				                             }else{
+				                                 alert("数据添加失败("+data.errorCode+")");
+				                             }
+				                             
+				                         })
+				                         .error(function(data, status, headers, config){
+				                             deferred.reject(data);
+				                         });
+				                     return deferred.promise;
+			                     };
+			                     ////////导出工程量
+			                     this.getProjectQuantityExcel= function(projectId){
+			                    	 var deferred = $q.defer();
+			                    	 $http.get('api/quantity/exportQuantity?projectId='+projectId+'&token='+token)
+				                     .success(function(data, status, headers, config){
+				                         console.log(data);
+				                             if(data.callStatus == "SUCCEED"){
+				                                 deferred.resolve(data);
+				                                 alert("导出预算工程量信息成功！")
+				                                 self.uploadQuantityInfo = data;
+				                             
+				                             }else{
+				                                 alert("数据导出失败("+data.errorCode+")");
+				                             }
+				                             
+				                         })
+				                         .error(function(data, status, headers, config){
+				                             deferred.reject(data);
+				                         });
+				                     return deferred.promise;
+			                     }
   });

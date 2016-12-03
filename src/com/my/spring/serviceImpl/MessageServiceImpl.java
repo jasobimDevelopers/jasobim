@@ -97,20 +97,23 @@ public class MessageServiceImpl implements MessageService {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(id!=null){
 					Message message=messageDao.getById(id);
-					if(!messageDao.deleteMessage(id)) 
-					{
-						///////////////////////////////
-						DataWrapper<List<MessageFile>> dataWrappers=messageFileDao.deleteMessageFileByMessageId(message.getId());
-						for(MessageFile e:dataWrappers.getData()){
+					if(messageFileDao.getMessageFileListByMessageId(message.getId()).getData()!=null 
+							&& messageFileDao.getMessageFileListByMessageId(message.getId()).getData().size()>0){
+						
+						if(messageFileDao.deleteMessageFileByMessageIds(message.getId())){
+							messageDao.deleteMessage(id);
+						}
+						
+						/*for(MessageFile e:dataWrappers.getData()){
 							fileDao.deleteFiles(e.getFileId());//删除文件表的信息
 							Files files=fileDao.getById(e.getFileId());
 							fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
-						}
-						
-			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						}*/
 					}
-					else
+					else{
+						messageDao.deleteMessage(id);
 						return dataWrapper;
+					}
 			        
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -124,20 +127,18 @@ public class MessageServiceImpl implements MessageService {
         return dataWrapper;
     }
 
-   /* @Override
+    @Override
     public DataWrapper<Void> updateMessage(Message message,String token) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
-				if(message!=null){
-					if(!messageDao.updateMessage(message)) 
-			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-					else
-						return dataWrapper;
-			        
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+				message.setUserId(userInMemory.getId());
+				if(!messageDao.updateMessage(message)) {
+				    dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}
+				else{
+					return dataWrapper;
 				}
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
@@ -146,7 +147,7 @@ public class MessageServiceImpl implements MessageService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
         return dataWrapper;
-    }*/
+    }
 
     @Override
     public DataWrapper<List<MessagePojo>> getMessageList(String token , Integer pageIndex, Integer pageSize, Message message) {
@@ -169,6 +170,12 @@ public class MessageServiceImpl implements MessageService {
 							messagePojo.setUserId(dataWrapper.getData().get(i).getUserId());
 							User user= new User();
 							user=userDao.getById(dataWrapper.getData().get(i).getUserId());
+							if(user.getUserIcon()!=null){
+								Files files=fileDao.getById(user.getUserIcon());
+								if(files.getUrl()!=null){
+									messagePojo.setUserIconUrl(files.getUrl());
+								}
+							}
 							if(user!=null){
 								messagePojo.setUserName(user.getUserName());
 							}
@@ -214,6 +221,44 @@ public class MessageServiceImpl implements MessageService {
 		            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				else
 					return messageDao.getMessageListByUserId(userId);
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return dataWrapper;
+	}
+	@Override
+	public DataWrapper<List<Message>> getMessageListByQuestionId(Long questionId,String token) {
+		DataWrapper<List<Message>> dataWrapper = new DataWrapper<List<Message>>();
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+			if(questionId!=null){
+				if(messageDao.getMessageListByUserId(questionId).getData()==null ||
+						messageDao.getMessageListByUserId(questionId).getData().size()<=0) 
+		            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				else
+					return messageDao.getMessageListByUserId(questionId);
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<Message> getMessageListById(Long id, String token) {
+		DataWrapper<Message> dataWrapper = new DataWrapper<Message>();
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+			if(id!=null){
+				if(messageDao.getMessageListById(id)==null) 
+		            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				else
+					dataWrapper.setData(messageDao.getMessageListById(id));
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 			}

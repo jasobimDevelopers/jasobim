@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.VideoDao;
+import com.my.spring.model.User;
 import com.my.spring.model.Video;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -107,6 +109,42 @@ public class VideoDaoImpl extends BaseDao<Video> implements VideoDao {
         retDataWrapper.setTotalPage(totalPageNum);
         retDataWrapper.setNumberPerPage(pageSize);
         return retDataWrapper;
+	}
+
+	@Override
+	public boolean getByProjectId(Long projectId) {
+		List<Video> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Video.class);
+        criteria.add(Restrictions.eq("projectId",projectId));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean deleteVideoByProjectId(Long id) {
+		String sql = "delete from video where project_id="+id;
+		Session session=getSession();
+		boolean temp=false;
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 int te=query.executeUpdate();
+			 if(te==1){
+				 temp= true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return temp;
 	}
 
 }

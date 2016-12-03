@@ -15,5 +15,11 @@ public interface QuestionDao {
     boolean deleteQuestionByProjectId(Long projectId);
     boolean updateQuestion(Question question);
     DataWrapper<List<QuestionPojo>> getQuestionList(Long projectId, Integer pageIndex, Integer pageSize, Question question);
+    Long getQuestionList();
+    Long getQuestionListOfSort();
+    Long getQuestionListOfImportant();
+    Long getQuestionListOfUrgent();
     Question getById(Long id);
+	boolean deleteQuestion(Long id);
+	DataWrapper<List<Question>> getQuestionListByLike(String content);
 }

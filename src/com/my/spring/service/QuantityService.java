@@ -1,6 +1,7 @@
 package com.my.spring.service;
 
 import com.my.spring.model.Quantity;
+import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public interface QuantityService {
     DataWrapper<Void> updateQuantity(Quantity quantity,String token);
 	DataWrapper<Quantity> getQuantityDetailsByAdmin(Long quantityId,String token);
 	DataWrapper<List<Quantity>> getQuantityList(Long projectId,String token,Integer pageIndex,Integer pageSize,Quantity quantity);
-	boolean batchImport(String filePath, MultipartFile file, String token, HttpServletRequest request, Long projectId);
+	boolean batchImport(String filePath, MultipartFile file, String token,Long projectId, HttpServletRequest request);
 	DataWrapper<String> exportQuantity(Long projectId,String token, HttpServletRequest request);
+	DataWrapper<List<Quantity>> getQuantityListNum(Long projectId, String token, Integer pageIndex, Integer pageSize,
+			Quantity quantity);
 }

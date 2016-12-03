@@ -8,9 +8,13 @@ import javax.persistence.ParameterMode;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Example;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.procedure.ProcedureCall;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import com.my.spring.DAO.BaseDao;
@@ -18,6 +22,7 @@ import com.my.spring.DAO.QuantityDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
+import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 
@@ -48,9 +53,24 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
     	DataWrapper<List<Quantity>> retDataWrapper = new DataWrapper<List<Quantity>>();
         List<Quantity> ret = new ArrayList<Quantity>();
         Session session = getSession();
+        /*ProjectionList projectionList=Projections.projectionList();
+        projectionList.add(Projections.groupProperty("projectId"));
+        projectionList.add(Projections.groupProperty("systemType"));
+        projectionList.add(Projections.groupProperty("serviceType"));
+        projectionList.add(Projections.groupProperty("familyAndType"));
+        projectionList.add(Projections.groupProperty("size"));
+        projectionList.add(Projections.groupProperty("material"));
+        projectionList.add(Projections.groupProperty("name"));
+        projectionList.add(Projections.groupProperty("typeName"));
+        projectionList.add(Projections.groupProperty("professionType"));
+        Quantity ticket = new Quantity(); 
+		ticket.setProjectId(projectId);
+		Criteria criteria = session.createCriteria(Quantity.class); 
+		criteria.add(Example.create(ticket)); */
         Criteria criteria = session.createCriteria(Quantity.class);
         ///////////////////////////////
         criteria.add(Restrictions.eq("projectId", projectId));
+        //criteria.setProjection(projectionList);
         if(quantity.getProfessionType()!=null){
         	criteria.add(Restrictions.eq("professionType", quantity.getProfessionType()));
         }
@@ -73,6 +93,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 			pageIndex = 1;
 		}
         
+        
         // 取总页数
         criteria.setProjection(Projections.rowCount());
         int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
@@ -80,6 +101,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 
         // 真正取值
         criteria.setProjection(null);
+       
         if (pageSize > 0 && pageIndex > 0) {
             criteria.setMaxResults(pageSize);// 最大显示记录数
             criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
@@ -196,5 +218,143 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 	    }
 		
 		return true;
+	}
+
+	@Override
+	public DataWrapper<List<Quantity>> getQuantityListNum(Long projectId, Integer pageSize, Integer pageIndex,
+			Quantity quantity) {
+		String sql = "select count(*) as num,SUM(length) as lengthnum,SUM(area) as areanum,"
+				 +"project_id,building_num,unit_num,household_num,system_type,"
+				 +"service_type,family_and_type,size,material,name,type_name,profession_type from item "
+				 + "GROUP BY project_id,building_num,unit_num,household_num,"
+				 + "system_type,service_type,family_and_type,size,material,name,type_name";
+		DataWrapper<List<QuantityPojo>> dataWrapper=new DataWrapper<List<QuantityPojo>>();
+		DataWrapper<List<Quantity>> dataWrappers=new DataWrapper<List<Quantity>>();
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("num",StandardBasicTypes.LONG)
+					 .addScalar("lengthnum", StandardBasicTypes.DOUBLE)
+					 .addScalar("areanum",StandardBasicTypes.DOUBLE)
+					 .addScalar("project_id",StandardBasicTypes.LONG)
+					 .addScalar("building_num", StandardBasicTypes.INTEGER)
+					 .addScalar("unit_num", StandardBasicTypes.INTEGER)
+					 .addScalar("household_num", StandardBasicTypes.INTEGER)
+					 .addScalar("system_type", StandardBasicTypes.STRING)
+					 .addScalar("service_type", StandardBasicTypes.STRING)
+					 .addScalar("family_and_type", StandardBasicTypes.STRING)
+					 .addScalar("size", StandardBasicTypes.STRING)
+					 .addScalar("material", StandardBasicTypes.STRING)
+					 .addScalar("type_name", StandardBasicTypes.STRING)
+					 .addScalar("name", StandardBasicTypes.STRING)
+					 .addScalar("profession_type", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(QuantityPojo.class)); 
+			 dataWrapper.setData(query.list());
+			 List <Quantity> quantityList=new ArrayList<Quantity>();
+			 if(dataWrapper.getData()!=null && dataWrapper.getData().size()>0){
+					if(dataWrapper.getData()!=null){
+			    		for(QuantityPojo pojo:dataWrapper.getData()){
+			    			
+			    			Quantity test=new Quantity();
+			    			Long st=pojo.getProject_id();
+			    			test.setProjectId(st);
+			    			test.setBuildingNum(pojo.getBuilding_num());
+			    			test.setFloorNum(pojo.getFloor_num());
+			    			test.setUnitNum(pojo.getUnit_num());
+			    			test.setHouseholdNum(pojo.getHousehold_num());
+//			    			test.setTypeName(pojo.getType_name());
+			    			String familyAndType=pojo.getFamily_and_type();
+			    			String typeName=pojo.getType_name();
+			    			if(typeName==null){
+			    				typeName="";
+			    			}
+//			    			test.setTypeName(typeName);
+			    			if(familyAndType==null){
+			    				familyAndType="";
+			    			}
+			    			test.setFamilyAndType(familyAndType);
+			    			String serviceType=pojo.getService_type();
+			    			if(serviceType==null){
+			    				serviceType="";
+			    			}
+			    			test.setServiceType(serviceType);
+			    			String systemType=pojo.getSystem_type();
+			    			if(systemType==null){
+			    				systemType="";
+			    			}
+			    			test.setSystemType(systemType);
+			    			test.setProfessionType(pojo.getProfession_type());
+			    			String names=pojo.getName();
+			    			if(names==null){
+			    				names="";
+			    			}
+			    			test.setName(names);
+			    			String size=pojo.getSize();
+			    			if(size==null){
+			    				size="";
+			    			}
+			    			test.setSize(size);
+			    			String material=pojo.getMaterial();
+			    			if(material.equals("")){
+			    				material="";
+			    			}
+			    			test.setMaterial(material);
+			    			if(pojo.getLengthnum()!=0){
+			    				test.setValue((pojo.getLengthnum()/1000));
+			    				test.setUnit("米（m）");
+			    			}
+			    			if(pojo.getAreanum()!=0){
+			    				test.setValue(pojo.getAreanum());
+			    				test.setUnit("平米（m2）");
+			    			}
+			    			if(pojo.getNum()!=0 && pojo.getAreanum()==0 && pojo.getLengthnum()==0){
+			    				test.setValue(pojo.getNum());
+			    				test.setUnit("个");
+			    			}
+			    			quantityList.add(test);
+			    		}
+			    		dataWrappers.setData(quantityList);
+			    	}else{
+			    		dataWrappers.setErrorCode(ErrorCodeEnum.Error);
+			    	}
+			 }
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	        }
+		 
+		return dataWrappers;
+	}
+
+	@Override
+	public boolean findSameQuantityAndDo(List<Quantity> quantityList) {
+		List<Quantity> quantityLists=new ArrayList<Quantity>();
+		List<Quantity> sameQuantityLists=new ArrayList<Quantity>();
+        Session session = getSession();
+        for(int i=0;i<quantityList.size();i++){
+        	Criteria criteria = session.createCriteria(Quantity.class);
+	        criteria.add(Restrictions.eq("name",quantityList.get(i).getName()))
+	        .add(Restrictions.eq("professionType", quantityList.get(i).getProfessionType()))
+	        .add(Restrictions.eq("projectId", quantityList.get(i).getProjectId()))
+	        .add(Restrictions.eq("buildingNum", quantityList.get(i).getBuildingNum()))
+	        .add(Restrictions.eq("floorNum", quantityList.get(i).getFloorNum()))
+	        .add(Restrictions.eq("unitNum", quantityList.get(i).getUnit()))
+	        .add(Restrictions.eq("householdNum",quantityList.get(i).getHouseholdNum()))
+	        .add(Restrictions.eq("familyAndType", quantityList.get(i).getFamilyAndType()))
+	        .add(Restrictions.eq("systemType", quantityList.get(i).getSystemType()))
+	        .add(Restrictions.eq("serviceType", quantityList.get(i).getServiceType()))
+	        .add(Restrictions.eq("size", quantityList.get(i).getSize()))
+	        .add(Restrictions.eq("material", quantityList.get(i).getMaterial()))
+	        .add(Restrictions.eq("typeName",quantityList.get(i).getTypeName()));
+	        try {
+	        	quantityLists = criteria.list();
+	        }catch (Exception e){
+	            e.printStackTrace();
+	        }
+	        if(quantityLists.size()>0){
+	        	sameQuantityLists.add(quantityList.get(i));
+	        }
+        }
+		return false;
 	}
 }

@@ -8,6 +8,7 @@ import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QuantityDao;
 import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.VideoDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
@@ -45,6 +46,8 @@ public class ProjectServiceImpl implements ProjectService {
     ItemDao itemDao;
     @Autowired
     PaperDao paperDao;
+    @Autowired
+    VideoDao videoDao;
     @Autowired
     QuantityDao quantityDao;
     @Autowired
@@ -105,18 +108,20 @@ public class ProjectServiceImpl implements ProjectService {
         	{
 				if(id!=null)
 				{
+					 /////判断项目下的图纸信息是否存在，存在删除，不存在不做处理
+					Paper paper=new Paper();
+					if(paperDao.getPaperList(id, 10, 1, paper).getTotalNumber()>0)
+					{
+						paperDao.deletePaperByProjectId(id);/////删除项目对应的图纸
+					}
+					
 					/////判断项目下的构件信息是否存在，存在删除，不存在不做处理
 					Item item=new Item();
 					if(itemDao.getItemList(id, 10, 1, item).getTotalNumber()>0)
 					{
 						itemDao.deleteItemByPorjectId(id);//////删除项目对应的构件
 					}
-				    /////判断项目下的图纸信息是否存在，存在删除，不存在不做处理
-					Paper paper=new Paper();
-					if(paperDao.getPaperList(id, 10, 1, paper).getTotalNumber()>0)
-					{
-						paperDao.deletePaperByProjectId(id);/////删除项目对应的图纸
-					}
+				   
 					/////判断项目下的问题信息是否存在，存在删除，不存在不做处理
 					Question question=new Question();
 					if(questionDao.getQuestionList(id, 10, 1, question).getTotalNumber()>0){
@@ -131,11 +136,20 @@ public class ProjectServiceImpl implements ProjectService {
 					if(buidlingDao.getBuildingByProjectId(id).getData()!=null){
 						buidlingDao.deleteBuildingByProjectId(id);
 					}
+					//////判断项目下的交底视频是否存在，存在删除，不存在不作处理
+					if(videoDao.getByProjectId(id)==true){
+						videoDao.deleteVideoByProjectId(id);
+					}
+					/////删除项目自身文件
+					if(!projectDao.deleteProject(id))
+					{
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}
 					if(modelId!=null){
 						/////有模型文件时删除模型文件
+						Files files=fileDao.getById(modelId);
 						if(fileDao.deleteFiles(modelId))
 						{
-							Files files=fileDao.getById(id);
 							fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
 						}else{
 							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -143,19 +157,16 @@ public class ProjectServiceImpl implements ProjectService {
 					}
 					if(picId!=null){
 						///有图片时删除图片文件
+						Files files=fileDao.getById(picId);
 						if(fileDao.deleteFiles(picId))
 						{
-							Files files=fileDao.getById(id);
 							fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
 							
 						}else{
 							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 						}
 					}
-					if(!projectDao.deleteProject(id))
-					{
-						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-					}
+					
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}

@@ -67,7 +67,7 @@ body{
 
 #right3{
 	height:30px;
-	margin-top:16px;
+	margin-top:25px;
 	margin-left:157px;
 	width:200px;
 }
@@ -76,22 +76,17 @@ body{
 	font-size:12px;
 	font-family:微软雅黑;
 }
+#right3-2{
+	float:left;
+	margin:0px 10px;
+}
 #forget{
 	font-size:12px;
 	font-family:微软雅黑;
 }
-#right3-2{
-	float:left;
-	font-family:微软雅黑;
-	font-size:14px;
-	margin:0px 10px;
-}
 #right3-1{
 	float:left;
-	font-family:微软雅黑;
-	font-size:14px;
 	margin-top:2px;
-	margin-bottom:2px;
 	margin-right:10px;
 }
 a{
@@ -109,7 +104,7 @@ a:active{
 text-decoration:none;
 }
 #check{
-	opaticy:50%;
+	margin-top: 2px;
 	background-color:white;
 	height:14px;
 	width:14px;
@@ -124,10 +119,10 @@ text-decoration:none;
 	width:290px;
 }
 #submit:hover{
-	color:#4FB8E1;
+	background:url(../images/submitHover.png) no-repeat 0px 3px;
 }
 #submit{
-	background:url(../images/submit.png) no-repeat 0px 3px;
+	background:url(../images/submitDefault.png) no-repeat 0px 3px;
 	height:60px;
 	width:290px;
 	font-size:18px;

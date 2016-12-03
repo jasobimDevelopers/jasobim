@@ -10,6 +10,7 @@ public class MessagePojo {
 	private Long questionId;
 	private Long userId;
 	private String userName;
+	private String userIconUrl;
 	private String[] fileList;
 	private String[] fileNameList;
 	
@@ -68,6 +69,12 @@ public class MessagePojo {
 	}
 	public void setFileNameList(String[] fileNameList) {
 		this.fileNameList = fileNameList;
+	}
+	public String getUserIconUrl() {
+		return userIconUrl;
+	}
+	public void setUserIconUrl(String userIconUrl) {
+		this.userIconUrl = userIconUrl;
 	}
 	
 

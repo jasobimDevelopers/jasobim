@@ -57,7 +57,7 @@ public class ReadQuantityExcel {
    * @param fielName
    * @return
    */
-  public List<Quantity> getExcelInfo(String fileName,MultipartFile Mfile){
+  public List<Quantity> getExcelInfo(String fileName,MultipartFile Mfile,Long projectId){
       
       //把spring文件上传的MultipartFile转换成CommonsMultipartFile类型
        CommonsMultipartFile cf= (CommonsMultipartFile)Mfile; //获取本地存储路径
@@ -73,7 +73,7 @@ public class ReadQuantityExcel {
            e.printStackTrace();
        }
        
-       //初始化客户信息的集合    
+       //初始化工程量信息的集合    
        List<Quantity> elementList=new ArrayList<Quantity>();
        //初始化输入流
        InputStream is = null;  
@@ -90,7 +90,7 @@ public class ReadQuantityExcel {
           //根据新建的文件实例化输入流
           is = cf.getInputStream();
           //根据excel里面的内容读取客户信息
-          elementList = getExcelInfo(is, isExcel2003); 
+          elementList = getExcelInfo(is, isExcel2003,projectId); 
           is.close();
       }catch(Exception e){
           e.printStackTrace();
@@ -170,7 +170,7 @@ public class ReadQuantityExcel {
    * @return
    * @throws IOException
    */
-  public  List<Quantity> getExcelInfo(InputStream is,boolean isExcel2003){
+  public  List<Quantity> getExcelInfo(InputStream is,boolean isExcel2003,Long projectId){
        List<Quantity> elementList=null;
        try{
            /** 根据版本选择创建Workbook的方式 */
@@ -183,7 +183,7 @@ public class ReadQuantityExcel {
                wb = new XSSFWorkbook(is); 
            }
            //读取Excel里面客户的信息
-           elementList=readExcelValue(wb);
+           elementList=readExcelValue(wb,projectId);
        }
        catch (IOException e)  {  
            e.printStackTrace();  
@@ -195,7 +195,7 @@ public class ReadQuantityExcel {
    * @param wb
    * @return
    */
-  private List<Quantity> readExcelValue(Workbook wb){ 
+  private List<Quantity> readExcelValue(Workbook wb,Long projectId){ 
       //得到第一个shell  
        Sheet sheet=wb.getSheetAt(0);
        
@@ -219,53 +219,72 @@ public class ReadQuantityExcel {
                Cell cell = row.getCell(c);
                if (null != cell){
                    if(c==0){
-                	   String temp=cell.getStringCellValue();
-                	   quantity.setName(temp);//工程量的名称
-                   }else if(c==1){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   String temp=cell.getStringCellValue();
                 	   if(temp!=null && !(temp.equals(""))){
-	                	   int professionType=Integer.valueOf(cell.getStringCellValue());
-	                	   quantity.setProfessionType(professionType);
+	                	   int buildingid=Integer.valueOf(temp.substring(temp.indexOf("B")+1,temp.indexOf("C")));
+	                	   int unitid=Integer.valueOf(temp.substring(temp.indexOf("C")+1,temp.indexOf("D")));
+	                	   int floorid=Integer.valueOf(temp.substring(temp.indexOf("D")+1,temp.indexOf("E")));
+	                	   int householdid=Integer.valueOf(temp.substring(temp.indexOf("E")+1));
+	                	   quantity.setBuildingNum(buildingid);
+	                	   quantity.setFloorNum(floorid);
+	                	   quantity.setHouseholdNum(householdid);
+	                	   quantity.setProjectId(projectId);
+	                	   quantity.setUnitNum(unitid);
                 	   }
-                	   
+                	  
+                   }else if(c==1){
+                	   String temp=cell.getStringCellValue();
+                	   quantity.setName(temp);//工程量的名称
+                	   if(temp.equals("电气配线") || temp.equals("电气配管") || temp.equals("电力电缆")){
+                		   quantity.setProfessionType(0);  
+                  	   }
                    }else if(c==2){
-                	   Double value=cell.getNumericCellValue();
-                	   quantity.setValue(value);
-                	   
+                	   ////工程量的类型名称
+                	   String temp=cell.getStringCellValue();
+                	   quantity.setTypeName(temp);//工程量的名称
                    }else if(c==3){
-                	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   quantity.setUnit(cell.getStringCellValue());
-                   }else if(c==4){
-                	   Long projectId=Long.valueOf(cell.getStringCellValue());
-                	   quantity.setProjectId(projectId);
-                   }else if(c==5){
-                	   int buildingNum=Integer.valueOf(cell.getStringCellValue());
-                	   quantity.setBuildingNum(buildingNum);
-                   }else if(c==6){
-                	   int floorNum=Integer.valueOf(cell.getStringCellValue());
-                	   quantity.setFloorNum(floorNum);
-                   }else if(c==7){
-                	   int unitNum=Integer.valueOf(cell.getStringCellValue());
-                	   quantity.setUnitNum(unitNum);
-                   }else if(c==8){
-                	   int householdNum=Integer.valueOf(cell.getStringCellValue());
-                	   quantity.setHouseholdNum(householdNum);
-                   }else if(c==9){
-                	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   quantity.setFamilyAndType(cell.getStringCellValue());
-                   }else if(c==10){
-                	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   quantity.setSystemType(cell.getStringCellValue());
-                   }else if(c==11){
+                	   //////工程量serviceType
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   quantity.setServiceType(cell.getStringCellValue());
-                   }else if(c==12){
+                   }else if(c==4){
+                	   /////工程量的size
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   quantity.setSize(cell.getStringCellValue());
-                   }else if(c==13){
+                   }else if(c==5){
+                	   /////工程量的value
+                	   double length=cell.getNumericCellValue();
+                	   if(length!=0){
+                		   quantity.setValue(length);
+                		   quantity.setUnit("米(m)");
+                	   }
+                   }else if(c==6){
+                	   //////工程量的familyAndType
+                	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                	   quantity.setFamilyAndType(cell.getStringCellValue());
+                   }else if(c==7){
+                	   /////工程量的area
+                	   double area=cell.getNumericCellValue();
+                	   if(area!=0){
+                		   quantity.setValue(area);
+                		   quantity.setUnit("平米（m2）");
+                	   }
+                   }else if(c==8){
+                	   /////工程量的材质
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   quantity.setMaterial(cell.getStringCellValue());
+                   }else if(c==9){
+                	   /////工程量的SystemType
+                	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                	   quantity.setSystemType(cell.getStringCellValue());
+                   }else if(c==10){
+                	   //////工程量的构件个数
+                	   int num=0;
+                	   num=Integer.valueOf(cell.getStringCellValue());
+                	   if(num!=0){
+                		   quantity.setValue(num);
+                		   quantity.setUnit("个");
+                	   }
                    }
                }
            }

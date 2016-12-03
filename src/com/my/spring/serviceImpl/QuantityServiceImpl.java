@@ -16,6 +16,7 @@ import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Quantity;
+import com.my.spring.model.QuantityPojo;
 import com.my.spring.model.User;
 import com.my.spring.service.QuantityService;
 import com.my.spring.utils.DataWrapper;
@@ -138,8 +139,7 @@ public class QuantityServiceImpl implements QuantityService {
 	}
 
 	@Override
-	public boolean batchImport(String filePath, MultipartFile file, String token, HttpServletRequest request,
-			Long projectId) {
+	public boolean batchImport(String filePath, MultipartFile file, String token, Long projectId, HttpServletRequest request) {
 		if (file == null || filePath == null || filePath.equals("")) {
 			return false;
 		}
@@ -154,10 +154,17 @@ public class QuantityServiceImpl implements QuantityService {
 		        ReadQuantityExcel readExcel=new ReadQuantityExcel();
 		        
 		        //解析excel，构件信息集合。
-		        List<Quantity> quantityList = readExcel.getExcelInfo(newFileName ,file);
-	    		quantityDao.deleteQuantityByProjectId(projectId);
-	    		quantityDao.addQuantityList(quantityList);
-		
+		        List<Quantity> quantityList = readExcel.getExcelInfo(newFileName ,file,projectId);
+		        if(quantityList.size()>0){
+		        /////1.预算量和模型的工程量没有重合部分，添加
+		    		if(quantityDao.addQuantityList(quantityList)){
+			    		b=true;
+		    		}
+		    	
+		    		/////2.预算量和模型的工程量有重合部分
+		    		
+		        }
+	    		
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
@@ -220,6 +227,21 @@ public class QuantityServiceImpl implements QuantityService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 			
+		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<Quantity>> getQuantityListNum(Long projectId, String token, Integer pageIndex,
+			Integer pageSize, Quantity quantity) {
+		DataWrapper<List<Quantity>> dataWrapper= new DataWrapper<List<Quantity>>();
+		User user=SessionManager.getSession(token);
+		if(user!=null){
+			if(projectId!=null){
+				dataWrapper=quantityDao.getQuantityListNum(projectId,pageSize, pageIndex,quantity);
+			}
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
 		return dataWrapper;
 	}
 }

@@ -6,6 +6,7 @@ import com.my.spring.model.Message;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -106,6 +107,46 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 	@Override
 	public Message getById(Long id) {
 		// TODO Auto-generated method stub
+		return get(id);
+	}
+
+	@Override
+	public DataWrapper<List<Message>> getMessageListByQuestionId(Long id) {
+	 DataWrapper<List<Message>> retDataWrapper = new DataWrapper<List<Message>>();
+	 List<Message> ret = null;
+     Session session = getSession();
+     Criteria criteria = session.createCriteria(Message.class);
+     criteria.add(Restrictions.eq("questionId",id));
+     try {
+         ret = criteria.list();
+     }catch (Exception e){
+         e.printStackTrace();
+     }
+     if (ret != null && ret.size() > 0) {
+			retDataWrapper.setData(ret);
+		}
+		return retDataWrapper;
+	}
+
+	@Override
+	public boolean deleteMessageByQuestionId(Long questionId) {
+		String sql = "delete from message where question_id="+questionId;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+	}
+
+	@Override
+	public Message getMessageListById(Long id) {
 		return get(id);
 	}
 }
