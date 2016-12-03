@@ -98,12 +98,29 @@ function QuestionController($scope,QuestionService) {
 		 }
 		 QuestionService.getQuestionList(pageSize,pageIndex,question).then(function (result){
 		  	  $scope.questionList = result.data;
+
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
 		      $scope.questionPage($scope.totalPage,$scope.currentPage);
 		      
+		      $scope.drawCircle();
+		      
 		  });
 	  }
+	 
+	 $scope.drawCircle = function() {
+		 document.getElementById("myStat").attributes["data-percent"].value = $scope.questionList[0].sortPercent;
+	      document.getElementById("myStat").attributes["data-text"].value = $scope.questionList[0].sortPercent + "%";
+	      document.getElementById("myStat1").attributes["data-percent"].value = $scope.questionList[0].importantPercent;
+	      document.getElementById("myStat1").attributes["data-text"].value = $scope.questionList[0].importantPercent + "%";
+	      document.getElementById("myStat2").attributes["data-percent"].value = $scope.questionList[0].urgentPercent;
+	      document.getElementById("myStat2").attributes["data-text"].value = $scope.questionList[0].urgentPercent + "%";
+	      
+	      $('#myStat').circliful();
+	  	  $('#myStat1').circliful();
+	  	  $('#myStat2').circliful();
+	 }
+	 
 	 /////初始化获取问题列表
 	 $scope.getQuestionList(pageSize,pageIndex,question);
 	 ////////问题重置
