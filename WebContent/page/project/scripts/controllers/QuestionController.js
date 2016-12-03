@@ -318,4 +318,9 @@ function QuestionController($scope,QuestionService) {
 			 // document.getElementById("projectDetail_body_questions").style.display='none';
 		    });
 	}
+	
+	
+	$scope.chooseImgMessage = function() {
+		document.getElementById("imgMessge").click();
+	}
 }
