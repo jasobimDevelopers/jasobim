@@ -66,9 +66,12 @@ public class TestFileController {
 	
 	@RequestMapping(value="/testGroupBy", method = RequestMethod.GET)
     @ResponseBody
-	public DataWrapper<List<Quantity>> testGroupBy() {
+	public DataWrapper<List<Quantity>> testGroupBy(
+			@RequestParam(value = "pageSize", required = true) int pageSize,
+			@RequestParam(value = "pageIndex", required = true) int pageIndex
+			) {
 
-        return quantityDao.testGroupBy();
+        return quantityDao.testGroupBy(pageSize, pageIndex);
     }
 
 }

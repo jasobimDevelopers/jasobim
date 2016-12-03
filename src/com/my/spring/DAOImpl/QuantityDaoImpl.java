@@ -8,7 +8,6 @@ import javax.persistence.ParameterMode;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Example;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -22,11 +21,8 @@ import com.my.spring.DAO.QuantityDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
-import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
-
-import scala.reflect.internal.Trees.New;
 
 /**
  * Created by Administrator on 2016/6/22.
@@ -361,21 +357,68 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 	}
 
 	@Override
-	public DataWrapper<List<Quantity>> testGroupBy() {
+	public DataWrapper<List<Quantity>> testGroupBy(int pageSize,int pageIndex) {
 		// TODO Auto-generated method stub
-		Session session = getSession();
+		
 		DataWrapper<List<Quantity>> dataWrapper = new DataWrapper<List<Quantity>>();
+		List<Quantity> ret = null;
+		
+		Session session = getSession();
 		Criteria criteria = session.createCriteria(Quantity.class);
+		
+		ProjectionList projectionList = Projections.projectionList();
+		projectionList.add(Projections.property("value").as("value"))
+						.add(Projections.property("unit").as("unit"))
+						.add(Projections.property("projectId").as("projectId"))
+						.add(Projections.property("systemType").as("systemType"))
+						.add(Projections.property("serviceType").as("serviceType"))
+						.add(Projections.property("familyAndType").as("familyAndType"))
+						.add(Projections.property("size").as("size"))	
+						.add(Projections.property("material").as("material"))
+						.add(Projections.property("name").as("name"))
+						.add(Projections.property("typeName").as("typeName"))
+						.add(Projections.property("professionType").as("professionType"))
+		
+						.add(Projections.groupProperty("projectId"))
+						.add(Projections.groupProperty("systemType"))
+						.add(Projections.groupProperty("serviceType"))
+						.add(Projections.groupProperty("familyAndType"))
+						.add(Projections.groupProperty("size"))
+						.add(Projections.groupProperty("material"))
+						.add(Projections.groupProperty("name"))
+						.add(Projections.groupProperty("typeName"))
+						.add(Projections.groupProperty("professionType"));
+		
+		
 		criteria.add(Restrictions.eq("projectId", new Long(79)));
-		criteria.setProjection(
-				Projections.projectionList().add(Projections.property("householdNum"))
-											.add(Projections.groupProperty("projectId"))
-											.add(Projections.groupProperty("systemType"))
-											.add(Projections.groupProperty("serviceType"))
-											.add(Projections.groupProperty("material"))
-				);
-		criteria.setResultTransformer(Transformers.aliasToBean(Quantity.class)); 
-		dataWrapper.setData(criteria.list());
+		criteria.setProjection(projectionList);
+		
+		
+		int totalItemNum =  criteria.list().size();
+		int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
+		
+		
+		criteria.setResultTransformer(Transformers.aliasToBean(Quantity.class));
+		if (pageSize > 0 && pageIndex > 0) {
+			criteria.setMaxResults(pageSize);// 最大显示记录数
+			criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+		 }
+		
+	
+		try {
+			ret =criteria.list();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		dataWrapper.setData(ret);
+        dataWrapper.setTotalNumber(totalItemNum);
+        dataWrapper.setCurrentPage(pageIndex);
+        dataWrapper.setTotalPage(totalPageNum);
+        dataWrapper.setNumberPerPage(pageSize);
+
+		dataWrapper.setData(ret);
+		
 		return dataWrapper;
 	}
 }
