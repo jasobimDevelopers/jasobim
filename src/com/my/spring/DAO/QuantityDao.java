@@ -1,8 +1,9 @@
 package com.my.spring.DAO;
 
 import com.my.spring.model.Quantity;
-import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DataWrapper;
+
+import scala.collection.generic.BitOperations.Int;
 
 import java.util.List;
 
@@ -25,5 +26,5 @@ public interface QuantityDao {
 		DataWrapper<List<Quantity>> getQuantityListNum(Long projectId, Integer pageSize, Integer pageIndex,
 				Quantity quantity);
 		
-		DataWrapper<List<Quantity>> testGroupBy();
+		DataWrapper<List<Quantity>> testGroupBy(int pageSize,int pageIndex);
 }
