@@ -26,6 +26,8 @@ import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 
+import scala.reflect.internal.Trees.New;
+
 /**
  * Created by Administrator on 2016/6/22.
  */
@@ -356,5 +358,22 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 	        }
         }
 		return false;
+	}
+
+	@Override
+	public DataWrapper<List<Quantity>> testGroupBy() {
+		// TODO Auto-generated method stub
+		Session session = getSession();
+		Criteria criteria = session.createCriteria(Quantity.class);
+		criteria.add(Restrictions.eq("projectId", new Long(79)));
+		criteria.setProjection(
+				Projections.projectionList().add(Projections.groupProperty("projectId"))
+											.add(Projections.groupProperty("systemType"))
+											.add(Projections.groupProperty("serviceType"))
+											.add(Projections.groupProperty("material"))
+				);
+		DataWrapper<List<Quantity>> dataWrapper = new DataWrapper<List<Quantity>>();
+		dataWrapper.setData(criteria.list());
+		return dataWrapper;
 	}
 }

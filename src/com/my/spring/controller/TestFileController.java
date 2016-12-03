@@ -1,5 +1,7 @@
 package com.my.spring.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.DAO.QuantityDao;
 import com.my.spring.model.Files;
+import com.my.spring.model.Quantity;
 import com.my.spring.service.FileService;
+import com.my.spring.utils.DataWrapper;
 @Controller
 @RequestMapping(value="api/test")
 public class TestFileController {
@@ -58,6 +62,13 @@ public class TestFileController {
 //		String filePath = request.getSession().getServletContext().getRealPath("/") + "/test.xls";
 		String filePath = "E:/test.xls";
         return quantityDao.exportQuantity(filePath,new Long(1));
+    }
+	
+	@RequestMapping(value="/testGroupBy", method = RequestMethod.GET)
+    @ResponseBody
+	public DataWrapper<List<Quantity>> testGroupBy() {
+
+        return quantityDao.testGroupBy();
     }
 
 }
