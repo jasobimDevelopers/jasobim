@@ -117,6 +117,13 @@ function ProjectController($scope,ProjectService) {
 	}
 	/////按楼栋号自动搜索
 	$scope.setBuildingNum = function(building,flag) {
+		for(var i = 0; i < 100; i++) {
+			if(i != index) {
+				$scope.floors[i] = 'title';
+			}
+		}
+		
+		
 		$scope.buildingId = building;	
 		$scope.buildingIds="allss";
 		var allclass=$('.buildingNum_quantity');
@@ -132,7 +139,7 @@ function ProjectController($scope,ProjectService) {
 		if(building!='all'){
 			allclass.eq(1).css("background-color","darkgray");
 		}
-		if(building=='all'){
+		if(building=='all' ){
 			if(flag=="构件信息页面"){
 				 $scope.getProjectItemList($scope.projectid,10,1,item);
 			 }
@@ -145,7 +152,7 @@ function ProjectController($scope,ProjectService) {
 			 if(flag=="图纸信息页面"){
 				 $scope.getProjectPaperList($scope.projectid,10,1,paper);
 			 }
-		}else{
+		}else if(building != 'title'){
 			ProjectService.getBuildingNum($scope.projectid,building).then(function(result){
 				 $scope.buildingNumInfo=result;  
 				 ProjectService.getBuildingDown($scope.projectid,building).then(function(result){
@@ -168,7 +175,15 @@ function ProjectController($scope,ProjectService) {
 		
 	}
 	/////按楼层号自动搜索
-	$scope.setFloorNum = function(floor,flag) {
+	$scope.setFloorNum = function(floor,flag,index) {
+		for(var i = 0; i < 100; i++) {
+			if(i != index) {
+				$scope.floors[i] = 'title';
+			}
+		}
+		
+		
+		
 		var allclass=$('.floorNum_quantity');
 		allclass.css("background-color","#fff");
 		
@@ -504,11 +519,13 @@ function ProjectController($scope,ProjectService) {
 		 if($scope.buildingArray == undefined || $scope.buildingArray.length==0) {
 			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		 }
-		
-		  
+		 $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
+		 if($scope.floorArray == undefined || $scope.floorArray.length==0) {
+			 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 }
 		 
-		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
-		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 
+		  
 		 if($scope.phase!="all") {
 			 item+= "&professionType=" + $scope.phase;
 		 }
@@ -615,8 +632,13 @@ function ProjectController($scope,ProjectService) {
 		 if($scope.buildingArray == undefined || $scope.buildingArray.length ==0) {
 			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		 }
-		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
-		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
+		 if($scope.floorArray == undefined || $scope.floorArray.length ==0) {
+			 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 }
+		 
+		 
+//		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
 		 if($scope.phase!="all") {
 			 paper+= "professionType=" + $scope.phase;
 		 }
@@ -648,7 +670,12 @@ function ProjectController($scope,ProjectService) {
 			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		 }
 		 $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
-		 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 if($scope.floorArray == undefined || $scope.floorArray.length == 0) {
+			 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 }
+		 
+		 
+//		 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
 		 
 		 
 		 var text=-1;
