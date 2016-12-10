@@ -132,17 +132,19 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 	public boolean deleteMessageByQuestionId(Long questionId) {
 		String sql = "delete from message where question_id="+questionId;
 		Session session=getSession();
+		boolean test=false;
 		 try{
 			 Query query = session.createSQLQuery(sql);
-			 if(query.executeUpdate()==1){
-				 return true;
+			 int temp=query.executeUpdate();
+			 if(temp!=0){
+				 test= true;
 			 }
 			 
 	        }catch(Exception e){
 	            e.printStackTrace();
 	        }
 		 
-		return false;
+		return test;
 	}
 
 	@Override

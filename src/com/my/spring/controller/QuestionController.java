@@ -80,13 +80,14 @@ public class QuestionController {
     @RequestMapping(value="/admin/getQuestionList",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<QuestionPojo>> getQuestionList(
+    		@RequestParam(value="content",required=false) String content,
     		@RequestParam(value="projectId",required=false) Long projectId,
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute Question question,
     		@RequestParam(value = "token",required = true) String token)
     {
-        return questionService.getQuestionList(projectId,token,pageIndex,pageSize,question);
+        return questionService.getQuestionList(content,projectId,token,pageIndex,pageSize,question);
     }
     @RequestMapping(value="/getQuestionDetails",method = RequestMethod.GET)
     @ResponseBody

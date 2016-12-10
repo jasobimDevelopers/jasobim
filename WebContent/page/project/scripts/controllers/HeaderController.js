@@ -14,4 +14,10 @@ function HeaderController($scope,DataService,$filter) {
   console.log(userIcon);
   $scope.userName=userName;
   $scope.userIcon=userIcon;
+  $scope.logout = function() {
+	  window.location.href = "login";
+	  deleteCookie("userName");
+	  deleteCookie("token");
+	  deleteCookie("userIcon");
+  }
 }

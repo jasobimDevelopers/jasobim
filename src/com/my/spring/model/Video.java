@@ -14,9 +14,10 @@ public class Video {
 	private Long fileId;
 	private Long projectId;
 	private Integer buildingNum;
-	private Integer professionType;
+	private Integer professionType;//0、质量 1、安全 2、技术
 	private String originName;
-	
+	private Integer videoType;////0(视频)、1(PDF文档)
+	private String intro;
 	@Id
     @GeneratedValue
     @Column(name = "id")
@@ -69,6 +70,24 @@ public class Video {
 	}
 	public void setOriginName(String originName) {
 		this.originName = originName;
+	}
+	
+	@Basic
+    @Column(name = "video_type")
+	public Integer getVideoType() {
+		return videoType;
+	}
+	public void setVideoType(Integer videoType) {
+		this.videoType = videoType;
+	}
+	
+	@Basic
+    @Column(name = "intro")
+	public String getIntro() {
+		return intro;
+	}
+	public void setIntro(String intro) {
+		this.intro = intro;
 	}
 	
 

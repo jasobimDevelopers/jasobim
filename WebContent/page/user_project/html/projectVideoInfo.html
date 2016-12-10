@@ -5,7 +5,7 @@
 				<div id="item_menuli_first">
 					<div><span>专业</span></div>
 					<div><button class="btn btn-default" ng-click="setPhase('all',flag[4])">全部</button></div>
-					<div ng-repeat="phase in projectPhaseInfo"><button class="btn btn-default" ng-click="setPhase($index,flag[4])">{{phase.name}}</button></div>
+					<div ng-repeat="phase in projectVideoType"><button class="btn btn-default" ng-click="setPhase($index,flag[4])">{{phase.name}}</button></div>
 				</div>
 				<div class="item_menuli_video">
 					<div><span>栋号</span></div>
@@ -30,7 +30,7 @@
 							    <!-- <td>{{projectVideo.name}}</td> -->
 								<td>{{projectVideo.originName}}</td>
 								<td>{{projectVideo.buildingNum}}</td>
-								<td>{{projectVideo.professionType}}</td>
+								<td>{{projectVideoType[projectVideo.professionType].name}}</td>
 								<td class="tds" >
 			                        <a href="{{projectVideo.url}}" target="_blank" download="{{projectVideo.originName}}">
 				                         <button id="uploadbutton">

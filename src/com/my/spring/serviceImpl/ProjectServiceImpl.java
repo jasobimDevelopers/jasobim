@@ -124,7 +124,7 @@ public class ProjectServiceImpl implements ProjectService {
 				   
 					/////判断项目下的问题信息是否存在，存在删除，不存在不做处理
 					Question question=new Question();
-					if(questionDao.getQuestionList(id, 10, 1, question).getTotalNumber()>0){
+					if(questionDao.getQuestionList(null,id, 10, 1, question).getTotalNumber()>0){
 						questionDao.deleteQuestionByProjectId(id);
 					}
 					//////判断项目下的工程量信息是否存在，存在删除，不存在不做处理
@@ -233,10 +233,12 @@ public class ProjectServiceImpl implements ProjectService {
 					projectpojo.setPlace(dataWrapper.getData().get(i).getPlace());
 					projectpojo.setStartDate(dataWrapper.getData().get(i).getStartDate());
 					projectpojo.setVersion(dataWrapper.getData().get(i).getVersion());
-					if(dataWrapper.getData().get(i).getModelId()!=null || dataWrapper.getData().get(i).getPicId()!=null){
+					if(dataWrapper.getData().get(i).getModelId()!=null){
 						Files files=fileDao.getById(dataWrapper.getData().get(i).getModelId());
-						Files filess=fileDao.getById(dataWrapper.getData().get(i).getPicId());
 						projectpojo.setModelUrl(files.getUrl());
+					}
+					if(dataWrapper.getData().get(i).getPicId()!=null){
+						Files filess=fileDao.getById(dataWrapper.getData().get(i).getPicId());
 						projectpojo.setPicUrl(filess.getUrl());
 					}
 					pojoproject.add(i, projectpojo);;
@@ -254,16 +256,47 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
 	@Override
-	public DataWrapper<Project> getProjectDetailsByAdmin(Long projectId, String token) {
-		DataWrapper<Project> dataWrapper = new DataWrapper<Project>();
+	public DataWrapper<ProjectPojo> getProjectDetailsByAdmin(Long projectId, String token) {
+		DataWrapper<ProjectPojo> dataWrapper = new DataWrapper<ProjectPojo>();
 		User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 				if(projectId!=null){
 					Project project=projectDao.getById(projectId);
+					ProjectPojo projectPojo=new ProjectPojo();
+					
 					if(project==null) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Project_Not_Existed);
-					else
-						dataWrapper.setData(project);
+					else{
+						if(project.getPicId()!=null)
+						{
+							Files files=new Files();
+							files=fileDao.getById(project.getPicId());
+							if(files!=null){
+								projectPojo.setPicUrl(files.getUrl());
+							}
+						}
+						if(project.getModelId()!=null){
+							Files filess=new Files();
+							filess=fileDao.getById(project.getModelId());
+							if(filess!=null){
+								projectPojo.setModelUrl(filess.getUrl());
+							}
+						}
+						projectPojo.setBuildingUnit(project.getBuildingUnit());
+						projectPojo.setConstructionUnit(project.getConstructionUnit());
+						projectPojo.setDescription(project.getDescription());
+						projectPojo.setDesignUnit(project.getDesignUnit());
+						projectPojo.setId(project.getId());
+						projectPojo.setLeader(project.getLeader());
+						projectPojo.setName(project.getName());
+						projectPojo.setNum(project.getNum());
+						projectPojo.setPhase(project.getPhase());
+						projectPojo.setPlace(project.getPlace());
+						projectPojo.setStartDate(project.getStartDate());
+						projectPojo.setVersion(project.getVersion());
+						dataWrapper.setData(projectPojo);
+					}
+						
 				}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);

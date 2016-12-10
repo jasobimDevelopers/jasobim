@@ -74,6 +74,11 @@ public class QuantityController {
             @RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute Quantity quantity){
+    	if(quantity.getFloorNum()!=null){
+    		if(quantity.getFloorNum()==1){
+    			quantity.setFloorNum(3);
+        	}
+    	}
         return quantityService.getQuantityList(projectId,token,pageIndex,pageSize,quantity);
     }
     @RequestMapping(value="/getQuantityListNum",method =RequestMethod.GET)

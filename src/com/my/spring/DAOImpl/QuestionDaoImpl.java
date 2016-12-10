@@ -102,7 +102,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<QuestionPojo>> getQuestionList(Long projectId ,Integer pageIndex, Integer pageSize, Question question) {
+    public DataWrapper<List<QuestionPojo>> getQuestionList(String content,Long projectId ,Integer pageIndex, Integer pageSize, Question question) {
     	DataWrapper<List<QuestionPojo>> retDataWrapperPojo = new DataWrapper<List<QuestionPojo>>();
     	DataWrapper<List<QuestionFile>> retDataWrapperPojos = new DataWrapper<List<QuestionFile>>();
         List<Question> ret = new ArrayList<Question>();
@@ -114,16 +114,36 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         if(projectId!=null){
             criteria.add(Restrictions.eq("projectId", question.getProjectId()));
         }
-
-        if(question.getPriority()!=null){
-        	criteria.add(Restrictions.eq("priority", question.getPriority()));
+        if(content!=null){
+        	
+			criteria.add(Restrictions.like("name", "%"+content+"%"));
+			criteria.add(Restrictions.like("intro", "%"+content+"%"));
+			criteria.add(Restrictions.like("trades", "%"+content+"%"));
+			//criteria.add(Restrictions.or(Restrictions.like("questionDate", "%"+content+"%")));
+			if(question.getPriority()!=null){
+				criteria.add(Restrictions.or(Restrictions.eq("priority",question.getPriority())));
+			}
+			if(question.getUserId()!=null){
+				criteria.add(Restrictions.or(Restrictions.eq("priority",question.getUserId())));
+			}
+			if(question.getQuestionType()!=null){
+				criteria.add(Restrictions.eq("questionType",question.getQuestionType()));
+			}
+			if(question.getState()!=null){
+				criteria.add(Restrictions.eq("state",question.getState()));
+			}
+        }else{
+        	 if(question.getPriority()!=null){
+             	criteria.add(Restrictions.eq("priority", question.getPriority()));
+             }
+             if(question.getQuestionType()!=null){
+             	criteria.add(Restrictions.eq("questionType", question.getQuestionType()));
+             }
+             if(question.getState()!=null){
+             	criteria.add(Restrictions.eq("state", question.getState()));
+             }
         }
-        if(question.getQuestionType()!=null){
-        	criteria.add(Restrictions.eq("questionType", question.getQuestionType()));
-        }
-        if(question.getState()!=null){
-        	criteria.add(Restrictions.eq("state", question.getState()));
-        }
+       
         if (pageSize == null) {
 			pageSize = 10;
 		}

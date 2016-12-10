@@ -5,8 +5,8 @@
 	 	<div id="home_head">
 		 	<div class="container">
 			 	<div id="content">
-			 		<ul class="nav navbar-nav" id="head_home_ul">
-		                    <li class= "collapse-li-main" ng-repeat="headerItem in headerItems">
+			 		<ul id="head_home_ul" >
+		                    <li ng-repeat="headerItem in headerItems" ng-click="headCssChange($index)" class="head_li">
 		                        <a href="{{headerItem.page}}" id="menutext">{{headerItem.name}}</a>
 		                    </li>
 		            </ul>

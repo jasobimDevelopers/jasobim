@@ -47,13 +47,13 @@
 						<div id="projectInfoDesc"><textarea id="projectInfoDescInput" ng-model="$parent.$parent.findProjectInfo.description" readonly="readonly"></textarea></div>
 					</div>
 					<div id="selfliModel" >
-						<div class="selfli_text"><span>模型上传：</span></div>
+						<div class="selfli_text"><span>项目模型：</span></div>
 						<div><input type="file" id="testfile" onchange="setModel(this)" readonly="readonly"/></div>
 						
 					</div>
 					<div id="selfliPic" >
-						<div class="selfli_text"><span>图片上传：</span></div>
-						<div><input type="file" id="picFile" onchange="setPic(this)" readonly="readonly"/></div>
+						<div class="selfli_text"><span>项目图片：</span></div>
+						<div><img src="{{findProjectInfo.picUrl}}" id="picFile" /></div>
 					</div>
 				</div>
 				

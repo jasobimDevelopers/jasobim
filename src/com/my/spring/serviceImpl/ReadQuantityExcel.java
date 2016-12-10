@@ -236,7 +236,7 @@ public class ReadQuantityExcel {
                    }else if(c==1){
                 	   String temp=cell.getStringCellValue();
                 	   quantity.setName(temp);//工程量的名称
-                	   if(temp.equals("电气配线") || temp.equals("电气配管") || temp.equals("电力电缆")){
+                	   if(temp.equals("电气配线") || temp.equals("电气配管") || temp.equals("电力电缆") || temp.equals("插座") || temp.equals("配电箱") || temp.equals("普通灯具") || temp.equals("小电器") || temp.equals("照明开关")){
                 		   quantity.setProfessionType(0);  
                   	   }
                    }else if(c==2){
@@ -280,7 +280,7 @@ public class ReadQuantityExcel {
                    }else if(c==10){
                 	   //////工程量的构件个数
                 	   int num=0;
-                	   num=Integer.valueOf(cell.getStringCellValue());
+                	   num=(int)(cell.getNumericCellValue());
                 	   if(num!=0){
                 		   quantity.setValue(new Double(num));
                 		   quantity.setUnit("个");

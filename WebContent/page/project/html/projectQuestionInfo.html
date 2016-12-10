@@ -31,13 +31,13 @@
 									<td>{{question.userId}}</td>
 									<td>{{question.name}}</td>
 									<td>{{question.trades}}</td>
-									<td>{{question.intro}}</td>
+									<td class="autocut"  title='{{question.intro}}' style="width:150px ! important;">{{question.intro}}</td>
 									<td>{{question.questionDate}}</td>
 									<td>{{projectQuestionOfPriority[question.priority].name}}</td>
 									<td>{{projectQuestionOfStatus[question.state].name}}</td>
 									<td class="tds" >
-				                        <button id="editbutton" ng-click="questionChangeClick(question.id)">
-				                        </button>
+				                        <!-- <button id="editbutton" ng-click="questionChangeClick(question.id)">
+				                        </button> -->
 				                        <button id="deletebutton" ng-click="deleteQuestion(question.id)">
 				                        </button>
 				                    </td>

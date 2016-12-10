@@ -20,19 +20,25 @@
     <script src="page/common/angular/angular-route.js"></script>
     <script src="page/common/angular/angular-file-upload.min.js"></script>
 <!-- css -->
+	<link href="page/user_project/css/codeInformation.css" rel="stylesheet" />
+	<link href="page/user_project/css/suggestion.css" rel="stylesheet" />
+	<link href="page/user_project/css/aboutUs.css" rel="stylesheet" /> 
+	<link href="page/user_project/css/adduser.css" rel="stylesheet" />
     <link href="page/user_project/css/style.css" rel="stylesheet" />
     <link href="page/user_project/css/jasobim.css" rel="stylesheet" />
     <link href="page/user_project/css/projectDetail.css" rel="stylesheet" />
     <link href="page/user_project/css/questionDetail.css" rel="stylesheet" />
-    <link href="page/user_project/css/jquery.circliful.css" rel="stylesheet">
+    <link href="page/user_project/css/jquery.circliful.css" rel="stylesheet" />
 <!-- app.js -->
     <script src="page/user_project/scripts/app.js"></script>
 <!-- controller.js -->
+	<script src="page/user_project/scripts/controllers/AboutUsController.js"></script>
 	<script src="page/user_project/scripts/controllers/QuestionController.js"></script>
     <script src="page/user_project/scripts/controllers/MainController.js"></script>
     <script src="page/user_project/scripts/controllers/HeaderController.js"></script>
     <script src="page/user_project/scripts/controllers/ProjectController.js"></script>
 <!-- service.js -->
+	<script src="page/user_project/scripts/services/AboutUsService.js"></script>
 	<script src="page/user_project/scripts/services/QuestionService.js"></script>
     <script src="page/user_project/scripts/services/DemoService.js"></script>
     <script src="page/user_project/scripts/services/ProjectService.js"></script>
@@ -45,5 +51,9 @@
 <div ng-include="'page/user_project/html/header.html'" style="position:relative; z-index:2;"></div>
 <div ng-include="'page/user_project/html/projectList.html'" ng-if="currentPath == 'user_projectList'" style="position:relative; z-index:0;"></div>
 <div ng-include="'page/user_project/html/projectQuestionList.html'" ng-if="currentPath == 'user_projectQuestionList'" style="position:relative; z-index:0;" id="questionListHtml"></div>
+<div ng-include="'page/user_project/html/codeInformationList.html'" ng-if="currentPath == 'codeInformationList'" style="position:relative; z-index:0;"></div>
+<div ng-include="'page/user_project/html/Feedback.html'" ng-if="currentPath == 'suggesttionList'" style="position:relative; z-index:0;"></div>
+<div ng-include="'page/user_project/html/aboutList.html'" ng-if="currentPath == 'aboutList'" style="position:relative; z-index:0;"></div>
 </body>
+
 </html>

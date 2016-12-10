@@ -4,14 +4,14 @@
 				<div id="item_menu">
 					<div id="item_menuli_first">
 						<div><span>专业</span></div>
-						<div><button class="btn btn-default" ng-click="setPhase('allProfessionType',flag[1])">全部</button></div>
-						<div ng-repeat="phase in projectPhaseInfo"><button class="btn btn-default" ng-change="setPhase($index,flag[1])">{{phase.name}}</button></div>
+						<div><button class="btn btn-default phase_quantity" ng-click="setPhase('all',flag[1])">全部</button></div>
+						<div ng-repeat="phase in projectPhaseInfo"><button class="btn btn-default phase_quantity" ng-click="setPhase($index,flag[1])">{{phase.name}}</button></div>
 					</div>
 					<div class="item_menuli">
 						<div><span>栋号</span></div>
-						<div><button class="btn btn-default" ng-click="setBuildingNum('allBuildingNum',flag[1])">全部</button></div>
+						<div><button class="btn btn-default buildingNum_quantity" ng-click="setBuildingNum('all',flag[1])">全部</button></div>
 						<div ng-repeat="buildingNumber in buildingArray">
-							<select class="myselect" type="text" ng-change="setBuildingNum(building[$index],flag[1],$index)"   ng-model="building[$index]">
+							<select class="myselect buildingNum_quantity" type="text" ng-click="setBuildingNum(building[$index],flag[1])"   ng-model="building[$index]">
 		    					<option value="title" >#{{$index*10+1}} -#{{$index*10+10}} </option>
 		    					<option value="{{number}}" ng-repeat="number in buildingNumber" >#{{number}}</option>
 		    				</select>
@@ -20,9 +20,9 @@
 					</div>
 					<div class="item_menuli">
 						<div><span>楼层</span></div>
-						<div><button class="btn btn-default" ng-click="setFloorNum('allFloorNum',flag[1])">全部</button></div>
-						<div ng-repeat="buildingDown in buildingDownArray[0]"><button class="btn btn-default" ng-change="setFloorNum(buildingDown,flag[1])">B{{buildingDown}}</button></div>
-						<div ng-repeat="floorNumber in floorArray">
+						<div><button class="btn btn-default floorNum_quantity" ng-click="setFloorNum('all',flag[1])">全部</button></div>
+						<div ng-repeat="buildingDown in buildingDownArray[0]"><button class="btn btn-default floorNums_quantity" ng-click="setFloorDownNum(buildingDown,flag[1])">B{{buildingDown}}</button></div>
+						<div ng-repeat="floorNumber in floorArray" class="floorNum_quantity">
 							<select class="myselect" type="text" ng-change="setFloorNum(floors[$index],flag[1])"  ng-model="floors[$index]">
 		    					<option value="title">F{{$index*10+1}} -F{{$index*10+10}}</option>
 		    					<option value="{{numbers}}" ng-repeat=" numbers in floorNumber">F{{numbers}}</option>
@@ -32,8 +32,8 @@
 					</div>
 					<div class="item_menuli">
 						<div><span>户型</span></div>
-						<div><button class="btn btn-default" ng-click="setHouseholdNum('allHouseholdNum',flag[1])">全部</button></div>
-						<div ng-repeat="household in projectHouseholdInfo"><button class="btn btn-default" ng-change="setHouseholdNum($index,flag[1])">{{household.name}}</button></div>
+						<div><button class="btn btn-default household_quantity" ng-click="setHouseholdNum('all',flag[1])">全部</button></div>
+						<div ng-repeat="household in projectHouseholdInfo"><button class="btn btn-default household_quantity" ng-click="setHouseholdNum($index,flag[1])">{{household.name}}</button></div>
 					</div>
 				</div>
 				<div id="item_content">
@@ -56,12 +56,12 @@
 								<td>{{projectItem.area}}</td>
 								<td>{{projectItem.material}}</td>
 								<td>{{projectItem.typeName}}</td>
-								<td class="tds" >
+								<!-- <td class="tds" >
 			                        <button id="editbutton" ng-click="itemChangeClick(projectItem.id)">
 			                        </button>
-			                        <!-- <button id="deletebutton" ng-click="deleteItem(projectItem.id)">
-			                        </button> -->
-			                    </td>
+			                        <button id="deletebutton" ng-click="deleteItem(projectItem.id)">
+			                        </button>
+			                    </td> -->
 							</tr>
 						</tbody>
 					</table>

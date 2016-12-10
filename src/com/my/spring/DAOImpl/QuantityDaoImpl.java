@@ -72,38 +72,49 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 						.add(Projections.groupProperty("material"))
 						.add(Projections.groupProperty("name"))
 						.add(Projections.groupProperty("typeName"));
-		if(quantity.getProfessionType()!=null){
-			projectionList.add(Projections.property("professionType").as("professionType"))
-						  .add(Projections.groupProperty("professionType"));
-		}
-		if(quantity.getBuildingNum()!=null){
-			projectionList.add(Projections.groupProperty("buildingNum"))
-			              .add(Projections.property("buildingNum").as("buildingNum"));
-		}	
-		if(quantity.getFloorNum()!=null){
-			projectionList.add(Projections.groupProperty("floorNum"))
-						  .add(Projections.property("floorNum").as("floorNum"));
-		}
-		if(quantity.getHouseholdNum()!=null){
-			projectionList.add(Projections.groupProperty("householdNum"))
-						  .add(Projections.property("householdNum").as("householdNum"));;
-		}
+		
+			if(quantity.getProfessionType()!=null){
+				projectionList.add(Projections.property("professionType").as("professionType"))
+							  .add(Projections.groupProperty("professionType"));
+			}
+			if(quantity.getBuildingNum()!=null){
+				projectionList.add(Projections.groupProperty("buildingNum"))
+				              .add(Projections.property("buildingNum").as("buildingNum"));
+			}	
+			if(quantity.getFloorNum()!=null){
+				projectionList.add(Projections.groupProperty("floorNum"))
+							  .add(Projections.property("floorNum").as("floorNum"));
+			}
+			if(quantity.getHouseholdNum()!=null){
+				projectionList.add(Projections.groupProperty("householdNum"))
+							  .add(Projections.property("householdNum").as("householdNum"));;
+			}
+			if(quantity.getProfessionType()!=null){
+				if(quantity.getProfessionType()!=-1){
+					criteria.add(Restrictions.eq("professionType", quantity.getProfessionType()));
+				}
+	        }
+	        if(quantity.getBuildingNum()!=null){
+	        	if(quantity.getBuildingNum()!=-1){
+	        		criteria.add(Restrictions.eq("buildingNum", quantity.getBuildingNum()));
+	        	}
+	        }
+	        if(quantity.getHouseholdNum()!=null){
+	        	if(quantity.getHouseholdNum()!=-1){
+	        		criteria.add(Restrictions.eq("householdNum", quantity.getHouseholdNum()));
+	        	}
+	        }
+	        if(quantity.getFloorNum()!=null){
+	        	if(quantity.getFloorNum()!=-1){
+	        		criteria.add(Restrictions.eq("floorNum", quantity.getFloorNum()));
+	        	}
+	        }
+		
+		
         ///////////////////////////////
         criteria.add(Restrictions.eq("projectId", projectId));
         criteria.setProjection(projectionList);
-        if(quantity.getProfessionType()!=null){
-        	criteria.add(Restrictions.eq("professionType", quantity.getProfessionType()));
-        }
-        if(quantity.getBuildingNum()!=null){
-        	criteria.add(Restrictions.eq("buildingNum", quantity.getBuildingNum()));
-        }
-        if(quantity.getHouseholdNum()!=null){
-        	criteria.add(Restrictions.eq("householdNum", quantity.getHouseholdNum()));
-        }
-        if(quantity.getFloorNum()!=null){
-        	criteria.add(Restrictions.eq("floorNum", quantity.getFloorNum()));
-        }
-        	
+	
         /////////////////////////////////////
    
         if (pageSize == null) {

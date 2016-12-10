@@ -82,8 +82,35 @@ function QuestionController($scope,QuestionService) {
 		      }
 		  });
 	  }
+	  /////////////////////初始化问题列表数据
+	  $scope.getQuestionLists = function(pageSize,pageIndex,question) {
+		     
+			 if($scope.questionType!="all"){
+				 question+= "questionType=" + $scope.questionType;
+			 }
+			 if($scope.questionPority!="all"){
+				 question+= "priority=" + $scope.questionPority;
+			 }
+			 if($scope.questionStatu!="all"){
+				 question+= "state=" + $scope.questionStatu;
+			 }
+			 if($scope.questionProjectId!="all"){
+				 question+= "projectId=" +$scope.questionProjectId;
+			 }
+			 QuestionService.getQuestionList(pageSize,pageIndex,question,null).then(function (result){
+			  	  $scope.questionList = result.data;
+
+			      $scope.currentPage = result.currentPage;
+			      $scope.totalPage = result.totalPage;
+			      $scope.questionPage($scope.totalPage,$scope.currentPage);
+			      $scope.drawCircle();
+			      
+			  });
+		  }
+	  
 	 ////////////////////////问题列表分页获取
 	 $scope.getQuestionList = function(pageSize,pageIndex,question) {
+		 var content=document.getElementById("paperList_find").value;
 		 if($scope.questionType!="all"){
 			 question+= "questionType=" + $scope.questionType;
 		 }
@@ -96,18 +123,14 @@ function QuestionController($scope,QuestionService) {
 		 if($scope.questionProjectId!="all"){
 			 question+= "projectId=" +$scope.questionProjectId;
 		 }
-		 QuestionService.getQuestionList(pageSize,pageIndex,question).then(function (result){
+		 QuestionService.getQuestionList(pageSize,pageIndex,question,content).then(function (result){
 		  	  $scope.questionList = result.data;
 
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
 		      $scope.questionPage($scope.totalPage,$scope.currentPage);
-		      
-		      $scope.drawCircle();
-		      
 		  });
 	  }
-	 
 	 $scope.drawCircle = function() {
 		  document.getElementById("myStat").attributes["data-percent"].value = $scope.questionList[0].sortPercent;
 	      document.getElementById("myStat").attributes["data-text"].value = $scope.questionList[0].sortPercent + "%";
@@ -115,14 +138,13 @@ function QuestionController($scope,QuestionService) {
 	      document.getElementById("myStat1").attributes["data-text"].value = $scope.questionList[0].importantPercent + "%";
 	      document.getElementById("myStat2").attributes["data-percent"].value = $scope.questionList[0].urgentPercent;
 	      document.getElementById("myStat2").attributes["data-text"].value = $scope.questionList[0].urgentPercent + "%";
-	      
 	      $('#myStat').circliful();
 	  	  $('#myStat1').circliful();
 	  	  $('#myStat2').circliful();
 	 }
 	 
 	 /////初始化获取问题列表
-	 $scope.getQuestionList(pageSize,pageIndex,question);
+	 $scope.getQuestionLists(pageSize,pageIndex,question);
 	 ////////问题重置
 	 $scope.resetQuestion = function(){
 		 $scope.findQuestionInfo={};
@@ -230,10 +252,12 @@ function QuestionController($scope,QuestionService) {
 	 }
 	 ///////问题删除
 	 $scope.deleteQuestion = function(questionId){
-		 QuestionService.deleteQuestion(questionId).then(function (result){
-		  	  $scope.deleteQuestionInfo = result.data;
-		  	  $scope.getQuestionList(pageSize,pageIndex,question);
-		  });
+		 if(confirm("确定删除？")) {  
+			 QuestionService.deleteQuestion(questionId).then(function (result){
+			  	  $scope.deleteQuestionInfo = result.data;
+			  	  $scope.getQuestionList(pageSize,pageIndex,question);
+			  });
+		 }
 	  }
 
 	 ///////分页获取项目列表
@@ -304,10 +328,12 @@ function QuestionController($scope,QuestionService) {
 	}
 	///////删除留言
 	$scope.deleteMessage = function(messageId,questionId){
-		QuestionService.deleteMessage(messageId).then(function (result){
-		  	  $scope.deleteMessageInfo = result.data;
-		  	  $scope.getMessageListByQuestionId(questionId);
-		  });
+		if(confirm("确定删除？")) {  
+			QuestionService.deleteMessage(messageId).then(function (result){
+			  	  $scope.deleteMessageInfo = result.data;
+			  	  $scope.getMessageListByQuestionId(questionId);
+			  });
+		}
 	}
 	//////修改留言
 	$scope.changeMessage = function(messageId,questionId){
@@ -318,9 +344,27 @@ function QuestionController($scope,QuestionService) {
 			 // document.getElementById("projectDetail_body_questions").style.display='none';
 		    });
 	}
+	/////问题搜索
+	$scope.search = function(){
+		var content=document.getElementById("paperList_find").value;
+		QuestionService.getQuestionList(pageSize,pageIndex,question).then(function (result){
+		  	  $scope.questionList = result.data;
+
+		      $scope.currentPage = result.currentPage;
+		      $scope.totalPage = result.totalPage;
+		      $scope.questionPage($scope.totalPage,$scope.currentPage);
+		  });
+		QuestionService.getQuestionList(pageSize,pageIndex,question,content).then(function (result){
+		  	  $scope.questionList = result.data;
+		      $scope.currentPage = result.currentPage;
+		      $scope.totalPage = result.totalPage;
+		      $scope.questionPage($scope.totalPage,$scope.currentPage);
+		      
+		  });
+	};
 	
-	
-	$scope.chooseImgMessage = function() {
-		document.getElementById("imgMessge").click();
-	}
+}
+
+function chooseImgMessage() {
+	document.getElementById("imgMessge").click();
 }

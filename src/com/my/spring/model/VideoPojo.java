@@ -11,6 +11,8 @@ public class VideoPojo {
     private String url;
     private Integer professionType;
     private String originName;
+    private Integer videoType;
+    private String intro; 
 	
 	public Long getProjectId() {
 		return projectId;
@@ -50,6 +52,18 @@ public class VideoPojo {
 	}
 	public void setOriginName(String originName) {
 		this.originName = originName;
+	}
+	public Integer getVideoType() {
+		return videoType;
+	}
+	public void setVideoType(Integer videoType) {
+		this.videoType = videoType;
+	}
+	public String getIntro() {
+		return intro;
+	}
+	public void setIntro(String intro) {
+		this.intro = intro;
 	}
 	
 }

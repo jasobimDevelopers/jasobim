@@ -14,19 +14,21 @@ button{
 	border:none;
 	outline:none;
 }
-a:link {
-text-decoration: none;
+ a:link {
+	text-decoration: none;
+}
 }
 a:visited {
 text-decoration: none;
-}
+background:rgba(255,255,255,0.5);
+} 
 
-a:active {
+ a:active {
 text-decoration: none;
 font-size: 14px;
 font-weight: bold;
 }
-
+ 
 #projectnames .inputtext{
 	margin-left:0px;
 	margin-right:3px;
@@ -39,23 +41,30 @@ font-weight: bold;
 }
 #content{
 	width:100%;
-	padding-left:150px;
+	padding-left:56px;
 	height:61px;
 	margin:0 auto;
 }
-li{
-	width:184px;
-}
+
 #projectContent{
 	width:100%;
 	margin:0 auto;
 }
-li{
+.head_li{
+	text-align:center;
+	font-size:20px;
+	width:170px;
+	list-style-type:none;
+	float:left;
+	height:40px;
 	margin:0 400px;
+	margin-top:10px;
+	
 
 }
+
 #menutext{
-	font-size:18px;
+	font-size:20px;
 	font-family:微软雅黑;
 }
 .ng-scope{
@@ -98,8 +107,7 @@ li{
 	margin-right:160px;
 }
 #portrait{
-	margin-left:80px;
-	padding-top:5px;
+	margin-left:25px;
 	color:white;
 	font-family:微软雅黑;
 	font-size:16px;
@@ -226,10 +234,9 @@ table
 	background:url(../images/headbk.png) repeat-x;
 }
 #out_login{
-	height:39px;
 	width:50px;
 	font-size:22px;
-	margin-top:13px;
+	margin-top:10px;
 	color:white;
 	padding-left:10px;
 }
@@ -238,7 +245,10 @@ table
 	width:100%;
 	height:204px;
 }
-
+.headTitle a:hover{
+	background-color:gray ! important;
+    opacity:0.5;
+}
 #userPageCode,#projectPageCode,#itemPageCode,#quantityPageCode,#questionPageCode,#videoPageCode,#paperPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
 #userPageCode a,#projectPageCode a,#itemPageCode a,#quantityPageCode a,#questionPageCode a,#videoPageCode a,#paperPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
 #userPageCode a:hover,#projectPageCode a:hover,#itemPageCode a:hover,#quantityPageCode a:hover,

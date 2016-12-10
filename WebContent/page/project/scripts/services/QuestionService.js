@@ -227,11 +227,16 @@
               };
               //////////////////////////////
               /////获取问题信息列表
-	          this.getQuestionList = function(pageSize,pageIndex,question) {
+	          this.getQuestionList = function(pageSize,pageIndex,question,content) {
 	
 	              var deferred = $q.defer();
 	              console.log("读取ProjectQuestionList数据");
-	              var api = 'api/question/admin/getQuestionList?token='+getCookie('token')+"&pageSize="+pageSize+"&pageIndex="+pageIndex+"&"+question;
+	              if(content!=undefined && content!=""){
+	            	  var api = 'api/question/admin/getQuestionList?token='+getCookie('token')+"&pageSize="+pageSize+"&pageIndex="+pageIndex+"&content="+content+"&"+question;
+	              }else{
+	            	  var api = 'api/question/admin/getQuestionList?token='+getCookie('token')+"&pageSize="+pageSize+"&pageIndex="+pageIndex+"&"+question;
+	              }
+	              
 	              $http.get(encodeURI(api))
 	                  .success(function(data, status, headers, config){
 	                      if(data.callStatus == "SUCCEED"){

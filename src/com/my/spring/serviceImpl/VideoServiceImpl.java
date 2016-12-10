@@ -39,7 +39,7 @@ public class VideoServiceImpl implements VideoService {
     private String filePath="files";
     private Integer fileType=4;
     @Override
-    public DataWrapper<Void> addVideo(Video video,String token,MultipartFile file,HttpServletRequest request) {
+    public DataWrapper<Void> addVideo(Video video,String token,MultipartFile file,HttpServletRequest request,int videoType) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -55,6 +55,7 @@ public class VideoServiceImpl implements VideoService {
 						originName = originName.substring(0, originName.lastIndexOf("."));
 					}
 					video.setOriginName(originName);
+					video.setVideoType(videoType);
 					if(!videoDao.addVideo(video)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else
@@ -115,8 +116,10 @@ public class VideoServiceImpl implements VideoService {
     				Integer professiontype=dataWrappers.getData().get(i).getProfessionType();
     				videoPojo.setProjectId(projectId);
     				videoPojo.setBuildingNum(temp);
+    				videoPojo.setVideoType(dataWrappers.getData().get(i).getVideoType());
     				videoPojo.setOriginName(dataWrappers.getData().get(i).getOriginName());
     				videoPojo.setProfessionType(professiontype);
+    				videoPojo.setIntro(dataWrappers.getData().get(i).getIntro());
     				Files file=fileDao.getById(dataWrappers.getData().get(i).getFileId());
     				if(file!=null){
     					videoPojo.setUrl(file.getUrl());

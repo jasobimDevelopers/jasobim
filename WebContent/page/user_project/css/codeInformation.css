@@ -1,0 +1,33 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin: 0px;
+	padding: 0px;
+}
+#codeOfbody,#codebody div{
+	float:left;
+}
+.videoCode,.paperCode{
+	margin:0 18px;
+	width:100px;
+}
+.videoCode div,.paperCode div{
+	float:left;
+}
+#codecontent div{
+	float:left;
+}
+
+.addcodehead{
+	width:844px;
+	height:50px;
+	margin-left:65px;
+	border-bottom:1px solid #999;
+}
+#codebody,#codeOfbody1{
+	margin-left:75px;
+	margin-top:28px;
+}
+#codecontent2{
+	margin-top:100px;
+}

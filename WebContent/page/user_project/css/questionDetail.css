@@ -14,7 +14,7 @@ button{
 	border:none;
 	outline:none;
 }
-a:link {
+/* a:link {
 text-decoration: none;
 }
 a:visited {
@@ -28,7 +28,7 @@ a:active {
 text-decoration: none;
 font-size: 16px;
 font-weight: bold;
-}
+} */
 /* select {
   Chrome和Firefox里面的边框是不一样的，所以复写了一下
   border: solid 1px #000;
@@ -97,13 +97,13 @@ text-decoration: none;
 #questionList_head{
 	margin:5px auto;
 	height:120px;
-	width:1202px;
+	width:1110px;
 	padding-top:50px;
 }
 #question_table_head{
 	margin:0px auto;
 	margin-top:130px;
-	width:1202px;
+	width:1110px;
 	padding-top:20px;
 }
 #question_table_head div{
@@ -172,7 +172,6 @@ text-decoration: none;
 #findTitle{
 	height:50px;
 	width:250px;
-	padding-top:10px;
 	font-size:16px;
 	font-family:微软雅黑;
 	padding-left:10px;
@@ -182,10 +181,12 @@ text-decoration: none;
 	float:left;
 }
 #findTitle div input{
-	width:205px;
+	width:272px;
 	background-color:#1BBC9B;
-	height:30px;
+	height:49px;
 	border-width:0px;
+	opacity:0.8;
+	outline:none;
 }
 #findIcon{
 	padding-top:10px;
@@ -239,7 +240,7 @@ text-decoration: none;
 	border-bottom:1px solid gray;
 }
 #questionList_content{
-	width:1202px;
+	width:1110px;
 	margin:0 auto;
 }
 #questionList_content div{

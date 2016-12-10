@@ -1,7 +1,7 @@
 
 <div id="questionContents" ng-controller="QuestionController">
-	<div ng-include="'page/project/html/addQuestion.html'" style="display:none;position:absolute; top:0px; left:400px; z-index:1;" id="addQuestionHtml"></div>
-	<div ng-include="'page/project/html/detailQuestion.html'" style="display:none;position:absolute; top:0px; left:400px; z-index:1;" id="detailQuestionHtml"></div>
+	<div ng-include="'page/user_project/html/addQuestion.html'" style="display:none;position:absolute; top:0px; left:400px; z-index:1;" id="addQuestionHtml"></div>
+	<div ng-include="'page/user_project/html/detailQuestion.html'" style="display:none;position:absolute; top:0px; left:400px; z-index:1;" id="detailQuestionHtml"></div>
 <!--	<div ng-include="'page/project/html/questionInfo.html'" style="display:none;position:absolute; top:0px; left:400px; z-index:1;" id="questionInfoHtml"></div> -->
 	<div id="projectDetail_body_questions" style="display:block">
 	    <div id="questionList_head" style="position:relative; z-index:1;display:block">
@@ -57,8 +57,7 @@
 	    	</div>
 	    	<div id="question_find">
 	    		<div id="findTitle">
-	    			<div>搜索</div>
-	    			<div><input type="text" id="paperList_find"></div>
+	    			<div><input type="text" id="paperList_find" value="搜索" onfocus="javascript:if(this.value=='搜索')this.value='';"></div>
 	    		</div>
 	    		<a href="#">
 	    			<div id="findIcon" class="glyphicon glyphicon-search" style="font-size:25px"></div>
@@ -95,8 +94,7 @@
 							<td class="tds" >
 		                        <button id="editbutton" ng-click="questionChangeClick(question.id)">
 		                        </button>
-		                        <button id="deletebutton" ng-click="deleteQuestion(question.id)">
-		                        </button>
+		                        
 		                    </td>
 						</tr>
 					</tbody>

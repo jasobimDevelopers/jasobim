@@ -7,9 +7,9 @@
             <div id="returnuser">
             	<a href="" ng-click="returnQuestionlists()"><span style="color:#86B5D7">返回问题列表</span>
             	</a>
-            	<div  style="float:right;margin-left:10px;">
+            	<!-- <div  style="float:right;margin-left:10px;">
             		<a href="" ng-click="hideAddQuestionHtmls()"><img src="page/project/images/deleteIcon.png"></a>
-            	</div>
+            	</div> -->
            	</div>
         </div>
         <div id="adduserbody">
@@ -62,7 +62,7 @@
         			<div id="imageMessage"><img width="70px" height="70px" src="{{message.userIconUrl}}"/></div>
         			<div id="messageUsername">
 	        			<div id="usernamessss"><span>{{message.userName}}</span></div>
-	        			<div id="usercontent"><div class="autocut"  title='{{message.content}}' onmouseover='this.style.width="400px"' onmouseout='this.style.width="100px"'><span>{{message.content}}</span></div></div>
+	        			<div id="usercontent"><div class="autocut"  title='{{message.content}}' onmouseover='this.style.width="400px"' onmouseout='this.style.width="400px"'><span>{{message.content}}</span></div></div>
         			</div>
         			<div id="action">
         				<div>
@@ -73,7 +73,7 @@
         		</div>
         	</div>
         	<div id="message_area">
-        		<div id="messageImg" ng-click="chooseImgMessage()"><input type="file" id="imgMessge"/></div>
+        		<div id="messageImg" onclick="chooseImgMessage()"><input type="file" id="imgMessge"/></div>
         		<div><input id="messageArea" cols="50" rows="5" onblur="if(this.value == ''){this.style.color = '#ACA899'; this.value = '我也说一句...'; }" 
     					onfocus="if(this.value == '我也说一句...'){this.value =''; this.style.color = '#000000'; }" 
                         style="color:#ACA899;" value="我也说一句..."/></div>

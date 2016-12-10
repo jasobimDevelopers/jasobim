@@ -363,6 +363,7 @@ text-decoration: none;
 	width:299px;
 	height:64px;
 	margin-left:21px;
+	resize: none;
 }
 
 #messageImg{
@@ -461,7 +462,7 @@ imageMessage img{
 	margin-left:20px;
 }
 .autocut {  
-    width:100px;  
+    width:150px ! important;  
     overflow:hidden;  
     white-space:nowrap;  
     text-overflow:ellipsis;  

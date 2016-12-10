@@ -21,11 +21,11 @@ a:visited {
 text-decoration: none;
 }
 
-a:active {
+/* a:active {
 text-decoration: none;
 font-size: 14px;
 font-weight: bold;
-}
+} */
 
 #projectnames .inputtext{
 	margin-left:0px;
@@ -94,16 +94,17 @@ li{
 	margin-right:160px;
 }
 #portrait{
-	margin-left:200px;
-	
-}
-#portrait span{
-color:white ! important;
+	margin-left:80px;
+	padding-top:15px;
+	color:white;
+	font-family:微软雅黑;
+	font-size:16px;
 }
 #portrait_image{
-	margin:10px 0px;
-	height:40px;
-	width:40px;
+	height:23px;
+	width:24px;
+	margin-right:10px;
+	margin-bottom:10px;
 }
 #menu{
 	margin-left:200px;

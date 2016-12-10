@@ -3,20 +3,19 @@
 				<div id="paper_headerss">
 					<div class="paper_menuli_upload">
 						<div><span>栋号</span></div>
-						<div ng-repeat="buildingNumber in buildingNumArray">
-							<select class="myselect" id="buildingN" type="text" ng-change="setBuildingNumber(buildingVideoB[$index])"   ng-model="buildingVideoB[$index]">
-		    					<option value="title" selected>#{{$index*10+1}} -#{{$index*10+10}} </option>
-		    					<option value="{{number}}" ng-repeat="number in buildingNumber">#{{number}}</option>
+						<div>
+							<select  id="buildingN">
+								<option value="{{$index}}" ng-repeat="x in buildingNumArrays">{{x}}</option>
 		    				</select>
 	    				</div>
 						
 					</div>
 					<div class="paper_menuli_upload">
 						<div><span>楼层</span></div>
-						<div ng-repeat="floorNumber in floorNumArray">
-							<select class="myselect" id="floorN" type="text" ng-change="setFloorNumber(buildingVideoF[$index])"   ng-model="buildingVideoF[$index]">
-		    					<option value="title" selected>F{{$index*10+1}} -F{{$index*10+10}}</option>
-		    					<option value="{{numbers}}" ng-repeat=" numbers in floorNumber">F{{numbers}}</option>
+						<div>
+							<select id="floorN">
+								<option value="{{$index}}" ng-repeat="y in floorNumArrays">{{y}}</option>
+								
 		    				</select>
 	    				</div>
 					</div>	

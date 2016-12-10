@@ -71,7 +71,7 @@ public class ProjectController {
     }
     @RequestMapping(value="/admin/getProjectDetails",method = RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<Project> getProjectDetailsByAdmin(
+    public DataWrapper<ProjectPojo> getProjectDetailsByAdmin(
     		@RequestParam(value="projectId",required=true) Long projectId,
     		@RequestParam(value="token",required=true) String token){
         return projectService.getProjectDetailsByAdmin(projectId,token);

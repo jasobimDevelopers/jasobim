@@ -4,12 +4,12 @@
         <div id="addhead">
         	<div id="addusertitle"><span>{{title}}</span></div>
             <div id="returnuser">
-            	<a href="" ng-click="returnUserlist()"><span>返回用户列表</span>
+            	<a href="" ng-click="hideadduserHtml()"><span>返回用户列表</span>
             	</a>
-            	<div  style="float:right;margin-left:10px;">
+<!--             	<div  style="float:right;margin-left:10px;">
             		<a href="" ng-click="hideadduserHtml()"><img src="page/project/images/deleteIcon.png"></a>
             	</div>
-           	</div>
+ -->           	</div>
         </div>
         <div id="adduserbody">
         	<div class="addinput">
@@ -23,10 +23,10 @@
             	<span>真实姓名:</span><input type="text"  id="inputnick" ng-model="findUserInfo.realName"/>
             </div>
             <div class="addinput">
-        		<span>邮箱地址:</span><input type="text"  id="inputadress" ng-model="findUserInfo.email"/>
+        		<span>邮箱地址:</span><input type="email"  id="inputadress" ng-model="findUserInfo.email"/>
             </div>
             <div class="addinput">
-            	<span>手机号码:</span><input type="text"  id="inputtel" ng-model="findUserInfo.tel"/>
+            	<span>手机号码:</span><input id="tel" type="tel" name="tel" ng-model="findUserInfo.tel" />
             </div>
             <div class="addinput">
         		<span>用户角色:</span>

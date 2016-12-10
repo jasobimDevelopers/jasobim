@@ -14,4 +14,5 @@ public interface UserDao {
 	boolean updateUser(User user);
 	DataWrapper<List<User>> getUserList(Integer pageSize, Integer pageIndex,User user);
 	DataWrapper<List<User>> findUserLike(User user);
+	DataWrapper<List<User>> findUserLikeRealName(String username);
 }

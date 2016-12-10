@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface QuestionService {
     DataWrapper<Void> updateQuestion(Question question,String token, MultipartFile[] file, HttpServletRequest request);
-    DataWrapper<List<QuestionPojo>> getQuestionList(Long projectId,String token, Integer pageIndex, Integer pageSize, Question question);
+    DataWrapper<List<QuestionPojo>> getQuestionList(String content,Long projectId,String token, Integer pageIndex, Integer pageSize, Question question);
 	DataWrapper<Question> getQuestionDetailsByAdmin(Long questionId,String token);
 	DataWrapper<Void> addQuestion(Question question, String token, MultipartFile[] file, HttpServletRequest request);
 	DataWrapper<Void> deleteQuestion(Long id, String token, HttpServletRequest request, Long projectId);

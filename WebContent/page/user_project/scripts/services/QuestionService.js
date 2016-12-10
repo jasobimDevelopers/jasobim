@@ -158,9 +158,6 @@
       this.updateProject = function(project,token) {
       	var deferred = $q.defer();
       	console.log("更新Project数据");
-//	          	var nProject = {};
-//	          	nProject.id = Project.id;
-//	          	nProject.realName = Project.realName;
       	$http.post('api/project/admin/updateProject?token='+token,project,
       		{
 	      		headers: {'Content-Type':undefined},
@@ -202,135 +199,135 @@
               });
           return deferred.promise;
           };
-          //////////////////////////////
-          ///////查找项目里的楼栋信息
-          this.getBuildingList = function(projectId) {
-          
+      //////////////////////////////
+      ///////查找项目里的楼栋信息
+      this.getBuildingList = function(projectId) {
+      
+      var deferred = $q.defer();
+      console.log("查找Project数据");
+      $http.get('api/building/admin/getBuildingByProjectId?projectId='+projectId+"&token="+token)
+          .success(function(data, status, headers, config){
+              console.log(data);
+              if(data.callStatus == "SUCCEED"){
+                  deferred.resolve(data);
+                  self.buildingInfo = data;
+              
+              }else{
+                  alert("数据查找失败");
+                  }
+                  
+              })
+              .error(function(data, status, headers, config){
+                  deferred.reject(data);
+              });
+          return deferred.promise;
+       };
+      //////////////////////////////
+      /////获取问题信息列表
+      this.getQuestionList = function(pageSize,pageIndex,question) {
+
           var deferred = $q.defer();
-          console.log("查找Project数据");
-          $http.get('api/building/admin/getBuildingByProjectId?projectId='+projectId+"&token="+token)
+          console.log("读取ProjectQuestionList数据");
+          var api = 'api/question/admin/getQuestionList?token='+getCookie('token')+"&pageSize="+pageSize+"&pageIndex="+pageIndex+"&"+question;
+          $http.get(encodeURI(api))
               .success(function(data, status, headers, config){
-                  console.log(data);
                   if(data.callStatus == "SUCCEED"){
                       deferred.resolve(data);
-                      self.buildingInfo = data;
-                  
+                      self.questionList = data;
+                 
                   }else{
-                      alert("数据查找失败");
-                      }
-                      
-                  })
-                  .error(function(data, status, headers, config){
-                      deferred.reject(data);
-                  });
-              return deferred.promise;
-              };
-              //////////////////////////////
-              /////获取问题信息列表
-	          this.getQuestionList = function(pageSize,pageIndex,question) {
-	
-	              var deferred = $q.defer();
-	              console.log("读取ProjectQuestionList数据");
-	              var api = 'api/question/admin/getQuestionList?token='+getCookie('token')+"&pageSize="+pageSize+"&pageIndex="+pageIndex+"&"+question;
-	              $http.get(encodeURI(api))
-	                  .success(function(data, status, headers, config){
-	                      if(data.callStatus == "SUCCEED"){
-	                          deferred.resolve(data);
-	                          self.questionList = data;
-	                     
-	                      }else{
-	                          alert("数据读取失败");
-	                      }
-	                      
-	                  })
-	                  .error(function(data, status, headers, config){
-	                      deferred.reject(data);
-	                  });
-	              return deferred.promise;
-	              };
-	        ///////////////获取问题所对应的留言信息
-            this.getMessageListByQuestionId = function(questionId){
-            	 var deferred = $q.defer();
-	              console.log("读取messageOfQuestionList数据");
-	              var api = 'api/message/admin/getMessageList?token='+getCookie('token')+"&questionId="+questionId;
-	              $http.get(encodeURI(api))
-	                  .success(function(data, status, headers, config){
-	                      if(data.callStatus == "SUCCEED"){
-	                          deferred.resolve(data);
-	                          self.messageList = data;
-	                     
-	                      }else{
-	                    	  console.log("该问题的留言为空")
-	                      }
-	                      
-	                  })
-	                  .error(function(data, status, headers, config){
-	                      deferred.reject(data);
-	                  });
-	              return deferred.promise;
-            };
-            ///////删除留言
-            this.deleteMessage = function(messageId){
-            	var deferred = $q.defer();
-                console.log("删除留言数据");
-                $http.get('api/message/deleteMessage?id='+messageId+'&token='+token)
-                    .success(function(data, status, headers, config){
-                        console.log(data);
-                        if(data.callStatus == "SUCCEED"){
-                            deferred.resolve(data);
-                            self.deleteMessageInfo = data;
-                            alert("数据删除成功");
-                        }else{
-                            alert("数据删除失败");
-                        }
-                        
-                    })
-                    .error(function(data, status, headers, config){
-                        deferred.reject(data);
-                    });
-                return deferred.promise;
-            };
-            /////////更新留言
-            this.updateMessageByAdmin = function(formData){
-            	var deferred = $q.defer();
-                console.log("更新留言数据");
-                $http.post('api/message/admin/updateMessage?token='+getCookie('token'),formData,
-              		  {
-          			  		headers: {'Content-Type':undefined},
-          			  		transformRequest: angular.identity 
-              		  })
-                    .success(function(data, status, headers, config){
-                        if(data.callStatus == "SUCCEED"){
-                            deferred.resolve(data);
-                            self.messageInfo = data;
-                            alert("留言更新成功")
-                        }else{
-                            alert("数据添加失败");
-                        }
-                        
-                    })
-                    .error(function(data, status, headers, config){
-                        deferred.reject(data);
-                    });
-                return deferred.promise; 
+                      alert("数据读取失败");
+                  }
+                  
+              })
+              .error(function(data, status, headers, config){
+                  deferred.reject(data);
+              });
+          return deferred.promise;
+          };
+    ///////////////获取问题所对应的留言信息
+    this.getMessageListByQuestionId = function(questionId){
+    	 var deferred = $q.defer();
+          console.log("读取messageOfQuestionList数据");
+          var api = 'api/message/admin/getMessageList?token='+getCookie('token')+"&questionId="+questionId;
+          $http.get(encodeURI(api))
+              .success(function(data, status, headers, config){
+                  if(data.callStatus == "SUCCEED"){
+                      deferred.resolve(data);
+                      self.messageList = data;
+                 
+                  }else{
+                	  console.log("该问题的留言为空")
+                  }
+                  
+              })
+              .error(function(data, status, headers, config){
+                  deferred.reject(data);
+              });
+          return deferred.promise;
+    };
+    ///////删除留言
+    this.deleteMessage = function(messageId){
+    	var deferred = $q.defer();
+        console.log("删除留言数据");
+        $http.get('api/message/deleteMessage?id='+messageId+'&token='+token)
+            .success(function(data, status, headers, config){
+                console.log(data);
+                if(data.callStatus == "SUCCEED"){
+                    deferred.resolve(data);
+                    self.deleteMessageInfo = data;
+                    alert("数据删除成功");
+                }else{
+                    alert("数据删除失败");
+                }
+                
+            })
+            .error(function(data, status, headers, config){
+                deferred.reject(data);
+            });
+        return deferred.promise;
+    };
+    /////////更新留言
+    this.updateMessageByAdmin = function(formData){
+    	var deferred = $q.defer();
+        console.log("更新留言数据");
+        $http.post('api/message/admin/updateMessage?token='+getCookie('token'),formData,
+      		  {
+  			  		headers: {'Content-Type':undefined},
+  			  		transformRequest: angular.identity 
+      		  })
+            .success(function(data, status, headers, config){
+                if(data.callStatus == "SUCCEED"){
+                    deferred.resolve(data);
+                    self.messageInfo = data;
+                    alert("留言更新成功")
+                }else{
+                    alert("数据添加失败");
+                }
+                
+            })
+            .error(function(data, status, headers, config){
+                deferred.reject(data);
+            });
+        return deferred.promise; 
+    }
+    //////查找留言信息
+    this.findMessage = function(messageId) {
+    
+    var deferred = $q.defer();
+    console.log("查找Message数据");
+    $http.get('api/message/admin/getMessageById?&token='+token+'&id='+messageId)
+        .success(function(data, status, headers, config){
+            console.log(data);
+            if(data.callStatus == "SUCCEED"){
+                deferred.resolve(data);
+                self.findMessageInfo = data;
+            }else{
+                alert("数据查找失败");
             }
-            //////查找留言信息
-            this.findMessage = function(messageId) {
-            
-            var deferred = $q.defer();
-            console.log("查找Message数据");
-            $http.get('api/message/admin/getMessageById?&token='+token+'&id='+messageId)
-                .success(function(data, status, headers, config){
-                    console.log(data);
-                    if(data.callStatus == "SUCCEED"){
-                        deferred.resolve(data);
-                        self.findMessageInfo = data;
-                    }else{
-                        alert("数据查找失败");
-                    }
-                    }).error(function(data, status, headers, config){
-                        deferred.reject(data);
-                    });
-                return deferred.promise;
-                };
+            }).error(function(data, status, headers, config){
+                deferred.reject(data);
+            });
+        return deferred.promise;
+        };
   });

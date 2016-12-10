@@ -184,7 +184,7 @@ public class QuantityServiceImpl implements QuantityService {
 			
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()) {
+			
 				String filePath = "E:/JasoBim/BimAppDocument/apache-tomcat-8.0.39/webapps/testJasobim" + "/out/" + projectId + "/";
 				File fileDir = new File(filePath);
 		        if (!fileDir.exists()) {
@@ -217,9 +217,7 @@ public class QuantityServiceImpl implements QuantityService {
 				} else {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}
-			} else {
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
+			
 			
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);

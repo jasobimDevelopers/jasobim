@@ -17,5 +17,5 @@ angular.module('Demo')
                 deferred.reject(data);
             });
         return deferred.promise;
-        };
+    };
 });

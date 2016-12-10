@@ -48,4 +48,19 @@ public class NavigationController {
     public String userQuestionPage(){
         return "user_home";
     }
+    
+    @RequestMapping(value="/codeInformationList")
+    public String codeInformationListPage(){
+    	return "user_home";
+    }
+    
+    @RequestMapping(value="/aboutList")
+    public String userAboutusPage(){
+        return "user_home";
+    }
+    
+    @RequestMapping(value="/suggesttionList")
+    public String userSuggesttionPage(){
+    	return "user_home";
+    }
 }

@@ -5,13 +5,7 @@ function projectInfo(){
 	document.getElementById("containers").style.display = 'none';
 	document.getElementById("projectInfoHtml").style.display = 'block';
 }
-//function selectValue(index){
-//	var obj=$(".myselect");
-//	for(i=0;i<obj.length;i++){
-//	        obj[i].selected = false;
-//	}
-//	obj[index].selected=true;
-//}
+
 
 function setModel(model) {
 	angular.element(model).scope().$parent.$parent.modelFiles = model.files[0];
@@ -22,9 +16,13 @@ function setPic(pic) {
 
 ////////////////////////////////
 function ProjectController($scope,ProjectService) {
+	$scope.a = 1;
+	
 	console.log("载入ProjectController");
 	$scope.currentPage = 1;
 	$scope.flagAll=-1;
+	$scope.selectedFloor="";
+	$scope.selectedBuilding="";
 	$scope.ProjectTofind = {};
 	$scope.findProjectInfo = {};
 	var buildingInfo = {};
@@ -37,21 +35,33 @@ function ProjectController($scope,ProjectService) {
 	$scope.buildingN=[];
 	var fileArray=[];
 	var fileArray1=[];
+	var videoTypeList=[];
+	$scope.floorNumArrays=[];
+	$scope.buildingNumArrays=[];
+	$scope.showOr=[];
+	for(var i=0;i<5;i++){
+		$scope.showOr[i]=0;
+	}
 	var introduced=null;
 	var projectId=null;
 	$scope.number=null;
 	$scope.numbers=null;
 	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","设计单位","施工地点","项目简介","建设单位","版本","施工时间","施工周期","操作"];
-	$scope.itemTitles=["序号","构件名称","底部高程","系统类型","尺寸","长度","设备类型","所属类别","标高","偏移量","面积","材质","类型名","操作"];
-	$scope.quantityTitles=["序号","构件名称","专业","系统类型","数值","单位","楼栋号","楼层号","单元号","户型","familyAndType","设备类型","尺寸","设备名称","材质"];
+	$scope.itemTitles=["序号","构件名称","底部高程","系统类型","尺寸","长度","设备类型","所属类别","标高","偏移量","面积","材质","类型名"];
+	$scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质"];
+	$scope.quantityTitlesFind=["专业","楼栋号","楼层号","户型"];
 	$scope.questionTitles=["序号","问题类型","问题提交人","问题标题","专业","内容","问题创建时间","问题等级","问题状态","操作"];
 	$scope.videoTitles=["序号","交底地址","楼栋号","专业","操作"];
 	$scope.paperTitles=["序号","图纸信息","楼栋号","楼层","专业","操作"];
 	$scope.flag=["工程量页面","构件信息页面","图纸信息页面","问题列表页面","安全交底页面"];
 	$scope.phase="all";
+	$scope.phases="alls";
 	$scope.buildingId="all";
+	$scope.buildingIds="alls";
 	$scope.floorId="all";
+	$scope.floorIds="alls";
 	$scope.householdId="all";
+	$scope.householdIds="alls";
 	$scope.questionType="all";
 	$scope.questionPriority="all";
 	$scope.questionStatus="all";
@@ -82,6 +92,15 @@ function ProjectController($scope,ProjectService) {
 	/////按专业自动搜索
 	$scope.setPhase = function(phase,flag) {
 		$scope.phase = phase;
+		$scope.phases="allss";
+		var allclass=$('.phase_quantity');
+		allclass.css("background-color","#fff");
+		if(phase=='all'){
+			allclass.eq(0).css("background-color","darkgray");
+		}
+		if(phase!='all'){
+			allclass.eq(phase+1).css("background-color","darkgray");
+		}
 		if(flag=="构件信息页面"){
 			$scope.getProjectItemList($scope.projectid,10,1,item);
 		}
@@ -92,54 +111,154 @@ function ProjectController($scope,ProjectService) {
 			$scope.getProjectPaperList($scope.projectid,10,1,paper);
 		}
 		if(flag=="安全交底页面"){
-			$scope.getProjectVideoList($scope.projectid,10,1,video);
+			$scope.getProjectVideoList(10,1,video);
 		}
 		
 	}
 	/////按楼栋号自动搜索
-	$scope.setBuildingNum = function(building,flag,index) {
+	$scope.setBuildingNum = function(building,flag) {
 		$scope.buildingId = building;	
-		ProjectService.getBuildingNum($scope.projectid,building).then(function(result){
-			 $scope.buildingNumInfo=result;  
-			 ProjectService.getBuildingDown($scope.projectid,building).then(function(result){
-				 $scope.buildingDownInfo=result;   
-				 if(flag=="构件信息页面"){
-					 $scope.getProjectItemList($scope.projectid,10,1,item);
-				 }
-				 if(flag=="工程量页面"){
-					 $scope.getProjectQuantityList($scope.projectid,10,1,quantity);
-				 }
-				 if(flag=="安全交底页面"){
-					 $scope.getProjectVideoList($scope.projectid,10,1,video);
-				 }
-				 if(flag=="图纸信息页面"){
-					 $scope.getProjectPaperList($scope.projectid,10,1,paper);
-				 }
-			    });
-			 
-			 
-	    });
+		$scope.buildingIds="allss";
+		var allclass=$('.buildingNum_quantity');
+		allclass.css("background-color","#fff");
+		if(building=='all'){
+			allclass.eq(0).css("background-color","darkgray");
+			allclass.val("title");
+			$scope.buildingNumInfo="";
+			$scope.buildingDownInfo="";
+			$scope.buildingInfo.buildingNum="";
+			
+		}
+		if(building!='all'){
+			allclass.eq(1).css("background-color","darkgray");
+		}
+		if(building=='all'){
+			if(flag=="构件信息页面"){
+				 $scope.getProjectItemList($scope.projectid,10,1,item);
+			 }
+			 if(flag=="工程量页面"){
+				 $scope.getProjectQuantityList($scope.projectid,10,1,quantity);
+			 }
+			 if(flag=="安全交底页面"){
+				 $scope.getProjectVideoList(10,1,video);
+			 }
+			 if(flag=="图纸信息页面"){
+				 $scope.getProjectPaperList($scope.projectid,10,1,paper);
+			 }
+		}else{
+			ProjectService.getBuildingNum($scope.projectid,building).then(function(result){
+				 $scope.buildingNumInfo=result;  
+				 ProjectService.getBuildingDown($scope.projectid,building).then(function(result){
+					 $scope.buildingDownInfo=result;   
+					 if(flag=="构件信息页面"){
+						 $scope.getProjectItemList($scope.projectid,10,1,item);
+					 }
+					 if(flag=="工程量页面"){
+						 $scope.getProjectQuantityList($scope.projectid,10,1,quantity);
+					 }
+					 if(flag=="安全交底页面"){
+						 $scope.getProjectVideoList(10,1,video);
+					 }
+					 if(flag=="图纸信息页面"){
+						 $scope.getProjectPaperList($scope.projectid,10,1,paper);
+					 }
+				    });
+		    });
+		}
+		
 	}
 	/////按楼层号自动搜索
 	$scope.setFloorNum = function(floor,flag) {
-		$scope.floorId=floor;
-		if(flag=="构件信息页面"){
-			$scope.getProjectItemList($scope.projectid,10,1,item);
+		var allclass=$('.floorNum_quantity');
+		allclass.css("background-color","#fff");
+		
+		var allclass_select=$('.floor_select');
+		allclass_select.css("background-color","#fff");
+		allclass_select.eq(Math.ceil(parseInt(floor)/10)-1).val('F'+floor); ; 
+		if(floor=='all'){
+			allclass.eq(0).css("background-color","darkgray");
+			allclass.val("title");
 		}
-		if(flag=="工程量页面"){
-			$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
+		
+		if($scope.buildingId!="all" && $scope.buildingIds!="alls"){
+			$scope.floorId=floor;
+			$scope.floorIds="allss";
+			if(floor!="title"){
+				if(flag=="构件信息页面"){
+					$scope.floorId=0;
+					$scope.floorId=parseInt(floor)+3;
+					$scope.getProjectItemList($scope.projectid,10,1,item);
+				}
+				if(flag=="工程量页面"){
+					if(floor!='all'){
+						$scope.floorId=0;
+						$scope.floorId=parseInt(floor)+3;
+						allclass_select.eq(parseInt(floor)+2).css("background-color","darkgray");
+						allclass.eq(parseInt(floor)+2).val(floor);
+						$(".floorNum_quantity").val(4);
+					}
+					$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
+				}
+				if(flag=="图纸信息页面"){
+					$scope.floorId=0;
+					$scope.floorId=parseInt(floor)+3;
+					$scope.getProjectPaperList($scope.projectid,10,1,paper);
+				}
+			}
 		}
-		if(flag=="图纸信息页面"){
-			$scope.getProjectPaperList($scope.projectid,10,1,paper);
+		
+		
+		
+		
+	}
+/////按地下层号自动搜索
+	$scope.setFloorDownNum = function(floor,flag) {
+		$scope.floorIds="allss";
+		var allclass=$('.floorNums_quantity');
+		var allclass_others=$('.floorNum_quantity');
+		allclass_others.css("background-color","#fff");
+		allclass.css("background-color","#fff");
+		if(parseInt(floor)==1){
+			allclass.eq(0).css("background-color","darkgray");
+			$scope.floorId=3;
 		}
+		if(parseInt(floor)==2){
+			allclass.eq(1).css("background-color","darkgray");
+			$scope.floorId=2;
+		}
+		if(floor!="title"){
+			//$('.floorNum_quantity')[parseInt(floor)/10].value(floor);
+			if(flag=="构件信息页面"){
+				$scope.getProjectItemList($scope.projectid,10,1,item);
+			}
+			if(flag=="工程量页面"){
+				$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
+			}
+			if(flag=="图纸信息页面"){
+				$scope.getProjectPaperList($scope.projectid,10,1,paper);
+			}
+		}
+		
+		
 	}
 	//////按户型自动搜索
 	$scope.setHouseholdNum = function(household,flag) {
 		$scope.householdId=household;
+		$scope.householdIds="allss";
+		var allclass=$('.household_quantity');
+		allclass.css("background-color","#fff");
+		if(household=='all'){
+			allclass.eq(0).css("background-color","darkgray");
+		}
+		if(household!='all'){
+			allclass.eq(household+1).css("background-color","darkgray");
+		}
 		if(flag=="构件信息页面"){
 			$scope.getProjectItemList($scope.projectid,10,1,item);
+			
 		}
 		if(flag=="工程量页面"){
+			
 			$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
 		}
 		if(flag=="图纸信息页面"){
@@ -230,11 +349,13 @@ function ProjectController($scope,ProjectService) {
 	  
 	 /////删除项目
 	 $scope.deleteProject = function(projectid){
+		 if(confirm("确定删除？")) {  
 		  	ProjectService.deleteProject(projectid,token).then(function(result){
 		       $scope.deleteProjectInfo=result.data;
 		       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
 		       
 		    });
+		 }
 	 }
 	 /////返回项目列表
 	 $scope.returnProjectlist = function(){
@@ -317,6 +438,7 @@ function ProjectController($scope,ProjectService) {
 	 //////////////////////////////项目详情信息
 	 $scope.projectInfoHead=[{name:"基本信息"},{name:"构件信息"},{name:"图纸信息"},{name:"工程量信息"},{name:"安全技术交底"},{name:"问题列表"}];
 	 $scope.projectPhaseInfo=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"}];
+	 $scope.projectVideoType=[{name:"安全"},{name:"质量"},{name:"技术"}];
 	 $scope.projectHouseholdInfo=[{name:"A型"},{name:"B型"},{name:"C型"},{name:"D型"},{name:"E型"}];
 	 $scope.projectQuestionOfType=[{name:"安全"},{name:"质量"},{name:"其他"}];
 	 $scope.projectQuestionOfPriority=[{name:"一般"},{name:"重要"},{name:"紧急"}];
@@ -386,30 +508,30 @@ function ProjectController($scope,ProjectService) {
 		  
 		 
 		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
-		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo-1);
-		 if($scope.phase!="allProfessionType") {
+		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 if($scope.phase!="all") {
 			 item+= "&professionType=" + $scope.phase;
 		 }
-		 if($scope.phase=="allProfessionType"){
+		 if($scope.phase=="all"){
 			 item+= "&professionType=" + $scope.flagAll;
 		 }
-		 if($scope.buildingId!="allBuildingNum"){
+		 if($scope.buildingId!="all"){
 			 item+= "&buildingNum=" + $scope.buildingId;
 		 }
-		 if($scope.phase=="allBuildingNum"){
+		 if($scope.buildingId=="all"){
 			 item+= "&buildingNum=" + $scope.flagAll;
 		 }
 		 
-		 if($scope.floorId!="allFloorNum"){
+		 if($scope.floorId!="all"){
 			 item+= "&floorNum=" + $scope.floorId;
 		 }
-		 if($scope.floorId=="allFloorNum"){
+		 if($scope.floorId=="all"){
 			 item+= "&floorNum=" + $scope.flagAll;
 		 }
-		 if($scope.householdId!="allHouseholdNum"){
+		 if($scope.householdId!="all"){
 			 item+= "&householdNum=" + $scope.householdId;
 		 }
-		 if($scope.householdId=="allHouseholdNum"){
+		 if($scope.householdId=="all"){
 			 item+= "&householdNum=" + $scope.flagAll;
 		 }
 		  ProjectService.getItemList(projectId,pageSize,pageIndex,item).then(function (result){
@@ -494,7 +616,7 @@ function ProjectController($scope,ProjectService) {
 			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		 }
 		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
-		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo-1);
+		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
 		 if($scope.phase!="all") {
 			 paper+= "professionType=" + $scope.phase;
 		 }
@@ -521,25 +643,53 @@ function ProjectController($scope,ProjectService) {
 	 */
 	 ////////////////////////工程量信息分页获取
 	 $scope.getProjectQuantityList = function(projectId,pageSize,pageIndex,quantity) {
+		 
 		 if($scope.buildingArray == undefined || $scope.buildingArray.length == 0) {
 			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		 }
 		 $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
-		 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo-1);
+		 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 
+		 
+		 var text=-1;
+		
 		  
 		 if($scope.phase!="all") {
 			 quantity+= "professionType=" + $scope.phase;
+			 $scope.showOr[0]=1;
+		 }else if($scope.phases!="alls"){
+			 quantity+= "professionType=" + text;
+			 $scope.showOr[0]=1;
 		 }
 		 if($scope.buildingId!="all"){
 			 quantity+= "&buildingNum=" + $scope.buildingId;
+			 $scope.showOr[1]=1;
+		 }else if($scope.buildingIds!="alls"){
+			 quantity+= "&buildingNum=" + text;
+			 $scope.showOr[1]=1;
 		 }
 		 if($scope.floorId!="all"){
 			 quantity+= "&floorNum=" + $scope.floorId;
+			 $scope.showOr[2]=1;
+		 }else if($scope.floorIds!="alls"){
+			 quantity+= "&floorNum=" + text;
+			 $scope.showOr[2]=1;
 		 }
 		 if($scope.householdId!="all"){
 			 quantity+= "&householdNum=" + $scope.householdId;
+			 $scope.showOr[3]=1;
+		 }else if($scope.householdIds!="alls"){
+			 quantity+= "&householdNum=" + text;
+			 $scope.showOr[3]=1;
+		 }
+		 $scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质"];
+		 for(var j=0;j<4;j++){
+			 if($scope.showOr[j]==1){
+				 $scope.quantityTitles.push($scope.quantityTitlesFind[j]);
+			 }
 		 }
 		  ProjectService.getQuantityList($scope.projectid,pageSize,pageIndex,quantity).then(function (result){
+			 
 		  	  $scope.projectQuantityList = result.data;
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
@@ -602,19 +752,17 @@ function ProjectController($scope,ProjectService) {
 	  }
 	  //////交底分页获取
 	 $scope.getProjectVideoList = function(pageSize,pageIndex,video) {
+		 video="";
 		 if($scope.buildingArray == undefined || $scope.buildingArray.length ==0) {
 			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		 }
-			
-		 
-		 
 		 if($scope.phase!="all") {
 			 video+= "professionType=" + $scope.phase;
 		 }
 		 if($scope.buildingId!="all"){
 			 video+= "&buildingNum=" + $scope.buildingId;
 		 }
-		  ProjectService.getVideoList(pageSize,pageIndex,video).then(function (result){
+		  ProjectService.getVideoList($scope.projectid,pageSize,pageIndex,video).then(function (result){
 		  	  $scope.videoList = result.data;
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
@@ -649,11 +797,13 @@ function ProjectController($scope,ProjectService) {
 	  }
 	 /////删除问题
 	 $scope.deleteQuestion = function(questionid){
+		 if(confirm("确定删除？")) {  
 		  	ProjectService.deleteQuestion(questionid,$scope.projectid).then(function(result){
 		       $scope.deleteQuestionInfo=result.data;
 		       $scope.getProjectQuestionList(pageSize,1,question);
 		       
 		    });
+		 }
 	 }
 	 /////导出工程量
 	 $scope.getProjectQuantityExcel=function(){
@@ -711,7 +861,7 @@ function ProjectController($scope,ProjectService) {
 			 document.getElementById("projectVideoInfoHtml").style.display = 'block';
 			 document.getElementById("projectQuestionInfo").style.display = 'none';
 			 var video=null;
-			 $scope.getProjectVideoList($scope.findProjectInfo.id,pageSize,1,video);
+			 $scope.getProjectVideoList(pageSize,1,video);
 		 }
 		 if(projectType == "问题列表"){
 			 document.getElementById("projectSelfInfoHtml").style.display = 'none';
@@ -782,10 +932,7 @@ function ProjectController($scope,ProjectService) {
 		 if(document.getElementById("penlin").files[0]!==null){
 			 fileArray[13]=document.getElementById("penlin").files[0];
 		 }		 
-		 //工程量
-		 if(document.getElementById("gongchengliang").files[0]!==null){
-			 fileArray[14]=document.getElementById("gongchengliang").files[0];	
-		 }
+		
 //		 console.log(typeof(fileArray));
 		 var formData = new FormData();
 		 for(var i=0;i<fileArray.length;i++){
@@ -800,16 +947,34 @@ function ProjectController($scope,ProjectService) {
 	 //////
 	 $scope.floorNumArray=menuArray(40);
 	 $scope.buildingNumArray=menuArray(20);
-
-	 $scope.setBuildingNumber = function(buildingss) {
-		 $scope.number=buildingss;
+	 for(var i=1;i<41;i++){
+		 if(i==1){
+			 $scope.floorNumArrays[i-1]="请输入楼层号";
+		 }else{
+			 $scope.floorNumArrays[i-1]="F"+(i-1);
+		 }
+		 
+		
 	 }
-	 $scope.setFloorNumber = function(buildingss) {
-		 $scope.numbers=buildingss;
+	 for(var j=0;j<20;j++){
+		 if(j==0){
+			 $scope.buildingNumArrays[j]="请输入楼栋号";
+		 }else{
+			 $scope.buildingNumArrays[j]="#"+j;
+		 }
+		 
+	 }
+	 
+	 $scope.setBuildingNumber = function(x) {
+		 $scope.number=x;
+	 }
+	 $scope.setFloorNumber = function(y) {
+		 $scope.numbers=y;
 	 }
 	 $scope.uploadPaperFile=function(){
-		
-		 if($scope.number!=null && $scope.numbers!=null && $scope.number!="title" && $scope.numbers!="title"){
+		 var building_val=document.getElementById("buildingN");
+		 var floor_val=document.getElementById("floorN");
+		 if(building_val.value!=0 && floor_val.value!=0){
 			 var formData = new FormData();
 			 if(document.getElementById("paper_dianqi").files[0]!=undefined){
 				 fileArray1[0]=document.getElementById("paper_dianqi").files[0];
@@ -826,11 +991,10 @@ function ProjectController($scope,ProjectService) {
 			 for(var i=0;i<fileArray1.length;i++){
 				 formData.append("fileList",fileArray1[i]);
 			 }
-			 ProjectService.uploadPaperFile(formData,$scope.number,$scope.numbers,$scope.projectid).then(function(result){
+			 ProjectService.uploadPaperFile(formData,building_val.value,floor_val.value,$scope.projectid).then(function(result){
 				       $scope.uploadPaperFile=result.data;	 
 				       document.getElementById("projectVideoInfoAdd").style.display = 'block';
-				    });
-			 
+				    }); 
 		 }else{
 			 alert("请输入图纸对应的楼栋号和楼层号！")
 		 }
@@ -843,27 +1007,32 @@ function ProjectController($scope,ProjectService) {
 		
 			 var formData = new FormData();
 			 var professionType=null;
-			 if(document.getElementById("video_dianqi").files[0]!=undefined){
-				 fileArray1[0]=document.getElementById("video_dianqi").files[0];
+			 var allType=$(".geipaishui_type");
+			
+			 
+			 
+			 
+			 if(document.getElementById("video_zhiliang").files[0]!=undefined){
+				 fileArray1[0]=document.getElementById("video_zhiliang").files[0];
 				 professionType=0;
+				 videoTypeList[0] = allType[0].value;
 			 }
-			 if(document.getElementById("video_nuantong").files[0]!=undefined){
-				 fileArray1[1]=document.getElementById("video_nuantong").files[0];
+			 if(document.getElementById("video_anquan").files[0]!=undefined){
+				 fileArray1[1]=document.getElementById("video_anquan").files[0];
 				 professionType=1;
+				 videoTypeList[1] = allType[1].value;
 			 }
-			 if(document.getElementById("video_geipaishui").files[0]!=undefined){
-				 fileArray1[2]=document.getElementById("video_geipaishui").files[0];
+			 if(document.getElementById("video_jishu").files[0]!=undefined){
+				 fileArray1[2]=document.getElementById("video_jishu").files[0];
 				 professionType=2;
+				 videoTypeList[2] = allType[2].value;
 			 }
-			 if(document.getElementById("paper_xiaofang").files[0]!=undefined){
-				 fileArray1[3]=document.getElementById("video_xiaofang").files[0];
-				 professionType=3;
-			 }
+			
 			 for(var i=0;i<fileArray1.length;i++){
 				 formData.append("fileList",fileArray1[i]);
 			 }
 			 if(professionType!=null){
-				 ProjectService.uploadVideoFile(formData,professionType,$scope.projectid).then(function(result){
+				 ProjectService.uploadVideoFile(formData,professionType,videoTypeList,$scope.projectid).then(function(result){
 				       $scope.uploadPaperFile=result.data;	      
 				       
 				    });

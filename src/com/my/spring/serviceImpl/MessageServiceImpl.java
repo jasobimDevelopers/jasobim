@@ -48,7 +48,6 @@ public class MessageServiceImpl implements MessageService {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(message!=null){
 					message.setUserId(userInMemory.getId());
 					if(message.getMessageDate()==null){
@@ -80,9 +79,6 @@ public class MessageServiceImpl implements MessageService {
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

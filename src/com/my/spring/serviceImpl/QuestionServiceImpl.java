@@ -129,13 +129,11 @@ public class QuestionServiceImpl implements QuestionService {
 								/////删除留言对应的文件
 								messageListFile=messageFileDao.getMessageFileListByMessageId(messageList.getData().get(j).getId());
 								////////无区别删除问题下的所有留言
-								if(!messageDao.deleteMessageByQuestionId(messageList.getData().get(j).getId())){
-									dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-								}
+								
 								if(messageListFile.getData()!=null && messageListFile.getData().size()>0){
 									
 									for(int k=0;k<messageListFile.getData().size();k++){
-										if(!messageFileDao.deleteMessageFile(messageList.getData().get(k).getId())){
+										if(!messageFileDao.deleteMessageFileByMessageId(messageList.getData().get(j).getId())){
 											dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 										}
 										Files filess=new Files();
@@ -146,7 +144,7 @@ public class QuestionServiceImpl implements QuestionService {
 										}
 									}
 								}
-								
+								messageDao.deleteMessageByQuestionId(messageList.getData().get(j).getQuestionId());
 							}
 							
 						}
@@ -287,11 +285,47 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public DataWrapper<List<QuestionPojo>> getQuestionList(Long projectId,String token, Integer pageIndex, Integer pageSize, Question question) {
+    public DataWrapper<List<QuestionPojo>> getQuestionList(String content,Long projectId,String token, Integer pageIndex, Integer pageSize, Question question) {
     	DataWrapper<List<QuestionPojo>> datawrapper=new DataWrapper<List<QuestionPojo>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
-    			datawrapper= questionDao.getQuestionList(projectId,pageIndex,pageSize,question);
+    			if(content!=null){
+    				//////问题类型搜索
+    				if("安全".contains(content)){
+    					question.setQuestionType(0);
+    				}
+    				if("质量".contains(content)){
+    					question.setQuestionType(1);
+    				}
+    				if("其他".contains(content)){
+    					question.setQuestionType(2);
+    				}
+    				/////问题等级搜索
+    				if("一般".contains(content)){
+    					question.setPriority(0);
+    				}
+    				if("重要".contains(content)){
+    					question.setPriority(1);
+    				}
+    				if("紧急".contains(content)){
+    					question.setPriority(2);
+    				}
+    				/////问题状态搜索
+    				if("待解决".contains(content)){
+    					question.setState(0);
+    				}
+    				if("已解决".contains(content)){
+    					question.setState(1);
+    				}
+    				List<User> users=new ArrayList<User>();
+    				users=userDao.findUserLikeRealName(content).getData();
+    				if(users!=null){
+    					if(users.size()>0){
+    						question.setUserId(users.get(0).getId());
+    					}
+    				}
+    			}
+    			datawrapper= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question);
     			Long questionSort=questionDao.getQuestionListOfSort();
     			Long questionImportant=questionDao.getQuestionListOfImportant();
     			Long questionAll=questionDao.getQuestionList();

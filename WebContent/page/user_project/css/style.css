@@ -93,7 +93,7 @@ a{
 	text-decoration:none;
 	color:#494949;
 }
-a:visited{
+/* a:visited{
 	
 text-decoration:none;
 }
@@ -102,7 +102,7 @@ color:#4FB8E1;
 }
 a:active{
 text-decoration:none;
-}
+} */
 #check{
 	margin-top: 2px;
 	background-color:white;

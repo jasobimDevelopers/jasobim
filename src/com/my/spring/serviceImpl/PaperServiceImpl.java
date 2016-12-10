@@ -134,8 +134,9 @@ public class PaperServiceImpl implements PaperService {
     	DataWrapper<List<Paper>> dataWrapper = new DataWrapper<List<Paper>>();
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
-	        	
+	        		
 	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper);
+	        		//String nameArray=null;
 	        		for(int i=0;i<dataWrapper.getData().size();i++){
 	        			PaperPojo papernew=new PaperPojo();
 	        			papernew.setProjectId(projectId);
@@ -143,6 +144,11 @@ public class PaperServiceImpl implements PaperService {
 	        			papernew.setBuildingNum(dataWrapper.getData().get(i).getBuildingNum());
 	        			papernew.setProfessionType(dataWrapper.getData().get(i).getProfessionType());
 	        			papernew.setFloorNum(dataWrapper.getData().get(i).getFloorNum());
+	        			/*String nameArrays=dataWrapper.getData().get(i).getOriginName();
+	        			if(nameArray!=null && !nameArray.contains(nameArrays)){
+	        				nameArray.concat(nameArrays);
+	        			}*/
+	        			
 	        			papernew.setOriginName(dataWrapper.getData().get(i).getOriginName());
 	        			Files file=fileDao.getById(dataWrapper.getData().get(i).getFileId());
 	        			if(file!=null){

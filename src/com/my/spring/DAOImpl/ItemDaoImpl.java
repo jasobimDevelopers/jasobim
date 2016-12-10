@@ -50,17 +50,26 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
         
         ///////////////////////////////
         criteria.add(Restrictions.eq("projectId", projectId));
+        
         if(item.getProfessionType()!=null){
-        	criteria.add(Restrictions.eq("professionType", item.getProfessionType()));
+        	if(item.getProfessionType()!=-1){
+        		criteria.add(Restrictions.eq("professionType", item.getProfessionType()));
+        	}
         }
         if(item.getBuildingNum()!=null){
-        	criteria.add(Restrictions.eq("buildingNum", item.getBuildingNum()));
+        	if(item.getBuildingNum()!=-1){
+        		criteria.add(Restrictions.eq("buildingNum", item.getBuildingNum()));
+        	}
         }
         if(item.getHouseholdNum()!=null){
-        	criteria.add(Restrictions.eq("householdNum", item.getHouseholdNum()));
+        	if(item.getHouseholdNum()!=-1){
+        		criteria.add(Restrictions.eq("householdNum", item.getHouseholdNum()));
+        	}
         }
         if(item.getFloorNum()!=null){
-        	criteria.add(Restrictions.eq("floorNum", item.getFloorNum()));
+        	if(item.getFloorNum()!=-1){
+        		criteria.add(Restrictions.eq("floorNum", item.getFloorNum()));
+        	}
         }
         	
         /////////////////////////////////////

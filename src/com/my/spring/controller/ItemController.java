@@ -94,6 +94,12 @@ public class ItemController {
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute Item item,
             @RequestParam(value = "token",required = false) String token){
+    	if(item.getFloorNum()!=null){
+    		if(item.getFloorNum()==1){
+        		item.setFloorNum(3);
+        	}
+    	}
+    	
         return itemService.getItemList(projectId,pageIndex,pageSize,item,token);
     }
     @RequestMapping(value="/getItemById",method=RequestMethod.GET)

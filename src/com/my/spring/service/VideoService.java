@@ -16,7 +16,7 @@ public interface VideoService {
 	DataWrapper<Video> getVideoDetails(Long id,String token);
 	DataWrapper<List<VideoPojo>> getVideoList(String token, Long projectId, Integer pageIndex, Integer pageSize, Video video);
 	DataWrapper<Void> deleteVideo(Long id, String token, Long fileid,HttpServletRequest request);
-	DataWrapper<Void> addVideo(Video video, String token, MultipartFile file, HttpServletRequest request);
+	DataWrapper<Void> addVideo(Video video, String token, MultipartFile file, HttpServletRequest request, int videoTypeList);
 	
 
 }

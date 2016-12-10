@@ -142,4 +142,25 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 		return delete(get(userid));
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<List<User>> findUserLikeRealName(String username) {
+		List<User> ret = null;
+		DataWrapper<List<User>> users=new DataWrapper<List<User>>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.like("realName",username));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+			users.setData(ret);;
+		}else{
+			users.setErrorCode(ErrorCodeEnum.Error);
+		}
+		return users;
+	}
+
 }

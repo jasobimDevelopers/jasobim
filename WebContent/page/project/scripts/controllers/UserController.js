@@ -6,6 +6,7 @@ function UserController($scope,UserService) {
   console.log("载入UserController");
   $scope.currentPage = 1;
   $scope.userTofind = {};
+  var user="";
   $scope.findUserInfo = {};
   $scope.userTitles=["序号","用户名","真实姓名","头像","权限","邮箱","电话","注册日期","操作"];
   $scope.roleList=[{name:"超级管理员"},{name:"管理员"}];
@@ -62,15 +63,18 @@ function UserController($scope,UserService) {
  }
  /////删除用户
  $scope.deleteUser = function(userid){
-	  	UserService.deleteUser(userid,token).then(function(result){
-	       $scope.deleteUserInfo=result.data;
-	       $scope.getUserList(pageSize,$scope.currentPage,$scope.userTofind);
-	       
-	    });
+	 if(confirm("确定删除？")) {  
+		 UserService.deleteUser(userid,token).then(function(result){
+		       $scope.deleteUserInfo=result.data;
+		       $scope.getUserList(pageSize,$scope.currentPage,$scope.userTofind);
+		       
+		    });
+     }  
+	  	
  }
  /////返回用户列表
  $scope.returnUserlist = function(){
-	       $scope.getUserList();
+	       $scope.getUserList(pageSize,pageIndex,user);
 	       document.getElementById("addUserHtml").style.display = 'none';
  }
  //////重置添加用户信息
@@ -78,16 +82,43 @@ function UserController($scope,UserService) {
 	 $scope.findUserInfo = {};
  }
 
+ 	function checkMobile(){
+	    var sMobile = document.getElementById("tel").value;
+	    if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(sMobile))){
+	        alert("不是完整的11位手机号或者正确的手机号");
+	        return false;
+	    }else{
+	    	return true;
+	    }
+	}
+	function checkEMail(){
+	    var temp = document.getElementById("inputadress");
+	    //对电子邮件的验证
+	    var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+	    if(!myreg.test(temp.value)){
+	        alert('请输入有效的E_mail！');
+	        return false;
+	    }else{
+	    	return true;
+	    }
+	}
  /////增加用户
  $scope.addUserByAdmin = function(){
 	 if($scope.title=="增加用户"){
 		 findUserInfo = {};
-		 findUserInfo=$scope.findUserInfo;
-		 UserService.addUserByAdmin(findUserInfo,token).then(function(result){
-		       $scope.addUserByAdminInfo=result.data;
-		       $scope.getUserList(pageSize,1,$scope.userTofind);
-		       
-		    });
+		 if(checkMobile()==true )
+		 {
+			 if(checkEMail()==true){
+				 findUserInfo=$scope.findUserInfo;
+				 UserService.addUserByAdmin(findUserInfo,token).then(function(result){
+				       $scope.addUserByAdminInfo=result.data;
+				       $scope.getUserList(pageSize,1,$scope.userTofind);
+				       document.getElementById("addUserHtml").style.display = 'none';
+				    });
+			 }
+			
+		 }
+		
 	 }
 	 if($scope.title=="更新用户")
 	{
@@ -107,7 +138,7 @@ function UserController($scope,UserService) {
 		 UserService.updateUser(formData,token).then(function(result){
 		       $scope.updateUserInfo=result.data;
 		       $scope.getUserList(pageSize,1,$scope.userTofind);
-		       
+		       document.getElementById("addUserHtml").style.display = 'none';
 		    });
 	}
 	 
