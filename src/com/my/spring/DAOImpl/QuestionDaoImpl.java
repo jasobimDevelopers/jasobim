@@ -14,11 +14,14 @@ import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
+import org.hibernate.criterion.Restrictions; 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,23 +118,42 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
             criteria.add(Restrictions.eq("projectId", question.getProjectId()));
         }
         if(content!=null){
+        	Disjunction dis = Restrictions.disjunction();        	
+        	dis.add(Restrictions.like("name", "%"+content+"%",MatchMode.ANYWHERE));
+        	dis.add(Restrictions.like("intro", "%"+content+"%",MatchMode.ANYWHERE));
+        	dis.add(Restrictions.like("trades", "%"+content+"%",MatchMode.ANYWHERE));
+
+//        	criteria.add(Restrictions.or(Restrictions.like("name", content,MatchMode.ANYWHERE),
+//        			Restrictions.like("intro", content,MatchMode.ANYWHERE),
+//        			Restrictions.like("trades", content,MatchMode.ANYWHERE)));
         	
-			criteria.add(Restrictions.like("name", "%"+content+"%"));
-			criteria.add(Restrictions.like("intro", "%"+content+"%"));
-			criteria.add(Restrictions.like("trades", "%"+content+"%"));
-			//criteria.add(Restrictions.or(Restrictions.like("questionDate", "%"+content+"%")));
-			if(question.getPriority()!=null){
-				criteria.add(Restrictions.or(Restrictions.eq("priority",question.getPriority())));
+        	if(question.getPriority()!=null) {
+        		dis.add(Restrictions.eq("priority", question.getPriority()));
+//				criteria.add(Restrictions.eq("priority",question.getPriority()));
+			} 
+        	if(question.getUserId()!=null){
+        		dis.add(Restrictions.eq("userId", question.getUserId()));
+//				criteria.add(Restrictions.eq("userId",question.getUserId()));
 			}
-			if(question.getUserId()!=null){
-				criteria.add(Restrictions.or(Restrictions.eq("priority",question.getUserId())));
-			}
+//			if(question.getPriority()!=null && question.getUserId()!=null){
+//				criteria.add(Restrictions.or(Restrictions.eq("priority", question.getPriority()), Restrictions.eq("priority",question.getUserId())));
+//			} else if(question.getPriority()!=null) {
+//				criteria.add(Restrictions.eq("priority",question.getPriority()));
+//			} else if(question.getUserId()!=null){
+//				criteria.add(Restrictions.eq("userId",question.getUserId()));
+//			}
+        	
+        	
+        	
 			if(question.getQuestionType()!=null){
-				criteria.add(Restrictions.eq("questionType",question.getQuestionType()));
+				dis.add(Restrictions.eq("questionType", question.getQuestionType()));
+//				criteria.add(Restrictions.eq("questionType",question.getQuestionType()));
 			}
 			if(question.getState()!=null){
-				criteria.add(Restrictions.eq("state",question.getState()));
+				dis.add(Restrictions.eq("state", question.getState()));
+//				criteria.add(Restrictions.eq("state",question.getState()));
 			}
+			criteria .add(dis);
         }else{
         	 if(question.getPriority()!=null){
              	criteria.add(Restrictions.eq("priority", question.getPriority()));

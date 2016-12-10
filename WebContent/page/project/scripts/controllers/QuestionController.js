@@ -347,13 +347,13 @@ function QuestionController($scope,QuestionService) {
 	/////问题搜索
 	$scope.search = function(){
 		var content=document.getElementById("paperList_find").value;
-		QuestionService.getQuestionList(pageSize,pageIndex,question).then(function (result){
-		  	  $scope.questionList = result.data;
-
-		      $scope.currentPage = result.currentPage;
-		      $scope.totalPage = result.totalPage;
-		      $scope.questionPage($scope.totalPage,$scope.currentPage);
-		  });
+//		QuestionService.getQuestionList(pageSize,pageIndex,question).then(function (result){
+//		  	  $scope.questionList = result.data;
+//
+//		      $scope.currentPage = result.currentPage;
+//		      $scope.totalPage = result.totalPage;
+//		      $scope.questionPage($scope.totalPage,$scope.currentPage);
+//		  });
 		QuestionService.getQuestionList(pageSize,pageIndex,question,content).then(function (result){
 		  	  $scope.questionList = result.data;
 		      $scope.currentPage = result.currentPage;
