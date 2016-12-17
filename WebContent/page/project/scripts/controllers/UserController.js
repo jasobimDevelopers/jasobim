@@ -4,6 +4,7 @@ var userName=getCookie('userName');
 function UserController($scope,UserService) {
 	
   console.log("载入UserController");
+ 
   $scope.currentPage = 1;
   $scope.userTofind = {};
   var user="";
@@ -38,6 +39,8 @@ function UserController($scope,UserService) {
   }
   //////显示用户添加界面
   $scope.showaddUser = function() {
+	  var widths=document.body.offsetWidth+"px";
+	  $(".allUser").css("width",widths);
 	  $scope.findUserInfo = {};
 	  document.getElementById("addUserHtml").style.display = 'block';
       $scope.title="增加用户";

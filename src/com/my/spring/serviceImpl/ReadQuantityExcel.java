@@ -288,7 +288,7 @@ public class ReadQuantityExcel {
                    }
                }
            }
-
+           quantity.setQuantityType(1);
            try{
         	   quantityList.add(quantity);
            }catch(Exception e){

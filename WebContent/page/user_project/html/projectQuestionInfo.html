@@ -3,18 +3,18 @@
 				<div id="question_head">
 					<div class="question_menulis">
 						<div><span>类型</span></div>
-						<div ng-click="setQuestionOfType('all',flag[3])"><button class="btn btn-default">全部</button></div>
-						<div ng-repeat="questionOfType in projectQuestionOfType" ng-click="setQuestionOfType($index,flag[3])"><button class="btn btn-default">{{questionOfType.name}}</button></div>
+						<div ng-click="setQuestionOfType('all',flag[3])"><button class="btn btn-default question_type">全部</button></div>
+						<div ng-repeat="questionOfType in projectQuestionOfType" ng-click="setQuestionOfType($index,flag[3])"><button class="btn btn-default question_type">{{questionOfType.name}}</button></div>
 					</div>
 					<div class="question_menuli">
 						<div><span>等级</span></div>
-						<div ng-click="setQuestionOfPriority('all',flag[3])"><button class="btn btn-default">全部</button></div>
-						<div ng-repeat="questionOfPriority in projectQuestionOfPriority" ng-click="setQuestionOfPriority($index,flag[3])"><button class="btn btn-default">{{questionOfPriority.name}}</button></div>
+						<div ng-click="setQuestionOfPriority('all',flag[3])"><button class="btn btn-default question_proprity">全部</button></div>
+						<div ng-repeat="questionOfPriority in projectQuestionOfPriority" ng-click="setQuestionOfPriority($index,flag[3])"><button class="btn btn-default question_proprity">{{questionOfPriority.name}}</button></div>
 					</div>
 					<div class="question_menuli_bottom">
 						<div><span>状态</span></div>
-						<div ng-click="setQuestionOfStatus('all',flag[3])"><button class="btn btn-default">全部</button></div>
-						<div ng-repeat="questionOfStatus in projectQuestionOfStatus" ng-click="setQuestionOfStatus($index,flag[3])"><button class="btn btn-default">{{questionOfStatus.name}}</button></div>
+						<div ng-click="setQuestionOfStatus('all',flag[3])"><button class="btn btn-default question_status">全部</button></div>
+						<div ng-repeat="questionOfStatus in projectQuestionOfStatus" ng-click="setQuestionOfStatus($index,flag[3])"><button class="btn btn-default question_status">{{questionOfStatus.name}}</button></div>
 						
 					</div>
 				</div>

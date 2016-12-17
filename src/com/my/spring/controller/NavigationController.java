@@ -25,10 +25,7 @@ public class NavigationController {
         return "login";
     }
     
-    @RequestMapping(value="/test")
-    public String testPage(){
-        return "test/test";
-    }
+    
     @RequestMapping(value="/projectQuestionList")
     public String questionPage(){
         return "home";

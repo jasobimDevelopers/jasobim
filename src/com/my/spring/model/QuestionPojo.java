@@ -20,6 +20,7 @@ public class QuestionPojo {
 	private int sortPercent;/////一般问题的百分比
 	private int importantPercent;/////重要问题的百分比
 	private int urgentPercent;//////紧急问题的百分比
+	private String position;//位置
 	public Long getId() {
 		return id;
 	}
@@ -134,6 +135,12 @@ public class QuestionPojo {
 	}
 	public void setUrgentPercent(int urgentPercent) {
 		this.urgentPercent = urgentPercent;
+	}
+	public String getPosition() {
+		return position;
+	}
+	public void setPosition(String position) {
+		this.position = position;
 	}
 	
 	

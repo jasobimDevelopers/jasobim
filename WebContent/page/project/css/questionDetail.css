@@ -172,7 +172,6 @@ text-decoration: none;
 #findTitle{
 	height:50px;
 	width:250px;
-	padding-top:10px;
 	font-size:16px;
 	font-family:微软雅黑;
 	padding-left:10px;
@@ -182,10 +181,11 @@ text-decoration: none;
 	float:left;
 }
 #findTitle div input{
-	width:205px;
+	width:267px;
 	background-color:#1BBC9B;
-	height:30px;
+	height:50px;
 	border-width:0px;
+	outline:none;
 }
 #findIcon{
 	padding-top:10px;

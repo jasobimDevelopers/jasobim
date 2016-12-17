@@ -348,7 +348,7 @@
 
           var deferred = $q.defer();
           console.log("读取ProjectPaperList数据");
-          var api = 'api/paper/admin/getPaperList?token='+getCookie('token')+'&projectId='+projectId + "&pageSize=" + pageSize + "&pageIndex="+pageIndex +"&"+ sql;
+          var api = 'api/paper/admin/getPaperLists?token='+getCookie('token')+'&projectId='+projectId + "&pageSize=" + pageSize + "&pageIndex="+pageIndex +"&"+ sql;
           $http.get(encodeURI(api))
               .success(function(data, status, headers, config){
                   if(data.callStatus == "SUCCEED"){
@@ -532,5 +532,31 @@
                      deferred.reject(data);
                  });
              return deferred.promise;
+          };
+          /////上传预算的工程量
+          this.uploadOtherQuantity = function(formData,projectId){
+         	 var deferred = $q.defer();
+              console.log("上传构件数据");
+              $http.post('api/quantity/admin/uploadQuantity?token='+getCookie('token')+"&projectId="+projectId,formData,
+             		 {
+             	 		headers: {'Content-Type':undefined},
+             	 		transformRequest: angular.identity 
+             		 })
+                  .success(function(data, status, headers, config){
+
+                      if(data.callStatus == "SUCCEED"){
+                          deferred.resolve(data);
+                          alert("上传预算工程量信息成功！")
+                          self.uploadQuantityInfo = data;
+                      
+                      }else{
+                          alert("数据添加失败("+data.errorCode+")");
+                      }
+                      
+                  })
+                  .error(function(data, status, headers, config){
+                      deferred.reject(data);
+                  });
+              return deferred.promise;
           };
   });

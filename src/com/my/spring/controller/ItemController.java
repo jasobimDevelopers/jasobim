@@ -15,17 +15,25 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Item;
+import com.my.spring.model.MinItem;
 import com.my.spring.service.ItemService;
 import com.my.spring.utils.DataWrapper;
 
 /**
- * Created by Administrator on 2016/6/22.
+ * Created by xyx 2016/11/1.
  */
 @Controller
 @RequestMapping(value="api/item")
 public class ItemController {
     @Autowired
     ItemService itemService;
+    
+    
+    
+    /*
+     *模型的原始构件信息上传
+     */
+    
     @RequestMapping(value="/admin/uploadItem", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> uploadItem(
@@ -37,6 +45,29 @@ public class ItemController {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
     	for(int i=0;i<fileList.length;i++){
     		if(itemService.batchImport(filePath, fileList[i],token,request,projectId)){
+            	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
+            }else{
+            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+            }
+    	}
+    	
+        return dataWrapper;
+    }
+    
+    /*
+     *轻量化处理后的模型构件信息上传
+     */
+    @RequestMapping(value="/admin/uploadMinItem", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> uploadMinItem(
+            @RequestParam(value = "fileList", required = false) MultipartFile[] fileList,
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "projectId",required = true) Long projectId,
+            HttpServletRequest request){
+    	String filePath = "/fileupload/minitems";
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    	for(int i=0;i<fileList.length;i++){
+    		if(itemService.batchImports(filePath, fileList[i],token,request,projectId)){
             	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
             }else{
             	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -96,11 +127,27 @@ public class ItemController {
             @RequestParam(value = "token",required = false) String token){
     	if(item.getFloorNum()!=null){
     		if(item.getFloorNum()==1){
-        		item.setFloorNum(3);
+        		item.setFloorNum(3);////对应地下二层
         	}
     	}
     	
         return itemService.getItemList(projectId,pageIndex,pageSize,item,token);
+    }
+    @RequestMapping(value="/admin/getMinItemList", method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<MinItem>> getMinItemList(
+    		@RequestParam(value="projectId",required=true) Long projectId,
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute MinItem item,
+            @RequestParam(value = "token",required = false) String token){
+    	if(item.getFloorNum()!=null){
+    		if(item.getFloorNum()==1){
+        		item.setFloorNum(3);
+        	}
+    	}
+    	
+        return itemService.getMinItemList(projectId,pageIndex,pageSize,item,token);
     }
     @RequestMapping(value="/getItemById",method=RequestMethod.GET)
     @ResponseBody
@@ -108,18 +155,6 @@ public class ItemController {
     		@RequestParam(value = "itemId",required = true) Long itemId,
             @RequestParam(value = "token",required = false) String token){
         return itemService.getItemById(itemId,token);
-    }
-    @RequestMapping(value="/getItemByOthers")
-    @ResponseBody
-    public DataWrapper<List<Item>> getItemByOthers(
-    		@RequestParam(value = "projectId",required = true) Long projectId,
-    		@RequestParam(value = "typeName",required = false) Long typeName,
-    		@RequestParam(value = "buildingNum",required = false) Long buildingNum,
-    		@RequestParam(value = "floorNum",required = false) Long floorNum,
-    		@RequestParam(value = "unitNum",required = false) Long unitNum,
-    		@RequestParam(value = "householdNum",required = false) Long householdNum,
-    		@RequestParam(value = "token",required = false) String token){
-        return itemService.getItemByOthers(projectId,typeName,buildingNum,floorNum,unitNum,householdNum,token);
     }
     /*
      * 查询项目相应栋号下的地下层层数
@@ -155,6 +190,15 @@ public class ItemController {
     	@RequestParam(value = "token",required = true) String token
     		){
         return itemService.getHouseHoldType(projectId, buildingId, floorId, token);
+    }
+    @RequestMapping(value="/getCodeImg",method=RequestMethod.POST)
+    @ResponseBody
+    public String getCodeImg(
+    		HttpServletRequest request,
+    		@ModelAttribute Item item
+    		){
+    	
+        return itemService.getCodeImg(item,request);
     }
 
 }

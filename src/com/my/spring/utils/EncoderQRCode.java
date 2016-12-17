@@ -14,12 +14,12 @@ public class EncoderQRCode {
        try { 
            Qrcode qrcodeHandler = new Qrcode(); 
         // 设置二维码排错率，可选L(7%)、M(15%)、Q(25%)、H(30%)，排错率越高可存储的信息越少，但对二维码清晰度的要求越小 
-           qrcodeHandler.setQrcodeErrorCorrect('H'); 
+           qrcodeHandler.setQrcodeErrorCorrect('L'); 
            qrcodeHandler.setQrcodeEncodeMode('B'); 
            qrcodeHandler.setQrcodeVersion(5); 
            System.out.println(content); 
 //	           int imgSize = 67 + 12 * (size - 1);
-           byte[] contentBytes = content.getBytes("gb2312"); 
+           byte[] contentBytes = content.getBytes("utf8"); 
            BufferedImage bufImg = new BufferedImage(115, 115, 
                    BufferedImage.TYPE_INT_RGB); 
            Graphics2D gs = bufImg.createGraphics(); 
@@ -56,16 +56,17 @@ public class EncoderQRCode {
     * @param args the command line arguments
     */ 
    public static void main(String[] args) { 
-	    String realPath="F:/xyxfiles/eclipseWorkspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/wtpwebapps/testJasobim";
+	    /*String realPath="F:/xyxfiles/eclipseWorkspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/wtpwebapps/testJasobim";
 	   	//取当前时间为图片名称 带毫秒的
-	   	SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
+*/	   	SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
 	   	Date d=new Date();
 	   	String str=sdf.format(d);
 	   	String filePath = "/fileOfCodeInformation/paperCodeFiles";
+	   	String imgPath="E:/codeInformation";
 	    //String rootPath = request.getSession().getServletContext().getRealPath("/");
-	    String imgPath = realPath+filePath+"/"+str+".png"; 
-	    System.out.println(imgPath);
-	    String content= "localhost:8080/testJasobim/files/userIcons/aa3f6b6ceff2101f5cb514ea09c96b42.jpg";
+	    //String imgPath = realPath+filePath+"/"+str+".png"; 
+	    //System.out.println(imgPath);
+	    String content = "http://mp.weixin.qq.com/s?__biz=MzI2MzU0NDkzNQ==&mid=100000007&idx=1&sn=9a85a9cffc294427379036356657a0a4&chksm=6abb080f5dcc8119c363ae5b0e07360b063b162222f9721cabda130eade63f5ca69dfc39f331#rd";
 	    EncoderQRCode handler = new EncoderQRCode(); 
 	    handler.encoderQRCode(content, imgPath); 
 	    System.out.println("imgPath:"+imgPath);

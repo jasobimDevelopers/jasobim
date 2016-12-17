@@ -105,7 +105,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<QuestionPojo>> getQuestionList(String content,Long projectId ,Integer pageIndex, Integer pageSize, Question question) {
+    public DataWrapper<List<QuestionPojo>> getQuestionList(String content,Long projectId ,Integer pageIndex, Integer pageSize, Question question,Long[] userIdList) {
     	DataWrapper<List<QuestionPojo>> retDataWrapperPojo = new DataWrapper<List<QuestionPojo>>();
     	DataWrapper<List<QuestionFile>> retDataWrapperPojos = new DataWrapper<List<QuestionFile>>();
         List<Question> ret = new ArrayList<Question>();
@@ -119,39 +119,24 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         }
         if(content!=null){
         	Disjunction dis = Restrictions.disjunction();        	
-        	dis.add(Restrictions.like("name", "%"+content+"%",MatchMode.ANYWHERE));
-        	dis.add(Restrictions.like("intro", "%"+content+"%",MatchMode.ANYWHERE));
-        	dis.add(Restrictions.like("trades", "%"+content+"%",MatchMode.ANYWHERE));
-
-//        	criteria.add(Restrictions.or(Restrictions.like("name", content,MatchMode.ANYWHERE),
-//        			Restrictions.like("intro", content,MatchMode.ANYWHERE),
-//        			Restrictions.like("trades", content,MatchMode.ANYWHERE)));
+        	dis.add(Restrictions.like("name", content,MatchMode.ANYWHERE));
+        	//dis.add(Restrictions.like("intro", content,MatchMode.ANYWHERE));
+        	dis.add(Restrictions.like("trades", content,MatchMode.ANYWHERE));
         	
         	if(question.getPriority()!=null) {
         		dis.add(Restrictions.eq("priority", question.getPriority()));
-//				criteria.add(Restrictions.eq("priority",question.getPriority()));
 			} 
-        	if(question.getUserId()!=null){
-        		dis.add(Restrictions.eq("userId", question.getUserId()));
-//				criteria.add(Restrictions.eq("userId",question.getUserId()));
+        	if(userIdList!=null){
+        		for(int i=0;i<userIdList.length;i++){
+        			dis.add(Restrictions.eq("userId", userIdList[i]));
+        		}
+        		
 			}
-//			if(question.getPriority()!=null && question.getUserId()!=null){
-//				criteria.add(Restrictions.or(Restrictions.eq("priority", question.getPriority()), Restrictions.eq("priority",question.getUserId())));
-//			} else if(question.getPriority()!=null) {
-//				criteria.add(Restrictions.eq("priority",question.getPriority()));
-//			} else if(question.getUserId()!=null){
-//				criteria.add(Restrictions.eq("userId",question.getUserId()));
-//			}
-        	
-        	
-        	
 			if(question.getQuestionType()!=null){
 				dis.add(Restrictions.eq("questionType", question.getQuestionType()));
-//				criteria.add(Restrictions.eq("questionType",question.getQuestionType()));
 			}
 			if(question.getState()!=null){
 				dis.add(Restrictions.eq("state", question.getState()));
-//				criteria.add(Restrictions.eq("state",question.getState()));
 			}
 			criteria .add(dis);
         }else{
@@ -165,7 +150,6 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
              	criteria.add(Restrictions.eq("state", question.getState()));
              }
         }
-       
         if (pageSize == null) {
 			pageSize = 10;
 		}
@@ -232,6 +216,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         	questionpojo.setIntro(ret.get(i).getIntro());
         	questionpojo.setName(ret.get(i).getName());
         	questionpojo.setProjectId(projectId);
+        	questionpojo.setPosition(ret.get(i).getPosition());
         	questionpojo.setQuestionDate(ret.get(i).getQuestionDate());
         	questionpojo.setQuestionType(ret.get(i).getQuestionType());
         	questionpojo.setState(ret.get(i).getState());

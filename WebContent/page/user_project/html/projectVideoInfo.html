@@ -4,14 +4,14 @@
 			<div id="video_contents">
 				<div id="item_menuli_first">
 					<div><span>专业</span></div>
-					<div><button class="btn btn-default" ng-click="setPhase('all',flag[4])">全部</button></div>
-					<div ng-repeat="phase in projectVideoType"><button class="btn btn-default" ng-click="setPhase($index,flag[4])">{{phase.name}}</button></div>
+					<div><button class="btn btn-default phase_video" ng-click="setPhase('all',flag[4])">全部</button></div>
+					<div ng-repeat="phase in projectVideoType"><button class="btn btn-default phase_video" ng-click="setPhase($index,flag[4])">{{phase.name}}</button></div>
 				</div>
 				<div class="item_menuli_video">
 					<div><span>栋号</span></div>
-					<div><button class="btn btn-default" ng-click="setBuildingNum('all',flag[4])">全部</button></div>
+					<div><button class="btn btn-default buildingNum_video" ng-click="setBuildingNum('all',flag[4])">全部</button></div>
 					<div ng-repeat="buildingNumber in buildingArray">
-						<select class="myselect" type="text" ng-change="setBuildingNum(building[$index],flag[4])"  ng-model="building[$index]">
+						<select class="myselect buildingNum_video" type="text" ng-change="setBuildingNum(building[$index],flag[4])"  ng-model="building[$index]">
 	    					<option value="title" >#{{$index*10+1}} -#{{$index*10+10}}</option>
 	    					<option value="{{number}}" ng-repeat="number in buildingNumber" >#{{number}}</option>
 	    				</select>

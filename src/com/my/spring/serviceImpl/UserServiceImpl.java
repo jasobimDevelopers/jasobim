@@ -77,11 +77,14 @@ public class UserServiceImpl implements UserService {
 				UserPojo users=new UserPojo();
 				users.setUserName(user.getUserName());
 				users.setUserType(user.getUserType());
-				Files file=new Files();
-				file=fileService.getById(user.getUserIcon());
-				if(file!=null){
-					users.setUserIconUrl(file.getUrl());
+				if(user.getUserIcon()!=null){
+					Files file=new Files();
+					file=fileService.getById(user.getUserIcon());
+					if(file!=null){
+						users.setUserIconUrl(file.getUrl());
+					}
 				}
+				
 				dataWrapper.setData(users);
 			}
 		}
@@ -106,7 +109,6 @@ public class UserServiceImpl implements UserService {
 				if (user.getTel() != null && !user.getTel().equals("")) {
 					userInDB.setTel(user.getTel());
 				}
-				
 				if (!userDao.updateUser(userInDB)) {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}

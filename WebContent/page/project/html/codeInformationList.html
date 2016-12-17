@@ -1,0 +1,123 @@
+
+	<div id="addcontent" ng-controller="CodeInformationController">
+		<div id="codecontent">
+			<div id="codecontent1" class="filePaper" style="display:block">
+		        <div class="addcodehead">
+		       		<div id="addusertitle"><span>{{titlePaper}}</span></div>
+		    	</div>
+		    	<div id="codebody">
+			       	<div class="paperCode">
+			       		<div><a href="#" ng-click="getPapers('建筑')"><img src="page/user_project/images/jianzhu.png" width="87px" height="118px"/></a></div>
+			       		<div><span>建筑</span></div>
+			       	</div>
+			       	<div class="paperCode">
+			       		<div><a href="#" ng-click="getPapers('暖通')"><img src="page/user_project/images/nuantong.png" width="87px" height="118px"/></a></div>
+			       		<div><span>暖通</span></div>
+			       	</div>
+			       	<div class="paperCode">
+			       		<div><a href="#" ng-click="getPapers('给排水')"><img src="page/user_project/images/paishui.png" width="87px" height="118px"/></a></div>
+			       		<div><span>给排水</span></div>
+			       	</div>
+			       	<div class="paperCode">
+			       		<div><a href="#" ng-click="getPapers('消防')"><img src="page/user_project/images/xiaofang.png" width="87px" height="118px"/></a></div>
+			       		<div><span>消防</span></div>
+			       	</div>
+			       	<div class="paperCode">
+			       		<div><a href="#" ng-click="getPapers('电气')"><img src="page/user_project/images/dianqi.png" width="87px" height="118px"/></a></div>
+			       		<div><span>电气</span></div>
+			       	</div>
+		       </div>
+		    </div>
+		    <div id="codecontent1" style="display:none" class="paperDetail">
+		        <div class="addcodehead">
+		       		<div id="addusertitle">
+		       			<span>{{titlePaper}}</span>
+	       			</div>
+		       		<div id="returnuser" style="margin-left: 666px;">
+	            		<a href="" ng-click="returnPaperList()"><span>返回图纸列表</span></a>
+          			</div>
+		    	</div>
+		    	<div id="codebody">
+			       	<div class="paperCode">
+			       		<div><a href="#"><img src="page/user_project/images/B1.png" width="117px" height="119px"/></a></div>
+			       		<div><span>B1层平面图</span></div>
+			       	</div>
+			       	<div class="paperCode">
+			       		<div><a href="#"><img src="page/user_project/images/B2.png" width="117px" height="119px"/></a></div>
+			       		<div><span>B2层平面图</span></div>
+			       	</div>
+			       	<div class="paperCode">
+			       		<div><a href="#"><img src="page/user_project/images/F1.png" width="117px" height="119px"/></a></div>
+			       		<div><span>F1层平面图</span></div>
+			       	</div>
+			       	<div class="paperCode">
+			       		<div><a href="#"><img src="page/user_project/images/F2.png" width="117px" height="119px"/></a></div>
+			       		<div><span>F2层平面图</span></div>
+			       	</div>
+			       	<div class="paperCode">
+			       		<div><a href="#"><img src="page/user_project/images/biaozhunceng.png" width="117px" height="119px"/></a></div>
+			       		<div><span>标准层平面图</span></div>
+			       	</div>
+			       	<div class="paperCode">
+			       		<div><a href="#"><img src="page/user_project/images/dingceng.png" width="117px" height="119px"/></a></div>
+			       		<div><span>顶层平面图</span></div>
+			       	</div>
+		       </div>
+		    </div>
+		    <div id="codecontent2" class="fileVideo" style="display:block">
+		       <div class="addcodehead">
+		       		<div id="addusertitle"><span>{{titleVideo}}</span></div>
+		       </div>
+		       <div id="codeOfbody1">
+			       	<div class="videoCode">
+			       		<div><a href="#" ng-click="getVideos('安全')"><img src="page/user_project/images/anquan.png" width="87px" height="118px"/></a></div>
+			       		<div><span>安全交底</span></div>
+			       	</div>
+			       	<div class="videoCode">
+			       		<div><a href="#" ng-click="getVideos('质量')"><img src="page/user_project/images/zhiliang.png" width="87px" height="118px"/></a></div>
+			       		<div><span>质量交底</span></div>
+			       	</div>
+			       	<div class="videoCode">
+			       		<div><a href="#" ng-click="getVideos('技术')"><img src="page/user_project/images/jishu.png" width="87px" height="118px"/></a></div>
+			       		<div><span>技术交底</span></div>
+			       	</div>
+			       	
+		       </div>
+		    </div>
+		    <div id="codecontent2" style="display:none;margin-top:0px" class="videoDetail" >
+		       <div class="addcodehead">
+		       		<div id="addusertitle"><span>{{titleVideo}}</span></div>
+		       		<div id="returnuser" style="margin-left:615px;">
+	            		<a href="" ng-click="returnVideoList()"><span>返回交底视频列表</span></a>
+          			</div>
+		       </div>
+		       <div id="codeOfbody1">
+			       	<div class="videoCode">
+			       		<div><img src="page/user_project/images/jiaodi.png" width="117px" height="119px"/></div>
+			       		<div><span>视频：用电安全</span></div>
+			       	</div>
+			       	<div class="videoCode">
+			       		<div><img src="page/user_project/images/jiaodi.png" width="117px" height="119px"/></div>
+			       		<div><span>视频：用电安全</span></div>
+			       	</div>
+			       	<div class="videoCode">
+			       		<div><img src="page/user_project/images/jiaodi.png" width="117px" height="119px"/></div>
+			       		<div><span>视频：用电安全</span></div>
+			       	</div>
+			       	<div class="videoCode">
+			       		<div><img src="page/user_project/images/jiaodi.png" width="117px" height="119px"/></div>
+			       		<div><span>视频：用电安全</span></div>
+			       	</div>
+			       	<div class="videoCode">
+			       		<div><img src="page/user_project/images/jiaodi.png" width="117px" height="119px"/></div>
+			       		<div><span>视频：用电安全</span></div>
+			       	</div>
+			       	<div class="videoCode">
+			       		<div><img src="page/user_project/images/jiaodi.png" width="117px" height="119px"/></div>
+			       		<div><span>视频：用电安全</span></div>
+			       	</div>
+		       </div>
+		    </div>
+		    
+        </div>
+	</div>

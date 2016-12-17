@@ -1,7 +1,13 @@
 package com.my.spring.serviceImpl;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.ItemDao;
+import com.my.spring.DAO.MinItemDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QuantityDao;
 import com.my.spring.DAO.UserDao;
@@ -10,12 +16,14 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Building;
 import com.my.spring.model.Item;
+import com.my.spring.model.MinItem;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.model.User;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ItemService;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.EncoderQRCode;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.SessionManager;
 
@@ -23,9 +31,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +49,8 @@ import javax.servlet.http.HttpServletRequest;
 public class ItemServiceImpl implements ItemService {
     @Autowired
     ItemDao itemDao;
+    @Autowired
+    MinItemDao minItemDao;
     @Autowired
     UserDao userDao;
     @Autowired
@@ -125,6 +139,18 @@ public class ItemServiceImpl implements ItemService {
         User adminInMemory = SessionManager.getSession(token);
         if (adminInMemory != null) {
         	dataWrapper =itemDao.getItemList(projectId,pageSize, pageIndex,item);
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return dataWrapper;
+    	
+    }
+    @Override
+    public DataWrapper<List<MinItem>> getMinItemList(Long projectId,Integer pageIndex, Integer pageSize, MinItem item,String token) {
+    	DataWrapper<List<MinItem>> dataWrapper = new DataWrapper<List<MinItem>>();
+        User adminInMemory = SessionManager.getSession(token);
+        if (adminInMemory != null) {
+        	dataWrapper =minItemDao.getMinItemList(projectId,pageSize, pageIndex,item);
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -256,11 +282,47 @@ public class ItemServiceImpl implements ItemService {
 			    				test.setValue(new Double(pojo.getNum()));
 			    				test.setUnit("个");
 			    			}
+			    			test.setQuantityType(0);
 			    			quantityList.add(test);
 			    		}
 			    		quantityDao.deleteQuantityByProjectId(projectId);
 			    		quantityDao.addQuantityList(quantityList);
 			    	}
+		        }
+		      
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+			
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return b;
+	}
+	@Override
+	public boolean batchImports(String name, MultipartFile file,String token,HttpServletRequest request,Long projectId) {
+		if (file == null || name == null || name.equals("")) {
+			return false;
+		}
+		int type=6;
+		DataWrapper<Void> dataWrapper=new DataWrapper<Void>();
+		boolean b = false;
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null){
+			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
+		        String newFileName = MD5Util.getMD5String(file.getOriginalFilename() + new Date() + UUID.randomUUID().toString()).replace(".","")
+		                    + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+		        //创建处理EXCEL
+		        ReadExcelOfMinItem readExcel=new ReadExcelOfMinItem();
+		        
+		        //解析excel，构件信息集合。
+		        List<MinItem> ItemList = readExcel.getExcelInfo(newFileName ,file,projectId);
+		        
+		        if(ItemList.size()>0){
+		        	 b = true;
+		        	fileSerivce.uploadFile(name, file, type, request);
+		            //迭代添加构件信息
+		        	minItemDao.addMinItemList(ItemList);
 		        }
 		      
 			}else{
@@ -344,27 +406,6 @@ public class ItemServiceImpl implements ItemService {
 		return dataWrapper;
 	}
 
-	////////工程量的类型-项目-楼号-单元号-层号-户号的提取方法
-	@Override
-	public DataWrapper<List<Item>> getItemByOthers(Long projectId, Long typeName, Long buildingNum, Long floorNum,
-			Long unitNum, Long householdNum, String token) {
-		DataWrapper<List<Item>> dataWrapper = new DataWrapper<List<Item>>();
-        User userInMemory = SessionManager.getSession(token);
-        if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
-				if(projectId!=null){
-					dataWrapper.setData(itemDao.getItemByOthers(projectId,typeName,buildingNum,floorNum,unitNum,householdNum));		
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
-				}
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
-		} else {
-			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
-		}
-		return dataWrapper;
-	}
 
 	@Override
 	public Long getItemByBase(Long projectId,Long buildingId,String token) {
@@ -391,6 +432,44 @@ public class ItemServiceImpl implements ItemService {
 			return itemDao.getHouseHoldType(projectId, buildingId, floorId);
 		}
 		return null;
+	}
+
+	@Override
+	public String getCodeImg(Item item,HttpServletRequest request) {
+		MinItem test=minItemDao.getMinItemBySelfId(item.getSelfId());
+		String codeInformation=null;
+		if(test!=null){
+			codeInformation=test.getName();
+		}
+		
+		codeInformation="名称：  "+test.getName()+"\r\n"+"设备ID：  "+test.getSelfId()+"\r\n"
+				+"楼层： "+test.getFloorNum()+"\r\n"+"设备名称： "+test.getTypeName()+"\r\n"
+				+"型号： "+test.getSize()+"\r\n"+"施工时间： "+" _年_月_日 \r\n"+"施工班组： "+" 张三\r\n"
+				+"验收人员： "+"XXX  XXX\r\n"+"验收时间： "+" _年_月_日 \r\n"+"施工单位： "+" 嘉实安装\r\n"
+				+"供应厂家： "+"  ____公司\r\n";
+		
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
+	   	Date d=new Date();
+	   	String str=sdf.format(d);
+	   	String rootPath = request.getSession().getServletContext().getRealPath("/");
+	   	String filePath="/codeFiles/";
+	   	String imgpath=rootPath+filePath;
+	   	String realPath=rootPath+filePath+"/"+str+".png";
+		try{
+		MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+	        @SuppressWarnings("rawtypes")
+			Map hints = new HashMap();  
+	        //内容所使用编码  
+	        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
+	        BitMatrix bitMatrix = multiFormatWriter.encode(codeInformation,BarcodeFormat.QR_CODE, 200, 200, hints);  
+	        //生成二维码  
+	        File outputFile = new File(imgpath,str+".png"); 
+	        
+	        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile);  
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return realPath;
 	}
 
 }

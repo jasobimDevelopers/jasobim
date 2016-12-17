@@ -23,6 +23,7 @@ public class Question {
 	private Integer priority;////问题等级 (0.一般 1.重要 2.紧急)
 	private Integer state;   ///问题的状态(0.待解决 1.已解决)
 	private String codeInformation;/////图片的二维码信息
+	private String position;///图片位置
 	
 	
 	
@@ -124,6 +125,15 @@ public class Question {
 	}
 	public void setCodeInformation(String codeInformation) {
 		this.codeInformation = codeInformation;
+	}
+	
+	@Basic
+    @Column(name = "position")
+	public String getPosition() {
+		return position;
+	}
+	public void setPosition(String position) {
+		this.position = position;
 	}
 	
 	

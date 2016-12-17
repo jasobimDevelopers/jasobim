@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -149,7 +150,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 		DataWrapper<List<User>> users=new DataWrapper<List<User>>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
-        criteria.add(Restrictions.like("realName",username));
+        criteria.add(Restrictions.like("realName",username,MatchMode.ANYWHERE));
         try {
             ret = criteria.list();
         }catch (Exception e){

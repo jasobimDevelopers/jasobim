@@ -1,6 +1,7 @@
 package com.my.spring.service;
 
 import com.my.spring.model.Item;
+import com.my.spring.model.MinItem;
 import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
@@ -21,9 +22,11 @@ public interface ItemService {
     public boolean batchImport(String name,MultipartFile file,String token,HttpServletRequest request, Long projectId);
 	DataWrapper<Void> deleteItemByProjectId(Long projectId, String token);
 	DataWrapper<Item> getItemById(Long id, String token);
-	DataWrapper<List<Item>> getItemByOthers(Long projectId, Long typeName, Long buildingNum, Long floorNum,
-			Long unitNum, Long householdNum, String token);
 	Long getItemByBase(Long projectId, Long buildingId,String token);
 	List<Object> getHouseHoldType(Long projectId, Long buildingId, Long floorId,String token);
 	Long getItemByBuidlingNum(Long projectId, Long buildingId, String token);
+	public boolean batchImports(String name,MultipartFile file,String token,HttpServletRequest request, Long projectId);
+	DataWrapper<List<MinItem>> getMinItemList(Long projectId, Integer pageIndex, Integer pageSize, MinItem item,
+			String token);
+	String getCodeImg(Item item, HttpServletRequest request);
 }

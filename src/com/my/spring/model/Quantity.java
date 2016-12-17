@@ -24,10 +24,20 @@ public class Quantity {
     private String size;
     private String typeName;
     private String material;//材质
-    
+    private Integer quantityType;///工程量来源   0、模型计算出来的工程量  1、预算的工程量
     
     
     @Basic
+    @Column(name = "quantity_type")
+    public Integer getQuantityType() {
+		return quantityType;
+	}
+
+	public void setQuantityType(Integer quantityType) {
+		this.quantityType = quantityType;
+	}
+
+	@Basic
     @Column(name = "value")
     public Double getValue() {
 		return value;
@@ -98,15 +108,7 @@ public class Quantity {
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
-//    @Basic
-//    @Column(name = "type_name")
-//    public String GetTypeName() {
-//        return typeName;
-//    }
-//
-//    public void setTypeName(String typeName) {
-//        this.typeName = typeName;
-//    }
+
     @Basic
     @Column(name = "size")
     public String getSize() {

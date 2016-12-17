@@ -54,6 +54,7 @@ function ProjectController($scope,ProjectService) {
 	$scope.videoTitles=["序号","交底地址","楼栋号","专业","操作"];
 	$scope.paperTitles=["序号","图纸信息","楼栋号","楼层","专业","操作"];
 	$scope.flag=["工程量页面","构件信息页面","图纸信息页面","问题列表页面","安全交底页面"];
+	$scope.quantityTypeTitles=["模型工程量","预算工程量"];
 	$scope.phase="all";
 	$scope.phases="alls";
 	$scope.buildingId="all";
@@ -116,14 +117,12 @@ function ProjectController($scope,ProjectService) {
 		
 	}
 	/////按楼栋号自动搜索
-	$scope.setBuildingNum = function(building,flag) {
+	$scope.setBuildingNum = function(building,flag,index) {
 		for(var i = 0; i < 100; i++) {
 			if(i != index) {
 				$scope.floors[i] = 'title';
 			}
 		}
-		
-		
 		$scope.buildingId = building;	
 		$scope.buildingIds="allss";
 		var allclass=$('.buildingNum_quantity');
@@ -184,16 +183,6 @@ function ProjectController($scope,ProjectService) {
 		
 		
 		
-		var allclass=$('.floorNum_quantity');
-		allclass.css("background-color","#fff");
-		
-		var allclass_select=$('.floor_select');
-		allclass_select.css("background-color","#fff");
-		allclass_select.eq(Math.ceil(parseInt(floor)/10)-1).val('F'+floor); ; 
-		if(floor=='all'){
-			allclass.eq(0).css("background-color","darkgray");
-			allclass.val("title");
-		}
 		
 		if($scope.buildingId!="all" && $scope.buildingIds!="alls"){
 			$scope.floorId=floor;
@@ -208,9 +197,6 @@ function ProjectController($scope,ProjectService) {
 					if(floor!='all'){
 						$scope.floorId=0;
 						$scope.floorId=parseInt(floor)+3;
-						allclass_select.eq(parseInt(floor)+2).css("background-color","darkgray");
-						allclass.eq(parseInt(floor)+2).val(floor);
-						$(".floorNum_quantity").val(4);
 					}
 					$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
 				}
@@ -453,6 +439,7 @@ function ProjectController($scope,ProjectService) {
 	 //////////////////////////////项目详情信息
 	 $scope.projectInfoHead=[{name:"基本信息"},{name:"构件信息"},{name:"图纸信息"},{name:"工程量信息"},{name:"安全技术交底"},{name:"问题列表"}];
 	 $scope.projectPhaseInfo=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"}];
+	 $scope.projectPhaseInfos=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"},{name:"建筑"}];
 	 $scope.projectVideoType=[{name:"安全"},{name:"质量"},{name:"技术"}];
 	 $scope.projectHouseholdInfo=[{name:"A型"},{name:"B型"},{name:"C型"},{name:"D型"},{name:"E型"}];
 	 $scope.projectQuestionOfType=[{name:"安全"},{name:"质量"},{name:"其他"}];
@@ -709,7 +696,7 @@ function ProjectController($scope,ProjectService) {
 			 quantity+= "&householdNum=" + text;
 			 $scope.showOr[3]=1;
 		 }
-		 $scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质"];
+		 $scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质","归属方"];
 		 for(var j=0;j<4;j++){
 			 if($scope.showOr[j]==1){
 				 $scope.quantityTitles.push($scope.quantityTitlesFind[j]);
@@ -773,7 +760,7 @@ function ProjectController($scope,ProjectService) {
 		      current:iCurrent,
 
 		      backFn:function(p){
-		    	  $scope.getProjectVideoList($scope.projectid,pageSize,p,video);
+		    	  $scope.getProjectVideoList(pageSize,p,video);
 		      }
 		  });
 	  }
@@ -839,6 +826,27 @@ function ProjectController($scope,ProjectService) {
 		  });
 	 }
 	 $scope.projectInfoChange = function(projectType){
+		    $scope.phase="all";
+			$scope.test="title";
+			$scope.phases="alls";
+			$scope.buildingId="all";
+			$scope.buildingIds="alls";
+			$scope.floorId="all";
+			$scope.floorIds="alls";
+			$scope.householdId="all";
+			$scope.householdIds="alls";
+			$scope.questionType="all";
+			$scope.questionPriority="all";
+			$scope.questionStatus="all";
+			$scope.buildingNumArray=null;
+			$scope.floorNumArray=null;
+			$scope.buildingNumInfo=null;
+			$scope.buildingDownInfo=null;
+			$scope.buildingNumInfo=[];
+			$scope.buildingDownInfo=[];
+			$scope.buildingArray=[];
+			$scope.buildingDownArray=[];
+			$scope.floorArray=[];
 		 if(projectType == "基本信息"){
 			 document.getElementById("projectSelfInfoHtml").style.display = 'block';
 			 document.getElementById("projectItemInfoHtml").style.display = 'none';
@@ -1112,10 +1120,14 @@ function ProjectController($scope,ProjectService) {
 	     /////////////////其他工程量的导入
 	     $scope.importQuantity = function(){
 	    	 var file="";
-	    	 if(document.getElementById("biangeng_import").files[0]!==null){
-	    		 file=document.getElementById("biangeng_import").files[0];	
+	    	 file=document.getElementById("biangeng_import").files;
+
+	    	 if(file!==null && file.length>0){
 				 var formData = new FormData();
-				 formData.append("file",file);
+				 for(var i = 0; i < file.length;i++) {
+					 formData.append("file",file[i]);
+				 }
+				 
 				 ProjectService.uploadOtherQuantity(formData,$scope.findProjectInfo.id).then(function(result){
 					       $scope.uploadOtherQuantitys=result.data;	 
 					       var quantity=null;

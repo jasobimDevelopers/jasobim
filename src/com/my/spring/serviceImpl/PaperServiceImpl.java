@@ -137,30 +137,49 @@ public class PaperServiceImpl implements PaperService {
 	        		
 	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper);
 	        		//String nameArray=null;
+	        		String temp="标准层_4096X3072";
+	        		int flag=-1;
 	        		for(int i=0;i<dataWrapper.getData().size();i++){
 	        			PaperPojo papernew=new PaperPojo();
-	        			papernew.setProjectId(projectId);
-	        			papernew.setId(dataWrapper.getData().get(i).getId());
-	        			papernew.setBuildingNum(dataWrapper.getData().get(i).getBuildingNum());
-	        			papernew.setProfessionType(dataWrapper.getData().get(i).getProfessionType());
-	        			papernew.setFloorNum(dataWrapper.getData().get(i).getFloorNum());
-	        			/*String nameArrays=dataWrapper.getData().get(i).getOriginName();
-	        			if(nameArray!=null && !nameArray.contains(nameArrays)){
-	        				nameArray.concat(nameArrays);
-	        			}*/
 	        			
-	        			papernew.setOriginName(dataWrapper.getData().get(i).getOriginName());
-	        			Files file=fileDao.getById(dataWrapper.getData().get(i).getFileId());
-	        			if(file!=null){
-	        				papernew.setUrl(file.getUrl());
+	        			if(temp.equals(dataWrapper.getData().get(i).getOriginName())){
+	        				if(flag==-1){
+	        					papernew.setProjectId(projectId);
+			        			papernew.setId(dataWrapper.getData().get(i).getId());
+			        			papernew.setBuildingNum(dataWrapper.getData().get(i).getBuildingNum());
+			        			papernew.setProfessionType(dataWrapper.getData().get(i).getProfessionType());
+			        			papernew.setFloorNum(dataWrapper.getData().get(i).getFloorNum());
+			        			papernew.setOriginName(dataWrapper.getData().get(i).getOriginName());
+			        			Files file=fileDao.getById(dataWrapper.getData().get(i).getFileId());
+			        			if(file!=null){
+			        				papernew.setUrl(file.getUrl());
+			        			}
+	        				}
+	        			}else{
+	        				papernew.setProjectId(projectId);
+		        			papernew.setId(dataWrapper.getData().get(i).getId());
+		        			papernew.setBuildingNum(dataWrapper.getData().get(i).getBuildingNum());
+		        			papernew.setProfessionType(dataWrapper.getData().get(i).getProfessionType());
+		        			papernew.setFloorNum(dataWrapper.getData().get(i).getFloorNum());
+		        			papernew.setOriginName(dataWrapper.getData().get(i).getOriginName());
+		        			Files file=fileDao.getById(dataWrapper.getData().get(i).getFileId());
+		        			if(file!=null){
+		        				papernew.setUrl(file.getUrl());
+		        			}
 	        			}
-	        			papers.add(i,papernew);
+	        			if(temp.equals(dataWrapper.getData().get(i).getOriginName())){
+	        				flag=0;
+	        			}
+	        			if(papernew.getId()!=null){
+	        				papers.add(papernew);
+	        			}
+	        			
 	        		}
 	        		dataWrappers.setData(papers);
 	        		dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
 	    			dataWrappers.setCallStatus(dataWrapper.getCallStatus());
 	    			dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
-	    			dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
+	    			dataWrappers.setTotalNumber(papers.size());
 	    			dataWrappers.setTotalPage(dataWrapper.getTotalPage());
 	        	
 			} else {
@@ -222,5 +241,49 @@ public class PaperServiceImpl implements PaperService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<PaperPojo>> getPaperLists(Long projectId, String token, Integer pageIndex, Integer pageSize,
+			Paper paper) {
+		DataWrapper<List<PaperPojo>> dataWrappers = new DataWrapper<List<PaperPojo>>();
+    	List<PaperPojo> papers=new ArrayList<PaperPojo>();
+    	
+    	DataWrapper<List<Paper>> dataWrapper = new DataWrapper<List<Paper>>();
+		 User userInMemory = SessionManager.getSession(token);
+	        if (userInMemory != null) {
+	        		
+	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper);
+	        		for(int i=0;i<dataWrapper.getData().size();i++){
+	        			PaperPojo papernew=new PaperPojo();
+        				papernew.setProjectId(projectId);
+	        			papernew.setId(dataWrapper.getData().get(i).getId());
+	        			papernew.setBuildingNum(dataWrapper.getData().get(i).getBuildingNum());
+	        			papernew.setProfessionType(dataWrapper.getData().get(i).getProfessionType());
+	        			papernew.setFloorNum(dataWrapper.getData().get(i).getFloorNum());
+	        			papernew.setOriginName(dataWrapper.getData().get(i).getOriginName());
+	        			Files file=fileDao.getById(dataWrapper.getData().get(i).getFileId());
+	        			if(file!=null){
+	        				papernew.setUrl(file.getUrl());
+	        			}
+	        			if(papernew.getId()!=null){
+	        				papers.add(papernew);
+	        			}
+	        		}
+	        		dataWrappers.setData(papers);
+	        		if(dataWrapper.getCurrentPage()==-1){
+	        			dataWrappers.setCurrentPage(1);
+	        		}else{
+	        			dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
+	        		}
+	    			dataWrappers.setCallStatus(dataWrapper.getCallStatus());
+	    			dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
+	    			dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
+	    			dataWrappers.setTotalPage(dataWrapper.getTotalPage());
+	        	
+			} else {
+				dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+			}
+        return dataWrappers;
 	}
 }

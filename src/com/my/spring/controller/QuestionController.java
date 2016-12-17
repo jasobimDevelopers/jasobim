@@ -59,6 +59,7 @@ public class QuestionController {
             @RequestParam(value = "token",required = true) String token){
         return questionService.deleteQuestion(questionId,token,request);
     }
+    
     @RequestMapping(value="/admin/updateQuestion",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateQuestion(
@@ -87,8 +88,14 @@ public class QuestionController {
     		@ModelAttribute Question question,
     		@RequestParam(value = "token",required = true) String token)
     {
+
         return questionService.getQuestionList(content,projectId,token,pageIndex,pageSize,question);
     }
+    
+    /*
+     * 通过问题id查找问题的详细信息
+     * 
+     * */
     @RequestMapping(value="/getQuestionDetails",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Question> getQuestionDetails(
@@ -96,6 +103,8 @@ public class QuestionController {
     		@RequestParam(value="token",required=true) String token){
         return questionService.getQuestionDetailsByAdmin(questionId,token);
     }
+    
+    
     @RequestMapping(value="/getQuestionsByLike",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<Question>> getQuestionsByLike(

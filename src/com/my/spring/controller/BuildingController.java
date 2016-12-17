@@ -32,16 +32,6 @@ public class BuildingController {
         return buildingService.deleteBuilding(id,token);
     }
 
-    @RequestMapping(value="/updateBuilding",method = RequestMethod.POST)
-    @ResponseBody
-    public DataWrapper<Void> updateBuilding(
-            @ModelAttribute Building building,
-            @RequestParam(value = "token",required = true) String token){
-       // System.out.println(building);
-    	////////building 的id不能为空
-        return buildingService.updateBuilding(building,token);
-    }
-
 
     @RequestMapping(value="/getBuildingList")
     @ResponseBody

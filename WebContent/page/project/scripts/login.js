@@ -40,10 +40,11 @@ function deleteCookie(name)
 }
 
 function login(){
+	var inputPassword=hex_md5($("#password").val());
 	 $.ajax({
          type: "GET",
          url: "api/user/login",
-         data: {username:$("#username").val(), password:$("#password").val()},
+         data: {username:$("#username").val(), password:inputPassword},
          dataType: "json",
          success: function(data){
         	 if(data.token!=null) 

@@ -346,7 +346,7 @@
 
           var deferred = $q.defer();
           console.log("读取ProjectPaperList数据");
-          var api = 'api/paper/admin/getPaperList?token='+getCookie('token')+'&projectId='+projectId + "&pageSize=" + pageSize + "&pageIndex="+pageIndex +"&"+ sql;
+          var api = 'api/paper/admin/getPaperLists?token='+getCookie('token')+'&projectId='+projectId + "&pageSize=" + pageSize + "&pageIndex="+pageIndex +"&"+ sql;
           $http.get(encodeURI(api))
               .success(function(data, status, headers, config){
                   if(data.callStatus == "SUCCEED"){
@@ -440,7 +440,9 @@
             	 		transformRequest: angular.identity 
             		 })
                  .success(function(data, status, headers, config){
-
+                	 if(data.callStatus != "SUCCEED"){
+                		 alert("正在上传构件信息，请耐心等待");
+                	 }
                      if(data.callStatus == "SUCCEED"){
                          deferred.resolve(data);
                          alert("上传构件信息成功，请继续上传图纸信息")

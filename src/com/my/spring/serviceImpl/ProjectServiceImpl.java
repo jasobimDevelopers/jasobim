@@ -59,6 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     FileService fileService;
     private String filePath="/files";
+    private String filePath1="files";
     private Integer fileType=2;
     @Override
     public DataWrapper<Project> addProject(Project project,String token,MultipartFile modelfile,MultipartFile picfile,HttpServletRequest request) {
@@ -68,12 +69,12 @@ public class ProjectServiceImpl implements ProjectService {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(project!=null){
 					if(modelfile!=null){
-						String path=filePath+"/"+"projectmodels"+"/";
+						String path=filePath1+"/"+"projectmodels"+"/";
 						Files newfile=fileService.uploadFile(path, modelfile,fileType,request);
 						project.setModelId(newfile.getId());
 					}
 					if(picfile!=null){
-						String path=filePath+"/"+"projectpics"+"/";
+						String path=filePath1+"/"+"projectpics"+"/";
 						Files newfile=fileService.uploadFile(path, picfile,fileType,request);
 						project.setPicId(newfile.getId());
 					}
@@ -124,7 +125,7 @@ public class ProjectServiceImpl implements ProjectService {
 				   
 					/////判断项目下的问题信息是否存在，存在删除，不存在不做处理
 					Question question=new Question();
-					if(questionDao.getQuestionList(null,id, 10, 1, question).getTotalNumber()>0){
+					if(questionDao.getQuestionList(null,id, 10, 1, question,null).getTotalNumber()>0){
 						questionDao.deleteQuestionByProjectId(id);
 					}
 					//////判断项目下的工程量信息是否存在，存在删除，不存在不做处理
@@ -187,12 +188,12 @@ public class ProjectServiceImpl implements ProjectService {
 				if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 					if(project!=null){
 						if(modelFile!=null){
-							String path=filePath+"/"+"projectmodels"+"/";
+							String path=filePath1+"/"+"projectmodels"+"/";
 							Files newfile=fileService.uploadFile(path, modelFile,fileType,request);
 							project.setModelId(newfile.getId());
 						}
 						if(picFile!=null){
-							String path=filePath+"/"+"projectpics"+"/";
+							String path=filePath1+"/"+"projectpics"+"/";
 							Files newfile=fileService.uploadFile(path, picFile,fileType,request);
 							project.setPicId(newfile.getId());
 						}

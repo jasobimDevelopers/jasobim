@@ -4,6 +4,7 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ItemDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Item;
+import com.my.spring.model.MinItem;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -178,95 +179,9 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		DataWrapper<Item> dataWrapper = new DataWrapper<Item>();
 		return get(id);
 	}
+	
 
-	//////工程量条件提取
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Item> getItemByOthers(Long projectId, Long typeName, Long buildingNum, Long floorNum,
-			Long unitNum, Long householdNum) {
-		String sql = null;
-		DataWrapper<List<Item>> dataWrapper = new DataWrapper<List<Item>>();
-		//////1.类型-楼号-单元号-楼层号-户号
-		if(projectId!=null && buildingNum!=null && floorNum!=null 
-		  && unitNum!=null && householdNum!=null && typeName!=null){
-			sql="select * from item as a where a.project_id="+projectId
-				+" and a.type_name="+typeName+" and a.building_num="
-		        +buildingNum+" and a.floor_num="+floorNum+" and a.unit_num="
-				+unitNum+" and a.house_hold="+householdNum;
-		}
-		/////2.项目-楼号-单元号-楼层号-户号
-		if(projectId!=null && buildingNum!=null && floorNum!=null 
-				  && unitNum!=null && householdNum!=null && typeName==null){
-			sql="select * from item as a where a.project_id="+projectId
-					+" and a.building_num="+buildingNum+" and a.floor_num="
-					+floorNum+" and a.unit_num="+unitNum
-					+" and a.house_hold="+householdNum;
-		}
-		//////3.项目-楼号-单元号-层号
-		if(projectId!=null && buildingNum!=null && floorNum!=null 
-				  && unitNum!=null && householdNum==null && typeName==null){
-			sql="select * from item as a where a.project_id="+projectId
-					+" and a.type_name="+typeName+" and a.building_num="
-			        +buildingNum+" and a.floor_num="+floorNum+" and a.unit_num="
-					+unitNum;
-		}
-		/////4.项目-楼号-单元号
-		if(projectId!=null && buildingNum!=null && floorNum==null 
-				  && unitNum!=null && householdNum==null && typeName==null){
-			sql="select * from item as a where a.project_id="+projectId
-					+" and a.type_name="+typeName+" and a.building_num="
-			        +buildingNum+" and a.unit_num="
-					+unitNum;
-		}
-		/////5.项目-楼号
-		if(projectId!=null && buildingNum!=null && floorNum==null 
-				  && unitNum==null && householdNum==null && typeName==null){
-			sql="select * from item as a where a.project_id="+projectId
-					+" and a.type_name="+typeName+" and a.building_num="
-			        +buildingNum;
-		}
-		/////6.项目-类型
-		if(projectId!=null && buildingNum==null && floorNum==null 
-				  && unitNum==null && householdNum==null && typeName!=null){
-			sql="select * from item as a where a.project_id="+projectId
-					+" and a.type_name="+typeName;
-		}
-		/////7.类型-项目-楼号-单元号-楼层号
-		if(projectId!=null && buildingNum!=null && floorNum!=null 
-				  && unitNum!=null && householdNum==null && typeName!=null){
-			sql="select * from item as a where a.project_id="+projectId
-					+" and a.type_name="+typeName+" and a.building_num="
-					+buildingNum+" and a.unit_num="+unitNum+" and a.floor_num="+floorNum;
-		}
-		/////8.类型-项目-楼号-单元
-		if(projectId!=null && buildingNum!=null && floorNum==null 
-				  && unitNum!=null && householdNum==null && typeName!=null){
-			sql="select * from item as a where a.project_id="+projectId
-					+" and a.type_name="+typeName+" and a.building_num="
-					+buildingNum+" and a.unit_num="+unitNum;
-		}
-		/////9.类型-项目-楼号
-		if(projectId!=null && buildingNum!=null && floorNum==null 
-				  && unitNum==null && householdNum==null && typeName!=null){
-			sql="select * from item as a where a.project_id="+projectId
-					+" and a.type_name="+typeName+" and a.building_num="
-					+buildingNum;
-		}
-		
-		Session session=getSession();
-		 try{
-	            Query query=session.createSQLQuery(sql);
-	            dataWrapper.setData(query.list());
-	            session.getTransaction().commit();
-	            session.flush();
-	        }catch(Exception e){
-	            e.printStackTrace();
-	            session.getTransaction().rollback();
-	            dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
-	        }
-		 
-		return dataWrapper.getData();
-	}
+	
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -337,6 +252,7 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		return saveList(itemList);
 	}
 
+
 	@Override
 	public boolean deleteItemByPorjectId(Long projectId) {
 		String sql = "delete from item where project_id="+projectId;
@@ -353,4 +269,5 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		 
 		return false;
 	}
+
 }

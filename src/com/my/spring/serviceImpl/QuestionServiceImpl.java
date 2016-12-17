@@ -289,6 +289,7 @@ public class QuestionServiceImpl implements QuestionService {
     	DataWrapper<List<QuestionPojo>> datawrapper=new DataWrapper<List<QuestionPojo>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
+    		Long[] userIdList=null;
     			if(content!=null){
     				//////问题类型搜索
     				if("安全".contains(content)){
@@ -319,13 +320,19 @@ public class QuestionServiceImpl implements QuestionService {
     				}
     				List<User> users=new ArrayList<User>();
     				users=userDao.findUserLikeRealName(content).getData();
+    				
+    				
     				if(users!=null){
     					if(users.size()>0){
-    						question.setUserId(users.get(0).getId());
+    						userIdList=new Long[users.size()];
+    						for(int i=0;i<users.size();i++){
+    							userIdList[i]=users.get(i).getId();
+    						}
+    						
     					}
     				}
     			}
-    			datawrapper= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question);
+    			datawrapper= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question,userIdList);
     			Long questionSort=questionDao.getQuestionListOfSort();
     			Long questionImportant=questionDao.getQuestionListOfImportant();
     			Long questionAll=questionDao.getQuestionList();

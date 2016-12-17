@@ -25,29 +25,23 @@ public class QuantityController {
     @RequestMapping(value="/admin/uploadQuantity", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> uploadItem(
-            @RequestParam(value = "file", required = true) MultipartFile file,
+            @RequestParam(value = "file", required = true) MultipartFile[] file,
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value = "projectId",required = true) Long projectId,
             HttpServletRequest request){
     	String filePath = "/fileupload/quantitys";
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-    	if(quantityService.batchImport(filePath, file,token,projectId,request)){
+    	for(int i=0;i<file.length;i++){
+    		if(quantityService.batchImport(filePath, file[i],token,projectId,request)){
             	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
-        }else{
+    		}else{
             	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-        }
+    		}
+    	}
+    	
         return dataWrapper;
     }
-    @RequestMapping(value="/addQuantity", method = RequestMethod.POST)
-    @ResponseBody
-    public DataWrapper<Void> addQuantity(
-            @ModelAttribute Quantity quantity,
-            @RequestParam(value = "token",required = true) String token){
-        	///////////////////工程量计算
-    	    /*按照楼号计算*/
-    	
-    	return quantityService.addQuantity(quantity,token);
-    }
+    
     @RequestMapping(value="/deleteQuantity")
     @ResponseBody
     public DataWrapper<Void> deleteQuantity(
@@ -81,6 +75,11 @@ public class QuantityController {
     	}
         return quantityService.getQuantityList(projectId,token,pageIndex,pageSize,quantity);
     }
+    
+    /**
+     *实时计算工程量并获取 
+     * 
+     */
     @RequestMapping(value="/getQuantityListNum",method =RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<Quantity>> getQuantityListNum(
@@ -100,6 +99,10 @@ public class QuantityController {
         return quantityService.getQuantityDetailsByAdmin(quantityId, token);
     }
     
+    /**
+     * 工程量导出到Excel
+     * 
+     */
     @RequestMapping(value="/exportQuantity",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<String> exportQuantity(

@@ -63,6 +63,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 						.add(Projections.property("material").as("material"))
 						.add(Projections.property("name").as("name"))
 						.add(Projections.property("typeName").as("typeName"))
+						.add(Projections.property("quantityType").as("quantityType"))
 								
 						.add(Projections.groupProperty("projectId"))
 						.add(Projections.groupProperty("systemType"))
@@ -188,20 +189,6 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 
 	@Override
 	public List<Quantity> getAllQuantity() {
-//		String sql = "select * from quantity ";
-//		List<Quantity> dataWrapper = new ArrayList<Quantity>();
-//		Session session=getSession();
-//		try{
-//	            
-//	            dataWrapper=query.list();
-//	            if(dataWrapper!=null&&dataWrapper.size()>0){
-//	            	return dataWrapper;
-//	            }
-//	    }catch(Exception e){
-//	            e.printStackTrace();
-//	    }
-//		
-//		return null;
 		List<Quantity> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(Quantity.class);
@@ -290,13 +277,11 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 			    			test.setFloorNum(pojo.getFloor_num());
 			    			test.setUnitNum(pojo.getUnit_num());
 			    			test.setHouseholdNum(pojo.getHousehold_num());
-//			    			test.setTypeName(pojo.getType_name());
 			    			String familyAndType=pojo.getFamily_and_type();
 			    			String typeName=pojo.getType_name();
 			    			if(typeName==null){
 			    				typeName="";
 			    			}
-//			    			test.setTypeName(typeName);
 			    			if(familyAndType==null){
 			    				familyAndType="";
 			    			}
@@ -348,7 +333,6 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 			 }
 	        }catch(Exception e){
 	            e.printStackTrace();
-	            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 	        }
 		 
 		return dataWrappers;

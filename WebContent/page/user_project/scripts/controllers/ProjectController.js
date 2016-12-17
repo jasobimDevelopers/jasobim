@@ -52,6 +52,7 @@ function ProjectController($scope,ProjectService) {
 	var projectId=null;
 	$scope.number=null;
 	$scope.numbers=null;
+	$scope.quantityTypeTitles=["模型工程量","预算工程量"];
 	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","设计单位","施工地点","项目简介","建设单位","版本","施工时间","施工周期","操作"];
 	$scope.itemTitles=["序号","构件名称","底部高程","系统类型","尺寸","长度","设备类型","所属类别","标高","偏移量","面积","材质","类型名"];
 	$scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质"];
@@ -83,16 +84,40 @@ function ProjectController($scope,ProjectService) {
 	var paper="";
 	/////按问题类型搜索
 	$scope.setQuestionOfType = function(type,flag){
+		var allclass=$('.question_type');
+		allclass.css("background-color","#fff");
+		if(type=='all'){
+			allclass.eq(0).css("background-color","darkgray");
+		}
+		if(type!='all'){
+			allclass.eq(type+1).css("background-color","darkgray");
+		}
 		$scope.questionType=type;
 		$scope.getProjectQuestionList(10,1,question);
 	}
 	/////按问题级别搜索
 	$scope.setQuestionOfPriority = function(priority,flag){
+		var allclass=$('.question_proprity');
+		allclass.css("background-color","#fff");
+		if(priority=='all'){
+			allclass.eq(0).css("background-color","darkgray");
+		}
+		if(priority!='all'){
+			allclass.eq(priority+1).css("background-color","darkgray");
+		}
 		$scope.questionPriority=priority;
 		$scope.getProjectQuestionList(10,1,question);
 	}
 	/////按问题状态搜索
 	$scope.setQuestionOfStatus = function(status,flag){
+		var allclass=$('.question_status');
+		allclass.css("background-color","#fff");
+		if(status=='all'){
+			allclass.eq(0).css("background-color","darkgray");
+		}
+		if(status!='all'){
+			allclass.eq(status+1).css("background-color","darkgray");
+		}
 		$scope.questionStatus=status;
 		$scope.getProjectQuestionList(10,1,question);
 	}
@@ -100,24 +125,49 @@ function ProjectController($scope,ProjectService) {
 	$scope.setPhase = function(phase,flag) {
 		$scope.phase = phase;
 		$scope.phases="allss";
-		var allclass=$('.phase_quantity');
-		allclass.css("background-color","#fff");
-		if(phase=='all'){
-			allclass.eq(0).css("background-color","darkgray");
-		}
-		if(phase!='all'){
-			allclass.eq(phase+1).css("background-color","darkgray");
-		}
+		
 		if(flag=="构件信息页面"){
+			var allclass=$('.phase_item');
+			allclass.css("background-color","#fff");
+			if(phase=='all'){
+				allclass.eq(0).css("background-color","darkgray");
+			}
+			if(phase!='all'){
+				allclass.eq(phase+1).css("background-color","darkgray");
+			}
 			$scope.getProjectItemList($scope.projectid,10,1,item);
 		}
-		if(flag=="工程量页面"){
+	    if(flag=="工程量页面"){
+			var allclass=$('.phase_quantity');
+			allclass.css("background-color","#fff");
+			if(phase=='all'){
+				allclass.eq(0).css("background-color","darkgray");
+			}
+			if(phase!='all'){
+				allclass.eq(phase+1).css("background-color","darkgray");
+			}
 			$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
 		}
 		if(flag=="图纸信息页面"){
+			var allclass=$('.phase_paper');
+			allclass.css("background-color","#fff");
+			if(phase=='all'){
+				allclass.eq(0).css("background-color","darkgray");
+			}
+			if(phase!='all'){
+				allclass.eq(phase+1).css("background-color","darkgray");
+			}
 			$scope.getProjectPaperList($scope.projectid,10,1,paper);
 		}
 		if(flag=="安全交底页面"){
+			var allclass=$('.phase_video');
+			allclass.css("background-color","#fff");
+			if(phase=='all'){
+				allclass.eq(0).css("background-color","darkgray");
+			}
+			if(phase!='all'){
+				allclass.eq(phase+1).css("background-color","darkgray");
+			}
 			$scope.getProjectVideoList(10,1,video);
 		}
 		
@@ -126,20 +176,64 @@ function ProjectController($scope,ProjectService) {
 	$scope.setBuildingNum = function(building,flag) {
 		$scope.buildingId = building;	
 		$scope.buildingIds="allss";
-		var allclass=$('.buildingNum_quantity');
-		allclass.css("background-color","#fff");
-		if(building=='all'){
-			allclass.eq(0).css("background-color","darkgray");
-			allclass.val("title");
-			$scope.buildingNumInfo="";
-			$scope.buildingDownInfo="";
-			$scope.buildingInfo.buildingNum="";
-			
+		if(flag=="构件信息页面"){
+			var allclass=$('.buildingNum_item');
+			allclass.css("background-color","#fff");
+			if(building!='all'){
+				allclass.eq(Math.ceil(building/10)).css("background-color","darkgray");
+			}
+			if(building=="all"){
+				allclass.eq(0).css("background-color","darkgray");
+				$scope.buildingId="all";
+				$scope.floorId="all";
+				$scope.floorIds="alls";
+			}
 		}
-		if(building!='all'){
-			allclass.eq(1).css("background-color","darkgray");
+		if(flag=="工程量页面"){
+			var allclass=$('.buildingNum_quantity');
+			allclass.css("background-color","#fff");
+			if(building!='all'){
+				allclass.eq(Math.ceil(building/10)).css("background-color","darkgray");
+			}
+			if(building=="all"){
+				$scope.buildingId="all";
+				$scope.floorId="all";
+				$scope.floorIds="alls";
+				allclass.eq(0).css("background-color","darkgray");
+			}
+		}
+		if(flag=="安全交底页面"){
+			var allclass=$('.buildingNum_video');
+			allclass.css("background-color","#fff");
+			if(building!='all'){
+				allclass.eq(Math.ceil(building/10)).css("background-color","darkgray");
+			}
+			if(building=="all"){
+				$scope.buildingId="all";
+				$scope.floorId="all";
+				$scope.floorIds="alls";
+				allclass.eq(0).css("background-color","darkgray");
+			}
+		}
+		if(flag=="图纸信息页面"){
+			var allclass=$('.buildingNum_paper');
+			allclass.css("background-color","#fff");
+			if(building!='all'){
+				allclass.eq(Math.ceil(building/10)).css("background-color","darkgray");
+			}
+			if(building=="all"){
+				$scope.buildingId="all";
+				$scope.floorId="all";
+				$scope.floorIds="alls";
+				allclass.eq(0).css("background-color","darkgray");
+			}
 		}
 		if(building=='all'){
+			$scope.buildingNumInfo=[];
+			$scope.buildingDownInfo=[];
+			$scope.buildingArray=[];
+			$scope.buildingDownArray=[];
+			$scope.floorArray=[];
 			if(flag=="构件信息页面"){
 				 $scope.getProjectItemList($scope.projectid,10,1,item);
 			 }
@@ -155,65 +249,81 @@ function ProjectController($scope,ProjectService) {
 		}else{
 			ProjectService.getBuildingNum($scope.projectid,building).then(function(result){
 				 $scope.buildingNumInfo=result;  
-				 ProjectService.getBuildingDown($scope.projectid,building).then(function(result){
-					 $scope.buildingDownInfo=result;   
-					 if(flag=="构件信息页面"){
-						 $scope.getProjectItemList($scope.projectid,10,1,item);
-					 }
-					 if(flag=="工程量页面"){
-						 $scope.getProjectQuantityList($scope.projectid,10,1,quantity);
-					 }
-					 if(flag=="安全交底页面"){
-						 $scope.getProjectVideoList(10,1,video);
-					 }
-					 if(flag=="图纸信息页面"){
-						 $scope.getProjectPaperList($scope.projectid,10,1,paper);
-					 }
-				    });
+				 if($scope.buildingNumInfo!=0){
+					 ProjectService.getBuildingDown($scope.projectid,building).then(function(result){
+						 $scope.buildingDownInfo=result;   
+						 if(flag=="构件信息页面"){
+							 $scope.getProjectItemList($scope.projectid,10,1,item);
+						 }
+						 if(flag=="工程量页面"){
+							 $scope.getProjectQuantityList($scope.projectid,10,1,quantity);
+						 }
+						 if(flag=="安全交底页面"){
+							 $scope.getProjectVideoList(10,1,video);
+						 }
+						 if(flag=="图纸信息页面"){
+							 $scope.getProjectPaperList($scope.projectid,10,1,paper);
+						 }
+					    });
+				 }else{
+					 $scope.buildingDownInfo=[];
+					 $scope.buildingDownArray=[];
+					 $scope.floorArray=[];
+				 }
 		    });
 		}
 		
 	}
 	/////按楼层号自动搜索
-	$scope.setFloorNum = function(floor,flag) {
-		var allclass=$('.floorNum_quantity');
-		allclass.css("background-color","#fff");
-		$scope.test="F"+floor;
-		var allclass_others=$('.floorNums_quantity');
-		allclass_others.css("background-color","#fff");
-		var allclass_select=$('.floor_select');
-		allclass_select.css("background-color","#fff");
-		//allclass_select.eq(Math.ceil(parseInt(floor)/10)-1).val('F'+floor); ; 
-		if(floor=='all'){
-			allclass.eq(0).css("background-color","darkgray");
-			allclass.val("title");
+	$scope.setFloorNum = function(floor,flag,index) {
+		for(var i = 0; i < 100; i++) {
+			if(i != index) {
+				$scope.floors[i] = 'title';
+			}
 		}
-		
 		if($scope.buildingId!="all" && $scope.buildingIds!="alls"){
 			$scope.floorId=floor;
 			$scope.floorIds="allss";
 			if(floor!="title"){
 				if(flag=="构件信息页面"){
+					var allclass=$('.floor_item');
+					allclass.css("background-color","#fff");
 					if(floor!='all'){
-						$scope.floorId=0;
-						$scope.floorId=parseInt(floor)+3;
+							allclass.eq(Math.ceil(parseInt(floor)/10)+2).css("background-color","darkgray");
+							$scope.floorId=0;
+							$scope.floorId=parseInt(floor)+3;
+					}
+					if(floor=="all"){
+						allclass.eq(0).css("background-color","darkgray");
+						$scope.floorId="all";
 					}
 					$scope.getProjectItemList($scope.projectid,10,1,item);
 				}
 				if(flag=="工程量页面"){
+					var allclass=$('.floor_quantity');
+					allclass.css("background-color","#fff");
 					if(floor!='all'){
+						allclass.eq(Math.ceil(parseInt(floor)/10+2)).css("background-color","darkgray");
 						$scope.floorId=0;
 						$scope.floorId=parseInt(floor)+3;
-						allclass_select.eq(parseInt(floor)+2).css("background-color","darkgray");
-						allclass.eq(parseInt(floor)+2).val(floor);
-						$(".floorNum_quantity").val(4);
+					}
+					if(floor=="all"){
+						allclass.eq(0).css("background-color","darkgray");
+						$scope.floorId="all";
 					}
 					$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
 				}
 				if(flag=="图纸信息页面"){
+					var allclass=$('.floor_paper');
+					allclass.css("background-color","#fff");
 					if(floor!='all'){
 						$scope.floorId=0;
 						$scope.floorId=parseInt(floor)+3;
+						allclass.eq(Math.ceil(parseInt(floor)/10)+2).css("background-color","darkgray");
+					}
+					if(floor=="all"){
+						allclass.eq(0).css("background-color","darkgray");
+						$scope.floorId="all";
 					}
 					$scope.getProjectPaperList($scope.projectid,10,1,paper);
 				}
@@ -223,31 +333,54 @@ function ProjectController($scope,ProjectService) {
 		
 		
 		
+		
 	}
-/////按地下层号自动搜索
+	/////按地下层号自动搜索
 	$scope.setFloorDownNum = function(floor,flag) {
 		$scope.floorIds="allss";
-		var allclass=$('.floorNums_quantity');
-		var allclass_others=$('.floorNum_quantity');
-		allclass_others.css("background-color","#fff");
-		allclass.css("background-color","#fff");
-		if(parseInt(floor)==1){
-			allclass.eq(0).css("background-color","darkgray");
-			$scope.floorId=3;
-		}
-		if(parseInt(floor)==2){
-			allclass.eq(1).css("background-color","darkgray");
-			$scope.floorId=2;
-		}
+		
+		
 		if(floor!="title"){
 			//$('.floorNum_quantity')[parseInt(floor)/10].value(floor);
 			if(flag=="构件信息页面"){
+				var allclass=$('.floor_item');
+				allclass.css("background-color","#fff");
+				if(parseInt(floor)==1){
+					allclass.eq(parseInt(floor)).css("background-color","darkgray");
+					$scope.floorId=3;
+				}
+				if(parseInt(floor)==2){
+					allclass.eq(parseInt(floor)).css("background-color","darkgray");
+					$scope.floorId=2;
+				}
 				$scope.getProjectItemList($scope.projectid,10,1,item);
 			}
 			if(flag=="工程量页面"){
+				var allclass=$('.floor_quantity');
+				allclass.css("background-color","#fff");
+				if(parseInt(floor)==1){
+					allclass.eq(parseInt(floor)).css("background-color","darkgray");
+					$scope.floorId=3;
+				}
+				if(parseInt(floor)==2){
+					allclass.eq(parseInt(floor)).css("background-color","darkgray");
+					$scope.floorId=2;
+				}
 				$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
 			}
 			if(flag=="图纸信息页面"){
+				var allclass=$('.floor_paper');
+				var allclass_others=$('.floor_paper');
+				allclass_others.css("background-color","#fff");
+				allclass.css("background-color","#fff");
+				if(parseInt(floor)==1){
+					allclass.eq(parseInt(floor)).css("background-color","darkgray");
+					$scope.floorId=3;
+				}
+				if(parseInt(floor)==2){
+					allclass.eq(parseInt(floor)).css("background-color","darkgray");
+					$scope.floorId=2;
+				}
 				$scope.getProjectPaperList($scope.projectid,10,1,paper);
 			}
 		}
@@ -258,25 +391,30 @@ function ProjectController($scope,ProjectService) {
 	$scope.setHouseholdNum = function(household,flag) {
 		$scope.householdId=household;
 		$scope.householdIds="allss";
-		var allclass=$('.household_quantity');
-		allclass.css("background-color","#fff");
-		if(household=='all'){
-			allclass.eq(0).css("background-color","darkgray");
-		}
-		if(household!='all'){
-			allclass.eq(household+1).css("background-color","darkgray");
-		}
 		if(flag=="构件信息页面"){
+			var allclass=$('.household_item');
+			allclass.css("background-color","#fff");
+			if(household=='all'){
+				allclass.eq(0).css("background-color","darkgray");
+			}
+			if(household!='all'){
+				allclass.eq(household+1).css("background-color","darkgray");
+			}
 			$scope.getProjectItemList($scope.projectid,10,1,item);
 			
 		}
 		if(flag=="工程量页面"){
-			
+			var allclass=$('.household_quantity');
+			allclass.css("background-color","#fff");
+			if(household=='all'){
+				allclass.eq(0).css("background-color","darkgray");
+			}
+			if(household!='all'){
+				allclass.eq(household+1).css("background-color","darkgray");
+			}
 			$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
 		}
-		if(flag=="图纸信息页面"){
-			
-		}
+		
 	}
 	
 
@@ -451,6 +589,7 @@ function ProjectController($scope,ProjectService) {
 	 //////////////////////////////项目详情信息
 	 $scope.projectInfoHead=[{name:"基本信息"},{name:"构件信息"},{name:"图纸信息"},{name:"工程量信息"},{name:"安全技术交底"},{name:"问题列表"}];
 	 $scope.projectPhaseInfo=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"}];
+	 $scope.projectPhaseInfos=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"},{name:"建筑"}];
 	 $scope.projectVideoType=[{name:"安全"},{name:"质量"},{name:"技术"}];
 	 $scope.projectHouseholdInfo=[{name:"A型"},{name:"B型"},{name:"C型"},{name:"D型"},{name:"E型"}];
 	 $scope.projectQuestionOfType=[{name:"安全"},{name:"质量"},{name:"其他"}];
@@ -517,11 +656,13 @@ function ProjectController($scope,ProjectService) {
 		 if($scope.buildingArray == undefined || $scope.buildingArray.length==0) {
 			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		 }
-		
+		 $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
+		 if($scope.floorArray == undefined || $scope.floorArray.length==0) {
+			 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 }
+		 
 		  
 		 
-		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
-		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
 		 if($scope.phase!="all") {
 			 item+= "&professionType=" + $scope.phase;
 		 }
@@ -628,8 +769,12 @@ function ProjectController($scope,ProjectService) {
 		 if($scope.buildingArray == undefined || $scope.buildingArray.length ==0) {
 			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		 }
-		  $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
-		  $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
+		 if($scope.floorArray == undefined || $scope.floorArray.length ==0) {
+			 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 }
+		  
+		  
 		 if($scope.phase!="all") {
 			 paper+= "professionType=" + $scope.phase;
 		 }
@@ -661,7 +806,11 @@ function ProjectController($scope,ProjectService) {
 			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
 		 }
 		 $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
-		 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 if($scope.floorArray == undefined || $scope.floorArray.length == 0) {
+			 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
+		 }
+		 
+		 
 		 
 		 
 		 var text=-1;
@@ -695,7 +844,7 @@ function ProjectController($scope,ProjectService) {
 			 quantity+= "&householdNum=" + text;
 			 $scope.showOr[3]=1;
 		 }
-		 $scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质"];
+		 $scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质","归属方"];
 		 for(var j=0;j<4;j++){
 			 if($scope.showOr[j]==1){
 				 $scope.quantityTitles.push($scope.quantityTitlesFind[j]);
@@ -759,7 +908,7 @@ function ProjectController($scope,ProjectService) {
 		      current:iCurrent,
 
 		      backFn:function(p){
-		    	  $scope.getProjectVideoList($scope.projectid,pageSize,p,video);
+		    	  $scope.getProjectVideoList(pageSize,p,video);
 		      }
 		  });
 	  }
@@ -825,6 +974,27 @@ function ProjectController($scope,ProjectService) {
 		  });
 	 }
 	 $scope.projectInfoChange = function(projectType){
+		    $scope.phase="all";
+			$scope.test="title";
+			$scope.phases="alls";
+			$scope.buildingId="all";
+			$scope.buildingIds="alls";
+			$scope.floorId="all";
+			$scope.floorIds="alls";
+			$scope.householdId="all";
+			$scope.householdIds="alls";
+			$scope.questionType="all";
+			$scope.questionPriority="all";
+			$scope.questionStatus="all";
+			$scope.buildingNumArray=null;
+			$scope.floorNumArray=null;
+			$scope.buildingNumInfo=null;
+			$scope.buildingDownInfo=null;
+			$scope.buildingNumInfo=[];
+			$scope.buildingDownInfo=[];
+			$scope.buildingArray=[];
+			$scope.buildingDownArray=[];
+			$scope.floorArray=[];
 		 if(projectType == "基本信息"){
 			 document.getElementById("projectSelfInfoHtml").style.display = 'block';
 			 document.getElementById("projectItemInfoHtml").style.display = 'none';
@@ -1058,6 +1228,7 @@ function ProjectController($scope,ProjectService) {
 	    	 document.getElementById("video_nuantong").value=null;
 	    	 document.getElementById("video_geipaishui").value=null;
 	    	 document.getElementById("video_xiaofang").value=null;
+	    	 
 	     }
 	     //////构件信息重置
 	     $scope.resetItemFile=function(){
@@ -1099,10 +1270,13 @@ function ProjectController($scope,ProjectService) {
 	     /////////////////其他工程量的导入
 	     $scope.importQuantity = function(){
 	    	 var file="";
-	    	 if(document.getElementById("biangeng_import").files[0]!==null){
-	    		 file=document.getElementById("biangeng_import").files[0];	
+	    	 file=document.getElementById("biangeng_import").files;
+	    	 if(file!==null && file.length>0){
 				 var formData = new FormData();
-				 formData.append("file",file);
+				 for(var i = 0; i < file.length;i++) {
+					 formData.append("file",file[i]);
+				 }
+				 
 				 ProjectService.uploadOtherQuantity(formData,$scope.findProjectInfo.id).then(function(result){
 					       $scope.uploadOtherQuantitys=result.data;	 
 					       var quantity=null;

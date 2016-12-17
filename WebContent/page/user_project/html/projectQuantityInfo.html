@@ -19,10 +19,10 @@
 					</div>
 					<div class="item_menuli">
 						<div><span>楼层</span></div>
-						<div><button class="btn btn-default floorNum_quantity" ng-click="setFloorNum('all',flag[0])">全部</button></div>
-						<div ng-repeat="buildingDown in buildingDownArray[0]"><button class="btn btn-default floorNum_quantity" ng-click="setFloorDownNum(buildingDown,flag[0])">B{{buildingDown}}</button></div>
+						<div><button class="btn btn-default floor_quantity" ng-click="setFloorNum('all',flag[0])">全部</button></div>
+						<div ng-repeat="buildingDown in buildingDownArray[0]"><button class="btn btn-default floor_quantity" ng-click="setFloorDownNum(buildingDown,flag[0])">B{{buildingDown}}</button></div>
 						<div ng-repeat="floorNumber in floorArray">
-							<select class="myselect floorNum_quantity floor_select" type="text" ng-change="setFloorNum(floors[$index],flag[0])"  ng-model="floors[$index]">
+							<select class="myselect floor_quantity" type="text" ng-change="setFloorNum(floors[$index],flag[0],$index)"  ng-model="floors[$index]">
 		    					<option value="title">F{{$index*10+1}} -F{{$index*10+10}}</option>
 		    					<option value="{{numbers}}" ng-repeat=" numbers in floorNumber">F{{numbers}}</option>
 		    				</select>
@@ -51,6 +51,7 @@
 								<td>{{quantity.size}}</td>
 								<td>{{quantity.typeName}}</td>
 								<td>{{quantity.material}}</td>
+								<td>{{quantityTypeTitles[quantity.quantityType]}}</td>
 								<td ng-show="showOr[0]==1">{{projectPhaseInfo[quantity.professionType].name}}</td>
 								<td ng-show="showOr[1]==1">{{quantity.buildingNum}}</td>
 								<td ng-show="showOr[2]==1">{{quantity.floorNum-3}}</td>
@@ -61,7 +62,7 @@
 					<div id="quantityAction">
 							<div id="quantityImport">
 								<div id="imgBiangen"><a href="#" id="quantity_button" ng-click="importQuantity()">变更签证</a></div>
-								<div id="biangeng_file"><input type="file" id="biangeng_import"/></div>
+								<div id="biangeng_file"><input type="file" id="biangeng_import" multiple="multiple"/></div>
 							</div>
 							<a href="{{quantityUrl}}" target="_blank" download="{{quantityExcel.originName}}">
 								<div id="quantityUpdate"><span>下载</span></div>

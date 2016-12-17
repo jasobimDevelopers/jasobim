@@ -223,28 +223,33 @@
           return deferred.promise;
        };
       //////////////////////////////
-      /////获取问题信息列表
-      this.getQuestionList = function(pageSize,pageIndex,question) {
+       /////获取问题信息列表
+       this.getQuestionList = function(pageSize,pageIndex,question,content) {
 
-          var deferred = $q.defer();
-          console.log("读取ProjectQuestionList数据");
-          var api = 'api/question/admin/getQuestionList?token='+getCookie('token')+"&pageSize="+pageSize+"&pageIndex="+pageIndex+"&"+question;
-          $http.get(encodeURI(api))
-              .success(function(data, status, headers, config){
-                  if(data.callStatus == "SUCCEED"){
-                      deferred.resolve(data);
-                      self.questionList = data;
-                 
-                  }else{
-                      alert("数据读取失败");
-                  }
+           var deferred = $q.defer();
+           console.log("读取ProjectQuestionList数据");
+           if(content!=undefined && content!=""){
+         	  var api = 'api/question/admin/getQuestionList?token='+getCookie('token')+"&pageSize="+pageSize+"&pageIndex="+pageIndex+"&content="+content+"&"+question;
+           }else{
+         	  var api = 'api/question/admin/getQuestionList?token='+getCookie('token')+"&pageSize="+pageSize+"&pageIndex="+pageIndex+"&"+question;
+           }
+           
+           $http.get(encodeURI(api))
+               .success(function(data, status, headers, config){
+                   if(data.callStatus == "SUCCEED"){
+                       deferred.resolve(data);
+                       self.questionList = data;
                   
-              })
-              .error(function(data, status, headers, config){
-                  deferred.reject(data);
-              });
-          return deferred.promise;
-          };
+                   }else{
+                       alert("数据读取失败");
+                   }
+                   
+               })
+               .error(function(data, status, headers, config){
+                   deferred.reject(data);
+               });
+           return deferred.promise;
+           };
     ///////////////获取问题所对应的留言信息
     this.getMessageListByQuestionId = function(questionId){
     	 var deferred = $q.defer();

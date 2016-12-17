@@ -15,7 +15,7 @@ public class Paper {
 	private Long projectId;
 	private Integer buildingNum;
 	private Integer floorNum;
-	private Integer professionType;//////专业类型：0 电气 1 暖通 2给排水 3 建筑 
+	private Integer professionType;//////专业类型：0 电气 1 暖通 2给排水 3 消防 4建筑 
 	private Long fileId;
 	private String originName;
 	
