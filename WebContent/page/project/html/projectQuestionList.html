@@ -92,10 +92,13 @@
 							<td>{{projectQuestionOfPriority[question.priority].name}}</td>
 							<td>{{projectQuestionOfStatus[question.state].name}}</td>
 							<td class="tds" >
+								<button id="statebutton" ng-click="questionStateChange(question.id,question.state)">
+		                        </button>
 		                        <button id="editbutton" ng-click="questionChangeClick(question.id)">
 		                        </button>
 		                        <button id="deletebutton" ng-click="deleteQuestion(question.id)">
 		                        </button>
+	                            
 		                    </td>
 						</tr>
 					</tbody>
@@ -105,11 +108,11 @@
 				</div>
 			</div>
 			<div id="dataShow" >
-				<div id="myStat" data-dimension="180"  data-text="" data-info="紧急" data-width="30" data-fontsize="38" data-percent="" data-fgcolor="#F55852" data-bgcolor="#FDD4D2" data-fill="#ddd">
+				<div id="myStat" data-dimension="180"  data-text="" data-info="一般" data-width="30" data-fontsize="38" data-percent="" data-fgcolor="#F55852" data-bgcolor="#FDD4D2" data-fill="#ddd">
 				</div>
 				<div id="myStat1" data-dimension="180"  data-text="" data-info="重要" data-width="30" data-fontsize="38" data-percent="" data-fgcolor="#FDDA3D" data-bgcolor="#FBF9E6" data-fill="#ddd">
 				</div>
-				<div id="myStat2" data-dimension="180"  data-text="" data-info="一般" data-width="30" data-fontsize="38" data-percent="" data-fgcolor="#9DED55" data-bgcolor="#E5FFD1" data-fill="#ddd">
+				<div id="myStat2" data-dimension="180"  data-text="" data-info="紧急" data-width="30" data-fontsize="38" data-percent="" data-fgcolor="#9DED55" data-bgcolor="#E5FFD1" data-fill="#ddd">
 				</div>
 			</div>
 		</div>		

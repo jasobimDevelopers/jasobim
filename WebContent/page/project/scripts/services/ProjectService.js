@@ -6,28 +6,7 @@
         return $.param(data);
     }
   var self=this;
-  /////增加项目
-  this.register = function(Project) {
-
-      var deferred = $q.defer();
-      console.log("读取ProjectList数据");
-      $http.post('api/Project/admin/getProjectList?token='+getCookie('token'))
-          .success(function(data, status, headers, config){
-              console.log(data);
-              if(data.callStatus == "SUCCEED"){
-                  deferred.resolve(data);
-                  self.ProjectList = data;
-             
-              }else{
-                  alert("数据读取失败");
-              }
-              
-          })
-          .error(function(data, status, headers, config){
-              deferred.reject(data);
-          });
-      return deferred.promise;
-      };
+  
   //获取项目列表
   this.getProjectList = function(pageSize,pageIndex,project) {
 
@@ -105,6 +84,27 @@
           });
       return deferred.promise;
       };
+      /////删除交底
+      this.deleteVideo = function(projectVideoId,fileId){
+    	  var deferred = $q.defer();
+          console.log("删除Video数据");
+          $http.get('api/video/admin/deleteVideo?id='+projectVideoId+'&token='+token+'&fileid='+fileId)
+              .success(function(data, status, headers, config){
+                  console.log(data);
+                  if(data.callStatus == "SUCCEED"){
+                      deferred.resolve(data);
+                      self.deleteProjectVideoInfo = data;
+                      alert("数据删除成功");
+                  }else{
+                      alert("数据删除失败");
+                  }
+                  
+              })
+              .error(function(data, status, headers, config){
+                  deferred.reject(data);
+              });
+          return deferred.promise;
+      }
       ///////更新项目信息
       this.updateProject = function(project,token) {
       	var deferred = $q.defer();

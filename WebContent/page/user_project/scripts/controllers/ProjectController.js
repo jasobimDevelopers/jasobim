@@ -53,7 +53,7 @@ function ProjectController($scope,ProjectService) {
 	$scope.number=null;
 	$scope.numbers=null;
 	$scope.quantityTypeTitles=["模型工程量","预算工程量"];
-	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","设计单位","施工地点","项目简介","建设单位","版本","施工时间","施工周期","操作"];
+	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","设计单位","施工地点","建设单位","版本","施工时间","施工周期","操作"];
 	$scope.itemTitles=["序号","构件名称","底部高程","系统类型","尺寸","长度","设备类型","所属类别","标高","偏移量","面积","材质","类型名"];
 	$scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质"];
 	$scope.quantityTitlesFind=["专业","楼栋号","楼层号","户型"];
@@ -62,6 +62,7 @@ function ProjectController($scope,ProjectService) {
 	$scope.paperTitles=["序号","图纸信息","楼栋号","楼层","专业","操作"];
 	$scope.flag=["工程量页面","构件信息页面","图纸信息页面","问题列表页面","安全交底页面"];
 	$scope.phase="all";
+	$scope.name="all";
 	$scope.test="title";
 	$scope.phases="alls";
 	$scope.buildingId="all";
@@ -281,6 +282,7 @@ function ProjectController($scope,ProjectService) {
 				$scope.floors[i] = 'title';
 			}
 		}
+		
 		if($scope.buildingId!="all" && $scope.buildingIds!="alls"){
 			$scope.floorId=floor;
 			$scope.floorIds="allss";
@@ -308,6 +310,7 @@ function ProjectController($scope,ProjectService) {
 						$scope.floorId=parseInt(floor)+3;
 					}
 					if(floor=="all"){
+						
 						allclass.eq(0).css("background-color","darkgray");
 						$scope.floorId="all";
 					}
@@ -416,7 +419,11 @@ function ProjectController($scope,ProjectService) {
 		}
 		
 	}
-	
+	////////通过构件名称收索
+	$scope.quantitySearch = function(){
+		$scope.name=document.getElementById("quantityName").value;
+		$scope.getProjectQuantityList($scope.projectid,10,1,quantity);
+	}
 
 	//////显示增加项目界面
 	
@@ -591,7 +598,7 @@ function ProjectController($scope,ProjectService) {
 	 $scope.projectPhaseInfo=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"}];
 	 $scope.projectPhaseInfos=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"},{name:"建筑"}];
 	 $scope.projectVideoType=[{name:"安全"},{name:"质量"},{name:"技术"}];
-	 $scope.projectHouseholdInfo=[{name:"A型"},{name:"B型"},{name:"C型"},{name:"D型"},{name:"E型"}];
+	 $scope.projectHouseholdInfo=[{name:"公共部位"},{name:"N户型"},{name:"Q户型"},{name:"Q户型反"},{name:"N户型反"}];
 	 $scope.projectQuestionOfType=[{name:"安全"},{name:"质量"},{name:"其他"}];
 	 $scope.projectQuestionOfPriority=[{name:"一般"},{name:"重要"},{name:"紧急"}];
 	 $scope.projectQuestionOfStatus=[{name:"待解决"},{name:"已解决"}];
@@ -666,6 +673,7 @@ function ProjectController($scope,ProjectService) {
 		 if($scope.phase!="all") {
 			 item+= "&professionType=" + $scope.phase;
 		 }
+		 
 		 if($scope.phase=="all"){
 			 item+= "&professionType=" + $scope.flagAll;
 		 }
@@ -774,7 +782,7 @@ function ProjectController($scope,ProjectService) {
 			 $scope.floorArray=menuArray($scope.buildingNumInfo-$scope.buildingDownInfo);
 		 }
 		  
-		  
+		 
 		 if($scope.phase!="all") {
 			 paper+= "professionType=" + $scope.phase;
 		 }
@@ -821,30 +829,34 @@ function ProjectController($scope,ProjectService) {
 			 $scope.showOr[0]=1;
 		 }else if($scope.phases!="alls"){
 			 quantity+= "professionType=" + text;
-			 $scope.showOr[0]=1;
+			 $scope.showOr[0]=0;
+		 }
+		 if($scope.name!="all"){
+			 quantity+= "&name=" + $scope.name;
 		 }
 		 if($scope.buildingId!="all"){
 			 quantity+= "&buildingNum=" + $scope.buildingId;
 			 $scope.showOr[1]=1;
 		 }else if($scope.buildingIds!="alls"){
 			 quantity+= "&buildingNum=" + text;
-			 $scope.showOr[1]=1;
+			 $scope.showOr[1]=0;
 		 }
 		 if($scope.floorId!="all"){
 			 quantity+= "&floorNum=" + $scope.floorId;
 			 $scope.showOr[2]=1;
 		 }else if($scope.floorIds!="alls"){
 			 quantity+= "&floorNum=" + text;
-			 $scope.showOr[2]=1;
+			 //$scope.showOr[2]=1;
+			 $scope.showOr[2]=0;
 		 }
 		 if($scope.householdId!="all"){
 			 quantity+= "&householdNum=" + $scope.householdId;
 			 $scope.showOr[3]=1;
 		 }else if($scope.householdIds!="alls"){
 			 quantity+= "&householdNum=" + text;
-			 $scope.showOr[3]=1;
+			 $scope.showOr[3]=0;
 		 }
-		 $scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质","归属方"];
+		 $scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质","来源"];
 		 for(var j=0;j<4;j++){
 			 if($scope.showOr[j]==1){
 				 $scope.quantityTitles.push($scope.quantityTitlesFind[j]);
@@ -1281,6 +1293,27 @@ function ProjectController($scope,ProjectService) {
 					       $scope.uploadOtherQuantitys=result.data;	 
 					       var quantity=null;
 						   $scope.getProjectQuantityList($scope.findProjectInfo.id,pageSize,1,quantity);
+			     });
+				
+			 }
+	     }
+	     //////////////交底上传
+	     $scope.importVideo = function(){
+	    	 var file="";
+	    	 file=document.getElementById("video_import").files;
+	    	 if(file!==null && file.length>0){
+				 var formData = new FormData();
+				 for(var i = 0; i < file.length;i++) {
+					 formData.append("fileList",file[i]);
+					 formData.append("videoTypeList",1);
+				 }
+				 formData.append("videoType",1);
+				 formData.append("buildingNum",6);
+				 formData.append("professionType",0);
+				 ProjectService.uploadVideo(formData,$scope.findProjectInfo.id).then(function(result){
+					       $scope.uploadVideos=result.data;	 
+					       var video=null;
+						   $scope.getProjectVideoList(pageSize,1,video);
 			     });
 				
 			 }

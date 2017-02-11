@@ -23,8 +23,10 @@ public interface QuantityDao {
 		
 		boolean exportQuantity(String filePath,Long projectId);
 		boolean deleteQuantityByProjectId(Long id);
-		DataWrapper<List<Quantity>> getQuantityListNum(Long projectId, Integer pageSize, Integer pageIndex,
+		DataWrapper<List<Quantity>> getQuantityListNums(Long projectId, Integer pageSize, Integer pageIndex,
 				Quantity quantity);
 		
 		DataWrapper<List<Quantity>> testGroupBy(int pageSize,int pageIndex);
+		DataWrapper<List<Quantity>> getQuantityListNum(Long projectId, Integer pageSize, Integer pageIndex,
+				Quantity quantity);
 }

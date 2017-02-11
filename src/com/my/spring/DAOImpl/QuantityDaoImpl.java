@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.QuantityDao;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.Building;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DaoUtil;
@@ -53,7 +54,8 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
         Session session = getSession();
         Criteria criteria = session.createCriteria(Quantity.class);
         ProjectionList projectionList = Projections.projectionList();
-		projectionList.add(Projections.property("value").as("value"))
+		projectionList.add(Projections.property("id").as("id"))
+						.add(Projections.sum("value").as("value"))
 						.add(Projections.property("unit").as("unit"))
 						.add(Projections.property("projectId").as("projectId"))
 						.add(Projections.property("systemType").as("systemType"))
@@ -64,7 +66,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 						.add(Projections.property("name").as("name"))
 						.add(Projections.property("typeName").as("typeName"))
 						.add(Projections.property("quantityType").as("quantityType"))
-								
+							
 						.add(Projections.groupProperty("projectId"))
 						.add(Projections.groupProperty("systemType"))
 						.add(Projections.groupProperty("serviceType"))
@@ -75,40 +77,37 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 						.add(Projections.groupProperty("typeName"));
 		
 			if(quantity.getProfessionType()!=null){
-				projectionList.add(Projections.property("professionType").as("professionType"))
-							  .add(Projections.groupProperty("professionType"));
-			}
-			if(quantity.getBuildingNum()!=null){
-				projectionList.add(Projections.groupProperty("buildingNum"))
-				              .add(Projections.property("buildingNum").as("buildingNum"));
-			}	
-			if(quantity.getFloorNum()!=null){
-				projectionList.add(Projections.groupProperty("floorNum"))
-							  .add(Projections.property("floorNum").as("floorNum"));
-			}
-			if(quantity.getHouseholdNum()!=null){
-				projectionList.add(Projections.groupProperty("householdNum"))
-							  .add(Projections.property("householdNum").as("householdNum"));;
-			}
-			if(quantity.getProfessionType()!=null){
 				if(quantity.getProfessionType()!=-1){
 					criteria.add(Restrictions.eq("professionType", quantity.getProfessionType()));
+					projectionList.add(Projections.property("professionType").as("professionType"));
+				}else{
+					projectionList.add(Projections.groupProperty("professionType"));
 				}
 	        }
 	        if(quantity.getBuildingNum()!=null){
 	        	if(quantity.getBuildingNum()!=-1){
 	        		criteria.add(Restrictions.eq("buildingNum", quantity.getBuildingNum()));
+	        		projectionList.add(Projections.property("buildingNum").as("buildingNum"));
+	        	}else{
+	        		projectionList.add(Projections.groupProperty("buildingNum"));
 	        	}
 	        }
 	        if(quantity.getHouseholdNum()!=null){
 	        	if(quantity.getHouseholdNum()!=-1){
 	        		criteria.add(Restrictions.eq("householdNum", quantity.getHouseholdNum()));
+	        		projectionList.add(Projections.property("householdNum").as("householdNum"));
+	        	}else{
+	        		projectionList.add(Projections.groupProperty("householdNum"));
 	        	}
 	        }
 	        if(quantity.getFloorNum()!=null){
 	        	if(quantity.getFloorNum()!=-1){
 	        		criteria.add(Restrictions.eq("floorNum", quantity.getFloorNum()));
+	        		projectionList.add(Projections.property("floorNum").as("floorNum"));
 	        	}
+	        }
+	        if(quantity.getName()!=null){
+	        		criteria.add(Restrictions.like("name","%"+quantity.getName()+"%"));
 	        }
 		
 		
@@ -268,11 +267,13 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 			 List <Quantity> quantityList=new ArrayList<Quantity>();
 			 if(dataWrapper.getData()!=null && dataWrapper.getData().size()>0){
 					if(dataWrapper.getData()!=null){
+						Long i=(long) 0;
 			    		for(QuantityPojo pojo:dataWrapper.getData()){
 			    			
 			    			Quantity test=new Quantity();
 			    			Long st=pojo.getProject_id();
 			    			test.setProjectId(st);
+			    			test.setId(i);
 			    			test.setBuildingNum(pojo.getBuilding_num());
 			    			test.setFloorNum(pojo.getFloor_num());
 			    			test.setUnitNum(pojo.getUnit_num());
@@ -325,8 +326,10 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 			    				test.setUnit("个");
 			    			}
 			    			quantityList.add(test);
+			    			i++;
 			    		}
 			    		dataWrappers.setData(quantityList);
+			    		dataWrappers.setTotalNumber(quantityList.size());
 			    	}else{
 			    		dataWrappers.setErrorCode(ErrorCodeEnum.Error);
 			    	}
@@ -435,4 +438,24 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		
 		return dataWrapper;
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+    public DataWrapper<List<Quantity>> getQuantityListNums(Long projectId, Integer pageSize, Integer pageIndex,
+			Quantity quantity) {
+        DataWrapper<List<Quantity>> retDataWrapper = new DataWrapper<List<Quantity>>();
+        List<Quantity> ret = new ArrayList<Quantity>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Quantity.class);
+//        criteria.addOrder(Order.desc("publishDate"));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        int totalItemNum =  ret.size();
+		retDataWrapper.setTotalNumber(totalItemNum);
+        retDataWrapper.setData(ret);
+        return retDataWrapper;
+    }
+
 }

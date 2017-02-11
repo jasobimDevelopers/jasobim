@@ -29,10 +29,11 @@ public class QuestionController {
             @ModelAttribute Question question,
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request,
-            @RequestParam(value = "file", required = false) MultipartFile[] file
+            @RequestParam(value = "file", required = false) MultipartFile[] file,
+            @RequestParam(value = "fileCode", required = false) MultipartFile fileCode
             ){
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-		dataWrapper=questionService.addQuestion(question,token,file,request);
+		dataWrapper=questionService.addQuestion(question,token,file,request,fileCode);
 		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
             	return dataWrapper;
     	}else{
@@ -51,7 +52,7 @@ public class QuestionController {
         return questionService.deleteQuestion(questionId,token,request,projectId);
     }
     //////根据问题id删除问题
-    @RequestMapping(value="/admin/deleteQuestionById")
+    @RequestMapping(value="/admin/deleteQuestionById",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> deleteQuestionById(
             @RequestParam(value = "questionId",required = true) Long questionId,
@@ -63,7 +64,7 @@ public class QuestionController {
     @RequestMapping(value="/admin/updateQuestion",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateQuestion(
-            @ModelAttribute Question question,
+            @ModelAttribute QuestionPojo question,
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request,
             @RequestParam(value = "file", required = false) MultipartFile[] file){
@@ -76,7 +77,22 @@ public class QuestionController {
         }
         return dataWrapper;
     }
-
+    @RequestMapping(value="/updateQuestionState",method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> updateQuestionState(
+    		@RequestParam(value = "questionId",required = true) Long questionId,
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "state",required = true) Integer state
+            ){
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    	dataWrapper=questionService.updateQuestionState(questionId,token,state);
+    	if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
+            	return dataWrapper;
+        }else{
+            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+        }
+        return dataWrapper;
+    }
 
     @RequestMapping(value="/admin/getQuestionList",method = RequestMethod.GET)
     @ResponseBody
@@ -92,13 +108,24 @@ public class QuestionController {
         return questionService.getQuestionList(content,projectId,token,pageIndex,pageSize,question);
     }
     
+    @RequestMapping(value="/getQuestionListByUserId",method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<QuestionPojo>> getQuestionListByUserId(
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@RequestParam(value = "token",required = true) String token)
+    {
+
+        return questionService.getQuestionListByUserId(token,pageIndex,pageSize);
+    }
+    
     /*
      * 通过问题id查找问题的详细信息
      * 
      * */
     @RequestMapping(value="/getQuestionDetails",method = RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<Question> getQuestionDetails(
+    public DataWrapper<QuestionPojo> getQuestionDetails(
     		@RequestParam(value="questionId",required=true) Long questionId,
     		@RequestParam(value="token",required=true) String token){
         return questionService.getQuestionDetailsByAdmin(questionId,token);

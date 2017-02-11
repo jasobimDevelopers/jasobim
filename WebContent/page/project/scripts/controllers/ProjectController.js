@@ -366,8 +366,14 @@ function ProjectController($scope,ProjectService) {
 	 //////重置添加项目信息
 	 $scope.resetProject = function(){
 		 $scope.findProjectInfo = {};
-	 }
-	 
+	 };
+	 /////删除交底
+	 $scope.deleteVideo = function(projectVideoId,fileId){
+			ProjectService.deleteVideo(projectVideoId,fileId).then(function(result){
+			       $scope.deleteProjectVideoInfo=result.data;
+			       $scope.getProjectVideoList(pageSize,pageIndex,video);
+			    });
+	 };
 	 
 
 	 /////增加项目
@@ -422,7 +428,6 @@ function ProjectController($scope,ProjectService) {
 			       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
 			    });
 		}
-		 
 	 }
 	 ////////模糊查找项目
 	 $scope.projectFind = function() {
@@ -441,7 +446,7 @@ function ProjectController($scope,ProjectService) {
 	 $scope.projectPhaseInfo=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"}];
 	 $scope.projectPhaseInfos=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"},{name:"建筑"}];
 	 $scope.projectVideoType=[{name:"安全"},{name:"质量"},{name:"技术"}];
-	 $scope.projectHouseholdInfo=[{name:"A型"},{name:"B型"},{name:"C型"},{name:"D型"},{name:"E型"}];
+	 $scope.projectHouseholdInfo=[{name:"公共部位"},{name:"N户型"},{name:"Q户型"},{name:"Q户型反"},{name:"N户型反"}];
 	 $scope.projectQuestionOfType=[{name:"安全"},{name:"质量"},{name:"其他"}];
 	 $scope.projectQuestionOfPriority=[{name:"一般"},{name:"重要"},{name:"紧急"}];
 	 $scope.projectQuestionOfStatus=[{name:"待解决"},{name:"已解决"}];
@@ -696,7 +701,7 @@ function ProjectController($scope,ProjectService) {
 			 quantity+= "&householdNum=" + text;
 			 $scope.showOr[3]=1;
 		 }
-		 $scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质","归属方"];
+		 $scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质","来源"];
 		 for(var j=0;j<4;j++){
 			 if($scope.showOr[j]==1){
 				 $scope.quantityTitles.push($scope.quantityTitlesFind[j]);

@@ -1,6 +1,21 @@
 var token=getCookie('token');
 var userIcon=getCookie('userIcon');
 var userName=getCookie('userName');
+
+function showUserIcon() {
+	var file = document.getElementById('inputicon').files[0];
+	console.log(file);
+    if(!/image\/\w+/.test(file.type)){ 
+        alert("文件必须为图片！");
+        return false; 
+    } 
+    var reader = new FileReader(); 
+    reader.readAsDataURL(file); 
+    reader.onload = function(e){ 
+        document.getElementById('showId').src = this.result;
+    } 
+}
+
 function UserController($scope,UserService) {
 	
   console.log("载入UserController");
@@ -82,12 +97,14 @@ function UserController($scope,UserService) {
  }
  //////重置添加用户信息
  $scope.resetUser = function(){
+	 document.getElementById('showId').src = "";
+	 document.getElementById('inputicon').value="";
 	 $scope.findUserInfo = {};
  }
 
  	function checkMobile(){
 	    var sMobile = document.getElementById("tel").value;
-	    if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(sMobile))){
+	    if(!(/^1[3|4|5|8|7][0-9]\d{4,8}$/.test(sMobile))){
 	        alert("不是完整的11位手机号或者正确的手机号");
 	        return false;
 	    }else{
@@ -105,15 +122,36 @@ function UserController($scope,UserService) {
 	    	return true;
 	    }
 	}
+	//////用户重名验证
+	$scope.sameName = function(){
+		var username=document.getElementById("inputname").value;
+	}
  /////增加用户
  $scope.addUserByAdmin = function(){
 	 if($scope.title=="增加用户"){
+		 document.getElementById('showId').src = "";
+		 document.getElementById('inputicon').value="";
 		 findUserInfo = {};
+		 if(!/image\/\w+/.test(document.querySelector('input[type=file]').files[0].type)){ 
+				 document.getElementById('showId').src = "";
+				 document.getElementById('inputicon').value="";
+				 alert("文件必须为图片！");
+				 return false; 
+		 }else{
+			 var userIcons = document.querySelector('input[type=file]').files[0];
+		 }
+		 var formDatas=new FormData();
+		 formDatas.append('file',userIcons);
 		 if(checkMobile()==true )
 		 {
 			 if(checkEMail()==true){
-				 findUserInfo=$scope.findUserInfo;
-				 UserService.addUserByAdmin(findUserInfo,token).then(function(result){
+				 for(var key in $scope.findUserInfo){
+					 if($scope.findUserInfo[key] != null) {
+						   formDatas.append(key, $scope.findUserInfo[key]);
+					   }
+				 }
+
+				 UserService.addUserByAdmin(formDatas,token).then(function(result){
 				       $scope.addUserByAdminInfo=result.data;
 				       $scope.getUserList(pageSize,1,$scope.userTofind);
 				       document.getElementById("addUserHtml").style.display = 'none';
@@ -132,7 +170,7 @@ function UserController($scope,UserService) {
 		 formData.append('file',userIcon);
 		 formData.append('userName',$scope.findUserInfo.userName);
 		 formData.append('realName',$scope.findUserInfo.realName);
-		 formData.append('eamil',$scope.findUserInfo.email);
+		 formData.append('email',$scope.findUserInfo.email);
 		 formData.append('tel',$scope.findUserInfo.tel);
 		 if($scope.findUserInfo.userType != null && ($scope.findUserInfo.userType==0 ||$scope.findUserInfo.userType ==1)) {
 			 formData.append('userType',$scope.findUserInfo.userType);

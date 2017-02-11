@@ -14,7 +14,7 @@
         <div id="adduserbody">
         	<div class="addinput">
         		<input type="hidden" ng-model="findUserInfo.id" id="userId"/>
-        		<span>&nbsp;&nbsp;&nbsp;用户名:</span><input type="text" ng-model="findUserInfo.userName" id="inputname" />
+        		<span>&nbsp;&nbsp;&nbsp;用户名:</span><input type="text" ng-model="findUserInfo.userName" id="inputname" ng-blur="sameName()"/>
             </div>
             <div class="addinput">
         		<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;密码:</span><input type="password" ng-model="findUserInfo.password" id="inputpassword" />
@@ -23,7 +23,7 @@
             	<span>真实姓名:</span><input type="text"  id="inputnick" ng-model="findUserInfo.realName"/>
             </div>
             <div class="addinput">
-        		<span>邮箱地址:</span><input type="email"  id="inputadress" ng-model="findUserInfo.email"/>
+        		<span>邮箱地址:</span><input type="text"  id="inputadress" ng-model="findUserInfo.email"/>
             </div>
             <div class="addinput">
             	<span>手机号码:</span><input id="tel" type="tel" name="tel" ng-model="findUserInfo.tel" />
@@ -37,8 +37,8 @@
             </div>
             <div class="addinput">
             	<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;头像上传:</span>
-            	<img width="100px" height="90px" src="{{findUserInfo.userIconUrl}}" />
-            	<input style="float:right" type="file"  id="inputicon" />
+            	<img width="100px" height="90px" src="{{findUserInfo.userIconUrl}}"  id="showId"/>
+            	<input style="float:right" type="file"  id="inputicon" onchange="showUserIcon()"  accept="image/gif,image/jpg" />
             </div>
             <div id="addbutton" style="margin-top:86px;">
             	<input class="btn btn-default" type="button" ng-click="addUserByAdmin()" value="确定" />

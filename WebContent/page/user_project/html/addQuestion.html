@@ -58,13 +58,13 @@
             	<div><textarea id="inputdetail" ng-model="findQuestionInfo.intro" ></textarea></div>
             </div>
             <div class="addinput_question">
-            	<div><span>现场图片:</span></div>
-            	<div><input type="file"  id="inputicon" /></div>
+            	<div><span>现场图片上传:</span></div>
+            	<div><input type="file"  id="inputicon" multiple="multiple" accept="image/*"/></div>
             </div>
-            <div class="addinput_question">
-            	<div><span>查看二维码:</span></div>
-            	<div><img width="100px" height="100px" src="{{}}" /></div>
-            </div>
+           <!--  <div class="addinput_question">
+            	<div><span>二维码图片上传:</span></div>
+            	<div><input type="file"  id="codeImg"/></div>
+            </div> -->
             <div id="addbutton" style="margin-top:86px;">
             	<input class="btn btn-default" type="button" ng-click="addQuestionByAdmin()" value="确定" />
                 <input type="button" ng-click="resetQuestion()" class="btn btn-default" value="重置" />

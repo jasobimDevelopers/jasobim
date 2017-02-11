@@ -183,6 +183,16 @@ table
 #editbutton{
 	height:25px;
 	width:20px;
+	background:url(../images/find.png) no-repeat;
+}
+#statebutton{
+	height:25px;
+	width:20px;
+	background:url(../images/change.png) no-repeat;
+}
+.changebutton{
+	height:25px;
+	width:20px;
 	background:url(../images/editIcon.png) no-repeat;
 }
 #uploadbutton{

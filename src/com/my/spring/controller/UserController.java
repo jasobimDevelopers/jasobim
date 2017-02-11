@@ -44,9 +44,9 @@ public class UserController {
     public DataWrapper<Void> addUser(
     		@ModelAttribute User user,
     		HttpServletRequest request,
-    		//@RequestParam(value = "file", required = false) MultipartFile file,
+    		@RequestParam(value = "file", required = false) MultipartFile file,
     		@RequestParam(value="token",required=true) String token) {
-		MultipartFile file=null;
+//		MultipartFile file=null;
         return userService.addUser(user,token,file,request);
     }
 	@RequestMapping(value="/findUserLike", method = RequestMethod.POST)
@@ -88,7 +88,7 @@ public class UserController {
     		@RequestParam(value="token",required=true) String token) {
         return userService.getUserDetails(token);
     }
-	
+	  
 	
 	//管理员获取其他用户的个人详情
 	@RequestMapping(value="/admin/getUserDetails", method = RequestMethod.GET)

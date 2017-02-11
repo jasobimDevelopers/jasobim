@@ -34,6 +34,17 @@
 						<div ng-repeat="household in projectHouseholdInfo"><button class="btn btn-default household_quantity" ng-click="setHouseholdNum($index,flag[0])">{{household.name}}</button></div>
 					</div>
 				</div>
+			    <div id="quantity_item_search">
+    				
+    				<div>
+	    				<a href="#" ng-click="quantitySearch()">
+	    					<div id="findQuantity" class="glyphicon glyphicon-search" style="font-size:30px"></div>
+	    				</a>
+    				</div>
+    				<div>
+    					<input type="text" id="quantityName" onfocus="javascript:if(this.value=='搜索')this.value='';">
+    				</div>
+				</div>
 				<div id="quantity_content">
 					<table class="table-striped table table-bordered">
 						<tbody>
@@ -62,7 +73,7 @@
 					<div id="quantityAction">
 							<div id="quantityImport">
 								<div id="imgBiangen"><a href="#" id="quantity_button" ng-click="importQuantity()">变更签证</a></div>
-								<div id="biangeng_file"><input type="file" id="biangeng_import" multiple="multiple"/></div>
+								<div id="biangeng_file"><input type="file" id="biangeng_import" multiple="multiple" accept="application/vnd.ms-excel"/></div>
 							</div>
 							<a href="{{quantityUrl}}" target="_blank" download="{{quantityExcel.originName}}">
 								<div id="quantityUpdate"><span>下载</span></div>

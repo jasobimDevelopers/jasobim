@@ -19,6 +19,15 @@ function HeaderController($scope,DataService,$filter) {
 	  $(".head_li").eq(index).css("background-color","gray");
 	  $(".head_li").eq(index).css("background","url(../images/headBottom_bk.png no-repeat)");
 	  $(".head_li").eq(index).css("opacity","0.5");
+	  if(index==0){
+		  document.getElementById("projectInfoHtml").style.display = 'none';
+	      document.getElementById("containers").style.display = 'block';
+	      document.getElementById("include_header").style.display = 'block';
+	  }
+	  if(index==1){
+		  
+	  }
+	  
   }
 
   $scope.logout = function() {

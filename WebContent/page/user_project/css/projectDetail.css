@@ -333,6 +333,11 @@ font-weight: bold;
 	border-right:1px solid #CCCCCC;
 	border-bottom:1px solid #CCCCCC;
 }
+#findQuantity{
+	height:50px;
+	width:78px;
+	padding-left:20px;
+}
 #quantity_menuli div{
 	float: left;
 	font-family: 微软雅黑;
@@ -340,7 +345,6 @@ font-weight: bold;
 	margin:8px 15px;
 } 
 #quantity_content{
-	background: url(../images/biaotikuang.png) no-repeat;
 	width:1110px;
 	margin-top:10px;
 	margin-left:46px;
@@ -541,13 +545,25 @@ font-weight: bold;
 	
 }
 /*////工程量变更下载*/
+#quantity_item_search{
+	width:1100px;
+	height:40px;
+	float:left;
+	margin-left:47px;
+    margin-top:20px;
+}
+#quantity_item_search div{
+	float:right;
+}
+#quantity_item_search input{
+	width:150px;
+	height:38px;
+}
 #quantityImport{
-	
 	width:280px;
 	margin-right:75px;
 	padding-top:5px;
 	height:30px;
-	
 }
 #quantityImport div{
 	float:left;

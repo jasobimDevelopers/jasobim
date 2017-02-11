@@ -122,13 +122,21 @@ text-decoration: none;
 	background-color:#EEEFF3;
 }
 #addQuestionLi{
-	width:575px;
+	width:500px;
 }
 #addQuestionIcon{
 	margin-top:-4px;
 	padding-left:27px;
 	width:49px;
 	height:30px;
+}
+#questionOfMy{
+	background:url(../images/myQuestion.png) no-repeat;
+	width:21px;
+	height:30px;
+}
+#questionOfMyText{
+	width:82px;
 }
 #addQuestionText{
 	width:40px;
@@ -145,7 +153,12 @@ text-decoration: none;
 	border-right:1px solid gray;
 	border-bottom:1px solid gray;
 }
-
+#addquestionbody{
+	margin:20px auto;
+	text-align:center;
+	height:675px;
+	width:600px;
+}
 #question_select{
 	background-color:#1BBC9B;
 	border:1px solid gray;
@@ -262,7 +275,7 @@ text-decoration: none;
 #dataShow div{
 	margin-top:13px;
 }
-#questionsPageCode{padding: 15px 20px;text-align: left;color: #ccc; width:800px;padding-left:500px;}
+#questionsPageCode{padding: 15px 20px;text-align: left;color: #ccc; width:800px;padding-left:400px;}
 #questionsPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
 
 #questionsPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}

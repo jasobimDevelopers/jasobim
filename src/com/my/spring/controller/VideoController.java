@@ -35,14 +35,14 @@ public class VideoController {
     	for(int i=0;i<fileList.length;i++){
     		dataWrapper=VideoService.addVideo(video, token, fileList[i], request,videoTypeList[i]);
     		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
-            	return dataWrapper;
+            	
             }else{
             	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
             }
     	}
         return dataWrapper;
     }
-    @RequestMapping(value="/deleteVideo")
+    @RequestMapping(value="/admin/deleteVideo", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteVideo(
             @RequestParam(value = "id",required = true) Long id,

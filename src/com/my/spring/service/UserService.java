@@ -13,6 +13,7 @@ import com.my.spring.utils.DataWrapper;
 
 
 public interface UserService {
+	
 	DataWrapper<Void> register(User user);
 	DataWrapper<UserPojo> login(String userName,String password);
 	DataWrapper<Void> updateUser(User user,String token);

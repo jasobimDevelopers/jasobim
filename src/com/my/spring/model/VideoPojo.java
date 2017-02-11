@@ -7,12 +7,14 @@ package com.my.spring.model;
 public class VideoPojo {
 	
     private Long projectId;
+    private Long id;
     private Integer buildingNum;
     private String url;
     private Integer professionType;
     private String originName;
     private Integer videoType;
     private String intro; 
+    private Long fileId;
 	
 	public Long getProjectId() {
 		return projectId;
@@ -64,6 +66,18 @@ public class VideoPojo {
 	}
 	public void setIntro(String intro) {
 		this.intro = intro;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Long getFileId() {
+		return fileId;
+	}
+	public void setFileId(Long fileId) {
+		this.fileId = fileId;
 	}
 	
 }

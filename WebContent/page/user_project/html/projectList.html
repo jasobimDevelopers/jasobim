@@ -1,5 +1,4 @@
 <div ng-controller="ProjectController">
-<div ng-include="'page/user_project/html/addProject.html'" style="display:none;z-index:1;" id="addProjectHtml"></div>
 <div ng-include="'page/user_project/html/projectInfo.html'" style="display:none; z-index:1;" id="projectInfoHtml"></div>
 <div id="projectContent">
 		<div id="include_header" style="display:block">
@@ -11,7 +10,7 @@
 	                <span class="inputtext">项目负责人:</span><input type="text" id="leader" ng-model="ProjectTofind.leader"/>
 	                <span class="inputtext">&nbsp建设单位:</span><input type="text" id="buildingUnit" ng-model="ProjectTofind.buildingUnit"/>
 	            	<span class="inputtext">&nbsp施工地点:</span><input type="text" id="place" ng-model="ProjectTofind.place"/>
-	                <span class="inputtext">&nbsp项目简介:</span><input type="text" id="description" ng-model="ProjectTofind.description"/>
+	               <!--  <span class="inputtext">&nbsp项目简介:</span><input type="text" id="description" ng-model="ProjectTofind.description"/> -->
 	                <span class="inputtext">&nbsp&nbsp&nbsp设计单位:</span><input type="text" id="designUnit" ng-model="ProjectTofind.designUnit"/>
 	                <span class="inputtext">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp版本:</span><input type="text" id="version" ng-model="ProjectTofind.version"/>
 	            	<span class="inputtext">&nbsp施工时间:</span><input type="text" id="startDate" ng-model="ProjectTofind.startDate"/>
@@ -38,7 +37,7 @@
 							<td>{{projectInfo.leader}}</td>
 							<td>{{projectInfo.buildingUnit}}</td>
 							<td>{{projectInfo.place}}</td>
-							<td>{{projectInfo.description}}</td>
+							<!-- <td>{{projectInfo.description}}</td> -->
 							<td>{{projectInfo.designUnit}}</td>
 							<td>{{projectInfo.version}}</td>
 							<td>{{projectInfo.startDate}}</td>
@@ -49,7 +48,7 @@
 		                    </td>
 						</tr>
 					</tbody>
-				</table>
+				</table> 
 			<div id="table-buton1" >
 				<div id="projectPageCode"></div>
 			</div>

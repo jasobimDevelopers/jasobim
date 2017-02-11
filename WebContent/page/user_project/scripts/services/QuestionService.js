@@ -90,7 +90,7 @@
       this.updateQuestionByAdmin = function(formData){
     	  var deferred = $q.defer();
           console.log("问题更新");
-          $http.post('api/question/admin/updateQuestion?token='+getCookie('token'),formData,
+          $http.post('api/question/admin/updateQuestion?token='+token,formData,
         		  {
     			  		headers: {'Content-Type':undefined},
     			  		transformRequest: angular.identity 
@@ -154,31 +154,6 @@
               });
           return deferred.promise;
       };
-      ///////更新项目信息
-      this.updateProject = function(project,token) {
-      	var deferred = $q.defer();
-      	console.log("更新Project数据");
-      	$http.post('api/project/admin/updateProject?token='+token,project,
-      		{
-	      		headers: {'Content-Type':undefined},
-	            transformRequest: angular.identity 
-      		})
-          .success(function(data, status, headers, config){
-          	console.log(data);
-              if(data.callStatus == "SUCCEED"){
-                  deferred.resolve(data);
-                  self.updateProjectInfo = data;
-                  alert("更新成功")
-              }else{
-                  alert("数据更新失败("+data.errorCode+")");
-              }
-              
-          })
-          .error(function(data, status, headers, config){
-              deferred.reject(data);
-          });
-      	  return deferred.promise;
-      };
      
       ///////查找问题信息
       this.findQuestion = function(questionId) {
@@ -200,6 +175,29 @@
           return deferred.promise;
           };
       //////////////////////////////
+    ///////问题状态切换
+      this.changeQuestionState = function(questionId,state) {
+      	var deferred = $q.defer();
+      	console.log("更新Project数据");
+      	$http.post('api/question/updateQuestionState?token='+token+'&questionId='+questionId+'&state='+state,
+      		{
+	      		headers: {'Content-Type':undefined},
+	            transformRequest: angular.identity 
+      		})
+          .success(function(data, status, headers, config){
+          	console.log(data);
+              if(data.callStatus == "SUCCEED"){
+                  deferred.resolve(data);
+                  self.updateQuestionInfo = data;
+              }else{
+                  alert("数据更新失败("+data.errorCode+")");
+              }
+          })
+          .error(function(data, status, headers, config){
+              deferred.reject(data);
+          });
+      	  return deferred.promise;
+      };
       ///////查找项目里的楼栋信息
       this.getBuildingList = function(projectId) {
       
@@ -250,6 +248,28 @@
                });
            return deferred.promise;
            };
+           /////通过用户id获取问题列表
+        this.getQuestionListByUserId= function(pageSize,pageIndex) {
+
+        var deferred = $q.defer();
+        console.log("读取ProjectQuestionListByUserId数据");
+  	  	var api = 'api/question/getQuestionListByUserId?token='+getCookie('token')+"&pageSize="+pageSize+"&pageIndex="+pageIndex;
+        $http.get(encodeURI(api))
+            .success(function(data, status, headers, config){
+                if(data.callStatus == "SUCCEED"){
+                    deferred.resolve(data);
+                    self.questionList = data;
+               
+                }else{
+                    alert("数据读取失败");
+                }
+                
+            })
+            .error(function(data, status, headers, config){
+                deferred.reject(data);
+            });
+        return deferred.promise;
+        };
     ///////////////获取问题所对应的留言信息
     this.getMessageListByQuestionId = function(questionId){
     	 var deferred = $q.defer();
@@ -315,7 +335,7 @@
                 deferred.reject(data);
             });
         return deferred.promise; 
-    }
+    };
     //////查找留言信息
     this.findMessage = function(messageId) {
     
@@ -334,5 +354,5 @@
                 deferred.reject(data);
             });
         return deferred.promise;
-        };
-  });
+    };
+});

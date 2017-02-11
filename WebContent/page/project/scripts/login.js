@@ -38,9 +38,17 @@ function deleteCookie(name)
     expdate.setTime(expdate.getTime() - (86400 * 1000 * 1)); 
     setCookie(name, "", expdate); 
 }
+function on_return(){
+	 if(window.event.keyCode == 13)
+	 {
 
+	   document.all('submit').click();
+	   
+	 }
+}
 function login(){
 	var inputPassword=hex_md5($("#password").val());
+	//var inputPassword=$("#password").val();
 	 $.ajax({
          type: "GET",
          url: "api/user/login",

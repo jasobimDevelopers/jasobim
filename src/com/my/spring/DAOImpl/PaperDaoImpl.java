@@ -44,7 +44,10 @@ public class PaperDaoImpl extends BaseDao<Paper> implements PaperDao {
         Session session = getSession();
         Criteria criteria = session.createCriteria(Paper.class);
         ///////////////////////////////
-        criteria.add(Restrictions.eq("projectId", projectId));
+        if(projectId!=null){
+        	criteria.add(Restrictions.eq("projectId", projectId));
+        }
+        
         if(paper.getProfessionType()!=null){
         	criteria.add(Restrictions.eq("professionType", paper.getProfessionType()));
         }

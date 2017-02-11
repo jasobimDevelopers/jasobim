@@ -274,4 +274,96 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 		String sql="SELECT * FROM question WHERE CONCAT(IFNULL(name,''),IFNULL(intro,''),IFNULL(trades,''),IFNULL(question_date,'')) LIKE '%"+content+"%'" ; 
 		return null;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<List<QuestionPojo>> getQuestionList(Integer pageIndex, Integer pageSize, Question question) {
+		DataWrapper<List<QuestionPojo>> retDataWrapperPojo = new DataWrapper<List<QuestionPojo>>();
+    	DataWrapper<List<QuestionFile>> retDataWrapperPojos = new DataWrapper<List<QuestionFile>>();
+        List<Question> ret = new ArrayList<Question>();
+        List<QuestionPojo> retpojo = new ArrayList<QuestionPojo>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Question.class);
+        criteria.add(Restrictions.eq("userId", question.getUserId()));
+        if (pageSize == null) {
+			pageSize = 10;
+		}
+        if (pageIndex == null) {
+			pageIndex = 1;
+		}
+        
+        // 取总页数
+        criteria.setProjection(Projections.rowCount());
+        int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
+        int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
+       
+        criteria.setProjection(null);
+       
+        if (pageSize > 0 && pageIndex > 0) {
+            criteria.setMaxResults(pageSize);// 最大显示记录数
+            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+            /////////////
+            
+        }
+        //////////////
+       
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        for(int i=0;i<ret.size();i++)
+        {
+        	QuestionPojo questionpojo=new QuestionPojo();
+        	retDataWrapperPojos=questionFileDao.getQuestionFileByQuestionId(ret.get(i).getId());
+        	if(retDataWrapperPojos.getData()!=null)
+        	{
+        		String[] fileLists=new String[retDataWrapperPojos.getData().size()];
+            	String[] fileNameLists=new String[retDataWrapperPojos.getData().size()];
+            	int flag=0;
+        		for(int j=0;j<retDataWrapperPojos.getData().size();j++)
+        		{
+        			Long fileId=retDataWrapperPojos.getData().get(j).getFileId();
+        			Files file=filesDao.getById(fileId);
+        			if(file!=null)
+        			{
+        				String fileItem=file.getUrl();
+        				fileLists[flag]=fileItem;
+        				String nameList=retDataWrapperPojos.getData().get(j).getOriginName();
+            			if(nameList!=null){
+            				fileNameLists[flag]=nameList;
+            			}
+        				flag++;
+        			}
+        			
+        			
+        		}
+        		if(fileLists!=null)
+        		{
+        			questionpojo.setFileList(fileLists);
+        		}				
+        	}
+        	String username=userDao.getById(ret.get(i).getUserId()).getRealName();
+        	questionpojo.setUserId(username);
+        	questionpojo.setCodeInformation(ret.get(i).getCodeInformation());
+        	questionpojo.setPriority(ret.get(i).getPriority());
+        	questionpojo.setId(ret.get(i).getId());
+        	questionpojo.setIntro(ret.get(i).getIntro());
+        	questionpojo.setName(ret.get(i).getName());
+        	questionpojo.setProjectId(ret.get(i).getProjectId());
+        	questionpojo.setPosition(ret.get(i).getPosition());
+        	questionpojo.setQuestionDate(ret.get(i).getQuestionDate());
+        	questionpojo.setQuestionType(ret.get(i).getQuestionType());
+        	questionpojo.setState(ret.get(i).getState());
+        	questionpojo.setTrades(ret.get(i).getTrades());        	        	
+        	retpojo.add(i, questionpojo);
+        }
+        retDataWrapperPojo.setData(retpojo);
+        retDataWrapperPojo.setTotalNumber(totalItemNum);
+        retDataWrapperPojo.setCurrentPage(pageIndex);
+        retDataWrapperPojo.setTotalPage(totalPageNum);
+        retDataWrapperPojo.setNumberPerPage(pageSize);
+        
+        return retDataWrapperPojo;
+	}
 }

@@ -53,7 +53,7 @@ public class QuestionServiceImpl implements QuestionService {
     private String filePath = "files";
     private Integer fileType=2;
     @Override
-    public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile[] fileList,HttpServletRequest request) {
+    public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile[] fileList,HttpServletRequest request,MultipartFile fileCode) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -65,6 +65,11 @@ public class QuestionServiceImpl implements QuestionService {
         		question.setState(0);
         	}
 			if(question!=null){
+				if(fileCode!=null){
+					String path=filePath+"/"+"questions";
+				 	Files newfile=fileService.uploadFile(path, fileCode,fileType,request);
+				 	question.setCodeInformation(newfile.getUrl());
+				}
 				if(!questionDao.addQuestion(question)){ 
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					return dataWrapper;
@@ -242,13 +247,13 @@ public class QuestionServiceImpl implements QuestionService {
 
 
     @Override
-    public DataWrapper<Void> updateQuestion(Question question,String token,MultipartFile[] file,HttpServletRequest request) {
+    public DataWrapper<Void> updateQuestion(QuestionPojo question,String token,MultipartFile[] file,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			User userInDB = userDao.getById(userInMemory.getId());
 			if (userInDB != null) {
-				if(userInDB.getUserType()==UserTypeEnum.Admin.getType()){
+				
 					if(question!=null){
 						Question questionOld=new Question();
 						questionOld=questionDao.getById(question.getId());
@@ -264,7 +269,12 @@ public class QuestionServiceImpl implements QuestionService {
 								 	questionFileDao.addQuestionFile(questionFile);
 								}
 							}
-							questionDao.updateQuestion(question);
+							questionOld.setIntro(question.getIntro());
+							questionOld.setName(question.getName());
+							questionOld.setState(question.getState());
+							questionOld.setTrades(question.getTrades());
+							questionOld.setQuestionType(question.getQuestionType());
+							questionDao.updateQuestion(questionOld);
 						}
 						else
 						{
@@ -272,9 +282,7 @@ public class QuestionServiceImpl implements QuestionService {
 							return dataWrapper;
 						}
 					}
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-				}
+				
 			} else {
 				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);
 			}
@@ -376,18 +384,54 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
 	@Override
-	public DataWrapper<Question> getQuestionDetailsByAdmin(Long questionId, String token) {
-		DataWrapper<Question> dataWrapper = new DataWrapper<Question>();
+	public DataWrapper<QuestionPojo> getQuestionDetailsByAdmin(Long questionId, String token) {
+		DataWrapper<QuestionPojo> dataWrapper = new DataWrapper<QuestionPojo>();
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
 				User userInDB = userDao.getById(userInMemory.getId());
 				if (userInDB != null) {
 					if(questionId!=null){
-						Question Question=questionDao.getById(questionId);
-						if(Question==null) 
-				            dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
-						else
-							dataWrapper.setData(Question);
+						Question question=questionDao.getById(questionId);
+						if(question==null){
+							 dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+						} 
+						else{
+							QuestionPojo questionPojo=new QuestionPojo();
+							
+							questionPojo.setId(question.getId());
+							questionPojo.setCodeInformation(question.getCodeInformation());
+							questionPojo.setIntro(question.getIntro());
+							questionPojo.setName(question.getName());
+							questionPojo.setPriority(question.getPriority());
+							questionPojo.setProjectId(question.getProjectId());
+							questionPojo.setQuestionDate(question.getQuestionDate());
+							questionPojo.setQuestionType(question.getQuestionType());
+							questionPojo.setState(question.getState());
+							questionPojo.setTrades(question.getTrades());
+							questionPojo.setUserId(userDao.getById(question.getUserId()).getRealName());
+							Long userIdis=userDao.getById(question.getUserId()).getId();
+							if(userIdis==userInMemory.getId()){
+								questionPojo.setUserid(1);
+							}else{
+								questionPojo.setUserid(0);
+							}
+							DataWrapper<List<QuestionFile>> file=new DataWrapper<List<QuestionFile>>();
+							file=questionFileDao.getQuestionFileByQuestionId(question.getId());
+							if(file.getData()!=null && file.getData().size()>0){
+								String[] fileList=new String[file.getData().size()];
+								for(int i=0;i<file.getData().size();i++){
+									Files files=new Files();
+									files=fileDao.getById(file.getData().get(i).getFileId());
+									if(files!=null){
+										fileList[i]=files.getUrl();
+									}
+								}
+								questionPojo.setFileList(fileList);
+							}
+							
+							dataWrapper.setData(questionPojo);
+						}
+							
 					}
 					
 				} else {
@@ -409,5 +453,81 @@ public class QuestionServiceImpl implements QuestionService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return null;
+	}
+
+	@Override
+	public DataWrapper<Void> updateQuestionState(Long questionId, String token, Integer state) {
+		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+			User userInDB = userDao.getById(userInMemory.getId());
+			if (userInDB != null) {
+				Question question=null;
+				question=questionDao.getById(questionId);	
+				if(question!=null){
+					question.setState(state);
+				}else{
+					dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+				}
+				if(!questionDao.updateQuestion(question)){
+					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}
+			} else {
+				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);
+			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<QuestionPojo>> getQuestionListByUserId(String token, Integer pageIndex, Integer pageSize) {
+		DataWrapper<List<QuestionPojo>> datawrapper=new DataWrapper<List<QuestionPojo>>();
+    	User userInMemory=SessionManager.getSession(token);
+    	Question question=new Question();
+    	if(userInMemory!=null){
+    			question.setUserId(userInMemory.getId());
+    			datawrapper= questionDao.getQuestionList(pageIndex,pageSize,question);
+    			Long questionSort=questionDao.getQuestionListOfSort();
+    			Long questionImportant=questionDao.getQuestionListOfImportant();
+    			Long questionAll=questionDao.getQuestionList();
+    			NumberFormat nf = NumberFormat.getNumberInstance();   
+    	        nf.setMaximumFractionDigits(2);   
+    	    	double sortPercent=( (double)questionSort/(double)questionAll);
+    	    	sortPercent=sortPercent*100;
+    	    	if((sortPercent+0.5)>Math.ceil(sortPercent))
+    	    	{
+    	    		sortPercent=Math.ceil(sortPercent);
+    	    	}else{
+    	    		sortPercent=Math.floor(sortPercent);
+    	    	}
+    	    	
+    	    	double importantPercent=((double)questionImportant/(double)questionAll);
+    	    	importantPercent=importantPercent*100;
+    	    	if((importantPercent+0.5)>Math.ceil(importantPercent))
+    	    	{
+    	    		importantPercent=Math.ceil(importantPercent);
+    	    	}else{
+    	    		importantPercent=Math.floor(importantPercent);
+    	    	}
+    	    	if(datawrapper.getData()==null || datawrapper.getData().size()<=0){
+    	    		List<QuestionPojo> questionPojolist=new ArrayList<QuestionPojo>();
+    	    		QuestionPojo questionPojo=new QuestionPojo();
+    	    		questionPojo.setSortPercent((int)sortPercent);
+    	    		questionPojo.setImportantPercent((int)importantPercent);
+    	    		questionPojo.setUrgentPercent(100-(int)sortPercent-(int)importantPercent);
+    	    		questionPojolist.add(questionPojo);
+    	    		datawrapper.setData(questionPojolist);
+    	    	}else{
+    	    		datawrapper.getData().get(0).setImportantPercent((int)importantPercent);
+        	    	datawrapper.getData().get(0).setUrgentPercent(100-(int)sortPercent-(int)importantPercent);
+    	    		datawrapper.getData().get(0).setSortPercent((int)sortPercent);
+    	    	}
+    	    	
+    	}else{
+    		datawrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+    	}
+    	return datawrapper;
 	}
 }

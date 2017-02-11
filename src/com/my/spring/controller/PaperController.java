@@ -44,7 +44,7 @@ public class PaperController {
     }
     
     
-    @RequestMapping(value="/admin/deletePaper")
+    @RequestMapping(value="/admin/deletePaper",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deletePaperByAdmin(
             @RequestParam(value = "id",required = true) Long id,
@@ -79,6 +79,17 @@ public class PaperController {
     		@PathVariable(value="paperId") Long paperId,
     		@RequestParam(value="token",required=true) String token){
         return paperService.getPaperDetailsByAdmin(paperId,token);
+    }
+    @RequestMapping(value="/codeInformation/getPapers",method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<PaperPojo>> getPapers(
+    		@RequestParam(value="projectId",required=false) Long projectId,
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Paper paper,
+    		HttpServletRequest request,
+    		@RequestParam(value="token",required=true) String token){
+        return paperService.getPapers(request,projectId,token,pageIndex,pageSize,paper);
     }
     
 }

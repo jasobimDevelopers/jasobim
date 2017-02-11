@@ -21,6 +21,7 @@ public class QuestionPojo {
 	private int importantPercent;/////重要问题的百分比
 	private int urgentPercent;//////紧急问题的百分比
 	private String position;//位置
+	private Integer userid;
 	public Long getId() {
 		return id;
 	}
@@ -141,6 +142,12 @@ public class QuestionPojo {
 	}
 	public void setPosition(String position) {
 		this.position = position;
+	}
+	public Integer getUserid() {
+		return userid;
+	}
+	public void setUserid(Integer i) {
+		this.userid = i;
 	}
 	
 	

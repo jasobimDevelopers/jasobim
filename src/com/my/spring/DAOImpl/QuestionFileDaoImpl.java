@@ -72,12 +72,10 @@ public class QuestionFileDaoImpl extends BaseDao<QuestionFile> implements Questi
 	public boolean deleteQuestionFileByQuestionId(Long id) {
 		String sql = "delete from question_file where question_id="+id;
 		Session session=getSession();
-		boolean temp=false;
+		boolean temp=true;
 		 try{
 			 Query query = session.createSQLQuery(sql);
-			 int tem=query.executeUpdate();
-			 if(tem==1){
-				 temp = true;
+			 if(query.executeUpdate()!=1){
 			 }
 	        }catch(Exception e){
 	            e.printStackTrace();

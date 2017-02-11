@@ -233,7 +233,7 @@ public class QuantityServiceImpl implements QuantityService {
 		User user=SessionManager.getSession(token);
 		if(user!=null){
 			if(projectId!=null){
-				dataWrapper=quantityDao.getQuantityListNum(projectId,pageSize, pageIndex,quantity);
+				dataWrapper=quantityDao.getQuantityListNums(projectId,pageSize, pageIndex,quantity);
 			}
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);

@@ -230,6 +230,17 @@ function QuestionController($scope,QuestionService) {
 	     document.getElementById("projectDetail_body_questions").style.display='block';
 	     $scope.getQuestionList(pageSize,pageIndex,question);
 	 }
+	 //////问题状态切换
+	 $scope.questionStateChange = function(questionId,state){
+		 if(state==1){
+			 state=0;
+		 }else{
+			 state=1;
+		 }
+	     QuestionService.changeQuestionState(questionId,state).then(function(result){
+	    	 $scope.getQuestionList(pageSize,pageIndex,question);
+		    });
+		 }
 	 /////返回问题列表
 	 $scope.returnQuestionlists = function(){
 		 $scope.messageListInfo="";

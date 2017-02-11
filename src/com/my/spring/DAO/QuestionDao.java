@@ -22,4 +22,5 @@ public interface QuestionDao {
     Question getById(Long id);
 	boolean deleteQuestion(Long id);
 	DataWrapper<List<Question>> getQuestionListByLike(String content);
+	DataWrapper<List<QuestionPojo>> getQuestionList(Integer pageIndex, Integer pageSize, Question question);
 }

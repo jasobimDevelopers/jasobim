@@ -214,12 +214,11 @@ DELIMITER //
 create procedure exportQuantity(in file_path  text,in project_id long)
 begin
 SET @sql = 'select id,name,profession_type,value,unit,project_id,building_num,floor_num,unit_num,household_num,family_and_type,system_type,service_type,size,material from quantity where project_id=';
-
 SET @insertSql = CONCAT(@sql,project_id,' into outfile ','\'',file_path,'\'');  
-PREPARE stmtinsert FROM @insertSql;  
+end ;
+PREPARE stmtinsert FROM @insertSql;   
 EXECUTE stmtinsert;
 end//
 DELIMITER ;
-				 
-	select * from tsble where xx group by x into outside 'filepath'			 
+				 		 
 				 

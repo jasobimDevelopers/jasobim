@@ -1,5 +1,10 @@
 package com.my.spring.serviceImpl;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.PaperDao;
 import com.my.spring.DAO.UserDao;
@@ -14,12 +19,19 @@ import com.my.spring.service.PaperService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
+import io.netty.handler.codec.http.HttpRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -265,6 +277,71 @@ public class PaperServiceImpl implements PaperService {
 	        			Files file=fileDao.getById(dataWrapper.getData().get(i).getFileId());
 	        			if(file!=null){
 	        				papernew.setUrl(file.getUrl());
+	        			}
+	        			if(papernew.getId()!=null){
+	        				papers.add(papernew);
+	        			}
+	        		}
+	        		dataWrappers.setData(papers);
+	        		if(dataWrapper.getCurrentPage()==-1){
+	        			dataWrappers.setCurrentPage(1);
+	        		}else{
+	        			dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
+	        		}
+	    			dataWrappers.setCallStatus(dataWrapper.getCallStatus());
+	    			dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
+	    			dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
+	    			dataWrappers.setTotalPage(dataWrapper.getTotalPage());
+	        	
+			} else {
+				dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+			}
+        return dataWrappers;
+	}
+
+	@Override
+	public DataWrapper<List<PaperPojo>> getPapers(HttpServletRequest request,Long projectId, String token, Integer pageIndex, Integer pageSize, Paper paper) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<PaperPojo>> dataWrappers = new DataWrapper<List<PaperPojo>>();
+    	List<PaperPojo> papers=new ArrayList<PaperPojo>();
+    	
+    	DataWrapper<List<Paper>> dataWrapper = new DataWrapper<List<Paper>>();
+		 User userInMemory = SessionManager.getSession(token);
+	        if (userInMemory != null) {
+	        		
+	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper);
+	        		for(int i=0;i<dataWrapper.getData().size();i++){
+	        			PaperPojo papernew=new PaperPojo();
+        				papernew.setProjectId(projectId);
+	        			papernew.setId(dataWrapper.getData().get(i).getId());
+	        			papernew.setBuildingNum(dataWrapper.getData().get(i).getBuildingNum());
+	        			papernew.setProfessionType(dataWrapper.getData().get(i).getProfessionType());
+	        			papernew.setFloorNum(dataWrapper.getData().get(i).getFloorNum());
+	        			papernew.setOriginName(dataWrapper.getData().get(i).getOriginName());
+	        			Files file=fileDao.getById(dataWrapper.getData().get(i).getFileId());
+	        			if(file!=null){
+	        				SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
+	        			   	Date d=new Date();
+	        			   	String str=sdf.format(d);
+	        			   	String rootPath = request.getSession().getServletContext().getRealPath("/");
+	        			   	String filePath="/codeFiles/";
+	        			   	String imgpath=rootPath+filePath;
+	        			   	String realPath=filePath+str+".png";
+	        				try{
+	        				MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+	        			        @SuppressWarnings("rawtypes")
+	        					Map hints = new HashMap();  
+	        			        //内容所使用编码  
+	        			        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
+	        			        BitMatrix bitMatrix = multiFormatWriter.encode("139.224.59.3:8080/testJasobim/"+file.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
+	        			        //生成二维码  
+	        			        File outputFile = new File(imgpath,str+".png"); 
+	        			        
+	        			        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile);  
+	        				} catch (Exception e) {
+	        					e.printStackTrace();
+	        				}
+	        				papernew.setUrl("codeFiles/"+str+".png");
 	        			}
 	        			if(papernew.getId()!=null){
 	        				papers.add(papernew);

@@ -20,7 +20,7 @@ public class NavigationController {
     public String projectPage(){
         return "home";
     }
-    @RequestMapping(value="/login")
+    @RequestMapping(value="/login") 
     public String loginPage(){
         return "login";
     }

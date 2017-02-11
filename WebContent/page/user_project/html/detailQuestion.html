@@ -41,11 +41,11 @@
             </div>
             <div class="addinput_question">
             	<div><span>现场图片:</span></div>
-            	<div><input type="file"  id="inputicon" /></div>
+            	<div ng-repeat="pic in findQuestionInfo.fileList" style="margin-right:10px;"><img class="min" id="xianchangImg" src="{{pic}}" /></div>
             </div>
-            <div class="addinput_question">
+            <div class="addinput_question" style="margin-top:100px;width:auto;">
             	<div><span>查看二维码:</span></div>
-            	<div><img width="100px" height="100px" src="{{}}" /></div>
+            	<div><img id="codeImg" class="min" src="{{findQuestionInfo.codeInformation}}" /></div>
             </div>
             <div id="addbutton" style="margin-top:86px;display:none;">
             	<input class="btn btn-default" type="button" ng-click="addQuestionByAdmin()" value="确定" />
@@ -79,9 +79,22 @@
         	</div>
         </div>
 	</div>
-	<style>
+<style>
+.max{width:100%;height:auto;}
+.min{width:100px;height:auto;}
+</style>
+
+<script>
+	$(function(){
+		$('#testImg').click(function(){
+
+		$(this).toggleClass('min');
+		$(this).toggleClass('max');
+		});
+		$('xianchangImg').click(function(){
+			$(this).toggleClass('min');
+			$(this).toggleClass('max');
+		});
+	});
+</script>
 	
-	#imgMessge {
-    			visibility: hidden;    /* 隐藏 */
-			}
-	</style>

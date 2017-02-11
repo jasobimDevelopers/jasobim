@@ -43,7 +43,7 @@ public class VideoServiceImpl implements VideoService {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
+			/*if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){*/
 				if(video!=null){
 					if(file!=null){
 						String path=filePath+"/"+"videos";
@@ -64,9 +64,9 @@ public class VideoServiceImpl implements VideoService {
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}
-			}else{
+			/*}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
+			}*/
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -80,14 +80,16 @@ public class VideoServiceImpl implements VideoService {
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(id!=null){
-					if(!videoDao.deleteVideo(id)) {
-						fileDao.deleteFiles(fileid);//删除文件表的信息
-						Files files=fileDao.getById(id);
+					if(videoDao.deleteVideo(id)) {
+						Files files=fileDao.getById(fileid);
 						fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
-			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						fileDao.deleteFiles(fileid);//删除文件表的信息
 					}
 					else
+					{
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 						return dataWrapper;
+					}
 			        
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -114,7 +116,9 @@ public class VideoServiceImpl implements VideoService {
     				VideoPojo videoPojo=new VideoPojo();
     				Integer temp=dataWrappers.getData().get(i).getBuildingNum();
     				Integer professiontype=dataWrappers.getData().get(i).getProfessionType();
+    				videoPojo.setId(dataWrappers.getData().get(i).getId());
     				videoPojo.setProjectId(projectId);
+    				videoPojo.setFileId(dataWrappers.getData().get(i).getFileId());
     				videoPojo.setBuildingNum(temp);
     				videoPojo.setVideoType(dataWrappers.getData().get(i).getVideoType());
     				videoPojo.setOriginName(dataWrappers.getData().get(i).getOriginName());

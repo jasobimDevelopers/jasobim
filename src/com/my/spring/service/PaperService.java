@@ -23,4 +23,6 @@ public interface PaperService {
 	DataWrapper<Void> deletePaperByAdmin(Long id, String token, HttpServletRequest request);
 	DataWrapper<List<PaperPojo>> getPaperLists(Long projectId, String token, Integer pageIndex, Integer pageSize,
 			Paper paper);
+	DataWrapper<List<PaperPojo>> getPapers(HttpServletRequest request,Long projectId, String token, Integer pageIndex, Integer pageSize,
+			Paper paper);
 }

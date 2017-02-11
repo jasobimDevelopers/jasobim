@@ -25,7 +25,7 @@ import com.my.spring.utils.SessionManager;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
-	private final String salt = "salt";
+	private final String salt = "嘉实安装";
 	
 	@Autowired
 	UserDao userDao;
@@ -348,7 +348,7 @@ public class UserServiceImpl implements UserService {
 					dataWrapper.setErrorCode(ErrorCodeEnum.User_Existed);
 				} else {
 					if(file !=null){
-						String path=filePath+"/"+"projectmodels"+"/";
+						String path=filePath+"/"+"userIcons"+"/";
 						Files newfile=fileService.uploadFile(path, file,fileType,request);
 						user.setUserIcon(newfile.getId());
 					}

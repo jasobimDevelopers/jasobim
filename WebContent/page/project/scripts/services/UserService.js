@@ -158,13 +158,13 @@ angular.module('Demo')
         ///////增加用户信息
         this.addUserByAdmin = function(findUserInfo,token) {
             var deferred = $q.defer();
-            
-            
             console.log("查找User数据");
             $http.post('api/user/admin/addUser?token='+token,findUserInfo,
             		{
-            			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-            			transformRequest: transform
+//            			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+//            			transformRequest: transform
+            			headers: {'Content-Type':undefined},
+            			transformRequest: angular.identity 
             		})
                 .success(function(data, status, headers, config){
   
