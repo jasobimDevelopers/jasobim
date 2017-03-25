@@ -43,13 +43,37 @@
 						<div class="projectInfoContent"><input type="text" ng-model="$parent.$parent.findProjectInfo.version" class="projectInfoContentInput" readonly="readonly" style="border-top:0;border-left:0;border-right:0;background-color:white; "/></span></div>
 					</div>
 					<div id="selfli">
+						<div class="selfli_text"><span>状态：</span></div>
+						<select type="text" ng-model="$parent.$parent.findProjectInfo.state" id="inputstate">
+							<option value="0"><span>未上线</span></option>
+							<option value="1"><span>已上线</span></option>
+        				</select>
+					</div>
+					<div id="selfli">
 						<div class="selfli_text"><span>项目工程简介：</span></div>
 						<div id="projectInfoDesc"><textarea id="projectInfoDescInput" ng-model="$parent.$parent.findProjectInfo.description" readonly="readonly" style="border:0;background-color:white;"></textarea></div>
 					</div>
 					<div id="selfliModel" >
 						<div class="selfli_text"><span>项目模型：</span></div>
 						<div><input type="file" id="testfile" onchange="setModel(this)" readonly="readonly"/></div>
-						
+					</div>
+					<div id="selfli">
+						<div class="selfli_text"><span>模型类型：</span></div>
+						<select type="text" ng-model="$parent.$parent.findProjectInfo.isIos" id="inputIsIos">
+							<option value="1"><span>苹果系统</span></option>
+							<option value="0"><span>安卓系统</span></option>
+        				</select>
+					</div>
+					<div id="selfli">
+						<div class="selfli_text"><span>模型标志：{{$parent.$parent.findProjectInfo.modelPart}}</span></div>
+						<select type="text" ng-model="$parent.$parent.findProjectInfo.modelPart" id="inputModelPart">
+							<option value="all"><span>整体模型</span></option>
+							<option value="rf"><span>顶层</span></option>
+							<option value="standard"><span>标准层</span></option>
+							<option value="B1"><span>地下一层</span></option>
+							<option value="B2"><span>地下二层</span></option>
+							<option value="B3"><span>地下三层</span></option>
+        				</select>
 					</div>
 					<div id="selfliPic" >
 						<div class="selfli_text"><span>项目图片：</span></div>

@@ -1,5 +1,5 @@
 
-<div id="suggestion">
+<div id="suggestion" ng-controller="SuggestionController">
 	<div id="addcontent">
         <div id="addhead">
         	<div id="addusertitle"><span>意见反馈</span></div>
@@ -9,7 +9,7 @@
         		<div><span>您宝贵的意见：</span><textarea id="suggestContent"></textarea></div>
         	</div>
             <div id="addbutton" style="margin-top:86px;">
-            	<input class="btn btn-default" type="button" ng-click="addSuggestion()" value="提交" />
+            	<input class="btn btn-default" type="button" ng-click="submitMessage()" value="提交" />
                 <input type="button" ng-click="resetSuggestion()" class="btn btn-default" value="重置" />
             </div>
         </div>

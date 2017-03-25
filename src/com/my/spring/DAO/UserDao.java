@@ -13,6 +13,6 @@ public interface UserDao {
 	boolean addUser(User user);
 	boolean updateUser(User user);
 	DataWrapper<List<User>> getUserList(Integer pageSize, Integer pageIndex,User user);
-	DataWrapper<List<User>> findUserLike(User user);
+	DataWrapper<User> findUserLike(User user);
 	DataWrapper<List<User>> findUserLikeRealName(String username);
 }

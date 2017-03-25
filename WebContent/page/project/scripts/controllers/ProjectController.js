@@ -1,5 +1,6 @@
 ////////////////项目详情信息和项目基本信息页面切换
 var index;
+var projectPicss=null;
 function projectInfo(){
 	document.getElementById("include_header").style.display = 'none';
 	document.getElementById("containers").style.display = 'none';
@@ -11,7 +12,20 @@ function setModel(model) {
 	angular.element(model).scope().$parent.$parent.modelFiles = model.files[0];
 }
 function setPic(pic) {
-	angular.element(pic).scope().$parent.$parent.picFiles = pic.files[0];
+	
+	var file = pic.files[0];
+	projectPicss=file;
+	console.log(file);
+    if(!/image\/\w+/.test(file.type)){ 
+        alert("文件必须为图片！");
+        return false; 
+    } 
+    var reader = new FileReader(); 
+    reader.readAsDataURL(file); 
+    reader.onload = function(e){ 
+        document.getElementById('showId').src = this.result;
+        document.getElementById("showId").style.display = 'block';
+    } 
 }
 
 ////////////////////////////////
@@ -19,6 +33,9 @@ function ProjectController($scope,ProjectService) {
 	$scope.a = 1;
 	
 	console.log("载入ProjectController");
+	$scope.fileTypes="";
+	$scope.videoTypes="";
+	var videoBuildingNums="";
 	$scope.currentPage = 1;
 	$scope.flagAll=-1;
 	$scope.selectedFloor="";
@@ -47,6 +64,7 @@ function ProjectController($scope,ProjectService) {
 	$scope.number=null;
 	$scope.numbers=null;
 	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","设计单位","施工地点","项目简介","建设单位","版本","施工时间","施工周期","操作"];
+	$scope.projectDetailsInfo=["项目名称","项目编码","施工单位","项目负责人","施工地点","建设单位","设计单位","施工时间","施工周期","版本","项目简介"];
 	$scope.itemTitles=["序号","构件名称","底部高程","系统类型","尺寸","长度","设备类型","所属类别","标高","偏移量","面积","材质","类型名"];
 	$scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质"];
 	$scope.quantityTitlesFind=["专业","楼栋号","楼层号","户型"];
@@ -75,6 +93,7 @@ function ProjectController($scope,ProjectService) {
 	var video = "";
 	var question="";
 	var paper="";
+	
 	/////按问题类型搜索
 	$scope.setQuestionOfType = function(type,flag){
 		$scope.questionType=type;
@@ -301,6 +320,7 @@ function ProjectController($scope,ProjectService) {
 	      $scope.findProjectInfo=result.data;
 	      $scope.projectid=projectId;
 	      document.getElementById("projectInfoHtml").style.display = 'block';
+	      document.getElementById("projectDetail_head").style.display = "block";
 	      document.getElementById("containers").style.display = 'none';
 	      document.getElementById("include_header").style.display = 'none';
 	      $scope.projectTitle="更新项目";
@@ -334,6 +354,7 @@ function ProjectController($scope,ProjectService) {
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
 		      $scope.projectPage($scope.totalPage,$scope.currentPage);
+		      
 		  });
 	  }
 	  
@@ -371,7 +392,7 @@ function ProjectController($scope,ProjectService) {
 	 $scope.deleteVideo = function(projectVideoId,fileId){
 			ProjectService.deleteVideo(projectVideoId,fileId).then(function(result){
 			       $scope.deleteProjectVideoInfo=result.data;
-			       $scope.getProjectVideoList(pageSize,pageIndex,video);
+			       $scope.getProjectVideoList(10,1,video);
 			    });
 	 };
 	 
@@ -379,7 +400,55 @@ function ProjectController($scope,ProjectService) {
 	 /////增加项目
 	 $scope.addProjectByAdmin = function(){
 		 if($scope.projectTitle=="增加项目"){
+
 			 var formData = new FormData();
+			 var i=0;
+			 ////////////////////////////////
+			 if($scope.findProjectInfo.name==null || $scope.findProjectInfo.name==undefined){
+				 alert($scope.projectDetailsInfo[0]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.num==null || $scope.findProjectInfo.num==undefined){
+				 alert($scope.projectDetailsInfo[1]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.constructionUnit==null || $scope.findProjectInfo.constructionUnit==undefined){
+				 alert($scope.projectDetailsInfo[2]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.leader==null || $scope.findProjectInfo.leader==undefined){
+				 alert($scope.projectDetailsInfo[3]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.place==null || $scope.findProjectInfo.place==undefined){
+				 alert($scope.projectDetailsInfo[4]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.buildingUnit==null || $scope.findProjectInfo.buildingUnit==undefined){
+				 alert($scope.projectDetailsInfo[5]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.designUnit==null || $scope.findProjectInfo.designUnit==undefined){
+				 alert($scope.projectDetailsInfo[6]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.startDate==null || $scope.findProjectInfo.startDate==undefined){
+				 alert($scope.projectDetailsInfo[7]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.phase==null || $scope.findProjectInfo.phase==undefined){
+				 alert($scope.projectDetailsInfo[8]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.version==null || $scope.findProjectInfo.version==undefined){
+				 alert($scope.projectDetailsInfo[9]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.description==null || $scope.findProjectInfo.description==undefined){
+				 alert($scope.projectDetailsInfo[10]+"不能为空");
+				 return ;
+			 }
+			///////////////////////////
 			 for (var key in $scope.findProjectInfo) {
 				   if($scope.findProjectInfo[key] != null) {
 					   formData.append(key, $scope.findProjectInfo[key]);
@@ -390,22 +459,76 @@ function ProjectController($scope,ProjectService) {
 			 } else {
 				 formData.append('modelFile',$scope.modelFiles);
 			 }
-			 if($scope.picFiles == undefined || $scope.picFiles == null) {
+			 if(projectPicss == undefined || projectPicss == null) {
 				 formData.append('picFile',null);
 			 } else {
-				 formData.append('picFile',$scope.picFiles);
+				 formData.append('picFile',projectPicss);
 			 }
 			 ProjectService.addProjectByAdmin(formData,token).then(function(result){
 			       $scope.addProjectByAdminInfo=result.data; 
 			       $scope.projectid=result.data.id;
 			       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
+			       document.getElementById("containers").style.display = 'none';
+				   document.getElementById("include_header").style.display = 'none';
+				   document.getElementById("showId").style.display = 'none';
 			       document.getElementById("projectItemInfoAdd").style.display = 'block';
+			       document.getElementById("picFile").value="";
+			       
+			       document.getElementById("projectDetail_head").style.display = "none";
 			    });
 		 }
 		 if($scope.projectTitle=="更新项目")
 		{
 			 
 			 var formData = new FormData();
+			 //////////////////
+			 if($scope.findProjectInfo.name==null || $scope.findProjectInfo.name==undefined){
+				 alert($scope.projectDetailsInfo[0]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.num==null || $scope.findProjectInfo.num==undefined){
+				 alert($scope.projectDetailsInfo[1]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.constructionUnit==null || $scope.findProjectInfo.constructionUnit==undefined){
+				 alert($scope.projectDetailsInfo[2]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.leader==null || $scope.findProjectInfo.leader==undefined){
+				 alert($scope.projectDetailsInfo[3]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.place==null || $scope.findProjectInfo.place==undefined){
+				 alert($scope.projectDetailsInfo[4]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.buildingUnit==null || $scope.findProjectInfo.buildingUnit==undefined){
+				 alert($scope.projectDetailsInfo[5]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.designUnit==null || $scope.findProjectInfo.designUnit==undefined){
+				 alert($scope.projectDetailsInfo[6]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.startDate==null || $scope.findProjectInfo.startDate==undefined){
+				 alert($scope.projectDetailsInfo[7]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.phase==null || $scope.findProjectInfo.phase==undefined){
+				 alert($scope.projectDetailsInfo[8]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.version==null || $scope.findProjectInfo.version==undefined){
+				 alert($scope.projectDetailsInfo[9]+"不能为空");
+				 return ;
+			 }
+			 if($scope.findProjectInfo.description==null || $scope.findProjectInfo.description==undefined){
+				 alert($scope.projectDetailsInfo[10]+"不能为空");
+				 return ;
+			 }else if($scope.findProjectInfo.description.length>1000){
+				 alert($scope.projectDetailsInfo[10]+"最多1000字");
+			 }
+			 ///////////////////////////////
 			 for (var key in $scope.findProjectInfo) {
 				   if($scope.findProjectInfo[key] != null) {
 					   formData.append(key, $scope.findProjectInfo[key]);
@@ -416,16 +539,19 @@ function ProjectController($scope,ProjectService) {
 			 } else {
 				 formData.append('modelFile',$scope.modelFiles);
 			 }
-			 if($scope.picFiles == undefined || $scope.picFiles == null) {
+			 //var picfile=document.getElementById("picFile").files[0];
+			 if(projectPicss == undefined || projectPicss == null) {
 				 formData.append('picFile',null);
 			 } else {
-				 formData.append('picFile',$scope.picFiles);
+				 formData.append('picFile',projectPicss);
 			 }
 			 ProjectService.updateProject(formData,token).then(function(result){
 				 
 			       $scope.updateProjectInfo=result.data;
-			       document.getElementById("projectItemInfoAdd").style.display = 'block';
+			       //document.getElementById("projectItemInfoAdd").style.display = 'block';
 			       $scope.getProjectList(pageSize,1,$scope.ProjectTofind);
+			       document.getElementById("showId").style.display = 'none';
+			       document.getElementById("picFile").value="";
 			    });
 		}
 	 }
@@ -1034,6 +1160,7 @@ function ProjectController($scope,ProjectService) {
 			 ProjectService.uploadPaperFile(formData,building_val.value,floor_val.value,$scope.projectid).then(function(result){
 				       $scope.uploadPaperFile=result.data;	 
 				       document.getElementById("projectVideoInfoAdd").style.display = 'block';
+				       document.getElementById("containers").style.display = 'none';
 				    }); 
 		 }else{
 			 alert("请输入图纸对应的楼栋号和楼层号！")
@@ -1140,5 +1267,54 @@ function ProjectController($scope,ProjectService) {
 			     });
 				
 			 }
+	     }
+	     //////////////交底上传
+	     $scope.importVideo = function(){
+	    	 var file="";
+	    	 file=document.getElementById("video_import").files;
+	    	 if(file!==null && file.length>0){
+				 var formData = new FormData();
+				 for(var i = 0; i < file.length;i++) {
+					 formData.append("fileList",file[i]);
+					 if($scope.fileTypes!=""){
+						 formData.append("videoTypeList",$scope.fileTypes);
+					 }else{
+						 formData.append("videoTypeList",3);
+					 }
+				 }
+				 if($scope.videoTypes!=""){
+					 formData.append("professionType",$scope.videoTypes);
+				 }else{
+					 formData.append("videoType",0);
+				 }
+				 if(videoBuildingNums!=""){
+					 formData.append("buildingNum",videoBuildingNums);
+				 }else{
+					 formData.append("buildingNum",6);
+				 }
+				 
+				 formData.append("videoType",0);
+				 ProjectService.uploadVideo(formData,$scope.findProjectInfo.id).then(function(result){
+					       $scope.uploadVideos=result.data;	 
+					       var video=null;
+						   $scope.getProjectVideoList(pageSize,1,video);
+			     });
+				
+			 }
+	     }
+	     $scope.set_buildingNum = function(num){
+	    	 videoBuildingNums=num;
+	     }
+	     $scope.setVideoType = function(index){
+	    	 $scope.videoTypes=index.videoTypes;
+	     }
+	     $scope.setFileType = function(index){
+	    	 $scope.fileTypes=index.videoFiles;
+	     }
+	     //////返回项目列表按钮
+	     $scope.returnProjects = function(){
+	    	 document.getElementById("projectInfoHtml").style.display = 'none';
+		     document.getElementById("containers").style.display = 'block';
+		     document.getElementById("include_header").style.display = 'block';
 	     }
 }

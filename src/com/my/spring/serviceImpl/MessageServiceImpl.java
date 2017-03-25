@@ -226,16 +226,62 @@ public class MessageServiceImpl implements MessageService {
         return dataWrapper;
 	}
 	@Override
-	public DataWrapper<List<Message>> getMessageListByQuestionId(Long questionId,String token) {
-		DataWrapper<List<Message>> dataWrapper = new DataWrapper<List<Message>>();
+	public DataWrapper<List<MessagePojo>> getMessageListByQuestionId(Long questionId,String token) {
+		DataWrapper<List<MessagePojo>> dataWrapper = new DataWrapper<List<MessagePojo>>();
+		DataWrapper<List<Message>> dataWrappers = new DataWrapper<List<Message>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			if(questionId!=null){
-				if(messageDao.getMessageListByUserId(questionId).getData()==null ||
-						messageDao.getMessageListByUserId(questionId).getData().size()<=0) 
+			if(questionId!=null)
+			{
+				dataWrappers=messageDao.getMessageListByQuestionId(questionId);
+				if(dataWrappers.getData()==null || dataWrappers.getData().size()<=0) 
 		            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-				else
-					return messageDao.getMessageListByUserId(questionId);
+				else{
+					List<MessagePojo> messagePojoList = new ArrayList<MessagePojo>();
+					for(int i=0;i<dataWrappers.getData().size();i++)
+					{
+						MessagePojo messagePojo =new MessagePojo();
+						messagePojo.setContent(dataWrappers.getData().get(i).getContent());
+						messagePojo.setMessageDate(dataWrappers.getData().get(i).getMessageDate());
+						messagePojo.setQuestionId(dataWrappers.getData().get(i).getQuestionId());
+						messagePojo.setId(dataWrappers.getData().get(i).getId());
+						if(dataWrappers.getData().get(i).getUserId()!=null)
+						{
+							messagePojo.setUserId(dataWrappers.getData().get(i).getUserId());
+							User user= new User();
+							user=userDao.getById(dataWrappers.getData().get(i).getUserId());
+							if(user.getUserIcon()!=null)
+							{
+								Files files=fileDao.getById(user.getUserIcon());
+								if(files.getUrl()!=null)
+								{
+									messagePojo.setUserIconUrl(files.getUrl());
+								}
+							}
+							if(user!=null)
+							{
+								messagePojo.setUserName(user.getUserName());
+							}
+							
+						}
+						if(messagePojo!=null)
+						{
+							messagePojoList.add(messagePojo);
+						}
+						if(messagePojoList!=null && messagePojoList.size()>0)
+						{
+							dataWrapper.setData(messagePojoList);
+							dataWrapper.setTotalNumber(dataWrappers.getTotalNumber());
+							dataWrapper.setCurrentPage(dataWrappers.getCurrentPage());
+							dataWrapper.setTotalPage(dataWrappers.getTotalPage());
+							dataWrapper.setNumberPerPage(dataWrappers.getNumberPerPage());
+						}
+						else
+						{
+							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						}
+					}
+				}
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 			}

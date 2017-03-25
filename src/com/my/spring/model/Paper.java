@@ -18,7 +18,7 @@ public class Paper {
 	private Integer professionType;//////专业类型：0 电气 1 暖通 2给排水 3 消防 4建筑 
 	private Long fileId;
 	private String originName;
-	
+	private Long size;///图纸文件大小
 	
 	@Basic
     @Column(name = "origin_name")
@@ -27,6 +27,14 @@ public class Paper {
 	}
 	public void setOriginName(String originName) {
 		this.originName = originName;
+	}
+	@Basic
+    @Column(name = "size")
+	public Long getSize() {
+		return size;
+	}
+	public void setSize(Long size) {
+		this.size = size;
 	}
 	@Id
     @GeneratedValue

@@ -3,6 +3,8 @@
 <html lang="en"  ng-app="Demo">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <!-- -->
 	<script src="page/project/scripts/utils/cookie.js"></script>
 	<script src="page/project/scripts/utils/para.js"></script>
@@ -15,6 +17,7 @@
     <script src="page/common/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 	<script src="page/common/jquery/jquery.circliful.min.js"></script>
 	<script src="page/common/jquery/jquery.circliful.js"></script>
+    <script src="page/common/layer/layer.js"></script>
 <!--angular-->
     <script src="page/common/angular/angular.js"></script>
     <script src="page/common/angular/angular-route.js"></script>
@@ -26,6 +29,9 @@
     <link href="page/project/css/projectDetail.css" rel="stylesheet" />
     <link href="page/project/css/questionDetail.css" rel="stylesheet" />
     <link href="page/project/css/jquery.circliful.css" rel="stylesheet">
+    <link href="page/project/css/dialog.css" rel="stylesheet">
+    
+  	
 <!-- app.js -->
     <script src="page/project/scripts/app.js"></script>
 <!-- controller.js -->
@@ -49,5 +55,6 @@
 <div ng-include="'page/project/html/user.html'" ng-if="currentPath == 'userList'" style="position:relative; z-index:0;" ></div>
 <div ng-include="'page/project/html/projectList.html'" ng-if="currentPath == 'projectList'" style="position:relative; z-index:0;" id="projectListHtml"></div>
 <div ng-include="'page/project/html/projectQuestionList.html'" ng-if="currentPath == 'projectQuestionList'" style="position:relative; z-index:0;" id="questionListHtml"></div>
+<div ng-include="'page/project/html/itemGetList.html'" ng-if="currentPath == 'itemGetList'" style="position:relative; z-index:0;" id="itemGetListHtml"></div>
 </body>
 </html>

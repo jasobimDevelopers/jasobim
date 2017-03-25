@@ -1,0 +1,66 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin: 0px;
+	padding: 0px;
+}
+body{
+	margin:0 auto;
+	padding:0;
+	background-color:#fff;
+}
+#bodys{
+	margin:0 auto;
+	height:900px;
+	width:1300px;
+	
+}
+
+
+#head_reset{
+	text-align:center;
+	width:100%;
+	height:200px;
+}
+#content{
+	width:100%;
+	margin:0 auto;
+	height:700px;
+}
+#one,#two,#three,#four{
+	height:100px;
+	margin:0 auto;
+	padding-left:403px;
+}
+.inputtext{
+	font-size:24px;
+	font-family:微软雅黑;
+	
+}
+#one div,#two div,#three div,#four div{
+	float:left;
+}
+
+.textName{
+	width:200px;
+	height:95px;
+	text-align:right;
+}
+.textContent{
+	width:400px;
+	height:95px;
+	text-align:left;
+	
+}
+.textContent input{
+	height:35px;
+	width:200px;
+}
+#five input{
+	height:50px;
+	width:200px;
+	font-size:28px;
+}
+#five{
+	padding-left:535px;
+}

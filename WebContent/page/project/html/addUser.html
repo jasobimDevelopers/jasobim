@@ -1,4 +1,4 @@
-
+<div id="gray"></div>
 <div style="width:1920px;height:1048px;margin:0 auto;" class="allUser">
 	<div id="addcontent" style="margin-top:200px;">
         <div id="addhead">
@@ -20,6 +20,9 @@
         		<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;密码:</span><input type="password" ng-model="findUserInfo.password" id="inputpassword" />
             </div>
             <div class="addinput">
+        		<span>密码确认:</span><input type="password"  id="inputpasswords" />
+            </div>
+            <div class="addinput">
             	<span>真实姓名:</span><input type="text"  id="inputnick" ng-model="findUserInfo.realName"/>
             </div>
             <div class="addinput">
@@ -28,12 +31,92 @@
             <div class="addinput">
             	<span>手机号码:</span><input id="tel" type="tel" name="tel" ng-model="findUserInfo.tel" />
             </div>
+            <div class="addinput"  id="mycheckBox">
+            	<div><span>所属项目:</span></div>
+            	<div id="checkBox">
+		            <table cellpadding="0" cellspacing="0" style="border:none;">
+						<tr ng-repeat="enum in projectLists">
+						   	<td class="title">{{enum.name}}</td>
+					       	<td><input type="checkbox" id="my" ng-click="choice(enum.id)"/></td>
+					    </tr>
+					</table>
+				</div>
+			</div>
             <div class="addinput">
         		<span>用户角色:</span>
         		<select type="text" ng-model="findUserInfo.userType" id="inputrole">
-					<option value="0"><span>超级管理员</span></option>
-					<option value="1"><span>管理员</span></option>
+					<option value="0"><span>管理员</span></option>
+					<option value="1"><span>普通用户</span></option>
+					<option value="2"><span>投资方</span></option>
+					<option value="3"><span>项目人员/项目负责人</span></option>
         		</select>
+        		
+        	</div>
+        	<div class="addinput">
+        		<span>用户职称:</span><input type="text"  id="inputUserType" ng-model="findUserInfo.workName"/>
+        	</div>
+        	<div class="addinput">
+        		<button class="tc">点击选择用户职位</button>
+				
+				<div class="popup" id="popup">
+					<div class="top_nav" id='top_nav'>
+						<div align="center">
+							<span>角色列表</span>
+							<a class="guanbi"></a>
+						</div>
+					</div>
+					<div class="min">
+						<div id="role1">
+							<div class="rolename">
+								<div class="rolename_content">
+									<span>项目员工</span>
+								</div>
+							</div>
+							<div class="rolelist">
+								<div class="checkBoxs">
+						             <div ng-repeat="enum in roleList1" class="rolecontents">
+											<span>{{enum.name}}</span>
+											<input type="checkbox" id="mys"  ng-click="setUserType(enum.name)"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="role2">
+							<div class="rolename">
+								<div class="rolename_content">
+									<span>公司内部员工</span>
+								</div>
+							</div>
+							<div class="rolelist">
+								<div class="checkBoxs">
+						            <div ng-repeat="enum in roleList3" class="rolecontents">
+											<span>{{enum.name}}</span>
+											<input type="checkbox" id="my1"  ng-click="setUserType(enum.name)"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="role3">
+							<div class="rolename">
+								<div class="rolename_content">
+									<span>其他</span>
+								</div>
+							</div>
+							<div class="rolelist">
+								<div class="checkBoxs">
+										<div ng-repeat="enum in roleList" class="rolecontents">
+											<span>{{enum.name}}</span>
+											<input type="checkbox" id="my2" ng-click="setUserType(enum.name)"/>
+										</div>
+								</div>
+							</div>
+						</div>
+						<div id="submitarea">
+							<input class="btn btn-default" type="button" ng-click="submitUserType()" value="确定"/>
+							<input class="btn btn-default" type="button" ng-click="resetUserType()"  value="重置"/>
+						</div>
+					</div>
+				</div>
             </div>
             <div class="addinput">
             	<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;头像上传:</span>
@@ -42,8 +125,62 @@
             </div>
             <div id="addbutton" style="margin-top:86px;">
             	<input class="btn btn-default" type="button" ng-click="addUserByAdmin()" value="确定" />
-                <input type="button" ng-click="resetUser()" class="btn btn-default" value="重置" />
+                <input type="button" ng-click="resetUser()" class="btn btn-default"  value="重置" />
             </div>
         </div>
 	</div>
 </div>
+<script type="text/javascript">
+	//窗口效果
+	//点击登录class为tc 显示
+	$(".tc").click(function(){
+		$("#gray").show();
+		$("#popup").show();//查找ID为popup的DIV show()显示#gray
+		tc_center();
+	});
+	
+	//点击关闭按钮
+	$("a.guanbi").click(function(){
+		$("#gray").hide();
+		$("#popup").hide();//查找ID为popup的DIV hide()隐藏
+	});
+
+	//窗口水平居中
+	$(window).resize(function(){
+		tc_center();
+	});
+
+	function tc_center(){
+		var _top=($(window).height()-$(".popup").height())/2;
+		var _left=($(window).width()-$(".popup").width())/2;
+		
+		$(".popup").css({top:_top,left:_left});
+	}	
+	</script>
+
+	<script type="text/javascript">
+	$(document).ready(function(){ 
+
+		$(".top_nav").mousedown(function(e){ 
+			$(this).css("cursor","move");//改变鼠标指针的形状 
+			var offset = $(this).offset();//DIV在页面的位置 
+			var x = e.pageX - offset.left;//获得鼠标指针离DIV元素左边界的距离 
+			var y = e.pageY - offset.top;//获得鼠标指针离DIV元素上边界的距离 
+			$(document).bind("mousemove",function(ev){ //绑定鼠标的移动事件，因为光标在DIV元素外面也要有效果，所以要用doucment的事件，而不用DIV元素的事件 
+			
+				$(".popup").stop();//加上这个之后 
+				
+				var _x = ev.pageX - x;//获得X轴方向移动的值 
+				var _y = ev.pageY - y;//获得Y轴方向移动的值 
+			
+				$(".popup").animate({left:_x+"px",top:_y+"px"},10); 
+			}); 
+
+		}); 
+
+		$(document).mouseup(function() { 
+			$(".popup").css("cursor","default"); 
+			$(this).unbind("mousemove"); 
+		});
+	}) 
+</script>

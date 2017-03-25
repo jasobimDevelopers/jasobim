@@ -50,7 +50,7 @@ function login(){
 	var inputPassword=hex_md5($("#password").val());
 	//var inputPassword=$("#password").val();
 	 $.ajax({
-         type: "GET",
+         type: "POST",
          url: "api/user/login",
          data: {username:$("#username").val(), password:inputPassword},
          dataType: "json",

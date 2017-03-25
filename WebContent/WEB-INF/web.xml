@@ -83,6 +83,10 @@
     <servlet-name>default</servlet-name>
     <url-pattern>*.xls</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.unity3d</url-pattern>
+  </servlet-mapping>
   <servlet>
     <servlet-name>dispatcher</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

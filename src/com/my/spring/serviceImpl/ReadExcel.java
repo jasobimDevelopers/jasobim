@@ -259,20 +259,36 @@ public class ReadExcel {
                 	   }
                    }else if(c==3){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   item.setTypeName(cell.getStringCellValue());//构件类型名称
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   item.setTypeName(str);//构件类型名称
                    }else if(c==4){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   item.setServiceType(cell.getStringCellValue());//构件的设备类型
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   item.setServiceType(str);//构件的设备类型
                    }else if(c==5){
                 	   item.setBottomElevation(cell.getNumericCellValue());//构件的底部标高
                    }else if(c==6){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   item.setSize(cell.getStringCellValue());//构件的尺寸
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   item.setSize(str);//构件的尺寸
                    }else if(c==7){
                 	   item.setLength(cell.getNumericCellValue());//构件的长度
                    }else if(c==8){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   item.setFamilyAndType(cell.getStringCellValue());//构件的类型
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   item.setFamilyAndType(str);//构件的类型
                    }else if(c==9){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   item.setLevel(cell.getStringCellValue());//构件标高
@@ -282,10 +298,18 @@ public class ReadExcel {
                 	   item.setArea(cell.getNumericCellValue());//构件面积
                    }else if(c==12){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   item.setMaterial(cell.getStringCellValue());//构件材质
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   item.setMaterial(str);//构件材质
                    }else if(c==13){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   item.setSystemType(cell.getStringCellValue());//构件的系统类型
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   item.setSystemType(str);//构件的系统类型
                    }
                }
            }

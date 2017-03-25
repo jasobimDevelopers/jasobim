@@ -5,7 +5,7 @@
 	<artifactId>jasobim</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>testJasobim</name>
+	<name>jasobim</name>
 
 <!-- ////////////////////////////////////////////////////////////// -->
 	 <dependencyManagement>
@@ -629,7 +629,7 @@
 		
 	</properties>
 	<build>
-		<finalName>testJasobim</finalName>
+		<finalName>jasobim</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>

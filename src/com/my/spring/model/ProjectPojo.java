@@ -14,12 +14,17 @@ public class ProjectPojo {
     private String buildingUnit;
     private String picUrl;
     private String modelUrl;
+    private String picName;///项目图片文件名
+    private String modelName;///项目模型文件名
     private String place;//施工地點
     private String description;//項目工程描述
     private String designUnit;//设计单位
     private String version;//版本
     private String startDate;//施工時間
     private String phase;//施工周期
+    private String state;//状态
+    private Integer isIos;///1.ios 0.安卓
+    private String modelPart;//all.整体	rf.顶层     standard.标准层     B1.地下一层     B2.地下二层      B3.地下三层
 	public Long getId() {
 		return id;
 	}
@@ -110,4 +115,34 @@ public class ProjectPojo {
 	public ProjectPojo(Long id,){
 		
 	}*/
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public String getPicName() {
+		return picName;
+	}
+	public void setPicName(String picName) {
+		this.picName = picName;
+	}
+	public String getModelName() {
+		return modelName;
+	}
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+	public Integer getIsIos() {
+		return isIos;
+	}
+	public void setIsIos(Integer isIos) {
+		this.isIos = isIos;
+	}
+	public String getModelPart() {
+		return modelPart;
+	}
+	public void setModelPart(String modelPart) {
+		this.modelPart = modelPart;
+	}
 }

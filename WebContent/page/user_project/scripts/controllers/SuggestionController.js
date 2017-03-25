@@ -4,7 +4,12 @@ function SuggestionController($scope,SuggestionService) {
 	$scope.resetSuggestion = function(){
 		document.getElementById("suggestContent").value="";
 	}
-	$scope.addSuggestion = function(){
-		alert("提交成功！谢谢您的意见,我们会尽快改进！")
+	$scope.submitMessage = function(){
+		var content=document.getElementById("suggestContent").value;
+		SuggestionService.addFeedBack(content).then(function(result)
+			{
+			$scope.feedBackInfo=result;
+		});
+		
 	}
 }

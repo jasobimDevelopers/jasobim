@@ -19,13 +19,40 @@ function showUserIcon() {
 function UserController($scope,UserService) {
 	
   console.log("载入UserController");
- 
+  
   $scope.currentPage = 1;
   $scope.userTofind = {};
+  $scope.projectLists={};
+  var project={};
+  var pageSize=10;
+  var pageIndex=1;
+  $scope.ProjectTofind={};
+  
   var user="";
+  var projectNums=null;
+  var test="";
+  var temp=1;
   $scope.findUserInfo = {};
   $scope.userTitles=["序号","用户名","真实姓名","头像","权限","邮箱","电话","注册日期","操作"];
-  $scope.roleList=[{name:"超级管理员"},{name:"管理员"}];
+  ///////部门名称
+  $scope.roleList=[{name:"管理员"},{name:"普通用户"},{name:"投资方"},{name:"项目人员/项目负责人"}];
+  /////项目人员职称
+  $scope.roleList1=[{name:"技术员"},{name:"材料员"},{name:"质量员"},{name:"安全员"},{name:"施工员"},{name:"项目负责人"}];
+  /////公司人员职称
+  $scope.roleList2=[{name:"质安科"},{name:"生产科"},{name:"技术科"},{name:"预算科"},{name:"材料科"},{name:"总经理"},{name:"副总经理"}];
+  $scope.roleList3=[{name:"技术科长"},{name:"技术主管"},{name:"技术员"},{name:"技术员"},{name:"预算主管"},
+                    {name:"总经理"},{name:"副总经理"},{name:"质安科长"},{name:"预算员"},
+                    {name:"预算科长"},{name:"生产经理"},{name:"市场助理"},{name:"质量员"}];
+ 
+  $scope.choice = function(ss){
+	  test=ss;
+	  if(projectNums!=null){
+		  projectNums=projectNums+","+ss;
+	  }else{
+		  projectNums=projectNums+ss;
+	  }
+	  
+  };
   ///////分页获取用户列表
   $scope.getUserList = function(pageSize,pageIndex,user) {
 	  UserService.getUserList(pageSize,pageIndex,user).then(function (result){
@@ -57,6 +84,9 @@ function UserController($scope,UserService) {
 	  var widths=document.body.offsetWidth+"px";
 	  $(".allUser").css("width",widths);
 	  $scope.findUserInfo = {};
+	  //////初始化获取项目列表
+	  $scope.getProjectLists(pageSize,-1,project);
+
 	  document.getElementById("addUserHtml").style.display = 'block';
       $scope.title="增加用户";
   }
@@ -75,6 +105,9 @@ function UserController($scope,UserService) {
  $scope.userChangeClick = function(userId){
     UserService.findUser(userId,token).then(function(result){
       $scope.findUserInfo=result.data;
+      //////初始化获取项目列表
+      $scope.getProjectLists(pageSize,-1,project);
+      document.getElementById("inputpasswords").value = $scope.findUserInfo.password;
       document.getElementById("addUserHtml").style.display = 'block';
       $scope.title="更新用户";
     });
@@ -128,19 +161,19 @@ function UserController($scope,UserService) {
 	}
  /////增加用户
  $scope.addUserByAdmin = function(){
+	 
 	 if($scope.title=="增加用户"){
-		 document.getElementById('showId').src = "";
-		 document.getElementById('inputicon').value="";
-		 findUserInfo = {};
-		 if(!/image\/\w+/.test(document.querySelector('input[type=file]').files[0].type)){ 
-				 document.getElementById('showId').src = "";
-				 document.getElementById('inputicon').value="";
-				 alert("文件必须为图片！");
-				 return false; 
-		 }else{
-			 var userIcons = document.querySelector('input[type=file]').files[0];
+		 var pass2=document.getElementById("inputpasswords").value;
+		 if(pass2!=$scope.findUserInfo.password){
+			 alert("两次的密码不一致！");
+			 return;
 		 }
+		 findUserInfo = {};
+	     var userIcons = document.querySelector('input[type=file]').files[0];
 		 var formDatas=new FormData();
+		 var workname=document.getElementById("inputUserType").value;
+		 formDatas.append('workName',workname);
+		 formDatas.append('projectList',projectNums);
 		 formDatas.append('file',userIcons);
 		 if(checkMobile()==true )
 		 {
@@ -155,6 +188,9 @@ function UserController($scope,UserService) {
 				       $scope.addUserByAdminInfo=result.data;
 				       $scope.getUserList(pageSize,1,$scope.userTofind);
 				       document.getElementById("addUserHtml").style.display = 'none';
+				       document.getElementById("inputpasswords").value="";
+					   document.getElementById("inputUserType").value="";
+					   projectNums="";
 				    });
 			 }
 			
@@ -168,14 +204,15 @@ function UserController($scope,UserService) {
 		 var userIcon = document.querySelector('input[type=file]').files[0];
 		 //var test=document.getElementById("inputicon").value;
 		 formData.append('file',userIcon);
+		 formData.append('projectList',projectNums);
 		 formData.append('userName',$scope.findUserInfo.userName);
 		 formData.append('realName',$scope.findUserInfo.realName);
 		 formData.append('email',$scope.findUserInfo.email);
+		 formData.append('password',$scope.findUserInfo.password);
 		 formData.append('tel',$scope.findUserInfo.tel);
-		 if($scope.findUserInfo.userType != null && ($scope.findUserInfo.userType==0 ||$scope.findUserInfo.userType ==1)) {
-			 formData.append('userType',$scope.findUserInfo.userType);
-		 }
-		 
+		 var workname=document.getElementById("inputUserType").value;
+		 formData.append('workName',workname);
+		 formData.append('userType',$scope.findUserInfo.userType);
 		 UserService.updateUser(formData,token).then(function(result){
 		       $scope.updateUserInfo=result.data;
 		       $scope.getUserList(pageSize,1,$scope.userTofind);
@@ -184,11 +221,44 @@ function UserController($scope,UserService) {
 	}
 	 
  }
+ ///////分页获取项目列表
+$scope.getProjectLists = function(pageSize,pageIndex,project) {
+	  UserService.getProjectLists(pageSize,pageIndex,project).then(function (result){
+	  	  $scope.projectLists = result.data;
+	  });
+  }
  ////////模糊查找用户
  $scope.find = function() {
 	 $scope.currentPage = 1;
 	 $scope.getUserList(pageSize,$scope.currentPage,$scope.userTofind);
  }
  $scope.getUserList(pageSize,$scope.currentPage,$scope.userTofind);
- 
+ var index="";
+ $scope.setUserType = function(userType,index){
+	 var fanxiBox = $(".min input:checkbox");
+	 if(userType=="投资方"){
+		 temp=2;
+	 }else if(userType=="超级管理员"){
+		 temp=0;
+	 }
+	 /*if(this.checked || this.checked=='checked'){
+
+	       fanxiBox.removeAttr("checked");
+	       //这里需注意jquery1.6以后必须用prop()方法
+	       //$(this).attr("checked",true);
+	       $(this).prop("checked", true);
+	     }*/
+	 document.getElementById("inputUserType").value=userType;
+ }
+//点击确定保存结果
+$scope.submitUserType = function(){
+	document.getElementById("gray").style.display = 'none';
+	document.getElementById("popup").style.display = 'none';
+};
+$scope.resetUserType = function(){
+	var fanxiBox = $(".min input:checkbox");
+	fanxiBox.prop("checked", false);
+	$scope.findUserInfo.userType="";
+};
+
 }

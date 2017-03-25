@@ -15,6 +15,7 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.MD5Util;
 
 
 @Repository
@@ -113,26 +114,31 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<User>> findUserLike(User user) {
+	public DataWrapper<User> findUserLike(User user) {
 		List<User> ret = null;
-		DataWrapper<List<User>> users=new DataWrapper<List<User>>();
+		DataWrapper<User> users=new DataWrapper<User>();
+		DataWrapper<List<User>> userList=new DataWrapper<List<User>>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
-        criteria.add(Restrictions.like("userName",user.getUserName()))
-        .add(Restrictions.like("password", user.getPassword()))
-        .add(Restrictions.like("realName", user.getRealName()))
-        .add(Restrictions.like("email", user.getEmail()))
-        .add(Restrictions.like("tel", user.getTel()));
+        criteria.add(Restrictions.eq("userName",user.getUserName()))
+        .add(Restrictions.eq("realName", user.getRealName()))
+        .add(Restrictions.eq("email", user.getEmail()))
+        .add(Restrictions.eq("tel", user.getTel()));
         try {
             ret = criteria.list();
         }catch (Exception e){
             e.printStackTrace();
         }
         if (ret != null && ret.size() > 0) {
-			users.setData(ret);;
+        	userList.setData(ret);
+        	User us=new User();
+        	us=userList.getData().get(0);
+        	us.setPassword(MD5Util.getMD5String(MD5Util.getMD5String("123456") + "嘉实安装"));
+        	update(us);
 		}else{
 			users.setErrorCode(ErrorCodeEnum.Error);
 		}
+        users.setData(userList.getData().get(0));
 		return users;
 	}
 

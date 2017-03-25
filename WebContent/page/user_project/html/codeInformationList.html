@@ -39,7 +39,7 @@
 		    	</div>
 		    	<div id="codebody">
 			       	<div class="paperCode" ng-repeat="paper in codePapers">
-			       		<div><a href="#"><img src="{{paper.url}}" width="117px" height="119px"/></a></div>
+			       		<div><a href="#"><img src="{{paper.url}}" width="117px" height="119px" onclick="showOneBig(this)"/></a></div>
 			       		<div><span>{{paper.originName}}</span></div>
 			       	</div>
 			       	
@@ -79,34 +79,52 @@
 		       </div>
 		       <div id="codeOfbody1">
 			       	<div class="videoCode">
-			       		<div><img src="page/user_project/images/anquan_shipin.png" width="117px" height="119px"/></div>
+			       		<div><img src="page/user_project/images/anquan_shipin.png" width="117px" height="119px" onclick="showOneBig(this)"/></div>
 			       		<div><span>视频：大型设备吊装施工工艺</span></div>
 			       	</div>
 			       	<div class="videoCode">
-			       		<div><img src="page/user_project/images/anquan_shipin1.png" width="117px" height="119px"/></div>
+			       		<div><img src="page/user_project/images/anquan_shipin1.png" width="117px" height="119px" onclick="showOneBig(this)"/></div>
 			       		<div><span>视频：防雷接地施工工艺</span></div>
 			       	</div>
 			       	<div class="videoCode">
-			       		<div><img src="page/user_project/images/anquan_shipin2.png" width="117px" height="119px"/></div>
+			       		<div><img src="page/user_project/images/anquan_shipin2.png" width="117px" height="119px" onclick="showOneBig(this)"/></div>
 			       		<div><span>视频：风管安装施工工艺</span></div>
 			       	</div>
 			       	<div class="videoCode">
-			       		<div><img src="page/user_project/images/1482193964.png" width="117px" height="119px"/></div>
+			       		<div><img src="page/user_project/images/1482193964.png" width="117px" height="119px" onclick="showOneBig(this)"/></div>
 			       		<div><span>文档：机电安装施工工艺图册(电气)</span></div>
 			       	</div>
 			       	<div class="videoCode">
-			       		<div><img src="page/user_project/images/1482193940.png" width="117px" height="119px"/></div>
+			       		<div><img src="page/user_project/images/1482193940.png" width="117px" height="119px" onclick="showOneBig(this)"/></div>
 			       		<div><span>文档：机电安装施工工艺图册(给排水)</span></div>
 			       	</div>
 			       	<div class="videoCode">
-			       		<div><img src="page/user_project/images/1482193929.png" width="117px" height="119px"/></div>
+			       		<div><img src="page/user_project/images/1482193929.png" width="117px" height="119px" onclick="showOneBig(this)"/></div>
 			       		<div><span>文档：机电安装施工工艺图册(暖通)</span></div>
 			       	</div>
 			       	<div class="videoCode">
-			       		<div><img src="page/user_project/images/1482193882.png" width="117px" height="119px"/></div>
+			       		<div><img src="page/user_project/images/1482193882.png" width="117px" height="119px" onclick="showOneBig(this)"/></div>
 			       		<div><span>文档：机电安装施工工艺图册(策划)</span></div>
 			       	</div>
 		       </div>
 		    </div>
         </div>
 	</div>
+<script>
+	function showOneBig(scope){
+		
+	layer.ready(function(){ 
+	  layer.open({
+  		type: 1,
+  		title: false,
+  		area: ['600px', '360px'],
+  		shadeClose: true, //点击遮罩关闭
+  		content: '<div style="background-size: 100% 100%;width:600px;height:360px;background-image: url(' +scope.src+')"/></div>'
+  	  });
+	});
+
+
+
+
+}
+</script>

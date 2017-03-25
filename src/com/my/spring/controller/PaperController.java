@@ -35,7 +35,7 @@ public class PaperController {
     	for(int i=0;i<fileList.length;i++){
     		dataWrapper=paperService.addPaper(paper, token, fileList[i], request);
     		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
-            	return dataWrapper;
+            	//return dataWrapper;
             }else{
             	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
             }
@@ -70,8 +70,9 @@ public class PaperController {
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute Paper paper,
-    		@RequestParam(value="token",required=true) String token){
-        return paperService.getPaperLists(projectId,token,pageIndex,pageSize,paper);
+    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="content",required=false) String content){
+        return paperService.getPaperLists(projectId,token,pageIndex,pageSize,paper,content);
     }
     @RequestMapping(value="/getPaperDetails/{paperId}")
     @ResponseBody

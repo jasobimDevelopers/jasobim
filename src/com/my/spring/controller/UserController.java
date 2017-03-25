@@ -47,23 +47,59 @@ public class UserController {
     		@RequestParam(value = "file", required = false) MultipartFile file,
     		@RequestParam(value="token",required=true) String token) {
 //		MultipartFile file=null;
-        return userService.addUser(user,token,file,request);
+         return userService.addUser(user,token,file,request);
     }
 	@RequestMapping(value="/findUserLike", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<List<User>> findUserLike(
+    public DataWrapper<User> findUserLike(
     		@ModelAttribute User user,
     		@RequestParam(value="token",required=true) String token) {
         return userService.findUserLike(user, token);
     }
 	
-	@RequestMapping(value="/login", method = RequestMethod.GET)
+	@RequestMapping(value="/login", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<UserPojo> Login(
     		HttpServletRequest request,
     		@RequestParam(value="username",required=true) String username,
     		@RequestParam(value="password",required=true) String password) {
 		DataWrapper<UserPojo> test=userService.login(username, password);
+		return test;
+    }
+	@RequestMapping(value="/findPass", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<User> FindPs(
+    		HttpServletRequest request,
+    		@RequestParam(value="userName",required=true) String userName,
+    		@RequestParam(value="realName",required=true) String realName,
+    		@RequestParam(value="tel",required=true) String tel,
+    		@RequestParam(value="email",required=true) String email) {
+		User user=new User();
+		if(userName!=null){
+			user.setUserName(userName);
+		}else{
+			return null;
+		}
+		if(email!=null){
+			user.setEmail(email);
+
+		}else{
+			return null;
+		}
+		if(realName!=null){
+			user.setRealName(realName);
+
+		}else{
+			return null;
+		}
+		if(tel!=null){
+			user.setTel(tel);
+
+		}else{
+			return null;
+		}
+		
+		DataWrapper<User> test=userService.FindPs(user);
 		return test;
     }
 	

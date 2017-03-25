@@ -561,4 +561,56 @@
                  });
              return deferred.promise;
          };
+         /////////////上传交底信息
+         this.uploadVideoFile = function(fileArray,professionType,projectId) {
+            var deferred = $q.defer();
+            console.log("上传图纸数据");
+            $http.post('api/video/admin/addVideo?token='+getCookie('token')+"&professionType="+professionType+"&projectId="+projectId,fileArray,
+           		 {
+           	 		headers: {'Content-Type':undefined},
+           	 		transformRequest: angular.identity 
+           		 })
+                .success(function(data, status, headers, config){
+
+                    if(data.callStatus == "SUCCEED"){
+                        deferred.resolve(data);
+                        alert("上传交底信息成功")
+                        self.uploadVideoInfo = data;
+                    
+                    }else{
+                        alert("数据添加失败("+data.errorCode+")");
+                    }
+                    
+                })
+                .error(function(data, status, headers, config){
+                    deferred.reject(data);
+                });
+            	return deferred.promise;
+          };
+      /////交底上传
+          this.uploadVideo = function(formData,projectId){
+          	 var deferred = $q.defer();
+              console.log("上传交底数据");
+              $http.post('api/video/admin/addVideo?token='+getCookie('token')+"&projectId="+projectId,formData,
+             		 {
+             	 		headers: {'Content-Type':undefined},
+             	 		transformRequest: angular.identity 
+             		 })
+                  .success(function(data, status, headers, config){
+
+                      if(data.callStatus == "SUCCEED"){
+                          deferred.resolve(data);
+                          alert("上传交底文档信息成功！")
+                          self.uploadVideoInfo = data;
+                      
+                      }else{
+                          alert("数据添加失败("+data.errorCode+")");
+                      }
+                      
+                  })
+                  .error(function(data, status, headers, config){
+                      deferred.reject(data);
+                  });
+              return deferred.promise;
+          };
   });

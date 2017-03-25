@@ -13,12 +13,14 @@ public class User {
     private String userName;
     private String password;
     private String realName;
-    private Integer userType;
+    private Integer userType;//0:超级管理员、1:普通管理员、2:安全员、3:质量员、4:施工员、5:资料员、6:材料员、7:Bim工程师
+   						///8:技术员、9:预算员、10:项目负责人
+    private String	workName;///职位名称
     private String email;
     private String tel;
     private Long userIcon;
     private Date registerDate;
-    
+    private String projectList;
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -30,12 +32,31 @@ public class User {
 	}
 	
 	@Basic
+    @Column(name = "project_list")
+	public String getProjectList() {
+		return projectList;
+	}
+	public void setProjectList(String projectList) {
+		this.projectList = projectList;
+	}
+	
+	@Basic
     @Column(name = "user_name")
 	public String getUserName() {
 		return userName;
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+	
+
+	@Basic
+    @Column(name = "work_name")
+	public String getWorkName() {
+		return workName;
+	}
+	public void setWorkName(String workName) {
+		this.workName = workName;
 	}
 	
 	@Basic

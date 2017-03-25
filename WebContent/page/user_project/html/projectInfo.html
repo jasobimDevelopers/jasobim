@@ -3,9 +3,10 @@
 		<div style="display:none"><span>{{projectTitle}}</span></div>
 		<div style="display:none" ng-model="findProjectInfo.id"></div>
 		<input type="hidden" ng-model="projectid"/>
-		<div class="bt_menu" ng-click="projectInfoChange(headerItem.name)" ng-repeat="headerItem in projectInfoHead"><span>{{headerItem.name}}</span></div>
+		<div class="bt_menu" ng-click="projectInfoChange(headerItem.name)" ng-repeat="headerItem in projectInfoHead" ><span>{{headerItem.name}}</span></div>
+		
 	</div>
-	
+	<a href=""><div id="returnProjectList" ng-click="returnProjects()"></div></a>
 
 	<div id="project_body">
 		<div ng-include="'page/user_project/html/projectSelfInfo.html'" style="display:block;position:absolute; z-index:1;" id="projectSelfInfoHtml"></div>

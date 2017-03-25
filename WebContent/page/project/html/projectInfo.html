@@ -1,9 +1,10 @@
 <div id="projectDetail">
-	<div id="projectDetail_head">
+	<div id="projectDetail_head" style="display:block">
 		<div style="display:none"><span>{{projectTitle}}</span></div>
 		<div style="display:none" ng-model="findProjectInfo.id"></div>
 		<input type="hidden" ng-model="projectid"/>
 		<div class="bt_menu" ng-click="projectInfoChange(headerItem.name)" ng-repeat="headerItem in projectInfoHead"><span>{{headerItem.name}}</span></div>
+		<div id="returnProjectList" class="bt_menu" ng-click="returnProjects()"><a href="">返回</a></div>
 	</div>
 	
 
@@ -15,4 +16,5 @@
 		<div ng-include="'page/project/html/projectVideoInfo.html'" style="display:none;position:absolute;  z-index:1;" id="projectVideoInfoHtml"></div>
 		<div ng-include="'page/project/html/projectQuestionInfo.html'" style="display:none;position:absolute; z-index:1;" id="projectQuestionInfo"></div>
 	</div>
+	
 </div>

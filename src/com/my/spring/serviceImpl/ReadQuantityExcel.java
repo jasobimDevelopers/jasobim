@@ -242,15 +242,26 @@ public class ReadQuantityExcel {
                    }else if(c==2){
                 	   ////工程量的类型名称
                 	   String temp=cell.getStringCellValue();
+                	   if(temp==null){
+                		   temp="";
+                	   }
                 	   quantity.setTypeName(temp);//工程量的名称
                    }else if(c==3){
                 	   //////工程量serviceType
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   quantity.setServiceType(cell.getStringCellValue());
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   quantity.setServiceType(str);
                    }else if(c==4){
                 	   /////工程量的size
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   quantity.setSize(cell.getStringCellValue());
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   quantity.setSize(str);
                    }else if(c==5){
                 	   /////工程量的value
                 	   double length=cell.getNumericCellValue();
@@ -261,7 +272,11 @@ public class ReadQuantityExcel {
                    }else if(c==6){
                 	   //////工程量的familyAndType
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   quantity.setFamilyAndType(cell.getStringCellValue());
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   quantity.setFamilyAndType(str);
                    }else if(c==7){
                 	   /////工程量的area
                 	   double area=cell.getNumericCellValue();
@@ -272,11 +287,19 @@ public class ReadQuantityExcel {
                    }else if(c==8){
                 	   /////工程量的材质
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   quantity.setMaterial(cell.getStringCellValue());
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   quantity.setMaterial(str);
                    }else if(c==9){
                 	   /////工程量的SystemType
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   quantity.setSystemType(cell.getStringCellValue());
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   quantity.setSystemType(str);
                    }else if(c==10){
                 	   //////工程量的构件个数
                 	   int num=0;

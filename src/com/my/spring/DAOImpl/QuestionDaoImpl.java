@@ -117,11 +117,21 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         if(projectId!=null){
             criteria.add(Restrictions.eq("projectId", question.getProjectId()));
         }
+        
         if(content!=null){
+        	String test = "";
+        	for(int i=0;i<content.length();i++){
+        		if(i==0){
+        			test=test+'%'+content.charAt(i)+'%';
+        		}else{
+        			test=test+content.charAt(i)+'%';
+        		}
+        		
+        	}
         	Disjunction dis = Restrictions.disjunction();        	
-        	dis.add(Restrictions.like("name", content,MatchMode.ANYWHERE));
+        	dis.add(Restrictions.like("name", test,MatchMode.ANYWHERE));
         	//dis.add(Restrictions.like("intro", content,MatchMode.ANYWHERE));
-        	dis.add(Restrictions.like("trades", content,MatchMode.ANYWHERE));
+        	dis.add(Restrictions.like("trades", test,MatchMode.ANYWHERE));
         	
         	if(question.getPriority()!=null) {
         		dis.add(Restrictions.eq("priority", question.getPriority()));
@@ -138,7 +148,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 			if(question.getState()!=null){
 				dis.add(Restrictions.eq("state", question.getState()));
 			}
-			criteria .add(dis);
+			criteria.add(dis);
         }else{
         	 if(question.getPriority()!=null){
              	criteria.add(Restrictions.eq("priority", question.getPriority()));

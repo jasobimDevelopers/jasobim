@@ -1,0 +1,65 @@
+<!DOCTYPE html> 
+<html lang="en"  ng-app="ItemApp"> 
+	<head> 
+	<meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+<!--jquery && bootstrap-->
+    <script src="common/jquery/jquery.js"></script>
+    <script src="common/jquery/jquery-1.11.1.js"></script>
+<!--angular-->
+    <script src="common/angular/angular.js"></script>
+    <script src="common/angular/angular-route.js"></script>
+    <script src="common/angular/angular-file-upload.min.js"></script>
+<!-- css -->
+    <link href="user_project/css/itemStyle.css" rel="stylesheet" />    
+<!-- js -->
+	<script src="project/scripts/itemInfoController.js"></script>
+	<script src="project/scripts/itemInfoService.js"></script>
+	</head>
+	<body>
+		<div id="content" ng-controller="itemInfoController">
+			<div id="head">
+				<div><h1>构件信息详细列表</h1></div>
+			</div>
+			<div id="con">
+				<div id="cons">
+					<div>
+						<div class="context"><span>构件名称</span></div>
+						<div class="cont">{{itemInfo.name}}</div>
+					</div>
+					<div>
+						<div class="context"><span>类型标准</span></div>
+						<div class="cont">{{itemInfo.familyAndType}}</div>
+					</div>
+					<div>
+						<div class="context"><span>标高</span></div>
+						<div class="cont">{{itemInfo.level}}</div>
+					</div>
+					<div>
+						<div class="context"><span>类型名称</span></div>
+						<div class="cont">{{itemInfo.typeName}}</div>
+					</div>
+					<div>
+						<div class="context"><span>偏移量</span></div>
+						<div class="cont">{{itemInfo.offset}}</div>
+					</div>
+					<div>
+						<div class="context"><span>所属项目</span></div>
+						<div class="cont">{{itemInfo.projectName}}</div>
+					</div>
+					<div>
+						<div class="context"><span>所属楼栋号</span></div>
+						<div class="cont">{{itemInfo.buildingNum}}</div>
+					</div>
+					<div>
+						<div class="context"><span>所属楼层</span></div>
+						<div class="cont">{{itemInfo.floorNum}}</div>
+					</div>
+					<div>
+						<div class="context"><span>构件名称</span></div>
+						<div class="cont"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

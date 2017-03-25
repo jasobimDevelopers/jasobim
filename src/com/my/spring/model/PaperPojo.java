@@ -8,6 +8,7 @@ public class PaperPojo {
     private String url;
     private Integer professionType;
     private String originName;
+    private Long size;
     
     
 	
@@ -62,6 +63,12 @@ public class PaperPojo {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public Long getSize() {
+		return size;
+	}
+	public void setSize(Long size) {
+		this.size = size;
 	}
 	
 }

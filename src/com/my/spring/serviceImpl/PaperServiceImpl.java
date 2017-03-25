@@ -72,6 +72,8 @@ public class PaperServiceImpl implements PaperService {
 					if (originName.contains(".")) {
 						originName = originName.substring(0, originName.lastIndexOf("."));
 					}
+					long fileSize=file.getSize()/1024;////文件大小kb单位 
+					paper.setSize(fileSize);
 					paper.setOriginName(originName);
 					if(!paperDao.addPaper(paper)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -147,7 +149,7 @@ public class PaperServiceImpl implements PaperService {
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
 	        		
-	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper);
+	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper,null);
 	        		//String nameArray=null;
 	        		String temp="标准层_4096X3072";
 	        		int flag=-1;
@@ -257,7 +259,7 @@ public class PaperServiceImpl implements PaperService {
 
 	@Override
 	public DataWrapper<List<PaperPojo>> getPaperLists(Long projectId, String token, Integer pageIndex, Integer pageSize,
-			Paper paper) {
+			Paper paper,String content) {
 		DataWrapper<List<PaperPojo>> dataWrappers = new DataWrapper<List<PaperPojo>>();
     	List<PaperPojo> papers=new ArrayList<PaperPojo>();
     	
@@ -265,7 +267,7 @@ public class PaperServiceImpl implements PaperService {
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
 	        		
-	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper);
+	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper,content);
 	        		for(int i=0;i<dataWrapper.getData().size();i++){
 	        			PaperPojo papernew=new PaperPojo();
         				papernew.setProjectId(projectId);
@@ -274,6 +276,7 @@ public class PaperServiceImpl implements PaperService {
 	        			papernew.setProfessionType(dataWrapper.getData().get(i).getProfessionType());
 	        			papernew.setFloorNum(dataWrapper.getData().get(i).getFloorNum());
 	        			papernew.setOriginName(dataWrapper.getData().get(i).getOriginName());
+	        			papernew.setSize(dataWrapper.getData().get(i).getSize());
 	        			Files file=fileDao.getById(dataWrapper.getData().get(i).getFileId());
 	        			if(file!=null){
 	        				papernew.setUrl(file.getUrl());
@@ -309,7 +312,7 @@ public class PaperServiceImpl implements PaperService {
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
 	        		
-	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper);
+	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper,null);
 	        		for(int i=0;i<dataWrapper.getData().size();i++){
 	        			PaperPojo papernew=new PaperPojo();
         				papernew.setProjectId(projectId);
@@ -333,7 +336,7 @@ public class PaperServiceImpl implements PaperService {
 	        					Map hints = new HashMap();  
 	        			        //内容所使用编码  
 	        			        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
-	        			        BitMatrix bitMatrix = multiFormatWriter.encode("139.224.59.3:8080/testJasobim/"+file.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
+	        			        BitMatrix bitMatrix = multiFormatWriter.encode("139.224.59.3:8080/jasobim/"+file.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
 	        			        //生成二维码  
 	        			        File outputFile = new File(imgpath,str+".png"); 
 	        			        

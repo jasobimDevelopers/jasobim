@@ -2,9 +2,7 @@ package com.my.spring.model;
 
 import javax.persistence.*;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
+
 @Entity
 @Table(name = "item")
 public class Item {

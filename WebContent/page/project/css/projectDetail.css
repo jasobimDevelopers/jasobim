@@ -32,13 +32,13 @@ font-weight: bold;
 	height:800px;
 }
 #projectDetail_head{
-	height:100px;
+	height:141px;
 	width:1110px;
 	margin:0 auto;
 }
 .bt_menu{
 	width:108px;
-	height:30px;
+	height:47px;
 	padding-top:5px;
 	float:left;
 	text-align: center;
@@ -49,7 +49,9 @@ font-weight: bold;
 .bt_menu:hover{
 	background-color:#4FB8E1;
 }
-
+#showId{
+	margin:35px;
+}
 #project_body{
 	width:1200px;
 	margin:0 auto;
@@ -60,9 +62,9 @@ font-weight: bold;
 #projectDetail_body_self{
 	background:url(../images/selfIcon.png) no-repeat;
 	border:1px solid #CCCCCC;
-	height:1100px;
 	width:1200px;
 	margin:0 auto;
+	padding-bottom:35px;
 }
 
 #selfContent{
@@ -95,7 +97,6 @@ font-weight: bold;
 }
 #selfliPic{
 	width:566px;
-	height:50px;
 	float: left;
 	margin-left:270px;
 	font-size: 18px;
@@ -138,7 +139,7 @@ font-weight: bold;
 	width:670px;
 	height:100px;
 	text-align:right;
-	margin-top:50px;
+	margin-top:850px;
 }
 /*标题具体内容----项目的构件信息*/
 
@@ -307,6 +308,9 @@ font-weight: bold;
 #paper_button{
 	margin-left:450px;
 	margin-top:50px;
+}
+.projectfile{
+	margin-left:22px;
 }
 /*标题具体内容----项目的工程量信息*/
 
@@ -538,13 +542,9 @@ font-weight: bold;
 	font-size:22px;
 	font-family:微软雅黑;
 	padding-top:4px;
-	margin-top:360px;
-	
 }
 /*工程量变更和下载*/
 #quantityImport{
-	
-	width:280px;
 	margin-right:75px;
 	padding-top:5px;
 	height:30px;
@@ -604,3 +604,38 @@ font-weight: bold;
     -moz-text-overflow: ellipsis;  
     -webkit-text-overflow: ellipsis;  
 }  
+#inputstate{
+	margin-left:7px;
+    width: 256px;
+    height: 30px;
+    border: 1px solid gray;
+    background-color: #F9F9F9;
+}
+#inputIsIos{
+	margin-left:7px;
+    width: 256px;
+    height: 30px;
+    border: 1px solid gray;
+    background-color: #F9F9F9;
+}
+/*返回按钮*/
+#returnProjectList{
+	font-size:30px;
+	font-family:微软雅黑;
+	background-color:white;
+	margin-bottom:30px;
+	float:right;
+}
+#video_type{
+	margin-right:10px;
+}
+#video_type2{
+	margin-left:10px;
+}
+/* table td{
+	width:7.7%;
+}
+table tr{
+	height:56px;
+	overflow:hidden;
+} */

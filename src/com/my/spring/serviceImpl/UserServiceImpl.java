@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
 			User user = userDao.getByUserName(userName);
 			if (user == null) {
 				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);
-			} else if(!user.getPassword().equals(MD5Util.getMD5String(MD5Util.getMD5String(password) + salt))) {
+			} else if(!user.getPassword().equals(MD5Util.getMD5String(password + salt))) {
 				dataWrapper.setErrorCode(ErrorCodeEnum.Password_Error);
 			} else {
 				SessionManager.removeSessionByUserId(user.getId());
@@ -143,11 +143,14 @@ public class UserServiceImpl implements UserService {
 				if (user.getEmail() != null && !user.getEmail().equals("")) {
 					userInDB.setEmail(user.getEmail());
 				}
+				if (user.getWorkName() != null && !user.getWorkName().equals("")) {
+					userInDB.setWorkName(user.getWorkName());
+				}
 				if (user.getTel() != null && !user.getTel().equals("")) {
 					userInDB.setTel(user.getTel());
 				}
 				if(user.getPassword() !=null && !user.getPassword().equals("")){
-					userInDB.setPassword(user.getPassword());
+					userInDB.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
 				}
 				if(user.getUserType() !=null && !user.getUserType().equals(""))
 				{
@@ -201,6 +204,7 @@ public class UserServiceImpl implements UserService {
 					userpojo.setUserName(dataWrapper.getData().getUserName());
 					userpojo.setUserType(dataWrapper.getData().getUserType());
 					userpojo.setUserIcon(dataWrapper.getData().getUserIcon());
+					userpojo.setWorkName(dataWrapper.getData().getWorkName());
 					if(dataWrapper.getData().getUserIcon()!=null){
 						Files file=new Files();
 						file=fileService.getById(dataWrapper.getData().getUserIcon());
@@ -242,6 +246,7 @@ public class UserServiceImpl implements UserService {
 						userpojo.setUserName(userList.getData().get(i).getUserName());
 						userpojo.setUserType(userList.getData().get(i).getUserType());
 						userpojo.setUserIcon(userList.getData().get(i).getUserIcon());
+						userpojo.setWorkName(userList.getData().get(i).getWorkName());
 						if(userList.getData().get(i).getUserIcon()!=null){
 							Files file=fileService.getById(userList.getData().get(i).getUserIcon());
 							if(file!=null){
@@ -292,14 +297,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataWrapper<List<User>> findUserLike(User user, String token) {
+	public DataWrapper<User> findUserLike(User user, String token) {
 		// TODO Auto-generated method stub
-		DataWrapper<List<User>> dataWrapper = new DataWrapper<List<User>>();
+		DataWrapper<User> dataWrapper = new DataWrapper<User>();
 		User adminInMemory = SessionManager.getSession(token);
 		if(adminInMemory!=null){
 			if(user!=null){
 				dataWrapper=userDao.findUserLike(user);
-				if(dataWrapper!=null && dataWrapper.getData().size()>0){
+				if(dataWrapper!=null && dataWrapper.getData()!=null){
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}
 			}else{
@@ -368,6 +373,14 @@ public class UserServiceImpl implements UserService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		
+		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<User> FindPs(User user) {
+		// TODO Auto-generated method stub
+		DataWrapper<User> dataWrapper = new DataWrapper<User>(); 
+		dataWrapper=userDao.findUserLike(user);
 		return dataWrapper;
 	}
 

@@ -84,9 +84,9 @@ public class MessageController {
         return messageService.getMessageListById(id,token);
     }
     ////通过问题id查找留言
-    @RequestMapping(value="/getMessageListByQuestionId")
+    @RequestMapping(value="/getMessageListByQuestionId",method=RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<List<Message>> getMessageListByQuestionId(
+    public DataWrapper<List<MessagePojo>> getMessageListByQuestionId(
     		@RequestParam(value = "questionId",required = true) Long questionId,
             @RequestParam(value = "token",required = true) String token){
         return messageService.getMessageListByQuestionId(questionId,token);

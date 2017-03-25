@@ -64,7 +64,10 @@
                 <value>com.my.spring.model.Files</value>
                 <value>com.my.spring.model.Project</value>
                 <value>com.my.spring.model.MinItem</value>
-               
+                <value>com.my.spring.model.FeedBack</value>
+                <value>com.my.spring.model.Duct</value>
+                <value>com.my.spring.model.CableTray</value>
+               	<value>com.my.spring.model.News</value>
             </list>
         </property>
     </bean>

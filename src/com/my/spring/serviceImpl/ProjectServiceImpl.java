@@ -58,28 +58,45 @@ public class ProjectServiceImpl implements ProjectService {
     UserDao userDao;
     @Autowired
     FileService fileService;
-    private String filePath="/files";
     private String filePath1="files";
     private Integer fileType=2;
     @Override
-    public DataWrapper<Project> addProject(Project project,String token,MultipartFile modelfile,MultipartFile picfile,HttpServletRequest request) {
-        DataWrapper<Project> dataWrapper = new DataWrapper<Project>();
+    public DataWrapper<ProjectPojo> addProject(Project project,String token,MultipartFile modelfile,MultipartFile picfile,HttpServletRequest request) {
+        DataWrapper<ProjectPojo> dataWrapper = new DataWrapper<ProjectPojo>();
+        DataWrapper<Project> dataWrappers = new DataWrapper<Project>();
         User userInMemory = SessionManager.getSession(token);
+        ProjectPojo pojo=new ProjectPojo();
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(project!=null){
 					if(modelfile!=null){
-						String path=filePath1+"/"+"projectmodels"+"/";
+						String path=filePath1+"/"+"projectmodels";
 						Files newfile=fileService.uploadFile(path, modelfile,fileType,request);
 						project.setModelId(newfile.getId());
+						pojo.setModelUrl(newfile.getUrl());
 					}
 					if(picfile!=null){
-						String path=filePath1+"/"+"projectpics"+"/";
+						String path=filePath1+"/"+"projectpics";
 						Files newfile=fileService.uploadFile(path, picfile,fileType,request);
 						project.setPicId(newfile.getId());
+						pojo.setPicUrl(newfile.getUrl());
 					}
 					if(projectDao.addProject(project)){
-						dataWrapper=projectDao.findProjectLike(project);
+						dataWrappers=projectDao.findProjectLike(project);
+						pojo.setBuildingUnit(dataWrappers.getData().getBuildingUnit());
+						pojo.setConstructionUnit(dataWrappers.getData().getConstructionUnit());
+						pojo.setDescription(dataWrappers.getData().getDescription());
+						pojo.setDesignUnit(dataWrappers.getData().getDesignUnit());
+						pojo.setId(dataWrappers.getData().getId());
+						pojo.setLeader(dataWrappers.getData().getLeader());
+						pojo.setName(dataWrappers.getData().getName());
+						pojo.setPlace(dataWrappers.getData().getPlace());
+						pojo.setNum(dataWrappers.getData().getNum());
+						pojo.setPhase(dataWrappers.getData().getPhase());
+						pojo.setStartDate(dataWrappers.getData().getStartDate());
+						pojo.setVersion(dataWrappers.getData().getVersion());
+						pojo.setIsIos(dataWrappers.getData().getIsIos());
+						dataWrapper.setData(pojo);
 					}
 					else{
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -111,7 +128,7 @@ public class ProjectServiceImpl implements ProjectService {
 				{
 					 /////判断项目下的图纸信息是否存在，存在删除，不存在不做处理
 					Paper paper=new Paper();
-					if(paperDao.getPaperList(id, 10, 1, paper).getTotalNumber()>0)
+					if(paperDao.getPaperList(id, 10, 1, paper,null).getTotalNumber()>0)
 					{
 						paperDao.deletePaperByProjectId(id);/////删除项目对应的图纸
 					}
@@ -188,12 +205,12 @@ public class ProjectServiceImpl implements ProjectService {
 				if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 					if(project!=null){
 						if(modelFile!=null){
-							String path=filePath1+"/"+"projectmodels"+"/";
+							String path=filePath1+"/"+"projectmodels";
 							Files newfile=fileService.uploadFile(path, modelFile,fileType,request);
 							project.setModelId(newfile.getId());
 						}
 						if(picFile!=null){
-							String path=filePath1+"/"+"projectpics"+"/";
+							String path=filePath1+"/"+"projectpics";
 							Files newfile=fileService.uploadFile(path, picFile,fileType,request);
 							project.setPicId(newfile.getId());
 						}
@@ -218,8 +235,13 @@ public class ProjectServiceImpl implements ProjectService {
     	DataWrapper<List<Project>> dataWrapper=new DataWrapper<List<Project>>();
     	List<ProjectPojo> pojoproject=new ArrayList<ProjectPojo>();
     	User userInMemory =SessionManager.getSession(token);
-    	if (userInMemory != null) {	
-				dataWrapper=projectDao.getProjectList(pageSize, pageIndex,project);
+    	if (userInMemory != null) {
+    		if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 
+    				|| userInMemory.getWorkName().contains("经理") || userInMemory.getWorkName().contains("科长")){
+    			dataWrapper=projectDao.getProjectList(pageSize, pageIndex,project,"-1");
+    		}else{
+    			dataWrapper=projectDao.getProjectList(pageSize, pageIndex,project,userInMemory.getProjectList());
+    		}
 				for(int i=0;i<dataWrapper.getData().size();i++){
 					ProjectPojo projectpojo=new ProjectPojo();
 					projectpojo.setId(dataWrapper.getData().get(i).getId());
@@ -234,13 +256,20 @@ public class ProjectServiceImpl implements ProjectService {
 					projectpojo.setPlace(dataWrapper.getData().get(i).getPlace());
 					projectpojo.setStartDate(dataWrapper.getData().get(i).getStartDate());
 					projectpojo.setVersion(dataWrapper.getData().get(i).getVersion());
+					projectpojo.setState(dataWrapper.getData().get(i).getState());
+					projectpojo.setIsIos(dataWrapper.getData().get(i).getIsIos());
+					if(dataWrapper.getData().get(i).getModelPart()!=null && dataWrapper.getData().get(i).getModelPart()!=""){
+						projectpojo.setModelPart(dataWrapper.getData().get(i).getModelPart());
+					}
 					if(dataWrapper.getData().get(i).getModelId()!=null){
 						Files files=fileDao.getById(dataWrapper.getData().get(i).getModelId());
 						projectpojo.setModelUrl(files.getUrl());
+						projectpojo.setModelName(files.getName());
 					}
 					if(dataWrapper.getData().get(i).getPicId()!=null){
 						Files filess=fileDao.getById(dataWrapper.getData().get(i).getPicId());
 						projectpojo.setPicUrl(filess.getUrl());
+						projectpojo.setPicName(filess.getName());
 					}
 					pojoproject.add(i, projectpojo);;
 				}
@@ -295,6 +324,9 @@ public class ProjectServiceImpl implements ProjectService {
 						projectPojo.setPlace(project.getPlace());
 						projectPojo.setStartDate(project.getStartDate());
 						projectPojo.setVersion(project.getVersion());
+						projectPojo.setState(project.getState());
+						projectPojo.setIsIos(project.getIsIos());
+						projectPojo.setModelPart(project.getModelPart());
 						dataWrapper.setData(projectPojo);
 					}
 						

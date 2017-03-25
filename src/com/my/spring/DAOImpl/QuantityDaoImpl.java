@@ -81,7 +81,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 					criteria.add(Restrictions.eq("professionType", quantity.getProfessionType()));
 					projectionList.add(Projections.property("professionType").as("professionType"));
 				}else{
-					projectionList.add(Projections.groupProperty("professionType"));
+					//projectionList.add(Projections.groupProperty("professionType"));
 				}
 	        }
 	        if(quantity.getBuildingNum()!=null){
@@ -89,7 +89,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 	        		criteria.add(Restrictions.eq("buildingNum", quantity.getBuildingNum()));
 	        		projectionList.add(Projections.property("buildingNum").as("buildingNum"));
 	        	}else{
-	        		projectionList.add(Projections.groupProperty("buildingNum"));
+	        		//projectionList.add(Projections.groupProperty("buildingNum"));
 	        	}
 	        }
 	        if(quantity.getHouseholdNum()!=null){
@@ -97,7 +97,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 	        		criteria.add(Restrictions.eq("householdNum", quantity.getHouseholdNum()));
 	        		projectionList.add(Projections.property("householdNum").as("householdNum"));
 	        	}else{
-	        		projectionList.add(Projections.groupProperty("householdNum"));
+	        		//projectionList.add(Projections.groupProperty("householdNum"));
 	        	}
 	        }
 	        if(quantity.getFloorNum()!=null){
@@ -153,7 +153,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		return get(id);
 	}
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public boolean findQuantity(Quantity quantity) {
 		String sql = "select * from quantity as a where a.project_id="+quantity.getProjectId()
@@ -178,7 +178,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 	    }
 		
 		return false;
-	}
+	}*/
 
 	@Override
 	public boolean addQuantityList(List<Quantity> quantityList) {

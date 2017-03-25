@@ -8,6 +8,8 @@ import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -38,7 +40,7 @@ public class PaperDaoImpl extends BaseDao<Paper> implements PaperDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<Paper>> getPaperList(Long projectId,Integer pageSize, Integer pageIndex,Paper paper) {
+    public DataWrapper<List<Paper>> getPaperList(Long projectId,Integer pageSize, Integer pageIndex,Paper paper,String content) {
     	DataWrapper<List<Paper>> retDataWrapper = new DataWrapper<List<Paper>>();
         List<Paper> ret = new ArrayList<Paper>();
         Session session = getSession();
@@ -47,7 +49,21 @@ public class PaperDaoImpl extends BaseDao<Paper> implements PaperDao {
         if(projectId!=null){
         	criteria.add(Restrictions.eq("projectId", projectId));
         }
-        
+        if(content!=null){
+        	String test = "";
+        	for(int i=0;i<content.length();i++){
+        		String ss=String.valueOf(content.charAt(i));
+        		if(i==0){
+        			test=test+'%'+ss+'%';
+        		}else{
+        			test=test+ss+'%';
+        		}
+        		
+        	}
+        	Disjunction dis = Restrictions.disjunction();        	
+        	dis.add(Restrictions.like("originName", test,MatchMode.ANYWHERE));
+        	criteria.add(dis);
+        }
         if(paper.getProfessionType()!=null){
         	criteria.add(Restrictions.eq("professionType", paper.getProfessionType()));
         }

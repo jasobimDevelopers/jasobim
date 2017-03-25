@@ -54,6 +54,7 @@ public class VideoServiceImpl implements VideoService {
 					if (originName.contains(".")) {
 						originName = originName.substring(0, originName.lastIndexOf("."));
 					}
+					video.setSize(file.getSize()/1024);
 					video.setOriginName(originName);
 					video.setVideoType(videoType);
 					if(!videoDao.addVideo(video)) 
@@ -124,6 +125,7 @@ public class VideoServiceImpl implements VideoService {
     				videoPojo.setOriginName(dataWrappers.getData().get(i).getOriginName());
     				videoPojo.setProfessionType(professiontype);
     				videoPojo.setIntro(dataWrappers.getData().get(i).getIntro());
+    				videoPojo.setSize(dataWrappers.getData().get(i).getSize());
     				Files file=fileDao.getById(dataWrappers.getData().get(i).getFileId());
     				if(file!=null){
     					videoPojo.setUrl(file.getUrl());

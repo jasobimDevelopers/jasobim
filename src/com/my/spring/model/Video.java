@@ -16,8 +16,9 @@ public class Video {
 	private Integer buildingNum;
 	private Integer professionType;//0、质量 1、安全 2、技术
 	private String originName;
-	private Integer videoType;////0(视频)、1(PDF文档)
+	private Integer videoType;////0(视频)、1(PDF文档)、2 文本文档（word） 3、其他
 	private String intro;
+	private Long size;
 	@Id
     @GeneratedValue
     @Column(name = "id")
@@ -27,6 +28,16 @@ public class Video {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	@Basic
+    @Column(name = "size")
+	public Long getSize() {
+		return size;
+	}
+	public void setSize(Long size) {
+		this.size = size;
+	}
+	
 	@Basic
     @Column(name = "file_id")
 	public Long getFileId() {

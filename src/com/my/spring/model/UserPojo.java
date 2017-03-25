@@ -15,6 +15,7 @@ public class UserPojo {
     private Long userIcon;
     private String userIconUrl;
     private Date registerDate;
+    private String workName;
     
    
 	public Long getId() {
@@ -92,6 +93,12 @@ public class UserPojo {
 	}
 	public void setUserIconUrl(String userIconUrl) {
 		this.userIconUrl = userIconUrl;
+	}
+	public String getWorkName() {
+		return workName;
+	}
+	public void setWorkName(String workName) {
+		this.workName = workName;
 	}
     
 }

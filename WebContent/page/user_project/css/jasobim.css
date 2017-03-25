@@ -28,18 +28,35 @@ text-decoration: none;
 font-size: 14px;
 font-weight: bold;
 }
- 
-#projectnames .inputtext{
-	margin-left:0px;
-	margin-right:3px;
-	margin-bottom:12px;
+#projectnames{
+	width:1106px;
+	height:156px;
+	
 }
-#projectnames input{
-	margin-right:25px;
-	height:30px;
+#projectnames div{
+	float:left;
+	
+}
+.choiceItem{
+	width:276px;
+	height:25px;
+	float:left;
+	text-align:right;
 	margin-bottom:20px;
-	width:175px;
 }
+.allname{
+	magrgin-right:8px;
+	width:120px;
+	height:25px;
+} 
+.allinput input{
+	width:120px;
+	height:30px;
+}
+#findBt{
+	margin-left:434px;
+}
+
 #content{
 	width:100%;
 	padding-left:56px;

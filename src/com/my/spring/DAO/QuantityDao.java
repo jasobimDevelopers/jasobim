@@ -16,7 +16,7 @@ public interface QuantityDao {
 	    boolean updateQuantity(Quantity quantity);
 	    DataWrapper<List<Quantity>> getQuantityList(Long projectId,Integer pageSize, Integer pageIndex,Quantity quantity);
 	    Quantity getById(Long id);
-		boolean findQuantity(Quantity quantity);
+		//boolean findQuantity(Quantity quantity);
 		boolean addQuantityList(List<Quantity> quantityList);
 		boolean findSameQuantityAndDo(List<Quantity> quantityList);
 		List<Quantity> getAllQuantity();

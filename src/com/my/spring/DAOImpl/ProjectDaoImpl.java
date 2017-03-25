@@ -8,6 +8,7 @@ import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -38,12 +39,24 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<Project>> getProjectList(Integer pageSize, Integer pageIndex, Project project) {
+    public DataWrapper<List<Project>> getProjectList(Integer pageSize, Integer pageIndex, Project project,String projectList) {
         DataWrapper<List<Project>> retDataWrapper = new DataWrapper<List<Project>>();
         List<Project> ret = new ArrayList<Project>();
+       
         Session session = getSession();
         Criteria criteria = session.createCriteria(Project.class);
 //        criteria.addOrder(Order.desc("publishDate"));
+        ////////
+        if(!projectList.equals("-1")){
+        	String[] ss =projectList.split(",");
+            Disjunction dis = Restrictions.disjunction();
+            for (int i = 0; i < ss.length; i++) {
+            	long test=Integer.valueOf(ss[i]);
+                dis.add(Restrictions.eq("id", test));
+            }
+            criteria .add(dis);
+        }
+        /////////
         if(project.getName() != null && !project.getName().equals("")) {
         	criteria.add(Restrictions.like("name", "%" + project.getName() + "%"));
         }

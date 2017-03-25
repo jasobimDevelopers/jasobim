@@ -1,0 +1,54 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin: 0px;
+	padding: 0px;
+}
+#head{
+	padding-top: 35px;
+	text-align: center;
+	width:396px;
+	height:56px;
+}
+#content
+{
+	font-size: 19px;
+    font-family: 微软雅黑;
+	width:394px;
+	border-right:1px solid black;
+	border-left:1px solid black;
+	border-top:1px solid black;
+}
+#con
+{
+	width:396px;
+}
+#cons div{
+	float:left;
+}
+#cons
+{
+	width:395px;height:90px;
+}
+.context{
+	text-align:right;
+	padding-top:31px;
+	width:109px;
+	height:59px;
+	border:1px solid black;
+	padding-right:10px;
+	
+}
+.context div{
+	float:right;
+}
+.cont{
+	padding-top:31px;
+	width:262px;
+	height:59px;
+	border:1px solid black;
+	padding-left:10px;
+}
+.cont div{
+	float:left;
+}

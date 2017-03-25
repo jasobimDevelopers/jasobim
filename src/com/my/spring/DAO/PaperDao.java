@@ -12,7 +12,7 @@ public interface PaperDao {
     boolean addPaper(Paper Paper);
     boolean deletePaper(Long id);
     boolean updatePaper(Paper Paper);
-    DataWrapper<List<Paper>> getPaperList(Long projecId, Integer pageSize, Integer pageIndex, Paper paper);
+    DataWrapper<List<Paper>> getPaperList(Long projecId, Integer pageSize, Integer pageIndex, Paper paper,String content);
     Paper getById(Long id);
 	boolean deletePaperByProjectId(Long id);
 }

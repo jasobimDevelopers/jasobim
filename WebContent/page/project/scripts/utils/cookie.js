@@ -2,7 +2,7 @@
 function setCookie(name,value,expiredays) 
 { 
   var argv = setCookie.arguments; 
-  var argc = setCookie.arguments.length; 
+  var argc = setCookie.arguments.length; //实参的个数
   var LargeExpDate = new Date (); 
   var expires = (argc > 2) ? argv[2] : expiredays ; 
   if(expires!=null) 

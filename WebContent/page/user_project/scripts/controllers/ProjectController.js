@@ -378,11 +378,11 @@ function ProjectController($scope,ProjectService) {
 				allclass.css("background-color","#fff");
 				if(parseInt(floor)==1){
 					allclass.eq(parseInt(floor)).css("background-color","darkgray");
-					$scope.floorId=3;
+					$scope.floorId=2;
 				}
 				if(parseInt(floor)==2){
 					allclass.eq(parseInt(floor)).css("background-color","darkgray");
-					$scope.floorId=2;
+					$scope.floorId=1;
 				}
 				$scope.getProjectPaperList($scope.projectid,10,1,paper);
 			}
@@ -1318,4 +1318,31 @@ function ProjectController($scope,ProjectService) {
 				
 			 }
 	     }
+	    /* //////////////图纸上传
+	     $scope.importVideo = function(){
+	    	 var file="";
+	    	 file=document.getElementById("video_import").files;
+	    	 if(file!==null && file.length>0){
+				 var formData = new FormData();
+				 for(var i = 0; i < file.length;i++) {
+					 formData.append("fileList",file[i]);
+					 formData.append("videoTypeList",1);
+				 }
+				 formData.append("videoType",1);
+				 formData.append("buildingNum",6);
+				 formData.append("professionType",0);
+				 ProjectService.uploadVideo(formData,$scope.findProjectInfo.id).then(function(result){
+					       $scope.uploadVideos=result.data;	 
+					       var video=null;
+						   $scope.getProjectVideoList(pageSize,1,video);
+			     });
+				
+			 }
+	     }*/
+	     //////返回项目列表按钮
+	     $scope.returnProjects = function(){
+	    	 document.getElementById("projectInfoHtml").style.display = 'none';
+		     document.getElementById("containers").style.display = 'block';
+		     document.getElementById("include_header").style.display = 'block';
+	     };
 }

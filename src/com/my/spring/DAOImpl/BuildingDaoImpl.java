@@ -75,7 +75,7 @@ public class BuildingDaoImpl extends BaseDao<Building> implements BuildingDao {
 
 	@Override
 	public boolean deleteBuildingByProjectId(Long id) {
-		String sql = "delete from building where id="+id+" and project_id="+id;
+		String sql = "delete from building where project_id="+id;
 		Session session=getSession();
 		 try{
 			 Query query = session.createSQLQuery(sql);

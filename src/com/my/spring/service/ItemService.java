@@ -2,6 +2,7 @@ package com.my.spring.service;
 
 import com.my.spring.model.Item;
 import com.my.spring.model.MinItem;
+import com.my.spring.model.MinItemPojo;
 import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ItemService {
     DataWrapper<Void> addItem(Item Item,String token);
     DataWrapper<Void> deleteItem(Long id,String token);
-    DataWrapper<Void> deleteItemByTypeNameAndProjectId(Long projectid,String typeName,String token);
+    //DataWrapper<Void> deleteItemByTypeNameAndProjectId(Long projectid,String typeName,String token);
     DataWrapper<Void> updateItem(Item Item,String token);
     DataWrapper<List<Item>> getItemList(Long projectId,Integer pageIndex, Integer pageSize, Item item, String token);
     public boolean batchImport(String name,MultipartFile file,String token,HttpServletRequest request, Long projectId);
@@ -29,4 +30,5 @@ public interface ItemService {
 	DataWrapper<List<MinItem>> getMinItemList(Long projectId, Integer pageIndex, Integer pageSize, MinItem item,
 			String token);
 	String getCodeImg(Item item, HttpServletRequest request);
+	DataWrapper<MinItemPojo> getMinItemById(Long id);
 }

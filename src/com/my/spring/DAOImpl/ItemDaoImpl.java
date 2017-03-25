@@ -108,7 +108,7 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
         return retDataWrapper;
     }
 
-	@Override
+/*	@Override
 	public List<Item> getItemByLocation(String location) {
 		//String sql = "select user.* from t_user user,t_token token where token.token = " + token + " and token.user_id = user.id";
 		char str1 = 0;
@@ -152,7 +152,7 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 	        }
 		 
 		return dataWrapper;
-	}
+	}*/
     //////////根据项目id删除构件和相应的工程量
 	@SuppressWarnings("unused")
 	@Override

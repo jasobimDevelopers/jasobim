@@ -15,6 +15,7 @@ public class VideoPojo {
     private Integer videoType;
     private String intro; 
     private Long fileId;
+    private Long size;
 	
 	public Long getProjectId() {
 		return projectId;
@@ -78,6 +79,12 @@ public class VideoPojo {
 	}
 	public void setFileId(Long fileId) {
 		this.fileId = fileId;
+	}
+	public Long getSize() {
+		return size;
+	}
+	public void setSize(Long size) {
+		this.size = size;
 	}
 	
 }

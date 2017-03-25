@@ -2,9 +2,7 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.MinItemDao;
-import com.my.spring.model.Item;
 import com.my.spring.model.MinItem;
-import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 
@@ -78,6 +76,7 @@ public class MinItemDaoImpl extends BaseDao<MinItem> implements MinItemDao {
         return retDataWrapper;
     }
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public MinItem getMinItemBySelfId(Long selfId) {
 		List<MinItem> ret = null;
@@ -94,7 +93,12 @@ public class MinItemDaoImpl extends BaseDao<MinItem> implements MinItemDao {
 		}
 		return null;
 	}
-
+	@Override
+	public MinItem getMinItemById(Long id) {
+		@SuppressWarnings("unused")
+		DataWrapper<MinItem> dataWrapper = new DataWrapper<MinItem>();
+		return get(id);
+	}
 }
 
     

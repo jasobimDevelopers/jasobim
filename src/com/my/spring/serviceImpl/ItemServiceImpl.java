@@ -17,13 +17,14 @@ import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Building;
 import com.my.spring.model.Item;
 import com.my.spring.model.MinItem;
+import com.my.spring.model.MinItemPojo;
+import com.my.spring.model.Project;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.model.User;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ItemService;
 import com.my.spring.utils.DataWrapper;
-import com.my.spring.utils.EncoderQRCode;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.SessionManager;
 
@@ -335,28 +336,6 @@ public class ItemServiceImpl implements ItemService {
         return b;
 	}
 
-	@Override
-	public DataWrapper<Void> deleteItemByTypeNameAndProjectId(Long projectid, String typeName, String token) {
-		// TODO Auto-generated method stub
-		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-        User userInMemory = SessionManager.getSession(token);
-        if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
-				if(projectid!=null && typeName!=null){
-					return itemDao.deleteItemByTypeNameAndProjectId(projectid,typeName,token);
-			        
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
-				}
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
-		} else {
-			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
-		}
-		return dataWrapper;
-		
-	}
 
 	@Override
 	public DataWrapper<Void> deleteItemByProjectId(Long projectId, String token) {
@@ -382,27 +361,86 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public DataWrapper<Item> getItemById(Long id, String token) {
 		DataWrapper<Item> dataWrapper = new DataWrapper<Item>();
-        User userInMemory = SessionManager.getSession(token);
-        if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
-				if(id!=null){
-					Item item=new Item();
-					item=itemDao.getItemById(id);
-					if(item!=null){
-						dataWrapper.setData(item);
-					}else{
-						dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
-					}				
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
-				}
+		if(id!=null){
+			Item item=new Item();
+			item=itemDao.getItemById(id);
+			if(item!=null){
+				dataWrapper.setData(item);
 			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
-		} else {
-			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+				dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+			}				
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 		}
-		
+		return dataWrapper;
+	}
+	@Override
+	public DataWrapper<MinItemPojo> getMinItemById(Long id) {
+		DataWrapper<MinItemPojo> dataWrapper = new DataWrapper<MinItemPojo>();
+		MinItemPojo minItemPojo=new MinItemPojo();
+		if(id!=null){
+			MinItem item=new MinItem();
+			item=minItemDao.getMinItemById(id);
+			if(item!=null){
+				Project project=new Project();
+				project=projectDao.getById(item.getProjectId());
+				minItemPojo.setProjectName(project.getName());
+				
+				minItemPojo.setArea(item.getArea());
+				
+				if(item.getBuildingNum()!=null){
+					minItemPojo.setBuildingNum(item.getBuildingNum());
+				}
+				if(item.getFamilyAndType()!=null){
+					minItemPojo.setFamilyAndType(item.getFamilyAndType());
+				}
+				if(item.getFloorNum()!=null){
+					minItemPojo.setFloorNum(item.getFloorNum());
+				}
+				if(item.getHouseholdNum()!=null){
+					minItemPojo.setHouseholdNum(item.getHouseholdNum());
+				}
+				
+				minItemPojo.setLength(item.getLength());
+				
+				if(item.getLevel()!=null){
+					minItemPojo.setLevel(item.getLevel());
+				}
+				if(item.getMaterial()!=null){
+					minItemPojo.setMaterial(item.getMaterial());
+				}
+				if(item.getTypeName()!=null){
+					minItemPojo.setTypeName(item.getTypeName());
+				}
+				if(item.getUnitNum()!=null){
+					minItemPojo.setUnitNum(item.getUnitNum());
+				}
+				if(item.getSystemType()!=null){
+					minItemPojo.setSystemType(item.getSystemType());
+				}
+				if(item.getSize()!=null){
+					minItemPojo.setSize(item.getSize());
+				}
+				if(item.getServiceType()!=null){
+					minItemPojo.setServiceType(item.getServiceType());
+				}
+				if(item.getProfessionType()!=null){
+					minItemPojo.setProfessionType(item.getProfessionType());
+				}
+				
+				minItemPojo.setOffset(item.getOffset());
+				
+				if(item.getName()!=null){
+					minItemPojo.setName(item.getName());
+				}
+				
+				dataWrapper.setData(minItemPojo);
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+			}				
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+		}
 		return dataWrapper;
 	}
 
@@ -434,25 +472,20 @@ public class ItemServiceImpl implements ItemService {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public String getCodeImg(Item item,HttpServletRequest request) {
 		MinItem test=minItemDao.getMinItemBySelfId(item.getSelfId());
 		String codeInformation=null;
 		if(test!=null){
-			codeInformation=test.getName();
+			codeInformation=test.getId().toString();
 		}
-		
-		codeInformation="名称：  "+test.getName()+"\r\n"+"设备ID：  "+test.getSelfId()+"\r\n"
-				+"楼层： "+test.getFloorNum()+"\r\n"+"设备名称： "+test.getTypeName()+"\r\n"
-				+"型号： "+test.getSize()+"\r\n"+"施工时间： "+" _年_月_日 \r\n"+"施工班组： "+" 张三\r\n"
-				+"验收人员： "+"XXX  XXX\r\n"+"验收时间： "+" _年_月_日 \r\n"+"施工单位： "+" 嘉实安装\r\n"
-				+"供应厂家： "+"  ____公司\r\n";
-		
+		codeInformation="http://139.224.59.3:8080/jasobim/page/itemInfo.html?id="+test.getId().toString();
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
 	   	Date d=new Date();
 	   	String str=sdf.format(d);
 	   	String rootPath = request.getSession().getServletContext().getRealPath("/");
-	   	String filePath="/codeFiles/";
+	   	String filePath="/codeFiles";
 	   	String imgpath=rootPath+filePath;
 	   	String realPath=rootPath+filePath+"/"+str+".png";
 		try{

@@ -22,7 +22,7 @@ public interface PaperService {
 	DataWrapper<Void> deletePaper(Long id, Long fileid, String token, HttpServletRequest request);
 	DataWrapper<Void> deletePaperByAdmin(Long id, String token, HttpServletRequest request);
 	DataWrapper<List<PaperPojo>> getPaperLists(Long projectId, String token, Integer pageIndex, Integer pageSize,
-			Paper paper);
+			Paper paper,String content);
 	DataWrapper<List<PaperPojo>> getPapers(HttpServletRequest request,Long projectId, String token, Integer pageIndex, Integer pageSize,
 			Paper paper);
 }

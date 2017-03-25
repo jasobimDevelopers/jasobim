@@ -257,7 +257,7 @@
     this.getMessageListByQuestionId = function(questionId){
     	 var deferred = $q.defer();
           console.log("读取messageOfQuestionList数据");
-          var api = 'api/message/admin/getMessageList?token='+getCookie('token')+"&questionId="+questionId;
+          var api = 'api/message/getMessageListByQuestionId?token='+getCookie('token')+"&questionId="+questionId;
           $http.get(encodeURI(api))
               .success(function(data, status, headers, config){
                   if(data.callStatus == "SUCCEED"){

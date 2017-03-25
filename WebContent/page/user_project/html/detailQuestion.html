@@ -41,11 +41,11 @@
             </div>
             <div class="addinput_question">
             	<div><span>现场图片:</span></div>
-            	<div ng-repeat="pic in findQuestionInfo.fileList" style="margin-right:10px;"><img class="min" id="xianchangImg" src="{{pic}}" /></div>
+            	<div ng-repeat="pic in findQuestionInfo.fileList" style="margin-right:10px;"><img class="min" id="xianchang{{$index}}" src="{{pic}}" onclick="showOneBig(this)"/></div>
             </div>
             <div class="addinput_question" style="margin-top:100px;width:auto;">
             	<div><span>查看二维码:</span></div>
-            	<div><img id="codeImg" class="min" src="{{findQuestionInfo.codeInformation}}" /></div>
+            	<div><img id="codeImg" class="min" src="{{findQuestionInfo.codeInformation}}" onclick="showOneBig(this)"/></div>
             </div>
             <div id="addbutton" style="margin-top:86px;display:none;">
             	<input class="btn btn-default" type="button" ng-click="addQuestionByAdmin()" value="确定" />
@@ -63,7 +63,7 @@
         			<div id="messageUsername">
 	        			<div id="usernamessss"><span>{{message.userName}}</span></div>
 	        			<div id="usercontent"><div class="
-	        			autocut"  title='{{message.content}}' onmouseover='this.style.width="400px"' onmouseout='this.style.width="400px"'><span>{{message.content}}</span></div></div>
+	        			autocut"  title='{{message.content}}' onmouseover='this.style.width="600px"' onmouseout='this.style.width="600px"'><span>{{message.content}}</span></div></div>
         			</div>
         			<div id="action">
         				
@@ -85,16 +85,21 @@
 </style>
 
 <script>
-	$(function(){
-		$('#testImg').click(function(){
-
-		$(this).toggleClass('min');
-		$(this).toggleClass('max');
-		});
-		$('xianchangImg').click(function(){
-			$(this).toggleClass('min');
-			$(this).toggleClass('max');
-		});
+	function showOneBig(scope){
+		
+	layer.ready(function(){ 
+	  layer.open({
+  		type: 1,
+  		title: false,
+  		area: ['600px', '360px'],
+  		shadeClose: true, //点击遮罩关闭
+  		content: '<div style="background-size: 100% 100%;width:600px;height:360px;background-image: url(' +scope.src+')"/></div>'
+  	  });
 	});
+
+
+
+
+}
 </script>
 	

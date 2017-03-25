@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Item;
 import com.my.spring.model.MinItem;
+import com.my.spring.model.MinItemPojo;
 import com.my.spring.service.ItemService;
 import com.my.spring.utils.DataWrapper;
 
@@ -90,14 +91,14 @@ public class ItemController {
             @RequestParam(value = "token",required = true) String token){
         return itemService.deleteItem(id,token);
     }
-    @RequestMapping(value="/deleteItemByTypeNameAndProjectId")
+    /*@RequestMapping(value="/deleteItemByTypeNameAndProjectId")
     @ResponseBody
     public DataWrapper<Void> deleteItemByTypeNameAndProjectId(
             @RequestParam(value = "typename",required = true) String typename,
             @RequestParam(value = "projectId",required = true) Long projectId,
             @RequestParam(value = "token",required = true) String token){
         return itemService.deleteItemByTypeNameAndProjectId(projectId,typename,token);
-    }
+    }*/
     @RequestMapping(value="/deleteItemByProjectId")
     @ResponseBody
     public DataWrapper<Void> deleteItemByProjectId(
@@ -155,6 +156,15 @@ public class ItemController {
     		@RequestParam(value = "itemId",required = true) Long itemId,
             @RequestParam(value = "token",required = false) String token){
         return itemService.getItemById(itemId,token);
+    }
+    @RequestMapping(value="/getMinItemById",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<MinItemPojo> getMinItemById(
+    		@RequestParam(value = "id",required = true) Long id
+            ){
+    	DataWrapper<MinItemPojo> dataWrapper = new DataWrapper<MinItemPojo>();
+    	dataWrapper=itemService.getMinItemById(id);
+        return dataWrapper;
     }
     /*
      * 查询项目相应栋号下的地下层层数

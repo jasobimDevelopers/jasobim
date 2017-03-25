@@ -43,6 +43,32 @@
 							</tr>
 						</tbody>
 					</table>
+					<div id="quantityAction">
+							<div id="quantityImport">
+								<div id="imgBiangen"><a href="#" id="quantity_button" ng-click="importVideo()">交底上传</a></div>
+								<div id="biangeng_file"><input type="file" id="video_import" multiple="multiple"/></div>
+								<div id="video_type">
+									<select id="video_type" class="myselect" ng-model="videoTypes" ng-change="setVideoType(this)">
+										<option value="0" selected = "selected">安全</option>
+										<option value="1">质量</option>
+										<option value="2">技术</option>
+									</select>
+								</div>
+								<!-- <div ng-repeat="buildingNumber in buildingArray">
+									<select class="myselect" type="text" ng-change="set_buildingNum(building[$index])"  ng-model="building[$index]">
+				    					<option value="title" >#{{$index*10+1}} -#{{$index*10+10}}</option>
+				    					<option value="{{number}}" ng-repeat="number in buildingNumber" >#{{number}}</option>
+				    				</select>
+    							</div> -->
+    							<div id="video_type">
+									<select id="video_type2" class="myselect" ng-model="videoFiles" ng-change="setFileType(this)">
+										<option value="0" selected = "selected">视频</option>
+										<option value="1">pdf</option>
+										<option value="2">word</option>
+									</select>
+								</div>
+							</div>
+					</div>
 					<div id="table-buton5" >
 						<div id="videoPageCode"></div>
 					</div>

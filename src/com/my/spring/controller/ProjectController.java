@@ -23,7 +23,7 @@ public class ProjectController {
     ProjectService projectService;
     @RequestMapping(value="/admin/addProject", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Project> addProject(
+    public DataWrapper<ProjectPojo> addProject(
             @ModelAttribute Project project,
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request,
