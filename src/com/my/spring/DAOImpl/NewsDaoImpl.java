@@ -79,6 +79,7 @@ public class NewsDaoImpl extends BaseDao<News> implements NewsDao {
         return retDataWrapper;
     }
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<News>> getNewsListByUserId(Long userId) {
 		 DataWrapper<List<News>> retDataWrapper = new DataWrapper<List<News>>();

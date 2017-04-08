@@ -6,23 +6,29 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.my.spring.DAO.DuctDao;
+import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Duct;
+import com.my.spring.model.DuctPojo;
 import com.my.spring.model.User;
 import com.my.spring.service.DuctService;
 import com.my.spring.service.FileService;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.FileOperationsUtil;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.SessionManager;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +44,8 @@ import javax.servlet.http.HttpServletRequest;
 public class DuctServiceImpl implements DuctService {
     @Autowired
     DuctDao DuctDao;
+    @Autowired
+    ProjectDao projectDao;
     @Autowired
     UserDao userDao;
     @Autowired
@@ -115,24 +123,112 @@ public class DuctServiceImpl implements DuctService {
     }
 
     @Override
-    public DataWrapper<List<Duct>> getDuctList() {
-        return DuctDao.getDuctList();
+    public DataWrapper<List<DuctPojo>> getDuctList(Integer pageIndex,Integer pageSize,Duct duct,String token,String content) {
+    	List<Duct> ductList=new  ArrayList<Duct>();
+    	List<DuctPojo> ductPojoList = new ArrayList<DuctPojo>();
+    	DataWrapper<List<DuctPojo>> ductLists=new  DataWrapper<List<DuctPojo>>();
+    	DataWrapper<List<Duct>> ductListst=new  DataWrapper<List<Duct>>();
+    	User userInMemory = SessionManager.getSession(token);
+    	if(userInMemory!=null){
+    		ductListst=DuctDao.getDuctList(pageSize,pageIndex,duct,content);
+    		ductList=ductListst.getData();
+    		if(ductList!=null && ductList.size()>0){
+    			String[] stateList=new String[]{"未定义","出库","安装","完成"};
+    	    	for(int i=0;i<ductList.size();i++){
+    	    		DuctPojo ductPojo=new DuctPojo();
+    	    		ductPojo.setCodeUrl(ductList.get(i).getCodeUrl());
+    	    		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+    	    		String str=sdf.format(ductList.get(i).getDate()); 
+    	    		ductPojo.setDate(str);
+    	    		ductPojo.setFamilyAndType(ductList.get(i).getFamilyAndType());
+    	    		ductPojo.setId(ductList.get(i).getId().toString());
+    	    		ductPojo.setLevel(ductList.get(i).getLevel());
+    	    		ductPojo.setName(ductList.get(i).getName());
+    	    		ductPojo.setProjectId(ductList.get(i).getProjectId().toString());
+    	    		ductPojo.setSelfId(ductList.get(i).getSelfId());
+    	    		ductPojo.setState(stateList[ductList.get(i).getState()]);
+    	    		ductPojo.setServiceType(ductList.get(i).getServiceType());
+    	    		if(ductList.get(i).getUserId()!=null){
+    	    			User user=userDao.getById(ductList.get(i).getUserId());
+    	    			if(user.getUserName()!=null){
+    	    				ductPojo.setUserName(user.getUserName());
+    	    			}
+    	    		}
+    	    		ductPojoList.add(ductPojo);
+    	    	}
+    	    	ductLists.setData(ductPojoList);
+        		ductLists.setData(ductPojoList);
+        		ductLists.setTotalNumber(ductListst.getTotalNumber());
+        		ductLists.setCurrentPage(ductListst.getCurrentPage());
+        		ductLists.setTotalPage(ductListst.getTotalPage());
+        		ductLists.setNumberPerPage(ductListst.getNumberPerPage());
+    		}else{
+    			ductLists.setErrorCode(ErrorCodeEnum.Error);
+    		}
+    	}else{
+    		ductLists.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+    	}
+        return ductLists;
     }
 
 	@Override
-	public DataWrapper<Duct> getDuctByProjectId(Long projectId,String token) {
+	public DataWrapper<List<DuctPojo>> getDuctByProjectId(Long projectId,String token,Duct duct) {
 		// TODO Auto-generated method stub
-		DataWrapper<Duct> dataWrapper = new DataWrapper<Duct>();
+		DataWrapper<List<DuctPojo>> dataWrapper = new DataWrapper<List<DuctPojo>>();
+		List<Duct> ductList = new ArrayList<Duct>();
+		List<DuctPojo> ductPojoList = new ArrayList<DuctPojo>();
         User userInMemory = SessionManager.getSession(token);
+        //String strs2="";
         if (userInMemory != null) {
-			
-				dataWrapper=DuctDao.getDuctByProjectId(projectId);
-			
+        	
+        	ductList=DuctDao.getDuctByProjectId(projectId,duct).getData();
+        	
+        	String[] stateList=new String[]{"未定义","出库","安装","完成"};
+        	String projectName=projectDao.getById(ductList.get(0).getProjectId()).getName();
+        	for(int i=0;i<ductList.size();i++){
+
+        		
+        		///////////////////////
+    			DuctPojo ductPojo=new DuctPojo();
+    			ductPojo.setId(ductList.get(i).getId().toString());
+    			ductPojo.setCodeUrl(ductList.get(i).getCodeUrl());
+        		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+        		String str=sdf.format(ductList.get(i).getDate()); 
+        		ductPojo.setDate(str);
+        		ductPojo.setSize(ductList.get(i).getSize());
+        		ductPojo.setState(stateList[ductList.get(i).getState()]);
+        		ductPojo.setName(ductList.get(i).getName());
+        		ductPojo.setFamilyAndType(ductList.get(i).getFamilyAndType());
+        		ductPojo.setLevel(ductList.get(i).getLevel());
+        		ductPojo.setBuildingNum(ductList.get(i).getBuildingNum().toString());
+        		ductPojo.setFloorNum(ductList.get(i).getFloorNum().toString());
+        		ductPojo.setUnitNum(ductList.get(i).getUnitNum().toString());
+        		ductPojo.setHouseholdNum(ductList.get(i).getHouseholdNum().toString());
+        		ductPojo.setProjectId(ductList.get(i).getProjectId().toString());
+        		ductPojo.setProjectName(projectName);
+        		ductPojo.setSelfId(ductList.get(i).getSelfId());
+        		ductPojo.setArea(ductList.get(i).getArea()+"");
+        		ductPojo.setLength(ductList.get(i).getLength()+"");
+        		ductPojo.setServiceType(ductList.get(i).getServiceType());
+        		ductPojo.setSystemType(ductList.get(i).getSystemType());
+        		if(ductList.get(i).getUserId()!=null){
+        			User user=userDao.getById(ductList.get(i).getUserId());
+        			if(user.getUserName()!=null){
+        				ductPojo.setUserName(user.getUserName());
+        			}
+        		}
+        		ductPojoList.add(i,ductPojo);
+        	}
+        	dataWrapper.setData(ductPojoList);
+        	
+        	//dataWrapper.setData(temp);
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
-		return dataWrapper;
+        return dataWrapper;
 	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean batchImport(String name, MultipartFile file,String token,HttpServletRequest request,Long projectId) {
 		if (file == null || name == null || name.equals("")) {
@@ -155,8 +251,8 @@ public class DuctServiceImpl implements DuctService {
 		        if(DuctList.size()>0){
 		        	for(int i=0;i<DuctList.size();i++){
 		        		String codeInformation=null;
-		        		codeInformation=DuctList.get(i).getId().toString();
-		        		codeInformation="http://139.224.59.3:8080/jasobim/page/ductInfo.html?id="+DuctList.get(i).getId().toString();
+		        		
+		        		codeInformation="http://139.224.59.3:8080/jasobim/page/ductInfo.html?selfId="+DuctList.get(i).getSelfId();
 		        		SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
 		        	   	Date d=new Date();
 		        	   	String str=sdf.format(d);
@@ -164,6 +260,20 @@ public class DuctServiceImpl implements DuctService {
 		        	   	String filePath="/codeFiles";
 		        	   	String imgpath=rootPath+filePath;
 		        	   	String realPath=rootPath+filePath+"/"+str+".png";
+		        	   	/////添加上传时间（精确到秒）
+						SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+					    Date date;
+						try {
+							date = sdfs.parse(df.format(new Date()));
+							DuctList.get(i).setDate(date);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}  
+						/////添加上传的用户id
+						DuctList.get(i).setUserId(userInMemory.getId());
+
 		        		try{
 		        		MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 		        	        @SuppressWarnings("rawtypes")
@@ -196,4 +306,92 @@ public class DuctServiceImpl implements DuctService {
 		}
         return b;
 	}
+	@Override
+	public DataWrapper<String> exportDuct(Long projectId, String token, HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		DataWrapper<String> dataWrapper = new DataWrapper<String>();
+		if (projectId == null) {
+			dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+		}
+			
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null) {
+			
+				String filePath = "E:/JasoBim/BimAppDocument/apache-tomcat-8.0.39/webapps/jasobim" + "/out/" + projectId + "/duct/";
+				File fileDir = new File(filePath);
+		        if (!fileDir.exists()) {
+		            fileDir.mkdirs();
+		        }
+		        String tempFile = filePath + "duct_temp.xls";
+		        String file = filePath + "duct.xls";
+		        String header = "序号\t"
+		        		+ "名称\t"
+		        		+ "专业\t"
+		        		+ "项目编号\t"
+		        		+ "楼栋号\t"
+		        		+ "楼层号\t"
+		        		+ "单元号\t"
+		        		+ "户型\t"
+		        		+ "familyAndType\t"
+		        		+ "系统类型\t"
+		        		+ "设备类型\t"
+		        		+ "尺寸\t"
+		        		+ "材质\t"
+		        		+ "偏移量\t"
+		        		+ "标高\t"
+		        		+ "状态\n";
+		        FileOperationsUtil.deleteFile(tempFile);
+		        FileOperationsUtil.deleteFile(file);
+		        if (DuctDao.exportQuantity(tempFile, projectId)) {
+					String content = FileOperationsUtil.readFile(tempFile);
+					String newContent = header + content;
+					FileOperationsUtil.writeFile(file, newContent, false);
+					dataWrapper.setData("out/" + projectId + "/quantitty.xls");
+				} else {
+					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}
+			
+			
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+			
+		return dataWrapper;
+	}
+
+	@Override
+    public DataWrapper<Void> updateDuct(Duct duct,String token,HttpServletRequest request) {
+        DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+			if(duct.getId()!=null){
+				Duct ducts = new Duct();
+				ducts=DuctDao.getDuctById(duct.getId());
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+			    Date date;
+				try {
+					date = sdfs.parse(df.format(new Date()));
+					ducts.setDate(date);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}  
+				ducts.setState(duct.getState());
+				ducts.setUserId(userInMemory.getId());
+				if(ducts!=null){
+					if(!DuctDao.updateDuct(ducts)){
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return dataWrapper;
+    }
+
+		
 }

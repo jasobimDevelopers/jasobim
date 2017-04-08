@@ -46,7 +46,6 @@ public class ExportExcel {
      * @param colSum 
      *            该报表的列数 
      */  
-    @SuppressWarnings({ "deprecation", "unused" })  
     public void createNormalHead(String headString, int colSum) {  
         HSSFRow row = sheet.createRow(0);  // 设置第一行  
         
@@ -191,7 +190,6 @@ public class ExportExcel {
      *            需要合并到的列索引 
      * @param cellValue 
      */  
-    @SuppressWarnings("deprecation")  
     public void createLastSumRow(int colSum, String[] cellValue) {  
   
         HSSFCellStyle cellStyle = wb.createCellStyle();  

@@ -43,7 +43,8 @@ public class BaseDao<T>{
     public T load(Serializable id) {
         Session session = getSession();
         session.beginTransaction();
-        T entity = (T) session.load(entityClass, id);
+        @SuppressWarnings("unchecked")
+		T entity = (T) session.load(entityClass, id);
         session.getTransaction().commit();
         return entity;
     }
@@ -54,7 +55,8 @@ public class BaseDao<T>{
      * @param id
      * @return 返回相应的持久化PO实例
      */
-    public T get(Serializable id) {
+    @SuppressWarnings("unchecked")
+	public T get(Serializable id) {
         //getSession();
         //session.beginTransaction();
         //T entity = (T) session.get(entityClass, id);
@@ -67,7 +69,8 @@ public class BaseDao<T>{
      * @param
      * @return 返回所有相应的持久化实例
      */
-    public List<T> getAll() {
+    @SuppressWarnings("unchecked")
+	public List<T> getAll() {
 
         return find("from " + entityClass.getSimpleName());
     }
@@ -190,7 +193,8 @@ public class BaseDao<T>{
      * @param hql
      * @return 查询结果
      */
-    public List find(String hql) {
+    @SuppressWarnings("rawtypes")
+	public List find(String hql) {
         /*
         Session session;
         Transaction transaction = null;

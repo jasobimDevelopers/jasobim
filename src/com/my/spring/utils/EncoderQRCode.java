@@ -3,10 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
+ import javax.imageio.ImageIO;
 
 import com.swetake.util.Qrcode;
 public class EncoderQRCode {
@@ -56,13 +53,7 @@ public class EncoderQRCode {
     * @param args the command line arguments
     */ 
    public static void main(String[] args) { 
-	    /*String realPath="F:/xyxfiles/eclipseWorkspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/wtpwebapps/testJasobim";
-	   	//取当前时间为图片名称 带毫秒的
-*/	   	SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
-	   	Date d=new Date();
-	   	String str=sdf.format(d);
-	   	String filePath = "/fileOfCodeInformation/paperCodeFiles";
-	   	String imgPath="E:/codeInformation";
+	    String imgPath="E:/codeInformation";
 	    //String rootPath = request.getSession().getServletContext().getRealPath("/");
 	    //String imgPath = realPath+filePath+"/"+str+".png"; 
 	    //System.out.println(imgPath);

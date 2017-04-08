@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.my.spring.utils.WDWUtil;
-import com.my.spring.model.Building;
 import com.my.spring.model.Item;
 
 public class ReadExcel {
@@ -210,8 +209,7 @@ public class ReadExcel {
        
        List<Item> elementList=new ArrayList<Item>();
        Item item;    
-       Building building = null;
-      //循环Excel行数,从第二行开始。标题不入库
+       //循环Excel行数,从第二行开始。标题不入库
        for(int r=1;r<totalRows;r++){
            Row row = sheet.getRow(r);
            if (row == null) continue;

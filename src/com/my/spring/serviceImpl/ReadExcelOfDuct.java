@@ -19,10 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.my.spring.utils.WDWUtil;
-import com.my.spring.model.Building;
 import com.my.spring.model.Duct;
 import com.my.spring.model.Item;
-import com.my.spring.model.MinItem;
 
 public class ReadExcelOfDuct {
     //总行数
@@ -198,7 +196,6 @@ public class ReadExcelOfDuct {
    * @param wb
    * @return
    */
-  @SuppressWarnings("unused")
 private List<Duct> readExcelValue(Workbook wb,Long projectId){ 
       //得到第一个shell  
        Sheet sheet=wb.getSheetAt(0);
@@ -224,87 +221,83 @@ private List<Duct> readExcelValue(Workbook wb,Long projectId){
                if (null != cell){
                    if(c==0){
                 	   String temp=cell.getStringCellValue();
-                	   Long test=Long.valueOf(temp);
-                	   //item.setSelfId(test);//模型中的id
+                	   item.setSelfId(temp);//模型中的id
                    }else if(c==1){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   String temp=cell.getStringCellValue();
                 	   if(temp!=null && !(temp.equals(""))){
 	                	   item.setLocation(cell.getStringCellValue());//位置
-	                	  
 	                	   int buildingid=Integer.valueOf(temp.substring(temp.indexOf("B")+1,temp.indexOf("C")));
 	                	   int unitid=Integer.valueOf(temp.substring(temp.indexOf("C")+1,temp.indexOf("D")));
 	                	   int floorid=Integer.valueOf(temp.substring(temp.indexOf("D")+1,temp.indexOf("E")));
 	                	   int householdid=Integer.valueOf(temp.substring(temp.indexOf("E")+1));
-	                	  // item.setBuildingNum(buildingid);
-	                	  // item.setFloorNum(floorid);
-	                	  // item.setHouseholdNum(householdid);
-	                	  // item.setProjectId(projectId);
-	                	   //item.setUnitNum(unitid);
+	                	   item.setBuildingNum(buildingid);
+	                	   item.setFloorNum(floorid);
+	                	   item.setHouseholdNum(householdid);
+	                	   item.setProjectId(projectId);
+	                	   item.setUnitNum(unitid);
                 	   }
                 	   
+                   }else if(c==2){
+                	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   item.setName(str);//构件的设备类型
                    }else if(c==3){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   String str=cell.getStringCellValue();
                 	   if(str==null){
                 		   str="";
                 	   }
-                	   item.setSize(str);//构件的尺寸
+                	   item.setTypeName(str);//构件类型名称
                    }else if(c==4){
+                	   
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   String str=cell.getStringCellValue();
                 	   if(str==null){
                 		   str="";
                 	   }
                 	   item.setServiceType(str);//构件的设备类型
-                  }else if(c==6){
-                	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	   String str=cell.getStringCellValue();
-                	   if(str==null){
-                		   str="";
-                	   }
-                	   //item.setTypeName(str);//构件类型名称
+                  }else if(c==5){
+                	  cell.setCellType(Cell.CELL_TYPE_STRING);
+           	   	      String str=cell.getStringCellValue();
+               	      if(str==null){
+               		      str="";
+               	      }
+               	      item.setSize(str);//构件的尺寸
+                   }else if(c==6){
+                	   item.setLength(cell.getNumericCellValue());//构件的长度
                    }else if(c==7){
-                	   //item.setLength(cell.getNumericCellValue());//构件的长度
-                   }else if(c==8){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   String str=cell.getStringCellValue();
                 	   if(str==null){
                 		   str="";
                 	   }
                 	   item.setFamilyAndType(str);//构件的类型
-                   }else if(c==9){
+                   }else if(c==8){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   item.setLevel(cell.getStringCellValue());//构件标高
-                   }else if(c==10){
-                	   //item.setOffset(cell.getNumericCellValue());//构件偏移量
-                   }else if(c==11){
-                	   //String area=cell.getStringCellValue();
-                	  // item.setArea(cell.getNumericCellValue());
+                   }else if(c==9){
+                	   item.setArea(cell.getNumericCellValue());
                 	   //构件面积
-                   }else if(c==12){
+                   }else if(c==10){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   String str=cell.getStringCellValue();
                 	   if(str==null){
                 		   str="";
                 	   }
-                	  // item.setMaterial(str);//构件材质
-                   }else if(c==13){
+                	   item.setMaterial(str);//构件材质
+                   }else if(c==11){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
-                	  // item.setSystemType(cell.getStringCellValue());//构件的系统类型
-                	   String test=cell.getStringCellValue();
-                	   
-                	   }
-                	   
+                	   item.setSystemType(cell.getStringCellValue());//构件的系统类型
                    }
                }
            }
-           try{
-        	   elementList.add(item);
-           }catch(Exception e){
-        	   e.printStackTrace();
-           }
-        return elementList;
+           elementList.add(item);
+       }
+       return elementList;
   }
 
 }

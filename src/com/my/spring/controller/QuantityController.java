@@ -2,7 +2,6 @@ package com.my.spring.controller;
 
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Quantity;
-import com.my.spring.model.QuantityPojo;
 import com.my.spring.service.QuantityService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;

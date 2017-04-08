@@ -56,7 +56,8 @@ public final class ZxingCode {
   /**
    * @param args the command line arguments
    */ 
-  public static void main(String[] args) { 
+  @SuppressWarnings("unchecked")
+public static void main(String[] args) { 
 	  /** 
 	     * @param args 
 	     * @throws Exception  

@@ -16,13 +16,10 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.hibernate.criterion.Restrictions; 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,14 +113,18 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
        
         if(projectId!=null){
             criteria.add(Restrictions.eq("projectId", question.getProjectId()));
-        }
+        } 
+        
         
         if(content!=null){
         	String test = "";
-        	for(int i=0;i<content.length();i++){
-        		if(i==0){
+        	for(int i=0;i<content.length();i++)
+        	{
+        		if(i==0)
+        		{
         			test=test+'%'+content.charAt(i)+'%';
-        		}else{
+        		}else
+        		{
         			test=test+content.charAt(i)+'%';
         		}
         		
@@ -133,25 +134,36 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         	//dis.add(Restrictions.like("intro", content,MatchMode.ANYWHERE));
         	dis.add(Restrictions.like("trades", test,MatchMode.ANYWHERE));
         	
-        	if(question.getPriority()!=null) {
+        	if(question.getPriority()!=null && question.getPriority()!=-1) 
+        	{
         		dis.add(Restrictions.eq("priority", question.getPriority()));
 			} 
-        	if(userIdList!=null){
+        	if(userIdList!=null)
+        	{
         		for(int i=0;i<userIdList.length;i++){
         			dis.add(Restrictions.eq("userId", userIdList[i]));
         		}
         		
 			}
-			if(question.getQuestionType()!=null){
+			if(question.getQuestionType()!=null)
+			{
 				dis.add(Restrictions.eq("questionType", question.getQuestionType()));
 			}
-			if(question.getState()!=null){
+			if(question.getState()!=null)
+			{
 				dis.add(Restrictions.eq("state", question.getState()));
 			}
 			criteria.add(dis);
         }else{
-        	 if(question.getPriority()!=null){
-             	criteria.add(Restrictions.eq("priority", question.getPriority()));
+    		 if(question.getPriority()!=null){
+            	if(question.getPriority()==-1){
+                	Disjunction dis = Restrictions.disjunction();        	
+                	dis.add(Restrictions.eq("priority", 1));
+                	dis.add(Restrictions.eq("priority", 2));
+                	criteria.add(dis);
+                }else{
+                	criteria.add(Restrictions.eq("priority", question.getPriority()));
+                }
              }
              if(question.getQuestionType()!=null){
              	criteria.add(Restrictions.eq("questionType", question.getQuestionType()));
@@ -160,6 +172,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
              	criteria.add(Restrictions.eq("state", question.getState()));
              }
         }
+        
         if (pageSize == null) {
 			pageSize = 10;
 		}
@@ -281,6 +294,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 
 	@Override
 	public DataWrapper<List<Question>> getQuestionListByLike(String content) {
+		@SuppressWarnings("unused")
 		String sql="SELECT * FROM question WHERE CONCAT(IFNULL(name,''),IFNULL(intro,''),IFNULL(trades,''),IFNULL(question_date,'')) LIKE '%"+content+"%'" ; 
 		return null;
 	}

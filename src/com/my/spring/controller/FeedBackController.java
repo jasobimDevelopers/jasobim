@@ -31,9 +31,10 @@ public class FeedBackController {
 	@RequestMapping(value="/addFeedback", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addFeedBack(
-    		@RequestParam(value="token",required=true) String token,
-    		@RequestParam(value="content",required=true) String content) {
-        return feedBackService.addFeedBack(content,token);
+    		@ModelAttribute FeedBack feedBack,
+    		@RequestParam(value="token",required=true) String token) {
+		System.out.println(feedBack.getContent());
+        return feedBackService.addFeedBack(feedBack.getContent(),token,feedBack.getTel());
     }
 	
 	//管理员删除用户的个人信息

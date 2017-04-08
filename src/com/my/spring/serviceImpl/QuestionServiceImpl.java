@@ -175,7 +175,6 @@ public class QuestionServiceImpl implements QuestionService {
     public DataWrapper<Void> deleteQuestion(Long id,String token,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
-        DataWrapper<List<Question>> questionList=new DataWrapper<List<Question>>();
         DataWrapper<List<QuestionFile>> questionFileList=new DataWrapper<List<QuestionFile>>();
         DataWrapper<List<Message>> messageList=new DataWrapper<List<Message>>();
         DataWrapper<List<MessageFile>> messageListFile=new DataWrapper<List<MessageFile>>();
@@ -298,84 +297,121 @@ public class QuestionServiceImpl implements QuestionService {
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		Long[] userIdList=null;
-    			if(content!=null){
-    				//////问题类型搜索
-    				if("安全".contains(content)){
-    					question.setQuestionType(0);
-    				}
-    				if("质量".contains(content)){
-    					question.setQuestionType(1);
-    				}
-    				if("其他".contains(content)){
-    					question.setQuestionType(2);
-    				}
-    				/////问题等级搜索
-    				if("一般".contains(content)){
-    					question.setPriority(0);
-    				}
-    				if("重要".contains(content)){
-    					question.setPriority(1);
-    				}
-    				if("紧急".contains(content)){
-    					question.setPriority(2);
-    				}
-    				/////问题状态搜索
-    				if("待解决".contains(content)){
-    					question.setState(0);
-    				}
-    				if("已解决".contains(content)){
-    					question.setState(1);
-    				}
-    				List<User> users=new ArrayList<User>();
-    				users=userDao.findUserLikeRealName(content).getData();
-    				
-    				
-    				if(users!=null){
-    					if(users.size()>0){
-    						userIdList=new Long[users.size()];
-    						for(int i=0;i<users.size();i++){
-    							userIdList[i]=users.get(i).getId();
-    						}
-    						
-    					}
-    				}
-    			}
-    			datawrapper= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question,userIdList);
-    			Long questionSort=questionDao.getQuestionListOfSort();
-    			Long questionImportant=questionDao.getQuestionListOfImportant();
-    			Long questionAll=questionDao.getQuestionList();
-    			NumberFormat nf = NumberFormat.getNumberInstance();   
-    	        nf.setMaximumFractionDigits(2);   
-    	    	double sortPercent=( (double)questionSort/(double)questionAll);
-    	    	sortPercent=sortPercent*100;
-    	    	if((sortPercent+0.5)>Math.ceil(sortPercent))
-    	    	{
-    	    		sortPercent=Math.ceil(sortPercent);
-    	    	}else{
-    	    		sortPercent=Math.floor(sortPercent);
-    	    	}
-    	    	
-    	    	double importantPercent=((double)questionImportant/(double)questionAll);
-    	    	importantPercent=importantPercent*100;
-    	    	if((importantPercent+0.5)>Math.ceil(importantPercent))
-    	    	{
-    	    		importantPercent=Math.ceil(importantPercent);
-    	    	}else{
-    	    		importantPercent=Math.floor(importantPercent);
-    	    	}
-    	    	if(datawrapper.getData()==null || datawrapper.getData().size()<=0){
-    	    		List<QuestionPojo> questionPojolist=new ArrayList<QuestionPojo>();
-    	    		QuestionPojo questionPojo=new QuestionPojo();
-    	    		questionPojo.setSortPercent((int)sortPercent);
-    	    		questionPojo.setImportantPercent((int)importantPercent);
-    	    		questionPojo.setUrgentPercent(100-(int)sortPercent-(int)importantPercent);
-    	    		questionPojolist.add(questionPojo);
-    	    		datawrapper.setData(questionPojolist);
-    	    	}else{
-    	    		datawrapper.getData().get(0).setImportantPercent((int)importantPercent);
-        	    	datawrapper.getData().get(0).setUrgentPercent(100-(int)sortPercent-(int)importantPercent);
-    	    		datawrapper.getData().get(0).setSortPercent((int)sortPercent);
-    	    	}
+			if(content!=null){
+				//////问题类型搜索
+				if("安全".contains(content))
+				{
+					question.setQuestionType(0);
+				}
+				if("质量".contains(content))
+				{
+					question.setQuestionType(1);
+				}
+				if("其他".contains(content))
+				{
+					question.setQuestionType(2);
+				}
+				/////问题状态搜索
+				if("待解决".contains(content)){
+					question.setState(0);
+				}
+				if("已解决".contains(content)){
+					question.setState(1);
+				}
+				List<User> users=new ArrayList<User>();
+				users=userDao.findUserLikeRealName(content).getData();
+    			if(users!=null)
+    			{
+					if(users.size()>0)
+					{
+						userIdList=new Long[users.size()];
+						for(int i=0;i<users.size();i++)
+						{
+							userIdList[i]=users.get(i).getId();
+						}
+					}
+				}
+			}
+			/////问题等级搜索
+			/////当用户是总经理级别的时候,问题搜索只能搜索重要和紧急，同时也只能看重要和紧急问题，不看一般问题 
+			if(userInMemory.getWorkName()!=null){
+				if(userInMemory.getWorkName().equals("总经理"))
+				{
+					if(question.getPriority()==null){
+						question.setPriority(-1);
+					}
+				}else{
+					if(content!=null){
+						if("一般".contains(content)){
+							question.setPriority(0);
+						}
+					}
+				}
+				/////当用户是投资方（甲方）的时候，问题搜索只能搜索一般问题，同时也只能看一般问题，不能重要和紧急问题
+				if(userInMemory.getWorkName().equals("投资方"))
+				{
+					if(question.getPriority()==null){
+						question.setPriority(0);
+					}
+				}else{
+					if(content!=null){
+						if("重要".contains(content)){
+							question.setPriority(1);
+						}
+						if("紧急".contains(content)){
+							question.setPriority(2);
+						}
+					}
+				}
+			}
+			datawrapper= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question,userIdList);
+			
+			Long questionSort=questionDao.getQuestionListOfSort();
+			Long questionImportant=questionDao.getQuestionListOfImportant();
+			Long questionAll=questionDao.getQuestionList();
+			NumberFormat nf = NumberFormat.getNumberInstance();   
+	        nf.setMaximumFractionDigits(2);   
+	    	double sortPercent=( (double)questionSort/(double)questionAll);
+	    	sortPercent=sortPercent*100;
+	    	if((sortPercent+0.5)>Math.ceil(sortPercent))
+	    	{
+	    		sortPercent=Math.ceil(sortPercent);
+	    	}else{
+	    		sortPercent=Math.floor(sortPercent);
+	    	}
+	    	
+	    	double importantPercent=((double)questionImportant/(double)questionAll);
+	    	importantPercent=importantPercent*100;
+	    	if((importantPercent+0.5)>Math.ceil(importantPercent))
+	    	{
+	    		importantPercent=Math.ceil(importantPercent);
+	    	}else{
+	    		importantPercent=Math.floor(importantPercent);
+	    	}
+	    	if(datawrapper.getData()!=null && datawrapper.getData().size()>0){
+	    		if(userInMemory.getWorkName()!=null){
+	    			if(userInMemory.getWorkName().equals("总经理")){
+						datawrapper.getData().get(0).setRoleFlag(1);
+					}else if(userInMemory.getWorkName().equals("投资方")){
+						datawrapper.getData().get(0).setRoleFlag(2);
+					}else{
+						datawrapper.getData().get(0).setRoleFlag(0);
+					}
+	    		}
+			}
+	    	if(datawrapper.getData()==null || datawrapper.getData().size()<=0){
+	    		List<QuestionPojo> questionPojolist=new ArrayList<QuestionPojo>();
+	    		QuestionPojo questionPojo=new QuestionPojo();
+	    		questionPojo.setSortPercent((int)sortPercent);
+	    		questionPojo.setImportantPercent((int)importantPercent);
+	    		questionPojo.setUrgentPercent(100-(int)sortPercent-(int)importantPercent);
+	    		questionPojolist.add(questionPojo);
+	    		datawrapper.setData(questionPojolist);
+	    	}else{
+	    		datawrapper.getData().get(0).setImportantPercent((int)importantPercent);
+    	    	datawrapper.getData().get(0).setUrgentPercent(100-(int)sortPercent-(int)importantPercent);
+	    		datawrapper.getData().get(0).setSortPercent((int)sortPercent);
+	    	}
     	    	
     	}else{
     		datawrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);

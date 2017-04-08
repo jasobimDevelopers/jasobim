@@ -22,6 +22,9 @@ public class QuestionPojo {
 	private int urgentPercent;//////紧急问题的百分比
 	private String position;//位置
 	private Integer userid;
+	private Integer roleFlag;//0.普通用户（只能看指定的项目的所有内容）
+							 //1.总经理(能看所有，但是问题只看紧急和重要) 
+	                         //2.投资方（只能看所述项目的内容，另外项目里面的工程量和紧急和重要问题不能看）
 	public Long getId() {
 		return id;
 	}
@@ -148,6 +151,12 @@ public class QuestionPojo {
 	}
 	public void setUserid(Integer i) {
 		this.userid = i;
+	}
+	public Integer getRoleFlag() {
+		return roleFlag;
+	}
+	public void setRoleFlag(Integer roleFlag) {
+		this.roleFlag = roleFlag;
 	}
 	
 	

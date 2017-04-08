@@ -3,7 +3,6 @@ package com.my.spring.DAO;
 import com.my.spring.model.Quantity;
 import com.my.spring.utils.DataWrapper;
 
-import scala.collection.generic.BitOperations.Int;
 
 import java.util.List;
 

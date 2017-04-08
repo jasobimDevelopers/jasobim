@@ -105,8 +105,11 @@ public class QuantityServiceImpl implements QuantityService {
     	DataWrapper<List<Quantity>> datawrapper=new DataWrapper<List<Quantity>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
-    		
-    			datawrapper=quantityDao.getQuantityList(projectId,pageSize, pageIndex,quantity);
+    		if(userInMemory.getWorkName().equals("投资方")){
+    			datawrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+    		}else{
+    			datawrapper=quantityDao.getQuantityList(projectId,pageSize, pageIndex,quantity);	
+    		}
     	}else{
     		datawrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}
@@ -185,7 +188,7 @@ public class QuantityServiceImpl implements QuantityService {
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null) {
 			
-				String filePath = "E:/JasoBim/BimAppDocument/apache-tomcat-8.0.39/webapps/testJasobim" + "/out/" + projectId + "/";
+				String filePath = "E:/JasoBim/BimAppDocument/apache-tomcat-8.0.39/webapps/jasobim" + "/out/" + projectId + "/";
 				File fileDir = new File(filePath);
 		        if (!fileDir.exists()) {
 		            fileDir.mkdirs();

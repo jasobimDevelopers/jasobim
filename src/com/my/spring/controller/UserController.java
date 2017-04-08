@@ -116,6 +116,20 @@ public class UserController {
     		@RequestParam(value="token",required=true) String token) {
         return userService.updateUser(user, token);
     }
+	/**
+	 * 
+	 * @param password///密码修改
+	 * @param token
+	 * @return
+	 */
+	@RequestMapping(value="/updatePsBySelf", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> UpdatePsBySelf(
+    		@RequestParam(value="oldPs",required=true) String oldPs,
+    		@RequestParam(value="newPs",required=true) String newPs,
+    		@RequestParam(value="token",required=true) String token) {
+        return userService.updateUserBySelf(oldPs, newPs, token);
+    }
 	
 	//普通用户获取自己的个人详情
 	@RequestMapping(value="/details", method = RequestMethod.GET)

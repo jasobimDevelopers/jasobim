@@ -84,6 +84,7 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
         return retDataWrapper;
     }
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<Message>> getMessageListByUserId(Long userId) {
 		 DataWrapper<List<Message>> retDataWrapper = new DataWrapper<List<Message>>();
@@ -110,6 +111,7 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 		return get(id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<Message>> getMessageListByQuestionId(Long id) {
 	 DataWrapper<List<Message>> retDataWrapper = new DataWrapper<List<Message>>();

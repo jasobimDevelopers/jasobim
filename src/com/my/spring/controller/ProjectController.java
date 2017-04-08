@@ -27,8 +27,8 @@ public class ProjectController {
             @ModelAttribute Project project,
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request,
-            @RequestParam(value = "modelFile", required = false) MultipartFile modelFile,
-            @RequestParam(value = "picFile", required = false) MultipartFile picFile){
+            @RequestParam(value = "modelFile", required = false) MultipartFile[] modelFile,
+            @RequestParam(value = "picFile", required = false) MultipartFile[] picFile){
         return projectService.addProject(project,token,modelFile,picFile,request);
     }
     
@@ -47,8 +47,8 @@ public class ProjectController {
             @ModelAttribute Project project,
             HttpServletRequest request,
             @RequestParam(value = "token",required = true) String token,
-            @RequestParam(value = "modelFile", required = false) MultipartFile modelFile,
-            @RequestParam(value = "picFile", required = false) MultipartFile picFile) {
+            @RequestParam(value = "modelFile", required = false) MultipartFile[] modelFile,
+            @RequestParam(value = "picFile", required = false) MultipartFile[] picFile) {
         return projectService.updateProject(project,token,modelFile,picFile,request);
     }
 

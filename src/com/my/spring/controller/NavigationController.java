@@ -16,6 +16,10 @@ public class NavigationController {
     public String userPage(){
         return "home";
     }
+    @RequestMapping(value="/itemGetList")
+    public String itemGetPage(){
+    	return "home";
+    }
     @RequestMapping(value="/projectList")
     public String projectPage(){
         return "home";
@@ -60,4 +64,6 @@ public class NavigationController {
     public String userSuggesttionPage(){
     	return "user_home";
     }
+    
+    
 }

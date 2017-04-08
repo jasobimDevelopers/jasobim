@@ -68,6 +68,7 @@
                 <value>com.my.spring.model.Duct</value>
                 <value>com.my.spring.model.CableTray</value>
                	<value>com.my.spring.model.News</value>
+               	<value>com.my.spring.model.DuctLog</value>
             </list>
         </property>
     </bean>

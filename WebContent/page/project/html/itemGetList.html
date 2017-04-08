@@ -1,10 +1,60 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-	<h1>啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦</h1>
-</body>
-</html>
+  <div id="all_yuzhihua" ng-controller="ItemGetController">
+  	<div id="head_yuzhihua">
+      	<div id="item_list"><span>构建列表</span></div>
+          <div id="data_get"><span>数据统计</span></div>
+          <div id="search_yuzhihua">
+		<div id="search_icons" ng-click="findItem()"><a href=""><img src="page/project/images/icon@2x.png" id="search_icon"/></a></div>
+		<div id="inputContents"><input type="text" id="search_input"/></div>
+	</div>
+      </div>
+      <div id="content1">
+      	<div id="leftss">
+          	<div id="one">
+			<div><img src="page/project/images/项目@2x.png"/></div>
+			<div><span>项目</span></div>
+			<div class="li_show_hide" id="li_show_hide1" onClick="hideUlst()"></div>
+		</div>
+              <div id="name_div" style="display:none">
+              	<ul class="left_ul">
+                  	<li ng-click="setProjectName(test.id)" ng-repeat="test in projectLists"><a href="">{{test.name}}</a></li>
+                 </ul>
+              </div>
+              <div id="two">
+			<div><img src="page/project/images/类型@2x.png"/></div>
+			<div><span>类型</span></div>
+			<div class="li_show_hide" id="li_show_hide2" onClick="hideUls()"></div>
+		</div>
+              <div id="type_div" style="display:none">
+              	<ul class="left_ul">
+                  	<li ng-click="setType(item)" ng-repeat="item in itemNameList"><a href="">{{item}}</a></li>
+                 </ul>
+              </div>
+              <div id="three">
+			<div><img src="page/project/images/状态@2x.png"/></div>
+			<div><span>状态</span></div>
+			<div class="li_show_hide" id="li_show_hide3" onClick="hideUl()"></div>
+		</div>
+              <div id="state_div" style="display:none">
+              	<ul class="left_ul">
+                  	<li ng-click="setState($index)" ng-repeat="items in itemState"><a href="">{{items}}</a></li>
+                  </ul>
+              </div>
+              <div id="four"></div>
+          </div>
+        <div id="rightss">
+	        <div>
+				<ul>
+					<li class="contents" ng-repeat="item in itemGetList">
+						<div class="state_icon"><span>{{item.state}}</span></div>
+						<div class="item_name"><span>{{item.name}}</span></div>
+						<div class="time"><span>{{item.date}}</span></div>
+					</li>
+				</ul>
+			</div>
+			<div id="table-buton112" >
+				<div id="itemsPageCode"></div>
+			</div>
+		</div>
+      </div>
+  </div>
+

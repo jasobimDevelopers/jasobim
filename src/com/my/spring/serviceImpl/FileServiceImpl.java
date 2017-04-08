@@ -25,7 +25,6 @@ public class FileServiceImpl implements FileService  {
 	ItemService itemService;
 	@Autowired
 	FileDao fileDao;
-	@SuppressWarnings("unused")
 	@Override
 	public Files uploadFile(String filePath, MultipartFile file, Integer fileType,HttpServletRequest request) {
 		
@@ -59,6 +58,7 @@ public class FileServiceImpl implements FileService  {
             files.setName(newFileName);//////构件的url
             files.setUrl(realPath);
             files.setFileType(fileType);
+            files.setRealName(file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf(".")));
             fileDao.addFiles(files);
             
 

@@ -19,7 +19,6 @@ import org.springframework.stereotype.Repository;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.QuantityDao;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.Building;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DaoUtil;
@@ -153,32 +152,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		return get(id);
 	}
 
-	/*@SuppressWarnings("unchecked")
-	@Override
-	public boolean findQuantity(Quantity quantity) {
-		String sql = "select * from quantity as a where a.project_id="+quantity.getProjectId()
-		+" and a.building_num="+quantity.getBuildingNum()+" and a.unit_num="+quantity.getUnitNum()
-		+" and a.floor_num="+quantity.getFloorNum()+" and a.household_num="+quantity.getHouseholdNum()
-		+" and a.name='"+quantity.getName()+"' and a.size='"+quantity.getSize()+"' and a.material='"
-		+quantity.getMaterial()+"' and a.service_type='"+quantity.getServiceType()
-		+"' and a.system_type='"+quantity.getSystemType()+"' and a.family_and_type='"
-		+quantity.getFamilyAndType()+"' and a.profession_type="+quantity.getProfessionType();
-		DataWrapper<List<QuantityPojo>> dataWrapper = new DataWrapper<List<QuantityPojo>>();
-		Session session=getSession();
-		try{
-	            Query query=session.createSQLQuery(sql);
-	            dataWrapper.setData(query.list());
-	            if(dataWrapper.getData()!=null&&dataWrapper.getData().size()>0){
-	            	return true;
-	            }
-	    }catch(Exception e){
-	        	dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
-	            e.printStackTrace();
-	           
-	    }
-		
-		return false;
-	}*/
+	
 
 	@Override
 	public boolean addQuantityList(List<Quantity> quantityList) {
@@ -186,6 +160,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		return saveList(quantityList);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Quantity> getAllQuantity() {
 		List<Quantity> ret = null;
@@ -234,6 +209,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<Quantity>> getQuantityListNum(Long projectId, Integer pageSize, Integer pageIndex,
 			Quantity quantity) {
@@ -341,6 +317,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		return dataWrappers;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean findSameQuantityAndDo(List<Quantity> quantityList) {
 		List<Quantity> quantityLists=new ArrayList<Quantity>();
@@ -373,6 +350,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<Quantity>> testGroupBy(int pageSize,int pageIndex) {
 		// TODO Auto-generated method stub

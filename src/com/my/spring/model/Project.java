@@ -14,8 +14,8 @@ public class Project {
     private String constructionUnit;//施工單位
     private String leader;//项目负责人
     private String buildingUnit;
-    private Long picId;
-    private Long modelId;
+    private String picId;
+    private String modelId;
     private String place;//施工地點
     private String description;//項目工程描述
     private String designUnit;//设计单位
@@ -23,8 +23,9 @@ public class Project {
     private String startDate;//施工時間
     private String phase;//施工周期
     private String state;//上线不上线的标志0.未上线 1.已上线
-    private Integer isIos;//0.安卓	1.ios
+    private String isIos;//0.安卓	1.ios   2.pad模型
     private String modelPart;//all.整体	rf.顶层     standard.标准层     B1.地下一层     B2.地下二层      B3.地下三层
+    
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -56,11 +57,11 @@ public class Project {
 	}
 	@Basic
 	@Column(name = "is_ios")
-	public Integer getIsIos() {
+	public String getIsIos() {
 		return isIos;
 	}
 
-	public void setIsIos(Integer isIos) {
+	public void setIsIos(String isIos) {
 		this.isIos = isIos;
 	}
 	
@@ -116,21 +117,21 @@ public class Project {
 
 	@Basic
     @Column(name = "pic_id")
-	public Long getPicId() {
+	public String getPicId() {
 		return picId;
 	}
 
-	public void setPicId(Long picId) {
+	public void setPicId(String picId) {
 		this.picId = picId;
 	}
 
 	@Basic
     @Column(name = "model_id")
-	public Long getModelId() {
+	public String getModelId() {
 		return modelId;
 	}
 
-	public void setModelId(Long modelId) {
+	public void setModelId(String modelId) {
 		this.modelId = modelId;
 	}
 

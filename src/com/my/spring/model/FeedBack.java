@@ -15,6 +15,7 @@ public class FeedBack {
 	private String userName;
 	private Date date;
 	private String content;
+	private String tel;
 	
 	@Id
     @GeneratedValue
@@ -33,6 +34,15 @@ public class FeedBack {
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+	
+	@Basic
+    @Column(name = "tel")
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
 	
 	@Basic

@@ -1,7 +1,6 @@
 package com.my.spring.service;
 
 import com.my.spring.model.Quantity;
-import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DataWrapper;
 
 import java.util.List;

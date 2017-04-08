@@ -9,7 +9,7 @@ function projectInfo(){
 
 
 function setModel(model) {
-	angular.element(model).scope().$parent.$parent.modelFiles = model.files[0];
+	angular.element(model).scope().$parent.$parent.modelFiles = model.files;
 }
 function setPic(pic) {
 	
@@ -63,7 +63,7 @@ function ProjectController($scope,ProjectService) {
 	var projectId=null;
 	$scope.number=null;
 	$scope.numbers=null;
-	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","设计单位","施工地点","项目简介","建设单位","版本","施工时间","施工周期","操作"];
+	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","设计单位","施工地点","建设单位","版本","施工时间","施工周期","操作"];
 	$scope.projectDetailsInfo=["项目名称","项目编码","施工单位","项目负责人","施工地点","建设单位","设计单位","施工时间","施工周期","版本","项目简介"];
 	$scope.itemTitles=["序号","构件名称","底部高程","系统类型","尺寸","长度","设备类型","所属类别","标高","偏移量","面积","材质","类型名"];
 	$scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质"];
@@ -457,7 +457,9 @@ function ProjectController($scope,ProjectService) {
 			 if($scope.modelFiles == undefined || $scope.modelFiles == null) {
 				 formData.append('modelFile',null);
 			 } else {
-				 formData.append('modelFile',$scope.modelFiles);
+				 for(var i = 0; i < $scope.modelFiles.length;i++) {
+					 formData.append('modelFile',$scope.modelFiles[i]);
+				 }
 			 }
 			 if(projectPicss == undefined || projectPicss == null) {
 				 formData.append('picFile',null);
@@ -537,8 +539,19 @@ function ProjectController($scope,ProjectService) {
 			 if($scope.modelFiles == undefined || $scope.modelFiles == null) {
 				 formData.append('modelFile',null);
 			 } else {
-				 formData.append('modelFile',$scope.modelFiles);
+				 for(var i = 0; i < $scope.modelFiles.length;i++) {
+					 formData.append('modelFile',$scope.modelFiles[i]);
+				 }
 			 }
+			 /*if($scope.modelFiles == undefined || $scope.modelFiles == null) {
+				 formData.append('modelFile',null);
+			 } else {
+				 var filett=document.getElementById("testfile").files;
+				 for(var i = 0; i < filett.length;i++) {
+					 formData.append('modelFile',filett[i]);
+				 }
+				 
+			 }*/
 			 //var picfile=document.getElementById("picFile").files[0];
 			 if(projectPicss == undefined || projectPicss == null) {
 				 formData.append('picFile',null);

@@ -19,7 +19,6 @@ import com.my.spring.service.PaperService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
-import io.netty.handler.codec.http.HttpRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -302,6 +301,7 @@ public class PaperServiceImpl implements PaperService {
         return dataWrappers;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<PaperPojo>> getPapers(HttpServletRequest request,Long projectId, String token, Integer pageIndex, Integer pageSize, Paper paper) {
 		// TODO Auto-generated method stub
@@ -329,8 +329,7 @@ public class PaperServiceImpl implements PaperService {
 	        			   	String rootPath = request.getSession().getServletContext().getRealPath("/");
 	        			   	String filePath="/codeFiles/";
 	        			   	String imgpath=rootPath+filePath;
-	        			   	String realPath=filePath+str+".png";
-	        				try{
+	        			   	try{
 	        				MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 	        			        @SuppressWarnings("rawtypes")
 	        					Map hints = new HashMap();  

@@ -61,25 +61,68 @@ public class ProjectServiceImpl implements ProjectService {
     private String filePath1="files";
     private Integer fileType=2;
     @Override
-    public DataWrapper<ProjectPojo> addProject(Project project,String token,MultipartFile modelfile,MultipartFile picfile,HttpServletRequest request) {
+    public DataWrapper<ProjectPojo> addProject(Project project,String token,MultipartFile modelfile[],MultipartFile picfile[],HttpServletRequest request) {
         DataWrapper<ProjectPojo> dataWrapper = new DataWrapper<ProjectPojo>();
         DataWrapper<Project> dataWrappers = new DataWrapper<Project>();
         User userInMemory = SessionManager.getSession(token);
         ProjectPojo pojo=new ProjectPojo();
+        String[] urlList = new String[modelfile.length];
+        
+        String[] urlList2 = new String[picfile.length];
+        
+        Integer[] ioIos = new Integer[modelfile.length];
+        Long[] modelidList=new Long[modelfile.length];
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(project!=null){
-					if(modelfile!=null){
-						String path=filePath1+"/"+"projectmodels";
-						Files newfile=fileService.uploadFile(path, modelfile,fileType,request);
-						project.setModelId(newfile.getId());
-						pojo.setModelUrl(newfile.getUrl());
+					if(modelfile.length>=0){
+						String temp="";
+						String modelName="";
+						for(int i=0;i<modelfile.length;i++){
+							String path=filePath1+"/"+"projectmodels";
+							Files newfile=fileService.uploadFile(path, modelfile[i],fileType,request);
+							if(i!=0){
+								temp=temp+","+newfile.getId();//0.安卓	1.ios   2.pad模型
+								String nameList=modelfile[i].getOriginalFilename().substring(0,modelfile[i].getOriginalFilename().lastIndexOf("."));
+								String[] nameLists=nameList.split("_");   
+								modelName=modelName+","+nameLists[0];
+								ioIos[i]=Integer.valueOf(nameLists[1]);
+							}else{
+								temp=newfile.getId().toString();
+								String nameList=modelfile[i].getOriginalFilename().substring(0,modelfile[i].getOriginalFilename().lastIndexOf("."));
+								String[] nameLists=nameList.split("_");   
+								modelName=nameLists[0];
+								ioIos[i]=Integer.valueOf(nameLists[1]);
+							}
+							modelidList[i]=newfile.getId();
+							urlList[i]=newfile.getUrl();
+						}
+						project.setModelId(temp);
+						project.setModelPart(modelName);
+						pojo.setModelUrl(urlList);////模型url
+						pojo.setModelId(modelidList);/////模型id
+						pojo.setIsIos(ioIos);
 					}
 					if(picfile!=null){
-						String path=filePath1+"/"+"projectpics";
-						Files newfile=fileService.uploadFile(path, picfile,fileType,request);
-						project.setPicId(newfile.getId());
-						pojo.setPicUrl(newfile.getUrl());
+						String temp="";
+						String picName = "";
+						for(int i=0;i<picfile.length;i++){
+							String path=filePath1+"/"+"projectpics";
+							Files newfile=fileService.uploadFile(path, picfile[i],fileType,request);
+							if(i!=0){
+								temp=temp+","+newfile.getId();
+								picName=picName+","+picfile[i].getOriginalFilename();
+							}else{
+								temp=newfile.getId().toString();
+								picName=picfile[i].getOriginalFilename();
+							}
+							urlList2[i]=newfile.getUrl();
+							project.setPicId(newfile.getId().toString());
+						}
+						//project.setPicId();
+						//project.set();
+						pojo.setPicUrl(urlList2[0]);
+						
 					}
 					if(projectDao.addProject(project)){
 						dataWrappers=projectDao.findProjectLike(project);
@@ -95,7 +138,6 @@ public class ProjectServiceImpl implements ProjectService {
 						pojo.setPhase(dataWrappers.getData().getPhase());
 						pojo.setStartDate(dataWrappers.getData().getStartDate());
 						pojo.setVersion(dataWrappers.getData().getVersion());
-						pojo.setIsIos(dataWrappers.getData().getIsIos());
 						dataWrapper.setData(pojo);
 					}
 					else{
@@ -118,8 +160,14 @@ public class ProjectServiceImpl implements ProjectService {
     public DataWrapper<Void> deleteProject(Long id,String token,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         Project projects=projectDao.getById(id);
-        Long modelId=projects.getModelId();
-        Long picId=projects.getPicId();
+        String modelId[]=null;
+        if(!projects.getModelId().equals("") && projects.getModelId()!=null){
+        	modelId=projects.getModelId().split(",");
+        }
+        String[] picId=null;
+        if(projects.getPicId()!=null && !projects.getPicId().equals("")){
+        	picId=projects.getPicId().split(",");
+        }
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
         	if(userInMemory.getUserType()==UserTypeEnum.Admin.getType())
@@ -158,32 +206,39 @@ public class ProjectServiceImpl implements ProjectService {
 					if(videoDao.getByProjectId(id)==true){
 						videoDao.deleteVideoByProjectId(id);
 					}
+					if(modelId!=null){
+						/////有模型文件时删除模型文件
+						for(int i=0;i<modelId.length;i++){
+							Files files=fileDao.getById(Long.valueOf(modelId[i]));
+							if(fileDao.deleteFiles(Long.valueOf(modelId[i])))
+							{
+								fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
+							}else{
+								dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+							}
+						}
+						
+					}
+					if(picId!=null){
+						///有图片时删除图片文件
+						for(int j=0;j<picId.length;j++){
+							Files files=fileDao.getById(Long.valueOf(picId[j]));
+							if(fileDao.deleteFiles(Long.valueOf(picId[j])))
+							{
+								fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
+								
+							}else{
+								dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+							}
+						}
+						
+					}
 					/////删除项目自身文件
 					if(!projectDao.deleteProject(id))
 					{
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					}
-					if(modelId!=null){
-						/////有模型文件时删除模型文件
-						Files files=fileDao.getById(modelId);
-						if(fileDao.deleteFiles(modelId))
-						{
-							fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
-						}else{
-							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-						}
-					}
-					if(picId!=null){
-						///有图片时删除图片文件
-						Files files=fileDao.getById(picId);
-						if(fileDao.deleteFiles(picId))
-						{
-							fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
-							
-						}else{
-							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-						}
-					}
+					
 					
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -198,21 +253,45 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public DataWrapper<Void> updateProject(Project project,String token,MultipartFile modelFile,MultipartFile picFile,HttpServletRequest request) {
+    public DataWrapper<Void> updateProject(Project project,String token,MultipartFile modelFile[],MultipartFile picFile[],HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 				if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 					if(project!=null){
-						if(modelFile!=null){
-							String path=filePath1+"/"+"projectmodels";
-							Files newfile=fileService.uploadFile(path, modelFile,fileType,request);
-							project.setModelId(newfile.getId());
+						String modelid="";
+						String modelName="";
+						String isIos="";
+						if(modelFile.length>=0){
+							for(int i=0;i<modelFile.length;i++){
+								String path=filePath1+"/"+"projectmodels";
+								Files newfile=fileService.uploadFile(path, modelFile[i],fileType,request);
+								if(i!=0){
+									modelid=modelid+","+newfile.getId();
+									modelName=modelName+","+newfile.getRealName().split("_")[0];
+									isIos=isIos+","+newfile.getRealName().split("_")[1];
+								}else{
+									modelid=newfile.getId().toString();
+									modelName=newfile.getRealName().split("_")[0];
+									isIos=newfile.getRealName().split("_")[1];
+								}
+							}
+							project.setModelId(modelid);
+							project.setModelPart(modelName);
+							project.setIsIos(isIos);
 						}
-						if(picFile!=null){
-							String path=filePath1+"/"+"projectpics";
-							Files newfile=fileService.uploadFile(path, picFile,fileType,request);
-							project.setPicId(newfile.getId());
+						if(picFile.length>=0){
+							String picid="";
+							for(int i=0;i<picFile.length;i++){
+								String path=filePath1+"/"+"projectpics";
+								Files newfile=fileService.uploadFile(path, picFile[i],fileType,request);
+								if(i!=0){
+									picid=picid+","+newfile.getId();
+								}else{
+									picid=newfile.getId().toString();
+								}
+							}
+							project.setPicId(picid);
 						}
 						if(!projectDao.updateProject(project)) 
 				            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -257,17 +336,46 @@ public class ProjectServiceImpl implements ProjectService {
 					projectpojo.setStartDate(dataWrapper.getData().get(i).getStartDate());
 					projectpojo.setVersion(dataWrapper.getData().get(i).getVersion());
 					projectpojo.setState(dataWrapper.getData().get(i).getState());
-					projectpojo.setIsIos(dataWrapper.getData().get(i).getIsIos());
-					if(dataWrapper.getData().get(i).getModelPart()!=null && dataWrapper.getData().get(i).getModelPart()!=""){
-						projectpojo.setModelPart(dataWrapper.getData().get(i).getModelPart());
+					
+					if(dataWrapper.getData().get(i).getModelId()!=null && !dataWrapper.getData().get(i).getModelPart().equals("")){
+						String[] modelId=dataWrapper.getData().get(i).getModelId().split(",");
+						Long[] modelid=new Long[modelId.length];
+						if(dataWrapper.getData().get(i).getModelId()!=null && !dataWrapper.getData().get(i).getModelId().equals("")){
+							for(int j=0;j<modelId.length;j++){
+								modelid[j]=Long.valueOf(modelId[j]);
+							}
+						}
+						////////
+						projectpojo.setModelId(modelid);
 					}
-					if(dataWrapper.getData().get(i).getModelId()!=null){
-						Files files=fileDao.getById(dataWrapper.getData().get(i).getModelId());
-						projectpojo.setModelUrl(files.getUrl());
-						projectpojo.setModelName(files.getName());
+					////////
+					if(dataWrapper.getData().get(i).getModelPart()!=null && !dataWrapper.getData().get(i).getModelPart().equals("")){
+						projectpojo.setModelPart(dataWrapper.getData().get(i).getModelPart().split(","));
 					}
-					if(dataWrapper.getData().get(i).getPicId()!=null){
-						Files filess=fileDao.getById(dataWrapper.getData().get(i).getPicId());
+					if(dataWrapper.getData().get(i).getModelId()!=null && !dataWrapper.getData().get(i).getModelId().equals("")){
+						String[] temp=dataWrapper.getData().get(i).getModelId().split(",");
+						String[] urlList=new String[temp.length];
+						String[] nameList=new String[temp.length];
+						Integer[] isIos = new Integer[temp.length];
+						for(int k=0;k<temp.length;k++){
+							String test="";
+							Files files=fileDao.getById(Long.valueOf(temp[k]));
+							urlList[k]=files.getUrl();
+							if(files.getRealName()!=null){
+								test=files.getRealName();
+								String[] nameLists=test.split("_");   
+								nameList[k]=nameLists[0];
+								isIos[k]=Integer.valueOf(nameLists[1]);
+							}
+						}
+						/////////
+						projectpojo.setModelUrl(urlList);
+						////////////
+						projectpojo.setModelPart(nameList);
+						projectpojo.setIsIos(isIos);
+					}
+					if(dataWrapper.getData().get(i).getPicId()!=null && !dataWrapper.getData().get(i).getPicId().equals("")){
+						Files filess=fileDao.getById(Long.valueOf(dataWrapper.getData().get(i).getPicId()));
 						projectpojo.setPicUrl(filess.getUrl());
 						projectpojo.setPicName(filess.getName());
 					}
@@ -297,19 +405,38 @@ public class ProjectServiceImpl implements ProjectService {
 					if(project==null) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Project_Not_Existed);
 					else{
-						if(project.getPicId()!=null)
+						if(project.getPicId()!=null && !project.getPicId().equals(""))
 						{
 							Files files=new Files();
-							files=fileDao.getById(project.getPicId());
+							files=fileDao.getById(Long.valueOf(project.getPicId()));
 							if(files!=null){
 								projectPojo.setPicUrl(files.getUrl());
 							}
 						}
-						if(project.getModelId()!=null){
-							Files filess=new Files();
-							filess=fileDao.getById(project.getModelId());
-							if(filess!=null){
-								projectPojo.setModelUrl(filess.getUrl());
+						if(project.getModelId()!=null && !project.getModelId().equals("")){
+							String[] urllist=project.getModelId().split(",");
+							String[] urlList=new String[urllist.length];
+							String[] nameList=new String[urllist.length];
+							Integer[] isIos = new Integer[urllist.length];
+							for(int j=0;j<urllist.length;j++){
+								String test="";
+								Files filess=new Files();
+								filess=fileDao.getById(Long.valueOf(urllist[j]));
+								urlList[j]=filess.getUrl();
+								if(filess.getRealName()!=null && !filess.getRealName().equals("")){
+									test=filess.getRealName();
+									nameList[j]=test.split("_")[0];
+									isIos[j]=Integer.valueOf(test.split("_")[1]);
+								}
+							}
+							if(urlList!=null){
+								projectPojo.setModelUrl(urlList);
+							}
+							if(nameList!=null){
+								projectPojo.setModelPart(nameList);
+							}
+							if(isIos!=null){
+								projectPojo.setIsIos(isIos);
 							}
 						}
 						projectPojo.setBuildingUnit(project.getBuildingUnit());
@@ -325,8 +452,6 @@ public class ProjectServiceImpl implements ProjectService {
 						projectPojo.setStartDate(project.getStartDate());
 						projectPojo.setVersion(project.getVersion());
 						projectPojo.setState(project.getState());
-						projectPojo.setIsIos(project.getIsIos());
-						projectPojo.setModelPart(project.getModelPart());
 						dataWrapper.setData(projectPojo);
 					}
 						
@@ -337,23 +462,4 @@ public class ProjectServiceImpl implements ProjectService {
 		return dataWrapper;
 	}
 
-	/*@Override
-	public DataWrapper<List<Project>> findProjectLike(Project project, String token) {
-		DataWrapper<List<Project>> dataWrapper = new DataWrapper<List<Project>>();
-		User adminInMemory = SessionManager.getSession(token);
-		if(adminInMemory!=null){
-			if(project!=null){
-				dataWrapper=projectDao.findProjectLike(project);
-				if(dataWrapper!=null && dataWrapper.getData().size()>0){
-					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-				}
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
-			}
-			
-		}else{
-			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
-		}
-		return dataWrapper;
-	}*/
 }

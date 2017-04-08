@@ -11,4 +11,5 @@ public interface CableTrayDao {
     boolean updateCableTray(CableTray CableTray);
     DataWrapper<List<CableTray>> getCableTrayList();
 	DataWrapper<CableTray> getCableTrayByProjectId(Long projectId);
+	boolean addCableTrayList(List<CableTray> cableTrayList);
 }

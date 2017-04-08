@@ -2,6 +2,7 @@ package com.my.spring.controller;
 
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Duct;
+import com.my.spring.model.DuctPojo;
 import com.my.spring.service.DuctService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class DuctController {
             @RequestParam(value = "token",required = true) String token){
         return ductService.addDuct(Duct,token);
     }
-    @RequestMapping(value="/deleteDuct")
+    @RequestMapping(value="/deleteDuct",method=RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> deleteDuct(
             @RequestParam(value = "id",required = true) Long id,
@@ -37,17 +38,35 @@ public class DuctController {
     }
 
 
-    @RequestMapping(value="/getDuctList")
+    @RequestMapping(value="/getDuctList",method=RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<List<Duct>> getDuctList(){
-        return ductService.getDuctList();
+    public DataWrapper<List<DuctPojo>> getDuctList(
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Duct duct,
+    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="content",required=false) String content){
+        return ductService.getDuctList(pageIndex,pageSize,duct,token,content);
     }
+    
+    
     @RequestMapping(value="/admin/getDuctByProjectId",method=RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<Duct> getDuctByProjectId(
+    public DataWrapper<List<DuctPojo>> getDuctByProjectId(
+    		@ModelAttribute Duct duct,
     		@RequestParam(value = "projectId",required = true) Long projectId,
     		@RequestParam(value = "token",required = true) String token){
-        return ductService.getDuctByProjectId(projectId,token);
+        return ductService.getDuctByProjectId(projectId,token,duct);
+    }
+    
+    
+    @RequestMapping(value="/admin/updateDuct",method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> updateDuct(
+            @ModelAttribute Duct duct,
+            HttpServletRequest request,
+            @RequestParam(value = "token",required = true) String token){
+        return ductService.updateDuct(duct,token,request);
     }
     /*
      *预制化的信息上传
@@ -71,5 +90,17 @@ public class DuctController {
     	}
     	
         return dataWrapper;
+    }
+    /**
+     * 预制化文件导出
+     * 
+     */
+    @RequestMapping(value="/admin/exportDuct",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<String> exportDuct(
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "token",required = true) String token,
+            HttpServletRequest request){
+        return ductService.exportDuct(projectId, token, request);
     }
 }

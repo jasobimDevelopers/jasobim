@@ -4,7 +4,6 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
-import com.my.spring.model.Item;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -54,6 +53,7 @@ public class FileDaoImpl extends BaseDao<Files> implements FileDao {
 		return get(id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<Files> getByName(String name) {
 		DataWrapper<Files> dataWrapper = new DataWrapper<Files>();

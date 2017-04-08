@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.VideoDao;
-import com.my.spring.model.User;
 import com.my.spring.model.Video;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -111,6 +110,7 @@ public class VideoDaoImpl extends BaseDao<Video> implements VideoDao {
         return retDataWrapper;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean getByProjectId(Long projectId) {
 		List<Video> ret = null;

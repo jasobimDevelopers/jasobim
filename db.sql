@@ -220,5 +220,57 @@ PREPARE stmtinsert FROM @insertSql;
 EXECUTE stmtinsert;
 end//
 DELIMITER ;
-				 		 
+
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+create table duct_log(
+id serial primary key,
+duct_id bigint(20) unsigned not null,
+date date,
+user_id bigint(20) unsigned not null,
+state int,
+foreign key(duct_id ) references duct(id),
+foreign key(user_id) references user(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/////预制化构件状态记录表
+
+DROP PROCEDURE IF EXISTS exportDuct;
+DELIMITER // 
+create procedure exportDuct(in file_path  text,in project_id long)
+begin
+SET @sql = 'select id,name,profession_type,value,unit,project_id,building_num,floor_num,unit_num,household_num,family_and_type,system_type,service_type,size,material from duct where project_id=';
+SET @insertSql = CONCAT(@sql,project_id,' into outfile ','\'',file_path,'\'');  
+end ;
+PREPARE stmtinsert FROM @insertSql;   
+EXECUTE stmtinsert;
+end//
+DELIMITER ;
+			
+
+DROP PROCEDURE IF EXISTS exportCableTray;
+DELIMITER // 
+create procedure exportCableTray(in file_path  text,in project_id long)
+begin
+SET @sql = 'select id,name,profession_type,value,unit,project_id,building_num,floor_num,unit_num,household_num,family_and_type,system_type,service_type,size,material from cable_tray where project_id=';
+SET @insertSql = CONCAT(@sql,project_id,' into outfile ','\'',file_path,'\'');  
+end ;
+PREPARE stmtinsert FROM @insertSql;   
+EXECUTE stmtinsert;
+end//
+DELIMITER ;
+
+
+create table model(
+id serial primary key,
+code_url varchar(20),
+construction_unit varchar(50),
+size varchar(50),
+others varchar(50), #工期
+project_id int(20) unsigned not null,
+file_id int(20) unsigned not null,
+upload_date date,
+version varchar(30),
+foreign key(file_id) references file(id),
+foreign key(project_id) references project(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 				 

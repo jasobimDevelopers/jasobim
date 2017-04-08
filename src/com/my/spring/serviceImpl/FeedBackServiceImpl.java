@@ -1,28 +1,20 @@
 package com.my.spring.serviceImpl;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.DAO.FeedBackDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.FeedBack;
-import com.my.spring.model.Files;
 import com.my.spring.model.User;
-import com.my.spring.model.UserPojo;
 import com.my.spring.service.FeedBackService;
-import com.my.spring.service.FileService;
-import com.my.spring.service.UserService;
 import com.my.spring.utils.DataWrapper;
-import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.SessionManager;
 
 
@@ -78,10 +70,11 @@ public class FeedBackServiceImpl implements FeedBackService {
 	}
 
 	@Override
-	public DataWrapper<Void> addFeedBack(String content,String token) {
+	public DataWrapper<Void> addFeedBack(String content,String token,String tel) {
 		DataWrapper<Void> dataWrapper = new DataWrapper<>();
 		FeedBack feedBack=new FeedBack();
 		feedBack.setContent(content);
+		feedBack.setTel(tel);
 		User userInMemory=SessionManager.getSession(token);
 		if(userInMemory!=null){
 			feedBack.setDate(new Date(System.currentTimeMillis()));

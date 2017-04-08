@@ -33,6 +33,8 @@ public class QuestionController {
             @RequestParam(value = "fileCode", required = false) MultipartFile fileCode
             ){
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    	
+    	System.out.println(question.getIntro());
 		dataWrapper=questionService.addQuestion(question,token,file,request,fileCode);
 		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
             	return dataWrapper;
@@ -104,7 +106,6 @@ public class QuestionController {
     		@ModelAttribute Question question,
     		@RequestParam(value = "token",required = true) String token)
     {
-
         return questionService.getQuestionList(content,projectId,token,pageIndex,pageSize,question);
     }
     

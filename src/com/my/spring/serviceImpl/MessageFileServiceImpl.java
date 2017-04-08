@@ -36,7 +36,6 @@ public class MessageFileServiceImpl implements MessageFileService {
     private Integer fileType=3;
     @Override
     public DataWrapper<MessageFilePojo> addMessageFile(MessageFile messageFile,String token,MultipartFile file,HttpServletRequest request) {
-    	DataWrapper<MessageFile> dataWrapper = new DataWrapper<MessageFile>();
     	DataWrapper<MessageFilePojo> dataWrappers = new DataWrapper<MessageFilePojo>();
         User userInMemory = SessionManager.getSession(token);////验证登录时的session
         if (userInMemory != null) {

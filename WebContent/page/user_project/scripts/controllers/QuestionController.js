@@ -18,7 +18,10 @@ function QuestionController($scope,QuestionService) {
 	$scope.questionProjectId="all";
 	$scope.questionTitles=["序号","问题类型","问题提交人","问题标题","专业","问题创建时间","问题等级","问题状态","操作"];
 	$scope.projectQuestionOfType=[{name:"安全"},{name:"质量"},{name:"其他"}];
+	////一般用户等级查询列表
 	$scope.projectQuestionOfPriority=[{name:"一般"},{name:"重要"},{name:"紧急"}];
+	$scope.projectQuestionOfPrioritys=[{name:"一般"},{name:"重要"},{name:"紧急"}];
+	
 	$scope.projectQuestionOfStatus=[{name:"待解决"},{name:"已解决"}];
 	$scope.percentOfQuestion=[{name:"一般",value:""},{name:"重要",value:""},{name:"紧急",value:""}];
 	$scope.questionAddOrUpdate=["添加","更新"];
@@ -102,31 +105,22 @@ function QuestionController($scope,QuestionService) {
 			 }
 			 QuestionService.getQuestionList(pageSize,pageIndex,question,null).then(function (result){
 			  	  $scope.questionList = result.data;
-
+			  	  if($scope.questionList[0].roleFlag==1){
+			  		  ////总经理等级查询列表
+			  		$scope.projectQuestionOfPrioritys=[{name:"重要"},{name:"紧急"}];
+			  	  }
+			  	  if($scope.questionList[0].roleFlag==2){
+			  		 ////投资方等级查询列表
+			  		$scope.projectQuestionOfPrioritys=[{name:"一般"}];
+			  	  }
 			      $scope.currentPage = result.currentPage;
 			      $scope.totalPage = result.totalPage;
 			      $scope.questionPage($scope.totalPage,$scope.currentPage);
-//			      document.getElementById("myStats").attributes["data-percent"].value = $scope.questionList[0].sortPercent;
-//			      document.getElementById("myStats").attributes["data-text"].value = $scope.questionList[0].sortPercent + "%";
-//			      document.getElementById("myStats1").attributes["data-percent"].value = $scope.questionList[0].importantPercent;
-//			      document.getElementById("myStats1").attributes["data-text"].value = $scope.questionList[0].importantPercent + "%";
-//			      document.getElementById("myStats2").attributes["data-percent"].value = $scope.questionList[0].urgentPercent;
-//			      document.getElementById("myStats2").attributes["data-text"].value = $scope.questionList[0].urgentPercent + "%";
-//			      $('#myStats').circliful();
-//			  	  $('#myStats1').circliful();
-//			  	  $('#myStats2').circliful();
+
 			      $scope.refreshCircle();
 			  });
 		  }
-	    /////百分比刷新
-//	  $scope.refreshData = function(){
-//		  document.getElementById("myStats").attributes["data-percent"].value = $scope.questionList[0].sortPercent;
-//	      document.getElementById("myStats").attributes["data-text"].value = $scope.questionList[0].sortPercent + "%";
-//	      document.getElementById("myStats1").attributes["data-percent"].value = $scope.questionList[0].importantPercent;
-//	      document.getElementById("myStats1").attributes["data-text"].value = $scope.questionList[0].importantPercent + "%";
-//	      document.getElementById("myStats2").attributes["data-percent"].value = $scope.questionList[0].urgentPercent;
-//	      document.getElementById("myStats2").attributes["data-text"].value = $scope.questionList[0].urgentPercent + "%";
-//	  }
+	   
 	  	////////////////////////问题列表分页获取
 		$scope.getQuestionList = function(pageSize,pageIndex,question) {
 			 content=document.getElementById("paperList_find").value;
@@ -144,20 +138,9 @@ function QuestionController($scope,QuestionService) {
 			 }
 			 QuestionService.getQuestionList(pageSize,pageIndex,question,content).then(function (result){
 			  	  $scope.questionList = result.data;
-
 			      $scope.currentPage = result.currentPage;
 			      $scope.totalPage = result.totalPage;
 			      $scope.questionPage($scope.totalPage,$scope.currentPage);
-			      
-//			      document.getElementById("myStats").attributes["data-percent"].value = $scope.questionList[0].sortPercent;
-//			      document.getElementById("myStats").attributes["data-text"].value = $scope.questionList[0].sortPercent + "%";
-//			      document.getElementById("myStats1").attributes["data-percent"].value = $scope.questionList[0].importantPercent;
-//			      document.getElementById("myStats1").attributes["data-text"].value = $scope.questionList[0].importantPercent + "%";
-//			      document.getElementById("myStats2").attributes["data-percent"].value = $scope.questionList[0].urgentPercent;
-//			      document.getElementById("myStats2").attributes["data-text"].value = $scope.questionList[0].urgentPercent + "%";
-//			      $('#myStats').circliful();
-//			  	  $('#myStats1').circliful();
-//			  	  $('#myStats2').circliful();
 			      $scope.refreshCircle();
 			  });
 		  }
@@ -369,7 +352,16 @@ function QuestionController($scope,QuestionService) {
 		
 	}
 	/////通过问题的等级查询
-	$scope.setQuestionPority = function(pority){
+	$scope.setQuestionPority = function(it){
+		if(it.pority.name=="一般"){
+			pority=0;
+		}
+		if(it.pority.name=="重要"){
+			pority=1;
+		}
+		if(it.pority.name=="紧急"){
+			pority=2;
+		}
 		$scope.questionPority=pority;
 		$scope.questionType="all";
 		$scope.questionStatu="all";
@@ -439,11 +431,8 @@ function QuestionController($scope,QuestionService) {
 		$scope.removeState();
 		$scope.appendDiv();
 		document.getElementById("myStats").attributes["data-percent"].value = $scope.questionList[0].sortPercent;
-//	    document.getElementById("myStats").attributes["data-text"].value = $scope.questionList[0].sortPercent + "%";
 	    document.getElementById("myStats1").attributes["data-percent"].value = $scope.questionList[0].importantPercent;
-//	    document.getElementById("myStats1").attributes["data-text"].value = $scope.questionList[0].importantPercent + "%";
 	    document.getElementById("myStats2").attributes["data-percent"].value = $scope.questionList[0].urgentPercent;
-//	    document.getElementById("myStats2").attributes["data-text"].value = $scope.questionList[0].urgentPercent + "%";
 	    $('#myStats').circliful();
 	  	$('#myStats1').circliful();
 	  	$('#myStats2').circliful();	

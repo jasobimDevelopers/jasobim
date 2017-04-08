@@ -1,5 +1,7 @@
 package com.my.spring.model;
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,7 +17,9 @@ public class CableTray {
 	private String level;
 	private String offset;
 	private String selfId;
-	
+	private String codeUrl;
+	private Integer state;
+	private Date date;
 	@Id
     @GeneratedValue
     @Column(name = "id")
@@ -24,6 +28,33 @@ public class CableTray {
 	}
 	public void setId(Long id){
 		this.id=id;
+	}
+	
+	@Basic
+	@Column(name ="state")
+	public Integer getState() {
+		return state;
+	}
+	public void setState(Integer state) {
+		this.state = state;
+	}
+	
+	@Basic
+	@Column(name ="date")
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
+	@Basic
+	@Column(name ="code_url")
+	public String getCodeUrl() {
+		return codeUrl;
+	}
+	public void setCodeUrl(String codeUrl) {
+		this.codeUrl = codeUrl;
 	}
 	
 	@Basic

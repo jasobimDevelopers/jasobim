@@ -2,9 +2,7 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.MessageFileDao;
-import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.MessageFile;
-import com.my.spring.model.User;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -48,6 +46,7 @@ public class MessageFileDaoImpl extends BaseDao<MessageFile> implements MessageF
         return retDataWrapper;
     }
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<MessageFile>> getMessageFileListByUserId(Long userId) {
 		 DataWrapper<List<MessageFile>> retDataWrapper = new DataWrapper<List<MessageFile>>();
@@ -85,6 +84,7 @@ public class MessageFileDaoImpl extends BaseDao<MessageFile> implements MessageF
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<MessageFile>> getMessageFileListByMessageId(Long messageId) {
 		DataWrapper<List<MessageFile>> retDataWrapper = new DataWrapper<List<MessageFile>>();

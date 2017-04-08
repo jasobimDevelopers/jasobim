@@ -47,7 +47,7 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
         Criteria criteria = session.createCriteria(Project.class);
 //        criteria.addOrder(Order.desc("publishDate"));
         ////////
-        if(!projectList.equals("-1")){
+        if(!projectList.equals("-1") && projectList!=null && !projectList.equals("null")){
         	String[] ss =projectList.split(",");
             Disjunction dis = Restrictions.disjunction();
             for (int i = 0; i < ss.length; i++) {

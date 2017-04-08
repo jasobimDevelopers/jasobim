@@ -18,6 +18,7 @@ public enum ErrorCodeEnum implements Serializable {
     //////项目错误
     Project_Not_Existed("Project Does not Existed!",8),
     Target_Not_Existed("Target Does not Existed!",9),
+    Password_Not_Fit("Target Does not Existed!",10),
     ;
 
     private String label;

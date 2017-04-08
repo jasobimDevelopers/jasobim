@@ -167,7 +167,36 @@ public class UserServiceImpl implements UserService {
 		}
 		return dataWrapper;
 	}
-
+	
+	@Override
+	public DataWrapper<Void> updateUserBySelf(String oldPs, String newPs, String token) {
+		// TODO Auto-generated method stub
+		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+		User adminInMemory = SessionManager.getSession(token);
+		int flag=-1;
+		if (adminInMemory != null) {
+			if(oldPs!=null && newPs!=null)
+			{
+				String oldPsReal=MD5Util.getMD5String(MD5Util.getMD5String(oldPs) + salt);
+				if(adminInMemory.getPassword().equals(oldPsReal)){
+					flag=1;
+					adminInMemory.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(newPs) + salt));
+				}else{
+					dataWrapper.setErrorCode(ErrorCodeEnum.Password_Not_Fit);
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+			if(flag>0){
+				if (!userDao.updateUser(adminInMemory)) {
+					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}
+			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return dataWrapper;
+	}
 	@Override
 	public DataWrapper<User> getUserDetails(String token) {
 		// TODO Auto-generated method stub

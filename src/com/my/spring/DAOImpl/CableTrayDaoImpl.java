@@ -69,5 +69,11 @@ public class CableTrayDaoImpl extends BaseDao<CableTray> implements CableTrayDao
 		return dataWrapper;
 	}
 
+	@Override
+	public boolean addCableTrayList(List<CableTray> cableTrayList) {
+		// TODO Auto-generated method stub
+		return saveList(cableTrayList);
+	}
+
 
 }

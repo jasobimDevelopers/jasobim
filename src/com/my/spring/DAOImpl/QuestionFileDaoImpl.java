@@ -2,8 +2,6 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.QuestionFileDao;
-import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.MessageFile;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
@@ -48,6 +46,7 @@ public class QuestionFileDaoImpl extends BaseDao<QuestionFile> implements Questi
         return retDataWrapper;
     }
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<QuestionFile>> getQuestionFileListByUserId(Long userId) {
 		 DataWrapper<List<QuestionFile>> retDataWrapper = new DataWrapper<List<QuestionFile>>();

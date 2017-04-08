@@ -1,7 +1,6 @@
 package com.my.spring.DAO;
 
 import com.my.spring.model.Item;
-import com.my.spring.model.MinItem;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DataWrapper;
 
