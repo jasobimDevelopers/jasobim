@@ -36,8 +36,6 @@ public class DuctController {
             @RequestParam(value = "token",required = true) String token){
         return ductService.deleteDuct(id,token);
     }
-
-
     @RequestMapping(value="/getDuctList",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<DuctPojo>> getDuctList(
@@ -59,6 +57,12 @@ public class DuctController {
         return ductService.getDuctByProjectId(projectId,token,duct);
     }
     
+    @RequestMapping(value="/admin/getDuctBySelfId",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<DuctPojo> getDuctBySelfId(
+    		@RequestParam(value = "selfId",required = true) String selfId){
+        return ductService.getDuctBySelfId(selfId);
+    }
     
     @RequestMapping(value="/admin/updateDuct",method = RequestMethod.POST)
     @ResponseBody

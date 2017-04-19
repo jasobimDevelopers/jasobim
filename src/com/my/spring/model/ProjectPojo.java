@@ -13,8 +13,8 @@ public class ProjectPojo {
     private String leader;//项目负责人
     private String buildingUnit;
     private String picUrl;
-    private Long[] modelId;
-    private String[] modelUrl;
+    //private Long[] modelId;
+    private String modelUrl;
     private String picName;///项目图片文件名
     private String modelName;///项目模型文件名
     private String place;//施工地點
@@ -24,7 +24,7 @@ public class ProjectPojo {
     private String startDate;//施工時間
     private String phase;//施工周期
     private String state;//状态
-    private Integer[] isIos;///1.ios 0.安卓   2.pad模型
+    private Integer isIos;///1.ios 0.安卓   2.pad模型
     private String[] modelPart;//all.整体	rf.顶层     standard.标准层     B1.地下一层     B2.地下二层      B3.地下三层
 	public Long getId() {
 		return id;
@@ -68,10 +68,10 @@ public class ProjectPojo {
 	public void setPicUrl(String picUrl) {
 		this.picUrl = picUrl;
 	}
-	public String[] getModelUrl() {
+	public String getModelUrl() {
 		return modelUrl;
 	}
-	public void setModelUrl(String[] modelUrl) {
+	public void setModelUrl(String modelUrl) {
 		this.modelUrl = modelUrl;
 	}
 	public String getPlace() {
@@ -128,10 +128,10 @@ public class ProjectPojo {
 	public void setModelName(String modelName) {
 		this.modelName = modelName;
 	}
-	public Integer[] getIsIos() {
+	public Integer getIsIos() {
 		return isIos;
 	}
-	public void setIsIos(Integer[] isIos) {
+	public void setIsIos(Integer isIos) {
 		this.isIos = isIos;
 	}
 	public String[] getModelPart() {
@@ -140,10 +140,10 @@ public class ProjectPojo {
 	public void setModelPart(String[] modelPart) {
 		this.modelPart = modelPart;
 	}
-	public Long[] getModelId() {
+	/*public Long[] getModelId() {
 		return modelId;
 	}
 	public void setModelId(Long[] modelId) {
 		this.modelId = modelId;
-	}
+	}*/
 }

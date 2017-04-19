@@ -148,6 +148,38 @@ body{
 #rightss{
 	width:81.5%
 }
+
+/*第一个页面 ending*/
+#right ul:nth-child(1){
+display: block;
+	background: none;
+}
+#right .main{
+	position: absolute;
+	width: 44%;
+	height: 600px;
+	display: none;
+}
+.sear{
+	width: 100%;
+}
+.chose{
+	width: 100%;
+	margin: 10px 0;
+	margin-left: 50px;
+}
+.chose div img{
+	height:14px;
+	vertical-align: middle;
+	padding-right: 5px;
+}
+.chose span{
+	font-family:微软雅黑;
+	font-size:14px;
+	color:#000000;
+	margin-right: 3px;
+
+}
 #table-buton112{
 	width:845px;
 	height:50px;

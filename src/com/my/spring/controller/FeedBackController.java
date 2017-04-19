@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.my.spring.model.FeedBack;
+import com.my.spring.model.FeedBackPojo;
 import com.my.spring.service.FeedBackService;
 import com.my.spring.utils.DataWrapper;
 
@@ -33,23 +34,22 @@ public class FeedBackController {
     public DataWrapper<Void> addFeedBack(
     		@ModelAttribute FeedBack feedBack,
     		@RequestParam(value="token",required=true) String token) {
-		System.out.println(feedBack.getContent());
         return feedBackService.addFeedBack(feedBack.getContent(),token,feedBack.getTel());
     }
 	
-	//管理员删除用户的个人信息
-	@RequestMapping(value="/admin/delete", method = RequestMethod.GET)
+	
+	@RequestMapping(value="/admin/deleteFeedback", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteFeedBackByAdmin(
-    		@RequestParam(value="id",required=true) Long id,
+    		@RequestParam(value="feedbackId",required=true) Long feedbackId,
     		@RequestParam(value="token",required=true) String token) {
-	        return feedBackService.deleteFeedBack(id,token);
+	        return feedBackService.deleteFeedBack(feedbackId,token);
     }
-	
+
 	//管理员获取用户列表
-	@RequestMapping(value="/admin/getFeedBackList", method = RequestMethod.GET)
+	@RequestMapping(value="/admin/getFeedbackList", method = RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<List<FeedBack>> getFeedBackListByAdmin(
+    public DataWrapper<List<FeedBackPojo>> getFeedBackListByAdmin(
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute FeedBack feedBack,

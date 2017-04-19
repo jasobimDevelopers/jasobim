@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataWrapper<UserPojo> login(String userName, String password) {
+	public DataWrapper<UserPojo> login(String userName, String password,Integer system) {
 		// TODO Auto-generated method stub
 		DataWrapper<UserPojo> dataWrapper = new DataWrapper<UserPojo>();
 		if (userName == null || password == null 
@@ -72,6 +72,9 @@ public class UserServiceImpl implements UserService {
 				dataWrapper.setErrorCode(ErrorCodeEnum.Password_Error);
 			} else {
 				SessionManager.removeSessionByUserId(user.getId());
+				if(system!=null){
+					user.setSystemId(system);
+				}
 				String token = SessionManager.newSession(user);
 				dataWrapper.setToken(token);
 				UserPojo users=new UserPojo();

@@ -32,15 +32,12 @@ public class DuctLogDaoImpl extends BaseDao<DuctLog> implements DuctLogDao {
     
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<DuctLog>> getDuctLogByDuctId(Long ductId,DuctLog DuctLog) {
+	public DataWrapper<List<DuctLog>> getDuctLogByDuctId(Long ductId) {
 		DataWrapper<List<DuctLog>> dataWrapper=new DataWrapper<List<DuctLog>>();
 		List<DuctLog> ret = new ArrayList<DuctLog>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(DuctLog.class);
         criteria.add(Restrictions.eq("ductId",ductId));
-        if(DuctLog.getId()!=null){
-        	criteria.add(Restrictions.eq("id",DuctLog.getId()));
-        }
         try {
             ret = criteria.list();
         }catch (Exception e){

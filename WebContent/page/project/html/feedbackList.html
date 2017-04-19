@@ -1,0 +1,36 @@
+<div id="projectContent" ng-controller="FeedbackController">
+	<div id="include_header" style="display:block;padding-bottom:20px;">
+	    	
+	        	<div id="projectnames">
+	     			<span class="inputtext">&nbsp用户名:</span><input type="text" id="projectName" ng-model="feedbackTofind.userName"/>
+	            	<span class="inputtext">&nbsp内容:</span><input type="text" id="projectNum" ng-model="feedbackTofind.content"/>
+	                <span class="inputtext">&nbsp时间:</span><input type="text" id="constructionUnit" ng-model="feedbackTofind.date"/>
+	                <a href=""><button id="find" ng-click="feedbackFind()" ></button></a>
+	            </div>
+	           
+	</div>
+	<div class="container" style="display:block;margin-top:30px;" id="containers">
+		<div id="include_bodys">
+			<table class="table-striped table table-bordered">
+				<tbody>
+					<tr>
+						<th ng-repeat="feedbackTitle in feedbackTitles">{{feedbackTitle}}</th>
+					</tr>
+					<tr ng-repeat = "feedback in feedbackList">
+					    <td>{{$index+1}}</td>
+					    <td>{{feedback.userName}}</td>
+					    <td>{{feedback.content}}</td>
+					    <td>{{feedback.date}}</td>
+					    <td> 
+					    	<button id="deletebutton" ng-click="deleteFeedback(feedback.id)">
+		                    </button>
+                        </td>
+					</tr>
+				</tbody>
+			</table>
+			<div id="table-buton1" >
+				<div id="feedbackPageCode"></div>
+			</div>
+		</div>
+	</div>		
+</div>

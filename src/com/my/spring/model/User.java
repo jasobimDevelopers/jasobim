@@ -21,6 +21,8 @@ public class User {
     private Long userIcon;
     private Date registerDate;
     private String projectList;
+    private Integer systemId;//0.IOS  1.android
+
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -120,6 +122,15 @@ public class User {
 	}
 	public void setUserIcon(Long userIcon) {
 		this.userIcon = userIcon;
+	}
+	
+	@Basic
+    @Column(name = "system_id") 
+	public Integer getSystemId() {
+		return systemId;
+	}
+	public void setSystemId(Integer systemId) {
+		this.systemId = systemId;
 	}
     
     

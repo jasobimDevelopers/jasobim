@@ -62,8 +62,9 @@ public class UserController {
     public DataWrapper<UserPojo> Login(
     		HttpServletRequest request,
     		@RequestParam(value="username",required=true) String username,
-    		@RequestParam(value="password",required=true) String password) {
-		DataWrapper<UserPojo> test=userService.login(username, password);
+    		@RequestParam(value="password",required=true) String password,
+    		@RequestParam(value="systemId",required=false) Integer systemId) {
+		DataWrapper<UserPojo> test=userService.login(username, password,systemId);
 		return test;
     }
 	@RequestMapping(value="/findPass", method = RequestMethod.GET)

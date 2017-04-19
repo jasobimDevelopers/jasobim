@@ -364,7 +364,11 @@ public class QuestionServiceImpl implements QuestionService {
 					}
 				}
 			}
-			datawrapper= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question,userIdList);
+			String projectList=null;
+			if(userInMemory.getUserType()==2 || userInMemory.getUserType()==3){
+				projectList=userInMemory.getProjectList();
+			}
+			datawrapper= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question,userIdList,projectList);
 			
 			Long questionSort=questionDao.getQuestionListOfSort();
 			Long questionImportant=questionDao.getQuestionListOfImportant();

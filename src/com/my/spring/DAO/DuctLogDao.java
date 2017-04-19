@@ -8,5 +8,5 @@ import com.my.spring.utils.DataWrapper;
 public interface DuctLogDao {
 	boolean addDuctLog(DuctLog DuctLog);
     boolean deleteDuctLog(Long id);
-	DataWrapper<List<DuctLog>> getDuctLogByDuctId(Long projectId,DuctLog DuctLog);
+	DataWrapper<List<DuctLog>> getDuctLogByDuctId(Long id);
 }

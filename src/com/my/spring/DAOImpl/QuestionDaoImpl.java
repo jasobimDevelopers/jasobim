@@ -102,7 +102,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<QuestionPojo>> getQuestionList(String content,Long projectId ,Integer pageIndex, Integer pageSize, Question question,Long[] userIdList) {
+    public DataWrapper<List<QuestionPojo>> getQuestionList(String content,Long projectId ,Integer pageIndex, Integer pageSize, Question question,Long[] userIdList,String projectList) {
     	DataWrapper<List<QuestionPojo>> retDataWrapperPojo = new DataWrapper<List<QuestionPojo>>();
     	DataWrapper<List<QuestionFile>> retDataWrapperPojos = new DataWrapper<List<QuestionFile>>();
         List<Question> ret = new ArrayList<Question>();
@@ -110,11 +110,23 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
       
         Session session = getSession();
         Criteria criteria = session.createCriteria(Question.class);
-       
+        ///////
+        if(projectList!=null && !projectList.equals("null")){
+        	String[] ss =projectList.split(",");
+            Disjunction dis = Restrictions.disjunction();
+            for (int i = 0; i < ss.length; i++) {
+            	long test=Integer.valueOf(ss[i]);
+                dis.add(Restrictions.eq("projectId", test));
+            }
+            criteria.add(dis);
+        }
+        /////////
         if(projectId!=null){
             criteria.add(Restrictions.eq("projectId", question.getProjectId()));
         } 
-        
+        if(question.getId()!=null){
+            criteria.add(Restrictions.eq("id", question.getId()));
+        } 
         
         if(content!=null){
         	String test = "";

@@ -33,8 +33,6 @@ public class QuestionController {
             @RequestParam(value = "fileCode", required = false) MultipartFile fileCode
             ){
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-    	
-    	System.out.println(question.getIntro());
 		dataWrapper=questionService.addQuestion(question,token,file,request,fileCode);
 		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
             	return dataWrapper;
@@ -54,7 +52,7 @@ public class QuestionController {
         return questionService.deleteQuestion(questionId,token,request,projectId);
     }
     //////根据问题id删除问题
-    @RequestMapping(value="/admin/deleteQuestionById",method = RequestMethod.POST)
+    @RequestMapping(value="/admin/deleteQuestionById",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteQuestionById(
             @RequestParam(value = "questionId",required = true) Long questionId,
@@ -116,7 +114,6 @@ public class QuestionController {
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@RequestParam(value = "token",required = true) String token)
     {
-
         return questionService.getQuestionListByUserId(token,pageIndex,pageSize);
     }
     

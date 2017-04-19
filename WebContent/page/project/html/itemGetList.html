@@ -1,8 +1,8 @@
   <div id="all_yuzhihua" ng-controller="ItemGetController">
   	<div id="head_yuzhihua">
-      	<div id="item_list"><span>构建列表</span></div>
-          <div id="data_get"><span>数据统计</span></div>
-          <div id="search_yuzhihua">
+      	<div id="item_list" ng-click="showList()"><span>构建列表</span></div>
+        <div id="data_get" ng-click="showData()"><span>数据统计</span></div>
+        <div id="search_yuzhihua">
 		<div id="search_icons" ng-click="findItem()"><a href=""><img src="page/project/images/icon@2x.png" id="search_icon"/></a></div>
 		<div id="inputContents"><input type="text" id="search_input"/></div>
 	</div>
@@ -10,39 +10,39 @@
       <div id="content1">
       	<div id="leftss">
           	<div id="one">
-			<div><img src="page/project/images/项目@2x.png"/></div>
+			<div ng-click="resetOne()"><a href=""><img src="page/project/images/项目@2x.png"/></a></div>
 			<div><span>项目</span></div>
 			<div class="li_show_hide" id="li_show_hide1" onClick="hideUlst()"></div>
 		</div>
               <div id="name_div" style="display:none">
               	<ul class="left_ul">
-                  	<li ng-click="setProjectName(test.id)" ng-repeat="test in projectLists"><a href="">{{test.name}}</a></li>
+                  	<li  ng-click="setProjectName(test.id,$index)" ng-repeat="test in projectLists"><a href="" id="item{{$index}}">{{test.name}}</a></li>
                  </ul>
               </div>
               <div id="two">
-			<div><img src="page/project/images/类型@2x.png"/></div>
+			<div ng-click="resetTwo()"><a href=""><img src="page/project/images/类型@2x.png"/></a></div>
 			<div><span>类型</span></div>
 			<div class="li_show_hide" id="li_show_hide2" onClick="hideUls()"></div>
 		</div>
               <div id="type_div" style="display:none">
               	<ul class="left_ul">
-                  	<li ng-click="setType(item)" ng-repeat="item in itemNameList"><a href="">{{item}}</a></li>
+                  	<li ng-click="setType(item,$index)" ng-repeat="item in itemNameList"><a id="items{{$index}}" href="">{{item}}</a></li>
                  </ul>
               </div>
               <div id="three">
-			<div><img src="page/project/images/状态@2x.png"/></div>
+			<div ng-click="resetThree()"><a href=""><img src="page/project/images/状态@2x.png"/></a></div>
 			<div><span>状态</span></div>
 			<div class="li_show_hide" id="li_show_hide3" onClick="hideUl()"></div>
 		</div>
               <div id="state_div" style="display:none">
               	<ul class="left_ul">
-                  	<li ng-click="setState($index)" ng-repeat="items in itemState"><a href="">{{items}}</a></li>
+                  	<li ng-click="setState($index,$index)" ng-repeat="items in itemState"><a id="itemss{{$index}}" href="">{{items}}</a></li>
                   </ul>
               </div>
               <div id="four"></div>
           </div>
         <div id="rightss">
-	        <div>
+	        <div id="content_ones" style="display:block">
 				<ul>
 					<li class="contents" ng-repeat="item in itemGetList">
 						<div class="state_icon"><span>{{item.state}}</span></div>
@@ -51,10 +51,97 @@
 					</li>
 				</ul>
 			</div>
-			<div id="table-buton112" >
+			<div class="main" style="display:none" id="content_twos">
+					<div class="sear">
+						<div class="chose">
+							<div><img src="page/project/images/日历@2x.png" alt=""/><span>查询范围：</span></div>
+							<div style="width:400px;">
+								<input id="d4311" class="Wdate" type="text" onClick="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}'})"/><span>到</span>
+								<input id="d4312" class="Wdate" type="text" onClick="WdatePicker({minDate:'#F{$dp.$D(\'d4311\')}',maxDate:'2020-10-01'})"/>
+							</div>
+						</div>
+
+					</div>
+					<div id="main_contents" style="width:750px;height:400px;"></div>
+			</div>
+			<div id="table-buton112" style="display:block" >
 				<div id="itemsPageCode"></div>
 			</div>
 		</div>
       </div>
   </div>
+<script type="text/javascript">
+	var myChart = echarts.init(document.getElementById('main_contents'));
+	option = {
+		title: {
+			text: ''
+		},
+		tooltip: {
+			trigger: 'axis'
+		},
+		legend: {
+			data:['库存数量','安装数量','出库数量','完成数量']
+		},
+		grid: {
+			left: '3%',
+			right: '4%',
+			bottom: '3%',
+			containLabel: true
+		},
+		toolbox: {
+			feature: {
+				saveAsImage: {}
+			}
+		},
+		xAxis: {
+			type: 'category',
+			boundaryGap: false,
+			data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月','八月','九月','十月','十一月','十二月']
+		},
 
+		yAxis:{
+			type: 'value',
+			scale: true,
+			name: '价格',
+			max: 250,
+			min: 0
+		},
+		series: [
+			{
+				name:'库存数量',
+				type:'line',
+				data:[250, 220, 200,180, 160, 150, 130,80,60,50,30,5]
+			},
+			{
+				name:'安装数量',
+				type:'line',
+				data:[10, 40, 50, 60, 30, 100, 120,100, 120, 100, 160, 200]
+			},
+			{
+				name:'出库数量',
+				type:'line',
+				data:[20, 30, 35, 80, 60, 80, 100,120, 140, 160,180, 250]
+			},
+			{
+				name:'完成数量',
+				type:'line',
+				data:[40, 20,80,120, 180, 95,100,130, 160, 180, 200, 250]
+			},
+
+		]
+	};
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+//	折线图 ending
+	$(function () {
+		$("input.jcDate").jcDate({
+			IcoClass: "jcDateIco",
+			Event: "click",
+			Speed: 100,
+			Left: 0,
+			Top: 28,
+			format: "-",
+			Timeout: 100
+		})
+	})
+</script>

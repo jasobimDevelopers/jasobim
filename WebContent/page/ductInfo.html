@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en"  ng-app="DuctApp">
+<head> 
+	<meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+<!--jquery && bootstrap-->
+    <script src="common/jquery/jquery.js"></script>
+    <script src="common/jquery/jquery-1.11.1.js"></script>
+<!--angular-->
+    <script src="common/angular/angular.js"></script>
+    <script src="common/angular/angular-route.js"></script>
+    <script src="common/angular/angular-file-upload.min.js"></script>
+<!-- css -->
+    <link href="user_project/css/itemStyle.css" rel="stylesheet" />    
+<!-- js -->
+	<script src="project/scripts/ductInfoController.js"></script>
+	<script src="project/scripts/ductInfoService.js"></script>
+	</head>
+	<body>
+		<div id="content" ng-controller="ductInfoController">
+			<div id="head">
+				<div><h1>构件信息详细列表</h1></div>
+			</div>
+			<div id="con">
+				<div id="cons">
+					<div>
+						<div class="context"><span>构件名称</span></div>
+						<div class="cont">{{ductInfo.name}}</div>
+					</div>
+					<div>
+						<div class="context"><span>类型标准</span></div>
+						<div class="cont">{{ductInfo.familyAndType}}</div>
+					</div>
+					<!-- <div>
+						<div class="context"><span>标高</span></div>
+						<div class="cont">{{itemInfo.level}}</div>
+					</div> -->
+					<div>
+						<div class="context"><span>类型名称</span></div>
+						<div class="cont">{{ductInfo.typeName}}</div>
+					</div>
+					<div>
+						<div class="context"><span>所属项目</span></div>
+						<div class="cont">{{ductInfo.projectName}}</div>
+					</div>
+					<div>
+						<div class="context"><span>所属楼栋号</span></div>
+						<div class="cont">{{ductInfo.buildingNum}}</div>
+					</div>
+					<div>
+						<div class="context"><span>所属楼层</span></div>
+						<div class="cont">{{ductInfo.floorNum}}</div>
+					</div>
+					<div>
+						<div class="context"><span>构件尺寸</span></div>
+						<div class="cont">{{ductInfo.size}}</div>
+					</div>
+					<div>
+						<div class="context"><span>构件长度</span></div>
+						<div class="cont">{{ductInfo.length}}</div>
+					</div>
+					<div>
+						<div class="context"><span>构件面积</span></div>
+						<div class="cont">{{ductInfo.area}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -20,6 +20,10 @@ public class NavigationController {
     public String itemGetPage(){
     	return "home";
     }
+    @RequestMapping(value="/feedbackList")
+    public String feedbackPage(){
+    	return "home";
+    }
     @RequestMapping(value="/projectList")
     public String projectPage(){
         return "home";

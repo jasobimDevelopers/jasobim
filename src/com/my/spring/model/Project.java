@@ -23,7 +23,7 @@ public class Project {
     private String startDate;//施工時間
     private String phase;//施工周期
     private String state;//上线不上线的标志0.未上线 1.已上线
-    private String isIos;//0.安卓	1.ios   2.pad模型
+    private String isIos;//1.安卓	 0.ios   2.pad模型
     private String modelPart;//all.整体	rf.顶层     standard.标准层     B1.地下一层     B2.地下二层      B3.地下三层
     
     @Id

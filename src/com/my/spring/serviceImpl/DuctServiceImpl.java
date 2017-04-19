@@ -6,11 +6,13 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.my.spring.DAO.DuctDao;
+import com.my.spring.DAO.DuctLogDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Duct;
+import com.my.spring.model.DuctLog;
 import com.my.spring.model.DuctPojo;
 import com.my.spring.model.User;
 import com.my.spring.service.DuctService;
@@ -44,6 +46,8 @@ import javax.servlet.http.HttpServletRequest;
 public class DuctServiceImpl implements DuctService {
     @Autowired
     DuctDao DuctDao;
+    @Autowired
+    DuctLogDao ductLogDao;
     @Autowired
     ProjectDao projectDao;
     @Autowired
@@ -81,6 +85,12 @@ public class DuctServiceImpl implements DuctService {
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(id!=null){
+					DataWrapper<List<DuctLog>> ductlist=ductLogDao.getDuctLogByDuctId(id);
+					if(ductlist.getData()!=null){
+						for(int i=0;i<ductlist.getData().size();i++){
+							ductLogDao.deleteDuctLog(ductlist.getData().get(i).getId());
+						}
+					}
 					if(!DuctDao.deleteDuct(id)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else
@@ -180,51 +190,93 @@ public class DuctServiceImpl implements DuctService {
         User userInMemory = SessionManager.getSession(token);
         //String strs2="";
         if (userInMemory != null) {
-        	
         	ductList=DuctDao.getDuctByProjectId(projectId,duct).getData();
-        	
         	String[] stateList=new String[]{"未定义","出库","安装","完成"};
-        	String projectName=projectDao.getById(ductList.get(0).getProjectId()).getName();
-        	for(int i=0;i<ductList.size();i++){
-
-        		
-        		///////////////////////
-    			DuctPojo ductPojo=new DuctPojo();
-    			ductPojo.setId(ductList.get(i).getId().toString());
-    			ductPojo.setCodeUrl(ductList.get(i).getCodeUrl());
-        		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-        		String str=sdf.format(ductList.get(i).getDate()); 
-        		ductPojo.setDate(str);
-        		ductPojo.setSize(ductList.get(i).getSize());
-        		ductPojo.setState(stateList[ductList.get(i).getState()]);
-        		ductPojo.setName(ductList.get(i).getName());
-        		ductPojo.setFamilyAndType(ductList.get(i).getFamilyAndType());
-        		ductPojo.setLevel(ductList.get(i).getLevel());
-        		ductPojo.setBuildingNum(ductList.get(i).getBuildingNum().toString());
-        		ductPojo.setFloorNum(ductList.get(i).getFloorNum().toString());
-        		ductPojo.setUnitNum(ductList.get(i).getUnitNum().toString());
-        		ductPojo.setHouseholdNum(ductList.get(i).getHouseholdNum().toString());
-        		ductPojo.setProjectId(ductList.get(i).getProjectId().toString());
-        		ductPojo.setProjectName(projectName);
-        		ductPojo.setSelfId(ductList.get(i).getSelfId());
-        		ductPojo.setArea(ductList.get(i).getArea()+"");
-        		ductPojo.setLength(ductList.get(i).getLength()+"");
-        		ductPojo.setServiceType(ductList.get(i).getServiceType());
-        		ductPojo.setSystemType(ductList.get(i).getSystemType());
-        		if(ductList.get(i).getUserId()!=null){
-        			User user=userDao.getById(ductList.get(i).getUserId());
-        			if(user.getUserName()!=null){
-        				ductPojo.setUserName(user.getUserName());
-        			}
-        		}
-        		ductPojoList.add(i,ductPojo);
+        	if(ductList!=null){
+        		String projectName=projectDao.getById(ductList.get(0).getProjectId()).getName();
+            	for(int i=0;i<ductList.size();i++){
+            		///////////////////////
+        			DuctPojo ductPojo=new DuctPojo();
+        			ductPojo.setId(ductList.get(i).getId().toString());
+        			ductPojo.setCodeUrl(ductList.get(i).getCodeUrl());
+            		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+            		String str=sdf.format(ductList.get(i).getDate()); 
+            		ductPojo.setDate(str);
+            		ductPojo.setSize(ductList.get(i).getSize());
+            		ductPojo.setState(stateList[ductList.get(i).getState()]);
+            		ductPojo.setName(ductList.get(i).getName());
+            		ductPojo.setFamilyAndType(ductList.get(i).getFamilyAndType());
+            		ductPojo.setLevel(ductList.get(i).getLevel());
+            		ductPojo.setBuildingNum(ductList.get(i).getBuildingNum().toString());
+            		ductPojo.setFloorNum(ductList.get(i).getFloorNum().toString());
+            		ductPojo.setUnitNum(ductList.get(i).getUnitNum().toString());
+            		ductPojo.setHouseholdNum(ductList.get(i).getHouseholdNum().toString());
+            		ductPojo.setProjectId(ductList.get(i).getProjectId().toString());
+            		ductPojo.setProjectName(projectName);
+            		ductPojo.setSelfId(ductList.get(i).getSelfId());
+            		ductPojo.setArea(ductList.get(i).getArea()+"");
+            		ductPojo.setLength(ductList.get(i).getLength()+"");
+            		ductPojo.setServiceType(ductList.get(i).getServiceType());
+            		ductPojo.setSystemType(ductList.get(i).getSystemType());
+            		if(ductList.get(i).getUserId()!=null){
+            			User user=userDao.getById(ductList.get(i).getUserId());
+            			if(user.getUserName()!=null){
+            				ductPojo.setUserName(user.getUserName());
+            			}
+            		}
+            		ductPojoList.add(i,ductPojo);
+            	}
+            	dataWrapper.setData(ductPojoList);
+        	}else{
+        		dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
         	}
-        	dataWrapper.setData(ductPojoList);
-        	
-        	//dataWrapper.setData(temp);
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+        return dataWrapper;
+	}
+	
+	@Override
+	public DataWrapper<DuctPojo> getDuctBySelfId(String selfId) {
+		// TODO Auto-generated method stub
+		DataWrapper<DuctPojo> dataWrapper = new DataWrapper<DuctPojo>();
+		Duct duct = new Duct();
+    	duct=DuctDao.getDuctBySelfId(selfId).getData();
+    	String[] stateList=new String[]{"未定义","出库","安装","完成"};
+    	if(duct!=null){
+    		String projectName=projectDao.getById(duct.getProjectId()).getName();
+			DuctPojo ductPojo=new DuctPojo();
+			ductPojo.setId(duct.getId().toString());
+			ductPojo.setCodeUrl(duct.getCodeUrl());
+    		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+    		String str=sdf.format(duct.getDate()); 
+    		ductPojo.setDate(str);
+    		ductPojo.setSize(duct.getSize());
+    		ductPojo.setState(stateList[duct.getState()]);
+    		ductPojo.setName(duct.getName());
+    		ductPojo.setFamilyAndType(duct.getFamilyAndType());
+    		ductPojo.setLevel(duct.getLevel());
+    		ductPojo.setBuildingNum(duct.getBuildingNum().toString());
+    		ductPojo.setFloorNum(duct.getFloorNum().toString());
+    		ductPojo.setUnitNum(duct.getUnitNum().toString());
+    		ductPojo.setHouseholdNum(duct.getHouseholdNum().toString());
+    		ductPojo.setProjectId(duct.getProjectId().toString());
+    		ductPojo.setProjectName(projectName);
+    		ductPojo.setSelfId(duct.getSelfId());
+    		ductPojo.setArea(duct.getArea()+"");
+    		ductPojo.setLength(duct.getLength()+"");
+    		ductPojo.setServiceType(duct.getServiceType());
+    		ductPojo.setSystemType(duct.getSystemType());
+    		if(duct.getUserId()!=null){
+    			User user=userDao.getById(duct.getUserId());
+    			if(user.getUserName()!=null){
+    				ductPojo.setUserName(user.getUserName());
+    			}
+    		}
+        	dataWrapper.setData(ductPojo);
+    	}else{
+    		dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+    	}
         return dataWrapper;
 	}
 	
@@ -259,18 +311,8 @@ public class DuctServiceImpl implements DuctService {
 		        	   	String rootPath = request.getSession().getServletContext().getRealPath("/");
 		        	   	String filePath="/codeFiles";
 		        	   	String imgpath=rootPath+filePath;
-		        	   	String realPath=rootPath+filePath+"/"+str+".png";
-		        	   	/////添加上传时间（精确到秒）
-						SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-					    Date date;
-						try {
-							date = sdfs.parse(df.format(new Date()));
-							DuctList.get(i).setDate(date);
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}  
+		        	   	String realPath=rootPath+filePath+"/"+str+".png";		        	   	
+		        	   	DuctList.get(i).setDate(new Date());
 						/////添加上传的用户id
 						DuctList.get(i).setUserId(userInMemory.getId());
 

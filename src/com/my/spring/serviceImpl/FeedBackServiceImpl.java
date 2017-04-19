@@ -1,6 +1,8 @@
 package com.my.spring.serviceImpl;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,6 +14,7 @@ import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.FeedBack;
+import com.my.spring.model.FeedBackPojo;
 import com.my.spring.model.User;
 import com.my.spring.service.FeedBackService;
 import com.my.spring.utils.DataWrapper;
@@ -30,21 +33,44 @@ public class FeedBackServiceImpl implements FeedBackService {
 
 
 	@Override
-	public DataWrapper<List<FeedBack>> getFeedBackList(Integer pageIndex, Integer pageSize, FeedBack feedBack, String token) {
+	public DataWrapper<List<FeedBackPojo>> getFeedBackList(Integer pageIndex, Integer pageSize, FeedBack feedBack, String token) {
 		// TODO Auto-generated method stub
 		DataWrapper<List<FeedBack>> dataWrapper = new DataWrapper<List<FeedBack>>();
+		List<FeedBackPojo> feedbackpojo = new ArrayList<FeedBackPojo>();
+		
+		DataWrapper<List<FeedBackPojo>> dataWrapperpojo = new DataWrapper<List<FeedBackPojo>>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
 			User adminInDB = userDao.getById(adminInMemory.getId());
 			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
 				dataWrapper=feedBackDao.getFeedBackList(pageSize, pageIndex,feedBack);
+				if(dataWrapper.getData()!=null){
+					for(int i=0;i<dataWrapper.getData().size();i++){
+						FeedBackPojo feedbackpojos=new FeedBackPojo();
+						feedbackpojos.setContent(dataWrapper.getData().get(i).getContent());
+						feedbackpojos.setId(dataWrapper.getData().get(i).getId());
+						feedbackpojos.setUserName(dataWrapper.getData().get(i).getUserName());
+						feedbackpojos.setTel(dataWrapper.getData().get(i).getTel());
+						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+	    	    		String str=sdf.format(dataWrapper.getData().get(i).getDate()); 
+	    	    		feedbackpojos.setDate(str);
+	    	    		feedbackpojo.add(feedbackpojos);
+					}
+					dataWrapperpojo.setData(feedbackpojo);
+					dataWrapperpojo.setCallStatus(dataWrapper.getCallStatus());
+					dataWrapperpojo.setCurrentPage(dataWrapper.getCurrentPage());
+					dataWrapperpojo.setNumberPerPage(dataWrapper.getNumberPerPage());
+					dataWrapperpojo.setTotalNumber(dataWrapper.getTotalNumber());
+					dataWrapperpojo.setTotalPage(dataWrapper.getTotalPage());
+					dataWrapperpojo.setErrorCode(dataWrapper.getErrorCode());
+				}
 			} else {
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+				dataWrapperpojo.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
 		} else {
-			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+			dataWrapperpojo.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
-		return dataWrapper;
+		return dataWrapperpojo;
 	}
 
 

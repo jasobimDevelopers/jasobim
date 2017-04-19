@@ -220,12 +220,15 @@ table
 #bottom a:hover,#bottom span:hover{
 	color:red;
 }
-#userPageCode,#projectPageCode,#itemPageCode,#quantityPageCode,#questionPageCode,#videoPageCode,#paperPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
-#userPageCode a,#projectPageCode a,#itemPageCode a,#quantityPageCode a,#questionPageCode a,#videoPageCode a,#paperPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+#feedbackPageCode{
+	float:right;
+}
+#userPageCode,#feedbackPageCode,#projectPageCode,#itemPageCode,#quantityPageCode,#questionPageCode,#videoPageCode,#paperPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
+#userPageCode a,#projectPageCode a,#itemPageCode a,#quantityPageCode a,#questionPageCode a,#videoPageCode a,#paperPageCode a,#feedbackPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
 #userPageCode a:hover,#projectPageCode a:hover,#itemPageCode a:hover,#quantityPageCode a:hover,
-#questionPageCode a:hover,#videoPageCode a:hover,#paperPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+#questionPageCode a:hover,#videoPageCode a:hover,#paperPageCode a:hover,#feedbackPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
 #userPageCode span.current,#itemPageCode span.current,#projectPageCode span.current,
-#quantityPageCode span.current,#questionPageCode span.current,#videoPageCode span.current,#paperPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+#quantityPageCode span.current,#questionPageCode span.current,#videoPageCode span.current,#paperPageCode span.current,#feedbackPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
 #userPageCode span.disabled,#projectPageCode span.disabled,#itemPageCode span.disabled,
 #quantityPageCode span.disabled,#questionPageCode span.disabled,#projectPageCode span.disabled,#videoPageCode span.disabled,
-#paperPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+#paperPageCode span.disabled,#feedbackPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}

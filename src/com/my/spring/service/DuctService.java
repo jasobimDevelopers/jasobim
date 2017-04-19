@@ -23,4 +23,5 @@ public interface DuctService {
 			Long projectId);
 	DataWrapper<String> exportDuct(Long projectId, String token, HttpServletRequest request);
 	DataWrapper<Void> updateDuct(Duct duct, String token, HttpServletRequest request);
+	DataWrapper<DuctPojo> getDuctBySelfId(String selfId);
 }

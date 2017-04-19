@@ -14,4 +14,5 @@ public interface DuctDao {
 	boolean addDuctList(List<Duct> ductList);
 	boolean exportQuantity(String tempFile, Long projectId);
 	Duct getDuctById(Long id);
+	DataWrapper<Duct> getDuctBySelfId(String selfId);
 }

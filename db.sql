@@ -178,6 +178,20 @@ foreign key(question_id) references question(id)
 
 
 
+#产值表
+create table value_output(
+id serial primary key,
+others varchar(50),
+project_id bigint(20) unsigned not null,
+date datetime,
+num double,
+finished double,
+foreign key(project_id) references project(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+#查看
+#增加
+
+
 create table message(
 id serial primary key,
 content text,
@@ -238,8 +252,8 @@ DROP PROCEDURE IF EXISTS exportDuct;
 DELIMITER // 
 create procedure exportDuct(in file_path  text,in project_id long)
 begin
-SET @sql = 'select id,name,profession_type,value,unit,project_id,building_num,floor_num,unit_num,household_num,family_and_type,system_type,service_type,size,material from duct where project_id=';
-SET @insertSql = CONCAT(@sql,project_id,' into outfile ','\'',file_path,'\'');  
+SET @sql = 'select id,name,count(*) as value,sum(length),sum(area),project_id,building_num,family_and_type,size from duct where project_id=';
+SET @insertSql = CONCAT(@sql,project_id,'group by size,family_and_type',' into outfile ','\'',file_path,'\'');  
 end ;
 PREPARE stmtinsert FROM @insertSql;   
 EXECUTE stmtinsert;
@@ -247,17 +261,6 @@ end//
 DELIMITER ;
 			
 
-DROP PROCEDURE IF EXISTS exportCableTray;
-DELIMITER // 
-create procedure exportCableTray(in file_path  text,in project_id long)
-begin
-SET @sql = 'select id,name,profession_type,value,unit,project_id,building_num,floor_num,unit_num,household_num,family_and_type,system_type,service_type,size,material from cable_tray where project_id=';
-SET @insertSql = CONCAT(@sql,project_id,' into outfile ','\'',file_path,'\'');  
-end ;
-PREPARE stmtinsert FROM @insertSql;   
-EXECUTE stmtinsert;
-end//
-DELIMITER ;
 
 
 create table model(

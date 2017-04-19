@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.my.spring.DAO.BaseDao;
@@ -39,7 +40,17 @@ public class FeedBackDaoImpl extends BaseDao<FeedBack> implements FeedBackDao {
         List<FeedBack> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(FeedBack.class);
-       
+        if(feedBack!=null){
+        	if(feedBack.getUserName()!=null){
+        		criteria.add(Restrictions.like("userName", "%" + feedBack.getUserName() + "%"));
+        	}
+        	if(feedBack.getContent()!=null){
+        		criteria.add(Restrictions.like("content", "%"+feedBack.getContent()+"%"));
+        	}
+        	if(feedBack.getDate()!=null){
+        		criteria.add(Restrictions.like("date", "%"+feedBack.getDate()+"%"));
+        	}
+        }
         
         if (pageSize == null) {
 			pageSize = 10;

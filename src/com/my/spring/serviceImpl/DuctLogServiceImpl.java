@@ -116,7 +116,7 @@ public class DuctLogServiceImpl implements DuctLogService {
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
         	
-        	DuctLogList=DuctLogDao.getDuctLogByDuctId(ductId,DuctLog).getData();
+        	DuctLogList=DuctLogDao.getDuctLogByDuctId(ductId).getData();
         	
         	String[] stateList=new String[]{"未定义","出库","安装","完成"};
         	if(DuctLogList!=null){

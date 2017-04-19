@@ -52,7 +52,7 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
         	criteria.add(Restrictions.eq("projectId", duct.getProjectId()));
         }
         if(duct.getName()!=null){
-        	criteria.add(Restrictions.eq("name", duct.getName()));
+        	criteria.add(Restrictions.like("name", "%"+duct.getName()+"%"));
         }
         if(duct.getUserId()!=null){
         	criteria.add(Restrictions.eq("userId", duct.getUserId()));
@@ -63,6 +63,9 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
         if(duct.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", duct.getProjectId()));
         }	
+        /////////////////////////////////////
+        criteria.setProjection(Projections.rowCount());
+        criteria.setProjection(Projections.groupProperty("state").as("num"));
         /////////////////////////////////////
    
         if (pageSize == null) {
@@ -119,6 +122,26 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 		}
 		return dataWrapper;
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<Duct> getDuctBySelfId(String selfId) {
+		DataWrapper<Duct> dataWrapper=new DataWrapper<Duct>();
+		List<Duct> ret = new ArrayList<Duct>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Duct.class);
+        criteria.add(Restrictions.eq("selfId",selfId));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+        	dataWrapper.setData(ret.get(0));
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+		}
+		return dataWrapper;
+	}
 
 	@Override
 	public boolean addDuctList(List<Duct> ductList) {
@@ -146,5 +169,6 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 	public Duct getDuctById(Long id) {
 		return get(id);
 	}
+
 
 }
