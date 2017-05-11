@@ -188,7 +188,7 @@ public class QuantityServiceImpl implements QuantityService {
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null) {
 			
-				String filePath = "E:/JasoBim/BimAppDocument/apache-tomcat-8.0.39/webapps/jasobim" + "/out/" + projectId + "/";
+				String filePath = "E:/JasoBim/BimAppDocument/apache-tomcat-8.0.9/webapps/jasobim" + "/out/" + projectId + "/";
 				File fileDir = new File(filePath);
 		        if (!fileDir.exists()) {
 		            fileDir.mkdirs();

@@ -21,7 +21,7 @@ public interface DuctService {
 	DataWrapper<List<DuctPojo>> getDuctByProjectId(Long projectId,String token, Duct duct);
 	boolean batchImport(String filePath, MultipartFile multipartFile, String token, HttpServletRequest request,
 			Long projectId);
-	DataWrapper<String> exportDuct(Long projectId, String token, HttpServletRequest request);
+	DataWrapper<String> exportDuct(Long projectId, String token, HttpServletRequest request,String dateStart,String dateFinished);
 	DataWrapper<Void> updateDuct(Duct duct, String token, HttpServletRequest request);
-	DataWrapper<DuctPojo> getDuctBySelfId(String selfId);
+	DataWrapper<DuctPojo> getDuctBySelfId(Long selfId);
 }

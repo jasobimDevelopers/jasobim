@@ -52,7 +52,7 @@ public class DuctController {
     @ResponseBody
     public DataWrapper<List<DuctPojo>> getDuctByProjectId(
     		@ModelAttribute Duct duct,
-    		@RequestParam(value = "projectId",required = true) Long projectId,
+    		@RequestParam(value = "projectId",required = false) Long projectId,
     		@RequestParam(value = "token",required = true) String token){
         return ductService.getDuctByProjectId(projectId,token,duct);
     }
@@ -60,8 +60,8 @@ public class DuctController {
     @RequestMapping(value="/admin/getDuctBySelfId",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<DuctPojo> getDuctBySelfId(
-    		@RequestParam(value = "selfId",required = true) String selfId){
-        return ductService.getDuctBySelfId(selfId);
+    		@RequestParam(value = "id",required = true) Long id){
+        return ductService.getDuctBySelfId(id);
     }
     
     @RequestMapping(value="/admin/updateDuct",method = RequestMethod.POST)
@@ -104,7 +104,10 @@ public class DuctController {
     public DataWrapper<String> exportDuct(
     		@RequestParam(value = "projectId",required = true) Long projectId,
             @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "dateStart",required = false) String dateStart,
+            @RequestParam(value = "dateFinished",required = false) String dateFinished,
             HttpServletRequest request){
-        return ductService.exportDuct(projectId, token, request);
+    	 
+        return ductService.exportDuct(projectId, token, request, dateStart, dateFinished);
     }
 }

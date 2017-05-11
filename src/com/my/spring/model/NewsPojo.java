@@ -10,7 +10,7 @@ public class NewsPojo {
 	private Long userId;
 	private String userName;
 	private String userIconUrl;
-	
+	private String title;
 	
 	public Long getId() {
 		return id;
@@ -55,6 +55,12 @@ public class NewsPojo {
 	}
 	public void setUserIconUrl(String userIconUrl) {
 		this.userIconUrl = userIconUrl;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 

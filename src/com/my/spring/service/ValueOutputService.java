@@ -12,8 +12,10 @@ import java.util.List;
  */
 public interface ValueOutputService {
     DataWrapper<Void> addValueOutput(ValueOutput ValueOutput, String token);
-    DataWrapper<Void> deleteValueOutput(Long id,String token);
+    DataWrapper<Void> deleteValueOutput(String id,String token);
     DataWrapper<Void> updateValueOutput(ValueOutput ValueOutput,String token);
     DataWrapper<List<ValueOutputPojo>> getValueOutputList(String token);
-	DataWrapper<ValueOutput> getValueOutputByProjectId(Long projectId,String token);
+	DataWrapper<List<ValueOutputPojo>> getValueOutputByProjectId(String projectName,Long projectId,String token);
+	DataWrapper<List<ValueOutputPojo>> getValueOutputLists(Integer pageIndex, Integer pageSize, ValueOutput valueOutput,
+			String token);
 }

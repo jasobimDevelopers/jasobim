@@ -1,5 +1,5 @@
 function ductInfoController($scope,ductInfoService) {
-	var name="selfId";
+	var name="id";
 	$scope.duct="";
     var id = getQueryStringByName(name);
     $scope.getDuctDetail = function(id) {

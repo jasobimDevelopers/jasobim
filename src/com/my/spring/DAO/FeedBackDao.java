@@ -11,7 +11,7 @@ public interface FeedBackDao {
 
 	boolean addFeedBack(FeedBack feedBack);
 
-	boolean deleteFeedBack(Long id);
+	boolean deleteFeedBack(String[] ids);
 
 	FeedBack getById(Long id);
 }

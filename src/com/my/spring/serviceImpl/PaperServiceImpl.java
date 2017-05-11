@@ -311,8 +311,8 @@ public class PaperServiceImpl implements PaperService {
     	DataWrapper<List<Paper>> dataWrapper = new DataWrapper<List<Paper>>();
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
-	        		
-	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper,null);
+	        		String projectIdList=userInMemory.getProjectList();
+	        		dataWrapper= paperDao.getPaperLists(projectIdList,pageSize, pageIndex,paper);
 	        		for(int i=0;i<dataWrapper.getData().size();i++){
 	        			PaperPojo papernew=new PaperPojo();
         				papernew.setProjectId(projectId);

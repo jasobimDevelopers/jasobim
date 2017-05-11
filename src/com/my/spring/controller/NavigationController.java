@@ -24,6 +24,10 @@ public class NavigationController {
     public String feedbackPage(){
     	return "home";
     }
+    @RequestMapping(value="/valueOutputList")
+    public String valueOutputPage(){
+    	return "home";
+    }
     @RequestMapping(value="/projectList")
     public String projectPage(){
         return "home";

@@ -262,7 +262,7 @@ text-decoration: none;
 #dataShow div{
 	margin-top:13px;
 }
-#questionsPageCode{padding: 15px 20px;text-align: left;color: #ccc; width:800px;padding-left:500px;}
+#questionsPageCode{padding: 15px 20px;text-align: left;color: #ccc; width:864px;padding-left:440px;}
 #questionsPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
 
 #questionsPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}

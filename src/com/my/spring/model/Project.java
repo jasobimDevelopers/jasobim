@@ -1,5 +1,7 @@
 package com.my.spring.model;
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 /**
@@ -25,7 +27,9 @@ public class Project {
     private String state;//上线不上线的标志0.未上线 1.已上线
     private String isIos;//1.安卓	 0.ios   2.pad模型
     private String modelPart;//all.整体	rf.顶层     standard.标准层     B1.地下一层     B2.地下二层      B3.地下三层
-    
+    private String teamList;
+    private String teamId;
+    private Date updateDate;
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -54,6 +58,16 @@ public class Project {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Basic
+    @Column(name = "team_list")
+	public String getTeamList() {
+		return teamList;
+	}
+
+	public void setTeamList(String teamList) {
+		this.teamList = teamList;
 	}
 	@Basic
 	@Column(name = "is_ios")
@@ -124,6 +138,16 @@ public class Project {
 	public void setPicId(String picId) {
 		this.picId = picId;
 	}
+	
+	@Basic
+    @Column(name = "update_date")
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
 
 	@Basic
     @Column(name = "model_id")
@@ -193,6 +217,16 @@ public class Project {
 
 	public void setPhase(String phase) {
 		this.phase = phase;
+	}
+
+	@Basic
+    @Column(name = "team_id")
+	public String getTeamId() {
+		return teamId;
+	}
+
+	public void setTeamId(String teamId) {
+		this.teamId = teamId;
 	}
 
     

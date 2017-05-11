@@ -27,14 +27,10 @@ import com.my.spring.utils.DataWrapper;
 @RequestMapping(value="api/item")
 public class ItemController {
     @Autowired
-    ItemService itemService;
-    
-    
-    
+    ItemService itemService;  
     /*
      *模型的原始构件信息上传
      */
-    
     @RequestMapping(value="/admin/uploadItem", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> uploadItem(
@@ -54,6 +50,29 @@ public class ItemController {
     	
         return dataWrapper;
     }
+    
+   /* 
+     *模型的原始构件信息上传(客户端生成二维码图片)
+     
+    @RequestMapping(value="/admin/uploadItems", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> uploadItems(
+            @RequestParam(value = "fileList", required = false) MultipartFile[] fileList,
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "projectId",required = true) Long projectId,
+            HttpServletRequest request){
+    	String filePath = "/fileupload/items";
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    	for(int i=0;i<fileList.length;i++){
+    		if(itemService.batchImportss(filePath, fileList[i],token,request,projectId)){
+            	dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
+            }else{
+            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+            }
+    	}
+    	
+        return dataWrapper;
+    }*/
     
     /*
      *轻量化处理后的模型构件信息上传

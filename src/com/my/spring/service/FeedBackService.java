@@ -14,7 +14,7 @@ public interface FeedBackService {
 	
 	DataWrapper<Void> addFeedBack(String content, String token,String tel);
 
-	DataWrapper<Void> deleteFeedBack(Long id, String token);
+	DataWrapper<Void> deleteFeedBack(String ids, String token);
 
 	DataWrapper<List<FeedBackPojo>> getFeedBackList(Integer pageIndex, Integer pageSize, FeedBack feedBack, String token);
 }

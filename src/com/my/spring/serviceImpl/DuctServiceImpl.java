@@ -150,13 +150,17 @@ public class DuctServiceImpl implements DuctService {
     	    		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
     	    		String str=sdf.format(ductList.get(i).getDate()); 
     	    		ductPojo.setDate(str);
-    	    		ductPojo.setFamilyAndType(ductList.get(i).getFamilyAndType());
+	    			ductPojo.setFamilyAndType(ductList.get(i).getFamilyAndType());
     	    		ductPojo.setId(ductList.get(i).getId().toString());
-    	    		ductPojo.setLevel(ductList.get(i).getLevel());
+	    			ductPojo.setLevel(ductList.get(i).getLevel());
     	    		ductPojo.setName(ductList.get(i).getName());
     	    		ductPojo.setProjectId(ductList.get(i).getProjectId().toString());
     	    		ductPojo.setSelfId(ductList.get(i).getSelfId());
-    	    		ductPojo.setState(stateList[ductList.get(i).getState()]);
+    	    		if(ductList.get(i).getState()!=null){
+    	    			ductPojo.setState(stateList[ductList.get(i).getState()]);	
+    	    		}else{
+    	    			ductPojo.setState(stateList[0]);
+    	    		}
     	    		ductPojo.setServiceType(ductList.get(i).getServiceType());
     	    		if(ductList.get(i).getUserId()!=null){
     	    			User user=userDao.getById(ductList.get(i).getUserId());
@@ -218,6 +222,7 @@ public class DuctServiceImpl implements DuctService {
             		ductPojo.setLength(ductList.get(i).getLength()+"");
             		ductPojo.setServiceType(ductList.get(i).getServiceType());
             		ductPojo.setSystemType(ductList.get(i).getSystemType());
+            		ductPojo.setModelFlag(ductList.get(i).getModelFlag());
             		if(ductList.get(i).getUserId()!=null){
             			User user=userDao.getById(ductList.get(i).getUserId());
             			if(user.getUserName()!=null){
@@ -237,7 +242,7 @@ public class DuctServiceImpl implements DuctService {
 	}
 	
 	@Override
-	public DataWrapper<DuctPojo> getDuctBySelfId(String selfId) {
+	public DataWrapper<DuctPojo> getDuctBySelfId(Long selfId) {
 		// TODO Auto-generated method stub
 		DataWrapper<DuctPojo> dataWrapper = new DataWrapper<DuctPojo>();
 		Duct duct = new Duct();
@@ -349,13 +354,12 @@ public class DuctServiceImpl implements DuctService {
         return b;
 	}
 	@Override
-	public DataWrapper<String> exportDuct(Long projectId, String token, HttpServletRequest request) {
+	public DataWrapper<String> exportDuct(Long projectId, String token, HttpServletRequest request,String dateStart,String dateFinished) {
 		// TODO Auto-generated method stub
 		DataWrapper<String> dataWrapper = new DataWrapper<String>();
 		if (projectId == null) {
 			dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 		}
-			
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null) {
 			
@@ -368,27 +372,22 @@ public class DuctServiceImpl implements DuctService {
 		        String file = filePath + "duct.xls";
 		        String header = "序号\t"
 		        		+ "名称\t"
-		        		+ "专业\t"
-		        		+ "项目编号\t"
+		        		+ "个数\t"
+		        		+ "长度\t"
+		        		+ "面积\t"
+		        		+ "项目id\t"
 		        		+ "楼栋号\t"
-		        		+ "楼层号\t"
-		        		+ "单元号\t"
-		        		+ "户型\t"
 		        		+ "familyAndType\t"
-		        		+ "系统类型\t"
-		        		+ "设备类型\t"
 		        		+ "尺寸\t"
-		        		+ "材质\t"
-		        		+ "偏移量\t"
-		        		+ "标高\t"
-		        		+ "状态\n";
+		        		+ "项目名称\t"
+		        		+ "时间\n";
 		        FileOperationsUtil.deleteFile(tempFile);
 		        FileOperationsUtil.deleteFile(file);
-		        if (DuctDao.exportQuantity(tempFile, projectId)) {
+		        if (DuctDao.exportDuct(tempFile, projectId,dateStart,dateFinished)) {
 					String content = FileOperationsUtil.readFile(tempFile);
 					String newContent = header + content;
 					FileOperationsUtil.writeFile(file, newContent, false);
-					dataWrapper.setData("out/" + projectId + "/quantitty.xls");
+					dataWrapper.setData("out/" + projectId +"/duct" +"/duct.xls");
 				} else {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}

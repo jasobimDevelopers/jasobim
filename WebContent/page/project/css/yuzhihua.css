@@ -22,6 +22,9 @@ body{
 	height:48px;
 }
 
+#itemGetContent_ul{
+	margin-top:90px;
+}
 #head_yuzhihua div{
 
 	font-family: 微软雅黑;
@@ -81,6 +84,10 @@ body{
 	width:17.5%;
 	height:100%;
 	border-right:1px solid #CCCCCC;
+}
+.left_ul{
+	max-height:200px;
+	overflow:auto;
 }
 .left_ul li{
 	margin:20px 0px !important;
@@ -168,17 +175,35 @@ display: block;
 	margin: 10px 0;
 	margin-left: 50px;
 }
-.chose div img{
+.choses{
+	padding-bottom:15px;
+	width: 100%;
+	margin: 15px 0;
+	margin-left: 23px;
+	border-bottom:1px solid black;
+}
+.chose div img,.choses div img{
 	height:14px;
 	vertical-align: middle;
 	padding-right: 5px;
 }
-.chose span{
+.chose span,.choses span{
 	font-family:微软雅黑;
 	font-size:14px;
 	color:#000000;
 	margin-right: 3px;
 
+}
+#four{
+    height: 50px;
+    margin-left: 75px;
+}
+#ductDownload{
+	background:url(../images/xiazai@2x.png) no-repeat 0px 0px;
+	width:72px;
+	height:35px;
+	text-align:center;
+	padding-top:5px;
 }
 #table-buton112{
 	width:845px;

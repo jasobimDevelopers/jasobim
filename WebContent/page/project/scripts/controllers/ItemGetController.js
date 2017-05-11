@@ -9,7 +9,6 @@ function hideUlst(){
 		idom.style.display = 'none';
 		
 	}
-	
 }
 function hideUls(){
 	var idom=document.getElementById("type_div");
@@ -54,6 +53,8 @@ function ItemGetController($scope,ItemGetService) {
 	var item_temp1="";
 	var item_temp2="";
 	var item_temp3="";
+	$scope.startTime=null;
+	$scope.finishedTime=null;
 	$scope.itemNameList=["风管","桥架","弯头"];
 	$scope.itemState=["初始化","出库","安装","完成"];
 	 ////////////////////////预制化构件列表分页获取
@@ -94,7 +95,7 @@ function ItemGetController($scope,ItemGetService) {
 	  };
 	  ///////分页获取项目列表
 	$scope.getProjectLists = function(pageSize,pageIndex,project) {
-		ItemGetService.getProjectLists(pageSize,pageIndex,project).then(function (result){
+		ItemGetService.getProjectLists(pageSize,-1,project).then(function (result){
 		  	  $scope.projectLists = result.data;
 		  });
 	};
@@ -121,6 +122,7 @@ function ItemGetController($scope,ItemGetService) {
     	tests.style.color="red";
     	$scope.itemGetList="";	
     	$scope.getItemGetList(pageSize,pageIndex,itemGet);
+    	$scope.getDuctExcel();
     }
     $scope.setType = function(temp,index){
     	$scope.name=temp;
@@ -205,4 +207,20 @@ function ItemGetController($scope,ItemGetService) {
 
     }
     
+    /////////导出预制化表格
+	$scope.getDuctExcel=function(){
+		ItemGetService.getDuctExcel($scope.projectId,$scope.startTime,$scope.finishedTime).then(function (result){
+		  	  $scope.ductUrl = result.data;
+		});
+	}
+	$scope.setTime = function(){
+		$scope.startTime=document.getElementById("d4311s").value;
+		$scope.finishedTime=document.getElementById("d4312s").value;
+		$scope.getDuctExcel();
+	}
+	$scope.getDuctExcelOfTime=function(){
+		$scope.getDuctExcel();
+		//$("#ductDownload").append("<div id=\"projectPageCode\"></div>");
+		$("#ductDownload").append("<a href=\"{{ductUrl}}\" target=\"_blank\" download=\"{{quantityExcel.originName}}\"><span>导出</span></a>");
+	}
 }

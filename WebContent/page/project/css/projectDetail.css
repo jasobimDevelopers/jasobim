@@ -632,6 +632,10 @@ font-weight: bold;
 #video_type2{
 	margin-left:10px;
 }
+#buildingNum_input,#floorNum_input{
+	width:100px;
+	height:34px;
+}
 /* table td{
 	width:7.7%;
 }

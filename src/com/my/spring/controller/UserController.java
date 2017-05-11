@@ -145,7 +145,7 @@ public class UserController {
 	@RequestMapping(value="/admin/getUserDetails", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<UserPojo> getUserDetailsByAdmin(
-    		@RequestParam(value="userId",required=true) Long userId,
+    		@RequestParam(value="userId",required=false) Long userId,
     		@RequestParam(value="token",required=true) String token) {
         return userService.getUserDetailsByAdmin(userId,token);
     }

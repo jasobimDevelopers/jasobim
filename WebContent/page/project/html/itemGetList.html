@@ -3,47 +3,62 @@
       	<div id="item_list" ng-click="showList()"><span>构建列表</span></div>
         <div id="data_get" ng-click="showData()"><span>数据统计</span></div>
         <div id="search_yuzhihua">
-		<div id="search_icons" ng-click="findItem()"><a href=""><img src="page/project/images/icon@2x.png" id="search_icon"/></a></div>
-		<div id="inputContents"><input type="text" id="search_input"/></div>
-	</div>
-      </div>
-      <div id="content1">
-      	<div id="leftss">
-          	<div id="one">
-			<div ng-click="resetOne()"><a href=""><img src="page/project/images/项目@2x.png"/></a></div>
-			<div><span>项目</span></div>
-			<div class="li_show_hide" id="li_show_hide1" onClick="hideUlst()"></div>
+			<div id="search_icons" ng-click="findItem()"><a href=""><img src="page/project/images/icon@2x.png" id="search_icon"/></a></div>
+			<div id="inputContents"><input type="text" id="search_input"/></div>
 		</div>
-              <div id="name_div" style="display:none">
+    </div>
+    <div id="content1">
+    	<div id="leftss">
+        	<div id="one">
+				<div ng-click="resetOne()"><a href=""><img src="page/project/images/项目@2x.png"/></a></div>
+				<div><span>项目</span></div>
+				<div class="li_show_hide" id="li_show_hide1" onClick="hideUlst()"></div>
+			</div>
+            <div id="name_div" style="display:none">
               	<ul class="left_ul">
                   	<li  ng-click="setProjectName(test.id,$index)" ng-repeat="test in projectLists"><a href="" id="item{{$index}}">{{test.name}}</a></li>
                  </ul>
-              </div>
-              <div id="two">
-			<div ng-click="resetTwo()"><a href=""><img src="page/project/images/类型@2x.png"/></a></div>
-			<div><span>类型</span></div>
-			<div class="li_show_hide" id="li_show_hide2" onClick="hideUls()"></div>
-		</div>
-              <div id="type_div" style="display:none">
+            </div>
+            <div id="two">
+				<div ng-click="resetTwo()"><a href=""><img src="page/project/images/类型@2x.png"/></a></div>
+				<div><span>类型</span></div>
+				<div class="li_show_hide" id="li_show_hide2" onClick="hideUls()"></div>
+			</div>
+            <div id="type_div" style="display:none">
               	<ul class="left_ul">
                   	<li ng-click="setType(item,$index)" ng-repeat="item in itemNameList"><a id="items{{$index}}" href="">{{item}}</a></li>
                  </ul>
-              </div>
-              <div id="three">
-			<div ng-click="resetThree()"><a href=""><img src="page/project/images/状态@2x.png"/></a></div>
-			<div><span>状态</span></div>
-			<div class="li_show_hide" id="li_show_hide3" onClick="hideUl()"></div>
-		</div>
-              <div id="state_div" style="display:none">
-              	<ul class="left_ul">
-                  	<li ng-click="setState($index,$index)" ng-repeat="items in itemState"><a id="itemss{{$index}}" href="">{{items}}</a></li>
-                  </ul>
-              </div>
-              <div id="four"></div>
+            </div>
+            <div id="three">
+				<div ng-click="resetThree()"><a href=""><img src="page/project/images/状态@2x.png"/></a></div>
+				<div><span>状态</span></div>
+				<div class="li_show_hide" id="li_show_hide3" onClick="hideUl()"></div>
+			</div>
+            <div id="state_div" style="display:none">
+            	<ul class="left_ul">
+                	<li ng-click="setState($index,$index)" ng-repeat="items in itemState"><a id="itemss{{$index}}" href="">{{items}}</a></li>
+                </ul>
+            </div>
           </div>
         <div id="rightss">
 	        <div id="content_ones" style="display:block">
-				<ul>
+            	<div class="sear">
+            			
+						<div class="choses">
+							<div><img src="page/project/images/日历@2x.png" alt=""/><span>查询范围：</span></div>
+							<div style="width:400px;">
+								<input id="d4311s" class="Wdate" type="text"  ng-model="startTime" ng-change="setTime()" onClick="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}'})"/><span>到</span>
+								<input id="d4312s" class="Wdate" type="text"  ng-model="finishedTime" onClick="WdatePicker({minDate:'#F{$dp.$D(\'d4311\')}',maxDate:'2020-10-01'})"/>
+							</div>
+							<div id="ductDownload" ng-click="setTime()">
+								<a href="{{ductUrl}}" target="_blank" download="{{quantityExcel.originName}}">
+								<span>导出</span>
+								</a>
+							</div>
+						</div>
+
+				</div>
+				<ul id="itemGetContent_ul">
 					<li class="contents" ng-repeat="item in itemGetList">
 						<div class="state_icon"><span>{{item.state}}</span></div>
 						<div class="item_name"><span>{{item.name}}</span></div>
@@ -67,6 +82,7 @@
 			<div id="table-buton112" style="display:block" >
 				<div id="itemsPageCode"></div>
 			</div>
+			
 		</div>
       </div>
   </div>

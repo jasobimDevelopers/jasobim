@@ -16,6 +16,8 @@ public class News {
 	private String content;
 	private Date newsDate;
 	private Long userId;
+	private String title;
+	private Long projectId;
 	
 	@Id
     @GeneratedValue
@@ -37,6 +39,14 @@ public class News {
 	}
 	
 	@Basic
+    @Column(name = "title")
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	@Basic
     @Column(name = "news_date")
 	public Date getNewsDate() {
 		return newsDate;
@@ -54,6 +64,14 @@ public class News {
 		this.userId = userId;
 	}
 	
+	@Basic
+    @Column(name = "project_id")
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
+	}
 	
 
 }

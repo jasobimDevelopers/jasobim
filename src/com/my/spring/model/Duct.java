@@ -33,7 +33,7 @@ public class Duct {
 	private String typeName;//类型名
 	private Long userId;///用户id
 	private String systemType;////系统类型
-	private Integer standard;/// 模型标志  1.standard  2.rf 3.all 4.B1 5.B2 6.B3
+	private String modelFlag;/// 模型标志  1.standard  2.rf 3.all 4.B1 5.B2 6.B3
 	
 	@Id
     @GeneratedValue
@@ -57,13 +57,13 @@ public class Duct {
 	}
 	
 	@Basic
-	@Column(name = "standard")
-	public Integer getStandard() {
-		return standard;
+	@Column(name = "model_flag")
+	public String getModelFlag() {
+		return modelFlag;
 	}
 
-	public void setStandard(Integer standard) {
-		this.standard = standard;
+	public void setModelFlag(String modelFlag) {
+		this.modelFlag = modelFlag;
 	}
 	
 	@Basic

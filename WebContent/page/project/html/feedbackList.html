@@ -10,6 +10,11 @@
 	           
 	</div>
 	<div class="container" style="display:block;margin-top:30px;" id="containers">
+		<div id="xuanzequ">
+			<button id="all_choice" ng-click="set_checkboxall('include_bodys')"><span>全选</span></button>
+			<button id="all_delete" ng-click="delete_choice('include_bodys')"><span>删除</span></button>
+		</div>
+		
 		<div id="include_bodys">
 			<table class="table-striped table table-bordered">
 				<tbody>
@@ -24,6 +29,7 @@
 					    <td> 
 					    	<button id="deletebutton" ng-click="deleteFeedback(feedback.id)">
 		                    </button>
+		                    <input type="checkbox" ng-click="setFeedbackId(feedback.id)" class="checkBoxItem">
                         </td>
 					</tr>
 				</tbody>

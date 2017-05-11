@@ -31,4 +31,5 @@ public interface ItemService {
 			String token);
 	String getCodeImg(Item item, HttpServletRequest request);
 	DataWrapper<MinItemPojo> getMinItemById(Long id);
+	//public boolean batchImportss(String name,MultipartFile file,String token,HttpServletRequest request, Long projectId);
 }

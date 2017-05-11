@@ -188,9 +188,23 @@ public class ItemServiceImpl implements ItemService {
 		        	int i=0;
 		        	
 			        for(Item Item:ItemList){
-			        	tempb[i]=Item.getBuildingNum();
-			        	tempf[i]=Item.getFloorNum();
-			        	temph[i]=Item.getHouseholdNum();
+			        	if(Item!=null){
+			        		if(Item.getBuildingNum()!=null){
+			        			tempb[i]=Item.getBuildingNum();
+			        		}else{
+			        			tempb[i]=0;
+			        		}
+			        		if(Item.getFloorNum()!=null){
+			        			tempf[i]=Item.getFloorNum();
+			        		}else{
+			        			tempf[i]=0;
+			        		}
+				        	if(Item.getHouseholdNum()!=null){
+				        		temph[i]=Item.getHouseholdNum();	
+				        	}else{
+				        		temph[i]=0;
+				        	}
+			        	}
 			        	i++;
 			        }
 			       
@@ -223,7 +237,7 @@ public class ItemServiceImpl implements ItemService {
 		            //迭代添加构件信息
 			        itemDao.addItemList(ItemList);
 			        List <Quantity> quantityList=new ArrayList<Quantity>();
-			    	DataWrapper<List <QuantityPojo>> quantitypojo= itemDao.getSameItem();
+			    	DataWrapper<List <QuantityPojo>> quantitypojo= itemDao.getSameItem(projectId);
 			    	if(quantitypojo.getData()!=null){
 			    		for(QuantityPojo pojo:quantitypojo.getData()){
 			    			

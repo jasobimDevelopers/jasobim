@@ -86,10 +86,13 @@ public class FeedBackDaoImpl extends BaseDao<FeedBack> implements FeedBackDao {
 
 
 	@Override
-	public boolean deleteFeedBack(Long id) {
+	public boolean deleteFeedBack(String[] id) {
 		// TODO Auto-generated method stub
-		
-		return delete(get(id));
+		boolean bool=false;
+		for(int i=0;i<id.length;i++){
+			bool=delete(get(Long.valueOf(id[i])));
+		}
+		return bool;
 	}
 
 

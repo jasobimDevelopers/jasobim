@@ -9,7 +9,7 @@ angular.module('DuctApp',[])
   this.getDuctDetail=function(id){
 	  var deferred = $q.defer();
       console.log("读取构建详细数据");
-      var api = '/jasobim/api/duct/admin/getDuctBySelfId?selfId='+id;
+      var api = '/jasobim/api/duct/admin/getDuctBySelfId?id='+id;
      
       $http.get(encodeURI(api))
           .success(function(data, status, headers, config){

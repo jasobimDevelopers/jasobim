@@ -75,13 +75,16 @@ public class FeedBackServiceImpl implements FeedBackService {
 
 
 	@Override
-	public DataWrapper<Void> deleteFeedBack(Long id, String token) {
+	public DataWrapper<Void> deleteFeedBack(String ids, String token) {
 		DataWrapper<Void> dataWrapper=new DataWrapper<Void>();
 		User userInMemory=SessionManager.getSession(token);
+		String[] idList=null;
+		idList=ids.split(",");
+		
 		if(userInMemory!=null){
 			User adminInDB = userDao.getById(userInMemory.getId());
 			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
-				if(feedBackDao.deleteFeedBack(id)){
+				if(feedBackDao.deleteFeedBack(idList)){
 					dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);

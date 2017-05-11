@@ -26,6 +26,8 @@ public class ProjectPojo {
     private String state;//状态
     private Integer isIos;///1.ios 0.安卓   2.pad模型
     private String[] modelPart;//all.整体	rf.顶层     standard.标准层     B1.地下一层     B2.地下二层      B3.地下三层
+    private String[] teamList;
+    private String[] teamId;
 	public Long getId() {
 		return id;
 	}
@@ -146,4 +148,16 @@ public class ProjectPojo {
 	public void setModelId(Long[] modelId) {
 		this.modelId = modelId;
 	}*/
+	public String[] getTeamList() {
+		return teamList;
+	}
+	public void setTeamList(String[] teamList) {
+		this.teamList = teamList;
+	}
+	public String[] getTeamId() {
+		return teamId;
+	}
+	public void setTeamId(String[] teamId) {
+		this.teamId = teamId;
+	}
 }

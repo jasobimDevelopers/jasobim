@@ -19,25 +19,25 @@
             <div class="addinput_question">
         		<div><span>项目名称:</span></div>
         		<div>
-        			<select type="text" ng-model="findQuestionInfo.projectId" class="addquestionSelect">
+        			<select type="text" ng-model="findQuestionInfo.projectId" class="addquestionSelect" required>
         				<option ng-repeat="projectinfo in projectLists" value="{{projectinfo.id}}">{{projectinfo.name}}</option>
         			</select>
         		</div>
             </div>
             <div class="addinput_question">
         		<div><span>问题名称:</span></div>
-        		<div><input type="text" ng-model="findQuestionInfo.name" id="inputpassword" /></div>
+        		<div><input type="text" ng-model="findQuestionInfo.name" id="inputpassword" required/></div>
             </div>
             <div class="addinput_question">
             	<div><span>所属专业:</span></div>
-            	<div><input type="text"  id="inputnick" ng-model="findQuestionInfo.trades" /></div>
+            	<div><input type="text"  id="inputnick" ng-model="findQuestionInfo.trades" required/></div>
             </div>
             <div class="addinput_question">
             	<div>
             		<span>问题类型:</span>
             	</div>
             	<div>
-            		<select type="text" ng-model="findQuestionInfo.questionType" class="addquestionSelect">
+            		<select type="text" ng-model="findQuestionInfo.questionType" class="addquestionSelect" required>
             			<option value="0">质量</option>
             			<option value="1">安全</option>
             			<option value="2">其他</option>
@@ -49,7 +49,7 @@
             		<span>问题等级:</span>
             	</div>
             	<div>
-            		<select  type="text" ng-model="findQuestionInfo.priority" class="addquestionSelect">
+            		<select  type="text" ng-model="findQuestionInfo.priority" class="addquestionSelect" required>
             			<option value="0">一般</option>
             			<option value="1">重要</option>
             			<option value="2">紧急</option>
@@ -66,7 +66,7 @@
             </div>
             <div class="addinput_question">
             	<div><span>查看二维码:</span></div>
-            	<div><img width="100px" height="100px" src="{{}}" /></div>
+            	<div><img width="100px" height="100px" src="{{findQuestionInfo.codeInformation}}" /></div>
             </div>
             <div id="addbutton" style="margin-top:86px;">
             	<input class="btn btn-default" type="button" ng-click="addQuestionByAdmin()" value="确定" />

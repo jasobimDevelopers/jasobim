@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +65,20 @@ public class ProjectServiceImpl implements ProjectService {
     public DataWrapper<ProjectPojo> addProject(Project project,String token,MultipartFile modelfile[],MultipartFile picfile[],HttpServletRequest request) {
         DataWrapper<ProjectPojo> dataWrapper = new DataWrapper<ProjectPojo>();
         DataWrapper<Project> dataWrappers = new DataWrapper<Project>();
+        ///班组信息存储
+        if(project.getTeamList()!=null){
+        	String[] temp=project.getTeamList().split(",");
+        	String test="";
+        	for(int i=0;i<temp.length;i++){
+        		if(i==0){
+        			test=test+i;
+        		}else{
+        			test=test+","+i;
+        		}
+        	}
+        	project.setTeamId(test);
+        }
+        ////////////
         User userInMemory = SessionManager.getSession(token);
         ProjectPojo pojo=new ProjectPojo();
         String[] urlList = new String[modelfile.length];
@@ -118,9 +133,13 @@ public class ProjectServiceImpl implements ProjectService {
 						}
 						//project.setPicId();
 						//project.set();
-						pojo.setPicUrl(urlList2[0]);
+						if(urlList2.length>0){
+							pojo.setPicUrl(urlList2[0]);
+						}
+						
 						
 					}
+					project.setUpdateDate(new Date(System.currentTimeMillis()));
 					if(projectDao.addProject(project)){
 						dataWrappers=projectDao.findProjectLike(project);
 						pojo.setBuildingUnit(dataWrappers.getData().getBuildingUnit());
@@ -253,6 +272,19 @@ public class ProjectServiceImpl implements ProjectService {
     public DataWrapper<Void> updateProject(Project project,String token,MultipartFile modelFile[],MultipartFile picFile[],HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
+      ///班组信息存储
+        if(project.getTeamList()!=null){
+        	String[] temp=project.getTeamList().split(",");
+        	String test="";
+        	for(int i=0;i<temp.length;i++){
+        		if(i==0){
+        			test=test+i;
+        		}else{
+        			test=test+","+i;
+        		}
+        	}
+        	project.setTeamId(test);
+        }
         if (userInMemory != null) {
 				if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 					if(project!=null){
@@ -290,6 +322,7 @@ public class ProjectServiceImpl implements ProjectService {
 							}
 							project.setPicId(picid);
 						}
+						project.setUpdateDate(new Date(System.currentTimeMillis()));
 						if(!projectDao.updateProject(project)) 
 				            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 						else
@@ -429,6 +462,26 @@ public class ProjectServiceImpl implements ProjectService {
 								{
 									projectPojo.setModelUrl(urlList[j]);
 								}
+							}
+						}
+					}
+					if(userInMemory.getUserType()!=3){
+						if(project.getTeamList()!=null){
+							String[] teamNames=project.getTeamList().split(",");
+							String[] teamIds=project.getTeamId().split(",");
+							projectPojo.setTeamList(teamNames);
+							projectPojo.setTeamId(teamIds);
+						}
+					}else{
+						if(userInMemory.getTeamId()!=null){
+							if(project.getTeamList()!=null){
+								String[] teamNames=project.getTeamList().split(",");
+								String[] teamname=new String[1];
+								teamname[0]=teamNames[userInMemory.getTeamId()];
+								projectPojo.setTeamList(teamname);
+								String[] teamId=new String[1];
+								teamId[0]=userInMemory.getTeamId().toString();
+								projectPojo.setTeamId(teamId);
 							}
 						}
 					}

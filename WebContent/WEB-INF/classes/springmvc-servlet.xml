@@ -12,6 +12,7 @@
  
 
     <!-- if you use annotation you must configure following setting -->
+    
     <mvc:annotation-driven/> 
 	<bean class="test.springmvc.SwaggerConfig" />
      

@@ -86,4 +86,31 @@
 	          });
 	      return deferred.promise;
 	      };
+      //////导出预制化表格
+	  this.getDuctExcel =function(projectId,startTime,finishedTime){
+		  var deferred = $q.defer();
+		  var api='api/duct/admin/exportDuct?projectId='+projectId+'&token='+token;
+		  if(startTime!=null && startTime!=undefined && startTime!=""){
+			  api+='&dateStart='+ startTime;
+		  }
+		  if(finishedTime!=null && finishedTime!=undefined && finishedTime!=""){
+			  api+='&dateFinished='+ finishedTime;
+		  }
+ 	 	  $http.get(api)
+          .success(function(data, status, headers, config){
+              console.log(data);
+                  if(data.callStatus == "SUCCEED"){
+                      deferred.resolve(data);
+                      alert("导出预制化构件信息成功！")
+                      self.uploadDuctInfo = data;
+                  }else{
+                     // alert("数据导出失败("+data.errorCode+")");
+                  }
+                  
+              })
+              .error(function(data, status, headers, config){
+                  deferred.reject(data);
+              });
+          return deferred.promise;
+	  }
   });

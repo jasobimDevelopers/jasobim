@@ -94,6 +94,7 @@ function UserController($scope,UserService) {
   $scope.hideadduserHtml= function(){
 		$scope.findUserInfo = {};
 		document.getElementById("addUserHtml").style.display = 'none';
+		document.getElementById("banzuxinxi").style.display="none";
 	}
   ///////更新用户
   $scope.updateUser = function(user){
@@ -105,10 +106,15 @@ function UserController($scope,UserService) {
  $scope.userChangeClick = function(userId){
     UserService.findUser(userId,token).then(function(result){
       $scope.findUserInfo=result.data;
+      if($scope.findUserInfo.userType==3){
+    	  document.getElementById("banzuxinxi").style.display = 'block'; 
+      }
       //////初始化获取项目列表
       $scope.getProjectLists(pageSize,-1,project);
       document.getElementById("inputpasswords").value = $scope.findUserInfo.password;
       document.getElementById("addUserHtml").style.display = 'block';
+      
+      
       $scope.title="更新用户";
     });
  }
@@ -127,6 +133,7 @@ function UserController($scope,UserService) {
  $scope.returnUserlist = function(){
 	       $scope.getUserList(pageSize,pageIndex,user);
 	       document.getElementById("addUserHtml").style.display = 'none';
+	      
  }
  //////重置添加用户信息
  $scope.resetUser = function(){
@@ -171,8 +178,6 @@ function UserController($scope,UserService) {
 		 findUserInfo = {};
 	     var userIcons = document.querySelector('input[type=file]').files[0];
 		 var formDatas=new FormData();
-		 var workname=document.getElementById("inputUserType").value;
-		 formDatas.append('workName',workname);
 		 formDatas.append('projectList',projectNums);
 		 formDatas.append('file',userIcons);
 		 if(checkMobile()==true )
@@ -188,12 +193,12 @@ function UserController($scope,UserService) {
 				       $scope.addUserByAdminInfo=result.data;
 				       $scope.getUserList(pageSize,1,$scope.userTofind);
 				       document.getElementById("addUserHtml").style.display = 'none';
+				       document.getElementById("banzuxinxi").style.display="none";
 				       document.getElementById("inputpasswords").value="";
 					   document.getElementById("inputUserType").value="";
 					   projectNums="";
 				    });
 			 }
-			
 		 }
 		
 	 }
@@ -204,19 +209,25 @@ function UserController($scope,UserService) {
 		 var userIcon = document.querySelector('input[type=file]').files[0];
 		 //var test=document.getElementById("inputicon").value;
 		 formData.append('file',userIcon);
-		 formData.append('projectList',projectNums);
+		 if(projectNums!=null){
+			 formData.append('projectList',projectNums);
+		 }else{
+			 formData.append('projectList',$scope.findUserInfo.projectList);
+		 }
+		 
 		 formData.append('userName',$scope.findUserInfo.userName);
 		 formData.append('realName',$scope.findUserInfo.realName);
 		 formData.append('email',$scope.findUserInfo.email);
 		 formData.append('password',$scope.findUserInfo.password);
 		 formData.append('tel',$scope.findUserInfo.tel);
-		 var workname=document.getElementById("inputUserType").value;
-		 formData.append('workName',workname);
+		 formData.append('workName',$scope.findUserInfo.workName);
 		 formData.append('userType',$scope.findUserInfo.userType);
+		 formData.append('teamInformation',$scope.findUserInfo.teamInformation)
 		 UserService.updateUser(formData,token).then(function(result){
 		       $scope.updateUserInfo=result.data;
 		       $scope.getUserList(pageSize,1,$scope.userTofind);
 		       document.getElementById("addUserHtml").style.display = 'none';
+		       document.getElementById("banzuxinxi").style.display="none";
 		    });
 	}
 	 
@@ -260,5 +271,10 @@ $scope.resetUserType = function(){
 	fanxiBox.prop("checked", false);
 	$scope.findUserInfo.userType="";
 };
+$scope.setUserType = function(index){
+	if(index==3){
+		document.getElementById("banzuxinxi").style.display="block";
+	}
+}
 
 }

@@ -39,7 +39,7 @@ public class VideoServiceImpl implements VideoService {
     private String filePath="files";
     private Integer fileType=4;
     @Override
-    public DataWrapper<Void> addVideo(Video video,String token,MultipartFile file,HttpServletRequest request,int videoType) {
+    public DataWrapper<Void> addVideo(Video video,String token,MultipartFile file,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -56,7 +56,6 @@ public class VideoServiceImpl implements VideoService {
 					}
 					video.setSize(file.getSize()/1024);
 					video.setOriginName(originName);
-					video.setVideoType(videoType);
 					if(!videoDao.addVideo(video)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else

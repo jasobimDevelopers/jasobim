@@ -144,7 +144,35 @@ public class BaseDao<T>{
         }
         return true;
     }
-
+    /**
+     * 删除PO
+     *
+     * @param entityList
+     */
+    public boolean deleteList(String[] idList) {
+    	Session session = getSession();
+    	if(idList!=null){
+    		try{
+                session.beginTransaction();
+                for(int i=0;i<idList.length;i++){
+                	session.delete(Long.valueOf(idList[i]));
+                	if(i%10==0){
+                		session.flush();
+                		session.clear();
+                	}
+                }
+                session.getTransaction().commit();
+                session.flush();
+                session.clear();
+            }catch(Exception e){
+                e.printStackTrace();
+                session.getTransaction().rollback();
+                return false;
+            }
+    	}
+        
+        return true;
+    }
     /**
      * 删除PO
      *

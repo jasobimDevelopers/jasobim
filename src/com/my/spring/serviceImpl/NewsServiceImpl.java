@@ -110,13 +110,13 @@ public class NewsServiceImpl implements NewsService {
         if (userInMemory != null) {
 				dataWrapper=NewsDao.getNewsList(pageIndex,pageSize,News);
 				if(dataWrapper.getData()!=null){
-					
 					List<NewsPojo> NewsPojoList = new ArrayList<NewsPojo>();
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						NewsPojo NewsPojo =new NewsPojo();
 						NewsPojo.setContent(dataWrapper.getData().get(i).getContent());
 						NewsPojo.setNewsDate(dataWrapper.getData().get(i).getNewsDate());
 						NewsPojo.setId(dataWrapper.getData().get(i).getId());
+						NewsPojo.setTitle(dataWrapper.getData().get(i).getTitle());
 						if(dataWrapper.getData().get(i).getUserId()!=null){
 							NewsPojo.setUserId(dataWrapper.getData().get(i).getUserId());
 							User user= new User();

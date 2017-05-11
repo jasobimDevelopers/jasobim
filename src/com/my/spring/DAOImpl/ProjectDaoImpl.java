@@ -9,6 +9,7 @@ import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -45,7 +46,7 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
        
         Session session = getSession();
         Criteria criteria = session.createCriteria(Project.class);
-//        criteria.addOrder(Order.desc("publishDate"));
+        criteria.addOrder(Order.desc("updateDate"));
         ////////
         if(!projectList.equals("-1") && projectList!=null && !projectList.equals("null")){
         	String[] ss =projectList.split(",");

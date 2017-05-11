@@ -21,6 +21,8 @@ public class User {
     private Long userIcon;
     private Date registerDate;
     private String projectList;
+    private String teamInformation;////班组信息
+    private Integer teamId;
     private Integer systemId;//0.IOS  1.android
 
     @Id
@@ -40,6 +42,15 @@ public class User {
 	}
 	public void setProjectList(String projectList) {
 		this.projectList = projectList;
+	}
+	
+	@Basic
+    @Column(name = "team_information")
+	public String getTeamInformation() {
+		return teamInformation;
+	}
+	public void setTeamInformation(String teamInformation) {
+		this.teamInformation = teamInformation;
 	}
 	
 	@Basic
@@ -131,6 +142,15 @@ public class User {
 	}
 	public void setSystemId(Integer systemId) {
 		this.systemId = systemId;
+	}
+	
+	@Basic
+    @Column(name = "team_id")
+	public Integer getTeamId() {
+		return teamId;
+	}
+	public void setTeamId(Integer teamId) {
+		this.teamId = teamId;
 	}
     
     

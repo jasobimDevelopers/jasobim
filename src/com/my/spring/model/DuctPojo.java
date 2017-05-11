@@ -31,6 +31,7 @@ public class DuctPojo {
     private String householdNum;
     private String material;//材质
     private String projectName;
+    private String modelFlag;
     public String getBuildingNum() {
 		return buildingNum;
 	}
@@ -223,6 +224,14 @@ public class DuctPojo {
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+
+	public String getModelFlag() {
+		return modelFlag;
+	}
+
+	public void setModelFlag(String modelFlag) {
+		this.modelFlag = modelFlag;
 	}
 	
 }

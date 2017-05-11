@@ -13,7 +13,7 @@
 
       var deferred = $q.defer();
       console.log("读取ProjectPaperList数据");
-      var api = 'api/paper/codeInformation/getPapers?token='+token+'&projectId='+projectId + "&pageSize=" + pageSize + "&pageIndex="+pageIndex +"&"+ sql;
+      var api = 'api/paper/codeInformation/getPapers?token='+token+ "&pageSize=" + pageSize + "&pageIndex="+pageIndex +"&"+ sql;
       $http.get(encodeURI(api))
           .success(function(data, status, headers, config){
               if(data.callStatus == "SUCCEED"){

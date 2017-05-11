@@ -2,7 +2,7 @@ var index;
 function CodeInformationController($scope,CodeInformationService) {
 	console.log("载入CodeInformationController");
 	var paper="";
-	var projectId=79;
+	var projectId=null;
 	var pageSize=10;
 	var pageIndex=1;
 	$scope.titlePaper="图纸区";

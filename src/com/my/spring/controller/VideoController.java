@@ -28,12 +28,11 @@ public class VideoController {
     public DataWrapper<Void> addVideo(
             @ModelAttribute Video video,
             @RequestParam(value = "token",required = true) String token,
-            @RequestParam(value = "videoTypeList",required = true) int videoTypeList[],
             HttpServletRequest request,
             @RequestParam(value = "fileList", required = false) MultipartFile[] fileList){
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
     	for(int i=0;i<fileList.length;i++){
-    		dataWrapper=VideoService.addVideo(video, token, fileList[i], request,videoTypeList[i]);
+    		dataWrapper=VideoService.addVideo(video, token, fileList[i], request);
     		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
             	
             }else{

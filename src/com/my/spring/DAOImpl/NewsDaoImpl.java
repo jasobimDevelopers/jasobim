@@ -46,6 +46,9 @@ public class NewsDaoImpl extends BaseDao<News> implements NewsDao {
         if(News.getUserId()!=null){
         	criteria.add(Restrictions.eq("userId", News.getUserId()));
         }
+        if(News.getProjectId()!=null){
+        	criteria.add(Restrictions.eq("projectId", News.getProjectId()));
+        }
         /////////////////////////////////////
    
         if (pageSize == null) {

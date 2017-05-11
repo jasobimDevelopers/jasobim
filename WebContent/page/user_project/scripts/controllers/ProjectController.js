@@ -588,7 +588,10 @@ function ProjectController($scope,ProjectService) {
 	 }
 	 //////初始化获取项目列表
 	 $scope.getProjectList(pageSize,$scope.currentPage,$scope.ProjectTofind);
-
+	/* for(int i=0;i<$scope.projectList.size;i++){
+		 
+	 }*/
+	 //setCookie('projectId',$scope.projectList.id);
 	 $scope.projectInfo = function(){
 		 console.log("test");
 		 alert("test");
@@ -597,7 +600,7 @@ function ProjectController($scope,ProjectService) {
 	 $scope.projectInfoHead=[{name:"基本信息"},{name:"构件信息"},{name:"图纸信息"},{name:"工程量信息"},{name:"安全技术交底"},{name:"问题列表"}];
 	 $scope.projectPhaseInfo=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"}];
 	 $scope.projectPhaseInfos=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"},{name:"建筑"}];
-	 $scope.projectVideoType=[{name:"安全"},{name:"质量"},{name:"技术"}];
+	 $scope.projectVideoType=[{name:"质量"},{name:"安全"},{name:"技术"}];
 	 $scope.projectHouseholdInfo=[{name:"公共部位"},{name:"N户型"},{name:"Q户型"},{name:"Q户型反"},{name:"N户型反"}];
 	 $scope.projectQuestionOfType=[{name:"安全"},{name:"质量"},{name:"其他"}];
 	 $scope.projectQuestionOfPriority=[{name:"一般"},{name:"重要"},{name:"紧急"}];
@@ -660,8 +663,10 @@ function ProjectController($scope,ProjectService) {
 	 */
 	 ////////////////////////构件信息分页获取
 	 $scope.getProjectItemList = function(projectId,pageSize,pageIndex,item) {
-		 if($scope.buildingArray == undefined || $scope.buildingArray.length==0) {
-			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+		 if($scope.buildingArray == undefined || $scope.buildingArray.length ==0) {
+			 if($scope.buildingInfo!=undefined){
+				 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+			 }
 		 }
 		 $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
 		 if($scope.floorArray == undefined || $scope.floorArray.length==0) {
@@ -705,8 +710,10 @@ function ProjectController($scope,ProjectService) {
 	  }
 	 ////////////////////////初始化构件信息分页获取
 	 $scope.InitProjectItemList = function(projectId,pageSize,pageIndex) {
-		 if($scope.buildingArray == undefined || $scope.buildingArray.length == 0) {
-			  $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);  
+		 if($scope.buildingArray == undefined || $scope.buildingArray.length ==0) {
+			 if($scope.buildingInfo!=undefined){
+				 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+			 }
 		 }
 		  
 		  ProjectService.getItemList(projectId,pageSize,pageIndex,item).then(function (result){
@@ -775,7 +782,9 @@ function ProjectController($scope,ProjectService) {
 	 ////////////////////////图纸列表信息分页获取
 	 $scope.getProjectPaperList = function(projectId,pageSize,pageIndex,paper) {
 		 if($scope.buildingArray == undefined || $scope.buildingArray.length ==0) {
-			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+			 if($scope.buildingInfo!=undefined){
+				 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+			 }
 		 }
 		 $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
 		 if($scope.floorArray == undefined || $scope.floorArray.length ==0) {
@@ -810,8 +819,10 @@ function ProjectController($scope,ProjectService) {
 	 ////////////////////////工程量信息分页获取
 	 $scope.getProjectQuantityList = function(projectId,pageSize,pageIndex,quantity) {
 		 
-		 if($scope.buildingArray == undefined || $scope.buildingArray.length == 0) {
-			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+		 if($scope.buildingArray == undefined || $scope.buildingArray.length ==0) {
+			 if($scope.buildingInfo!=undefined){
+				 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+			 }
 		 }
 		 $scope.buildingDownArray=menuArray($scope.buildingDownInfo);
 		 if($scope.floorArray == undefined || $scope.floorArray.length == 0) {
@@ -928,7 +939,9 @@ function ProjectController($scope,ProjectService) {
 	 $scope.getProjectVideoList = function(pageSize,pageIndex,video) {
 		 video="";
 		 if($scope.buildingArray == undefined || $scope.buildingArray.length ==0) {
-			 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+			 if($scope.buildingInfo!=undefined){
+				 $scope.buildingArray=menuArray($scope.buildingInfo.buildingNum);
+			 }
 		 }
 		 if($scope.phase!="all") {
 			 video+= "professionType=" + $scope.phase;

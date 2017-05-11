@@ -227,7 +227,7 @@ public class ReadExcel {
                 	   String temp=cell.getStringCellValue();
                 	   if(temp!=null && !(temp.equals(""))){
 	                	   item.setLocation(cell.getStringCellValue());//位置
-	                	   int projectid=Integer.valueOf(temp.substring(temp.indexOf("A")+1,temp.indexOf("B")));
+	                	   //int projectid=Integer.valueOf(temp.substring(temp.indexOf("A")+1,temp.indexOf("B")));
 	                	   int buildingid=Integer.valueOf(temp.substring(temp.indexOf("B")+1,temp.indexOf("C")));
 	                	   int unitid=Integer.valueOf(temp.substring(temp.indexOf("C")+1,temp.indexOf("D")));
 	                	   int floorid=Integer.valueOf(temp.substring(temp.indexOf("D")+1,temp.indexOf("E")));
@@ -235,7 +235,7 @@ public class ReadExcel {
 	                	   item.setBuildingNum(buildingid);
 	                	   item.setFloorNum(floorid);
 	                	   item.setHouseholdNum(householdid);
-	                	   item.setProjectId(new Long((long)projectid));
+	                	   //item.setProjectId(new Long((long)projectid));
 	                	   item.setUnitNum(unitid);
                 	   }
                 	   
@@ -249,7 +249,7 @@ public class ReadExcel {
                 	   if(name.equals("风管") || name.equals("风管附件") || name.equals("风管管件") || name.equals("风道末端") || name.equals("柜式离心风机") || name.equals("高效低噪声混流风机")){
                 		   item.setProfessionType(1);
                 	   }
-                	   if(name.equals("消火栓箱")){
+                	   if(name.equals("消火栓箱") || name.equals("潜污泵")){
                 		   item.setProfessionType(3);
                 	   }
                 	   if(name.equals("卫浴装置")){
@@ -319,10 +319,6 @@ public class ReadExcel {
         		   item.setProfessionType(2);
         	   }
            }
-           
-           
-           
-           
            try{
         	   elementList.add(item);
            }catch(Exception e){

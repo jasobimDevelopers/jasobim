@@ -176,6 +176,16 @@ function QuestionController($scope,QuestionService) {
 	 }
 	 /////增加问题
 	 $scope.addQuestionByAdmin = function(){
+		 var title_problem=document.getElementById("inputpassword").value;////问题标题
+		 var charse=document.getElementById("inputnick").value;///问题所属专业
+		 if(title_problem==null || title_problem==undefined || title_problem==""){
+			 alert("问题标题不能为空！");
+			 return;
+		 }
+		 if(charse==null || charse==undefined || charse==""){
+			 alert("问题所属专业不能为空！");
+			 return;
+		 }
 		 if($scope.flag=="添加"){
 			 var formData = new FormData();
 			 for (var key in $scope.findQuestionInfo) {
@@ -186,7 +196,6 @@ function QuestionController($scope,QuestionService) {
 			 QuestionService.addQuestionByAdmin(formData).then(function(result){
 			       $scope.questionInfo=result.data; 
 			       $scope.getQuestionList(pageSize,1,question);
-			      
 			    });
 		 }
 		 if($scope.flag=="更新"){

@@ -8,6 +8,7 @@ import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -50,7 +51,8 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
         }
         if(message.getQuestionId()!=null){
         	criteria.add(Restrictions.eq("questionId", message.getQuestionId()));
-        }	
+        }
+        criteria.addOrder(Order.asc("messageDate"));
         /////////////////////////////////////
    
         if (pageSize == null) {
@@ -94,6 +96,7 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
         Session session = getSession();
         Criteria criteria = session.createCriteria(Message.class);
         criteria.add(Restrictions.eq("userId",userId));
+        criteria.addOrder(Order.desc("messageDate"));
         try {
             ret = criteria.list();
         }catch (Exception e){
@@ -119,6 +122,7 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
      Session session = getSession();
      Criteria criteria = session.createCriteria(Message.class);
      criteria.add(Restrictions.eq("questionId",id));
+     criteria.addOrder(Order.asc("messageDate"));
      try {
          ret = criteria.list();
      }catch (Exception e){

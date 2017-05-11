@@ -12,7 +12,7 @@ public interface DuctDao {
     DataWrapper<List<Duct>> getDuctList(Integer pageSize,Integer pageIndex,Duct duct,String content);
 	DataWrapper<List<Duct>> getDuctByProjectId(Long projectId,Duct duct);
 	boolean addDuctList(List<Duct> ductList);
-	boolean exportQuantity(String tempFile, Long projectId);
+	boolean exportDuct(String tempFile, Long projectId,String dateStart,String dateFinished);
 	Duct getDuctById(Long id);
-	DataWrapper<Duct> getDuctBySelfId(String selfId);
+	DataWrapper<Duct> getDuctBySelfId(Long id);
 }

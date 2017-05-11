@@ -404,13 +404,13 @@ public class QuestionServiceImpl implements QuestionService {
 	    		}
 			}
 	    	if(datawrapper.getData()==null || datawrapper.getData().size()<=0){
-	    		List<QuestionPojo> questionPojolist=new ArrayList<QuestionPojo>();
+	    		/*List<QuestionPojo> questionPojolist=new ArrayList<QuestionPojo>();
 	    		QuestionPojo questionPojo=new QuestionPojo();
 	    		questionPojo.setSortPercent((int)sortPercent);
 	    		questionPojo.setImportantPercent((int)importantPercent);
 	    		questionPojo.setUrgentPercent(100-(int)sortPercent-(int)importantPercent);
 	    		questionPojolist.add(questionPojo);
-	    		datawrapper.setData(questionPojolist);
+	    		datawrapper.setData(questionPojolist);*/
 	    	}else{
 	    		datawrapper.getData().get(0).setImportantPercent((int)importantPercent);
     	    	datawrapper.getData().get(0).setUrgentPercent(100-(int)sortPercent-(int)importantPercent);

@@ -250,18 +250,23 @@ foreign key(user_id) references user(id)
 
 DROP PROCEDURE IF EXISTS exportDuct;
 DELIMITER // 
-create procedure exportDuct(in file_path  text,in project_id long)
+create procedure exportDuct(in file_path  text,in project_id long,in date_start datetime,in date_finished datetime)
 begin
-SET @sql = 'select id,name,count(*) as value,sum(length),sum(area),project_id,building_num,family_and_type,size from duct where project_id=';
-SET @insertSql = CONCAT(@sql,project_id,'group by size,family_and_type',' into outfile ','\'',file_path,'\'');  
-end ;
+SET @sql = 'select b.name,count(*) as value,sum(length) as length,sum(area) as area,b.project_id,b.building_num,b.family_and_type,
+b.size,a.name as project_name,b.date from duct b left join project a on a.id=b.project_id where b.project_id=';
+
+if (date_start is not null and date_finished is not null) then 
+	SET @insertSql = CONCAT(@sql,project_id,'and b.date between ',date_start,' and ',date_finished,' group by size,
+		family_and_type order by b.date desc',' into outfile ','\'',file_path,'\'');  
+else
+	SET @insertSql = CONCAT(@sql,project_id,' group by size,family_and_type order by b.date desc',' into outfile ','\'',file_path,'\'');  
+
+end if;
 PREPARE stmtinsert FROM @insertSql;   
 EXECUTE stmtinsert;
 end//
 DELIMITER ;
 			
-
-
 
 create table model(
 id serial primary key,

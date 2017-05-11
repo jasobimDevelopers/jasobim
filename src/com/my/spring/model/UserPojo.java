@@ -14,10 +14,11 @@ public class UserPojo {
     private String tel;
     private Long userIcon;
     private String userIconUrl;
+    private String[] projectName;
     private Date registerDate;
     private String workName;
-    
-   
+    private String teamInformation;////班组信息
+    private String projectList;
 	public Long getId() {
 		return id;
 	}
@@ -99,6 +100,24 @@ public class UserPojo {
 	}
 	public void setWorkName(String workName) {
 		this.workName = workName;
+	}
+	public String[] getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String[] projectName) {
+		this.projectName = projectName;
+	}
+	public String getTeamInformation() {
+		return teamInformation;
+	}
+	public void setTeamInformation(String teamInformation) {
+		this.teamInformation = teamInformation;
+	}
+	public String getProjectList() {
+		return projectList;
+	}
+	public void setProjectList(String projectList) {
+		this.projectList = projectList;
 	}
     
 }

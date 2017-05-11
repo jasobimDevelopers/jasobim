@@ -41,7 +41,7 @@ public class FeedBackController {
 	@RequestMapping(value="/admin/deleteFeedback", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteFeedBackByAdmin(
-    		@RequestParam(value="feedbackId",required=true) Long feedbackId,
+    		@RequestParam(value="feedbackId",required=true) String feedbackId,
     		@RequestParam(value="token",required=true) String token) {
 	        return feedBackService.deleteFeedBack(feedbackId,token);
     }

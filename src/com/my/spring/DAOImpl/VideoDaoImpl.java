@@ -70,7 +70,7 @@ public class VideoDaoImpl extends BaseDao<Video> implements VideoDao {
         List<Video> ret = new ArrayList<Video>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Video.class);
-//        criteria.addOrder(Order.desc("publishDate"));
+        //criteria.addOrder(Order.desc("publishDate"));
         if(video.getProfessionType()!=null){
         	criteria.add(Restrictions.eq("professionType", video.getProfessionType()));
         }

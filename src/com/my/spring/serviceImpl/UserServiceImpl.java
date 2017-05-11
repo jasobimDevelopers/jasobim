@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
+import com.my.spring.model.Project;
 import com.my.spring.model.User;
 import com.my.spring.model.UserPojo;
 import com.my.spring.service.FileService;
@@ -29,6 +31,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	ProjectDao projectDao;
 	@Autowired
 	FileService fileService;
 	private String filePath="files";
@@ -74,12 +78,27 @@ public class UserServiceImpl implements UserService {
 				SessionManager.removeSessionByUserId(user.getId());
 				if(system!=null){
 					user.setSystemId(system);
+				}else{
+					user.setSystemId(-1);
 				}
 				String token = SessionManager.newSession(user);
 				dataWrapper.setToken(token);
 				UserPojo users=new UserPojo();
+				if(user.getProjectList()!=null){
+					String[] projectList=user.getProjectList().split(",");
+					String[] projectName = new String[projectList.length];
+					for(int i=0;i<projectList.length;i++){
+						Project project = new Project();
+						project=projectDao.getById(Long.valueOf(projectList[i]));
+						if(project!=null){
+							projectName[i]=project.getName();
+						}
+					}
+					users.setProjectName(projectName);
+				}
 				users.setUserName(user.getUserName());
 				users.setUserType(user.getUserType());
+				users.setId(user.getId());
 				if(user.getUserIcon()!=null){
 					Files file=new Files();
 					file=fileService.getById(user.getUserIcon());
@@ -87,7 +106,6 @@ public class UserServiceImpl implements UserService {
 						users.setUserIconUrl(file.getUrl());
 					}
 				}
-				
 				dataWrapper.setData(users);
 			}
 		}
@@ -140,20 +158,23 @@ public class UserServiceImpl implements UserService {
 				if(user.getUserName() != null && !user.getUserName().equals("")) {
 					userInDB.setUserName(user.getUserName());
 				}
+				if(!user.getPassword().equals(userInDB.getPassword())){
+					userInDB.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
+				}
 				if(user.getRealName() != null && !user.getRealName().equals("")) {
 					userInDB.setRealName(user.getRealName());
 				}
 				if (user.getEmail() != null && !user.getEmail().equals("")) {
 					userInDB.setEmail(user.getEmail());
 				}
+				if(user.getProjectList()!=null){
+					userInDB.setProjectList(user.getProjectList());
+				}
 				if (user.getWorkName() != null && !user.getWorkName().equals("")) {
 					userInDB.setWorkName(user.getWorkName());
 				}
 				if (user.getTel() != null && !user.getTel().equals("")) {
 					userInDB.setTel(user.getTel());
-				}
-				if(user.getPassword() !=null && !user.getPassword().equals("")){
-					userInDB.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
 				}
 				if(user.getUserType() !=null && !user.getUserType().equals(""))
 				{
@@ -222,32 +243,35 @@ public class UserServiceImpl implements UserService {
 		DataWrapper<User> dataWrapper = new DataWrapper<User>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
-			User adminInDB = userDao.getById(adminInMemory.getId());
-			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
-				dataWrapper.setData(userDao.getById(userId));
-				if(dataWrapper.getData()!=null){
-					UserPojo userpojo=new UserPojo();
-					userpojo.setEmail(dataWrapper.getData().getEmail());
-					userpojo.setId(dataWrapper.getData().getId());
-					userpojo.setPassword(dataWrapper.getData().getPassword());
-					userpojo.setRealName(dataWrapper.getData().getRealName());
-					userpojo.setRegisterDate(dataWrapper.getData().getRegisterDate());
-					userpojo.setTel(dataWrapper.getData().getTel());
-					userpojo.setUserName(dataWrapper.getData().getUserName());
-					userpojo.setUserType(dataWrapper.getData().getUserType());
-					userpojo.setUserIcon(dataWrapper.getData().getUserIcon());
-					userpojo.setWorkName(dataWrapper.getData().getWorkName());
-					if(dataWrapper.getData().getUserIcon()!=null){
-						Files file=new Files();
-						file=fileService.getById(dataWrapper.getData().getUserIcon());
-						if(file!=null){
-							userpojo.setUserIconUrl(file.getUrl());
-						}
+			User adminInDB = new User();
+			if(userId!=null && (adminInMemory.getUserType()==0 || adminInMemory.getWorkName().equals("总经理"))){
+				adminInDB = userDao.getById(userId);
+			}else{
+				adminInDB = userDao.getById(adminInMemory.getId());
+			}
+			dataWrapper.setData(adminInDB);
+			if(dataWrapper.getData()!=null){
+				UserPojo userpojo=new UserPojo();
+				userpojo.setEmail(dataWrapper.getData().getEmail());
+				userpojo.setId(dataWrapper.getData().getId());
+				userpojo.setPassword(dataWrapper.getData().getPassword());
+				userpojo.setProjectList(dataWrapper.getData().getProjectList());
+				userpojo.setRealName(dataWrapper.getData().getRealName());
+				userpojo.setRegisterDate(dataWrapper.getData().getRegisterDate());
+				userpojo.setTel(dataWrapper.getData().getTel());
+				userpojo.setUserName(dataWrapper.getData().getUserName());
+				userpojo.setUserType(dataWrapper.getData().getUserType());
+				userpojo.setUserIcon(dataWrapper.getData().getUserIcon());
+				userpojo.setTeamInformation(dataWrapper.getData().getTeamInformation());
+				userpojo.setWorkName(dataWrapper.getData().getWorkName());
+				if(dataWrapper.getData().getUserIcon()!=null){
+					Files file=new Files();
+					file=fileService.getById(dataWrapper.getData().getUserIcon());
+					if(file!=null){
+						userpojo.setUserIconUrl(file.getUrl());
 					}
-					dataWrappers.setData(userpojo);
 				}
-			} else {
-				dataWrappers.setErrorCode(ErrorCodeEnum.AUTH_Error);
+				dataWrappers.setData(userpojo);
 			}
 		} else {
 			dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
@@ -264,13 +288,15 @@ public class UserServiceImpl implements UserService {
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
 			User adminInDB = userDao.getById(adminInMemory.getId());
-			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
+			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType() || adminInDB.getTeamId()!=null || adminInDB.getWorkName().equals("总经理")) {
+				user.setTeamInformation(adminInDB.getTeamInformation());
 				userList=userDao.getUserList(pageSize, pageIndex,user);
 				if(userList.getData().size()>0){
 					for(int i=0;i<userList.getData().size();i++){
 						UserPojo userpojo=new UserPojo();
 						userpojo.setEmail(userList.getData().get(i).getEmail());
 						userpojo.setId(userList.getData().get(i).getId());
+						userpojo.setProjectList(userList.getData().get(i).getProjectList());
 						userpojo.setPassword(userList.getData().get(i).getPassword());
 						userpojo.setRealName(userList.getData().get(i).getRealName());
 						userpojo.setTel(userList.getData().get(i).getTel());
@@ -279,13 +305,13 @@ public class UserServiceImpl implements UserService {
 						userpojo.setUserType(userList.getData().get(i).getUserType());
 						userpojo.setUserIcon(userList.getData().get(i).getUserIcon());
 						userpojo.setWorkName(userList.getData().get(i).getWorkName());
+						userpojo.setTeamInformation(userList.getData().get(i).getTeamInformation());
 						if(userList.getData().get(i).getUserIcon()!=null){
 							Files file=fileService.getById(userList.getData().get(i).getUserIcon());
 							if(file!=null){
 								userpojo.setUserIconUrl(file.getUrl());
 							}
 						}
-						
 						userpojoList.add(i, userpojo);
 					}
 					dataWrapper.setData(userpojoList);
@@ -393,6 +419,19 @@ public class UserServiceImpl implements UserService {
 					user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
 					//user.setUserType(user.getUserType());
 					user.setRegisterDate(new Date(System.currentTimeMillis()));
+					if(user.getWorkName()!=null){
+						String[] teamId=user.getWorkName().split(",");
+						String team="";
+						for(int i=0;i<teamId.length;i++){
+							if(i==0){
+								team=team+i;
+							}else{
+								team=team+","+i;
+							}
+							
+						}
+						user.setTeamId(0);
+					}
 					if(!userDao.addUser(user)) {
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					}

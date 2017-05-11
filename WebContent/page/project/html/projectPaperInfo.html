@@ -56,6 +56,26 @@
 								</tr>
 							</tbody>
 						</table>
+						<div id="quantityAction">
+							<div id="quantityImport">
+								<div id="imgBiangen"><a href="#" id="quantity_button" ng-click="importPaper()">图纸上传</a></div>
+								<div id="biangeng_file"><input type="file" id="paper_import" multiple="multiple"/></div>
+								<div id="video_type">
+									<select id="video_type" class="myselect" ng-model="professionType" ng-change="setPaperType(this)">
+										<option value="0" selected = "selected">电气</option>
+										<option value="1">暖通</option>
+										<option value="2">给排水</option>
+										<option value="3">消防</option>
+										<option value="4">建筑</option>
+										<option value="5">装饰</option>
+									</select>
+								</div>
+    							<div id="video_type">
+									<div><span>楼栋号:</span><input type="text" id="buildingNum_input" /></div>
+									<div><span>楼层号:</span><input type="text" id="floorNum_input" /></div>
+								</div>
+							</div>
+						</div>
 						<div id="table-buton6" >
 							<div id="paperPageCode"></div>
 						</div>

@@ -14,7 +14,10 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.procedure.ProcedureCall;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.ParameterMode;
@@ -106,9 +109,15 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 		List<Duct> ret = new ArrayList<Duct>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Duct.class);
-        criteria.add(Restrictions.eq("projectId",projectId));
+        //criteria.add(Restrictions.eq("projectId",projectId));
         if(duct.getId()!=null){
         	criteria.add(Restrictions.eq("id",duct.getId()));
+        }
+        if(duct.getSelfId()!=null){
+        	criteria.add(Restrictions.eq("selfId",duct.getSelfId()));
+        }
+        if(duct.getModelFlag()!=null){
+        	criteria.add(Restrictions.eq("modelFlag",duct.getModelFlag()));
         }
         try {
             ret = criteria.list();
@@ -124,12 +133,12 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<Duct> getDuctBySelfId(String selfId) {
+	public DataWrapper<Duct> getDuctBySelfId(Long selfId) {
 		DataWrapper<Duct> dataWrapper=new DataWrapper<Duct>();
 		List<Duct> ret = new ArrayList<Duct>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Duct.class);
-        criteria.add(Restrictions.eq("selfId",selfId));
+        criteria.add(Restrictions.eq("id",selfId));
         try {
             ret = criteria.list();
         }catch (Exception e){
@@ -147,15 +156,32 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 	public boolean addDuctList(List<Duct> ductList) {
 		return saveList(ductList);
 	}
+	
+	/*
+	 * 根据时间段和项目id导出预制化表单
+	 * @see com.my.spring.DAO.DuctDao#exportDuct(java.lang.String, java.lang.Long, java.util.Date, java.util.Date)
+	 */
+	
 	@Override
-	public boolean exportQuantity(String filePath,Long projectId) {
+	public boolean exportDuct(String filePath,Long projectId,String dateStart,String dateFinished) {
 		// TODO Auto-generated method stub
 		
 		Session session=getSession();
 		try{
 			ProcedureCall procedureCall = session.createStoredProcedureCall("exportDuct");
+			String starttime="";
+			String finishedtime="";
+			
+			if(dateStart!=null){
+	    		starttime=dateStart;
+			}
+			if(dateFinished!=null){
+				finishedtime=dateFinished;
+			}
 			procedureCall.registerParameter("file_path", String.class, ParameterMode.IN).bindValue(filePath);
 			procedureCall.registerParameter("project_id", Long.class, ParameterMode.IN).bindValue(projectId);
+			procedureCall.registerParameter("date_start", String.class, ParameterMode.IN).bindValue(starttime);;
+			procedureCall.registerParameter("date_finished", String.class, ParameterMode.IN).bindValue(finishedtime);;
 			procedureCall.getOutputs();
 	    }catch(Exception e){
 	        e.printStackTrace();

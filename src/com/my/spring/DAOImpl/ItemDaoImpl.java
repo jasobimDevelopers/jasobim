@@ -50,11 +50,16 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
         
         ///////////////////////////////
         criteria.add(Restrictions.eq("projectId", projectId));
-        
         if(item.getProfessionType()!=null){
         	if(item.getProfessionType()!=-1){
         		criteria.add(Restrictions.eq("professionType", item.getProfessionType()));
         	}
+        }
+        if(item.getModelFlag()!=null){
+        	criteria.add(Restrictions.eq("modelFlag", item.getModelFlag()));
+        }
+        if(item.getSelfId()!=null){
+        	criteria.add(Restrictions.eq("selfId", item.getSelfId()));
         }
         if(item.getBuildingNum()!=null){
         	if(item.getBuildingNum()!=-1){
@@ -184,11 +189,12 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<QuantityPojo>> getSameItem() {
+	public DataWrapper<List<QuantityPojo>> getSameItem(Long projectId) {
 		String sql = "select count(*) as num,SUM(length) as lengthnum,SUM(area) as areanum,"
 				 +"project_id,building_num,unit_num,floor_num,household_num,system_type,"
-				 +"service_type,family_and_type,size,material,name,type_name,profession_type from item "
-				 + "GROUP BY project_id,building_num,unit_num,floor_num,household_num,"
+				 +"service_type,family_and_type,size,material,name,type_name,profession_type from item where project_id="
+				 +projectId
+				 + " GROUP BY project_id,building_num,unit_num,floor_num,household_num,"
 				 + "system_type,service_type,family_and_type,size,material,name,type_name";
 		DataWrapper<List<QuantityPojo>> dataWrapper=new DataWrapper<List<QuantityPojo>>();
 		Session session=getSession();

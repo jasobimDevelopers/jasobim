@@ -27,7 +27,8 @@ public class Item {
     private String name;   //构件名称
     private String typeName;//类型名
     private Integer professionType;//专业类型
-
+    private String modelFlag;//////模型标志
+    
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -38,6 +39,16 @@ public class Item {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    @Basic
+    @Column(name = "model_flag")
+	public String getModelFlag() {
+		return modelFlag;
+	}
+
+	public void setModelFlag(String modelFlag) {
+		this.modelFlag = modelFlag;
+	}
 
     @Basic
     @Column(name = "project_id")

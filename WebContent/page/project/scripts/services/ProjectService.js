@@ -473,7 +473,7 @@
 
                      if(data.callStatus == "SUCCEED"){
                          deferred.resolve(data);
-                         alert("上传图纸信息成功，请继续上传交底信息")
+                         alert("上传图纸信息成功")
                          self.uploadPaperInfo = data;
                      
                      }else{
@@ -491,8 +491,8 @@
                  var deferred = $q.defer();
                  
                  
-                 console.log("上传图纸数据");
-                 $http.post('api/video/admin/addVideo?token='+getCookie('token')+"&professionType="+professionType+"&videoTypeList="+videoTypeList+"&projectId="+projectId,fileArray,
+                 console.log("上传交底数据信息");
+                 $http.post('api/video/admin/addVideo?token='+getCookie('token')+"&professionType="+professionType+"&videoType="+videoTypeList+"&projectId="+projectId,fileArray,
                 		 {
                 	 		headers: {'Content-Type':undefined},
                 	 		transformRequest: angular.identity 
