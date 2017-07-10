@@ -90,19 +90,23 @@ public class ProjectServiceImpl implements ProjectService {
         if (userInMemory != null) {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(project!=null){
-					if(modelfile.length>=0){
+					if(modelfile.length>=0)
+					{
 						String temp="";
 						String modelName="";
-						for(int i=0;i<modelfile.length;i++){
-							String path=filePath1+"/"+"projectmodels";
+						for(int i=0;i<modelfile.length;i++)
+						{
+							String path=filePath1+"/"+"projectmodels/"+project.getId();
 							Files newfile=fileService.uploadFile(path, modelfile[i],fileType,request);
-							if(i!=0){
+							if(i!=0)
+							{
 								temp=temp+","+newfile.getId();//0.安卓	1.ios   2.pad模型
 								String nameList=modelfile[i].getOriginalFilename().substring(0,modelfile[i].getOriginalFilename().lastIndexOf("."));
 								String[] nameLists=nameList.split("_");   
 								modelName=modelName+","+nameLists[0];
 								ioIos[i]=Integer.valueOf(nameLists[1]);
-							}else{
+							}else
+							{
 								temp=newfile.getId().toString();
 								String nameList=modelfile[i].getOriginalFilename().substring(0,modelfile[i].getOriginalFilename().lastIndexOf("."));
 								String[] nameLists=nameList.split("_");   
@@ -118,8 +122,9 @@ public class ProjectServiceImpl implements ProjectService {
 					if(picfile!=null){
 						String temp="";
 						String picName = "";
-						for(int i=0;i<picfile.length;i++){
-							String path=filePath1+"/"+"projectpics";
+						for(int i=0;i<picfile.length;i++)
+						{
+							String path=filePath1+"/"+"projectpics/"+project.getId();
 							Files newfile=fileService.uploadFile(path, picfile[i],fileType,request);
 							if(i!=0){
 								temp=temp+","+newfile.getId();
@@ -133,14 +138,14 @@ public class ProjectServiceImpl implements ProjectService {
 						}
 						//project.setPicId();
 						//project.set();
-						if(urlList2.length>0){
+						if(urlList2.length>0)
+						{
 							pojo.setPicUrl(urlList2[0]);
 						}
-						
-						
 					}
 					project.setUpdateDate(new Date(System.currentTimeMillis()));
-					if(projectDao.addProject(project)){
+					if(projectDao.addProject(project))
+					{
 						dataWrappers=projectDao.findProjectLike(project);
 						pojo.setBuildingUnit(dataWrappers.getData().getBuildingUnit());
 						pojo.setConstructionUnit(dataWrappers.getData().getConstructionUnit());
@@ -155,14 +160,11 @@ public class ProjectServiceImpl implements ProjectService {
 						pojo.setStartDate(dataWrappers.getData().getStartDate());
 						pojo.setVersion(dataWrappers.getData().getVersion());
 						dataWrapper.setData(pojo);
-					}
-					else{
+					}else{
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-						return dataWrapper;
 					}
-				}else{
+				}else
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
-				}
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
@@ -293,7 +295,7 @@ public class ProjectServiceImpl implements ProjectService {
 						String isIos="";
 						if(modelFile.length>=0){
 							for(int i=0;i<modelFile.length;i++){
-								String path=filePath1+"/"+"projectmodels";
+								String path=filePath1+"/"+"projectmodels/"+project.getId();
 								Files newfile=fileService.uploadFile(path, modelFile[i],fileType,request);
 								if(i!=0){
 									modelid=modelid+","+newfile.getId();
@@ -312,7 +314,7 @@ public class ProjectServiceImpl implements ProjectService {
 						if(picFile.length>=0){
 							String picid="";
 							for(int i=0;i<picFile.length;i++){
-								String path=filePath1+"/"+"projectpics";
+								String path=filePath1+"/"+"projectpics/"+project.getId();
 								Files newfile=fileService.uploadFile(path, picFile[i],fileType,request);
 								if(i!=0){
 									picid=picid+","+newfile.getId();
@@ -476,12 +478,19 @@ public class ProjectServiceImpl implements ProjectService {
 						if(userInMemory.getTeamId()!=null){
 							if(project.getTeamList()!=null){
 								String[] teamNames=project.getTeamList().split(",");
-								String[] teamname=new String[1];
-								teamname[0]=teamNames[userInMemory.getTeamId()];
-								projectPojo.setTeamList(teamname);
-								String[] teamId=new String[1];
-								teamId[0]=userInMemory.getTeamId().toString();
-								projectPojo.setTeamId(teamId);
+								String[] teamIds=project.getTeamId().split(",");
+								if(userInMemory.getWorkName().equals("项目负责人")){
+									projectPojo.setTeamList(teamNames);
+									projectPojo.setTeamId(teamIds);
+								}else{
+									String[] teamname=new String[1];
+									teamname[0]=teamNames[userInMemory.getTeamId()];
+									
+									String[] teamId=new String[1];
+									teamId[0]=userInMemory.getTeamId().toString();
+									projectPojo.setTeamId(teamId);
+								}
+								
 							}
 						}
 					}

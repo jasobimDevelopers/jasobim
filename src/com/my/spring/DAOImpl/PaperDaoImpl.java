@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -17,9 +18,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Repository
 public class PaperDaoImpl extends BaseDao<Paper> implements PaperDao {
 
@@ -46,6 +44,7 @@ public class PaperDaoImpl extends BaseDao<Paper> implements PaperDao {
         Session session = getSession();
         Criteria criteria = session.createCriteria(Paper.class);
         ///////////////////////////////
+        criteria.addOrder(Order.desc("id"));
         if(projectId!=null){
         	criteria.add(Restrictions.eq("projectId", projectId));
         }

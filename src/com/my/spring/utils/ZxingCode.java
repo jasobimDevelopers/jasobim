@@ -1,11 +1,9 @@
 package com.my.spring.utils;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;  
-
 import javax.imageio.ImageIO;  
 import java.io.File;  
 import java.io.OutputStream;
@@ -15,16 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;  
 import java.awt.image.BufferedImage;  
-   
-   
 public final class ZxingCode {  
-   
   private static final int BLACK = 0xFF000000;  
   private static final int WHITE = 0xFFFFFFFF;  
-   
   private ZxingCode() {}  
-   
-     
   public static BufferedImage toBufferedImage(BitMatrix matrix) {  
     int width = matrix.getWidth();  
     int height = matrix.getHeight();  
@@ -36,7 +28,6 @@ public final class ZxingCode {
     }  
     return image;  
   }  
-   
   public static void writeToFile(BitMatrix matrix, String format, File file)  
       throws IOException {  
     BufferedImage image = toBufferedImage(matrix);  
@@ -44,8 +35,6 @@ public final class ZxingCode {
       throw new IOException("Could not write an image of format " + format + " to " + file);  
     }  
   }  
-   
-     
   public static void writeToStream(BitMatrix matrix, String format, OutputStream stream)  
       throws IOException {  
     BufferedImage image = toBufferedImage(matrix);  
@@ -53,20 +42,10 @@ public final class ZxingCode {
       throw new IOException("Could not write an image of format " + format);  
     }  
   }  
-  /**
-   * @param args the command line arguments
-   */ 
   @SuppressWarnings("unchecked")
-public static void main(String[] args) { 
-	  /** 
-	     * @param args 
-	     * @throws Exception  
-	     */ 
-	   
-	   
+  public static void main(String[] args) { 
 	try {
 	        String content = "http://mp.weixin.qq.com/s?__biz=MzI2MzU0NDkzNQ==&mid=100000007&idx=1&sn=9a85a9cffc294427379036356657a0a4&chksm=6abb080f5dcc8119c363ae5b0e07360b063b162222f9721cabda130eade63f5ca69dfc39f331#rd"; 
-	        
 	        String path = "E:/codeInformation";
 	        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 	        @SuppressWarnings("rawtypes")
@@ -84,6 +63,4 @@ public static void main(String[] args) {
 	    e.printStackTrace();
 	}
  }  
-  
-   
 }

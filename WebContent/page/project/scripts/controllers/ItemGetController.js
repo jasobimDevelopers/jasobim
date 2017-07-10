@@ -57,8 +57,9 @@ function ItemGetController($scope,ItemGetService) {
 	$scope.finishedTime=null;
 	$scope.itemNameList=["风管","桥架","弯头"];
 	$scope.itemState=["初始化","出库","安装","完成"];
-	 ////////////////////////预制化构件列表分页获取
-	 $scope.getItemGetList = function(pageSize,pageIndex,itemGet) {
+	
+	////////////////////////预制化构件列表分页获取
+	$scope.getItemGetList = function(pageSize,pageIndex,itemGet,startTime,finishedTime) {
 		 var content=document.getElementById("search_input").value;
 		 if($scope.projectId!=null && $scope.projectId!=undefined){
 			 itemGet+= "projectId=" + $scope.projectId;
@@ -69,7 +70,7 @@ function ItemGetController($scope,ItemGetService) {
 		 if($scope.state!=null && $scope.state!=undefined){
 			 itemGet+= "&state=" + $scope.state;
 		 }
-		 ItemGetService.getItemGetList(pageSize,pageIndex,itemGet,content).then(function (result){
+		 ItemGetService.getItemGetList(pageSize,pageIndex,itemGet,content,$scope.startTime,$scope.finishedTime).then(function (result){
 		  	  $scope.itemGetList = result.data;
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
@@ -100,10 +101,10 @@ function ItemGetController($scope,ItemGetService) {
 		  });
 	};
 	/////初始化获取问题列表
-    $scope.getItemGetList(pageSize,pageIndex,itemGet);
+    $scope.getItemGetList(pageSize,pageIndex,itemGet,$scope.startTime,$scope.finishedTime);
     $scope.getProjectLists(pageSize,pageIndex,project);
     $scope.findItem= function(){
-    	  $scope.getItemGetList(pageSize,pageIndex,itemGet);
+    	  $scope.getItemGetList(pageSize,pageIndex,itemGet,$scope.startTime,$scope.finishedTime);
     };
     $scope.setProjectName = function(temp,index){
     	$scope.projectId=temp;
@@ -121,7 +122,7 @@ function ItemGetController($scope,ItemGetService) {
     	var tests=document.getElementById("item"+index);
     	tests.style.color="red";
     	$scope.itemGetList="";	
-    	$scope.getItemGetList(pageSize,pageIndex,itemGet);
+    	$scope.getItemGetList(pageSize,pageIndex,itemGet,$scope.startTime,$scope.finishedTime);
     	$scope.getDuctExcel();
     }
     $scope.setType = function(temp,index){
@@ -139,7 +140,7 @@ function ItemGetController($scope,ItemGetService) {
     	var test=document.getElementById("items"+index);
     	test.style.color="red";
     	$scope.itemGetList="";
-    	$scope.getItemGetList(pageSize,pageIndex,itemGet);
+    	$scope.getItemGetList(pageSize,pageIndex,itemGet,$scope.startTime,$scope.finishedTime);
     }
     $scope.setState = function(temp,index){
     	$scope.state=temp;
@@ -156,19 +157,19 @@ function ItemGetController($scope,ItemGetService) {
     	var test=document.getElementById("itemss"+index);
     	test.style.color="red";
     	$scope.itemGetList="";
-    	$scope.getItemGetList(pageSize,pageIndex,itemGet);
+    	$scope.getItemGetList(pageSize,pageIndex,itemGet,$scope.startTime,$scope.finishedTime);
     }
     $scope.resetOne= function(){
     	$scope.projectId=null;
     	var test=document.getElementById("item"+item_temp1);
     	test.style.color="";
-    	$scope.getItemGetList(pageSize,pageIndex,itemGet);
+    	$scope.getItemGetList(pageSize,pageIndex,itemGet,$scope.startTime,$scope.finishedTime);
     }
     $scope.resetTwo= function(){
     	$scope.name=null;
     	var test=document.getElementById("items"+item_temp2);
     	test.style.color="";
-    	$scope.getItemGetList(pageSize,pageIndex,itemGet);
+    	$scope.getItemGetList(pageSize,pageIndex,itemGet,$scope.startTime,$scope.finishedTime);
     }
     $scope.resetThree= function(){
     	$scope.state=null;
@@ -204,6 +205,7 @@ function ItemGetController($scope,ItemGetService) {
     	idom1.style.display="none";
     	var idom2=document.getElementById("content_twos");
     	idom2.style.display="block";
+    	
 
     }
     
@@ -212,6 +214,11 @@ function ItemGetController($scope,ItemGetService) {
 		ItemGetService.getDuctExcel($scope.projectId,$scope.startTime,$scope.finishedTime).then(function (result){
 		  	  $scope.ductUrl = result.data;
 		});
+	}
+	$scope.setDuctTime = function(){
+		$scope.startTime=document.getElementById("d4311s").value;
+		$scope.finishedTime=document.getElementById("d4312s").value;
+		$scope.getItemGetList(pageSize,pageIndex,itemGet,$scope.startTime,$scope.finishedTime);
 	}
 	$scope.setTime = function(){
 		$scope.startTime=document.getElementById("d4311s").value;

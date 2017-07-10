@@ -281,4 +281,17 @@ version varchar(30),
 foreign key(file_id) references file(id),
 foreign key(project_id) references project(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+create table user_log(
+id serial primary key,
+project_part int,#0.模型区域 1.图纸区域 2.登录区域 3.交底区域 4.预制化区域 5.没有
+system_type int,#(0.安卓系统 2.苹果系统)
+version varchar(32),#(版本号)
+action_date date,
+user_id bigint(20) unsigned not null,
+project_id bigint(20) unsigned not null,
+foreign key(user_id) references user(id),
+foreign key(project_id) references project(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 				 

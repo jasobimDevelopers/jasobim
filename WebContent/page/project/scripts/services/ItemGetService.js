@@ -6,7 +6,7 @@
         return $.param(data);
     }
   var self=this;
-  this.getItemGetList = function(pageSize,pageIndex,itemGet,content){
+  this.getItemGetList = function(pageSize,pageIndex,itemGet,content,startTime,finishedTime){
 	  
 	  var deferred = $q.defer();
 	  console.log("读取itemGetList数据");
@@ -16,6 +16,12 @@
       }else{
     	  var api = 'api/duct/getDuctList?token='+getCookie('token')+"&pageSize="+pageSize+"&pageIndex="+pageIndex+"&"+itemGet;
       }
+	  if(startTime!=null && startTime!=undefined && startTime!=""){
+		  api+='&dateStart='+ startTime;
+	  }
+	  if(finishedTime!=null && finishedTime!=undefined && finishedTime!=""){
+		  api+='&dateFinished='+ finishedTime;
+	  }
 	  $http.get(encodeURI(api))
       .success(function(data, status, headers, config){
           if(data.callStatus == "SUCCEED"){

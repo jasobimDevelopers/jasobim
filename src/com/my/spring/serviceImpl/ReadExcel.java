@@ -220,8 +220,9 @@ public class ReadExcel {
                if (null != cell){
                    if(c==0){
                 	   String temp=cell.getStringCellValue();
-                	   Long test=Long.valueOf(temp);
-                	   item.setSelfId(test);//模型中的id
+                	   //Long temp=(long) cell.getNumericCellValue();
+                	   //Long test=Long.valueOf(temp);
+                	   item.setSelfId(Long.valueOf(temp));//模型中的id
                    }else if(c==1){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   String temp=cell.getStringCellValue();
@@ -293,7 +294,7 @@ public class ReadExcel {
                    }else if(c==10){
                 	   item.setOffset(cell.getNumericCellValue());//构件偏移量
                    }else if(c==11){
-                	   item.setArea(cell.getNumericCellValue());//构件面积
+                	   item.setArea(cell.getNumericCellValue());//构件面积  
                    }else if(c==12){
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   String str=cell.getStringCellValue();
@@ -312,13 +313,16 @@ public class ReadExcel {
                }
            }
            //添加 构件信息
-           if(item.getName().equals("管道") || item.getName().equals("管件") ||item.getName().equals("管道附件")){
-        	   if(item.getSystemType().equals("消火栓给水系统") || item.getSystemType().equals("湿式自动喷水灭火系统")){
-        		   item.setProfessionType(3);
-        	   }else{
-        		   item.setProfessionType(2);
-        	   }
+           if(item.getName()!=null){
+        	   if(item.getName().equals("管道") || item.getName().equals("管件") ||item.getName().equals("管道附件")){
+            	   if(item.getSystemType().equals("消火栓给水系统") || item.getSystemType().equals("湿式自动喷水灭火系统")){
+            		   item.setProfessionType(3);
+            	   }else{
+            		   item.setProfessionType(2);
+            	   }
+               }
            }
+           
            try{
         	   elementList.add(item);
            }catch(Exception e){

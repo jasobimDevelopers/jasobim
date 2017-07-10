@@ -14,4 +14,5 @@ public interface BuildingService {
     DataWrapper<Void> updateBuilding(Building building,String token);
     DataWrapper<List<Building>> getBuildingList();
 	DataWrapper<Building> getBuildingByProjectId(Long projectId,String token);
+	void TestScheduled();
 }

@@ -460,6 +460,13 @@ function ProjectController($scope,ProjectService) {
 	      document.getElementById("projectInfoHtml").style.display = 'block';
 	      document.getElementById("containers").style.display = 'none';
 	      document.getElementById("include_header").style.display = 'none';
+	      ////
+	      document.getElementById("projectSelfInfoHtml").style.display = 'block';
+	      document.getElementById("projectItemInfoHtml").style.display = 'none';
+	      document.getElementById("projectPaperInfoHtml").style.display = 'none';
+	      document.getElementById("projectQuantityInfoHtml").style.display = 'none';
+	      document.getElementById("projectVideoInfoHtml").style.display = 'none';
+	      document.getElementById("projectQuestionInfo").style.display = 'none';
 	      $scope.projectTitle="更新项目";
 	    });
 	    $scope.getBuildingList(projectId);

@@ -4,18 +4,22 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.DuctDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Duct;
+import com.my.spring.model.DuctPojos;
+import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.procedure.ProcedureCall;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,12 +46,13 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<Duct>> getDuctList(Integer pageSize,Integer pageIndex,Duct duct,String content) {
+    public DataWrapper<List<Duct>> getDuctList(Integer pageSize,Integer pageIndex,Duct duct,String content,Date dateStart,Date dateFinished) {
     	DataWrapper<List<Duct>> retDataWrapper = new DataWrapper<List<Duct>>();
         List<Duct> ret = new ArrayList<Duct>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Duct.class);
         criteria.addOrder(Order.desc("date"));
+        
         if(duct.getState()!=null){
         	criteria.add(Restrictions.eq("state", duct.getState()));
         }
@@ -66,9 +71,13 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
         if(duct.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", duct.getProjectId()));
         }	
+        if(dateStart!=null)    
+        	//查询制定时间之后的记录  
+            criteria.add(Restrictions.ge("date",dateStart));  
+	    if(dateFinished!=null)                          //查询指定时间之前的记录  
+	        criteria.add(Restrictions.le("date",dateFinished));  
         /////////////////////////////////////
-        criteria.setProjection(Projections.rowCount());
-        criteria.setProjection(Projections.groupProperty("state").as("num"));
+        //criteria.setProjection(Projections.groupProperty("state").as("num"));
         /////////////////////////////////////
    
         if (pageSize == null) {
@@ -109,7 +118,12 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 		List<Duct> ret = new ArrayList<Duct>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Duct.class);
-        //criteria.add(Restrictions.eq("projectId",projectId));
+        if(projectId!=null){
+        	criteria.add(Restrictions.eq("projectId",projectId));
+        }
+        if(duct.getName()!=null){
+        	criteria.add(Restrictions.like("name","%"+duct.getName()+"%"));
+        }
         if(duct.getId()!=null){
         	criteria.add(Restrictions.eq("id",duct.getId()));
         }
@@ -194,6 +208,25 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 	@Override
 	public Duct getDuctById(Long id) {
 		return get(id);
+	}
+
+	@Override
+	public DataWrapper<List<DuctPojos>> getDuctLists() {
+		DataWrapper<List<DuctPojos>> dataWrapper=new DataWrapper<List<DuctPojos>>();
+		String sql = "select DATE_FORMAT(date,'%Y-%m') as month,count(date) as sum_date,state  from duct group by month,state";
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("month", StandardBasicTypes.STRING)
+					 .addScalar("sum_date", StandardBasicTypes.LONG)
+					 .addScalar("state", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(DuctPojos.class));
+			 dataWrapper.setData(query.list());
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return dataWrapper;
 	}
 
 

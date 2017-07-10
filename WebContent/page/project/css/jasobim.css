@@ -20,7 +20,15 @@ text-decoration: none;
 a:visited {
 text-decoration: none;
 }
-
+/* .container{
+	margin:0px ! important;
+} */
+/* #head_div{
+	width:1920px ! important;
+	height:65px ! important;
+	margin:0 auto;
+	text-align:center;
+} */
 /* a:active {
 text-decoration: none;
 font-size: 14px;

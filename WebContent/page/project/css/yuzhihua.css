@@ -205,6 +205,13 @@ display: block;
 	text-align:center;
 	padding-top:5px;
 }
+#ductFind{
+	background:url(../images/xiazai@2x.png) no-repeat 0px 0px;
+	width:72px;
+	height:35px;
+	text-align:center;
+	padding-top:5px;
+}
 #table-buton112{
 	width:845px;
 	height:50px;

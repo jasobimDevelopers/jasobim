@@ -26,10 +26,6 @@ public class DuctLogDaoImpl extends BaseDao<DuctLog> implements DuctLogDao {
     public boolean deleteDuctLog(Long id) {
         return delete(get(id));
     }
-
-   
-
-    
 	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<DuctLog>> getDuctLogByDuctId(Long ductId) {

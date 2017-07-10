@@ -79,6 +79,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         if(user.getTel() != null && !user.getTel().equals("")) {
         	criteria.add(Restrictions.like("tel", "%" + user.getTel() + "%"));
         }
+         
         if(user.getTeamInformation()!=null && !user.getTeamInformation().equals("")){
         	criteria.add(Restrictions.eq("teamInformation", user.getTeamInformation()));
         }

@@ -2,7 +2,6 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ValueOutputDao;
-import com.my.spring.model.FeedBack;
 import com.my.spring.model.ValueOutput;
 import com.my.spring.model.ValueOutputPojo;
 import com.my.spring.utils.DaoUtil;
@@ -10,7 +9,6 @@ import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -99,6 +97,7 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
 		return saveList(ValueOutputList);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<ValueOutput>> getValueOutputByProjectId(Long projectId,String projectName,String[] projectList) {
 		 DataWrapper<List<ValueOutput>> retDataWrapper = new DataWrapper<List<ValueOutput>>();
@@ -138,6 +137,7 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
 	        return retDataWrapper;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<ValueOutput>> getValueOutputListByProjectName(String projectName) {
 		 DataWrapper<List<ValueOutput>> retDataWrapper = new DataWrapper<List<ValueOutput>>();
@@ -159,7 +159,7 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<ValueOutput>> getValueOutputLists(Integer pageSize, Integer pageIndex,ValueOutput valueOutput) {
+	public DataWrapper<List<ValueOutput>> getValueOutputLists(Integer pageSize, Integer pageIndex,ValueOutput valueOutput,String dates) {
 		// TODO Auto-generated method stub
 		DataWrapper<List<ValueOutput>> dataWrapper = new DataWrapper<List<ValueOutput>>();
         List<ValueOutput> ret = null;
@@ -167,13 +167,16 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
         Criteria criteria = session.createCriteria(ValueOutput.class);
         if(valueOutput!=null){
         	if(valueOutput.getDate()!=null){
-        		criteria.add(Restrictions.like("date", "%"+valueOutput.getDate()+"%"));
+        		criteria.add(Restrictions.eq("date", valueOutput.getDate()));
         	}
         	if(valueOutput.getProjectId()!=-1){
         		criteria.add(Restrictions.eq("projectId", valueOutput.getProjectId()));
         	}
+        	if(valueOutput.getOthers()!=null){
+        		criteria.add(Restrictions.like("others", "%"+valueOutput.getOthers()+"%"));
+        	}
+        	
         }
-        
         if (pageSize == null) {
 			pageSize = 10;
 		}

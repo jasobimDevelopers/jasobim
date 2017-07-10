@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 public class DataTypeTest {
 	public static void main(String[] arg){
-		BigInteger test=new BigInteger("2111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
+		/*BigInteger test=new BigInteger("2111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
 		BigInteger test1=new BigInteger("1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
 		BigInteger test2=test.add(test1);
 		BigInteger test3=test.subtract(test1);
@@ -40,6 +40,19 @@ public class DataTypeTest {
         System.out.println("--------------------用BigInteger来存储数值的结果！---------------------");  
         for (int i = 0; i < resultBigInteger.length; i++) {  
             System.out.println("resultBigInteger[" + i + "] = "+ resultBigInteger[i]);  
-        }  
+        }  */
+		BigInteger[] resultBigInteger = new BigInteger[100];  
+        resultBigInteger[0] = BigInteger.ZERO;  
+        resultBigInteger[1] = BigInteger.ONE;  
+        BigInteger test = new BigInteger("222222222222222222222222222222");
+        System.out.println(test);
+        System.out.println("resultBigInteger[0]="+resultBigInteger[0]);
+        System.out.println("resultBigInteger[1]="+resultBigInteger[1]);
+        resultBigInteger[2] = resultBigInteger[1].add(resultBigInteger[1]);
+        System.out.println("resultBigInteger[2]="+resultBigInteger[2]);
+        for(int i=3;i<21;i++){
+        	resultBigInteger[i]=resultBigInteger[i-1].multiply(resultBigInteger[i-1]);
+        	System.out.println(resultBigInteger[i]);
+        }
 	}
 }

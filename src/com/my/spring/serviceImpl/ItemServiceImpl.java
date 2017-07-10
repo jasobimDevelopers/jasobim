@@ -43,9 +43,6 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Service("ItemService")
 public class ItemServiceImpl implements ItemService {
     @Autowired

@@ -11,9 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 public interface ItemService {
     DataWrapper<Void> addItem(Item Item,String token);
     DataWrapper<Void> deleteItem(Long id,String token);

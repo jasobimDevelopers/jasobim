@@ -10,9 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 public interface PaperService {
     DataWrapper<Void> updatePaper(Paper paper,String token);
 	DataWrapper<Paper> getPaperDetailsByAdmin(Long paperId,String token);

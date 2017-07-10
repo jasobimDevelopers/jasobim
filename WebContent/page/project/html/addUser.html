@@ -80,7 +80,7 @@
 								<div class="checkBoxs">
 						             <div ng-repeat="enum in roleList1" class="rolecontents">
 											<span>{{enum.name}}</span>
-											<input type="checkbox" id="mys"  ng-click="setUserType(enum.name)"/>
+											<input type="checkbox" id="mys"  ng-click="setUserType(roleList1,enum.name)"/>
 									</div>
 								</div>
 							</div>
@@ -95,7 +95,7 @@
 								<div class="checkBoxs">
 						            <div ng-repeat="enum in roleList3" class="rolecontents">
 											<span>{{enum.name}}</span>
-											<input type="checkbox" id="my1"  ng-click="setUserType(enum.name)"/>
+											<input type="checkbox" id="my1"  ng-click="setUserType($index,enum.name)" />
 									</div>
 								</div>
 							</div>
@@ -110,7 +110,7 @@
 								<div class="checkBoxs">
 										<div ng-repeat="enum in roleList" class="rolecontents">
 											<span>{{enum.name}}</span>
-											<input type="checkbox" id="my2" ng-click="setUserType(enum.name)"/>
+											<input type="checkbox" id="my2" ng-click="setUserType($index,enum.name)"/>
 										</div>
 								</div>
 							</div>

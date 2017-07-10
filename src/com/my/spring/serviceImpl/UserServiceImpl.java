@@ -89,7 +89,9 @@ public class UserServiceImpl implements UserService {
 					String[] projectName = new String[projectList.length];
 					for(int i=0;i<projectList.length;i++){
 						Project project = new Project();
-						project=projectDao.getById(Long.valueOf(projectList[i]));
+						if(!projectList[i].equals("")){
+							project=projectDao.getById(Long.valueOf(projectList[i]));
+						}
 						if(project!=null){
 							projectName[i]=project.getName();
 						}

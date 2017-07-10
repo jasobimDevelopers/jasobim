@@ -11,6 +11,8 @@ import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +20,9 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/6/22.
  */
+
 @Service("buildingService")
+//@Component("deleteBuilding")
 public class BuidlingServiceImpl implements BuildingService {
     @Autowired
     BuildingDao buildingDao;
@@ -47,9 +51,17 @@ public class BuidlingServiceImpl implements BuildingService {
 		}
         return dataWrapper;
     }
-
+    
+    
     @Override
+    public void TestScheduled(){
+    	System.out.println("Test!");
+    }
+    
+    //@Override
+    //@Scheduled(cron = "0/5 * *  * * ? ")  
     public DataWrapper<Void> deleteBuilding(Long id,String token) {
+    	System.out.println("TEST!!!!!!!!!!!!!!");
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {

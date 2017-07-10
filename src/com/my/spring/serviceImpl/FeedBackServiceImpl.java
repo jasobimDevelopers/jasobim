@@ -23,15 +23,10 @@ import com.my.spring.utils.SessionManager;
 
 @Service("feedBackService")
 public class FeedBackServiceImpl implements FeedBackService {
-	
 	@Autowired
 	FeedBackDao feedBackDao;
 	@Autowired
 	UserDao userDao;
-	
-
-
-
 	@Override
 	public DataWrapper<List<FeedBackPojo>> getFeedBackList(Integer pageIndex, Integer pageSize, FeedBack feedBack, String token) {
 		// TODO Auto-generated method stub

@@ -295,6 +295,7 @@ private List<Duct> readExcelValue(Workbook wb,Long projectId){
                    }
                }
            }
+           item.setState(0);
            elementList.add(item);
        }
        return elementList;

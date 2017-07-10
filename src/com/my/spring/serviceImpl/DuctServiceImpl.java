@@ -14,6 +14,7 @@ import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Duct;
 import com.my.spring.model.DuctLog;
 import com.my.spring.model.DuctPojo;
+import com.my.spring.model.DuctPojos;
 import com.my.spring.model.User;
 import com.my.spring.service.DuctService;
 import com.my.spring.service.FileService;
@@ -39,9 +40,6 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Service("ductService")
 public class DuctServiceImpl implements DuctService {
     @Autowired
@@ -133,16 +131,42 @@ public class DuctServiceImpl implements DuctService {
     }
 
     @Override
-    public DataWrapper<List<DuctPojo>> getDuctList(Integer pageIndex,Integer pageSize,Duct duct,String token,String content) {
+    public DataWrapper<List<DuctPojo>> getDuctList(Integer pageIndex,Integer pageSize,Duct duct,String token,String content,String dateStart, String dateFinished) {
     	List<Duct> ductList=new  ArrayList<Duct>();
+    	Date dateStarts=null;
+    	Date dateFinisheds=null;
     	List<DuctPojo> ductPojoList = new ArrayList<DuctPojo>();
     	DataWrapper<List<DuctPojo>> ductLists=new  DataWrapper<List<DuctPojo>>();
     	DataWrapper<List<Duct>> ductListst=new  DataWrapper<List<Duct>>();
     	User userInMemory = SessionManager.getSession(token);
     	if(userInMemory!=null){
-    		ductListst=DuctDao.getDuctList(pageSize,pageIndex,duct,content);
+    		SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd");
+    		if(dateStart!=null){
+    			try {
+					dateStarts=sdfs.parse(dateStart);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    		if(dateFinished!=null){
+    			try {
+					dateFinisheds=sdfs.parse(dateFinished);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    		
+    		ductListst=DuctDao.getDuctList(pageSize,pageIndex,duct,content,dateStarts, dateFinisheds);
     		ductList=ductListst.getData();
+    		String projectName=null;
     		if(ductList!=null && ductList.size()>0){
+    			if(duct!=null){
+    				if(duct.getProjectId()!=null){
+    					projectName=projectDao.getById(duct.getProjectId()).getName();
+    				}
+    			}
     			String[] stateList=new String[]{"未定义","出库","安装","完成"};
     	    	for(int i=0;i<ductList.size();i++){
     	    		DuctPojo ductPojo=new DuctPojo();
@@ -150,6 +174,7 @@ public class DuctServiceImpl implements DuctService {
     	    		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
     	    		String str=sdf.format(ductList.get(i).getDate()); 
     	    		ductPojo.setDate(str);
+    	    		ductPojo.setProjectName(projectName);
 	    			ductPojo.setFamilyAndType(ductList.get(i).getFamilyAndType());
     	    		ductPojo.setId(ductList.get(i).getId().toString());
 	    			ductPojo.setLevel(ductList.get(i).getLevel());
@@ -433,6 +458,14 @@ public class DuctServiceImpl implements DuctService {
 		}
         return dataWrapper;
     }
+
+	@Override
+	public DataWrapper<List<DuctPojos>> getDuctStateSum() {
+		DataWrapper<List<DuctPojos>> dataWrapper = new DataWrapper<List<DuctPojos>>();
+		dataWrapper=DuctDao.getDuctLists();
+		// TODO Auto-generated method stub
+		return dataWrapper;
+	}
 
 		
 }

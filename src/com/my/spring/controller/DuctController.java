@@ -3,6 +3,7 @@ package com.my.spring.controller;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Duct;
 import com.my.spring.model.DuctPojo;
+import com.my.spring.model.DuctPojos;
 import com.my.spring.service.DuctService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Controller
 @RequestMapping(value="api/duct")
 public class DuctController {
@@ -41,12 +39,19 @@ public class DuctController {
     public DataWrapper<List<DuctPojo>> getDuctList(
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@RequestParam(value = "dateStart",required = false) String dateStart,
+            @RequestParam(value = "dateFinished",required = false) String dateFinished,
     		@ModelAttribute Duct duct,
     		@RequestParam(value="token",required=true) String token,
     		@RequestParam(value="content",required=false) String content){
-        return ductService.getDuctList(pageIndex,pageSize,duct,token,content);
+        return ductService.getDuctList(pageIndex,pageSize,duct,token,content,dateStart, dateFinished);
     }
     
+    @RequestMapping(value="/getDuctStateSum",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<DuctPojos>> getDuctStateSum(){
+        return ductService.getDuctStateSum();
+    }
     
     @RequestMapping(value="/admin/getDuctByProjectId",method=RequestMethod.GET)
     @ResponseBody
@@ -83,7 +88,7 @@ public class DuctController {
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value = "projectId",required = true) Long projectId,
             HttpServletRequest request){
-    	String filePath = "/fileupload/ducts";
+    	String filePath = "/fileupload/ducts/"+projectId;
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
     	for(int i=0;i<fileList.length;i++){
     		if(ductService.batchImport(filePath, fileList[i],token,request,projectId)){

@@ -1,9 +1,6 @@
 package com.my.spring.utils;
-
 import java.security.MessageDigest;
-
-public class MD5Util {  
-    
+public class MD5Util {      
     public static String getMD5String(String inStr) {
     	String md5String = null;
         try {
@@ -24,6 +21,5 @@ public class MD5Util {
             e.printStackTrace();
         }
         return md5String;
-    }
-    
+    }   
 }

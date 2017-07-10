@@ -20,9 +20,6 @@ import com.my.spring.model.MinItemPojo;
 import com.my.spring.service.ItemService;
 import com.my.spring.utils.DataWrapper;
 
-/**
- * Created by xyx 2016/11/1.
- */
 @Controller
 @RequestMapping(value="api/item")
 public class ItemController {
@@ -38,7 +35,7 @@ public class ItemController {
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value = "projectId",required = true) Long projectId,
             HttpServletRequest request){
-    	String filePath = "/fileupload/items";
+    	String filePath = "/fileupload/items"+"/"+projectId;
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
     	for(int i=0;i<fileList.length;i++){
     		if(itemService.batchImport(filePath, fileList[i],token,request,projectId)){
@@ -145,12 +142,6 @@ public class ItemController {
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute Item item,
             @RequestParam(value = "token",required = false) String token){
-    	if(item.getFloorNum()!=null){
-    		if(item.getFloorNum()==1){
-        		item.setFloorNum(3);////对应地下二层
-        	}
-    	}
-    	
         return itemService.getItemList(projectId,pageIndex,pageSize,item,token);
     }
     @RequestMapping(value="/admin/getMinItemList", method=RequestMethod.GET)

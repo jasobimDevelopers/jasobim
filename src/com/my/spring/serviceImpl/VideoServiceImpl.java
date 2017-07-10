@@ -13,19 +13,13 @@ import com.my.spring.service.FileService;
 import com.my.spring.service.VideoService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Service("VideoService")
 public class VideoServiceImpl implements VideoService {
     @Autowired
@@ -46,7 +40,7 @@ public class VideoServiceImpl implements VideoService {
 			/*if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){*/
 				if(video!=null){
 					if(file!=null){
-						String path=filePath+"/"+"videos";
+						String path=filePath+"/"+"videos/"+video.getProjectId();
 						Files newfile=fileService.uploadFile(path, file,fileType,request);
 						video.setFileId(newfile.getId());
 					}

@@ -34,9 +34,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Service("paperService")
 public class PaperServiceImpl implements PaperService {
     @Autowired
@@ -63,7 +60,7 @@ public class PaperServiceImpl implements PaperService {
 				///////验证是不是管理员身份
 				if(paper!=null){////验证上传的实体类是不是为空
 					///////1.文件的上传返回url
-					String path=filePath+"/"+"papers";
+					String path=filePath+"/"+"papers/"+paper.getProjectId();
 					Files newfile=fileService.uploadFile(path, file,fileType,request);
 					paper.setFileId(newfile.getId());
 					
@@ -327,7 +324,13 @@ public class PaperServiceImpl implements PaperService {
 	        			   	Date d=new Date();
 	        			   	String str=sdf.format(d);
 	        			   	String rootPath = request.getSession().getServletContext().getRealPath("/");
-	        			   	String filePath="/codeFiles/";
+	        			   	String filePath="";
+	        			   	if(projectId!=null){
+	        			   		filePath="/codeFiles/"+projectId;
+	        			   	}else{
+	        			   		filePath="/codeFiles";
+	        			   	}
+	        			   	
 	        			   	String imgpath=rootPath+filePath;
 	        			   	try{
 	        				MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
@@ -343,7 +346,13 @@ public class PaperServiceImpl implements PaperService {
 	        				} catch (Exception e) {
 	        					e.printStackTrace();
 	        				}
-	        				papernew.setUrl("codeFiles/"+str+".png");
+	        			   	String url="";
+	        			   	if(projectId!=null){
+	        			   		url="codeFiles/"+projectId+"/"+str+".png";
+	        			   	}else{
+	        			   		url="codeFiles/"+str+".png";
+	        			   	}
+	        				papernew.setUrl(url);
 	        			}
 	        			if(papernew.getId()!=null){
 	        				papers.add(papernew);

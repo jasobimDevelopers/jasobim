@@ -23,9 +23,6 @@ import com.my.spring.utils.FileOperationsUtil;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.SessionManager;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Service("quantityService")
 public class QuantityServiceImpl implements QuantityService {
     @Autowired
@@ -188,7 +185,7 @@ public class QuantityServiceImpl implements QuantityService {
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null) {
 			
-				String filePath = "E:/JasoBim/BimAppDocument/apache-tomcat-8.0.9/webapps/jasobim" + "/out/" + projectId + "/";
+				String filePath = "E:/JasoBim/BimAppDocument/apache-tomcat-8.0.39/webapps/jasobim" + "/out/" + projectId + "/";
 				File fileDir = new File(filePath);
 		        if (!fileDir.exists()) {
 		            fileDir.mkdirs();

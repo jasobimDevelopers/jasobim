@@ -10,9 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 public interface MessageService {
     //DataWrapper<Void> updateMessage(Message message,String token);
     DataWrapper<List<MessagePojo>> getMessageList(String token, Integer pageIndex, Integer pageSize, Message message);

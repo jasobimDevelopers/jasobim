@@ -26,9 +26,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Service("messageService")
 public class MessageServiceImpl implements MessageService {
     @Autowired

@@ -1,0 +1,42 @@
+<div id="projectContent" ng-controller="ValueOutputController">
+	<div id="include_header" style="display:block;padding-bottom:20px;">
+	    	
+	        	<div id="projectnames">
+	     			<span class="inputtext">项目名:</span><input type="text" id="projectName" ng-model="valueOutputTofind.others"/>
+	                <span class="inputtext">&nbsp时间:</span><input type="text" id="constructionUnit" ng-model="valueOutputTofind.dates"/>
+	                <a href=""><button id="find" ng-click="valueOutputFind()" ></button></a>
+	            </div>
+	           
+	</div>
+	<div class="container" style="display:block;margin-top:30px;" id="containers">
+		<div id="xuanzequ">
+			<button id="all_choice" ng-click="set_checkboxall('include_bodys')"><span>全选</span></button>
+			<button id="all_delete" ng-click="delete_choice('include_bodys')"><span>删除</span></button>
+		</div>
+		
+		<div id="include_bodys">
+			<table class="table-striped table table-bordered">
+				<tbody>
+					<tr>
+						<th ng-repeat="valueOutputTitle in valueOutputTitles">{{valueOutputTitle}}</th>
+					</tr>
+					<tr ng-repeat = "valueOutput in valueOutputList">
+					    <td>{{$index+1}}</td>
+					    <td>{{valueOutput.projectName}}</td>
+					    <td>{{valueOutput.num}}</td>
+					    <td>{{valueOutput.finished}}</td>
+					    <td>{{valueOutput.dates}}</td>
+					    <td> 
+					    	<button id="deletebutton" ng-click="deleteValueOutput(feedback.id)">
+		                    </button>
+		                    <input type="checkbox" ng-click="setValueOutputId(valueOutput.id)" class="checkBoxItem">
+                        </td>
+					</tr>
+				</tbody>
+			</table>
+			<div id="table-buton111" >
+				<div id="valueOutputPageCode"></div>
+			</div>
+		</div>
+	</div>		
+</div>

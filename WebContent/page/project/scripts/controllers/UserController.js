@@ -105,16 +105,28 @@ function UserController($scope,UserService) {
   ////显示更新用户界面
  $scope.userChangeClick = function(userId){
     UserService.findUser(userId,token).then(function(result){
+      document.getElementById("addUserHtml").style.display = 'block';
       $scope.findUserInfo=result.data;
       if($scope.findUserInfo.userType==3){
     	  document.getElementById("banzuxinxi").style.display = 'block'; 
       }
       //////初始化获取项目列表
+      var test=$scope.findUserInfo.projectList.split(",");
       $scope.getProjectLists(pageSize,-1,project);
+     
       document.getElementById("inputpasswords").value = $scope.findUserInfo.password;
-      document.getElementById("addUserHtml").style.display = 'block';
-      
-      
+      for(var i=0;i<$scope.projectLists.length;i++){
+    	  for(var j=0;j<test.length;j++){
+    		  if($scope.projectLists[i].id==test[j]){
+    			  var PID = document.getElementById("checkBox");
+    			  var cb = PID.getElementsByTagName("input");
+    			  if(cb[i].type == "checkbox"){
+    				 cb[i].checked =true;
+    			  }
+    		  }
+    	  }
+      }
+     
       $scope.title="更新用户";
     });
  }
@@ -245,22 +257,22 @@ $scope.getProjectLists = function(pageSize,pageIndex,project) {
  }
  $scope.getUserList(pageSize,$scope.currentPage,$scope.userTofind);
  var index="";
- $scope.setUserType = function(userType,index){
+ /*$scope.setUserType = function(userType,index){
 	 var fanxiBox = $(".min input:checkbox");
 	 if(userType=="投资方"){
 		 temp=2;
 	 }else if(userType=="超级管理员"){
 		 temp=0;
 	 }
-	 /*if(this.checked || this.checked=='checked'){
+	 if(this.checked || this.checked=='checked'){
 
 	       fanxiBox.removeAttr("checked");
 	       //这里需注意jquery1.6以后必须用prop()方法
 	       //$(this).attr("checked",true);
 	       $(this).prop("checked", true);
-	     }*/
+	     }
 	 document.getElementById("inputUserType").value=userType;
- }
+ }*/
 //点击确定保存结果
 $scope.submitUserType = function(){
 	document.getElementById("gray").style.display = 'none';
@@ -271,10 +283,12 @@ $scope.resetUserType = function(){
 	fanxiBox.prop("checked", false);
 	$scope.findUserInfo.userType="";
 };
-$scope.setUserType = function(index){
-	if(index==3){
+$scope.setUserType = function(index,name){
+	
+	if(index[0].name=="技术员"){
 		document.getElementById("banzuxinxi").style.display="block";
 	}
+	$scope.findUserInfo.workName=name;
 }
 
 }

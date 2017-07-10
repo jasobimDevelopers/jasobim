@@ -7,8 +7,6 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.ValueOutput;
 import com.my.spring.model.ValueOutputPojo;
-import com.my.spring.model.FeedBack;
-import com.my.spring.model.FeedBackPojo;
 import com.my.spring.model.User;
 import com.my.spring.service.ValueOutputService;
 import com.my.spring.service.FileService;
@@ -25,9 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Service("ValueOutputService")
 public class ValueOutputServiceImpl implements ValueOutputService {
     @Autowired
@@ -201,7 +196,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 	
 	
 	@Override
-	public DataWrapper<List<ValueOutputPojo>> getValueOutputLists(Integer pageIndex, Integer pageSize, ValueOutput ValueOutput, String token) {
+	public DataWrapper<List<ValueOutputPojo>> getValueOutputLists(Integer pageIndex, Integer pageSize, ValueOutput ValueOutput, String token,String dates) {
 		// TODO Auto-generated method stub
 		List<ValueOutputPojo> dataWrapperPojo = new ArrayList<ValueOutputPojo>();
     	DataWrapper<List<ValueOutput>> dataWrappers = new DataWrapper<List<ValueOutput>>();
@@ -211,7 +206,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 			if(ValueOutput.getProjectId()==null){
 				ValueOutput.setProjectId((long) -1);
 			}
-			dataWrappers=ValueOutputDao.getValueOutputLists(pageSize,pageIndex,ValueOutput);
+			dataWrappers=ValueOutputDao.getValueOutputLists(pageSize,pageIndex,ValueOutput,dates);
     		if(dataWrappers.getData()!=null){
     			for(int i=0;i<dataWrappers.getData().size();i++){
     				ValueOutputPojo valueOutputPojo = new ValueOutputPojo();

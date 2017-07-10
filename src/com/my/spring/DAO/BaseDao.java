@@ -1,29 +1,19 @@
 package com.my.spring.DAO;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
-
-/**
- * Created by tia on 16/5/28.
- */
 @Transactional
 public class BaseDao<T>{
-
     @Autowired
     private SessionFactory sessionFactory;
-
     private Class<T> entityClass;
-    
-   // private List<Class<T>> entityClassList;
     /**
      * 通过反射获取子类确定的泛型类
      */
@@ -33,7 +23,6 @@ public class BaseDao<T>{
         Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
         entityClass = (Class) params[0];
     }
-
     /**
      * 根据ID加载PO实例
      *
@@ -48,7 +37,6 @@ public class BaseDao<T>{
         session.getTransaction().commit();
         return entity;
     }
-
     /**
      * 根据ID获取PO实例
      *
@@ -57,7 +45,7 @@ public class BaseDao<T>{
      */
     @SuppressWarnings("unchecked")
 	public T get(Serializable id) {
-        //getSession();
+        getSession();
         //session.beginTransaction();
         //T entity = (T) session.get(entityClass, id);
         //session.getTransaction().commit();

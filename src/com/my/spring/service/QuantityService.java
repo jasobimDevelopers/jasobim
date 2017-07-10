@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 public interface QuantityService {
     DataWrapper<Void> addQuantity(Quantity quantity, String token);
     DataWrapper<Void> deleteQuantity(Long id,String token);

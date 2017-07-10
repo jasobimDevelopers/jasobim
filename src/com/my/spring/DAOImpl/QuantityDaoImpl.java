@@ -24,9 +24,6 @@ import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Repository
 public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 
@@ -65,7 +62,6 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 						.add(Projections.property("name").as("name"))
 						.add(Projections.property("typeName").as("typeName"))
 						.add(Projections.property("quantityType").as("quantityType"))
-							
 						.add(Projections.groupProperty("projectId"))
 						.add(Projections.groupProperty("systemType"))
 						.add(Projections.groupProperty("serviceType"))

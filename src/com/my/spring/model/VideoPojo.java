@@ -1,9 +1,4 @@
 package com.my.spring.model;
-
-
-
-//@Entity
-//@Table(name="")
 public class VideoPojo {
 	
     private Long projectId;

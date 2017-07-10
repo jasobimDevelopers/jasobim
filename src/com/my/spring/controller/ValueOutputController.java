@@ -1,7 +1,5 @@
 package com.my.spring.controller;
 
-import com.my.spring.model.FeedBack;
-import com.my.spring.model.FeedBackPojo;
 import com.my.spring.model.ValueOutput;
 import com.my.spring.model.ValueOutputPojo;
 import com.my.spring.service.ValueOutputService;
@@ -10,12 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
-
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Controller
 @RequestMapping(value="api/ValueOutput")
 public class ValueOutputController {
@@ -69,8 +65,21 @@ public class ValueOutputController {
       public DataWrapper<List<ValueOutputPojo>> getValueOutputListByAdmin(
       		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
       		@RequestParam(value="pageSize",required=false) Integer pageSize,
+      		@RequestParam(value="dates",required=false) String dates,
       		@ModelAttribute ValueOutput valueOutput,
       		@RequestParam(value="token",required=true) String token) {
-          return ValueOutputService.getValueOutputLists(pageIndex,pageSize,valueOutput,token);
+  		  if(dates!=null){
+  			try  
+  			{  
+  			    SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+  			  valueOutput.setDate(sdf.parse(dates));  
+  			}  
+  			catch (ParseException e)  
+  			{  
+  			    System.out.println(e.getMessage());  
+  			}  
+
+  		  }
+          return ValueOutputService.getValueOutputLists(pageIndex,pageSize,valueOutput,token,dates);
       }
 }

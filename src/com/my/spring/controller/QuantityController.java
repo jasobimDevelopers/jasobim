@@ -13,9 +13,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Controller
 @RequestMapping(value="api/quantity")
 public class QuantityController {
@@ -28,7 +25,7 @@ public class QuantityController {
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value = "projectId",required = true) Long projectId,
             HttpServletRequest request){
-    	String filePath = "/fileupload/quantitys";
+    	String filePath = "/fileupload/quantitys/"+projectId;
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
     	for(int i=0;i<file.length;i++){
     		if(quantityService.batchImport(filePath, file[i],token,projectId,request)){

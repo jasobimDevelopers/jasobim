@@ -50,6 +50,11 @@
 								<input id="d4311s" class="Wdate" type="text"  ng-model="startTime" ng-change="setTime()" onClick="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}'})"/><span>到</span>
 								<input id="d4312s" class="Wdate" type="text"  ng-model="finishedTime" onClick="WdatePicker({minDate:'#F{$dp.$D(\'d4311\')}',maxDate:'2020-10-01'})"/>
 							</div>
+							<div id="ductFind" ng-click="setDuctTime()">
+								<a href="##">
+								<span>查询</span>
+								</a>
+							</div>
 							<div id="ductDownload" ng-click="setTime()">
 								<a href="{{ductUrl}}" target="_blank" download="{{quantityExcel.originName}}">
 								<span>导出</span>
@@ -86,78 +91,4 @@
 		</div>
       </div>
   </div>
-<script type="text/javascript">
-	var myChart = echarts.init(document.getElementById('main_contents'));
-	option = {
-		title: {
-			text: ''
-		},
-		tooltip: {
-			trigger: 'axis'
-		},
-		legend: {
-			data:['库存数量','安装数量','出库数量','完成数量']
-		},
-		grid: {
-			left: '3%',
-			right: '4%',
-			bottom: '3%',
-			containLabel: true
-		},
-		toolbox: {
-			feature: {
-				saveAsImage: {}
-			}
-		},
-		xAxis: {
-			type: 'category',
-			boundaryGap: false,
-			data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月','八月','九月','十月','十一月','十二月']
-		},
-
-		yAxis:{
-			type: 'value',
-			scale: true,
-			name: '价格',
-			max: 250,
-			min: 0
-		},
-		series: [
-			{
-				name:'库存数量',
-				type:'line',
-				data:[250, 220, 200,180, 160, 150, 130,80,60,50,30,5]
-			},
-			{
-				name:'安装数量',
-				type:'line',
-				data:[10, 40, 50, 60, 30, 100, 120,100, 120, 100, 160, 200]
-			},
-			{
-				name:'出库数量',
-				type:'line',
-				data:[20, 30, 35, 80, 60, 80, 100,120, 140, 160,180, 250]
-			},
-			{
-				name:'完成数量',
-				type:'line',
-				data:[40, 20,80,120, 180, 95,100,130, 160, 180, 200, 250]
-			},
-
-		]
-	};
-	// 使用刚指定的配置项和数据显示图表。
-	myChart.setOption(option);
-//	折线图 ending
-	$(function () {
-		$("input.jcDate").jcDate({
-			IcoClass: "jcDateIco",
-			Event: "click",
-			Speed: 100,
-			Left: 0,
-			Top: 28,
-			format: "-",
-			Timeout: 100
-		})
-	})
-</script>
+<script src="page/project/scripts/DuctItemGets.js"></script>

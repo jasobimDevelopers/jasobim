@@ -15,5 +15,5 @@ public interface ValueOutputDao {
 	DataWrapper<List<ValueOutput>> getValueOutputByProjectId(Long projectId,String projectName, String[] projectLists);
 	boolean addValueOutputList(List<ValueOutput> ValueOutputList);
 	DataWrapper<List<ValueOutput>> getValueOutputListByProjectName(String projectName);
-	DataWrapper<List<ValueOutput>> getValueOutputLists(Integer pageIndex, Integer pageSize, ValueOutput valueOutput);
+	DataWrapper<List<ValueOutput>> getValueOutputLists(Integer pageIndex, Integer pageSize, ValueOutput valueOutput,String dates);
 }

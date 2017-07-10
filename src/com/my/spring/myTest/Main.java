@@ -1,7 +1,7 @@
  package com.my.spring.myTest;
 
 
-import java.util.Calendar;
+//import java.util.Calendar;
 //import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.Properties;
@@ -36,8 +36,8 @@ public class Main {
     public static String receiveMailAccount = "xyx7148@qq.com.com";
 
     public static void main(String[] args) throws Exception {
-    	Calendar cal = Calendar.getInstance();
-		int month = cal.get(Calendar.MONTH) + 1;
+    	//Calendar cal = Calendar.getInstance();
+		//int month = cal.get(Calendar.MONTH) + 1;
         // 1. 创建参数配置, 用于连接邮件服务器的参数配置
         Properties props = new Properties();                    // 参数配置
         props.setProperty("mail.transport.protocol", "smtp");   // 使用的协议（JavaMail规范要求）
