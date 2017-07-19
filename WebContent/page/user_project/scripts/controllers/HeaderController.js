@@ -35,6 +35,7 @@ function HeaderController($scope,DataService,$filter) {
 	  deleteCookie("userName");
 	  deleteCookie("token");
 	  deleteCookie("userIcon");
+	  deleteCookie("password");
   }
   
 }
