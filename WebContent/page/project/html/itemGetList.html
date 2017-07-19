@@ -47,8 +47,8 @@
 						<div class="choses">
 							<div><img src="page/project/images/日历@2x.png" alt=""/><span>查询范围：</span></div>
 							<div style="width:400px;">
-								<input id="d4311s" class="Wdate" type="text"  ng-model="startTime" ng-change="setTime()" onClick="WdatePicker({maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}'})"/><span>到</span>
-								<input id="d4312s" class="Wdate" type="text"  ng-model="finishedTime" onClick="WdatePicker({minDate:'#F{$dp.$D(\'d4311\')}',maxDate:'2020-10-01'})"/>
+								<input id="d4311s" class="Wdate" type="text"  ng-model="startTime" ng-change="setTime()" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}'})"/><span>到</span>
+								<input id="d4312s" class="Wdate" type="text"  ng-model="finishedTime" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'d4311\')}',maxDate:'2020-10-01'})"/>
 							</div>
 							<div id="ductFind" ng-click="setDuctTime()">
 								<a href="##">

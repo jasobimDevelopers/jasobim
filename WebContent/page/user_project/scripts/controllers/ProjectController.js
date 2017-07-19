@@ -1338,27 +1338,39 @@ function ProjectController($scope,ProjectService) {
 				
 			 }
 	     }
-	    /* //////////////图纸上传
-	     $scope.importVideo = function(){
+	     
+	     ////////////////////图纸上传
+	     $scope.importPaper = function(){
 	    	 var file="";
-	    	 file=document.getElementById("video_import").files;
+	    	 file=document.getElementById("paper_import").files;
 	    	 if(file!==null && file.length>0){
 				 var formData = new FormData();
 				 for(var i = 0; i < file.length;i++) {
 					 formData.append("fileList",file[i]);
-					 formData.append("videoTypeList",1);
 				 }
-				 formData.append("videoType",1);
-				 formData.append("buildingNum",6);
-				 formData.append("professionType",0);
-				 ProjectService.uploadVideo(formData,$scope.findProjectInfo.id).then(function(result){
-					       $scope.uploadVideos=result.data;	 
-					       var video=null;
-						   $scope.getProjectVideoList(pageSize,1,video);
+				 if($scope.paperTypes!=null){
+					 formData.append("professionType",$scope.paperTypes);
+				 }
+				 var paper_buildingNum=document.getElementById("buildingNum_input").value;
+				 var paper_floorNum=document.getElementById("floorNum_input").value;
+				 if(paper_buildingNum!=undefined && paper_buildingNum!=""){
+					 paperBuildingNum=paper_buildingNum;
+				 }
+				 if(paper_floorNum!=undefined && paper_floorNum!=""){
+					 paperFloorNum=paper_floorNum
+				 }
+				 ProjectService.uploadPaperFile(formData,paperBuildingNum,paperFloorNum,$scope.findProjectInfo.id).then(function(result){
+					       $scope.uploadPapers=result.data;	 
+					       var paper=null;
+						   $scope.getProjectPaperList($scope.projectid,10,1,paper);
 			     });
 				
 			 }
-	     }*/
+	     }
+	     ////////图纸赋值
+	     $scope.setPaperType = function(index){
+	    	 $scope.paperTypes=index.professionType;
+	     }
 	     //////返回项目列表按钮
 	     $scope.returnProjects = function(){
 	    	 document.getElementById("projectInfoHtml").style.display = 'none';

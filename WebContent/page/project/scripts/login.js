@@ -46,8 +46,22 @@ function on_return(){
 	   
 	 }
 }
+$(function(){
+	if(getCookie("password")!=null && getCookie("password")!=undefined){
+		$("#password").val(getCookie("password"));
+	}
+	if(getCookie("userName")!=null && getCookie("userName")!=undefined){
+		$("#username").val(getCookie("userName"));
+	}
+});
+	
+
+	
+ 
+
 function login(){
-	var inputPassword=hex_md5($("#password").val());
+	var password=$("#password").val();
+	var inputPassword=hex_md5(password);
 	//var inputPassword=$("#password").val();
 	 $.ajax({
          type: "POST",
@@ -60,8 +74,12 @@ function login(){
         		/* setCookie('userIcon',data.data.userIcon);
         		 setCookie('userName',data.data.userName);*/
  				 setCookie('token',data.token);
- 				 setCookie('userName',data.data.userName);
  				 setCookie('userIcon',data.data.userIconUrl);
+ 				 var r=document.getElementsByName("rember"); 
+ 				 if(r[0].checked){
+ 					setCookie('password',password);
+ 					setCookie('userName',data.data.userName);
+ 				 }      
  				 if(data.data.userType==0){
  					window.location.href="userList";
  				 }

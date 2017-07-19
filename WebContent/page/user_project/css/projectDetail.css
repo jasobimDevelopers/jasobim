@@ -12,6 +12,17 @@
     -webkit-border-radius:3px;
     -moz-border-radius :3px;
 }
+#buildingNum_input,#floorNum_input{
+	width:100px;
+	height:34px;
+}
+#video_type{
+	margin-right:10px;
+}
+#video_type2{
+	margin-left:10px;
+}
+
 /* a:link {
 text-decoration: none;
 }
@@ -560,14 +571,12 @@ font-weight: bold;
 	height:38px;
 }
 #quantityImport{
-	width:280px;
+	width:750px;
 	margin-right:75px;
 	padding-top:5px;
 	height:30px;
 }
-#quantityImport div{
-	float:left;
-}
+
 #imgBiangen{
 	background:url(../images/biangeng@2x.png) no-repeat;
 	height:30px;
@@ -595,11 +604,9 @@ font-weight: bold;
     width: 70px;
     height: 30px;
 }
-#quantityAction div{
-	text-align:center;
-	float:left;
-}
+
 #quantityImport div{
+	text-align:center;
 	float:left;
 }
 #quantity_button{

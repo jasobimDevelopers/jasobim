@@ -315,7 +315,7 @@ public class ReadExcel {
            //添加 构件信息
            if(item.getName()!=null){
         	   if(item.getName().equals("管道") || item.getName().equals("管件") ||item.getName().equals("管道附件")){
-            	   if(item.getSystemType().equals("消火栓给水系统") || item.getSystemType().equals("湿式自动喷水灭火系统")){
+            	   if(item.getSystemType().contains("消火栓") || item.getSystemType().contains("喷水灭火系统")){
             		   item.setProfessionType(3);
             	   }else{
             		   item.setProfessionType(2);

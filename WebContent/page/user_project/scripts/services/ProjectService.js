@@ -473,7 +473,7 @@
 
                      if(data.callStatus == "SUCCEED"){
                          deferred.resolve(data);
-                         alert("上传图纸信息成功，请继续上传交底信息")
+                         alert("上传图纸信息成功，请继续上传图纸信息")
                          self.uploadPaperInfo = data;
                      
                      }else{

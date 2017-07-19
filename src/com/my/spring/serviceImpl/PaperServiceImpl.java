@@ -56,7 +56,7 @@ public class PaperServiceImpl implements PaperService {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);////验证登录时的session
         if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
+			/*if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){*/
 				///////验证是不是管理员身份
 				if(paper!=null){////验证上传的实体类是不是为空
 					///////1.文件的上传返回url
@@ -79,9 +79,9 @@ public class PaperServiceImpl implements PaperService {
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}
-			}else{
+			/*}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
+			}*/
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

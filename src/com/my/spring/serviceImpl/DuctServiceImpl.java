@@ -140,7 +140,7 @@ public class DuctServiceImpl implements DuctService {
     	DataWrapper<List<Duct>> ductListst=new  DataWrapper<List<Duct>>();
     	User userInMemory = SessionManager.getSession(token);
     	if(userInMemory!=null){
-    		SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd");
+    		SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     		if(dateStart!=null){
     			try {
 					dateStarts=sdfs.parse(dateStart);

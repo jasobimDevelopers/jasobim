@@ -51,13 +51,13 @@
 					</div>
 					<div id="selfli">
 						<div class="selfli_text"><span>项目工程简介：</span></div>
-						<div id="projectInfoDesc"><textarea id="projectInfoDescInput" ng-model="$parent.$parent.findProjectInfo.description" readonly="readonly" style="border:0;background-color:white;"></textarea></div>
+						<div id="projectInfoDesc"><textarea id="projectInfoDescInput" ng-model="$parent.$parent.findProjectInfo.description" readonly="readonly" style="border:0;resize:none;background-color:white;"></textarea></div>
 					</div>
 					<div id="selfliModel" >
-						<div class="selfli_text"><span>项目模型：</span></div>
-						<div><input type="file" id="testfile" onchange="setModel(this)" readonly="readonly"/></div>
+						<!-- <div class="selfli_text"><span>项目模型：</span></div>
+						<div><input type="file" id="testfile" onchange="setModel(this)" readonly="readonly"/></div> -->
 					</div>
-					<div id="selfli">
+					<!-- <div id="selfli">
 						<div class="selfli_text"><span>模型类型：</span></div>
 						<select type="text" ng-model="$parent.$parent.findProjectInfo.isIos" id="inputIsIos">
 							<option value="1"><span>苹果系统</span></option>
@@ -74,7 +74,7 @@
 							<option value="B2"><span>地下二层</span></option>
 							<option value="B3"><span>地下三层</span></option>
         				</select>
-					</div>
+					</div> -->
 					<div id="selfliPic" >
 						<div class="selfli_text"><span>项目图片：</span></div>
 						<div><img src="{{findProjectInfo.picUrl}}" id="picFile" width="260px;" height="150px"/></div>
