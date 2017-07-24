@@ -17,5 +17,5 @@ public interface DuctDao {
 	boolean exportDuct(String tempFile, Long projectId,String dateStart,String dateFinished);
 	Duct getDuctById(Long id);
 	DataWrapper<List<DuctPojos>> getDuctLists();
-	DataWrapper<Duct> getDuctBySelfId(Long id);
+	DataWrapper<Duct> getDuctBySelfId(Long id,String selfId,Long projectId);
 }

@@ -43,6 +43,7 @@
 	float:right;
 }
 .cont{
+	overflow: auto;
 	padding-top:31px;
 	width:262px;
 	height:59px;

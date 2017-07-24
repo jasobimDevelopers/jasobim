@@ -147,12 +147,23 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<Duct> getDuctBySelfId(Long selfId) {
+	public DataWrapper<Duct> getDuctBySelfId(Long selfId,String id,Long projectId) {
 		DataWrapper<Duct> dataWrapper=new DataWrapper<Duct>();
 		List<Duct> ret = new ArrayList<Duct>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Duct.class);
-        criteria.add(Restrictions.eq("id",selfId));
+        if(selfId==null && (id==null && projectId==null)){
+        	return dataWrapper;
+        }
+        if(selfId!=null){
+        	criteria.add(Restrictions.eq("id",selfId));
+        }
+        if(id!=null){
+        	criteria.add(Restrictions.eq("selfId",id));
+        }
+        if(projectId!=null){
+        	criteria.add(Restrictions.eq("projectId",projectId));
+        }
         try {
             ret = criteria.list();
         }catch (Exception e){

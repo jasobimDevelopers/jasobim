@@ -1,13 +1,18 @@
+
 function ductInfoController($scope,ductInfoService) {
 	var name="id";
+	var name1="s";
+	var name2="p";
 	$scope.duct="";
     var id = getQueryStringByName(name);
-    $scope.getDuctDetail = function(id) {
-		  ductInfoService.getDuctDetail(id).then(function (result){
+    var selfId = getQueryStringByName(name1);
+    var projectId = getQueryStringByName(name2);
+    $scope.getDuctDetail = function(id,selfId,projectId) {
+		  ductInfoService.getDuctDetail(id,selfId,projectId).then(function (result){
 		  	  $scope.ductInfo = result.data;
 		  });
 	}
-    $scope.getDuctDetail(id);
+    $scope.getDuctDetail(id,selfId,projectId);
     ///////通过id获取构件的详细信息
 	
 	

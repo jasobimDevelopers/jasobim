@@ -65,8 +65,10 @@ public class DuctController {
     @RequestMapping(value="/admin/getDuctBySelfId",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<DuctPojo> getDuctBySelfId(
-    		@RequestParam(value = "id",required = true) Long id){
-        return ductService.getDuctBySelfId(id);
+    		@RequestParam(value = "id",required = false) Long id,
+    		@RequestParam(value = "selfId",required = false) String selfId,
+    		@RequestParam(value = "projectId",required = false) Long projectId){
+        return ductService.getDuctBySelfId(id,selfId,projectId);
     }
     
     @RequestMapping(value="/admin/updateDuct",method = RequestMethod.POST)

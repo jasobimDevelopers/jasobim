@@ -22,46 +22,50 @@
 			</div>
 			<div id="con">
 				<div id="cons">
-					<div>
+					<div  ng-if="ductInfo.name!=null && ductInfo.name!=''">
 						<div class="context"><span>构件名称</span></div>
 						<div class="cont">{{ductInfo.name}}</div>
 					</div>
-					<div>
+					<div ng-if="ductInfo.familyAndType!=null && ductInfo.familyAndType!=''">
 						<div class="context"><span>类型标准</span></div>
 						<div class="cont">{{ductInfo.familyAndType}}</div>
 					</div>
-					<!-- <div>
+					<div ng-if="ductInfo.level!=null && ductInfo.level!=''">
 						<div class="context"><span>标高</span></div>
-						<div class="cont">{{itemInfo.level}}</div>
-					</div> -->
-					<div>
+						<div class="cont">{{ductInfo.level}}</div>
+					</div>
+					<div ng-if="ductInfo.typeName!=null && ductInfo.typeName!=''">
 						<div class="context"><span>类型名称</span></div>
 						<div class="cont">{{ductInfo.typeName}}</div>
 					</div>
-					<div>
+					<div ng-if="ductInfo.projectName!=null && ductInfo.projectName!=''">
 						<div class="context"><span>所属项目</span></div>
 						<div class="cont">{{ductInfo.projectName}}</div>
 					</div>
-					<div>
+					<div ng-if="ductInfo.buildingNum!=null && ductInfo.buildingNum!=''">
 						<div class="context"><span>所属楼栋号</span></div>
 						<div class="cont">{{ductInfo.buildingNum}}</div>
 					</div>
-					<div>
+					<div ng-if="ductInfo.floorNum!=null && ductInfo.floorNum!=''">
 						<div class="context"><span>所属楼层</span></div>
 						<div class="cont">{{ductInfo.floorNum}}</div>
 					</div>
-					<div>
+					<div ng-if="ductInfo.size!=null && ductInfo.size!=''">
 						<div class="context"><span>构件尺寸</span></div>
 						<div class="cont">{{ductInfo.size}}</div>
 					</div>
-					<div>
+					<div ng-if="ductInfo.length!=null && ductInfo.length!='' && ductInfo.length!=0.0">
 						<div class="context"><span>构件长度</span></div>
 						<div class="cont">{{ductInfo.length}}</div>
 					</div>
-					<div>
+					<div ng-if="ductInfo.area!=null && ductInfo.area!='' && ductInfo.area!=0.0">
 						<div class="context"><span>构件面积</span></div>
 						<div class="cont">{{ductInfo.area}}</div>
-					</div>
+					</div> 
+					<div ng-if="ductInfo.systemType!=null && ductInfo.systemType!=''">
+						<div class="context"><span>系统类型</span></div>
+						<div class="cont">{{ductInfo.systemType}}</div>
+					</div> 
 				</div>
 			</div>
 		</div>

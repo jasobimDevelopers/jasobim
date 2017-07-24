@@ -24,6 +24,6 @@ public interface DuctService {
 			Long projectId);
 	DataWrapper<String> exportDuct(Long projectId, String token, HttpServletRequest request,String dateStart,String dateFinished);
 	DataWrapper<Void> updateDuct(Duct duct, String token, HttpServletRequest request);
-	DataWrapper<DuctPojo> getDuctBySelfId(Long selfId);
+	DataWrapper<DuctPojo> getDuctBySelfId(Long selfId,String id,Long projectId);
 	DataWrapper<List<DuctPojos>> getDuctStateSum();
 }

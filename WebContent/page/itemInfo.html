@@ -22,42 +22,42 @@
 			</div>
 			<div id="con">
 				<div id="cons">
-					<div>
+					<div ng-if="itemInfo.name!=null && itemInfo.name!=''">
 						<div class="context"><span>构件名称</span></div>
 						<div class="cont">{{itemInfo.name}}</div>
 					</div>
-					<div>
+					<div ng-if="itemInfo.familyAndType!=null && itemInfo.familyAndType!=''">
 						<div class="context"><span>类型标准</span></div>
 						<div class="cont">{{itemInfo.familyAndType}}</div>
 					</div>
-					<div>
+					<div ng-if="itemInfo.level!=null && itemInfo.level!=''">
 						<div class="context"><span>标高</span></div>
 						<div class="cont">{{itemInfo.level}}</div>
 					</div>
-					<div>
+					<div ng-if="itemInfo.typeName!=null && itemInfo.typeName!=''">
 						<div class="context"><span>类型名称</span></div>
 						<div class="cont">{{itemInfo.typeName}}</div>
 					</div>
-					<div>
+					<div ng-if="itemInfo.offset!=null && itemInfo.offset!=''">
 						<div class="context"><span>偏移量</span></div>
 						<div class="cont">{{itemInfo.offset}}</div>
 					</div>
-					<div>
+					<div ng-if="itemInfo.projectName!=null && itemInfo.projectName!=''">
 						<div class="context"><span>所属项目</span></div>
 						<div class="cont">{{itemInfo.projectName}}</div>
 					</div>
-					<div>
+					<div ng-if="itemInfo.buildingNum!=null && itemInfo.buildingNum!=''">
 						<div class="context"><span>所属楼栋号</span></div>
 						<div class="cont">{{itemInfo.buildingNum}}</div>
 					</div>
-					<div>
+					<div ng-if="itemInfo.floorNum!=null && itemInfo.floorNum!=''">
 						<div class="context"><span>所属楼层</span></div>
 						<div class="cont">{{itemInfo.floorNum}}</div>
 					</div>
-					<div>
+					<!-- <div>
 						<div class="context"><span>构件名称</span></div>
 						<div class="cont"></div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>

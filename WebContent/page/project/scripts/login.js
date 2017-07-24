@@ -78,8 +78,8 @@ function login(){
  				 var r=document.getElementsByName("rember"); 
  				 if(r[0].checked){
  					setCookie('password',password);
- 					setCookie('userName',data.data.userName);
- 				 }      
+ 				 }     
+ 				 setCookie('userName',data.data.userName);
  				 if(data.data.userType==0){
  					window.location.href="userList";
  				 }

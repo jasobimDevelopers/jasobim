@@ -1352,7 +1352,7 @@ function ProjectController($scope,ProjectService) {
 					 formData.append("professionType",$scope.paperTypes);
 				 }
 				 var paper_buildingNum=document.getElementById("buildingNum_input").value;
-				 var paper_floorNum=document.getElementById("floorNum_input").value;
+				 var paper_floorNum=document.getElementById("floorNum_input").value+3;
 				 if(paper_buildingNum!=undefined && paper_buildingNum!=""){
 					 paperBuildingNum=paper_buildingNum;
 				 }

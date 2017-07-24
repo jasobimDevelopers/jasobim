@@ -164,7 +164,10 @@ public class DuctServiceImpl implements DuctService {
     		if(ductList!=null && ductList.size()>0){
     			if(duct!=null){
     				if(duct.getProjectId()!=null){
-    					projectName=projectDao.getById(duct.getProjectId()).getName();
+    					if(projectDao.getById(duct.getProjectId())!=null){
+    						projectName=projectDao.getById(duct.getProjectId()).getName();	
+    					}
+    					
     				}
     			}
     			String[] stateList=new String[]{"未定义","出库","安装","完成"};
@@ -222,7 +225,10 @@ public class DuctServiceImpl implements DuctService {
         	ductList=DuctDao.getDuctByProjectId(projectId,duct).getData();
         	String[] stateList=new String[]{"未定义","出库","安装","完成"};
         	if(ductList!=null){
-        		String projectName=projectDao.getById(ductList.get(0).getProjectId()).getName();
+        		String projectName="";
+        		if(projectDao.getById(ductList.get(0).getProjectId())!=null){
+        			projectName=projectDao.getById(ductList.get(0).getProjectId()).getName();
+        		}
             	for(int i=0;i<ductList.size();i++){
             		///////////////////////
         			DuctPojo ductPojo=new DuctPojo();
@@ -267,14 +273,18 @@ public class DuctServiceImpl implements DuctService {
 	}
 	
 	@Override
-	public DataWrapper<DuctPojo> getDuctBySelfId(Long selfId) {
+	public DataWrapper<DuctPojo> getDuctBySelfId(Long selfId,String id,Long projectId) {
 		// TODO Auto-generated method stub
 		DataWrapper<DuctPojo> dataWrapper = new DataWrapper<DuctPojo>();
 		Duct duct = new Duct();
-    	duct=DuctDao.getDuctBySelfId(selfId).getData();
+    	duct=DuctDao.getDuctBySelfId(selfId,id,projectId).getData();
     	String[] stateList=new String[]{"未定义","出库","安装","完成"};
     	if(duct!=null){
-    		String projectName=projectDao.getById(duct.getProjectId()).getName();
+    		String projectName="";
+    		if(projectDao.getById(duct.getProjectId())!=null){
+    			projectName=projectDao.getById(duct.getProjectId()).getName();
+    		}
+    		
 			DuctPojo ductPojo=new DuctPojo();
 			ductPojo.setId(duct.getId().toString());
 			ductPojo.setCodeUrl(duct.getCodeUrl());
