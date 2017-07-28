@@ -19,7 +19,8 @@ function showUserIcon() {
 function UserController($scope,UserService) {
 	
   console.log("载入UserController");
-  
+  $scope.systemTypelist = [{"id":0,"name":"安装人员"},{"id":1,"name":"土建人员"}];
+  $scope.userTypeList = [{"id":0,"name":"管理员"},{"id":1,"name":"普通用户"},{"id":2,"name":"投资方"},{"id":3,"name":"项目人员/项目负责人"}];
   $scope.currentPage = 1;
   $scope.userTofind = {};
   $scope.projectLists={};
@@ -27,23 +28,23 @@ function UserController($scope,UserService) {
   var pageSize=10;
   var pageIndex=1;
   $scope.ProjectTofind={};
-  
   var user="";
   var projectNums=null;
   var test="";
   var temp=1;
   $scope.findUserInfo = {};
   $scope.userTitles=["序号","用户名","真实姓名","头像","权限","邮箱","电话","注册日期","操作"];
-  ///////部门名称
-  $scope.roleList=[{name:"管理员"},{name:"普通用户"},{name:"投资方"},{name:"项目人员/项目负责人"}];
+  ///////其他
+  $scope.roleList=[{name:"管理员"},{name:"普通用户"},{name:"投资方"},{name:"项目人员/项目负责人"},
+                   {name:"项目经理"},{name:"常务经理"},{name:"土建负责人"},{name:"BIM工程师"}];
   /////项目人员职称
-  $scope.roleList1=[{name:"技术员"},{name:"材料员"},{name:"质量员"},{name:"安全员"},{name:"施工员"},{name:"项目负责人"}];
+  $scope.roleList1=[{name:"技术员"},{name:"材料员"},{name:"质量员"},{name:"安全员"},{name:"施工员"},{name:"资料员"},
+                    {name:"机管员"},{name:"钢筋翻样员"},{name:"木工翻样员"},{name:"技术负责人"},{name:"安装负责人"},];
   /////公司人员职称
   $scope.roleList2=[{name:"质安科"},{name:"生产科"},{name:"技术科"},{name:"预算科"},{name:"材料科"},{name:"总经理"},{name:"副总经理"}];
   $scope.roleList3=[{name:"技术科长"},{name:"技术主管"},{name:"技术员"},{name:"技术员"},{name:"预算主管"},
                     {name:"总经理"},{name:"副总经理"},{name:"质安科长"},{name:"预算员"},
                     {name:"预算科长"},{name:"生产经理"},{name:"市场助理"},{name:"质量员"}];
- 
   $scope.choice = function(ss){
 	  test=ss;
 	  if(projectNums!=null){
@@ -86,7 +87,8 @@ function UserController($scope,UserService) {
 	  $scope.findUserInfo = {};
 	  //////初始化获取项目列表
 	  $scope.getProjectLists(pageSize,-1,project);
-
+	  $scope.findUserInfo.systemType=0;
+	  $scope.findUserInfo.userType=3;
 	  document.getElementById("addUserHtml").style.display = 'block';
       $scope.title="增加用户";
   }
@@ -180,7 +182,6 @@ function UserController($scope,UserService) {
 	}
  /////增加用户
  $scope.addUserByAdmin = function(){
-	 
 	 if($scope.title=="增加用户"){
 		 var pass2=document.getElementById("inputpasswords").value;
 		 if(pass2!=$scope.findUserInfo.password){
@@ -290,5 +291,6 @@ $scope.setUserType = function(index,name){
 	}
 	$scope.findUserInfo.workName=name;
 }
+
 
 }

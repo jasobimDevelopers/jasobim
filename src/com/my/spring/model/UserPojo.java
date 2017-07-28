@@ -19,6 +19,7 @@ public class UserPojo {
     private String workName;
     private String teamInformation;////班组信息
     private String projectList;
+    private Integer systemType;
 	public Long getId() {
 		return id;
 	}
@@ -118,6 +119,12 @@ public class UserPojo {
 	}
 	public void setProjectList(String projectList) {
 		this.projectList = projectList;
+	}
+	public Integer getSystemType() {
+		return systemType;
+	}
+	public void setSystemType(Integer systemType) {
+		this.systemType = systemType;
 	}
     
 }

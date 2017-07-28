@@ -24,7 +24,7 @@ public class User {
     private String teamInformation;////班组信息
     private Integer teamId;
     private Integer systemId;//0.IOS  1.android
-
+    private Integer systemType;//0.安装人员 1.土建人员
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -151,6 +151,14 @@ public class User {
 	}
 	public void setTeamId(Integer teamId) {
 		this.teamId = teamId;
+	}
+	@Basic
+    @Column(name = "system_type")
+	public Integer getSystemType() {
+		return systemType;
+	}
+	public void setSystemType(Integer systemType) {
+		this.systemType = systemType;
 	}
     
     

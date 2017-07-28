@@ -44,13 +44,13 @@
 			</div>
             <div class="addinput">
         		<span>用户角色:</span>
-        		<select type="text" ng-model="findUserInfo.userType" id="inputrole" ng-change="setUserType(findUserInfo.userType)">
-					<option value="0"><span>管理员</span></option>
-					<option value="1"><span>普通用户</span></option>
-					<option value="2"><span>投资方</span></option>
-					<option value="3"><span>项目人员/项目负责人</span></option>
+        		<select type="text" ng-model="findUserInfo.userType" id="inputrole" ng-options="o.id as o.name for o in userTypeList">
         		</select>
-        		
+        	</div>
+        	<div class="addinput">
+        		<span>所属系统:</span>
+        		<select type="text" ng-model="findUserInfo.systemType" id="inputrole" ng-options="o.id as o.name for o in systemTypelist">
+        		</select>
         	</div>
         	<div class="addinput" style="display:none" id="banzuxinxi">
         		<span>班组信息:</span><input type="text" id="inputArrayType" ng-model="findUserInfo.teamInformation"/ >
@@ -95,7 +95,7 @@
 								<div class="checkBoxs">
 						            <div ng-repeat="enum in roleList3" class="rolecontents">
 											<span>{{enum.name}}</span>
-											<input type="checkbox" id="my1"  ng-click="setUserType($index,enum.name)" />
+											<input type="checkbox" id="my1"  ng-click="setUserType(roleList3,enum.name)" />
 									</div>
 								</div>
 							</div>
@@ -110,7 +110,7 @@
 								<div class="checkBoxs">
 										<div ng-repeat="enum in roleList" class="rolecontents">
 											<span>{{enum.name}}</span>
-											<input type="checkbox" id="my2" ng-click="setUserType($index,enum.name)"/>
+											<input type="checkbox" id="my2" ng-click="setUserType(roleList,enum.name)"/>
 										</div>
 								</div>
 							</div>

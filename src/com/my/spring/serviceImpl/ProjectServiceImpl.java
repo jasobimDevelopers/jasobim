@@ -351,7 +351,7 @@ public class ProjectServiceImpl implements ProjectService {
     	isios=userInMemory.getSystemId();
     	if (userInMemory != null) {
     		if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 
-    				|| userInMemory.getWorkName().contains("经理") || userInMemory.getWorkName().contains("科长")){
+    				|| userInMemory.getWorkName().contains("总经理") || userInMemory.getWorkName().contains("科长") || userInMemory.getWorkName().contains("主管")){
     			dataWrapper=projectDao.getProjectList(pageSize, pageIndex,project,"-1");
     		}else{
     			dataWrapper=projectDao.getProjectList(pageSize, pageIndex,project,userInMemory.getProjectList());

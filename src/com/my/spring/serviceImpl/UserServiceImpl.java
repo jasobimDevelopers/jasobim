@@ -166,7 +166,12 @@ public class UserServiceImpl implements UserService {
 				if(user.getRealName() != null && !user.getRealName().equals("")) {
 					userInDB.setRealName(user.getRealName());
 				}
-				if (user.getEmail() != null && !user.getEmail().equals("")) {
+				if(user.getSystemType()==null){
+					userInDB.setSystemType(0);
+				}else{
+					userInDB.setSystemType(1);
+				}
+				if(user.getEmail() != null && !user.getEmail().equals("")) {
 					userInDB.setEmail(user.getEmail());
 				}
 				if(user.getProjectList()!=null){
@@ -254,6 +259,7 @@ public class UserServiceImpl implements UserService {
 			dataWrapper.setData(adminInDB);
 			if(dataWrapper.getData()!=null){
 				UserPojo userpojo=new UserPojo();
+				userpojo.setSystemType(dataWrapper.getData().getSystemType());
 				userpojo.setEmail(dataWrapper.getData().getEmail());
 				userpojo.setId(dataWrapper.getData().getId());
 				userpojo.setPassword(dataWrapper.getData().getPassword());
@@ -296,6 +302,7 @@ public class UserServiceImpl implements UserService {
 				if(userList.getData().size()>0){
 					for(int i=0;i<userList.getData().size();i++){
 						UserPojo userpojo=new UserPojo();
+						userpojo.setSystemType(userList.getData().get(i).getSystemType());
 						userpojo.setEmail(userList.getData().get(i).getEmail());
 						userpojo.setId(userList.getData().get(i).getId());
 						userpojo.setProjectList(userList.getData().get(i).getProjectList());

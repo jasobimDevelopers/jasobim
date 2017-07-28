@@ -606,7 +606,7 @@ function ProjectController($scope,ProjectService) {
 	 //////////////////////////////项目详情信息
 	 $scope.projectInfoHead=[{name:"基本信息"},{name:"构件信息"},{name:"图纸信息"},{name:"工程量信息"},{name:"安全技术交底"},{name:"问题列表"}];
 	 $scope.projectPhaseInfo=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"}];
-	 $scope.projectPhaseInfos=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"},{name:"建筑"}];
+	 $scope.projectPhaseInfos=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"},{name:"建筑"},{name:"装饰"},{name:"结构"}];
 	 $scope.projectVideoType=[{name:"质量"},{name:"安全"},{name:"技术"}];
 	 $scope.projectHouseholdInfo=[{name:"公共部位"},{name:"N户型"},{name:"Q户型"},{name:"Q户型反"},{name:"N户型反"}];
 	 $scope.projectQuestionOfType=[{name:"安全"},{name:"质量"},{name:"其他"}];
