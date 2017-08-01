@@ -41,9 +41,9 @@ public class UserLogController {
 	@RequestMapping(value="/admin/deleteUserLog", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteUserLogByAdmin(
-    		@RequestParam(value="UserLogId",required=true) String UserLogId,
+    		@RequestParam(value="userLogId",required=true) String userLogId,
     		@RequestParam(value="token",required=true) String token) {
-	        return userLogService.deleteUserLog(UserLogId,token);
+	        return userLogService.deleteUserLog(userLogId,token);
     }
 
 	//管理员获取用户列表

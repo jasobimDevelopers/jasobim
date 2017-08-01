@@ -1,8 +1,8 @@
 package com.my.spring.serviceImpl;
 
-import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -35,7 +35,7 @@ public class UserLogServiceImpl implements UserLogService {
 		// TODO Auto-generated method stub
 		DataWrapper<List<UserLog>> dataWrapper = new DataWrapper<List<UserLog>>();
 		List<UserLogPojo> UserLogpojo = new ArrayList<UserLogPojo>();
-		String[] projectPart={"模型区域","图纸区域","登录区域","交底区域","预制化区域 ","其他区域"};
+		String[] projectPart={"模型区域","图纸区域","登录区域","交底区域","预制化区域 ","紧急事项区域","通知区域","产值区域","班组信息区域"};
 		//#0.模型区域 1.图纸区域 2.登录区域 3.交底区域 4.预制化区域 5.其他
 		String[] systemName={"苹果系统","安卓系统"};
 		DataWrapper<List<UserLogPojo>> dataWrapperpojo = new DataWrapper<List<UserLogPojo>>();
@@ -76,7 +76,6 @@ public class UserLogServiceImpl implements UserLogService {
 		User userInMemory=SessionManager.getSession(token);
 		String[] idList=null;
 		idList=ids.split(",");
-		
 		if(userInMemory!=null){
 			User adminInDB = userDao.getById(userInMemory.getId());
 			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
@@ -99,7 +98,7 @@ public class UserLogServiceImpl implements UserLogService {
 		DataWrapper<Void> dataWrapper = new DataWrapper<>();
 		User userInMemory=SessionManager.getSession(token);
 		if(userInMemory!=null){
-			userLog.setActionDate(new Date(System.currentTimeMillis()));
+			userLog.setActionDate(new Date());
 			userLog.setUserId(userInMemory.getId());
 			if(!UserLogDao.addUserLog(userLog)) {
 				dataWrapper.setErrorCode(ErrorCodeEnum.Error);

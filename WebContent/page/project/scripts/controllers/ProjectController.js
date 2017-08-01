@@ -1392,16 +1392,23 @@ function ProjectController($scope,ProjectService) {
 		     document.getElementById("include_header").style.display = 'block';
 	     }
 	   //上传文件方法
-	     $scope.UpladFile=function () {
+	     $scope.UpladFile=function (test) {
 	    	 var process=document.getElementById("process");
 	    	 process.style.display="block";
-	         var fileObj = document.getElementById("video_import").files[0]; // js 获取文件对象
-	         var url = "api/video/admin/addVideo"; // 接收上传文件的后台地址 
-	         var form = new FormData(); // FormData 对象
+	    	 var form = new FormData(); // FormData 对象
+	    	 if(test=='video'){
+	    		 var fileObj = document.getElementById("video_import").files[0]; // js 获取文件对象
+		         var url = "api/video/admin/addVideo"; // 接收上传文件的后台地址 
+		         form.append("videoType",$scope.fileTypes); // 文件对象
+	    	 }
+	         if(test=='paper'){
+	        	 var fileObj = document.getElementById("paper_import").files; // js 获取文件对象
+		         var url = "api/paper/admin/uploadPaper"; // 接收上传文件的后台地址 
+	         }
 	         form.append("fileList", fileObj); // 文件对象
 	         form.append("projectId",$scope.findProjectInfo.id);
 	         form.append("professionType",$scope.videoTypes);
-	         form.append("videoType",$scope.fileTypes); // 文件对象
+	        
 	         form.append("token",token);
 	         xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
 	         xhr.open("post", url, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。

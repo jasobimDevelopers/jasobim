@@ -109,51 +109,6 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
         return retDataWrapper;
     }
 
-/*	@Override
-	public List<Item> getItemByLocation(String location) {
-		//String sql = "select user.* from t_user user,t_token token where token.token = " + token + " and token.user_id = user.id";
-		char str1 = 0;
-		for(int i=location.length()-1;i>=0;i--){
-			if(location.charAt(i)>='A' && location.charAt(i)<='Z'){
-				str1=location.charAt(i);
-				break;
-			}
-		}
-		int temp=str1+1;
-		char str2=(char) temp;
-        String location2=location+str2+"%";
-		String sql = "select * from Item where location LIKE "+location2;
-		Session session = getSession();
-        Query query = session.createSQLQuery(sql)
-                .addEntity(Item.class);
-        @SuppressWarnings("unchecked")
-		List<Item> ItemList = query.list();
-        if(ItemList != null && ItemList.size() > 0) {
-            return ItemList;
-        }else {
-            return null;
-        }
-	}
-
-	////输入project_id和type_name删除，并删除quantity里面project_id和name一致的
-	@SuppressWarnings("unused")
-	@Override
-	public DataWrapper<Void> deleteItemByTypeNameAndProjectId(Long projectId, String typeName, String token) {
-		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-		String sql="delete a.*,b.* from item as a,quantity as b where a.project_id=b.project_id and a.type_name=b.name and a.project_id="+projectId+" and a.type_name="+typeName;
-		Session session=getSession();
-		 try{
-	            Query query=session.createSQLQuery(sql);
-	            session.getTransaction().commit();
-	            session.flush();
-	        }catch(Exception e){
-	            e.printStackTrace();
-	            session.getTransaction().rollback();
-	            dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
-	        }
-		 
-		return dataWrapper;
-	}*/
     //////////根据项目id删除构件和相应的工程量
 	@SuppressWarnings("unused")
 	@Override

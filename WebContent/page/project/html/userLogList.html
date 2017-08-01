@@ -1,4 +1,4 @@
-<div id="projectContent" ng-controller="ValueOutputController">
+<div id="projectContent" ng-controller="UserLogController">
 	<div id="include_header" style="display:block;padding-bottom:20px;">
 	    	
 	        	<div id="projectnames">
@@ -18,24 +18,26 @@
 			<table class="table-striped table table-bordered">
 				<tbody>
 					<tr>
-						<th ng-repeat="valueOutputTitle in valueOutputTitles">{{valueOutputTitle}}</th>
+						<th ng-repeat="userLogTitle in userLogTitles">{{userLogTitle}}</th>
 					</tr>
-					<tr ng-repeat = "valueOutput in valueOutputList">
+					<tr ng-repeat = "userLog in userLogList">
 					    <td>{{$index+1}}</td>
-					    <td>{{valueOutput.projectName}}</td>
-					    <td>{{valueOutput.num}}</td>
-					    <td>{{valueOutput.finished}}</td>
-					    <td>{{valueOutput.dates}}</td>
+					    <td>{{userLog.userName}}</td>
+					    <td>{{userLog.projectName}}</td>
+					    <td>{{userLog.projectPart}}</td>
+					    <td>{{userLog.actionDate}}</td>
+					    <td>{{userLog.systemType}}</td>
+					    <td>{{userLog.version}}</td>
 					    <td> 
-					    	<button id="deletebutton" ng-click="deleteValueOutput(valueOutput.id)">
+					    	<button id="deletebutton" ng-click="deleteUserLog(userLog.id)">
 		                    </button>
-		                    <input type="checkbox" ng-click="setValueOutputId(valueOutput.id)" class="checkBoxItem">
+		                    <input type="checkbox" ng-click="setUserLogId(userLog.id)" class="checkBoxItem">
                         </td>
 					</tr>
 				</tbody>
 			</table>
-			<div id="table-buton111" >
-				<div id="valueOutputPageCode"></div>
+			<div id="table-buton1112" >
+				<div id="userLogPageCode"></div>
 			</div>
 		</div>
 	</div>		

@@ -1,6 +1,6 @@
 package com.my.spring.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -15,7 +15,8 @@ public class UserLog {
 	private Long id;
 	private Long userId;
 	private Long projectId;
-	private Integer projectPart;
+	private Integer projectPart; //0.Model(模型) 1.Paper,//图纸   2.Login,//登录  3.Disclose,//交底   4.Prefabricate,//预制化   
+								//5.Question,//紧急事项（问题）6.Notification,//通知 7.Production,//产值    8.Member,//班组信息 
 	private String version;
 	private Date actionDate;
 	private Integer systemType;//0.苹果系统  1.安卓系统

@@ -36,9 +36,13 @@
     <servlet-name>default</servlet-name>
     <url-pattern>*.jpg</url-pattern>
   </servlet-mapping>
-   <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>*.mov</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.wmv</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>default</servlet-name>
@@ -91,6 +95,10 @@
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>*.xls</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.xlsx</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>default</servlet-name>
