@@ -25,7 +25,7 @@ public class QuestionController {
     QuestionService questionService;
     @RequestMapping(value="/addQuestion", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Void> addQuestion(
+    public DataWrapper<Question> addQuestion(
             @ModelAttribute Question question,
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request,
@@ -33,13 +33,16 @@ public class QuestionController {
             @RequestParam(value = "fileCode", required = false) MultipartFile fileCode
             ){
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    	DataWrapper<Question> dataWrappers = new DataWrapper<Question>();
 		dataWrapper=questionService.addQuestion(question,token,file,request,fileCode);
 		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
-            	return dataWrapper;
+			dataWrappers.setCallStatus(CallStatusEnum.SUCCEED);
+			dataWrappers.setData(question);
+            return dataWrappers;
     	}else{
-    		dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+    		dataWrappers.setErrorCode(ErrorCodeEnum.Error);
     	}
-        return dataWrapper;
+        return dataWrappers;
     }
     //////根据项目id和问题id删除问题
     @RequestMapping(value="/admin/deleteQuestion")

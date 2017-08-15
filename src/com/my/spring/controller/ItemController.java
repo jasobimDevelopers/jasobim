@@ -162,7 +162,7 @@ public class ItemController {
     }
     @RequestMapping(value="/getItemById",method=RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<Item> getItemById(
+    public DataWrapper<MinItemPojo> getItemById(
     		@RequestParam(value = "itemId",required = true) Long itemId,
             @RequestParam(value = "token",required = false) String token){
         return itemService.getItemById(itemId,token);

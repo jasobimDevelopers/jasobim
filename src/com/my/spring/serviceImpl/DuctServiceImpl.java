@@ -398,31 +398,31 @@ public class DuctServiceImpl implements DuctService {
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null) {
 			
-				String filePath = "E:/JasoBim/BimAppDocument/apache-tomcat-8.0.39/webapps/jasobim" + "/out/" + projectId + "/duct/";
+				String filePath = "E:/JasoBim/BimAppDocument/tomcat_xyx_8080/webapps/jasobim" + "/out/" + projectId + "/duct/";
 				File fileDir = new File(filePath);
 		        if (!fileDir.exists()) {
 		            fileDir.mkdirs();
 		        }
-		        String tempFile = filePath + "duct_temp.xls";
-		        String file = filePath + "duct.xls";
-		        String header = "序号\t"
-		        		+ "名称\t"
-		        		+ "个数\t"
-		        		+ "长度\t"
-		        		+ "面积\t"
-		        		+ "项目id\t"
-		        		+ "楼栋号\t"
-		        		+ "familyAndType\t"
-		        		+ "尺寸\t"
-		        		+ "项目名称\t"
-		        		+ "时间\n";
+		        String tempFile = filePath + "duct_temp.csv";
+		        String file = filePath + "duct.csv";
+		        String header = "序号,"
+		        		+ "名称,"
+		        		+ "个数,"
+		        		+ "长度,"
+		        		+ "面积,"
+		        		+ "项目id,"
+		        		+ "楼栋号,"
+		        		+ "familyAndType,"
+		        		+ "尺寸,"
+		        		+ "项目名称,"
+		        		+ "时间";
 		        FileOperationsUtil.deleteFile(tempFile);
 		        FileOperationsUtil.deleteFile(file);
 		        if (DuctDao.exportDuct(tempFile, projectId,dateStart,dateFinished)) {
 					String content = FileOperationsUtil.readFile(tempFile);
-					String newContent = header + content;
+					String newContent = header+"\n" + content;
 					FileOperationsUtil.writeFile(file, newContent, false);
-					dataWrapper.setData("out/" + projectId +"/duct" +"/duct.xls");
+					dataWrapper.setData("out/" + projectId +"/duct" +"/duct.csv");
 				} else {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}

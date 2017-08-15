@@ -43,7 +43,9 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 					//Calendar cal = Calendar.getInstance();
 					//int month = cal.get(Calendar.MONTH) + 1;
 					///if()
-					ValueOutput.setDate(new Date());
+					if(ValueOutput.getDate()==null){
+						ValueOutput.setDate(new Date());
+					}
 					if(!ValueOutputDao.addValueOutput(ValueOutput)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else
@@ -175,7 +177,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 	    	    		strone.setDates(str);
 	    	    		strone.setProjectName(valueOutputss.get(i).getOthers());
 	    	    		valueOutputs.add(i, strone);
-	    				nums+=valueOutputss.get(i).getNum();
+	    				nums=valueOutputss.get(i).getNum();
 	    				finisheds+=valueOutputss.get(i).getFinished();
 	    			}
 	    			DecimalFormat df=new DecimalFormat(".##");

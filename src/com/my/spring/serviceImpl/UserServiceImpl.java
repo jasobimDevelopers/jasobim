@@ -17,6 +17,7 @@ import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.Project;
 import com.my.spring.model.User;
+import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
 import com.my.spring.service.FileService;
 import com.my.spring.service.UserService;
@@ -335,6 +336,56 @@ public class UserServiceImpl implements UserService {
 			} else {
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return dataWrapper;
+	}
+	@Override
+	public DataWrapper<List<UserPadPojo>> getUserTeam(String token,Long projectId) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<UserPadPojo>> dataWrapper = new DataWrapper<List<UserPadPojo>>();
+		List<UserPadPojo> userpojoList=new ArrayList<UserPadPojo>();
+		DataWrapper<List<User>> userList=new DataWrapper<List<User>>();
+		User adminInMemory = SessionManager.getSession(token);
+		String[] workNameList={"项目经理","常务经理","技术负责人","土建负责人","安装负责人","技术员","质量员","施工员",
+				"材料员","资料员","预算员","机管员","安全员","钢筋翻样员","木工翻样员","BIM工程师"};
+		if (adminInMemory != null) {
+				userList=userDao.getUserTeam(null, -1,projectId);
+				if(userList.getData().size()>0){
+					for(int i=0;i<userList.getData().size();i++){
+						UserPadPojo userpadpojo=new UserPadPojo();
+						userpadpojo.setId(-1);
+						for(int j=0;j<workNameList.length;j++){
+							if(userList.getData().get(i).getWorkName().contains(workNameList[j])){
+								userpadpojo.setId(workNameList.length-j);
+							}
+						}
+						if(userpadpojo.getId()>0){
+							userpadpojo.setRealName(userList.getData().get(i).getRealName());
+							userpadpojo.setTel(userList.getData().get(i).getTel());
+							userpadpojo.setWorkName(userList.getData().get(i).getWorkName());
+							userpojoList.add(userpadpojo);
+						}
+					}
+					for(int k=0;k<userpojoList.size();k++){
+						for(int s=k+1;s<userpojoList.size();s++){
+							if(userpojoList.get(k).getId()<userpojoList.get(s).getId()){
+								UserPadPojo userpadpojos=new UserPadPojo();
+								userpadpojos=userpojoList.get(k);
+					 			userpojoList.set(k, userpojoList.get(s));
+								userpojoList.set(s, userpadpojos);
+							}
+						}
+					}
+					dataWrapper.setData(userpojoList);
+					dataWrapper.setCallStatus(userList.getCallStatus());
+					dataWrapper.setCurrentPage(userList.getCurrentPage());
+					dataWrapper.setErrorCode(userList.getErrorCode());
+					dataWrapper.setNumberPerPage(userList.getNumberPerPage());
+					dataWrapper.setTotalNumber(userList.getTotalNumber());
+					dataWrapper.setTotalPage(userList.getTotalPage());
+				}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

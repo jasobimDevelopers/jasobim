@@ -74,7 +74,7 @@
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://139.224.59.3:3306/bimdatas?characterEncoding=utf-8" />
+        <property name="url" value="jdbc:mysql://localhost:3306/bimdatas?characterEncoding=utf-8" />
         <property name="username" value="root" />
         <property name="password" value="Jaso@2016" />
     </bean>

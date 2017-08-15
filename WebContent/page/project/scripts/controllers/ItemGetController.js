@@ -220,6 +220,7 @@ function ItemGetController($scope,ItemGetService) {
 		$scope.finishedTime=document.getElementById("d4312s").value;
 		$scope.getItemGetList(pageSize,pageIndex,itemGet,$scope.startTime,$scope.finishedTime);
 	}
+	$scope.getDuctExcel();
 	$scope.setTime = function(){
 		$scope.startTime=document.getElementById("d4311s").value;
 		$scope.finishedTime=document.getElementById("d4312s").value;

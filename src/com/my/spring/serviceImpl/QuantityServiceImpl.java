@@ -185,35 +185,35 @@ public class QuantityServiceImpl implements QuantityService {
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null) {
 			
-				String filePath = "E:/JasoBim/BimAppDocument/apache-tomcat-8.0.39/webapps/jasobim" + "/out/" + projectId + "/";
+				String filePath = "E:/JasoBim/BimAppDocument/tomcat_xyx_8080/webapps/jasobim" + "/out/" + projectId + "/";
 				File fileDir = new File(filePath);
 		        if (!fileDir.exists()) {
 		            fileDir.mkdirs();
 		        }
-		        String tempFile = filePath + "quantitty_temp.xls";
-		        String file = filePath + "quantitty.xls";
-		        String header = "序号\t"
-		        		+ "名称\t"
-		        		+ "专业\t"
-		        		+ "数值\t"
-		        		+ "单位\t"
-		        		+ "项目编号\t"
-		        		+ "楼栋号\t"
-		        		+ "楼层号\t"
-		        		+ "单元号\t"
-		        		+ "户型\t"
-		        		+ "familyAndType\t"
-		        		+ "系统类型\t"
-		        		+ "设备类型\t"
-		        		+ "尺寸\t"
-		        		+ "材质\n";
+		        String tempFile = filePath + "quantity_temp.csv";
+		        String file = filePath + "quantity.csv";
+		        String header = "序号,"
+		        		+ "名称,"
+		        		+ "专业,"
+		        		+ "数值,"
+		        		+ "单位,"
+		        		+ "项目编号,"
+		        		+ "楼栋号,"
+		        		+ "楼层号,"
+		        		+ "单元号,"
+		        		+ "户型,"
+		        		+ "familyAndType,"
+		        		+ "系统类型,"
+		        		+ "设备类型,"
+		        		+ "尺寸,"
+		        		+ "材质";
 		        FileOperationsUtil.deleteFile(tempFile);
 		        FileOperationsUtil.deleteFile(file);
 		        if (quantityDao.exportQuantity(tempFile, projectId)) {
 					String content = FileOperationsUtil.readFile(tempFile);
-					String newContent = header + content;
+					String newContent = header +"\n"+ content;
 					FileOperationsUtil.writeFile(file, newContent, false);
-					dataWrapper.setData("out/" + projectId + "/quantitty.xls");
+					dataWrapper.setData("out/" + projectId + "/quantity.csv");
 				} else {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}

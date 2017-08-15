@@ -1,17 +1,26 @@
 package com.my.spring.DAOImpl;
 
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.ParameterMode;
+
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.procedure.ProcedureCall;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.UserLogDao;
+import com.my.spring.model.DuctPojos;
 import com.my.spring.model.UserLog;
+import com.my.spring.model.UserLogPojos;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 
@@ -27,6 +36,12 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 	}
 
 	@Override
+	public boolean addUserLogList(List<UserLog> userLogList) {
+		// TODO Auto-generated method stub
+		return saveList(userLogList);
+	}
+
+	@Override
 	public UserLog getById(Long id) {
 		// TODO Auto-generated method stub
 		return get(id);
@@ -35,7 +50,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<UserLog>> getUserLogList(Integer pageSize, Integer pageIndex,UserLog UserLog) {
+	public DataWrapper<List<UserLog>> getUserLogList(Integer pageSize, Integer pageIndex,UserLog UserLog,Date startDate,Date finishedDate) {
 		// TODO Auto-generated method stub
 		DataWrapper<List<UserLog>> dataWrapper = new DataWrapper<List<UserLog>>();
         List<UserLog> ret = null;
@@ -52,8 +67,21 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
                 criteria.add(Restrictions.ge("actionDate",UserLog.getActionDate()));  
     	    /*if(UserLog.getActionDate()!=null)                          //查询指定时间之前的记录  
     	        criteria.add(Restrictions.le("actionDate",UserLog.getActionDate()));*/  
+        	if(UserLog.getProjectId()!=null){
+        		criteria.add(Restrictions.eq("projectId",UserLog.getProjectId()));
+        	}
+        	if(UserLog.getProjectPart()!=null){
+        		criteria.add(Restrictions.eq("projectPart", UserLog.getProjectPart()));
+        	}
+        	if(UserLog.getSystemType()!=null){
+        		criteria.add(Restrictions.eq("systemType", UserLog.getSystemType()));
+        	}
         }
-        
+        if(startDate!=null)    
+        	//查询制定时间之后的记录  
+            criteria.add(Restrictions.ge("actionDate",startDate));  
+	    if(finishedDate!=null)                          //查询指定时间之前的记录  
+	        criteria.add(Restrictions.le("actionDate",finishedDate));  
         if (pageSize == null) {
 			pageSize = 10;
 		}
@@ -96,6 +124,101 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 		}
 		return bool;
 	}
+	@Override
+	public boolean exportUserLog(String filePath,String dateStart,String dateFinished) {
+		// TODO Auto-generated method stub
+		
+		Session session=getSession();
+		try{
+			ProcedureCall procedureCall = session.createStoredProcedureCall("exportUserLog");
+			String starttime="";
+			String finishedtime="";
+			
+			if(dateStart!=null){
+	    		starttime=dateStart;
+			}
+			if(dateFinished!=null){
+				finishedtime=dateFinished;
+			}
+			procedureCall.registerParameter("file_path", String.class, ParameterMode.IN).bindValue(filePath);
+			procedureCall.registerParameter("date_start", String.class, ParameterMode.IN).bindValue(starttime);
+			procedureCall.registerParameter("date_finished", String.class, ParameterMode.IN).bindValue(finishedtime);;
+			procedureCall.getOutputs();
+	    }catch(Exception e){
+	        e.printStackTrace();
+	        return false;
+	    }
+		
+		return true;
+	}
 
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<List<UserLogPojos>> getUserLogLists(String startTime,String finishedTime,Long projectId,Integer projectPart,Integer systemType) {
+		DataWrapper<List<UserLogPojos>> dataWrapper=new DataWrapper<List<UserLogPojos>>();
+		String sql="";
+		String sql0 = "select count(a.id) as num,a.project_part as projectPart"
+				+",a.system_type as systemType,b.real_name as userName,a.action_date as actionDate,"
+				+"a.version,a.project_id as projectName";
+		String sql3 = ",DATE_FORMAT(a.action_date,'%Y-%m') as date";
+		String sql_time= ",DATE_FORMAT(a.action_date,'%Y-%m-%d') as date";
+		String sql4=" from user_log a,user b where a.user_id=b.id";
+		String sql2=" group by project_part,date";
+		sql=sql0+sql3+sql4;
+		if(startTime!=null){
+			sql=sql0+sql_time+sql4;
+			sql=sql+" and a.action_date>"+"'"+startTime+"'";
+		}
+		if(finishedTime!=null){
+			if(startTime!=null){
+				sql=sql+" and a.action_date<"+"'"+finishedTime+"'";
+			}else{
+				sql=sql0+sql_time+sql4;
+				sql=sql+" and a.action_date<"+"'"+finishedTime+"'";
+			}
+		}
+		if(projectId!=null){
+			sql=sql+" and a.project_id="+projectId;
+		}
+		if(projectPart!=null){
+			sql=sql+" and a.project_part="+projectPart;
+		}
+		if(systemType!=null){
+			sql=sql+" and a.system_type="+systemType;
+		}
+		sql=sql+sql2;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("date", StandardBasicTypes.STRING)
+					 .addScalar("num", StandardBasicTypes.LONG)
+					 .addScalar("projectPart", StandardBasicTypes.STRING)
+					 .addScalar("systemType", StandardBasicTypes.STRING)
+					 .addScalar("userName", StandardBasicTypes.STRING)
+					 .addScalar("actionDate", StandardBasicTypes.STRING)
+					 .addScalar("version", StandardBasicTypes.STRING)
+					 .addScalar("projectName", StandardBasicTypes.STRING)
+					 .setResultTransformer(Transformers.aliasToBean(UserLogPojos.class));
+			 dataWrapper.setData(query.list());
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return dataWrapper;
+	}
+
+	@Override
+	public boolean loadUserLogFile(String fileUrl) {
+		String sql="load data infile "+fileUrl+"ignore into table user_log character set utf-8 fields terminated by ',' lines terminated by '/r/n' ";
+		Session session=getSession();
+		try{
+			 Query query = session.createSQLQuery(sql);
+			 System.out.println(query.getComment());
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		return true;
+	}
 
 }

@@ -14,7 +14,7 @@ public class FileOperationsUtil {
             BufferedReader br = new BufferedReader(reader);
             String str = null;
             while((str = br.readLine())!=null) {
-            	content = content + str + "\n";
+            	content = content + str.replaceAll("\t", ",") + "\n";
             }
             br.close();
             reader.close();
@@ -32,7 +32,8 @@ public class FileOperationsUtil {
 	         FileOutputStream out=new FileOutputStream(file,append);       
 	         StringBuffer sb=new StringBuffer();
 	         sb.append(content);
-	         out.write(sb.toString().getBytes("utf-8"));
+//	         out.write(sb.toString().getBytes("utf-8"));
+	         out.write(sb.toString().getBytes("gbk"));
 	         out.close();
 	     } catch(IOException ex) {
 	         System.out.println(ex.getStackTrace());

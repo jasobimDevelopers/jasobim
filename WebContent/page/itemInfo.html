@@ -54,6 +54,34 @@
 						<div class="context"><span>所属楼层</span></div>
 						<div class="cont">{{itemInfo.floorNum}}</div>
 					</div>
+					<div ng-if="itemInfo.familyAndType!=null && itemInfo.familyAndType!=''">
+						<div class="context"><span>familyAndType</span></div>
+						<div class="cont">{{itemInfo.familyAndType}}</div>
+					</div>
+					<div ng-if="itemInfo.systemType!=null && itemInfo.systemType!=''">
+						<div class="context"><span>系统类型</span></div>
+						<div class="cont">{{itemInfo.systemType}}</div>
+					</div>
+					<div ng-if="itemInfo.serviceType!=null && itemInfo.serviceType!=''">
+						<div class="context"><span>设备类型</span></div>
+						<div class="cont">{{itemInfo.serviceType}}</div>
+					</div>
+					<div ng-if="itemInfo.size!=null && itemInfo.size!=''">
+						<div class="context"><span>尺寸</span></div>
+						<div class="cont">{{itemInfo.size}}</div>
+					</div>
+					<div ng-if="itemInfo.material!=null && itemInfo.material!=''">
+						<div class="context"><span>材质</span></div>
+						<div class="cont">{{itemInfo.material}}</div>
+					</div>
+					<div ng-if="itemInfo.length!=null && itemInfo.length!=''">
+						<div class="context"><span>长度</span></div>
+						<div class="cont">{{itemInfo.length}}</div>
+					</div>
+					<div ng-if="itemInfo.area!=null && itemInfo.area!=''">
+						<div class="context"><span>面积</span></div>
+						<div class="cont">{{itemInfo.area}}</div>
+					</div>
 					<!-- <div>
 						<div class="context"><span>构件名称</span></div>
 						<div class="cont"></div>

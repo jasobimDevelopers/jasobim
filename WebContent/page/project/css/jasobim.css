@@ -50,7 +50,6 @@ font-weight: bold;
 	width:100%;
 	height:61px;
 	margin:0 auto;
-	padding-left:40px;
 }
 #projectContent{
 	width:100%;
@@ -273,3 +272,14 @@ border-radius: 4px;vertical-align: middle;}
 	height:35px;
 	float:right;
 }
+#add_valueOutPut_button{
+	margin-top: 35px;
+    padding-left: 30px;
+    background: url(../images/addButton.png) no-repeat;
+    margin-left: 950px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #1ABC9C;
+    font-family: 黑体;
+}
+    

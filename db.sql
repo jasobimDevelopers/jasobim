@@ -290,8 +290,7 @@ system_type int,#(0.安卓系统 2.苹果系统)
 version varchar(32),#(版本号)
 action_date date,
 user_id bigint(20) unsigned not null,
-project_id bigint(20) unsigned not null,
-foreign key(user_id) references user(id),
-foreign key(project_id) references project(id)
+project_id bigint(20),
+foreign key(user_id) references user(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 				 

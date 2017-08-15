@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.User;
+import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
 import com.my.spring.service.UserService;
 import com.my.spring.utils.DataWrapper;
@@ -168,6 +169,14 @@ public class UserController {
     		@RequestParam(value="token",required=true) String token) {
         return userService.getUserList(pageIndex,pageSize,user,token);
     }
+	//管理员获取用户列表
+		@RequestMapping(value="/getUserTeam", method = RequestMethod.GET)
+	    @ResponseBody
+	    public DataWrapper<List<UserPadPojo>> getUserTeam(
+	   	    		@RequestParam(value="token",required=true) String token,
+	   	    		@RequestParam(value="projectId",required=true) Long projectId) {
+	        return userService.getUserTeam(token,projectId);
+	    }
 	
 	//修改用户权限
 	@RequestMapping(value="/admin/changeUser/{userId}/type/{userType}", method = RequestMethod.POST)

@@ -370,13 +370,33 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public DataWrapper<Item> getItemById(Long id, String token) {
-		DataWrapper<Item> dataWrapper = new DataWrapper<Item>();
+	public DataWrapper<MinItemPojo> getItemById(Long id, String token) {
+		DataWrapper<MinItemPojo> dataWrapper = new DataWrapper<MinItemPojo>();
 		if(id!=null){
 			Item item=new Item();
 			item=itemDao.getItemById(id);
 			if(item!=null){
-				dataWrapper.setData(item);
+				if(item!=null){
+					MinItemPojo pojo = new MinItemPojo();
+					pojo.setArea(item.getArea());
+					pojo.setBuildingNum(item.getBuildingNum());
+					pojo.setFamilyAndType(item.getFamilyAndType());
+					pojo.setFloorNum(item.getFloorNum());
+					pojo.setHouseholdNum(item.getHouseholdNum());
+					pojo.setLength(item.getLength());
+					pojo.setLevel(item.getLevel());
+					pojo.setMaterial(item.getMaterial());
+					pojo.setName(item.getName());
+					pojo.setOffset(item.getOffset());
+					pojo.setProfessionType(item.getProfessionType());
+					pojo.setProjectName(projectDao.getById(item.getProjectId()).getName());
+					pojo.setServiceType(item.getServiceType());
+					pojo.setSize(item.getSize());
+					pojo.setSystemType(item.getSystemType());
+					pojo.setTypeName(item.getTypeName());
+					pojo.setUnitNum(item.getUnitNum());
+					dataWrapper.setData(pojo);
+				}
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 			}				

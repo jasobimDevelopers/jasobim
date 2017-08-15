@@ -46,13 +46,16 @@ font-weight: bold;
 	width:1110px;
 	margin:0 auto;
 }
+#projectDetail_head div{
+	float:left;
+}
 .bt_menu{
-	width:108px;
+	width:96px;
 	height:30px;
 	padding-top:5px;
 	float:left;
 	text-align: center;
-    margin:15px 35px;
+    margin:15px 30px;
     font-size:16px;
     font-family: 微软雅黑;
 }
@@ -626,9 +629,14 @@ font-weight: bold;
     -webkit-text-overflow: ellipsis;  
 }  
 /*返回按钮*/
-#returnProjectList{
-	background:url(../images/reback.png) no-repeat center;
-	background-size:45px 40px;
-	width:100%;
-	height:55px;
+#returnbt{
+	background:url(../images/reback.png) no-repeat -1px 4px;
+	background-size:30px 23px;
+	text-align:center;
+	width:100px;
+	height:30px;
+	padding-top:5px;
+	margin:15px 30px;
+	font-size:16px;
+	font-family:微软雅黑;
 }

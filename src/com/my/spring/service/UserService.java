@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.model.User;
+import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
 import com.my.spring.utils.DataWrapper;
 
@@ -27,5 +28,6 @@ public interface UserService {
 	DataWrapper<Void> updateUserByAdmin(User user,String token, MultipartFile file,HttpServletRequest request);
 	DataWrapper<User> FindPs(User user);
 	DataWrapper<Void> updateUserBySelf(String oldPs,String newPs,String token);
+	DataWrapper<List<UserPadPojo>> getUserTeam(String token,Long projectId);
 	
 }

@@ -1,10 +1,23 @@
 package com.my.spring.serviceImpl;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,27 +25,35 @@ import org.springframework.stereotype.Service;
 import com.my.spring.DAO.UserLogDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.UserLog;
 import com.my.spring.model.UserLogPojo;
+import com.my.spring.model.UserLogPojos;
 import com.my.spring.model.User;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.FileOperationsUtil;
+import com.my.spring.utils.ReflectTest;
 import com.my.spring.utils.SessionManager;
+import com.my.spring.utils.Writer;
+import com.my.spring.utils.Reader;
 
 
 @Service("userLogService")
 public class UserLogServiceImpl implements UserLogService {
 	@Autowired
-	UserLogDao UserLogDao;
+	UserLogDao userLogDao;
 	@Autowired
 	UserDao userDao;
 	@Autowired
 	ProjectDao projectDao;
 	@Override
-	public DataWrapper<List<UserLogPojo>> getUserLogList(Integer pageIndex, Integer pageSize, UserLog UserLog, String token) {
+	public DataWrapper<List<UserLogPojo>> getUserLogList(Integer pageIndex, Integer pageSize, UserLog UserLog, String token,String startDate,String finishedDate,String searchContent) {
 		// TODO Auto-generated method stub
+		Date dateStarts=null;
+    	Date dateFinisheds=null;
 		DataWrapper<List<UserLog>> dataWrapper = new DataWrapper<List<UserLog>>();
 		List<UserLogPojo> UserLogpojo = new ArrayList<UserLogPojo>();
 		String[] projectPart={"模型区域","图纸区域","登录区域","交底区域","预制化区域 ","紧急事项区域","通知区域","产值区域","班组信息区域"};
@@ -41,13 +62,42 @@ public class UserLogServiceImpl implements UserLogService {
 		DataWrapper<List<UserLogPojo>> dataWrapperpojo = new DataWrapper<List<UserLogPojo>>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
-				dataWrapper=UserLogDao.getUserLogList(pageSize, pageIndex,UserLog);
+			Long userId=null;
+			if(searchContent!=null && searchContent!=""){
+				User users=userDao.getByUserName(searchContent);
+				if(users!=null){
+					UserLog.setUserId(users.getId());
+				}
+			}
+			SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    		if(startDate!=null){
+    			try {
+    				dateStarts=sdfs.parse(startDate);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    		if(finishedDate!=null){
+    			try {
+					dateFinisheds=sdfs.parse(finishedDate);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+				dataWrapper=userLogDao.getUserLogList(pageSize, pageIndex,UserLog,dateStarts,dateFinisheds);
 				if(dataWrapper.getData()!=null){
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						UserLogPojo UserLogpojos=new UserLogPojo();
 						UserLogpojos.setId(dataWrapper.getData().get(i).getId());
-						UserLogpojos.setUserName(userDao.getById(dataWrapper.getData().get(i).getUserId()).getUserName());
-						UserLogpojos.setProjectName(projectDao.getById(dataWrapper.getData().get(i).getProjectId()).getName());
+						UserLogpojos.setUserName(userDao.getById(dataWrapper.getData().get(i).getUserId()).getRealName());
+						if(projectDao.getById(dataWrapper.getData().get(i).getProjectId())!=null){
+							UserLogpojos.setProjectName(projectDao.getById(dataWrapper.getData().get(i).getProjectId()).getName());
+						}
+						else{
+							UserLogpojos.setProjectName("");
+						}
 						DateFormat df2 = DateFormat.getDateTimeInstance();//可以精确到时分秒 
 	    	    		UserLogpojos.setActionDate(df2.format(dataWrapper.getData().get(i).getActionDate()));
 	    	    		UserLogpojos.setProjectPart(projectPart[dataWrapper.getData().get(i).getProjectPart()]);
@@ -79,7 +129,7 @@ public class UserLogServiceImpl implements UserLogService {
 		if(userInMemory!=null){
 			User adminInDB = userDao.getById(userInMemory.getId());
 			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
-				if(UserLogDao.deleteUserLog(idList)){
+				if(userLogDao.deleteUserLog(idList)){
 					dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
@@ -100,7 +150,7 @@ public class UserLogServiceImpl implements UserLogService {
 		if(userInMemory!=null){
 			userLog.setActionDate(new Date());
 			userLog.setUserId(userInMemory.getId());
-			if(!UserLogDao.addUserLog(userLog)) {
+			if(!userLogDao.addUserLog(userLog)) {
 				dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 			}
 		}else{
@@ -111,6 +161,188 @@ public class UserLogServiceImpl implements UserLogService {
 	}
 
 
-	
+	@Override
+	public DataWrapper<String> exportUserLog(String token, HttpServletRequest request, String dateStart,
+			String dateFinished) {
+		// TODO Auto-generated method stub
+		DataWrapper<String> dataWrapper = new DataWrapper<String>();
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null) {
+			
+				String filePath = "E:/JasoBim/BimAppDocument/tomcat_xyx_8080/webapps/jasobim" + "/out/" + "userLog/";
+				File fileDir = new File(filePath);
+		        if (!fileDir.exists()) {
+		            fileDir.mkdirs();
+		        }
+		        String tempFile = filePath + "userlog_temp.csv";
+		        String file = filePath + "userlog.csv";
+		        String header = "真实姓名,"
+		        		+ "功能模块,"
+		        		+ "版本号,"
+		        		+ "访问量,"
+		        		+ "系统类型,"
+		        		+ "项目名称";
+		        FileOperationsUtil.deleteFile(tempFile);
+		        FileOperationsUtil.deleteFile(file);
+		        if (userLogDao.exportUserLog(tempFile,dateStart,dateFinished)) {
+					String content = FileOperationsUtil.readFile(tempFile);
+					String newContent = header + "\n" + content;
+					FileOperationsUtil.writeFile(file, newContent, false);
+					dataWrapper.setData("out/" + "userLog/" +"/userlog.csv");
+				} else {
+					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}
+			
+			
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+			
+		return dataWrapper;
+	}
 
+
+	@Override
+	public DataWrapper<List<UserLogPojos>> getUserLogCountSum(String token,String startTime,String finishedTime,Long projectId,Integer projectPart,Integer systemType) {
+		DataWrapper<List<UserLogPojos>> dataWrapper = new DataWrapper<List<UserLogPojos>>();
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null){
+			dataWrapper=userLogDao.getUserLogLists(startTime,finishedTime,projectId,projectPart,systemType);
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return dataWrapper;
+	}
+
+
+	@SuppressWarnings("static-access")
+	@Override
+	public DataWrapper<String> writeUserLogInFile(UserLog userLog) {
+		// TODO Auto-generated method stub
+		DataWrapper<String> dataWrapper = new DataWrapper<String>();
+		userLog.setActionDate(new Date());
+		String fileUrl="C:/filetest/newfile.txt";
+		File file = new File("C:/filetest/newfile.txt");
+		ReflectTest reflect = null;
+		List<String> str = null;
+		try {
+			str = reflect.reflectTest(userLog);
+		} catch (NoSuchMethodException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalArgumentException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InvocationTargetException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String content = "";
+		for(int i=0;i<str.size();i++){
+			if(content.equals("")){
+				content=content+str.get(i);
+			}else{
+				content+=","+str.get(i);
+			}
+		}
+		try (FileOutputStream fop = new FileOutputStream(file,true)) {
+
+		   // if file doesn't exists, then create it
+		   if (!file.exists()) {
+		    file.createNewFile();
+		   }
+		   else{
+			   if(file.length() != 0)
+				   content="\r\n"+content;  
+		   } 
+		   // get the content in bytes
+		   byte[] contentInBytes = content.getBytes();
+
+		   fop.write(contentInBytes);
+		   fop.flush();
+		   fop.close();
+		   System.out.println("Done");
+
+		  } catch (IOException e) {
+		   e.printStackTrace();
+		  }
+		dataWrapper.setData(fileUrl);
+		return dataWrapper;
+	}
+
+
+	@Override
+	public DataWrapper<List<UserLog>> readUserLogFromFile() {
+	   DataWrapper<List<UserLog>> dataWrapper = new DataWrapper<List<UserLog>>();
+       
+       List<UserLog> infoBeans=new ArrayList<UserLog>();
+       String fileUrl="C:/filetest/newfile.csv";
+       try {
+           Scanner sc = null;
+           File file = new File(fileUrl);
+           if (file.isFile() && file.exists()){ //判断文件是否存在
+        	   FileInputStream inputStream = new FileInputStream(fileUrl);
+        	   sc = new Scanner(inputStream, "UTF-8");
+               while(sc.hasNextLine()){
+            	   String line = sc.nextLine();
+            	   UserLog infoBean=new UserLog();
+                   String[] s=line.split(",");
+                   infoBean.setUserId(Long.valueOf(s[1]));
+                   infoBean.setProjectId(Long.valueOf(s[2]));
+                   infoBean.setProjectPart(Integer.valueOf(s[3]));
+                   infoBean.setVersion(s[4]);
+                   SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                   infoBean.setActionDate(sdf.parse(s[5]));
+                   infoBean.setSystemType(Integer.valueOf(s[6]));  
+                   System.out.println(line);
+                   infoBeans.add(infoBean);
+               }
+               //////////////////////批量存入insert into user_log infoBeans
+               ////////////////
+               if(userLogDao.addUserLogList(infoBeans)){
+            	   dataWrapper.setCallStatus(CallStatusEnum.SUCCEED);
+               }else{
+            	   dataWrapper.setCallStatus(CallStatusEnum.FAILED);
+               }
+               ////////////////
+               ///////////
+               /////////////////////load file into tables
+               if(userLogDao.loadUserLogFile(fileUrl)){
+            	   dataWrapper.setCallStatus(CallStatusEnum.SUCCEED);
+               }else{
+            	   dataWrapper.setCallStatus(CallStatusEnum.FAILED);
+               }
+               
+               if(sc.ioException() != null)
+               {
+            	   throw sc.ioException();
+
+               }
+               inputStream.close();
+               sc.close();
+              /* InputStreamReader read = new InputStreamReader(
+                       new FileInputStream(file), encoding);//考虑到编码格式
+               BufferedReader bufferedReader = new BufferedReader(read);
+               String lineTxt = null;*/
+               /*while ((lineTxt = bufferedReader.readLine()) != null) {
+            	  
+               }
+               read.close();*/
+           } else {
+               System.out.println("找不到指定的文件");
+           }
+       } catch (Exception e) {
+           System.out.println("读取文件内容出错");
+           e.printStackTrace();
+       } 
+       //Reader reader=new Reader(fileUrl);
+      // Writer writer=new Writer(fileUrl);
+       //new Thread(reader).start();
+       //new Thread(writer).start();
+	   dataWrapper.setData(infoBeans);    
+	   return dataWrapper;
+	}
 }

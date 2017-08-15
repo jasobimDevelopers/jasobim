@@ -114,7 +114,6 @@ public class DuctController {
             @RequestParam(value = "dateStart",required = false) String dateStart,
             @RequestParam(value = "dateFinished",required = false) String dateFinished,
             HttpServletRequest request){
-    	 
         return ductService.exportDuct(projectId, token, request, dateStart, dateFinished);
     }
 }

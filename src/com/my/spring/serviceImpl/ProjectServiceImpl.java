@@ -299,16 +299,13 @@ public class ProjectServiceImpl implements ProjectService {
 								Files newfile=fileService.uploadFile(path, modelFile[i],fileType,request);
 								if(i!=0){
 									modelid=modelid+","+newfile.getId();
-									modelName=modelName+","+newfile.getRealName().split("_")[0];
 									isIos=isIos+","+newfile.getRealName().split("_")[1];
 								}else{
 									modelid=newfile.getId().toString();
-									modelName=newfile.getRealName().split("_")[0];
 									isIos=newfile.getRealName().split("_")[1];
 								}
 							}
 							project.setModelId(modelid);
-							project.setModelPart(modelName);
 							project.setIsIos(isIos);
 						}
 						if(picFile.length>=0){

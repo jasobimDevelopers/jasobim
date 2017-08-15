@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -22,6 +23,23 @@ import com.my.spring.utils.MD5Util;
 public class UserDaoImpl extends BaseDao<User> implements UserDao {
 
 	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> getByUserNames(String userName) {
+		// TODO Auto-generated method stub
+		List<User> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.like("userName",'%'+userName+'%'));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+			return ret;
+		}
+		return null;
+	}
 	@Override
 	public User getByUserName(String userName) {
 		// TODO Auto-generated method stub
@@ -177,6 +195,49 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 			users.setErrorCode(ErrorCodeEnum.Error);
 		}
 		return users;
+	}
+
+	@Override
+	public DataWrapper<List<User>> getUserTeam(Integer pageSize, Integer pageIndex, Long projectId) {
+		DataWrapper<List<User>> dataWrapper = new DataWrapper<List<User>>();
+        List<User> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        
+        if(projectId!=null){
+        	criteria.add(Restrictions.like("projectList", "%" + projectId + "%"));
+        }
+        criteria.add(Restrictions.eq("userType",3));
+        if (pageSize == null) {
+			pageSize = 10;
+		}
+        if (pageIndex == null) {
+			pageIndex = 1;
+		}
+        
+        // 取总页数
+        criteria.setProjection(Projections.rowCount());
+        int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
+        int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
+
+        // 真正取值
+        criteria.setProjection(null);
+        if (pageSize > 0 && pageIndex > 0) {
+            criteria.setMaxResults(pageSize);// 最大显示记录数
+            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        dataWrapper.setData(ret);
+        dataWrapper.setTotalNumber(totalItemNum);
+        dataWrapper.setCurrentPage(pageIndex);
+        dataWrapper.setTotalPage(totalPageNum);
+        dataWrapper.setNumberPerPage(pageSize);
+
+        return dataWrapper;
 	}
 
 }

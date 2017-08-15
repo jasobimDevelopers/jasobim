@@ -46,9 +46,7 @@ public class ProjectController {
             HttpServletRequest request,
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value = "modelFile", required = false) MultipartFile[] modelFile,
-            @RequestParam(value = "picFile", required = false) MultipartFile[] picFile,
-            @RequestParam(value = "urlFlag",required = false) String[] urlFlag) {
-    	
+            @RequestParam(value = "picFile", required = false) MultipartFile[] picFile) {
         return projectService.updateProject(project,token,modelFile,picFile,request);
     }
 

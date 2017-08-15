@@ -1,7 +1,7 @@
 <div ng-controller="HeaderController">
-	 <nav class="navbar">
+  <nav class="navbar">
 	 
-	 	<div id="head_div" class="collapse navbar-collapse navbar-left navbar-inverse navbar-fixed-top">
+	 	<div id="head_div" class="collapse navbar-collapse navbar-left navbar-inverse navbar-fixed-top"> 
 		 	<div class="container">
 			 	<div id="content">
 		 			<div id="imagelogo">
@@ -9,7 +9,7 @@
 					</div>
 			 		<ul class="nav navbar-nav">
 		                    <li class= "collapse-li-main" ng-repeat="headerItem in headerItems">
-		                    	<a ng-href="{{headerItem.page}}" id="menutext">{{headerItem.name}}</a>
+		                    	<a ng-click="goPage(headerItem.page,$index)"id="menutext">{{headerItem.name}}</a>
 		                    </li>
 		            </ul>
 		             <div id="portrait">
@@ -18,6 +18,6 @@
 			 	</div>
 		 	</div>
 	 	</div>
-	 </nav>
+	 </nav> 
 </div> 
  

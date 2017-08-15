@@ -95,6 +95,7 @@ public class QuestionServiceImpl implements QuestionService {
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+   
         return dataWrapper;
     }
 
