@@ -1,0 +1,31 @@
+@charset "utf-8";
+/* CSS Document */
+#include_bodys_userLog{
+	width:830px;
+	margin:0 auto;
+}
+.li_show_hide_userLog{
+    height: 20px;
+    width: 50px;
+    background: url(../images/menuItem1.png) no-repeat;
+    background-position: 25px 9px;
+}
+#type_div_userlog{
+    width: 177px;
+    text-align: center;
+}
+#leftss_data{
+	width: 17.5%;
+    height: 100%;
+    border-right: 1px solid #CCCCCC;
+}
+#name_divs{
+	margin-left:44px;	
+}
+#type_div_userlogs{
+    width: 177px;
+    text-align: center;
+}
+#state_divs{
+    margin-left: 50px;
+}
