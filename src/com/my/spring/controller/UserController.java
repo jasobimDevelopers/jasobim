@@ -47,7 +47,6 @@ public class UserController {
     		HttpServletRequest request,
     		@RequestParam(value = "file", required = false) MultipartFile file,
     		@RequestParam(value="token",required=true) String token) {
-//		MultipartFile file=null;
          return userService.addUser(user,token,file,request);
     }
 	@RequestMapping(value="/findUserLike", method = RequestMethod.POST)
@@ -61,7 +60,6 @@ public class UserController {
 	@RequestMapping(value="/login", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<UserPojo> Login(
-    		HttpServletRequest request,
     		@RequestParam(value="username",required=true) String username,
     		@RequestParam(value="password",required=true) String password,
     		@RequestParam(value="systemId",required=false) Integer systemId) {

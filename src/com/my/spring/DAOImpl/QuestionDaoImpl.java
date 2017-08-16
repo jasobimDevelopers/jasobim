@@ -16,6 +16,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,6 +112,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         Session session = getSession();
         Criteria criteria = session.createCriteria(Question.class);
         ///////
+        criteria.addOrder(Order.desc("questionDate"));
         if(projectList!=null && !projectList.equals("null")){
         	String[] ss =projectList.split(",");
             Disjunction dis = Restrictions.disjunction();
