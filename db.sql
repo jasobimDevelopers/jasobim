@@ -293,4 +293,30 @@ user_id bigint(20) unsigned not null,
 project_id bigint(20),
 foreign key(user_id) references user(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table production_percent(
+    id serial primary key,
+	project_id BIGINT(20),
+	user_id BIGINT(20),
+    building_num varchar(20),
+    profession_type varchar(128),
+    part_name varchar(32),
+    plan_num DOUBLE,#0 admin 1 user
+    finished_num DOUBLE,#0 admin 1 user
+    some_thing varchar(64),
+    date date
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table production(
+    id serial primary key,
+	project_id BIGINT(20),
+	user_id BIGINT(20),
+    building_num varchar(20),
+    profession_type varchar(128),
+    part_name varchar(32),
+    plan_num int,#0 admin 1 user
+    finished_num int,#0 admin 1 user
+    some_thing varchar(64),
+    date date
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 				 

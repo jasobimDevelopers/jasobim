@@ -76,6 +76,9 @@ public class NavigationController {
     public String userSuggesttionPage(){
     	return "user_home";
     }
-    
+    @RequestMapping(value="/productionList")
+    public String productionPage(){
+        return "user_home";
+    }
     
 }

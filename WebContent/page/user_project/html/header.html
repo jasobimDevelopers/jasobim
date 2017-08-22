@@ -2,12 +2,13 @@
 	 
 	 	<div id="headBackground">
 	 	</div>
+	 	
 	 	<div id="home_head">
 		 	<div class="container">
 			 	<div id="content">
 			 		<ul id="head_home_ul" >
 		                    <li ng-repeat="headerItem in headerItems" ng-click="headCssChange($index)" class="head_li">
-		                        <a href="{{headerItem.page}}" id="menutext">{{headerItem.name}}</a>
+		                        <a ng-click="goPage(headerItem.page,$index)" id="menutext">{{headerItem.name}}</a>
 		                    </li>
 		            </ul>
 		            <div id="portrait">
@@ -15,6 +16,43 @@
 				    </div>
 			 	</div>
 		 	</div>
-	 	</div>
+	 	</div> 
+	 	<!-- <div id="home_head">
+		 	<div class="container">
+			<ul class="menu">
+				<li>
+					<a ng-click="goPage(headerItems[0].page)">项目管理</a>
+				</li>
+				<li>
+					<a ng-click="goPage(headerItems[1].page)">质量安全管理</a>
+				</li>
+				<li>
+					<a ng-click="goPage(headerItems[2].page)">二维码专区</a>
+				</li>
+				<li>
+					<a ng-click="goPage(headerItems[3].page)">生产进度管理</a>
+					<ul class="submenu">
+						<li class="li_child"><a href="#"><span class="production_text">主楼</span></a></li>
+						<li class="li_child"><a href="#"><span class="production_text">主楼地库</span></a></li>
+						<li class="li_child"><a href="#"><span class="production_text">人防地库</span></a></li>
+					</ul>
+				</li>
+				<li>
+					<a ng-click="goPage(headerItems[4].page)">意见反馈</a>
+				</li>
+				<li>
+					<a ng-click="goPage(headerItems[5].page)">关于我们</a>
+				</li>
+				<li>
+					 <div id="portrait">
+					 	<div><a href="#"><img src="{{userIcon}}" id="portrait_image"/></a></div>
+					 	<div><span>{{userName}}</span></div>
+					 	<div><a ng-click="logout()" class="glyphicon glyphicon-off" id="out_login"></a></div>
+					 </div>
+				</li>
+			</ul>
+			
+		</div>
+	</div> -->
 	 	
 </div> 

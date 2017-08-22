@@ -20,6 +20,7 @@ public class UserLog {
 	private String version;
 	private Date actionDate;
 	private Integer systemType;//0.苹果系统  1.安卓系统
+	private Long fileId;//////模块区域下的文件id
 	
 	@Id
     @GeneratedValue
@@ -45,6 +46,15 @@ public class UserLog {
 	}
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
+	}
+	
+	@Basic
+	@Column(name = "file_id")
+	public Long getFileId() {
+		return fileId;
+	}
+	public void setFileId(Long fileId) {
+		this.fileId = fileId;
 	}
 	@Basic
 	@Column(name = "project_part")

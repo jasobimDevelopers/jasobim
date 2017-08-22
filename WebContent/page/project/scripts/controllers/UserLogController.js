@@ -63,7 +63,7 @@ function UserLogController($scope,UserLogService) {
   $scope.projectLists="";
   $scope.projectPartList=["模型区域","图纸区域","登录区域","交底区域","预制化区域","紧急事项区域","通知区域","产值区域","班组信息区域"];
   $scope.phoneSystem=["苹果系统","安卓系统"];
-  $scope.userLogTitles=["序号","用户名","项目名称","功能区域","操作时间","系统类型","版本","操作"];
+  $scope.userLogTitles=["序号","用户名","项目名称","功能区域","操作时间","系统类型","文件内容","版本","操作"];
   	//////搜索
   $scope.UserLogFind = function(){
  	 $scope.currentPage = 1;

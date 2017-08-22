@@ -16,8 +16,10 @@ import com.my.spring.model.DuctLog;
 import com.my.spring.model.DuctPojo;
 import com.my.spring.model.DuctPojos;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
 import com.my.spring.service.DuctService;
 import com.my.spring.service.FileService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.FileOperationsUtil;
 import com.my.spring.utils.MD5Util;
@@ -52,6 +54,8 @@ public class DuctServiceImpl implements DuctService {
     UserDao userDao;
     @Autowired
     FileService fileSerivce;
+    @Autowired
+    UserLogService userLogSerivce;
     @Override
     public DataWrapper<Void> addDuct(Duct Duct,String token) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -140,6 +144,15 @@ public class DuctServiceImpl implements DuctService {
     	DataWrapper<List<Duct>> ductListst=new  DataWrapper<List<Duct>>();
     	User userInMemory = SessionManager.getSession(token);
     	if(userInMemory!=null){
+    		if(duct.getId()!=null && duct.getProjectId()!=null){
+        		UserLog userLog = new UserLog();
+        		userLog.setActionDate(new Date());
+        		userLog.setFileId(duct.getId());
+        		userLog.setProjectPart(4);
+        		userLog.setUserId(userInMemory.getId());
+        		userLog.setVersion("-1");
+        		userLogSerivce.addUserLog(userLog, token);
+        	}
     		SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     		if(dateStart!=null){
     			try {

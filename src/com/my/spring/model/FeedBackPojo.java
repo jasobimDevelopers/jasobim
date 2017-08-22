@@ -1,8 +1,5 @@
 package com.my.spring.model;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-@Entity
-@Table(name = "feedback")
+
 public class FeedBackPojo {
 	private Long id;
 	private String userName;

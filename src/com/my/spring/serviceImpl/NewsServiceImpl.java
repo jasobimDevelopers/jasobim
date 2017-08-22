@@ -9,15 +9,17 @@ import com.my.spring.model.Files;
 import com.my.spring.model.News;
 import com.my.spring.model.NewsPojo;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
 import com.my.spring.service.FileService;
 import com.my.spring.service.NewsService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,8 @@ public class NewsServiceImpl implements NewsService {
     UserDao userDao;
     @Autowired
     FileService fileService;
+    @Autowired
+    UserLogService userLogSerivce;
     /*private String filePath = "/files";
     private Integer fileType=3;*/
     @Override
@@ -108,6 +112,15 @@ public class NewsServiceImpl implements NewsService {
     	DataWrapper<List<News>> dataWrapper = new DataWrapper<List<News>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
+        	if(News.getId()!=null){
+        		UserLog userLog = new UserLog();
+        		userLog.setActionDate(new Date());
+        		userLog.setFileId(News.getId());
+        		userLog.setProjectPart(6);
+        		userLog.setUserId(userInMemory.getId());
+        		userLog.setVersion("-1");
+        		userLogSerivce.addUserLog(userLog, token);
+        	}
 				dataWrapper=NewsDao.getNewsList(pageIndex,pageSize,News);
 				if(dataWrapper.getData()!=null){
 					List<NewsPojo> NewsPojoList = new ArrayList<NewsPojo>();

@@ -2,6 +2,7 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ValueOutputDao;
+import com.my.spring.model.News;
 import com.my.spring.model.ValueOutput;
 import com.my.spring.model.ValueOutputPojo;
 import com.my.spring.utils.DaoUtil;
@@ -207,5 +208,11 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
         dataWrapper.setNumberPerPage(pageSize);
 
         return dataWrapper;
+	}
+
+	@Override
+	public ValueOutput getById(Long fileId) {
+		// TODO Auto-generated method stub
+		return get(fileId);
 	}
 }

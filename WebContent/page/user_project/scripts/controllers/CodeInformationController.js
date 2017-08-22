@@ -102,7 +102,7 @@ function CodeInformationController($scope,CodeInformationService) {
 		      current:iCurrent,
 
 		      backFn:function(p){
-		    	  $scope.getProjectPaperList($scope.projectid,pageSize,p,paper);
+		    	  $scope.getCodePapers($scope.projectid,pageSize,p,paper);
 		      }
 		  });
 	  }

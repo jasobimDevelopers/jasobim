@@ -8,6 +8,7 @@ public class UserLogPojo {
 	private String version;
 	private String actionDate;
 	private String systemType;//0.苹果系统  1.安卓系统
+	private String fileName;
 	
 	public Long getId() {
 		return id;
@@ -55,6 +56,12 @@ public class UserLogPojo {
 	}
 	public void setSystemType(String systemType) {
 		this.systemType = systemType;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	
 

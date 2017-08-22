@@ -1,0 +1,55 @@
+<div id="production" ng-controller="ProductionController">
+	<div id="select_content">
+		<div id="select_content_item" ng-repeat="item_name in item_name_list"><span>{{item_name}}</span></div>
+	</div>
+	<div id="addcontent">
+        <div id="addhead">
+        	<div id="addusertitle">
+        		<span>当前所在项目</span>
+        		<select type="text" ng-model="findUserInfo.userType" id="inputrole" ng-options="o.id as o.name for o in project_name_list">
+        		</select>
+        	</div>
+        	<div id="add_production_bt"><a>数据录入入口</a></div>
+        </div>
+        <div id="input_production_body">
+        	<div id="production_content1">
+        		<div><span>主楼生产进度表格：</span></div>
+        		<table class="table-striped table table-bordered">
+						<tbody>
+							<tr>
+								<th ng-repeat="userLogTitle in userLogTitles">分部工程</th>
+								<th>1号楼电气安装</th>
+								<th>1号楼给排水安装</th>
+								<th>公共项</th>
+							</tr>
+							<tr ng-repeat = "userLog in userLogList">
+							    <td>{{$index+1}}</td>
+							    <td>{{userLog.userName}}</td>
+							    <td>{{userLog.projectName}}</td>
+							    <td>{{userLog.projectPart}}</td>
+							    <td>{{userLog.actionDate}}</td>
+							    <td>{{userLog.systemType}}</td>
+							    <td>{{userLog.fileName}}</td>
+							    <td>{{userLog.version}}</td>
+					 		    <td> 
+							    	<button id="deletebutton" ng-click="deleteUserLog(userLog.id)">
+				                    </button>
+				                   <!--  <input type="checkbox" ng-click="setUserLogId(userLog.id)" class="checkBoxItem"> -->
+		                        </td>
+							</tr>
+						</tbody>
+				</table>
+        	</div>
+        	<div id="production_content2">
+        		<div><span>人防地库进度表格：</span></div>
+        		<div id="zhulou_content"><span>主楼表格</span></div>
+        	</div>
+        	<div id="production_content3">
+        		<div><span>主楼地库进度表格：</span></div>
+        		<div id="zhulou_content"><span>主楼表格</span></div>
+        	</div>
+            
+        </div>
+	</div>
+</div>
+	

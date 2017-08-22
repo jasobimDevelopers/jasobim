@@ -60,7 +60,6 @@ public class FileServiceImpl implements FileService  {
             files.setFileType(fileType);
             files.setRealName(file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf(".")));
             fileDao.addFiles(files);
-            
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -476,15 +476,16 @@ public class ProjectServiceImpl implements ProjectService {
 							if(project.getTeamList()!=null){
 								String[] teamNames=project.getTeamList().split(",");
 								String[] teamIds=project.getTeamId().split(",");
-								if(userInMemory.getWorkName().equals("项目负责人")){
+								if(userInMemory.getWorkName().equals("安装负责人")){
 									projectPojo.setTeamList(teamNames);
 									projectPojo.setTeamId(teamIds);
 								}else{
-									String[] teamname=new String[1];
-									teamname[0]=teamNames[userInMemory.getTeamId()];
-									
-									String[] teamId=new String[1];
-									teamId[0]=userInMemory.getTeamId().toString();
+									String[] teamname=userInMemory.getTeamInformation().split(",");								
+									projectPojo.setTeamList(teamname);
+									String[] teamId=new String[teamname.length];
+									for(int j=0;j<teamname.length;j++){
+										teamId[j]=String.valueOf(j);
+									}
 									projectPojo.setTeamId(teamId);
 								}
 								

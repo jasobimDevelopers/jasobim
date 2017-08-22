@@ -46,7 +46,7 @@ public final class ZxingCode {
   public static void main(String[] args) { 
 	try {
 	        String content = "http://mp.weixin.qq.com/s?__biz=MzI2MzU0NDkzNQ==&mid=100000007&idx=1&sn=9a85a9cffc294427379036356657a0a4&chksm=6abb080f5dcc8119c363ae5b0e07360b063b162222f9721cabda130eade63f5ca69dfc39f331#rd"; 
-	        String path = "E:/codeInformation";
+	        String path = "C:/Users/Han/Desktop/e.pdf";
 	        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 	        @SuppressWarnings("rawtypes")
 			Map hints = new HashMap();  

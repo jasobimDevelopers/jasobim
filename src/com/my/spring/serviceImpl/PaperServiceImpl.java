@@ -14,8 +14,10 @@ import com.my.spring.model.Files;
 import com.my.spring.model.Paper;
 import com.my.spring.model.PaperPojo;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
 import com.my.spring.service.FileService;
 import com.my.spring.service.PaperService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
@@ -44,6 +46,8 @@ public class PaperServiceImpl implements PaperService {
     FileDao fileDao;
     @Autowired
     FileService fileService;
+    @Autowired
+    UserLogService userLogSerivce;
     private String filePath = "files";
     private Integer fileType=1;
     /*
@@ -262,7 +266,15 @@ public class PaperServiceImpl implements PaperService {
     	DataWrapper<List<Paper>> dataWrapper = new DataWrapper<List<Paper>>();
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
-	        		
+		        	if(paper.getId()!=null && projectId!=null){
+		        		UserLog userLog = new UserLog();
+		        		userLog.setActionDate(new Date());
+		        		userLog.setFileId(paper.getId());
+		        		userLog.setProjectPart(1);
+		        		userLog.setUserId(userInMemory.getId());
+		        		userLog.setVersion("-1");
+		        		userLogSerivce.addUserLog(userLog, token);
+		        	}
 	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper,content);
 	        		for(int i=0;i<dataWrapper.getData().size();i++){
 	        			PaperPojo papernew=new PaperPojo();
@@ -308,7 +320,13 @@ public class PaperServiceImpl implements PaperService {
     	DataWrapper<List<Paper>> dataWrapper = new DataWrapper<List<Paper>>();
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
-	        		String projectIdList=userInMemory.getProjectList();
+	        	String projectIdList=null;
+	        	if(userInMemory.getUserType()==3){
+	        		projectIdList=userInMemory.getProjectList();
+	        	}
+	        	if(projectIdList==null){
+	        		projectIdList="79";
+	        	}	
 	        		dataWrapper= paperDao.getPaperLists(projectIdList,pageSize, pageIndex,paper);
 	        		for(int i=0;i<dataWrapper.getData().size();i++){
 	        			PaperPojo papernew=new PaperPojo();
@@ -330,7 +348,6 @@ public class PaperServiceImpl implements PaperService {
 	        			   	}else{
 	        			   		filePath="/codeFiles";
 	        			   	}
-	        			   	
 	        			   	String imgpath=rootPath+filePath;
 	        			   	try{
 	        				MultiFormatWriter multiFormatWriter = new MultiFormatWriter();

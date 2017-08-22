@@ -15,8 +15,10 @@ import com.my.spring.model.Question;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.model.QuestionPojo;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
 import com.my.spring.service.FileService;
 import com.my.spring.service.QuestionService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
@@ -24,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +52,8 @@ public class QuestionServiceImpl implements QuestionService {
     FileDao fileDao;
     @Autowired
     FileService fileService;
+    @Autowired
+    UserLogService userLogService;
     private String filePath = "files";
     private Integer fileType=2;
     @Override
@@ -59,7 +63,7 @@ public class QuestionServiceImpl implements QuestionService {
         if (userInMemory != null) {
         	question.setUserId(userInMemory.getId());
         	if(question.getQuestionDate()==null){
-				question.setQuestionDate(new Date(System.currentTimeMillis()));
+				question.setQuestionDate(new Date());
 			}
         	if(question.getState()==null){
         		question.setState(0);
@@ -299,6 +303,15 @@ public class QuestionServiceImpl implements QuestionService {
     	if(userInMemory!=null){
     		Long[] userIdList=null;
 			if(content!=null){
+				if(question.getId()!=null){
+	        		UserLog userLog = new UserLog();
+	        		userLog.setActionDate(new Date());
+	        		userLog.setFileId(question.getId());
+	        		userLog.setProjectPart(5);
+	        		userLog.setUserId(userInMemory.getId());
+	        		userLog.setVersion("-1");
+	        		userLogService.addUserLog(userLog, token);
+	        	}
 				//////问题类型搜索
 				if("安全".contains(content))
 				{

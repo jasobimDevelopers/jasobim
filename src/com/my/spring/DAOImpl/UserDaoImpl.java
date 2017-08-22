@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -99,7 +100,12 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         }
          
         if(user.getTeamInformation()!=null && !user.getTeamInformation().equals("")){
-        	criteria.add(Restrictions.eq("teamInformation", user.getTeamInformation()));
+        	String[] teamInformation=user.getTeamInformation().split(",");
+        	 Disjunction dis = Restrictions.disjunction();
+             for (int i = 0; i < teamInformation.length; i++) {
+                 dis.add(Restrictions.eq("teamInformation", teamInformation[i]));
+             }
+             criteria .add(dis);
         }
         if(user.getProjectList()!=null){
         	criteria.add(Restrictions.like("projectList", "%" + user.getProjectList() + "%"));

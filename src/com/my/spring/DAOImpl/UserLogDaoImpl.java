@@ -210,7 +210,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 
 	@Override
 	public boolean loadUserLogFile(String fileUrl) {
-		String sql="load data infile "+fileUrl+"ignore into table user_log character set utf-8 fields terminated by ',' lines terminated by '/r/n' ";
+		String sql="load data infile "+"'"+fileUrl+"'"+" ignore into table user_log character set utf-8 fields terminated by ',' lines terminated by '/r/n' ";
 		Session session=getSession();
 		try{
 			 Query query = session.createSQLQuery(sql);

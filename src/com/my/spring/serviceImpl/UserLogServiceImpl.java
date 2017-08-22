@@ -23,7 +23,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.my.spring.DAO.UserLogDao;
+import com.my.spring.DAO.ValueOutputDao;
+import com.my.spring.DAO.VideoDao;
+import com.my.spring.DAO.DuctDao;
+import com.my.spring.DAO.ItemDao;
+import com.my.spring.DAO.NewsDao;
+import com.my.spring.DAO.PaperDao;
 import com.my.spring.DAO.ProjectDao;
+import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
@@ -49,6 +56,21 @@ public class UserLogServiceImpl implements UserLogService {
 	UserDao userDao;
 	@Autowired
 	ProjectDao projectDao;
+	@Autowired
+	PaperDao paperDao;
+	@Autowired
+	ItemDao itemDao;
+	@Autowired
+	DuctDao ductDao;
+	@Autowired
+	ValueOutputDao valueOutputDao;
+	@Autowired
+	NewsDao newsDao;
+	@Autowired
+	QuestionDao questionDao;
+	@Autowired
+	VideoDao videoDao;
+	
 	@Override
 	public DataWrapper<List<UserLogPojo>> getUserLogList(Integer pageIndex, Integer pageSize, UserLog UserLog, String token,String startDate,String finishedDate,String searchContent) {
 		// TODO Auto-generated method stub
@@ -58,7 +80,7 @@ public class UserLogServiceImpl implements UserLogService {
 		List<UserLogPojo> UserLogpojo = new ArrayList<UserLogPojo>();
 		String[] projectPart={"模型区域","图纸区域","登录区域","交底区域","预制化区域 ","紧急事项区域","通知区域","产值区域","班组信息区域"};
 		//#0.模型区域 1.图纸区域 2.登录区域 3.交底区域 4.预制化区域 5.其他
-		String[] systemName={"苹果系统","安卓系统"};
+		String[] systemName={"苹果系统","安卓系统",""};
 		DataWrapper<List<UserLogPojo>> dataWrapperpojo = new DataWrapper<List<UserLogPojo>>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
@@ -90,6 +112,41 @@ public class UserLogServiceImpl implements UserLogService {
 				if(dataWrapper.getData()!=null){
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						UserLogPojo UserLogpojos=new UserLogPojo();
+						if(dataWrapper.getData().get(i).getProjectPart()==0){
+							if(dataWrapper.getData().get(i).getFileId()!=null){
+								UserLogpojos.setFileName(itemDao.getItemById(dataWrapper.getData().get(i).getFileId()).getName());
+							}
+						}
+						if(dataWrapper.getData().get(i).getProjectPart()==1){
+							if(dataWrapper.getData().get(i).getFileId()!=null){
+								UserLogpojos.setFileName(paperDao.getById(dataWrapper.getData().get(i).getFileId()).getOriginName());
+							}
+						}
+						if(dataWrapper.getData().get(i).getProjectPart()==3){
+							if(dataWrapper.getData().get(i).getFileId()!=null){
+								UserLogpojos.setFileName(videoDao.getById(dataWrapper.getData().get(i).getFileId()).getData().getOriginName());
+							}
+						}
+						if(dataWrapper.getData().get(i).getProjectPart()==4){
+							if(dataWrapper.getData().get(i).getFileId()!=null){
+								UserLogpojos.setFileName(ductDao.getDuctById(dataWrapper.getData().get(i).getFileId()).getName());
+							}
+						}
+						if(dataWrapper.getData().get(i).getProjectPart()==5){
+							if(dataWrapper.getData().get(i).getFileId()!=null){
+								UserLogpojos.setFileName(questionDao.getById(dataWrapper.getData().get(i).getFileId()).getName());
+							}
+						}
+						if(dataWrapper.getData().get(i).getProjectPart()==6){
+							if(dataWrapper.getData().get(i).getFileId()!=null){
+								UserLogpojos.setFileName(newsDao.getById(dataWrapper.getData().get(i).getFileId()).getTitle());
+							}
+						}
+						if(dataWrapper.getData().get(i).getProjectPart()==7){
+							if(dataWrapper.getData().get(i).getFileId()!=null){
+								UserLogpojos.setFileName(valueOutputDao.getById(dataWrapper.getData().get(i).getFileId()).getOthers());
+							}
+						}
 						UserLogpojos.setId(dataWrapper.getData().get(i).getId());
 						UserLogpojos.setUserName(userDao.getById(dataWrapper.getData().get(i).getUserId()).getRealName());
 						if(projectDao.getById(dataWrapper.getData().get(i).getProjectId())!=null){
@@ -188,7 +245,7 @@ public class UserLogServiceImpl implements UserLogService {
 					String content = FileOperationsUtil.readFile(tempFile);
 					String newContent = header + "\n" + content;
 					FileOperationsUtil.writeFile(file, newContent, false);
-					dataWrapper.setData("out/" + "userLog/" +"/userlog.csv");
+					dataWrapper.setData("out/" + "userLog/" +"userlog.csv");
 				} else {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}

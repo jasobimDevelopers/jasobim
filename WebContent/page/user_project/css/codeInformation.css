@@ -8,21 +8,32 @@
 	float:left;
 }
 .videoCode,.paperCode{
-	margin:0 18px;
-	width:125px;
+	width:153px;
 }
 .videoCode div,.paperCode div{
 	float:left;
 }
-#codecontent div{
+
+.paperCodes{
+	height:215px;
+	width:125px;
+}
+.paperCodes div{
 	float:left;
 }
-
 .addcodehead{
 	width:844px;
 	height:50px;
 	margin-left:65px;
 	border-bottom:1px solid #999;
+}
+#codecontent1s{
+	width:1000px;
+	height:451px;
+}
+#codecontentss{
+	width:1000px;
+	height:451px;
 }
 #codebody,#codeOfbody1{
 	margin-left:75px;
@@ -30,4 +41,23 @@
 }
 #codecontent2{
 	margin-top:100px;
+	width:1000px;
+	height:300px;
 }
+#codecontent2 div{
+	float:left;
+}
+#returnpaperlist{
+	padding-top: 16px;
+    margin-left: 730px;
+    font-size: 16px;
+    font-family: 微软雅黑;
+}
+/*生产进度管理css*/
+#input_production_body{
+	margin: 20px auto;
+    text-align: center;
+    height: 468px;
+    width: 600px;
+}
+   

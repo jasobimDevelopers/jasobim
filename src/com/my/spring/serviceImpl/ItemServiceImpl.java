@@ -22,8 +22,10 @@ import com.my.spring.model.Project;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ItemService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.SessionManager;
@@ -59,6 +61,8 @@ public class ItemServiceImpl implements ItemService {
     BuildingDao buildingDao;
     @Autowired
     FileService fileSerivce;
+    @Autowired
+    UserLogService userLogSerivce;
     @Override
     public DataWrapper<Void> addItem(Item item,String token) {
     	 DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -136,6 +140,15 @@ public class ItemServiceImpl implements ItemService {
     	DataWrapper<List<Item>> dataWrapper = new DataWrapper<List<Item>>();
         User adminInMemory = SessionManager.getSession(token);
         if (adminInMemory != null) {
+        	if(item.getId()!=null && projectId!=null){
+        		UserLog userLog = new UserLog();
+        		userLog.setActionDate(new Date());
+        		userLog.setFileId(item.getId());
+        		userLog.setProjectPart(0);
+        		userLog.setUserId(adminInMemory.getId());
+        		userLog.setVersion("-1");
+        		userLogSerivce.addUserLog(userLog, token);
+        	}
         	dataWrapper =itemDao.getItemList(projectId,pageSize, pageIndex,item);
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);

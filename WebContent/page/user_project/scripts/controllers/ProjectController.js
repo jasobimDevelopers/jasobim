@@ -595,6 +595,7 @@ function ProjectController($scope,ProjectService) {
 	 }
 	 //////初始化获取项目列表
 	 $scope.getProjectList(pageSize,$scope.currentPage,$scope.ProjectTofind);
+	 
 	/* for(int i=0;i<$scope.projectList.size;i++){
 		 
 	 }*/

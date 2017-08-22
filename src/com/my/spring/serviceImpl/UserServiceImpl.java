@@ -296,9 +296,8 @@ public class UserServiceImpl implements UserService {
 		DataWrapper<List<User>> userList=new DataWrapper<List<User>>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
-			User adminInDB = userDao.getById(adminInMemory.getId());
-			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType() || adminInDB.getTeamId()!=null || adminInDB.getWorkName().equals("总经理")) {
-				user.setTeamInformation(adminInDB.getTeamInformation());
+			if (adminInMemory.getUserType() == UserTypeEnum.Admin.getType() || adminInMemory.getTeamId()!=null || adminInMemory.getWorkName().equals("总经理")) {
+				user.setTeamInformation(adminInMemory.getTeamInformation());
 				userList=userDao.getUserList(pageSize, pageIndex,user);
 				if(userList.getData().size()>0){
 					for(int i=0;i<userList.getData().size();i++){

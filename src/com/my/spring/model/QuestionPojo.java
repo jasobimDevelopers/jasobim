@@ -1,6 +1,6 @@
 package com.my.spring.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 
 public class QuestionPojo {
@@ -84,8 +84,8 @@ public class QuestionPojo {
 	public Date getQuestionDate() {
 		return questionDate;
 	}
-	public void setQuestionDate(Date questionDate) {
-		this.questionDate = questionDate;
+	public void setQuestionDate(Date date) {
+		this.questionDate = date;
 	}
 	
 	

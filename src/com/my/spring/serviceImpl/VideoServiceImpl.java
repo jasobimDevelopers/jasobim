@@ -9,7 +9,9 @@ import com.my.spring.model.Video;
 import com.my.spring.model.VideoPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
 import com.my.spring.service.FileService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.service.VideoService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,6 +33,8 @@ public class VideoServiceImpl implements VideoService {
     FileDao fileDao;
     @Autowired
     FileService fileService;
+    @Autowired
+    UserLogService userLogService;
     private String filePath="files";
     private Integer fileType=4;
     @Override
@@ -105,8 +110,18 @@ public class VideoServiceImpl implements VideoService {
     	DataWrapper<List<Video>> dataWrappers=new DataWrapper<List<Video>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
+    		if(video.getId()!=null){
+    			UserLog userLog=new UserLog();
+    			userLog.setActionDate(new Date());
+    			userLog.setVersion("-1");
+    			userLog.setUserId(userInMemory.getId());
+    			userLog.setFileId(video.getId());
+    			userLog.setProjectPart(3);
+    			userLogService.addUserLog(userLog,token);
+    		}
     			dataWrappers=videoDao.getVideoList(projectId, pageIndex, pageSize, video);
     			for(int i=0;i<dataWrappers.getData().size();i++){
+    				
     				VideoPojo videoPojo=new VideoPojo();
     				Integer temp=dataWrappers.getData().get(i).getBuildingNum();
     				Integer professiontype=dataWrappers.getData().get(i).getProfessionType();
