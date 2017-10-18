@@ -184,10 +184,10 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
              }
         }
         
-        if (pageSize == null) {
+        if (pageSize == null){
 			pageSize = 10;
 		}
-        if (pageIndex == null) {
+        if (pageIndex == null){
 			pageIndex = 1;
 		}
         

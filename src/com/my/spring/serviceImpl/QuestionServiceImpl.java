@@ -385,30 +385,25 @@ public class QuestionServiceImpl implements QuestionService {
 			if(userInMemory.getWorkName()!=null){
 				if(userInMemory.getWorkName().equals("总经理"))
 				{
-					if(question.getPriority()==null){
+					if(question.getPriority()==null)
 						question.setPriority(-1);
-					}
 				}else{
 					if(content!=null){
-						if("一般".contains(content)){
+						if("一般".contains(content))
 							question.setPriority(0);
-						}
 					}
 				}
 				/////当用户是投资方（甲方）的时候，问题搜索只能搜索一般问题，同时也只能看一般问题，不能重要和紧急问题
 				if(userInMemory.getWorkName().equals("投资方"))
 				{
-					if(question.getPriority()==null){
+					if(question.getPriority()==null)
 						question.setPriority(0);
-					}
 				}else{
 					if(content!=null){
-						if("重要".contains(content)){
+						if("重要".contains(content))
 							question.setPriority(1);
-						}
-						if("紧急".contains(content)){
+						if("紧急".contains(content))
 							question.setPriority(2);
-						}
 					}
 				}
 			}
@@ -420,18 +415,7 @@ public class QuestionServiceImpl implements QuestionService {
 			for(int i=0;i<dataWrappers.getData().size();i++)
 	        {
 	        	QuestionPojo questionpojo=new QuestionPojo();
-	        	if(dataWrappers.getData().get(i).getUserList()!=null){
-	        		String[] nameList = dataWrappers.getData().get(i).getUserList().split(",");
-	        		if(nameList.length>0){
-	        			String[] nameLists =new String[nameList.length] ;
-	        			for(int k=0;k<nameList.length;k++){
-	        			   nameLists[i]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
-	        			}
-	        			questionpojo.setUserNameLists(nameLists);
-		        	}else{
-		        		questionpojo.setUserNameLists(null);
-		        	}
-	        	}
+	        	
         		dataWrapperFiles=questionFileDao.getQuestionFileByQuestionId(dataWrappers.getData().get(i).getId());
 	        	if(dataWrapperFiles.getData()!=null)
 	        	{
@@ -447,9 +431,8 @@ public class QuestionServiceImpl implements QuestionService {
 	        				String fileItem=file.getUrl();
 	        				fileLists[flag]=fileItem;
 	        				String nameList=dataWrapperFiles.getData().get(j).getOriginName();
-	            			if(nameList!=null){
+	            			if(nameList!=null)
 	            				fileNameLists[flag]=nameList;
-	            			}
 	        				flag++;
 	        			}
 		        	}
@@ -458,6 +441,18 @@ public class QuestionServiceImpl implements QuestionService {
 	        			questionpojo.setFileList(fileLists);
 	        		}				
 		        }
+	        	if(dataWrappers.getData().get(i).getUserList()!=null){
+	        		String[] nameList = dataWrappers.getData().get(i).getUserList().split(",");
+	        		if(nameList.length>0){
+	        			String[] nameLists =new String[nameList.length] ;
+	        			for(int k=0;k<nameList.length;k++){
+	        			   nameLists[k]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+	        			}
+	        			questionpojo.setUserNameLists(nameLists);
+		        	}else{
+		        		questionpojo.setUserNameLists(null);
+		        	}
+	        	}
 	        	String username=userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName();
 	        	questionpojo.setUserId(username);
 	        	questionpojo.setCodeInformation(dataWrappers.getData().get(i).getCodeInformation());
@@ -513,20 +508,11 @@ public class QuestionServiceImpl implements QuestionService {
 					}
 	    		}
 			}
-	    	if(datawrapper.getData()==null || datawrapper.getData().size()<=0){
-	    		/*List<QuestionPojo> questionPojolist=new ArrayList<QuestionPojo>();
-	    		QuestionPojo questionPojo=new QuestionPojo();
-	    		questionPojo.setSortPercent((int)sortPercent);
-	    		questionPojo.setImportantPercent((int)importantPercent);
-	    		questionPojo.setUrgentPercent(100-(int)sortPercent-(int)importantPercent);
-	    		questionPojolist.add(questionPojo);
-	    		datawrapper.setData(questionPojolist);*/
-	    	}else{
+	    	if(datawrapper.getData()!=null || datawrapper.getData().size()>0){
 	    		datawrapper.getData().get(0).setImportantPercent((int)importantPercent);
     	    	datawrapper.getData().get(0).setUrgentPercent(100-(int)sortPercent-(int)importantPercent);
 	    		datawrapper.getData().get(0).setSortPercent((int)sortPercent);
 	    	}
-    	    	
     	}else{
     		datawrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}

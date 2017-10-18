@@ -21,6 +21,8 @@ public class MinItemPojo {
     private String material;//材质
     private String name;   //构件名称
     private String typeName;//类型名
+    private Long selfId;
+    private Long id;
     private Integer professionType;//专业类型 0、电气 1、暖通 2、给水 3、排水 4.消防
 
 
@@ -161,6 +163,22 @@ public class MinItemPojo {
 
 	public void setProfessionType(Integer professionType) {
 		this.professionType = professionType;
+	}
+
+	public Long getSelfId() {
+		return selfId;
+	}
+
+	public void setSelfId(Long selfId) {
+		this.selfId = selfId;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
    

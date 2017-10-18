@@ -391,6 +391,8 @@ public class ItemServiceImpl implements ItemService {
 			if(item!=null){
 				if(item!=null){
 					MinItemPojo pojo = new MinItemPojo();
+					pojo.setSelfId(item.getSelfId());
+					pojo.setId(item.getId());
 					pojo.setArea(item.getArea());
 					pojo.setBuildingNum(item.getBuildingNum());
 					pojo.setFamilyAndType(item.getFamilyAndType());

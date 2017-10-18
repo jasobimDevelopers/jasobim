@@ -22,6 +22,7 @@ public class QuestionPojo {
 	private String position;//位置
 	private String[] userNameLists;
 	private String voiceUrlList;
+	private Integer userid;
 	private Integer roleFlag;//0.普通用户（只能看指定的项目的所有内容）
 							 //1.总经理(能看所有，但是问题只看紧急和重要) 
 	                         //2.投资方（只能看所述项目的内容，另外项目里面的工程量和紧急和重要问题不能看）
@@ -163,6 +164,12 @@ public class QuestionPojo {
 	}
 	public void setVoiceUrlList(String voiceUrlList) {
 		this.voiceUrlList = voiceUrlList;
+	}
+	public Integer getUserid() {
+		return userid;
+	}
+	public void setUserid(Integer userid) {
+		this.userid = userid;
 	}
 	
 	

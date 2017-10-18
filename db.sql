@@ -209,6 +209,21 @@ foreign key(file_id) references file(id),
 foreign key(message_id) references message(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+////规范文件表
+create table normative_files(
+id serial primary key,
+content varchar(255),
+file_id_list  varchar(255),
+file_type_list varchar(255),
+submitDate date,
+submit_user_id bigint(20) unsigned not null,
+title varchar(255),
+describe varchar(255),
+remark varchar(255),
+size bigint(20),
+studyType int
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;/////完成
+
 create index item_project_id_idx on item(project_id);
 create index item_building_num_idx on item(building_num);
 create index item_unit_num_idx on item(unit_num);

@@ -22,6 +22,14 @@
 			</div>
 			<div id="con">
 				<div id="cons">
+					<div ng-if="itemInfo.projectName!=null && itemInfo.projectName!=''">
+						<div class="context"><span>所属项目</span></div>
+						<div class="cont">{{itemInfo.projectName}}</div>
+					</div>
+					<div ng-if="itemInfo.selfId!=null && itemInfo.selfId!=''">
+						<div class="context"><span>构件编号</span></div>
+						<div class="cont">{{itemInfo.selfId}}</div>
+					</div>
 					<div ng-if="itemInfo.name!=null && itemInfo.name!=''">
 						<div class="context"><span>构件名称</span></div>
 						<div class="cont">{{itemInfo.name}}</div>
@@ -42,10 +50,7 @@
 						<div class="context"><span>偏移量</span></div>
 						<div class="cont">{{itemInfo.offset}}</div>
 					</div>
-					<div ng-if="itemInfo.projectName!=null && itemInfo.projectName!=''">
-						<div class="context"><span>所属项目</span></div>
-						<div class="cont">{{itemInfo.projectName}}</div>
-					</div>
+					
 					<div ng-if="itemInfo.buildingNum!=null && itemInfo.buildingNum!=''">
 						<div class="context"><span>所属楼栋号</span></div>
 						<div class="cont">{{itemInfo.buildingNum}}</div>
