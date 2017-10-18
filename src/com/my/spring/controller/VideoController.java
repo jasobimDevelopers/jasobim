@@ -54,9 +54,11 @@ public class VideoController {
     		@RequestParam(value="projectId",required=true) Long projectId,
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@RequestParam(value="beginDate",required=false) String beginDate,
+    		@RequestParam(value="endDate",required=false) String endDate,
     		@ModelAttribute Video video,
     		@RequestParam(value = "token",required = true) String token
     		){
-        return VideoService.getVideoList(token,projectId,pageIndex,pageSize,video);
+        return VideoService.getVideoList(token,projectId,pageIndex,pageSize,video,beginDate,endDate);
     }
 }

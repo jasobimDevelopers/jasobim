@@ -61,7 +61,8 @@ public class ProjectServiceImpl implements ProjectService {
     FileService fileService;
     private String filePath1="files";
     private Integer fileType=2;
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public DataWrapper<ProjectPojo> addProject(Project project,String token,MultipartFile modelfile[],MultipartFile picfile[],HttpServletRequest request) {
         DataWrapper<ProjectPojo> dataWrapper = new DataWrapper<ProjectPojo>();
         DataWrapper<Project> dataWrappers = new DataWrapper<Project>();
@@ -274,6 +275,7 @@ public class ProjectServiceImpl implements ProjectService {
     public DataWrapper<Void> updateProject(Project project,String token,MultipartFile modelFile[],MultipartFile picFile[],HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
+        
       ///班组信息存储
         if(project.getTeamList()!=null){
         	String[] temp=project.getTeamList().split(",");
@@ -287,11 +289,12 @@ public class ProjectServiceImpl implements ProjectService {
         	}
         	project.setTeamId(test);
         }
+        Project projects = new Project();
         if (userInMemory != null) {
 				if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 					if(project!=null){
+						projects=projectDao.getById(project.getId());
 						String modelid="";
-						String modelName="";
 						String isIos="";
 						if(modelFile.length>=0){
 							for(int i=0;i<modelFile.length;i++){
@@ -305,8 +308,8 @@ public class ProjectServiceImpl implements ProjectService {
 									isIos=newfile.getRealName().split("_")[1];
 								}
 							}
-							project.setModelId(modelid);
-							project.setIsIos(isIos);
+							projects.setModelId(modelid);
+							projects.setIsIos(isIos);
 						}
 						if(picFile.length>=0){
 							String picid="";
@@ -319,14 +322,53 @@ public class ProjectServiceImpl implements ProjectService {
 									picid=newfile.getId().toString();
 								}
 							}
-							project.setPicId(picid);
+							projects.setPicId(picid);
 						}
-						project.setUpdateDate(new Date(System.currentTimeMillis()));
-						if(!projectDao.updateProject(project)) 
+						if(project.getBuildingUnit()!=null){
+							projects.setBuildingUnit(project.getBuildingUnit());
+						}
+						if(project.getConstructionUnit()!=null){
+							projects.setConstructionUnit(project.getConstructionUnit());
+						}
+						if(project.getDescription()!=null){
+							projects.setDescription(project.getDescription());
+						}
+						if(project.getDesignUnit()!=null){
+							projects.setDesignUnit(project.getDesignUnit());
+						}
+						if(project.getLeader()!=null){
+							projects.setLeader(project.getLeader());
+						}
+						if(project.getModelPart()!=null){
+							projects.setModelPart(project.getModelPart());
+						}
+						if(project.getName()!=null){
+							projects.setName(project.getName());
+						}
+						if(project.getPhase()!=null){
+							projects.setPlace(project.getPhase());
+						}
+						if(project.getStartDate()!=null){
+							projects.setStartDate(project.getStartDate());
+						}
+						if(project.getState()!=null){
+							projects.setState(project.getState());
+						}
+						if(project.getTeamList()!=null){
+							projects.setTeamId(project.getTeamId());
+							projects.setTeamList(project.getTeamList());
+						}
+						if(project.getVersion()!=null){
+							projects.setVersion(project.getVersion());
+						}
+						if(project.getPlace()!=null){
+							projects.setPlace(project.getPlace());
+						}
+						projects.setUpdateDate(new Date(System.currentTimeMillis()));
+						if(!projectDao.updateProject(projects)) 
 				            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 						else
 							return dataWrapper;
-				        
 					}
 			} else {
 				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);

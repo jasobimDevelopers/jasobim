@@ -70,12 +70,12 @@ function ProjectController($scope,ProjectService) {
 	var projectId=null;
 	$scope.number=null;
 	$scope.numbers=null;
-	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","建设单位","施工地点","设计单位","版本","施工时间","施工周期","操作"];
+	$scope.projectTitles=["序号","项目名称","项目编码","施工单位","项目负责人","建设单位","版本","施工时间","施工周期","操作"];
 	$scope.projectDetailsInfo=["项目名称","项目编码","施工单位","项目负责人","施工地点","建设单位","设计单位","施工时间","施工周期","版本","项目简介"];
 	$scope.itemTitles=["序号","构件名称","底部高程","系统类型","尺寸","长度","设备类型","所属类别","标高","偏移量","面积","材质","类型名"];
 	$scope.quantityTitles=["序号","构件名称","系统类型","数值","单位","familyAndType","设备类型","尺寸","设备名称","材质"];
 	$scope.quantityTitlesFind=["专业","楼栋号","楼层号","户型"];
-	$scope.questionTitles=["序号","问题类型","问题提交人","问题标题","专业","内容","问题创建时间","问题等级","问题状态","操作"];
+	$scope.questionTitles=["序号","问题类型","问题提交人","问题标题","专业","问题创建时间","问题等级","问题状态","操作"];
 	$scope.videoTitles=["序号","交底地址","楼栋号","专业","操作"];
 	$scope.paperTitles=["序号","图纸信息","楼栋号","楼层","专业","操作"];
 	$scope.flag=["工程量页面","构件信息页面","图纸信息页面","问题列表页面","安全交底页面"];
@@ -101,7 +101,10 @@ function ProjectController($scope,ProjectService) {
 	var video = "";
 	var question="";
 	var paper="";
-	
+	var nS=null;
+	$scope.getDate=function(nS) {     
+		   return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');     
+	}     
 	/////按问题类型搜索
 	$scope.setQuestionOfType = function(type,flag){
 		$scope.questionType=type;
@@ -974,6 +977,9 @@ function ProjectController($scope,ProjectService) {
 		 }
 		  ProjectService.getQuestionList($scope.projectid,pageSize,pageIndex,question).then(function (result){
 		  	  $scope.projectQuestionList = result.data;
+		  	  for(var i=0;i<$scope.projectQuestionList.length;i++){
+		  		$scope.projectQuestionList[i].questionDate=$scope.getDate($scope.projectQuestionList[i].questionDate);
+		  	  }
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
 		      $scope.questionPage($scope.totalPage,$scope.currentPage);
@@ -1397,18 +1403,37 @@ function ProjectController($scope,ProjectService) {
 	    	 process.style.display="block";
 	    	 var form = new FormData(); // FormData 对象
 	    	 if(test=='video'){
-	    		 var fileObj = document.getElementById("video_import").files[0]; // js 获取文件对象
+	    		 var fileObj = document.getElementById("video_import").files; // js 获取文件对象
 		         var url = "api/video/admin/addVideo"; // 接收上传文件的后台地址 
-		         form.append("videoType",$scope.fileTypes); // 文件对象
+		         if($scope.fileTypes!=""){
+		        	 form.append("videoType",$scope.fileTypes); // 文件对象
+		         }
+		         if($scope.videoTypes!=""){
+		        	 form.append("professionType",$scope.videoTypes);
+		         }
 	    	 }
 	         if(test=='paper'){
 	        	 var fileObj = document.getElementById("paper_import").files; // js 获取文件对象
 		         var url = "api/paper/admin/uploadPaper"; // 接收上传文件的后台地址 
+		         if($scope.paperTypes!=null){
+		        	 form.append("professionType",$scope.paperTypes);
+				 }
+		         var paper_buildingNum=document.getElementById("buildingNum_input").value;
+				 var paper_floorNum=document.getElementById("floorNum_input").value;
+				 if(paper_floorNum!=undefined && paper_floorNum!=""){
+					 form.append("floorNum",paper_floorNum);
+				 }
+			 	 if(paper_buildingNum!=undefined && paper_buildingNum!=""){
+			 		 form.append("buildingNum",paper_buildingNum);
+				 }
 	         }
-	         form.append("fileList", fileObj); // 文件对象
+	         if(fileObj!==null && fileObj.length>0){
+				 for(var i = 0; i < fileObj.length;i++) {
+					 form.append("fileList",fileObj[i]);
+				 }
+	         }
+	         ////////////
 	         form.append("projectId",$scope.findProjectInfo.id);
-	         form.append("professionType",$scope.videoTypes);
-	        
 	         form.append("token",token);
 	         xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
 	         xhr.open("post", url, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。

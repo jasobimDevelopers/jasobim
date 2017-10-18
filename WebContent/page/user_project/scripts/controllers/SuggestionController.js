@@ -5,7 +5,7 @@ function SuggestionController($scope,SuggestionService) {
 		document.getElementById("suggestContent").value="";
 	}
 	$scope.submitMessage = function(){
-		var content=document.getElementById("suggestContent").value;
+		var content=encodeURI(document.getElementById("suggestContent").value);
 		SuggestionService.addFeedBack(content).then(function(result)
 			{
 			$scope.feedBackInfo=result;

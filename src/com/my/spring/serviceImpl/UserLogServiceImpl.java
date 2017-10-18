@@ -1,13 +1,9 @@
 package com.my.spring.serviceImpl;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -44,8 +40,6 @@ import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.FileOperationsUtil;
 import com.my.spring.utils.ReflectTest;
 import com.my.spring.utils.SessionManager;
-import com.my.spring.utils.Writer;
-import com.my.spring.utils.Reader;
 
 
 @Service("userLogService")
@@ -84,7 +78,6 @@ public class UserLogServiceImpl implements UserLogService {
 		DataWrapper<List<UserLogPojo>> dataWrapperpojo = new DataWrapper<List<UserLogPojo>>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
-			Long userId=null;
 			if(searchContent!=null && searchContent!=""){
 				User users=userDao.getByUserName(searchContent);
 				if(users!=null){

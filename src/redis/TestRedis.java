@@ -24,9 +24,9 @@ public class TestRedis {
     private static Jedis jedis; 
     
     @Before
-    public void setup() {
+    public static void setup() {
         //连接redis服务器，192.168.0.100:6379
-        jedis = new Jedis("127.0.0.1", 6379);
+        jedis = new Jedis("139.224.59.3", 6379);
         //权限认证
         jedis.auth("xyx123456");  
     }
@@ -150,27 +150,30 @@ public class TestRedis {
     public static void main(String[] args) {  
         // 1.初始化  
     	
-        Config config = new Config();  
-        config.setConnectionPoolSize(10);  
-        config.addAddress("127.0.0.1:6379");  
-        config.setPassword("xyx123456");
-        Redisson redisson = Redisson.create(config);  
+    	setup();
         System.out.println("reids连接成功...");  
-  
+        jedis.set("name","xinxin");//向key-->name中放入了value-->xinxin  
+        System.out.println(jedis.get("name"));//执行结果：xinxin  
+       
+     /*   User user=new User("1000", "宝宝", "xioabao");  
+        jedis.set(user.getId().getBytes(), SerializeUtils.serialize(user));  
+        byte[] bytes=jedis.get(user.getId().getBytes());  
+        System.out.println((User)SerializeUtils.deSerialize(bytes));  */
+        
         // 2.测试concurrentMap,put方法的时候就会同步到redis中  
         //RSet<Object> test=redisson.getSet("test");
         //test.add("tess");
         ///System.out.println("测试：///resultMap==" + test.set);
         
-        ConcurrentMap<String, Object> map = redisson.getMap("FirstMap");  
+       /* ConcurrentMap<String, Object> map = redisson.getMap("FirstMap");  
         map.put("wuguowei", "男");  
         map.put("zhangsan", "nan");  
         map.put("lisi", "女");  
   
         ConcurrentMap resultMap = redisson.getMap("FirstMap");  
-        System.out.println("resultMap==" + resultMap.keySet());  
+        System.out.println("resultMap==" + resultMap.keySet());  */
   
-        // 2.测试Set集合  
+       /* // 2.测试Set集合  
         Set mySet = redisson.getSet("MySet");  
         mySet.add("wuguowei");  
         mySet.add("lisi");  
@@ -187,10 +190,10 @@ public class TestRedis {
         myQueue.poll();  
   
         Queue resultQueue=redisson.getQueue("FirstQueue");  
-        System.out.println("resultQueue==="+resultQueue);  
+        System.out.println("resultQueue==="+resultQueue);  */
           
         // 关闭连接  
-        redisson.shutdown();
+        //redisson.shutdown();
     }  
 	
 }

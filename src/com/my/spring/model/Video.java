@@ -1,5 +1,7 @@
 package com.my.spring.model;
 
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +21,9 @@ public class Video {
 	private Integer videoType;////0(视频)、1(PDF文档)、2 文本文档（word） 3、其他
 	private String intro;
 	private Long size;
+	private Integer videoGrade;/////交底的等级（0、公司总交底 1、项目交底 2、留底资料 3、通用交底）
+	private Long uploadUserId;//////交底上传人id
+	private Date uploadDate;///交底上传时间
 	@Id
     @GeneratedValue
     @Column(name = "id")
@@ -99,6 +104,33 @@ public class Video {
 	}
 	public void setIntro(String intro) {
 		this.intro = intro;
+	}
+	
+	@Basic
+	@Column(name = "video_grade")
+	public Integer getVideoGrade() {
+		return videoGrade;
+	}
+	public void setVideoGrade(Integer videoGrade) {
+		this.videoGrade = videoGrade;
+	}
+	
+	@Basic 
+	@Column(name = "upload_user_id")
+	public Long getUploadUserId() {
+		return uploadUserId;
+	}
+	public void setUploadUserId(Long uploadUserId) {
+		this.uploadUserId = uploadUserId;
+	}
+	
+	@Basic
+	@Column(name = "upload_date")
+	public Date getUploadDate() {
+		return uploadDate;
+	}
+	public void setUploadDate(Date uploadDate) {
+		this.uploadDate = uploadDate;
 	}
 	
 

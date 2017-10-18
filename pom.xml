@@ -185,8 +185,14 @@
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
 		</dependency>
-
-
+	<!-- springMvc Swagger -->
+	    <!-- swagger -->  
+        <dependency>  
+            <groupId>com.mangofactory</groupId>  
+            <artifactId>swagger-springmvc</artifactId>  
+            <version>1.0.2</version>  
+        </dependency>  
+        <!-- swagger -->  
 
 
 
@@ -477,11 +483,7 @@
 		</dependency>
 		<!-- dozer E -->
 		<!-- swagger S -->
-		<dependency>
-			<groupId>com.mangofactory</groupId>
-			<artifactId>swagger-springmvc</artifactId>
-			<version>0.8.8</version>
-		</dependency>
+		
 		<!-- swagger E -->
 		<!-- Test S -->
 		<dependency>
@@ -521,7 +523,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>17.0</version>
+			<version>15.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

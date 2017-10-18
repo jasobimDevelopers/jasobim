@@ -11,5 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 public interface CodeService {
     
     public DataWrapper<List<String>> batchImport(String name,MultipartFile[] file,String token,HttpServletRequest request);
+
+	public DataWrapper<String> batchImportText(String filePath, String content, String token,
+			HttpServletRequest request);
 	
 }

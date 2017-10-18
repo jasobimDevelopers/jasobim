@@ -20,6 +20,7 @@ public class UserPojo {
     private String teamInformation;////班组信息
     private String projectList;
     private Integer systemType;
+    private String[] menuItemList;
 	public Long getId() {
 		return id;
 	}
@@ -125,6 +126,12 @@ public class UserPojo {
 	}
 	public void setSystemType(Integer systemType) {
 		this.systemType = systemType;
+	}
+	public String[] getMenuItemList() {
+		return menuItemList;
+	}
+	public void setMenuItemList(String[] menuItemList) {
+		this.menuItemList = menuItemList;
 	}
     
 }

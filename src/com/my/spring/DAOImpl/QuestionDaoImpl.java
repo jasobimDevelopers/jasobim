@@ -21,6 +21,8 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,12 +105,9 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<QuestionPojo>> getQuestionList(String content,Long projectId ,Integer pageIndex, Integer pageSize, Question question,Long[] userIdList,String projectList) {
-    	DataWrapper<List<QuestionPojo>> retDataWrapperPojo = new DataWrapper<List<QuestionPojo>>();
-    	DataWrapper<List<QuestionFile>> retDataWrapperPojos = new DataWrapper<List<QuestionFile>>();
+    public DataWrapper<List<Question>> getQuestionList(String content,Long projectId ,Integer pageIndex, Integer pageSize, Question question,Long[] userIdList,String projectList) {
+    	DataWrapper<List<Question>> retDataWrapperPojo = new DataWrapper<List<Question>>();
         List<Question> ret = new ArrayList<Question>();
-        List<QuestionPojo> retpojo = new ArrayList<QuestionPojo>();
-      
         Session session = getSession();
         Criteria criteria = session.createCriteria(Question.class);
         ///////
@@ -129,7 +128,6 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         if(question.getId()!=null){
             criteria.add(Restrictions.eq("id", question.getId()));
         } 
-        
         if(content!=null){
         	String test = "";
         	for(int i=0;i<content.length();i++)
@@ -137,8 +135,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         		if(i==0)
         		{
         			test=test+'%'+content.charAt(i)+'%';
-        		}else
-        		{
+        		}else{
         			test=test+content.charAt(i)+'%';
         		}
         		
@@ -205,62 +202,14 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
             criteria.setMaxResults(pageSize);// 最大显示记录数
             criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
             /////////////
-            
         }
-        //////////////
-       
         try {
             ret = criteria.list();
         }catch (Exception e){
             e.printStackTrace();
         }
-        for(int i=0;i<ret.size();i++)
-        {
-        	QuestionPojo questionpojo=new QuestionPojo();
-        	retDataWrapperPojos=questionFileDao.getQuestionFileByQuestionId(ret.get(i).getId());
-        	if(retDataWrapperPojos.getData()!=null)
-        	{
-        		String[] fileLists=new String[retDataWrapperPojos.getData().size()];
-            	String[] fileNameLists=new String[retDataWrapperPojos.getData().size()];
-            	int flag=0;
-        		for(int j=0;j<retDataWrapperPojos.getData().size();j++)
-        		{
-        			Long fileId=retDataWrapperPojos.getData().get(j).getFileId();
-        			Files file=filesDao.getById(fileId);
-        			if(file!=null)
-        			{
-        				String fileItem=file.getUrl();
-        				fileLists[flag]=fileItem;
-        				String nameList=retDataWrapperPojos.getData().get(j).getOriginName();
-            			if(nameList!=null){
-            				fileNameLists[flag]=nameList;
-            			}
-        				flag++;
-        			}
-        			
-        			
-        		}
-        		if(fileLists!=null)
-        		{
-        			questionpojo.setFileList(fileLists);
-        		}				
-        	}
-        	String username=userDao.getById(ret.get(i).getUserId()).getRealName();
-        	questionpojo.setUserId(username);
-        	questionpojo.setCodeInformation(ret.get(i).getCodeInformation());
-        	questionpojo.setPriority(ret.get(i).getPriority());
-        	questionpojo.setId(ret.get(i).getId());
-        	questionpojo.setIntro(ret.get(i).getIntro());
-        	questionpojo.setName(ret.get(i).getName());
-        	questionpojo.setProjectId(projectId);
-        	questionpojo.setPosition(ret.get(i).getPosition());
-        	questionpojo.setQuestionDate(ret.get(i).getQuestionDate());
-        	questionpojo.setQuestionType(ret.get(i).getQuestionType());
-        	questionpojo.setState(ret.get(i).getState());
-        	questionpojo.setTrades(ret.get(i).getTrades());        	        	
-        	retpojo.add(i, questionpojo);
-        }
-        retDataWrapperPojo.setData(retpojo);
+        
+        retDataWrapperPojo.setData(ret);
         retDataWrapperPojo.setTotalNumber(totalItemNum);
         retDataWrapperPojo.setCurrentPage(pageIndex);
         retDataWrapperPojo.setTotalPage(totalPageNum);
@@ -353,6 +302,15 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         for(int i=0;i<ret.size();i++)
         {
         	QuestionPojo questionpojo=new QuestionPojo();
+        	if(ret.get(i).getUserList()!=null){
+        		String[] nameList = new String[ret.get(i).getUserList().split(",").length];
+        		for(int k=0;k<nameList.length;k++){
+        			nameList[k]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+        		}
+        		questionpojo.setUserNameLists(nameList);
+        	}else{
+        		questionpojo.setUserNameLists(null);
+        	}
         	retDataWrapperPojos=questionFileDao.getQuestionFileByQuestionId(ret.get(i).getId());
         	if(retDataWrapperPojos.getData()!=null)
         	{
@@ -390,7 +348,8 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         	questionpojo.setName(ret.get(i).getName());
         	questionpojo.setProjectId(ret.get(i).getProjectId());
         	questionpojo.setPosition(ret.get(i).getPosition());
-        	questionpojo.setQuestionDate(ret.get(i).getQuestionDate());
+        	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+        	questionpojo.setQuestionDate(sdf.format(ret.get(i).getQuestionDate()));
         	questionpojo.setQuestionType(ret.get(i).getQuestionType());
         	questionpojo.setState(ret.get(i).getState());
         	questionpojo.setTrades(ret.get(i).getTrades());        	        	

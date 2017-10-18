@@ -21,16 +21,29 @@ public class fileGetCodeController {
     @Autowired
     CodeService codeService;  
     /*
-     *模型的原始构件信息上传
+     *文件上传并生成二维码
+     *返回二维码图片的地址
      */
-    @RequestMapping(value="/admin/uploadItem", method = RequestMethod.POST)
+    @RequestMapping(value="/admin/uploadFiles", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<List<String>> uploadItem(
             @RequestParam(value = "fileList", required = false) MultipartFile[] fileList,
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request){
-    	String filePath = "/files/code/";
+    	String filePath = "files/code";
         return codeService.batchImport(filePath, fileList,token,request);
+    }
+    /*
+     *内容或链接转二维码图片
+     */
+    @RequestMapping(value="/admin/uploadTexts", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<String> uploadItem(
+            @RequestParam(value = "content",required = true) String content,
+            @RequestParam(value = "token",required = true) String token,
+            HttpServletRequest request){
+    	String filePath = "files/code";
+        return codeService.batchImportText(filePath, content,token,request);
     }
     
    

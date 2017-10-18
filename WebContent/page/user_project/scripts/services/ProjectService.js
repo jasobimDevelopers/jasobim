@@ -559,6 +559,27 @@
                   });
               return deferred.promise;
           };
+          /////删除交底
+          this.deleteVideo = function(projectVideoId,fileId){
+        	  var deferred = $q.defer();
+              console.log("删除Video数据");
+              $http.get('api/video/admin/deleteVideo?id='+projectVideoId+'&token='+token+'&fileid='+fileId)
+                  .success(function(data, status, headers, config){
+                      console.log(data);
+                      if(data.callStatus == "SUCCEED"){
+                          deferred.resolve(data);
+                          self.deleteProjectVideoInfo = data;
+                          alert("数据删除成功");
+                      }else{
+                          alert("数据删除失败");
+                      }
+                      
+                  })
+                  .error(function(data, status, headers, config){
+                      deferred.reject(data);
+                  });
+              return deferred.promise;
+          }
          /////交底上传
          this.uploadVideo = function(formData,projectId){
          	 var deferred = $q.defer();

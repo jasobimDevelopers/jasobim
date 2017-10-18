@@ -36,18 +36,35 @@
 				                         <button id="uploadbutton">
 			                        	</button>
 			                        </a>
+			                        <button id="deletebutton" ng-click="deleteVideo(projectVideo.id,projectVideo.fileId)">
+			                        </button>
 			                    </td>
 							</tr>
 						</tbody>
 					</table>
 					<div id="quantityAction">
 							<div id="quantityImport">
-								<!-- <div><select id="videoType">
-									<option value="0">视频</option>
-									<option value="1">文本文档</option>
-								</select></div> -->
-								<div id="imgBiangen"><a href="#" id="quantity_button" ng-click="importVideo()">交底上传</a></div>
+								<div id="process" style="display:none;width:1024px;text-align:left;">
+									<progress id="progressBar" value="0" max="100" style="width: 300px;"></progress>
+		    						<span id="percentage"></span><span id="time"></span>
+		    						<br /><br />
+	    						</div>
+								<div id="imgBiangen"><a href="#" id="quantity_button" ng-click="UpladFile('video')">交底上传</a></div>
 								<div id="biangeng_file"><input type="file" id="video_import" multiple="multiple"/></div>
+								<div id="video_type">
+									<select id="video_type" class="myselect" ng-model="videoTypes" ng-change="setVideoType(this)">
+										<option value="0" selected = "selected">质量</option>
+										<option value="1">安全</option>
+										<option value="2">技术</option>
+									</select>
+								</div>
+    							<div id="video_type">
+									<select id="video_type2" class="myselect" ng-model="videoFiles" ng-change="setFileType(this)">
+										<option value="0" selected = "selected">视频</option>
+										<option value="1">pdf</option>
+										<option value="2">word</option>
+									</select>
+								</div>
 							</div>
 					</div>
 					<div id="table-buton5" >

@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -65,17 +66,32 @@ public class VideoDaoImpl extends BaseDao<Video> implements VideoDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<Video>> getVideoList(Long projectId, Integer pageIndex, Integer pageSize, Video video) {
+	public DataWrapper<List<Video>> getVideoList(Long projectId, Integer pageIndex, Integer pageSize, Video video,String beginDate,String endDate) {
 		DataWrapper<List<Video>> retDataWrapper = new DataWrapper<List<Video>>();
         List<Video> ret = new ArrayList<Video>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Video.class);
-        //criteria.addOrder(Order.desc("publishDate"));
+        criteria.addOrder(Order.desc("id"));
         if(video.getProfessionType()!=null){
         	criteria.add(Restrictions.eq("professionType", video.getProfessionType()));
         }
+        if(video.getVideoGrade()!=null){
+        	criteria.add(Restrictions.eq("videoGrade", video.getVideoGrade()));
+        }
+        if(video.getUploadUserId()!=null){
+        	criteria.add(Restrictions.eq("uploadUserId", video.getUploadUserId()));
+        }
         if(video.getBuildingNum()!=null){
         	criteria.add(Restrictions.eq("buildingNum", video.getBuildingNum()));
+        }
+        if(beginDate!=null){
+        	 criteria.add(Restrictions.ge("beginDate",beginDate)); 
+        }
+        if(endDate!=null){
+        	criteria.add(Restrictions.le("endDate",endDate));  
+        }
+        if(video.getOriginName()!=null){
+        	criteria.add(Restrictions.like("originName", "%"+video.getOriginName()+"%"));
         }
         criteria.add(Restrictions.eq("projectId", projectId));
         

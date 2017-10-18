@@ -5,13 +5,11 @@ import com.my.spring.DAO.DuctDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Duct;
 import com.my.spring.model.DuctPojos;
-import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -221,6 +219,7 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 		return get(id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<DuctPojos>> getDuctLists() {
 		DataWrapper<List<DuctPojos>> dataWrapper=new DataWrapper<List<DuctPojos>>();

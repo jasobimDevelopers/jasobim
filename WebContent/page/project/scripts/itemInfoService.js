@@ -5,11 +5,12 @@ angular.module('ItemApp',[])
   var transform = function(data){
         return $.param(data);
    }
+  var baseUrl="http://jasobim.com.cn";
   var self=this;
   this.getItemDetail=function(id){
 	  var deferred = $q.defer();
       console.log("读取构建详细数据");
-      var api = '/jasobim/api/item/getItemById?itemId='+id;
+      var api =baseUrl + '/api/item/getItemById?itemId='+id;
      
       $http.get(encodeURI(api))
           .success(function(data, status, headers, config){

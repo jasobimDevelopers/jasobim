@@ -100,6 +100,8 @@ public class UserServiceImpl implements UserService {
 					users.setProjectName(projectName);
 				}
 				users.setUserName(user.getUserName());
+				users.setWorkName(user.getWorkName());
+				users.setRealName(user.getRealName());
 				users.setUserType(user.getUserType());
 				users.setId(user.getId());
 				if(user.getUserIcon()!=null){
@@ -132,6 +134,9 @@ public class UserServiceImpl implements UserService {
 				}
 				if (user.getTel() != null && !user.getTel().equals("")) {
 					userInDB.setTel(user.getTel());
+				}
+				if(user.getMenuItemList()!=null){
+					userInDB.setMenuItemList(user.getMenuItemList());
 				}
 				if (!userDao.updateUser(userInDB)) {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -314,6 +319,9 @@ public class UserServiceImpl implements UserService {
 						userpojo.setUserType(userList.getData().get(i).getUserType());
 						userpojo.setUserIcon(userList.getData().get(i).getUserIcon());
 						userpojo.setWorkName(userList.getData().get(i).getWorkName());
+						if(userList.getData().get(i).getMenuItemList()!=null){
+							userpojo.setMenuItemList(userList.getData().get(i).getMenuItemList().split(","));
+						}
 						userpojo.setTeamInformation(userList.getData().get(i).getTeamInformation());
 						if(userList.getData().get(i).getUserIcon()!=null){
 							Files file=fileService.getById(userList.getData().get(i).getUserIcon());
@@ -491,6 +499,7 @@ public class UserServiceImpl implements UserService {
 						}
 						user.setTeamId(0);
 					}
+					user.setMenuItemList("0,1,2,3,4,5,6,7,8");
 					if(!userDao.addUser(user)) {
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					}

@@ -168,6 +168,12 @@ public class ValueOutputServiceImpl implements ValueOutputService {
         		UserLog userLog = new UserLog(); 
         		userLog.setFileId(ValueOutputDao.getValueOutputListByProjectName(projectName).getData().get(0).getId());
         		userLog.setActionDate(new Date());
+        		userLog.setSystemType(userInMemory.getSystemType());
+        		if(projectId!=null){
+        			userLog.setProjectId(projectId);
+        		}else{
+        			userLog.setProjectId((long) -1);
+        		}
         		userLog.setProjectPart(7);
         		userLog.setUserId(userInMemory.getId());
         		userLog.setVersion("-1");

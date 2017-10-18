@@ -73,6 +73,8 @@ select::-ms-expand { display: none; } */
 text-decoration: none;
 }
 #questionOfProject{
+	height: 500px;
+    overflow: auto;
 	position:absolute;
 	top:100px;
 }
@@ -118,7 +120,7 @@ text-decoration: none;
 	padding-left:48px;
 	font-size:16px;
 	font-family:微软雅黑;
-	width:784px;
+	width:885px;
 	border:1px solid gray;
 	background-color:#EEEFF3;
 }
@@ -139,7 +141,7 @@ text-decoration: none;
 	font-size:16px;
 	font-family:微软雅黑;
 	height:50px;
-	width:325px;
+	width:225px;
 	padding-top:12px;
 	padding-left:60px;
 	border-top:1px solid gray;
@@ -232,7 +234,7 @@ text-decoration: none;
 	float:left;
 }
 #table_content{
-	width:784px;
+	width:885px;
 	height:600px;
 	background-color:white;
 	border-left:1px solid gray;
@@ -250,9 +252,9 @@ text-decoration: none;
 	float:right;
 }
 #dataShow{
-	padding-left:55px;
+	padding-left:20px;
 	height:600px;
-	width:325px ! important;
+	width:225px ! important;
 	background-color:white;
 	color:black ! important;
 }
@@ -463,7 +465,7 @@ imageMessage img{
 	margin-left:20px;
 }
 .autocut {  
-    width:150px ! important;  
+    width:350px ! important;  
     overflow:hidden;  
     white-space:nowrap;  
     text-overflow:ellipsis;  

@@ -30,11 +30,12 @@ public class QuestionController {
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request,
             @RequestParam(value = "file", required = false) MultipartFile[] file,
-            @RequestParam(value = "fileCode", required = false) MultipartFile fileCode
+            @RequestParam(value = "fileCode", required = false) MultipartFile fileCode,
+            @RequestParam(value = "voiceFile", required = false) MultipartFile[] voiceFile
             ){
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
     	DataWrapper<Question> dataWrappers = new DataWrapper<Question>();
-		dataWrapper=questionService.addQuestion(question,token,file,request,fileCode);
+		dataWrapper=questionService.addQuestion(question,token,file,request,fileCode,voiceFile);
 		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
 			dataWrappers.setCallStatus(CallStatusEnum.SUCCEED);
 			dataWrappers.setData(question);
@@ -70,9 +71,10 @@ public class QuestionController {
             @ModelAttribute QuestionPojo question,
             @RequestParam(value = "token",required = true) String token,
             HttpServletRequest request,
-            @RequestParam(value = "file", required = false) MultipartFile[] file){
+            @RequestParam(value = "file", required = false) MultipartFile[] file,
+            @RequestParam(value = "voiceFile", required = false) MultipartFile[] voiceFile){
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-    	dataWrapper=questionService.updateQuestion(question,token,file,request);
+    	dataWrapper=questionService.updateQuestion(question,token,file,request,voiceFile);
     	if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
             	return dataWrapper;
         }else{

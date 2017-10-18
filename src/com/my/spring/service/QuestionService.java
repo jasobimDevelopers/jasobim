@@ -14,10 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
  * Created by Administrator on 2016/6/22.
  */
 public interface QuestionService {
-    DataWrapper<Void> updateQuestion(QuestionPojo question,String token, MultipartFile[] file, HttpServletRequest request);
+    DataWrapper<Void> updateQuestion(QuestionPojo question,String token, MultipartFile[] file, HttpServletRequest request,MultipartFile[] files);
     DataWrapper<List<QuestionPojo>> getQuestionList(String content,Long projectId,String token, Integer pageIndex, Integer pageSize, Question question);
 	DataWrapper<QuestionPojo> getQuestionDetailsByAdmin(Long questionId,String token);
-	DataWrapper<Void> addQuestion(Question question, String token, MultipartFile[] file, HttpServletRequest request, MultipartFile fileCode);
+	DataWrapper<Void> addQuestion(Question question, String token, MultipartFile[] file, HttpServletRequest request, MultipartFile fileCode,MultipartFile[] voiceFile);
 	DataWrapper<Void> deleteQuestion(Long id, String token, HttpServletRequest request, Long projectId);
 	DataWrapper<Void> deleteQuestion(Long questionId, String token, HttpServletRequest request);
 	DataWrapper<List<Question>> getQuestionsByLike(String content, String token);

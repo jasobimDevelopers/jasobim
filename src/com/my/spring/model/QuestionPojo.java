@@ -1,6 +1,5 @@
 package com.my.spring.model;
 
-import java.util.Date;
 
 
 public class QuestionPojo {
@@ -11,7 +10,7 @@ public class QuestionPojo {
 	private String name;  ///问题名称
 	private String trades;///问题专业
 	private String intro; //////问题内容
-	private Date questionDate;/////问题的创建时间
+	private String questionDate;/////问题的创建时间
 	private Integer priority;////问题等级 (0.一般 1.重要 2.紧急)
 	private Integer state;   ///问题的状态(0.待解决 1.已解决)
 	private String codeInformation;/////图片的二维码信息
@@ -21,7 +20,8 @@ public class QuestionPojo {
 	private int importantPercent;/////重要问题的百分比
 	private int urgentPercent;//////紧急问题的百分比
 	private String position;//位置
-	private Integer userid;
+	private String[] userNameLists;
+	private String voiceUrlList;
 	private Integer roleFlag;//0.普通用户（只能看指定的项目的所有内容）
 							 //1.总经理(能看所有，但是问题只看紧急和重要) 
 	                         //2.投资方（只能看所述项目的内容，另外项目里面的工程量和紧急和重要问题不能看）
@@ -51,8 +51,8 @@ public class QuestionPojo {
 	public String getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserId(String strings) {
+		this.userId = strings;
 	}
 	
 	
@@ -81,10 +81,10 @@ public class QuestionPojo {
 	}
 	
 	
-	public Date getQuestionDate() {
+	public String getQuestionDate() {
 		return questionDate;
 	}
-	public void setQuestionDate(Date date) {
+	public void setQuestionDate(String date) {
 		this.questionDate = date;
 	}
 	
@@ -146,17 +146,23 @@ public class QuestionPojo {
 	public void setPosition(String position) {
 		this.position = position;
 	}
-	public Integer getUserid() {
-		return userid;
+	public String[] getUserNameLists() {
+		return userNameLists;
 	}
-	public void setUserid(Integer i) {
-		this.userid = i;
+	public void setUserNameLists(String[] userNameLists) {
+		this.userNameLists = userNameLists;
 	}
 	public Integer getRoleFlag() {
 		return roleFlag;
 	}
 	public void setRoleFlag(Integer roleFlag) {
 		this.roleFlag = roleFlag;
+	}
+	public String getVoiceUrlList() {
+		return voiceUrlList;
+	}
+	public void setVoiceUrlList(String voiceUrlList) {
+		this.voiceUrlList = voiceUrlList;
 	}
 	
 	

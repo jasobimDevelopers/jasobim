@@ -19,14 +19,14 @@
 			<table class="table-striped table table-bordered">
 				<tbody>
 					<tr>
-						<th ng-repeat="feedbackTitle in feedbackTitles">{{feedbackTitle}}</th>
+						<th ng-repeat="feedbackTitle in feedbackTitles" style="text-align:center;">{{feedbackTitle}}</th>
 					</tr>
 					<tr ng-repeat = "feedback in feedbackList">
-					    <td>{{$index+1}}</td>
-					    <td>{{feedback.userName}}</td>
-					    <td>{{feedback.content}}</td>
-					    <td>{{feedback.date}}</td>
-					    <td> 
+					    <td style="width:10px;text-align:center;">{{$index+1}}</td>
+					    <td style="width:80px;text-align:center;">{{feedback.realName}}</td>
+					    <td style="width:500px;text-align:center;">{{feedback.content}}</td>
+					    <td style="width:150px;text-align:center;">{{feedback.date}}</td>
+					    <td style="width:80px;text-align:center;"> 
 					    	<button id="deletebutton" ng-click="deleteFeedback(feedback.id)">
 		                    </button>
 		                    <input type="checkbox" ng-click="setFeedbackId(feedback.id)" class="checkBoxItem">

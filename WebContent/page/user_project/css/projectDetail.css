@@ -617,8 +617,8 @@ font-weight: bold;
 	width:60px;
 }
 /*隐藏超出的内容*/
-.autocut {  
-    width:580px ! important;  
+/* .autocut {  
+    width:250px ! important;  
     overflow:hidden;  
     white-space:nowrap;  
     text-overflow:ellipsis;  
@@ -627,7 +627,7 @@ font-weight: bold;
     -khtml-text-overflow: ellipsis;  
     -moz-text-overflow: ellipsis;  
     -webkit-text-overflow: ellipsis;  
-}  
+}   */
 /*返回按钮*/
 #returnbt{
 	background:url(../images/reback.png) no-repeat -1px 4px;

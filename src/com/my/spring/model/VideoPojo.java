@@ -1,6 +1,5 @@
 package com.my.spring.model;
 public class VideoPojo {
-	
     private Long projectId;
     private Long id;
     private Integer buildingNum;
@@ -8,6 +7,9 @@ public class VideoPojo {
     private Integer professionType;
     private String originName;
     private Integer videoType;
+    private String uploadDate;
+    private String uploadUserName;
+    private Integer videoGrade;
     private String intro; 
     private Long fileId;
     private Long size;
@@ -80,6 +82,24 @@ public class VideoPojo {
 	}
 	public void setSize(Long size) {
 		this.size = size;
+	}
+	public String getUploadDate() {
+		return uploadDate;
+	}
+	public void setUploadDate(String uploadDate) {
+		this.uploadDate = uploadDate;
+	}
+	public String getUploadUserName() {
+		return uploadUserName;
+	}
+	public void setUploadUserName(String uploadUserName) {
+		this.uploadUserName = uploadUserName;
+	}
+	public Integer getVideoGrade() {
+		return videoGrade;
+	}
+	public void setVideoGrade(Integer videoGrade) {
+		this.videoGrade = videoGrade;
 	}
 	
 }

@@ -248,6 +248,77 @@ foreign key(user_id) references user(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /////预制化构件状态记录表
 
+//////////////施工任务单
+create table construction_task(
+id serial primary key,
+company_name varchar(255),
+create_date datetime,
+user_id bigint(20) unsigned not null,
+create_user_name varchar(50),
+receive_user_id bigint(20) unsigned not null,
+team_name varchar(50),
+task_content varchar(255),
+finished_date date,
+rewards varchar(50),
+work_people_name_list varchar(255),
+detail_content varchar(255),
+approval_people_name text,
+approval_date_list text,
+approval_people_idea_list text,
+approval_people_type_list text,
+approval_people_note_list text,
+task_flag int,
+others_attention varchar(50),
+project_id bigint(20) unsigned not null,
+user_project_id_list varchar(50),
+foreign key(user_id) references user(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+//////预付单
+create table advanced_order(
+id serial primary key,
+project_name varchar(255),
+create_date datetime,
+submit_user_id bigint(20) unsigned not null,
+create_user_name varchar(50),
+construct_part varchar(255),
+quantity_des varchar(255),
+next_approval_people_type varchar(50),
+next_approval_people_id varchar(50),
+approval_people_name text,
+approval_update_date text,
+approval_people_idea text,
+approval_people_type text,
+approval_people_note text,
+status int,
+project_id bigint(20) unsigned not null,
+user_project_id_list varchar(50),
+content_files_id varchar(50),
+photo_of_finished varchar(50),
+foreign key(submit_user_id) references user(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+///预付单汇总表
+create table advance_order_collect(
+id serial primary key,
+project_name varchar(255),
+create_date datetime,
+submit_user_id bigint(20) unsigned not null,
+create_user_name varchar(50),
+leader varchar(50),
+month int,
+construct_part varchar(255),
+advanced_order_id bigint(20) unsigned not null,
+current_finished bigint(20) unsigned not null,
+before_finished bigint(20) unsigned not null,
+leader_name varchar(50),
+constructor_name varchar(50),
+quantityer_name varchar(50),
+foreign key(advanced_order_id) references advanced_order(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 DROP PROCEDURE IF EXISTS exportDuct;
 DELIMITER // 
 create procedure exportDuct(in file_path  text,in project_id long,in date_start datetime,in date_finished datetime)

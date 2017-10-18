@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+////质量安全问题属性
 
 @Entity
 @Table(name = "question")
@@ -24,9 +25,10 @@ public class Question {
 	private Integer state;   ///问题的状态(0.待解决 1.已解决)
 	private String codeInformation;/////图片的二维码信息
 	private String position;///图片位置
-	
-	
-	
+	//////
+	private String voiceIdList;//语音idList
+	private String userList;///接收到人
+	private String readState;///接收人的已读和未读情况
 	@Id
     @GeneratedValue
     @Column(name = "id")
@@ -35,6 +37,15 @@ public class Question {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	@Basic
+    @Column(name = "user_list")
+	public String getUserList() {
+		return userList;
+	}
+	public void setUserList(String userList) {
+		this.userList = userList;
 	}
 	
 	@Basic
@@ -134,6 +145,24 @@ public class Question {
 	}
 	public void setPosition(String position) {
 		this.position = position;
+	}
+	
+	@Basic
+	@Column(name = "read_state")
+	public String getReadState() {
+		return readState;
+	}
+	public void setReadState(String readState) {
+		this.readState = readState;
+	}
+	
+	@Basic
+	@Column(name = "voice_id_list")
+	public String getVoiceIdList() {
+		return voiceIdList;
+	}
+	public void setVoiceIdList(String voiceIdList) {
+		this.voiceIdList = voiceIdList;
 	}
 	
 	

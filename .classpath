@@ -62,5 +62,8 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/guava-13.0.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.mail.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jedis-2.1.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jiguang-common-1.0.7.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jpush-client-3.3.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/freemarker.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

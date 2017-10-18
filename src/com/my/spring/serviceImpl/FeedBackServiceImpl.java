@@ -45,6 +45,12 @@ public class FeedBackServiceImpl implements FeedBackService {
 						feedbackpojos.setContent(dataWrapper.getData().get(i).getContent());
 						feedbackpojos.setId(dataWrapper.getData().get(i).getId());
 						feedbackpojos.setUserName(dataWrapper.getData().get(i).getUserName());
+						if(dataWrapper.getData().get(i).getUserName()!=null){
+							User users=userDao.getByUserName(dataWrapper.getData().get(i).getUserName());
+							if(users!=null){
+								feedbackpojos.setRealName(users.getRealName());
+							}
+						}
 						feedbackpojos.setTel(dataWrapper.getData().get(i).getTel());
 						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 	    	    		String str=sdf.format(dataWrapper.getData().get(i).getDate()); 

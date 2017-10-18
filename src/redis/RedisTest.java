@@ -23,7 +23,7 @@ public class RedisTest {
     @Before
     public void setUp() {
     	System.out.println("------------1");
-    	pool = new JedisPool(new JedisPoolConfig(),"127.0.0.1");
+    	pool = new JedisPool(new JedisPoolConfig(),"139.224.59.3");
 
         jedis = pool.getResource();
         jedis.auth("xyx123456");

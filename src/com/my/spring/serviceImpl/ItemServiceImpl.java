@@ -533,7 +533,8 @@ public class ItemServiceImpl implements ItemService {
 	   	String imgpath=rootPath+filePath;
 	   	String realPath=rootPath+filePath+"/"+str+".png";
 		try{
-		MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+		
+			MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 	        @SuppressWarnings("rawtypes")
 			Map hints = new HashMap();  
 	        //内容所使用编码  

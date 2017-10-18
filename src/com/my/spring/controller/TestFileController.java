@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.DAO.QuantityDao;
+import com.my.spring.jpush.PushMessage;
 import com.my.spring.model.Files;
 import com.my.spring.model.Quantity;
 import com.my.spring.service.FileService;
@@ -72,6 +73,14 @@ public class TestFileController {
 			) {
 
         return quantityDao.testGroupBy(pageSize, pageIndex);
+    }
+	
+	@RequestMapping(value="/testLog", method = RequestMethod.GET)
+    @ResponseBody
+	public DataWrapper<Void> testLog(
+			) {
+		PushMessage.testSch();
+        return null;
     }
 
 }

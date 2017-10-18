@@ -42,39 +42,82 @@ public class CodeServiceImpl implements CodeService {
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null){
 			if (file != null && file.length>0) {
-				name=name+userInMemory.getId();
+				name=name+"/"+userInMemory.getId();
 				for(int i=0;i<file.length;i++){
 					Files files=fileSerivce.uploadFile(name, file[i], 8, request);
 					if(files!=null){
 						SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
         			   	Date d=new Date();
         			   	String str=sdf.format(d);
-						String rootPath = request.getSession().getServletContext().getRealPath("/");
-        			   	String imgpath=rootPath+name;
+						/*String rootPath = request.getSession().getServletContext().getRealPath("/");
+        			   	String imgpath=rootPath+name;*/
         			   	try{
-        				MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        			        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         			        @SuppressWarnings("rawtypes")
         					Map hints = new HashMap();  
         			        //内容所使用编码  
         			        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
-        			        BitMatrix bitMatrix = multiFormatWriter.encode("139.224.59.3:8080/jasobim/"+files.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
+        			        BitMatrix bitMatrix = multiFormatWriter.encode("139.224.59.3:8080/jasobim"+files.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
+        			        //生成二维码  
+        			     
+        			        File outputFile = new File("E:/JasoBim/BimAppDocument/tomcat_xyx_8080/webapps/jasobim/files/code",str+".png"); 
+        			        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile);  
+        			   		/*MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        			        @SuppressWarnings("rawtypes")
+        					Map hints = new HashMap();  
+        			        //内容所使用编码  
+        			        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
+        			        BitMatrix bitMatrix = multiFormatWriter.encode("139.224.59.3:8080/jasobim"+files.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
         			        //生成二维码  
         			        File outputFile = new File(imgpath,str+".png"); 
         			        
-        			        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile);  
+        			        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile); */ 
         				} catch (Exception e) {
         					e.printStackTrace();
         				}
-        			   	String urlReal=name+str+".png";
+        			   	String urlReal="files/code/"+str+".png";
 						temp.add(urlReal);
 					}else{
 						temp.add(file[i].getOriginalFilename()+" format error");
 					}
 				}
+				urllist.setData(temp);
 			}
 		}else{
 			urllist.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
         return urllist;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<String> batchImportText(String name, String content,String token,HttpServletRequest request) {
+		DataWrapper<String> url= new DataWrapper<String>();
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null){
+			if (content != null && !content.equals("")) {
+				name=name+"/"+userInMemory.getId();
+				SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
+			   	Date d=new Date();
+			   	String str=sdf.format(d);
+			   	try{
+			        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+			        @SuppressWarnings("rawtypes")
+					Map hints = new HashMap();  
+			        //内容所使用编码  
+			        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
+			        BitMatrix bitMatrix = multiFormatWriter.encode("139.224.59.3:8080/jasobim"+content,BarcodeFormat.QR_CODE, 200, 200, hints);  
+			        //生成二维码  
+			        File outputFile = new File("E:/JasoBim/BimAppDocument/tomcat_xyx_8080/webapps/jasobim/files/code",str+".png"); 
+			        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile);  
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			   	String urlReal="files/code/"+str+".png";
+				url.setData(urlReal);;
+			}
+		}else{
+			url.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return url;
 	}
 }

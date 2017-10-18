@@ -26,15 +26,14 @@
 									<th ng-repeat="questionTitle in questionTitles">{{questionTitle}}</th>
 								</tr>
 								<tr ng-repeat = "question in projectQuestionList">
-								    <td>{{$index+1}}</td>
-									<td>{{projectQuestionOfType[question.questionType].name}}</td>
-									<td>{{question.userId}}</td>
-									<td>{{question.name}}</td>
-									<td>{{question.trades}}</td>
-									<td class="autocut"  title='{{question.intro}}' style="width:150px;">{{question.intro}}</td>
-									<td>{{question.questionDate}}</td>
-									<td>{{projectQuestionOfPriority[question.priority].name}}</td>
-									<td>{{projectQuestionOfStatus[question.state].name}}</td>
+								    <td style="width:15px;">{{$index+1}}</td>
+									<td style="width:50px;">{{projectQuestionOfType[question.questionType].name}}</td>
+									<td style="width:80px;">{{question.userId}}</td>
+									<td style="width:150px;">{{question.name}}</td>
+									<td style="width:80px;">{{question.trades}}</td>
+									<td style="width:120px;">{{question.questionDate}}</td>
+									<td style="width:70px;">{{projectQuestionOfPriority[question.priority].name}}</td>
+									<td style="width:70px;">{{projectQuestionOfStatus[question.state].name}}</td>
 									<!-- <td class="tds" >
 			                        <button id="editbutton" ng-click="questionChangeClick(question.id)">
 			                        </button>

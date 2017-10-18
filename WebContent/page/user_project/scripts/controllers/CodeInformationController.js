@@ -1,5 +1,6 @@
 var index;
 function CodeInformationController($scope,CodeInformationService) {
+	
 	console.log("载入CodeInformationController");
 	var paper="";
 	var projectId=null;

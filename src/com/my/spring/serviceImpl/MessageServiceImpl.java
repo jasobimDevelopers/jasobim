@@ -171,6 +171,7 @@ public class MessageServiceImpl implements MessageService {
 							}
 							if(user!=null){
 								messagePojo.setUserName(user.getUserName());
+								messagePojo.setRealName(user.getRealName());
 							}
 							
 						}
@@ -241,6 +242,7 @@ public class MessageServiceImpl implements MessageService {
 						messagePojo.setContent(dataWrappers.getData().get(i).getContent());
 						messagePojo.setMessageDate(dataWrappers.getData().get(i).getMessageDate());
 						messagePojo.setQuestionId(dataWrappers.getData().get(i).getQuestionId());
+						messagePojo.setRealName(userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName());
 						messagePojo.setId(dataWrappers.getData().get(i).getId());
 						if(dataWrappers.getData().get(i).getUserId()!=null)
 						{

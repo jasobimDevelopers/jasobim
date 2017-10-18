@@ -13,6 +13,7 @@ public class MessagePojo {
 	private String userIconUrl;
 	private String[] fileList;
 	private String[] fileNameList;
+	private String realName;
 	
 	
 	public Long getId() {
@@ -75,6 +76,12 @@ public class MessagePojo {
 	}
 	public void setUserIconUrl(String userIconUrl) {
 		this.userIconUrl = userIconUrl;
+	}
+	public String getRealName() {
+		return realName;
+	}
+	public void setRealName(String realName) {
+		this.realName = realName;
 	}
 	
 

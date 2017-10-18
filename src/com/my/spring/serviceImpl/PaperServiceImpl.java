@@ -5,11 +5,13 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.PaperDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.Building;
 import com.my.spring.model.Files;
 import com.my.spring.model.Paper;
 import com.my.spring.model.PaperPojo;
@@ -43,6 +45,8 @@ public class PaperServiceImpl implements PaperService {
     @Autowired
     UserDao userDao;
     @Autowired
+    BuildingDao buildingDao;
+    @Autowired
     FileDao fileDao;
     @Autowired
     FileService fileService;
@@ -59,11 +63,24 @@ public class PaperServiceImpl implements PaperService {
     public DataWrapper<Void> addPaper(Paper paper,String token,MultipartFile file,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);////验证登录时的session
+        Building buliding = new Building(); 
         if (userInMemory != null) {
 			/*if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){*/
 				///////验证是不是管理员身份
 				if(paper!=null){////验证上传的实体类是不是为空
 					///////1.文件的上传返回url
+					if(paper.getBuildingNum()!=null){
+						if(paper.getProjectId()!=null){
+							buliding=buildingDao.getBuildingByProjectId(paper.getProjectId()).getData();
+							if(buliding!=null){
+								if(paper.getBuildingNum()>buliding.getBuildingNum()){
+									buliding.setBuildingNum(paper.getBuildingNum());
+									buildingDao.updateBuilding(buliding);
+								}
+							}
+						}
+						
+					}
 					String path=filePath+"/"+"papers/"+paper.getProjectId();
 					Files newfile=fileService.uploadFile(path, file,fileType,request);
 					paper.setFileId(newfile.getId());
@@ -97,7 +114,6 @@ public class PaperServiceImpl implements PaperService {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(id!=null){
 					if(!paperDao.deletePaper(id)){ ///删除图纸表的信息
 						fileDao.deleteFiles(fileid);//删除文件表的信息
@@ -109,9 +125,6 @@ public class PaperServiceImpl implements PaperService {
 						return dataWrapper;
 			        
 				}
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -230,8 +243,6 @@ public class PaperServiceImpl implements PaperService {
 		User userInMemory=SessionManager.getSession(token);
 		if(userInMemory!=null)
 		{
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType())
-			{
 				if(id!=null)
 				{
 					Paper papers=paperDao.getById(id);
@@ -248,9 +259,6 @@ public class PaperServiceImpl implements PaperService {
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

@@ -118,7 +118,7 @@ text-decoration: none;
 	padding-left:48px;
 	font-size:16px;
 	font-family:微软雅黑;
-	width:784px;
+	width:885px;
 	border:1px solid gray;
 	background-color:#EEEFF3;
 }
@@ -147,7 +147,7 @@ text-decoration: none;
 	font-size:16px;
 	font-family:微软雅黑;
 	height:50px;
-	width:325px;
+	width:225px;
 	padding-top:12px;
 	padding-left:60px;
 	border-top:1px solid gray;
@@ -246,7 +246,7 @@ text-decoration: none;
 	float:left;
 }
 #table_content{
-	width:784px;
+	width:885px;
 	height:600px;
 	background-color:white;
 	border-left:1px solid gray;
@@ -264,9 +264,9 @@ text-decoration: none;
 	float:right;
 }
 #dataShow{
-	padding-left:55px;
+	padding-left:20px;
 	height:600px;
-	width:325px ! important;
+	width: 225px ! important;
 	background-color:white;
 	color:black ! important;
 }
@@ -339,7 +339,7 @@ text-decoration: none;
 #usercontent{
 	font-size:16px;
 	font-family:微软雅黑;
-	width:654px;
+	width:700px;
 	padding-left:20px;
 	padding-top: 9px;
 }
@@ -363,7 +363,6 @@ text-decoration: none;
 	float:left;
 }
 #userIntro{
-	height:75px;
 	margin-left:28px;
 	width:799px;
 }
@@ -405,7 +404,6 @@ text-decoration: none;
 #imageMessage{
     border-radius: 35px;
     width: 70px;
-    height: 70px;
     border: 1px solid gray;
     overflow:hidden;
 }
@@ -415,11 +413,9 @@ imageMessage img{
 #imgMessge{
 	opacity:0;
 	width:40px;
-	height:43px;
 }
 #messageUsername{
 	width:654px;
-	height:70px;
 }
 #action{
     text-align: center;

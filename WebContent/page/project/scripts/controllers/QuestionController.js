@@ -28,7 +28,7 @@ function QuestionController($scope,QuestionService) {
 		d ? document.getElementById("questionOfStatu").style.display = 'none': '';
 	}
 	$scope.showProjects=function(){
-		$scope.getProjectLists(pageSize,pageIndex,project);
+		$scope.getProjectLists(pageSize,-1,project);
 		$scope.restStyle(false,true,true,true);
 		var idom = document.getElementById("questionOfProject");
 		console.log(idom.style.display);

@@ -25,6 +25,7 @@ public class User {
     private Integer teamId;
     private Integer systemId;//0.IOS  1.android
     private Integer systemType;//0.安装人员 1.土建人员
+    private String menuItemList;
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -159,6 +160,15 @@ public class User {
 	}
 	public void setSystemType(Integer systemType) {
 		this.systemType = systemType;
+	}
+	
+	@Basic
+	@Column(name = "menu_item_list")
+	public String getMenuItemList() {
+		return menuItemList;
+	}
+	public void setMenuItemList(String menuItemList) {
+		this.menuItemList = menuItemList;
 	}
     
     

@@ -6,6 +6,7 @@ public class FeedBackPojo {
 	private String date;
 	private String content;
 	private String tel;
+	private String realName;
 	
 	public Long getId() {
 		return id;
@@ -40,6 +41,12 @@ public class FeedBackPojo {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getRealName() {
+		return realName;
+	}
+	public void setRealName(String realName) {
+		this.realName = realName;
 	}
 	
 }

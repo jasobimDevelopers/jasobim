@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class QuestionServiceImpl implements QuestionService {
     private String filePath = "files";
     private Integer fileType=2;
     @Override
-    public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile[] fileList,HttpServletRequest request,MultipartFile fileCode) {
+    public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile[] fileList,HttpServletRequest request,MultipartFile fileCode,MultipartFile[] voices) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -77,24 +78,42 @@ public class QuestionServiceImpl implements QuestionService {
 				if(!questionDao.addQuestion(question)){ 
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					return dataWrapper;
-				}else if(fileList.length>0)
-				{
-					for(int k=0;k<fileList.length;k++){
-						
-						String path=filePath+"/"+"questions";
-					 	Files newfile=fileService.uploadFile(path, fileList[k],fileType,request);
-					 	QuestionFile questionFile=new QuestionFile();
-					 	questionFile.setQuestionId(question.getId());
-					 	questionFile.setFileId(newfile.getId());
-					 	String originName = fileList[k].getOriginalFilename();
-						if (originName.contains(".")) {
-							originName = originName.substring(0, originName.lastIndexOf("."));
+				}else{ 
+					if(fileList.length>0)
+					{
+						for(int k=0;k<fileList.length;k++){
+							
+							String path=filePath+"/"+"questions";
+						 	Files newfile=fileService.uploadFile(path, fileList[k],fileType,request);
+						 	QuestionFile questionFile=new QuestionFile();
+						 	questionFile.setQuestionId(question.getId());
+						 	questionFile.setFileId(newfile.getId());
+						 	String originName = fileList[k].getOriginalFilename();
+							if (originName.contains(".")) {
+								originName = originName.substring(0, originName.lastIndexOf("."));
+							}
+							questionFile.setOriginName(originName);
+						 	questionFileDao.addQuestionFile(questionFile);
 						}
-						questionFile.setOriginName(originName);
-					 	questionFileDao.addQuestionFile(questionFile);
+							
 					}
-						
-				}	
+					if(voices.length>0){
+						for(int s=0;s<voices.length;s++){
+							
+							String path=filePath+"/"+"questions";
+						 	Files newfile=fileService.uploadFile(path, fileList[s],fileType,request);
+						 	QuestionFile questionFiles=new QuestionFile();
+						 	questionFiles.setQuestionId(question.getId());
+						 	questionFiles.setFileId(newfile.getId());
+						 	String originName = fileList[s].getOriginalFilename();
+							if (originName.contains(".")) {
+								originName = originName.substring(0, originName.lastIndexOf("."));
+							}
+							questionFiles.setOriginName(originName);
+						 	questionFileDao.addQuestionFile(questionFiles);
+						}
+					}
+				}
 			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
@@ -251,7 +270,7 @@ public class QuestionServiceImpl implements QuestionService {
 
 
     @Override
-    public DataWrapper<Void> updateQuestion(QuestionPojo question,String token,MultipartFile[] file,HttpServletRequest request) {
+    public DataWrapper<Void> updateQuestion(QuestionPojo question,String token,MultipartFile[] file,HttpServletRequest request,MultipartFile[] voices) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -267,6 +286,16 @@ public class QuestionServiceImpl implements QuestionService {
 								for(int i=0;i<file.length;i++){
 									String path=filePath+"/"+"questions";
 								 	Files newfile=fileService.uploadFile(path, file[i],fileType,request);
+								 	QuestionFile questionFile=new QuestionFile();
+								 	questionFile.setQuestionId(question.getId());
+								 	questionFile.setFileId(newfile.getId());
+								 	questionFileDao.addQuestionFile(questionFile);
+								}
+							}
+							if(voices.length>0){
+								for(int j=0;j<voices.length;j++){
+									String path=filePath+"/"+"questions";
+								 	Files newfile=fileService.uploadFile(path, file[j],fileType,request);
 								 	QuestionFile questionFile=new QuestionFile();
 								 	questionFile.setQuestionId(question.getId());
 								 	questionFile.setFileId(newfile.getId());
@@ -299,6 +328,9 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public DataWrapper<List<QuestionPojo>> getQuestionList(String content,Long projectId,String token, Integer pageIndex, Integer pageSize, Question question) {
     	DataWrapper<List<QuestionPojo>> datawrapper=new DataWrapper<List<QuestionPojo>>();
+    	List<QuestionPojo> pojo = new ArrayList<QuestionPojo>();
+    	DataWrapper<List<Question>> dataWrappers = new DataWrapper<List<Question>>();
+    	DataWrapper<List<QuestionFile>> dataWrapperFiles = new DataWrapper<List<QuestionFile>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		Long[] userIdList=null;
@@ -307,6 +339,8 @@ public class QuestionServiceImpl implements QuestionService {
 	        		UserLog userLog = new UserLog();
 	        		userLog.setActionDate(new Date());
 	        		userLog.setFileId(question.getId());
+	        		userLog.setSystemType(userInMemory.getSystemId());
+	        		userLog.setProjectId((long)-1);
 	        		userLog.setProjectPart(5);
 	        		userLog.setUserId(userInMemory.getId());
 	        		userLog.setVersion("-1");
@@ -382,8 +416,70 @@ public class QuestionServiceImpl implements QuestionService {
 			if(userInMemory.getUserType()==2 || userInMemory.getUserType()==3){
 				projectList=userInMemory.getProjectList();
 			}
-			datawrapper= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question,userIdList,projectList);
-			
+			dataWrappers= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question,userIdList,projectList);
+			for(int i=0;i<dataWrappers.getData().size();i++)
+	        {
+	        	QuestionPojo questionpojo=new QuestionPojo();
+	        	if(dataWrappers.getData().get(i).getUserList()!=null){
+	        		String[] nameList = dataWrappers.getData().get(i).getUserList().split(",");
+	        		if(nameList.length>0){
+	        			String[] nameLists =new String[nameList.length] ;
+	        			for(int k=0;k<nameList.length;k++){
+	        			   nameLists[i]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+	        			}
+	        			questionpojo.setUserNameLists(nameLists);
+		        	}else{
+		        		questionpojo.setUserNameLists(null);
+		        	}
+	        	}
+        		dataWrapperFiles=questionFileDao.getQuestionFileByQuestionId(dataWrappers.getData().get(i).getId());
+	        	if(dataWrapperFiles.getData()!=null)
+	        	{
+	        		String[] fileLists=new String[dataWrapperFiles.getData().size()];
+	            	String[] fileNameLists=new String[dataWrapperFiles.getData().size()];
+	            	int flag=0;
+	        		for(int j=0;j<dataWrapperFiles.getData().size();j++)
+	        		{
+	        			Long fileId=dataWrapperFiles.getData().get(j).getFileId();
+	        			Files file=fileDao.getById(fileId);
+	        			if(file!=null)
+	        			{
+	        				String fileItem=file.getUrl();
+	        				fileLists[flag]=fileItem;
+	        				String nameList=dataWrapperFiles.getData().get(j).getOriginName();
+	            			if(nameList!=null){
+	            				fileNameLists[flag]=nameList;
+	            			}
+	        				flag++;
+	        			}
+		        	}
+	        		if(fileLists!=null)
+	        		{
+	        			questionpojo.setFileList(fileLists);
+	        		}				
+		        }
+	        	String username=userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName();
+	        	questionpojo.setUserId(username);
+	        	questionpojo.setCodeInformation(dataWrappers.getData().get(i).getCodeInformation());
+	        	questionpojo.setPriority(dataWrappers.getData().get(i).getPriority());
+	        	questionpojo.setId(dataWrappers.getData().get(i).getId());
+	        	questionpojo.setIntro(dataWrappers.getData().get(i).getIntro());
+	        	questionpojo.setName(dataWrappers.getData().get(i).getName());
+	        	questionpojo.setProjectId(projectId);
+	        	questionpojo.setPosition(dataWrappers.getData().get(i).getPosition());
+	        	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+	        	questionpojo.setQuestionDate(sdf.format(dataWrappers.getData().get(i).getQuestionDate()));
+	        	questionpojo.setQuestionType(dataWrappers.getData().get(i).getQuestionType());
+	        	questionpojo.setState(dataWrappers.getData().get(i).getState());
+	        	questionpojo.setTrades(dataWrappers.getData().get(i).getTrades());        	        	
+	        	pojo.add(i, questionpojo);
+	        }
+			datawrapper.setData(pojo);
+			datawrapper.setCurrentPage(dataWrappers.getCurrentPage());
+			datawrapper.setCallStatus(dataWrappers.getCallStatus());
+			datawrapper.setNumberPerPage(dataWrappers.getNumberPerPage());
+			datawrapper.setTotalNumber(dataWrappers.getTotalNumber());
+			datawrapper.setTotalPage(dataWrappers.getTotalPage());
 			Long questionSort=questionDao.getQuestionListOfSort();
 			Long questionImportant=questionDao.getQuestionListOfImportant();
 			Long questionAll=questionDao.getQuestionList();
@@ -458,7 +554,8 @@ public class QuestionServiceImpl implements QuestionService {
 							questionPojo.setName(question.getName());
 							questionPojo.setPriority(question.getPriority());
 							questionPojo.setProjectId(question.getProjectId());
-							questionPojo.setQuestionDate(question.getQuestionDate());
+							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+							questionPojo.setQuestionDate(sdf.format(question.getQuestionDate()));
 							questionPojo.setQuestionType(question.getQuestionType());
 							questionPojo.setState(question.getState());
 							questionPojo.setTrades(question.getTrades());

@@ -4,6 +4,7 @@ import com.my.spring.model.Building;
 import com.my.spring.service.BuildingService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ public class BuildingController {
     BuildingService buildingService;
     @RequestMapping(value="/addBuilding", method = RequestMethod.POST)
     @ResponseBody
+    //@Cacheable(value="user-key", condition="#userId <50")
     public DataWrapper<Void> addBuilding(
             @ModelAttribute Building building,
             @RequestParam(value = "token",required = true) String token){

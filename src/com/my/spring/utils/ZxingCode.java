@@ -46,18 +46,18 @@ public final class ZxingCode {
   public static void main(String[] args) { 
 	try {
 	        String content = "http://mp.weixin.qq.com/s?__biz=MzI2MzU0NDkzNQ==&mid=100000007&idx=1&sn=9a85a9cffc294427379036356657a0a4&chksm=6abb080f5dcc8119c363ae5b0e07360b063b162222f9721cabda130eade63f5ca69dfc39f331#rd"; 
-	        String path = "C:/Users/Han/Desktop/e.pdf";
+	        String path = "C:/Users/Han/Desktop/c95b2fff55cbde40b353394c374e1aa2.png";
 	        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 	        @SuppressWarnings("rawtypes")
 			Map hints = new HashMap();  
 	        //内容所使用编码  
 	        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
-	        BitMatrix bitMatrix = multiFormatWriter.encode(content,BarcodeFormat.QR_CODE, 200, 200, hints);  
+	        BitMatrix bitMatrix = multiFormatWriter.encode(path,BarcodeFormat.QR_CODE, 200, 200, hints);  
 	        //生成二维码  
 	        SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
 		   	Date d=new Date();
 		   	String str=sdf.format(d);
-	        File outputFile = new File(path,str+".jpg"); 
+	        File outputFile = new File("C:/Users/Han/Desktop",str+".jpg"); 
 	        MatrixToImageWriter.writeToFile(bitMatrix, "jpg", outputFile);  
 	} catch (Exception e) {
 	    e.printStackTrace();

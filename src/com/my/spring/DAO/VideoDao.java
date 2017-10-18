@@ -11,7 +11,7 @@ public interface VideoDao {
 	boolean addVideo(Video Video);
 	boolean updateVideo(Video Video);
 	boolean deleteVideo(Long id);
-	DataWrapper<List<Video>> getVideoList(Long projectId, Integer pageIndex, Integer pageSize, Video video);
+	DataWrapper<List<Video>> getVideoList(Long projectId, Integer pageIndex, Integer pageSize, Video video,String beginDate,String endDate);
 	boolean getByProjectId(Long id);
 	boolean deleteVideoByProjectId(Long id);
 }
