@@ -15,7 +15,7 @@ public class ConstructionTaskPojo {
 	private String nextReceivePeopleName;
 	private String nextApprovalPeopleType;
 	private String currentUserName;
-	private Integer taskFlag;////任务单状态指标
+	private Integer taskFlag;////任务单状态(0、未完成 1、已完成)
 	private String[] approvalPeopleNameList;//审批人姓名
 	private String[] approvalDateList;///每次审批的时间数组
 	private String[] approvalPeopleIdeaList;//审批人意见数组
@@ -23,7 +23,7 @@ public class ConstructionTaskPojo {
 	private String[] approvalPeopleTypeList;//审批人数组
 	private String lastDate;///历时
 	private String workPeopleNameList;
-	private Integer state;///0、带审批   1、已审批   2、未完成  3、已完成
+	private Integer state;///(0、未审批 1、已审批)
 	private String[] fileUrlList;
 
 	public Long getId() {

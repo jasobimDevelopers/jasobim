@@ -59,7 +59,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/swetakeQRcode.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jnotify-0.93.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/ehcache-spring-annotations-1.2.0.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/guava-13.0.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.mail.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jedis-2.1.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jiguang-common-1.0.7.jar"/>

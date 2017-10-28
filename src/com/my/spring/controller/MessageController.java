@@ -85,7 +85,8 @@ public class MessageController {
     @ResponseBody
     public DataWrapper<List<MessagePojo>> getMessageListByQuestionId(
     		@RequestParam(value = "questionId",required = true) Long questionId,
-            @RequestParam(value = "token",required = true) String token){
-        return messageService.getMessageListByQuestionId(questionId,token);
+    		@RequestParam(value = "weixin",required = false) String weixin,
+            @RequestParam(value = "token",required = false) String token){
+        return messageService.getMessageListByQuestionId(questionId,token,weixin);
     }
 }

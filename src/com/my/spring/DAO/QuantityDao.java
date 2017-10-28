@@ -17,7 +17,7 @@ public interface QuantityDao {
 		boolean findSameQuantityAndDo(List<Quantity> quantityList);
 		List<Quantity> getAllQuantity();
 		
-		boolean exportQuantity(String filePath,Long projectId);
+		String exportQuantity(Long projectId);
 		boolean deleteQuantityByProjectId(Long id);
 		DataWrapper<List<Quantity>> getQuantityListNums(Long projectId, Integer pageSize, Integer pageIndex,
 				Quantity quantity);

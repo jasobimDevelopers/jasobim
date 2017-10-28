@@ -85,6 +85,9 @@ public class UserServiceImpl implements UserService {
 				String token = SessionManager.newSession(user);
 				dataWrapper.setToken(token);
 				UserPojo users=new UserPojo();
+				if(user.getMenuItemList()!=null){
+					users.setMenuItemList(user.getMenuItemList().split(","));
+				}
 				if(user.getProjectList()!=null){
 					String[] projectList=user.getProjectList().split(",");
 					String[] projectName = new String[projectList.length];

@@ -5,6 +5,7 @@ package com.my.spring.model;
 public class QuestionPojo {
 	private Long id;       ////问题编号
 	private Long projectId;////项目工程id
+	private String projectName;///项目名称
 	private Integer questionType;////问题类型(0.安全1.质量2.其他)
 	private String userId;  ///问题提交人id
 	private String name;  ///问题名称
@@ -23,6 +24,7 @@ public class QuestionPojo {
 	private String[] userNameLists;
 	private String voiceUrlList;
 	private Integer userid;
+	private String userList;
 	private Integer roleFlag;//0.普通用户（只能看指定的项目的所有内容）
 							 //1.总经理(能看所有，但是问题只看紧急和重要) 
 	                         //2.投资方（只能看所述项目的内容，另外项目里面的工程量和紧急和重要问题不能看）
@@ -170,6 +172,18 @@ public class QuestionPojo {
 	}
 	public void setUserid(Integer userid) {
 		this.userid = userid;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	public String getUserList() {
+		return userList;
+	}
+	public void setUserList(String userList) {
+		this.userList = userList;
 	}
 	
 	

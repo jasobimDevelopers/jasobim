@@ -26,7 +26,7 @@ public class TestRedis {
     @Before
     public static void setup() {
         //连接redis服务器，192.168.0.100:6379
-        jedis = new Jedis("139.224.59.3", 6379);
+        jedis = new Jedis("jasobim.com.cn", 6379);
         //权限认证
         jedis.auth("xyx123456");  
     }

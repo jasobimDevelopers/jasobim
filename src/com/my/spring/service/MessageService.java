@@ -17,7 +17,7 @@ public interface MessageService {
 	DataWrapper<Void> addMessage(Message message, String token, MultipartFile[] file, 
 			HttpServletRequest request);
 	DataWrapper<Void> deleteMessage(Long id, String token, HttpServletRequest request);
-	DataWrapper<List<MessagePojo>> getMessageListByQuestionId(Long questionId, String token);
+	DataWrapper<List<MessagePojo>> getMessageListByQuestionId(Long questionId, String token, String weixin);
 	DataWrapper<Void> updateMessage(Message message, String token);
 	DataWrapper<Message> getMessageListById(Long id, String token);
 }

@@ -147,7 +147,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         	
         	if(question.getPriority()!=null && question.getPriority()!=-1) 
         	{
-        		dis.add(Restrictions.eq("priority", question.getPriority()));
+        		criteria.add(Restrictions.eq("priority", question.getPriority()));
 			} 
         	if(userIdList!=null)
         	{

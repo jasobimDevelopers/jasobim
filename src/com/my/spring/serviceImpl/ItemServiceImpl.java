@@ -526,7 +526,7 @@ public class ItemServiceImpl implements ItemService {
 		if(test!=null){
 			codeInformation=test.getId().toString();
 		}
-		codeInformation="http://139.224.59.3:8080/jasobim/page/itemInfo.html?id="+test.getId().toString();
+		codeInformation="http://jasobim.com.cn/page/itemInfo.html?id="+test.getId().toString();
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
 	   	Date d=new Date();
 	   	String str=sdf.format(d);

@@ -125,31 +125,50 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 		return bool;
 	}
 	@Override
-	public boolean exportUserLog(String filePath,String dateStart,String dateFinished) {
+	public String exportUserLog(String dateStart,String dateFinished) {
 		// TODO Auto-generated method stub
 		
 		Session session=getSession();
+		String result = "";
 		try{
-			ProcedureCall procedureCall = session.createStoredProcedureCall("exportUserLog");
-			String starttime="";
-			String finishedtime="";
-			
-			if(dateStart!=null){
-	    		starttime=dateStart;
+
+			String sql="select A.real_name,A.name as project_part_name,A.version,A.num,A.system_name,B.name as projectName,DATE_FORMAT(A.action_date,'%Y-%m-%d %H:%i:%s')"
+					+" from (select b.real_name,d.name,a.version,a.num,e.system_name,a.project_id,a.action_date from (select *,count(*) as"
+					+" num from user_log where 1=1";
+			if(dateStart != null) {
+				sql += " and action_date >= " + dateStart;
 			}
-			if(dateFinished!=null){
-				finishedtime=dateFinished;
+			if(dateFinished != null) {
+				sql += " and action_date <= " + dateFinished;
 			}
-			procedureCall.registerParameter("file_path", String.class, ParameterMode.IN).bindValue(filePath);
-			procedureCall.registerParameter("date_start", String.class, ParameterMode.IN).bindValue(starttime);
-			procedureCall.registerParameter("date_finished", String.class, ParameterMode.IN).bindValue(finishedtime);;
-			procedureCall.getOutputs();
+			sql +=	" GROUP BY user_id,project_id,system_type,version,project_part,project_id) a,"
+					+"user b,project_part_name d,phone_system e where a.user_id=b.id and a.project_part=d.project_part"
+					+" and b.user_type=3 and a.system_type=e.system_type) A left join  project B on A.project_id=B.id";
+			Query query = session.createSQLQuery(sql);
+			List<Object[]> list = query.list();
+			for(Object[] o : list) {
+				result +=  o[0] +"," + o[1] +"," + o[2]+","+o[3]+","+o[4]+","+o[5]+","+o[6]+"\n";
+			}
+//			ProcedureCall procedureCall = session.createStoredProcedureCall("exportUserLog");
+//			String starttime="";
+//			String finishedtime="";
+//			
+//			if(dateStart!=null){
+//	    		starttime=dateStart;
+//			}
+//			if(dateFinished!=null){
+//				finishedtime=dateFinished;
+//			}
+//			procedureCall.registerParameter("file_path", String.class, ParameterMode.IN).bindValue(filePath);
+//			procedureCall.registerParameter("date_start", String.class, ParameterMode.IN).bindValue(starttime);
+//			procedureCall.registerParameter("date_finished", String.class, ParameterMode.IN).bindValue(finishedtime);;
+//			procedureCall.getOutputs();
 	    }catch(Exception e){
 	        e.printStackTrace();
-	        return false;
+	        return null;
 	    }
+		return result;
 		
-		return true;
 	}
 
 

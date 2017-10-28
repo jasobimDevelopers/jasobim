@@ -186,10 +186,32 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 	 */
 	
 	@Override
-	public boolean exportDuct(String filePath,Long projectId,String dateStart,String dateFinished) {
+	public String exportDuct(Long projectId,String dateStart,String dateFinished) {
 		// TODO Auto-generated method stub
-		
-		Session session=getSession();
+		Session session = getSession();
+		String result="";
+		try{
+
+			String sql="select b.id,b.name,count(*) as value,sum(length) as length,sum(area) as area,b.project_id,b.building_num,b.family_and_type,"
+						+"b.size,a.name as project_name,b.date from duct b left join project a on a.id=b.project_id where b.project_id="+projectId;
+						
+			if(dateStart != null) {
+				sql += " and b.date >= " + dateStart;
+			}
+			if(dateFinished != null) {
+				sql += " and b.date <= " + dateFinished;
+			}
+			sql +=" group by size,family_and_type order by b.date desc";
+			Query query = session.createSQLQuery(sql);
+			List<Object[]> list = query.list();
+			for(Object[] o : list) {
+				result +=  o[0] +"," + o[1] +"," + o[2]+","+o[3]+","+o[4]+","+o[5]+","+o[6]+","+o[7]+","+o[8]+","+o[9]+","+o[10]+"\n";
+			}
+		}catch(Exception e){
+	        e.printStackTrace();
+	        return null;
+	    }
+		/*Session session=getSession();
 		try{
 			ProcedureCall procedureCall = session.createStoredProcedureCall("exportDuct");
 			String starttime="";
@@ -209,9 +231,9 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 	    }catch(Exception e){
 	        e.printStackTrace();
 	        return false;
-	    }
+	    }*/
 		
-		return true;
+		return result;
 	}
 
 	@Override

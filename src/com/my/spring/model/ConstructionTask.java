@@ -31,7 +31,7 @@ public class ConstructionTask {
 	private String approvalPeopleTypeList;///班组长   →   质量员  →    安全员或其他   →    施工员  →   预算员   →  经理
 	private String approvalPeopleNoteList;//审批人批注
 	private String approvalPeopleName;///审批人姓名
-	private Integer taskFlag;////任务单状态指标(2.待审批  3.已审批 1.已完成  0.未完成)
+	private Integer taskFlag;////任务单状态指标( 1.已完成  0.未完成)
 	private String othersAttention;////任务单其他需要注意的事情
 	private Long projectId;////项目id
 	private String userProjectIdList;
@@ -259,6 +259,7 @@ public class ConstructionTask {
 	public void setFileIdList(String fileIdList) {
 		this.fileIdList = fileIdList;
 	}
+	
 	
 	
 	

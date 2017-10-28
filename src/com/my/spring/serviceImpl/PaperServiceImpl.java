@@ -363,7 +363,7 @@ public class PaperServiceImpl implements PaperService {
 	        					Map hints = new HashMap();  
 	        			        //内容所使用编码  
 	        			        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
-	        			        BitMatrix bitMatrix = multiFormatWriter.encode("139.224.59.3:8080/jasobim/"+file.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
+	        			        BitMatrix bitMatrix = multiFormatWriter.encode("jasobim.com.cn/"+file.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
 	        			        //生成二维码  
 	        			        File outputFile = new File(imgpath,str+".png"); 
 	        			        

@@ -34,6 +34,7 @@ import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.UserLog;
 import com.my.spring.model.UserLogPojo;
 import com.my.spring.model.UserLogPojos;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.model.User;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
@@ -219,29 +220,32 @@ public class UserLogServiceImpl implements UserLogService {
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null) {
 			
-				String filePath = "E:/JasoBim/BimAppDocument/tomcat_xyx_8080/webapps/jasobim" + "/out/" + "userLog/";
+				String filePath = Parameters.userLogFilePath + userInMemory.getId() + "/";
 				File fileDir = new File(filePath);
 		        if (!fileDir.exists()) {
 		            fileDir.mkdirs();
 		        }
-		        String tempFile = filePath + "userlog_temp.csv";
 		        String file = filePath + "userlog.csv";
 		        String header = "真实姓名,"
 		        		+ "功能模块,"
 		        		+ "版本号,"
 		        		+ "访问量,"
 		        		+ "系统类型,"
-		        		+ "项目名称";
-		        FileOperationsUtil.deleteFile(tempFile);
-		        FileOperationsUtil.deleteFile(file);
-		        if (userLogDao.exportUserLog(tempFile,dateStart,dateFinished)) {
-					String content = FileOperationsUtil.readFile(tempFile);
-					String newContent = header + "\n" + content;
-					FileOperationsUtil.writeFile(file, newContent, false);
-					dataWrapper.setData("out/" + "userLog/" +"userlog.csv");
-				} else {
-					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-				}
+		        		+ "项目名称,"
+		        		+ "时间";
+		        String result = userLogDao.exportUserLog(dateStart, dateFinished);
+		        if(result == null) {
+		        	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+		        } else {
+					boolean flag = FileOperationsUtil.writeFile(file, header + "\n" + result, false);
+					if(flag) {
+						dataWrapper.setData("out/" + "userLog/" + userInMemory.getId() + "/userlog.csv");
+					} else {
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}
+					
+		        }
+
 			
 			
 		} else {

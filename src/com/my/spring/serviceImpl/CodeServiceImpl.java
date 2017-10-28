@@ -57,10 +57,10 @@ public class CodeServiceImpl implements CodeService {
         					Map hints = new HashMap();  
         			        //内容所使用编码  
         			        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
-        			        BitMatrix bitMatrix = multiFormatWriter.encode("139.224.59.3:8080/jasobim"+files.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
+        			        BitMatrix bitMatrix = multiFormatWriter.encode("jasobim.com.cn/"+files.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
         			        //生成二维码  
         			     
-        			        File outputFile = new File("E:/JasoBim/BimAppDocument/tomcat_xyx_8080/webapps/jasobim/files/code",str+".png"); 
+        			        File outputFile = new File("C:/jasobim/tomcat80/webapps/ROOT/files/code",str+".png"); 
         			        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile);  
         			   		/*MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         			        @SuppressWarnings("rawtypes")
@@ -105,9 +105,9 @@ public class CodeServiceImpl implements CodeService {
 					Map hints = new HashMap();  
 			        //内容所使用编码  
 			        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
-			        BitMatrix bitMatrix = multiFormatWriter.encode("139.224.59.3:8080/jasobim"+content,BarcodeFormat.QR_CODE, 200, 200, hints);  
+			        BitMatrix bitMatrix = multiFormatWriter.encode("jasobim.com.cn/"+content,BarcodeFormat.QR_CODE, 200, 200, hints);  
 			        //生成二维码  
-			        File outputFile = new File("E:/JasoBim/BimAppDocument/tomcat_xyx_8080/webapps/jasobim/files/code",str+".png"); 
+			        File outputFile = new File("C:/jasobim/tomcat80/webapps/ROOT/files/code",str+".png"); 
 			        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile);  
 				} catch (Exception e) {
 					e.printStackTrace();

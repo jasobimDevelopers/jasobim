@@ -1,6 +1,6 @@
 package com.my.spring.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -17,6 +17,7 @@ public class Message {
 	private Date messageDate;
 	private Long questionId;
 	private Long userId;
+	private Long projectId;
 	
 	@Id
     @GeneratedValue
@@ -62,6 +63,15 @@ public class Message {
 	}
 	public void setQuestionId(Long questionId) {
 		this.questionId = questionId;
+	}
+	
+	@Basic
+    @Column(name = "project_id")
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 	
 

@@ -6,7 +6,7 @@ import java.sql.Date;
 public class MessagePojo {
 	private Long id;
 	private String content;
-	private Date messageDate;
+	private String messageDate;
 	private Long questionId;
 	private Long userId;
 	private String userName;
@@ -14,7 +14,8 @@ public class MessagePojo {
 	private String[] fileList;
 	private String[] fileNameList;
 	private String realName;
-	
+	private String projectName;
+	private Long projectId;
 	
 	public Long getId() {
 		return id;
@@ -32,10 +33,10 @@ public class MessagePojo {
 	}
 	
 	
-	public Date getMessageDate() {
+	public String getMessageDate() {
 		return messageDate;
 	}
-	public void setMessageDate(Date messageDate) {
+	public void setMessageDate(String messageDate) {
 		this.messageDate = messageDate;
 	}
 	
@@ -82,6 +83,18 @@ public class MessagePojo {
 	}
 	public void setRealName(String realName) {
 		this.realName = realName;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 	
 

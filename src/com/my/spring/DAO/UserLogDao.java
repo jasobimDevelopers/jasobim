@@ -19,7 +19,7 @@ public interface UserLogDao {
 
 	UserLog getById(Long id);
 
-	boolean exportUserLog(String tempFile, String dateStart, String dateFinished);
+	String exportUserLog(String dateStart, String dateFinished);
 
 	DataWrapper<List<UserLogPojos>> getUserLogLists(String startTime,String finishedTime,Long projectId,Integer projectPart,Integer systemType);
 

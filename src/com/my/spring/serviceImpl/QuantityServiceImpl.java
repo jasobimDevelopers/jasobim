@@ -17,6 +17,7 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.User;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.service.QuantityService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.FileOperationsUtil;
@@ -185,12 +186,11 @@ public class QuantityServiceImpl implements QuantityService {
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null) {
 			
-				String filePath = "E:/JasoBim/BimAppDocument/tomcat_xyx_8080/webapps/jasobim" + "/out/" + projectId + "/";
+				String filePath = Parameters.quantityPath + projectId + "/";
 				File fileDir = new File(filePath);
 		        if (!fileDir.exists()) {
 		            fileDir.mkdirs();
 		        }
-		        String tempFile = filePath + "quantity_temp.csv";
 		        String file = filePath + "quantity.csv";
 		        String header = "序号,"
 		        		+ "名称,"
@@ -207,16 +207,7 @@ public class QuantityServiceImpl implements QuantityService {
 		        		+ "设备类型,"
 		        		+ "尺寸,"
 		        		+ "材质";
-		        FileOperationsUtil.deleteFile(tempFile);
-		        FileOperationsUtil.deleteFile(file);
-		        if (quantityDao.exportQuantity(tempFile, projectId)) {
-					String content = FileOperationsUtil.readFile(tempFile);
-					String newContent = header +"\n"+ content;
-					FileOperationsUtil.writeFile(file, newContent, false);
-					dataWrapper.setData("out/" + projectId + "/quantity.csv");
-				} else {
-					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-				}
+		      String result = quantityDao.exportQuantity(projectId);
 			
 			
 		} else {

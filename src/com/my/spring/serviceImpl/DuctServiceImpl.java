@@ -17,6 +17,7 @@ import com.my.spring.model.DuctPojo;
 import com.my.spring.model.DuctPojos;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.service.DuctService;
 import com.my.spring.service.FileService;
 import com.my.spring.service.UserLogService;
@@ -357,7 +358,7 @@ public class DuctServiceImpl implements DuctService {
 		        	for(int i=0;i<DuctList.size();i++){
 		        		String codeInformation=null;
 		        		
-		        		codeInformation="http://139.224.59.3:8080/jasobim/page/ductInfo.html?selfId="+DuctList.get(i).getSelfId();
+		        		codeInformation="http://jasobim.com.cn/page/ductInfo.html?selfId="+DuctList.get(i).getSelfId();
 		        		SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
 		        	   	Date d=new Date();
 		        	   	String str=sdf.format(d);
@@ -411,12 +412,11 @@ public class DuctServiceImpl implements DuctService {
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null) {
 			
-				String filePath = "E:/JasoBim/BimAppDocument/tomcat_xyx_8080/webapps/jasobim" + "/out/" + projectId + "/duct/";
+				String filePath = Parameters.ductfilePath + projectId + "/";
 				File fileDir = new File(filePath);
 		        if (!fileDir.exists()) {
 		            fileDir.mkdirs();
 		        }
-		        String tempFile = filePath + "duct_temp.csv";
 		        String file = filePath + "duct.csv";
 		        String header = "序号,"
 		        		+ "名称,"
@@ -429,17 +429,12 @@ public class DuctServiceImpl implements DuctService {
 		        		+ "尺寸,"
 		        		+ "项目名称,"
 		        		+ "时间";
-		        FileOperationsUtil.deleteFile(tempFile);
-		        FileOperationsUtil.deleteFile(file);
-		        if (DuctDao.exportDuct(tempFile, projectId,dateStart,dateFinished)) {
-					String content = FileOperationsUtil.readFile(tempFile);
-					String newContent = header+"\n" + content;
-					FileOperationsUtil.writeFile(file, newContent, false);
-					dataWrapper.setData("out/" + projectId +"/duct" +"/duct.csv");
-				} else {
-					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-				}
-			
+		       String result = DuctDao.exportDuct(projectId, dateStart, dateFinished);
+		       if(result!=null){
+		    	   dataWrapper.setData(result);
+		       }else{
+		    	   dataWrapper.setErrorCode(ErrorCodeEnum.Error);;
+		       }
 			
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);

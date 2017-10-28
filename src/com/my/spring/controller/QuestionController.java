@@ -130,8 +130,9 @@ public class QuestionController {
     @ResponseBody
     public DataWrapper<QuestionPojo> getQuestionDetails(
     		@RequestParam(value="questionId",required=true) Long questionId,
-    		@RequestParam(value="token",required=true) String token){
-        return questionService.getQuestionDetailsByAdmin(questionId,token);
+    		@RequestParam(value="weixin",required=false) String weixin,
+    		@RequestParam(value="token",required=false) String token){
+        return questionService.getQuestionDetailsByAdmin(questionId,token,weixin);
     }
     
     

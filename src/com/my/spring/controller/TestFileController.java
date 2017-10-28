@@ -62,7 +62,7 @@ public class TestFileController {
 		//根据id去查Files,取出Files里面的url,传参
 //		String filePath = request.getSession().getServletContext().getRealPath("/") + "/test.xls";
 		String filePath = "E:/test.xls";
-        return quantityDao.exportQuantity(filePath,new Long(1));
+        return true;
     }
 	
 	@RequestMapping(value="/testGroupBy", method = RequestMethod.GET)

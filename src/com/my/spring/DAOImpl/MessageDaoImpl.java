@@ -49,6 +49,9 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
         if(message.getQuestionId()!=null){
         	criteria.add(Restrictions.eq("questionId", message.getQuestionId()));
         }
+        if(message.getProjectId()!=null){
+        	criteria.add(Restrictions.eq("projectId", message.getProjectId()));
+        }
         criteria.addOrder(Order.asc("messageDate"));
         /////////////////////////////////////
    

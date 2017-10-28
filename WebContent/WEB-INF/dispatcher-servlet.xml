@@ -33,7 +33,7 @@
               </property>
        </bean>
        <bean class="com.my.spring.utils.SwaggerConfig" />
-       <mvc:resources mapping="/api/**" location="/api/" />  
+      <!--  <mvc:resources mapping="/api/**" location="/api/" />   -->
        <!-- <mvc:default-servlet-handler/> -->
        <bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
          <!-- Direct static mappings -->

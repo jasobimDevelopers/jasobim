@@ -703,6 +703,18 @@
 					<overwrite>false</overwrite>
 				</configuration>
 			</plugin>
+			<plugin>
+		    <groupId>org.apache.tomcat.maven</groupId>
+		    <artifactId>tomcat7-maven-plugin</artifactId>
+		    <version>2.2</version>
+		    <configuration>
+		        <url>http://jasobim.com.cn:8080/manager/text</url>
+		        <username>xyx</username>
+		        <password>xyxtest</password>
+		        <update>true</update>
+		        <path>/jasobim</path>
+		    </configuration>
+		    </plugin>
 		</plugins>
 	</build>
 	

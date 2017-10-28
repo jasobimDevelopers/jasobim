@@ -188,21 +188,24 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 	}
 
 	@Override
-	public boolean exportQuantity(String filePath,Long projectId) {
+	public String exportQuantity(Long projectId) {
 		// TODO Auto-generated method stub
-		
+		String result="";
 		Session session=getSession();
 		try{
-			ProcedureCall procedureCall = session.createStoredProcedureCall("exportQuantity");
-			procedureCall.registerParameter("file_path", String.class, ParameterMode.IN).bindValue(filePath);
-			procedureCall.registerParameter("project_id", Long.class, ParameterMode.IN).bindValue(projectId);
-			procedureCall.getOutputs();
+			String sql="select id,name,profession_type,value,unit,project_id,building_num,floor_num,unit_num,household_num,"
+					+"family_and_type,system_type,service_type,size,material from quantity where project_id="+projectId;
+			Query query = session.createSQLQuery(sql);
+			List<Object[]> list = query.list();
+			for(Object[] o : list) {
+				result +=  o[0] +"," + o[1] +"," + o[2]+","+o[3]+","+o[4]+","+o[5]+","+o[6]+","+o[7]+","+o[8]+","+o[9]+","
+						  +o[10]+","+o[11]+","+o[12]+","+o[13]+","+o[14]+"\n";
+			}
 	    }catch(Exception e){
 	        e.printStackTrace();
-	        return false;
+	        return null;
 	    }
-		
-		return true;
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")
