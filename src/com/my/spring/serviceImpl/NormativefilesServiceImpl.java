@@ -1,0 +1,196 @@
+package com.my.spring.serviceImpl;
+
+import com.my.spring.DAO.FileDao;
+import com.my.spring.DAO.NormativefilesDao;
+import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.Files;
+import com.my.spring.model.Normativefiles;
+import com.my.spring.model.NormativefilesPojo;
+import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
+import com.my.spring.service.FileService;
+import com.my.spring.service.NormativefilesService;
+import com.my.spring.service.UserLogService;
+import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.SessionManager;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+@Service("normativefilesService")
+public class NormativefilesServiceImpl implements NormativefilesService {
+    @Autowired
+    NormativefilesDao normativefilesDao;
+    /*@Autowired
+    NormativefilesFileDao NormativefilesFileDao;*/
+    @Autowired
+    FileDao fileDao;
+    @Autowired
+    UserDao userDao;
+    @Autowired
+    FileService fileService;
+    @Autowired
+    UserLogService userLogSerivce;
+    private String filePath = "files";
+    private Integer fileType = 0;//默认word文档
+    @Override
+    public DataWrapper<Void> addNormativefiles(Normativefiles Normativefiles,String token,MultipartFile[] fileList,Integer fileType,HttpServletRequest request) {
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+			if(Normativefiles!=null){
+				
+				if(fileList.length >0){
+					String idList="";
+					for(int i=0;i<fileList.length;i++){
+						String path=filePath+"/"+"normativefiles";
+						Files newfile=fileService.uploadFile(path, fileList[i],fileType,request);
+						if(!idList.equals("")){
+							idList=idList+","+newfile.getId();
+						}else{
+							idList+=newfile.getId();
+						}
+						
+					}
+					Normativefiles.setFileIdList(idList);
+				}
+				Normativefiles.setSubmitUserId(userInMemory.getId());
+				Normativefiles.setSubmitDate(new Date(System.currentTimeMillis()));
+				if(!normativefilesDao.addNormativefiles(Normativefiles)) 
+				{
+					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return dataWrapper;
+    }
+
+    @Override
+    public DataWrapper<Void> deleteNormativefiles(Long id,String token ) {
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
+				if(id!=null){
+					Normativefiles normativefiles=normativefilesDao.getById(id);
+					if(normativefiles.getFileIdList()!=null){
+						for(int i=0;i<normativefiles.getFileIdList().split(",").length ;i++){
+							fileService.deleteFileById(Long.valueOf(normativefiles.getFileIdList().split(",")[i]));
+						}
+					}
+					if(!normativefilesDao.deleteNormativefiles(id)){
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}
+				}else{
+					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return dataWrapper;
+    }
+
+    
+
+    @Override
+    public DataWrapper<List<NormativefilesPojo>> getNormativefilesList(String token , Integer pageIndex, Integer pageSize, Normativefiles Normativefiles) {
+    	DataWrapper<List<NormativefilesPojo>> dataWrappers = new DataWrapper<List<NormativefilesPojo>>();
+    	DataWrapper<List<Normativefiles>> dataWrapper = new DataWrapper<List<Normativefiles>>();
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+        	if(Normativefiles.getId()!=null){
+        		UserLog userLog = new UserLog();
+        		userLog.setActionDate(new Date());
+        		//userLog.setFileId(Normativefiles.getId());
+        		userLog.setProjectPart(6);
+        		userLog.setUserId(userInMemory.getId());
+        		userLog.setVersion("-1");
+        		userLogSerivce.addUserLog(userLog, token);
+        	}
+				dataWrapper=normativefilesDao.getNormativefilessList(pageIndex,pageSize,Normativefiles);
+				if(dataWrapper.getData()!=null){
+					List<NormativefilesPojo> NormativefilesPojoList = new ArrayList<NormativefilesPojo>();
+					for(int i=0;i<dataWrapper.getData().size();i++){
+						NormativefilesPojo NormativefilesPojo =new NormativefilesPojo();
+						NormativefilesPojo.setContent(dataWrapper.getData().get(i).getContent());
+						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+						NormativefilesPojo.setSubmitDate(sdf.format(dataWrapper.getData().get(i).getSubmitDate()));
+						NormativefilesPojo.setId(dataWrapper.getData().get(i).getId());
+						NormativefilesPojo.setDescribe(dataWrapper.getData().get(i).getDescribes());
+						NormativefilesPojo.setSize(dataWrapper.getData().get(i).getSize());
+						NormativefilesPojo.setTitle(dataWrapper.getData().get(i).getTitle());
+						if(dataWrapper.getData().get(i).getFileIdList()!=null){
+							String[] idlist = dataWrapper.getData().get(i).getFileIdList().split(",");
+							String[] fileUrlList = new String[idlist.length];
+							String[] fileNameList = new String[idlist.length];
+							for(int s=0;s<idlist.length;s++){
+								Files files = fileService.getById(Long.valueOf(idlist[s]));
+								fileUrlList[s]=files.getUrl();
+								fileNameList[s]=files.getRealName();
+							}
+							NormativefilesPojo.setFileUrlList(fileUrlList);
+							NormativefilesPojo.setFileNameList(fileNameList);
+						}
+						if(dataWrapper.getData().get(i).getSubmitUserId()!=null){
+							NormativefilesPojo.setSubmitUserName(userDao.getById(dataWrapper.getData().get(i).getSubmitUserId()).getUserName());
+						}
+						if(NormativefilesPojo!=null){
+							NormativefilesPojoList.add(NormativefilesPojo);
+						}
+					}
+					if(NormativefilesPojoList!=null && NormativefilesPojoList.size()>0){
+						dataWrappers.setData(NormativefilesPojoList);
+						dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
+						dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
+						dataWrappers.setTotalPage(dataWrapper.getTotalPage());
+						dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
+					}else{
+						dataWrappers.setErrorCode(ErrorCodeEnum.Error);
+					}
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+        return dataWrappers;
+    }
+
+	@Override
+	public DataWrapper<List<Normativefiles>> getNormativefilesListByUserId(Long userId,String token) {
+		DataWrapper<List<Normativefiles>> dataWrapper = new DataWrapper<List<Normativefiles>>();
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+			if(userId!=null){
+				if(normativefilesDao.getNormativefilessListByUserId(userId)==null) 
+		            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				else
+					return normativefilesDao.getNormativefilessListByUserId(userId);
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return dataWrapper;
+	}
+
+	
+
+	
+}

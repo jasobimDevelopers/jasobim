@@ -1,0 +1,92 @@
+<div id="quantityContent">
+	<div id="projectDetail_body_quantity">
+				<div id="quantity_menu">
+					<div id="item_menuli_first">
+						<div><span>专业</span></div>
+						<div><button class="btn btn-default phase_quantity" ng-click="setPhase('all',flag[0])">全部</button></div>
+						<div ng-repeat="phase in projectPhaseInfo"><button class="btn btn-default phase_quantity" ng-click="setPhase($index,flag[0])">{{phase.name}}</button></div>
+					</div>
+					<div class="item_menuli">
+						<div><span>栋号</span></div>
+						<div><button class="btn btn-default buildingNum_quantity" ng-click="setBuildingNum('all',flag[0])">全部</button></div>
+						<div ng-repeat="buildingNumber in buildingArray">
+							<select class="myselect buildingNum_quantity" type="text" ng-click="setBuildingNum(building[$index],flag[0])"  ng-model="building[$index]">
+		    					<option value="title" >#{{$index*10+1}} -#{{$index*10+10}}</option>
+		    					<option value="{{number}}" ng-repeat="number in buildingNumber" >#{{number}}</option>
+		    				</select>
+	    				</div>
+						
+					</div>
+					<div class="item_menuli">
+						<div><span>楼层</span></div>
+						<div><button class="btn btn-default floor_quantity" ng-click="setFloorNum('all',flag[0])">全部</button></div>
+						<div ng-repeat="buildingDown in buildingDownArray[0]"><button class="btn btn-default floor_quantity" ng-click="setFloorDownNum(buildingDown,flag[0])">B{{buildingDown}}</button></div>
+						<div ng-repeat="floorNumber in floorArray">
+							<select class="myselect floor_quantity" type="text" ng-change="setFloorNum(floors[$index],flag[0],$index)"  ng-model="floors[$index]">
+		    					<option value="title">F{{$index*10+1}} -F{{$index*10+10}}</option>
+		    					<option value="{{numbers}}" ng-repeat=" numbers in floorNumber">F{{numbers}}</option>
+		    				</select>
+	    				</div>
+					</div>
+					<div id="quantity_item_menuli">
+						<div><span>户型</span></div>
+						<div><button class="btn btn-default household_quantity" ng-click="setHouseholdNum('all',flag[0])">全部</button></div>
+						<div ng-repeat="household in projectHouseholdInfo"><button class="btn btn-default household_quantity" ng-click="setHouseholdNum($index,flag[0])">{{household.name}}</button></div>
+					</div>
+				</div>
+			    <div id="quantity_item_search">
+    				
+    				<div>
+	    				<a href="#" ng-click="quantitySearch()">
+	    					<div id="findQuantity" class="glyphicon glyphicon-search" style="font-size:30px"></div>
+	    				</a>
+    				</div>
+    				<div>
+    					<input type="text" id="quantityName" onfocus="javascript:if(this.value=='搜索')this.value='';">
+    				</div>
+				</div>
+				<div id="quantity_content">
+					<table class="table-striped table table-bordered">
+						<tbody>
+							<tr>
+								<th ng-repeat="quantityTitle in quantityTitles">{{quantityTitle}}</th>
+							</tr>
+							<tr ng-repeat = "quantity in projectQuantityList">
+							    <td>{{$index+1}}</td>
+								<td>{{quantity.name}}</td>
+								<td>{{quantity.systemType}}</td>
+								<td>{{quantity.value}}</td>
+								<td>{{quantity.unit}}</td>
+								<td>{{quantity.familyAndType}}</td>
+								<td>{{quantity.serviceType}}</td>
+								<td>{{quantity.size}}</td>
+								<td>{{quantity.typeName}}</td>
+								<td>{{quantity.material}}</td>
+								<td>{{quantityTypeTitles[quantity.quantityType]}}</td>
+								<td ng-show="showOr[0]==1">{{projectPhaseInfo[quantity.professionType].name}}</td>
+								<td ng-show="showOr[1]==1">{{quantity.buildingNum}}</td>
+								<td ng-show="showOr[2]==1">{{quantity.floorNum-3}}</td>
+								<td ng-show="showOr[3]==1">{{projectHouseholdInfo[quantity.householdNum].name}}</td>
+							</tr>
+						</tbody>
+					</table>
+					<div id="quantityAction">
+							<div id="quantityImport">
+								<div id="imgBiangen"><a href="#" id="quantity_button" ng-click="importQuantity()">变更签证</a></div>
+								<div id="biangeng_file"><input type="file" id="biangeng_import" multiple="multiple" accept="application/vnd.ms-excel"/></div>
+								<div style="margin-bottom:5px;">
+									<a href="{{quantityUrl}}" target="_blank" download="{{quantityExcel.originName}}">
+										<div id="quantityUpdate"><span>下载</span></div>
+									</a>
+								</div>
+							</div>
+							
+					</div>
+					<div id="table-buton3" >
+						<div id=quantityPageCode></div>
+						
+					</div>
+					
+				</div>
+	</div>
+</div>

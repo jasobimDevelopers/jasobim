@@ -8,15 +8,25 @@ import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.jpush.PushExample;
 import com.my.spring.model.Files;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageFile;
 import com.my.spring.model.MessagePojo;
+import com.my.spring.model.Project;
+import com.my.spring.model.Question;
 import com.my.spring.model.User;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.service.FileService;
 import com.my.spring.service.MessageService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
+
+import cn.jpush.api.JPushClient;
+import cn.jpush.api.common.APIConnectionException;
+import cn.jpush.api.common.APIRequestException;
+import cn.jpush.api.push.PushResult;
+import cn.jpush.api.push.model.PushPayload;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,17 +41,17 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service("messageService")
 public class MessageServiceImpl implements MessageService {
-    @Autowired
+	@Autowired
     MessageDao messageDao;
-    @Autowired
+	@Autowired
     MessageFileDao messageFileDao;
-    @Autowired
+	@Autowired
     FileDao fileDao;
-    @Autowired
+	@Autowired
     QuestionDao questionDao;
-    @Autowired
+	@Autowired
     ProjectDao projectDao;
-    @Autowired
+	@Autowired
     UserDao userDao;
     @Autowired
     FileService fileService;
@@ -51,11 +61,13 @@ public class MessageServiceImpl implements MessageService {
     public DataWrapper<Void> addMessage(Message message,String token,MultipartFile[] file,HttpServletRequest request) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
+        Question questions = new Question();
         if (userInMemory != null) {
 				if(message!=null){
 					message.setUserId(userInMemory.getId());
 					if(message.getQuestionId()!=null){
-						message.setProjectId(questionDao.getById(message.getQuestionId()).getProjectId());
+						questions=questionDao.getById(message.getQuestionId());
+						message.setProjectId(questions.getProjectId());
 					}
 					if(message.getMessageDate()==null){
 						message.setMessageDate(new Date());
@@ -77,8 +89,30 @@ public class MessageServiceImpl implements MessageService {
 								messageFileDao.addMessageFile(messageFile);
 							}
 						}
-			           
-					}
+						///////////////////////////
+						List<User> userList = new ArrayList<User>();
+						userList=userDao.findUserLikeProjct(questions.getProjectId(),userInMemory.getId());
+						String[] userids= new String[userList.size()];
+				
+						for(int b =0;b<userList.size();b++){
+							userids[b]=userList.get(b).getId().toString();
+						}
+						JPushClient jpushClient = new JPushClient(Parameters.masterSecret, Parameters.appKey, 3);
+						String content=userInMemory.getRealName()+"对标题为："+questions.getName()+"的问题提交了一个回复";
+						PushPayload payload = PushExample.buildPushObject_all_alias_alert(userids,content);
+						try {
+							PushResult result = jpushClient.sendPush(payload);
+							System.out.println(result);
+						} catch (APIConnectionException e) {
+							e.printStackTrace();         
+						} catch (APIRequestException e) {
+							System.out.println("Should review the error, and fix the request"+ e);
+							System.out.println("HTTP Status: " + e.getStatus());
+							System.out.println("Error Code: " + e.getErrorCode());
+							System.out.println("Error Message: " + e.getErrorMessage());
+						}
+				///////////////////////////////
+						}
 					else
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);;
 			        
@@ -101,16 +135,9 @@ public class MessageServiceImpl implements MessageService {
 					Message message=messageDao.getById(id);
 					if(messageFileDao.getMessageFileListByMessageId(message.getId()).getData()!=null 
 							&& messageFileDao.getMessageFileListByMessageId(message.getId()).getData().size()>0){
-						
 						if(messageFileDao.deleteMessageFileByMessageIds(message.getId())){
 							messageDao.deleteMessage(id);
 						}
-						
-						/*for(MessageFile e:dataWrappers.getData()){
-							fileDao.deleteFiles(e.getFileId());//删除文件表的信息
-							Files files=fileDao.getById(e.getFileId());
-							fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
-						}*/
 					}
 					else{
 						messageDao.deleteMessage(id);
@@ -168,7 +195,13 @@ public class MessageServiceImpl implements MessageService {
 						messagePojo.setMessageDate(sdf.format(dataWrapper.getData().get(i).getMessageDate()));
 						messagePojo.setQuestionId(dataWrapper.getData().get(i).getQuestionId());
 						messagePojo.setProjectId(dataWrapper.getData().get(i).getProjectId());
-						messagePojo.setProjectName(projectDao.getById(questionDao.getById(dataWrapper.getData().get(i).getQuestionId()).getProjectId()).getName());
+						Question questionss = new Question(); 
+						Project project = new Project(); 
+						questionss=questionDao.getById(dataWrapper.getData().get(i).getQuestionId());
+						if(questionss!=null){
+							project =projectDao.getById(questionss.getProjectId());
+							messagePojo.setProjectName(project.getName());
+						}
 						messagePojo.setId(dataWrapper.getData().get(i).getId());
 						if(dataWrapper.getData().get(i).getUserId()!=null){
 							messagePojo.setUserId(dataWrapper.getData().get(i).getUserId());
@@ -261,6 +294,17 @@ public class MessageServiceImpl implements MessageService {
 						messagePojo.setQuestionId(message.getQuestionId());
 						messagePojo.setRealName(userDao.getById(message.getUserId()).getRealName());
 						messagePojo.setId(message.getId());
+						List<MessageFile> messagefile = new ArrayList<MessageFile>();
+						messagefile = messageFileDao.getMessageFileListByMessageId(message.getId()).getData();
+						if(messagefile!=null && messagefile.size()>0){
+							String[] urllist = new String[messagefile.size()];
+							for(int i=0;i<messagefile.size();i++){
+								Files files = new Files();
+								files = fileDao.getById(messagefile.get(i).getFileId());
+								urllist[i]=files.getUrl();
+							}
+							messagePojo.setFileList(urllist);
+						}
 						if(message.getUserId()!=null)
 						{
 							messagePojo.setUserId(message.getUserId());

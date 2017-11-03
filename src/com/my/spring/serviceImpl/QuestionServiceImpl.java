@@ -9,6 +9,7 @@ import com.my.spring.DAO.QuestionFileDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.jpush.PushExample;
 import com.my.spring.model.Files;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageFile;
@@ -17,11 +18,18 @@ import com.my.spring.model.QuestionFile;
 import com.my.spring.model.QuestionPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.service.FileService;
 import com.my.spring.service.QuestionService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
+
+import cn.jpush.api.JPushClient;
+import cn.jpush.api.common.APIConnectionException;
+import cn.jpush.api.common.APIRequestException;
+import cn.jpush.api.push.PushResult;
+import cn.jpush.api.push.model.PushPayload;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,13 +74,13 @@ public class QuestionServiceImpl implements QuestionService {
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
         	question.setUserId(userInMemory.getId());
-        	if(question.getQuestionDate()==null){
-				question.setQuestionDate(new Date());
-			}
-        	if(question.getState()==null){
-        		question.setState(0);
-        	}
 			if(question!=null){
+				if(question.getQuestionDate()==null){
+					question.setQuestionDate(new Date());
+				}
+	        	if(question.getState()==null){
+	        		question.setState(0);
+	        	}
 				if(fileCode!=null){
 					String path=filePath+"/"+"questions";
 				 	Files newfile=fileService.uploadFile(path, fileCode,fileType,request);
@@ -82,6 +90,7 @@ public class QuestionServiceImpl implements QuestionService {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					return dataWrapper;
 				}else{ 
+					
 					if(fileList.length>0)
 					{
 						for(int k=0;k<fileList.length;k++){
@@ -116,7 +125,35 @@ public class QuestionServiceImpl implements QuestionService {
 						 	questionFileDao.addQuestionFile(questionFiles);
 						}
 					}
+					/////////////////////////
+				///////////////////////////
+				List<User> userList = new ArrayList<User>();
+				userList=userDao.findUserLikeProjct(question.getProjectId(),userInMemory.getId());
+				String[] userids= new String[userList.size()];
+				
+				for(int b =0;b<userList.size();b++){
+					userids[b]=userList.get(b).getId().toString();
 				}
+				JPushClient jpushClient = new JPushClient(Parameters.masterSecret, Parameters.appKey, 3);
+		          // For push, all you need do is to build PushPayload object.
+		          //PushPayload payload =  buildPushObject_android_tag_alertWithTitle();
+				  String content=userInMemory.getRealName()+"提交了一个标题为："+question.getName()+"的问题";
+		    	  PushPayload payload = PushExample.buildPushObject_all_alias_alert(userids,content);
+		          try {
+		              PushResult result = jpushClient.sendPush(payload);
+		              System.out.println(result);
+		          } catch (APIConnectionException e) {
+		            e.printStackTrace();         
+		          } catch (APIRequestException e) {
+		              System.out.println("Should review the error, and fix the request"+ e);
+		              System.out.println("HTTP Status: " + e.getStatus());
+		              System.out.println("Error Code: " + e.getErrorCode());
+		              System.out.println("Error Message: " + e.getErrorMessage());
+		          }
+				///////////////////////////////
+				/////////////////////////////////
+				}
+
 			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);

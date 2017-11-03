@@ -54,6 +54,9 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
         if(duct.getState()!=null){
         	criteria.add(Restrictions.eq("state", duct.getState()));
         }
+        if(duct.getId()!=null){
+        	criteria.add(Restrictions.eq("id", duct.getId()));
+        }
         if(duct.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", duct.getProjectId()));
         }

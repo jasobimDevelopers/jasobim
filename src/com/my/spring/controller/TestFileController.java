@@ -79,7 +79,7 @@ public class TestFileController {
     @ResponseBody
 	public DataWrapper<Void> testLog(
 			) {
-		PushMessage.testSch();
+		//PushMessage.testSch();
         return null;
     }
 

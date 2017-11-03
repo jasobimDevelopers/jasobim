@@ -1,0 +1,89 @@
+<div id="paperContent">
+	<div id="projectDetail_body_paper">
+				<div id="paper_header">
+					
+					<div class="paper_menuli">
+						<div id="item_menuli_first">
+							<div><span>专业</span></div>
+							<div><button class="btn btn-default phase_paper" ng-click="setPhase('all',flag[2])">全部</button></div>
+							<div ng-repeat="phase in projectPhaseInfos"><button class="btn btn-default phase_paper" ng-click="setPhase($index,flag[2])">{{phase.name}}</button></div>
+						</div>
+						<div class="item_menuli">
+							<div><span>栋号</span></div>
+							<div><button class="btn btn-default buildingNum_paper" ng-click="setBuildingNum('all',flag[2])">全部</button></div>
+							<div ng-repeat="buildingNumber in buildingArray">
+								<select class="myselect buildingNum_paper" type="text" ng-change="setBuildingNum(building[$index],flag[2],$index)"  ng-model="building[$index]">
+			    					<option value="title" >#{{$index*10+1}} -#{{$index*10+10}}</option>
+			    					<option value="{{number}}" ng-repeat="number in buildingNumber" >#{{number}}</option>
+			    				</select>
+		    				</div>
+						</div>
+						<div class="item_menulisss">
+							<div><span>楼层</span></div>
+							<div><button class="btn btn-default floor_paper" ng-click="setFloorNum('all',flag[2])">全部</button></div>
+							<div ng-repeat="buildingDown in buildingDownArray[0]"><button class="btn btn-default floor_paper" ng-click="setFloorDownNum(buildingDown,flag[2])">B{{buildingDown}}</button></div>
+							<div ng-repeat="floorNumber in floorArray">
+								<select class="myselect floor_paper" type="text" ng-change="setFloorNum(floors[$index],flag[2],$index)"  ng-model="floors[$index]">
+			    					<option value="title">F{{$index*10+1}} -F{{$index*10+10}}</option>
+			    					<option value="{{numbers}}" ng-repeat=" numbers in floorNumber">F{{numbers}}</option>
+			    				</select>
+		    				</div>
+						</div>						
+					</div>
+				</div>
+				<div id="paper_content">
+						<table class="table-striped table table-bordered">
+							<tbody>
+								<tr>
+									<th ng-repeat="paperTitle in paperTitles">{{paperTitle}}</th>
+								</tr>
+								<tr ng-repeat = "projectPaper in projectPaperList">
+								    <td>{{$index+1}}</td>
+									<td>{{projectPaper.originName}}</td>
+									<td>{{projectPaper.buildingNum}}</td>
+									<td>{{projectPaper.floorNum}}</td>
+									<td>{{projectPhaseInfos[projectPaper.professionType].name}}</td>
+									<td class="tds" >
+									    <a href="{{projectPaper.url}}" target="_blank" download="{{projectPaper.originName}}">
+					                        <button id="uploadbutton">
+				                        	</button>
+			                        	</a>
+			                        	<a href="">
+					                        <button id="deletebutton" ng-click="deletePaper(projectPaper.id)">
+					                        </button>
+				                        </a>
+				                    </td>
+								</tr>
+							</tbody>
+						</table>
+						<div id="quantityAction">
+							<div id="quantityImport">
+								<div id="process" style="display:none;width:1024px;text-align:left;">
+									<progress id="progressBar" value="0" max="100" style="width: 300px;"></progress>
+		    						<span id="percentage"></span><span id="time"></span>
+		    						<br /><br />
+	    						</div>
+								<div id="imgBiangen"><a href="#" id="quantity_button" ng-click="UpladFile('paper')">图纸上传</a></div>
+								<div id="biangeng_file"><input type="file" id="paper_import" multiple="multiple"/></div>
+								<div id="video_type">
+									<select id="video_type" class="myselect" ng-model="professionType" ng-change="setPaperType(this)">
+										<option value="0" selected = "selected">电气</option>
+										<option value="1">暖通</option>
+										<option value="2">给排水</option>
+										<option value="3">消防</option>
+										<option value="4">建筑</option>
+										<option value="5">装饰</option>
+									</select>
+								</div>
+    							<div id="video_type">
+									<div><span>楼栋号:</span><input type="text" id="buildingNum_input" /></div>
+									<div><span>楼层号:</span><input type="text" id="floorNum_input" /></div>
+								</div>
+							</div>
+						</div>
+						<div id="table-buton6" >
+							<div id="paperPageCode"></div>
+						</div>
+				</div>
+	</div>
+</div>

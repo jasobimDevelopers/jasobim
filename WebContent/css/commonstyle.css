@@ -1,0 +1,33 @@
+html, body, div, nav, section, footer, p, h1, h2, h3, h4, h5, h6, span, img, a, ul, li, ol, dl, dd, dt, table, th, tr, td, form, input, select, option, textarea, button {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  outline: none;
+  vertical-align: top;
+}
+
+html {
+  /*font-size: 100%;*/
+  font-family: "Microsoft YaHei";
+  position: relative; }
+
+body {
+  font-size: 62.5%;
+  /*width: 16rem;*/
+  height: 100%;
+  margin: 0 auto;
+  /*overflow: hidden;*/
+  background: #f6f6f6; }
+
+ul, li {
+  list-style: none; }
+
+.clear:after {
+  width: 0;
+  height: 0;
+  content: '';
+  display: block;
+  clear: both; }
+
+/*# sourceMappingURL=commonstyle.css.map */

@@ -1,0 +1,73 @@
+<div id="itemContent">
+	<div id="projectDetail_body_item">
+				<div style="display:block">{{htmlList[1]}}</div>
+				<div id="item_menu">
+					<div id="item_menuli_first">
+						<div><span>专业</span></div>
+						<div><button class="btn btn-default phase_item" ng-click="setPhase('all',flag[1])">全部</button></div>
+						<div ng-repeat="phase in projectPhaseInfo"><button class="btn btn-default phase_item" ng-click="setPhase($index,flag[1])">{{phase.name}}</button></div>
+					</div>
+					<div class="item_menuli">
+						<div><span>栋号</span></div>
+						<div><button class="btn btn-default buildingNum_item" ng-click="setBuildingNum('all',flag[1])">全部</button></div>
+						<div ng-repeat="buildingNumber in buildingArray">
+							<select class="myselect buildingNum_item" type="text" ng-change="setBuildingNum(building[$index],flag[1],$index)"   ng-model="building[$index]">
+		    					<option value="title" >#{{$index*10+1}} -#{{$index*10+10}} </option>
+		    					<option value="{{number}}" ng-repeat="number in buildingNumber" >#{{number}}</option>
+		    				</select>
+	    				</div>
+						
+					</div>
+					<div class="item_menuli">
+						<div><span>楼层</span></div>
+						<div><button class="btn btn-default floor_item" ng-click="setFloorNum('all',flag[1])">全部</button></div>
+						<div ng-repeat="buildingDown in buildingDownArray[0]"><button class="btn btn-default floor_item" ng-click="setFloorDownNum(buildingDown,flag[1])">B{{buildingDown}}</button></div>
+						<div ng-repeat="floorNumber in floorArray" class="floorNum_quantity">
+							<select class="myselect floor_item" type="text" ng-change="setFloorNum(floors[$index],flag[1],$index)"  ng-model="floors[$index]">
+		    					<option value="title">F{{$index*10+1}} -F{{$index*10+10}}</option>
+		    					<option value="{{numbers}}" ng-repeat=" numbers in floorNumber">F{{numbers}}</option>
+		    				</select>
+	    				</div>
+						
+					</div>
+					<div class="item_menuli">
+						<div><span>户型</span></div>
+						<div><button class="btn btn-default household_item" ng-click="setHouseholdNum('all',flag[1])">全部</button></div>
+						<div ng-repeat="household in projectHouseholdInfo"><button class="btn btn-default household_item" ng-click="setHouseholdNum($index,flag[1])">{{household.name}}</button></div>
+					</div>
+				</div>
+				<div id="item_content">
+					<table class="table-striped table table-bordered">
+						<tbody>
+							<tr>
+								<th ng-repeat="itemTitle in itemTitles">{{itemTitle}}</th>
+							</tr>
+							<tr ng-repeat = "projectItem in projectItemList">
+							    <td>{{$index+1}}</td>
+								<td>{{projectItem.name}}</td>
+								<td>{{projectItem.bottomElevation}}</td>
+								<td>{{projectItem.systemType}}</td>
+								<td>{{projectItem.size}}</td>
+								<td>{{projectItem.length}}</td>
+								<td>{{projectItem.serviceType}}</td>
+								<td>{{projectItem.familyAndType}}</td>
+								<td>{{projectItem.level}}</td>
+								<td>{{projectItem.offset}}</td>
+								<td>{{projectItem.area}}</td>
+								<td>{{projectItem.material}}</td>
+								<td>{{projectItem.typeName}}</td>
+								<!-- <td class="tds" >
+			                        <button id="editbutton" ng-click="itemChangeClick(projectItem.id)">
+			                        </button>
+			                        <button id="deletebutton" ng-click="deleteItem(projectItem.id)">
+			                        </button>
+			                    </td> -->
+							</tr>
+						</tbody>
+					</table>
+					<div id="table-buton" >
+						<div id="itemPageCode"></div>
+					</div>
+				</div>
+	</div>
+</div>

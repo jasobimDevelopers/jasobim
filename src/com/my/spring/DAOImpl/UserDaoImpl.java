@@ -1,5 +1,6 @@
 package com.my.spring.DAOImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -189,7 +190,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 		DataWrapper<List<User>> users=new DataWrapper<List<User>>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
-        criteria.add(Restrictions.like("realName",username,MatchMode.ANYWHERE));
+        criteria.add(Restrictions.like("realName","%"+username+"%"));
         try {
             ret = criteria.list();
         }catch (Exception e){
@@ -244,6 +245,24 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         dataWrapper.setNumberPerPage(pageSize);
 
         return dataWrapper;
+	}
+	@Override
+	public List<User> findUserLikeProjct(Long projectList,Long id) {
+		List<User> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.like("projectList","%"+projectList+"%"));
+        criteria.add(Restrictions.eq("userType", 3));
+        criteria.add(Restrictions.ne("id",id));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret == null || ret.size() < 0) {
+			return null;
+		}
+		return ret;
 	}
 
 }

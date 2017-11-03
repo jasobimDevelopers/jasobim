@@ -208,7 +208,16 @@ public class QuantityServiceImpl implements QuantityService {
 		        		+ "尺寸,"
 		        		+ "材质";
 		      String result = quantityDao.exportQuantity(projectId);
-			
+		      if(result!=null){
+		    	  boolean flag = FileOperationsUtil.writeFile(file, header + "\n" + result, false);
+					if(flag) {
+						dataWrapper.setData("own/" + "quantity/" + projectId + "/quantity.csv");
+					} else {
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}
+		      }else{
+		    	  dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+		      }
 			
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);

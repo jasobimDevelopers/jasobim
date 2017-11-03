@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>嘉实智慧安装</title>
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/jquery-1.8.3.js"></script>
+    <script src="js/swiper-3.4.1.jquery.min.js"></script>
+    <script src="js/index.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <div class="head">
+        <div class="logo">
+           <img src="images/logo.png" alt=""><span></span><span>嘉实智慧安装</span>
+        </div>
+        <div class="nav">
+            <ul>
+                <li><a href="#" class="active">首页</a></li>
+                <li><a href="#">项目管理</a></li>
+                <li><a href="#">质量安全管理</a></li>
+                <li><a href="#">二维码专区</a></li>
+                <li><a href="#">关于我们</a></li>
+                <li><a href="#">意见反馈</a></li>
+                <li><button onclick="login()">登录</button></li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <!-- Required swiper-lazy class and image source specified in data-src attribute -->
+                <img src="images/banner.png">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/banner.png">
+            </div>
+            <div class="swiper-slide">
+                <img src="images/banner.png">
+            </div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination swiper-pagination-white"></div>
+        <!-- Navigation -->
+        <div class="swiper-button-next swiper-button-white"></div>
+        <div class="swiper-button-prev swiper-button-white"></div>
+    </div>
+    <div class="container">
+        <div class="con_left">
+            <h1>信息共享 高效协作</h1>
+            <p>我们秉行工匠精神，不断创新突破，实现多终端协同工作，引领建筑行业信息化的全新时代</p>
+        </div>
+        <div class="con_right"><img src="images/mockup.png" alt=""></div>
+    </div>
+    <div class="news">
+        <div class="news_con">
+            <img src="images/news.png" alt="">
+            <p>新闻公告     2月10日，嘉实管理团队在董事长章永泉先生的带领下踏上浙江天台山开启践行十年蓝图的荣耀之旅</p>
+        </div>
+
+    </div>
+    <div class="foot">
+        <div class="smll_ball"></div>
+        <div class="big_ball"></div>
+        <!--<div class="smll_ball"><img src="images/smallBall.png" alt=""></div>
+        <div class="big_ball"><img src="images/bigBall.png" alt=""></div>-->
+        <ul class="foot_top">
+            <li>联系我们</li>
+            <li>快速链接</li>
+            <li>关注我们</li>
+        </ul>
+        <div class="foot_con">
+            <ul>
+                <li>地址 ：上海市曹安公路4800号嘉实1号楼</li>
+                <li>电邮 ： Marketing@jaso.com.cn</li>
+                <li>电话 ： 86(21)6958 9518</li>
+            </ul>
+            <ul>
+                <li>嘉实集团企业网站</li>
+                <li>南京分公司</li>
+                <li>苏州分公司</li>
+                <li>中原分公司</li>
+            </ul>
+            <div class="weixin"><img src="images/wechat.png" alt=""></div>
+        </div>
+        <div class="copyright"><p><span>嘉实集团版权所有</span><span>沪备024121545号</span> </p></div>
+    </div>
+</div>
+</body>
+<script>
+    $(".nav ul li a").on('click',function () {
+
+        $(".nav ul li a").removeClass('active')
+        $(this).addClass('active')
+    })
+    var swiperBanner = new Swiper('.swiper-container', {
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        pagination: '.swiper-pagination',
+        autoplayDisableOnInteraction : false,
+        paginationClickable: true,
+        preloadImages: false,
+        lazyLoading: true,
+        autoplay: 2500,
+        loop: true
+    });
+</script>
+</html>

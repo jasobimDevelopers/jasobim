@@ -1,0 +1,27 @@
+<div class="wrap">
+    <!--头部-->
+    <div class="head">
+        <div class="logo">
+           <img src="images/logo.png" alt=""><span></span><span>嘉实智慧安装</span>
+        </div>
+        <!--导航-->
+        <div class="nav">
+            <ul>
+                <li><a href="index.html" class="active">首页</a></li>
+                <li><a href="project.html">项目管理</a></li>
+                <li><a href="#">质量安全管理</a></li>
+                <li><a href="#">二维码专区</a></li>
+                <li><a href="#">关于我们</a></li>
+                <li><a href="#">意见反馈</a></li>
+                <li><button>登录</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+//    导航
+    $(".nav ul li a").on('click',function () {
+        $(".nav ul li a").removeClass('active')
+        $(this).addClass('active')
+    });
+</script>

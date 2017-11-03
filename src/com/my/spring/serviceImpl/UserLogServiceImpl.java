@@ -239,7 +239,7 @@ public class UserLogServiceImpl implements UserLogService {
 		        } else {
 					boolean flag = FileOperationsUtil.writeFile(file, header + "\n" + result, false);
 					if(flag) {
-						dataWrapper.setData("out/" + "userLog/" + userInMemory.getId() + "/userlog.csv");
+						dataWrapper.setData("own/" + "userLog/" + userInMemory.getId() + "/userlog.csv");
 					} else {
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					}

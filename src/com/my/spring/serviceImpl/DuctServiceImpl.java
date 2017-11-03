@@ -206,9 +206,10 @@ public class DuctServiceImpl implements DuctService {
     	    		ductPojo.setServiceType(ductList.get(i).getServiceType());
     	    		if(ductList.get(i).getUserId()!=null){
     	    			User user=userDao.getById(ductList.get(i).getUserId());
-    	    			if(user.getUserName()!=null){
-    	    				ductPojo.setUserName(user.getUserName());
+    	    			if(user!=null){
+    	    				 ductPojo.setUserName(user.getRealName());	
     	    			}
+    	    		   
     	    		}
     	    		ductPojoList.add(ductPojo);
     	    	}
@@ -270,8 +271,8 @@ public class DuctServiceImpl implements DuctService {
             		ductPojo.setModelFlag(ductList.get(i).getModelFlag());
             		if(ductList.get(i).getUserId()!=null){
             			User user=userDao.getById(ductList.get(i).getUserId());
-            			if(user.getUserName()!=null){
-            				ductPojo.setUserName(user.getUserName());
+            			if(user.getRealName()!=null){
+            				ductPojo.setUserName(user.getRealName());
             			}
             		}
             		ductPojoList.add(i,ductPojo);
@@ -323,8 +324,8 @@ public class DuctServiceImpl implements DuctService {
     		ductPojo.setSystemType(duct.getSystemType());
     		if(duct.getUserId()!=null){
     			User user=userDao.getById(duct.getUserId());
-    			if(user.getUserName()!=null){
-    				ductPojo.setUserName(user.getUserName());
+    			if(user.getRealName()!=null){
+    				ductPojo.setUserName(user.getRealName());
     			}
     		}
         	dataWrapper.setData(ductPojo);
@@ -430,11 +431,17 @@ public class DuctServiceImpl implements DuctService {
 		        		+ "项目名称,"
 		        		+ "时间";
 		       String result = DuctDao.exportDuct(projectId, dateStart, dateFinished);
-		       if(result!=null){
-		    	   dataWrapper.setData(result);
-		       }else{
-		    	   dataWrapper.setErrorCode(ErrorCodeEnum.Error);;
-		       }
+		       if(result == null) {
+		        	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+		        } else {
+					boolean flag = FileOperationsUtil.writeFile(file, header + "\n" + result, false);
+					if(flag) {
+						dataWrapper.setData("own/" + "duct/" + projectId + "/duct.csv");
+					} else {
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}
+					
+		        }
 			
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);

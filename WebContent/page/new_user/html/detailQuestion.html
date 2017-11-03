@@ -1,0 +1,101 @@
+
+
+	<div id="addcontent_question">
+	<div ng-include="'page/project/html/addMessage.html'" style="display:none;position:absolute; top:700px; left:170px; z-index:2;" id="addMessageHtml"></div>
+        <div id="addhead">
+        	<div id="addusertitle"><span>问题详情</span></div>
+            <div id="returnuser">
+            	<a href="" ng-click="returnQuestionlists()"><span style="color:#86B5D7">返回问题列表</span>
+            	</a>
+            	<!-- <div  style="float:right;margin-left:10px;">
+            		<a href="" ng-click="hideAddQuestionHtmls()"><img src="page/project/images/deleteIcon.png"></a>
+            	</div> -->
+           	</div>
+        </div>
+        <div id="adduserbody">
+        	<div class="addinput_question" style="display:none;">
+        		<div><span>问题编号:</span></div>
+        		<div><input type="text" ng-model="findQuestionInfo.id" id="inputname" readonly="readonly"/></div>
+            </div>
+            <div class="addinput_question">
+        		<div><span>问题名称:</span></div>
+        		<div><input type="text" ng-model="findQuestionInfo.name" id="inputpassword" readonly="readonly"/></div>
+            </div>
+            <div class="addinput_question">
+            	<div><span>所属专业:</span></div>
+            	<div><input type="text"  id="inputnick" ng-model="findQuestionInfo.trades" readonly="readonly"/></div>
+            </div>
+            <div class="addinput_question">
+            	<div>
+            		<span>问题类型:</span>
+            		<select type="text" ng-model="findQuestionInfo.questionType" id="inputtype" disabled="disabled">
+						<option value="0" selected="selected"><span>安全</span></option>
+						<option value="1"><span>质量</span></option>
+						<option value="2"><soan>其他</soan></option>
+        			</select>
+            	</div>
+            </div>
+            <div class="addinput_question">
+            	<div><span>问题详情:</span></div>
+            	<div><textarea id="inputdetail" ng-model="findQuestionInfo.intro" readonly="readonly"></textarea></div>
+            </div>
+            <div class="addinput_question">
+            	<div><span>现场图片:</span></div>
+            	<div ng-repeat="pic in findQuestionInfo.fileList" style="margin-right:10px;"><img class="min" id="xianchang{{$index}}" src="{{pic}}" onclick="showOneBig(this)"/></div>
+            </div>
+            <div class="addinput_question" style="margin-top:100px;width:auto;">
+            	<div><span>查看二维码:</span></div>
+            	<div><img id="codeImg" class="min" src="{{findQuestionInfo.codeInformation}}" onclick="showOneBig(this)"/></div>
+            </div>
+            <div id="addbutton" style="margin-top:86px;display:none;">
+            	<input class="btn btn-default" type="button" ng-click="addQuestionByAdmin()" value="确定" />
+                <input type="button" ng-click="resetQuestion()" class="btn btn-default" value="重置" />
+            </div>
+        </div>
+        <div id="message_leave">
+        	<div id="message_head">
+        		<div>留言板</div>
+        	</div>
+        	<div id="message_content">
+        		
+        		<div id="userIntro" ng-repeat="message in messageListInfo">
+        			<div id="imageMessage"><img width="70px" height="70px" src="{{message.userIconUrl}}"/></div>
+        			<div id="messageUsername">
+	        			<div id="usernamessss"><span>{{message.realName}}</span></div>
+	        			<div id="usercontent"><div><span>{{message.content}}</span></div></div>
+        			</div>
+        		</div>
+        	</div>
+        	<div id="message_area">
+        		<div id="messageImg"><input type="file" id="imgMessge"/></div>
+        		<div><input id="messageArea" cols="50" rows="5" onblur="if(this.value == ''){this.style.color = '#ACA899'; this.value = '我也说一句...'; }" 
+    					onfocus="if(this.value == '我也说一句...'){this.value =''; this.style.color = '#000000'; }" 
+                        style="color:#ACA899;" value="我也说一句..."/></div>
+        		<div id="messageText"><a href="#" ng-click="addMessage(findQuestionInfo.id)"><span>发送</span></a></div>
+        	</div>
+        </div>
+	</div>
+<style>
+.max{width:100%;height:auto;}
+.min{width:100px;height:auto;}
+</style>
+
+<script>
+	function showOneBig(scope){
+		
+	layer.ready(function(){ 
+	  layer.open({
+  		type: 1,
+  		title: false,
+  		area: ['600px', '360px'],
+  		shadeClose: true, //点击遮罩关闭
+  		content: '<div style="background-size: 100% 100%;width:600px;height:360px;background-image: url(' +scope.src+')"/></div>'
+  	  });
+	});
+
+
+
+
+}
+</script>
+	

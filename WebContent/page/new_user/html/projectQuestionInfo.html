@@ -1,0 +1,51 @@
+<div id="questionContent">
+	<div id="projectDetail_body_question">
+				<div id="question_head">
+					<div class="question_menulis">
+						<div><span>类型</span></div>
+						<div ng-click="setQuestionOfType('all',flag[3])"><button class="btn btn-default question_type">全部</button></div>
+						<div ng-repeat="questionOfType in projectQuestionOfType" ng-click="setQuestionOfType($index,flag[3])"><button class="btn btn-default question_type">{{questionOfType.name}}</button></div>
+					</div>
+					<div class="question_menuli">
+						<div><span>等级</span></div>
+						<div ng-click="setQuestionOfPriority('all',flag[3])"><button class="btn btn-default question_proprity">全部</button></div>
+						<div ng-repeat="questionOfPriority in projectQuestionOfPriority" ng-click="setQuestionOfPriority($index,flag[3])"><button class="btn btn-default question_proprity">{{questionOfPriority.name}}</button></div>
+					</div>
+					<div class="question_menuli_bottom">
+						<div><span>状态</span></div>
+						<div ng-click="setQuestionOfStatus('all',flag[3])"><button class="btn btn-default question_status">全部</button></div>
+						<div ng-repeat="questionOfStatus in projectQuestionOfStatus" ng-click="setQuestionOfStatus($index,flag[3])"><button class="btn btn-default question_status">{{questionOfStatus.name}}</button></div>
+						
+					</div>
+				</div>
+				<div id="question_content">
+					<div id="questionTbodyContent">
+						<table class="table-striped table table-bordered">
+							<tbody>
+								<tr>
+									<th ng-repeat="questionTitle in questionTitles">{{questionTitle}}</th>
+								</tr>
+								<tr ng-repeat = "question in projectQuestionList">
+								    <td style="width:15px;">{{$index+1}}</td>
+									<td style="width:50px;">{{projectQuestionOfType[question.questionType].name}}</td>
+									<td style="width:80px;">{{question.userId}}</td>
+									<td style="width:150px;">{{question.name}}</td>
+									<td style="width:80px;">{{question.trades}}</td>
+									<td style="width:120px;">{{question.questionDate}}</td>
+									<td style="width:70px;">{{projectQuestionOfPriority[question.priority].name}}</td>
+									<td style="width:70px;">{{projectQuestionOfStatus[question.state].name}}</td>
+									<!-- <td class="tds" >
+			                        <button id="editbutton" ng-click="questionChangeClick(question.id)">
+			                        </button>
+			                    	</td> -->
+								</tr>
+								
+							</tbody>
+						</table>
+						<div id="table-buton4" >
+							<div id=questionPageCode></div>
+						</div>
+					</div>
+				</div>
+	</div>
+</div>

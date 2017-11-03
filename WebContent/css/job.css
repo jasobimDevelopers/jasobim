@@ -1,0 +1,393 @@
+.wrap {
+    width: 100%;
+}
+
+.wrap .top {
+    width: 100%;
+    height: 1.87733rem;
+    background: url("../images/top.png") top center no-repeat;
+    background-size: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.wrap .top .top_con {
+    padding: 0.32rem 0.64rem;
+    font-size: 0.768rem;
+    color: #fff;
+    display: flex;
+}
+
+.wrap .top .top_con div {
+    display: inline-block;
+    text-align: center;
+}
+
+.wrap .top .top_con .back {
+    flex: 1;
+}
+
+.wrap .top .top_con .back i {
+    display: inline-block;
+    width: 0.53333rem;
+    height: 0.93867rem;
+    background: url("../images/back.png");
+    background-size: 100%;
+    vertical-align: bottom;
+}
+
+.wrap .top .top_con .back span {
+    margin-left: 0.32rem;
+}
+
+.wrap .top .top_con .jobDetail {
+    flex: 4;
+    text-align: center;
+}
+
+.wrap .top .top_con .qr {
+    flex: 0.5;
+}
+
+.wrap .top .top_con .qr i {
+    display: inline-block;
+    width: 1.024rem;
+    height: 1.024rem;
+    background: url("../images/qr.png");
+    background-size: 100%;
+}
+
+.wrap .mainJob {
+    width: 100%;
+    background: #fff;
+    border-bottom: 1px solid #999;
+    margin-bottom: 0.64rem;
+    margin-top: 1.87733rem;
+}
+
+.wrap .mainJob .duty {
+    padding: 0.32rem 0.64rem;
+}
+
+.wrap .mainJob .duty .dutyTitle {
+    display: inline-block;
+}
+
+.wrap .mainJob .duty .dutyTitle i {
+    display: inline-block;
+    width: 0.896rem;
+    height: 1.024rem;
+    background: url("../images/dutyicon.png");
+    background-size: 100%;
+}
+
+.wrap .mainJob .duty .dutyTitle span {
+    margin-left: 0.64rem;
+    font-size: 0.68267rem;
+    color: #00572f;
+    display: inline-block;
+    line-height: 1.6;
+    font-weight: 900;
+}
+
+.wrap .mainJob .duty .writer {
+    float: right;
+    display: inline-block;
+    width: 2.56rem;
+    height: 1.10933rem;
+    background: url("../images/qianpi.png");
+    background-size: 100%;
+}
+
+.wrap .mainJob .mainCon {
+    padding: 0 0.64rem;
+}
+
+.wrap .mainJob .mainCon > ul {
+    width: 100%;
+}
+
+.wrap .mainJob .mainCon > ul li {
+    font-size: 0.68267rem;
+    color: #333;
+    padding: 0.32rem;
+}
+
+.wrap .mainJob .mainCon .img {
+    width: 100%;
+    margin: 0.42667rem 0;
+}
+
+.wrap .mainJob .mainCon .img ul {
+    width: 100%;
+}
+
+.wrap .mainJob .mainCon .img ul li {
+    width: 3.392rem;
+    margin-right: 0.384rem;
+    float: left;
+}
+
+.wrap .mainJob .mainCon .img ul li img {
+    width: 100%;
+    margin-bottom: 0.42667rem;
+}
+
+.wrap .mainJob .mainCon .img ul li:nth-child(4) {
+    margin-right: 0;
+}
+
+.wrap .mainJob .person {
+    padding: 0.32rem 0.64rem;
+    font-size: 0.55467rem;
+}
+
+.wrap .mainJob .person .bg {
+    display: inline-block;
+    width: 1.408rem;
+    height: 1.408rem;
+    line-height: 1.408rem;
+    text-align: center;
+    background: url("../images/circle.png");
+    background-size: 100%;
+}
+
+.wrap .mainJob .person .finishPer {
+    display: inline-block;
+    height: 1.49333rem;
+    line-height: 1.49333rem;
+    color: #666;
+}
+
+.wrap .mainJob .person .finishPer span:nth-child(1) {
+    margin: 0 0.64rem;
+}
+
+.wrap .history {
+    border-top: 1px solid #999;
+    background: #fff;
+}
+
+.wrap .history .historyTitle {
+    padding: 0.64rem;
+}
+
+.wrap .history .historyTitle i {
+    display: inline-block;
+    width: 0.896rem;
+    height: 0.896rem;
+    background: url("../images/run.png");
+    background-size: 100%;
+}
+
+.wrap .history .historyTitle span {
+    margin-left: 0.64rem;
+    font-size: 0.68267rem;
+    color: #00572f;
+    display: inline-block;
+    line-height: 1.6;
+    font-weight: 900;
+}
+
+.wrap .history .historyCon ul li {
+    border-bottom: 1px solid #999999;
+    margin-left: 0.64rem;
+}
+
+.wrap .history .historyCon ul li p:nth-child(1) {
+    font-size: 0.59733rem;
+    font-weight: 900;
+    color: #333;
+}
+
+.wrap .history .historyCon ul li p:nth-child(2) {
+    font-size: 0.55467rem;
+    color: #333;
+    margin: 0.42667rem 0;
+}
+
+.wrap .history .historyCon ul li p:nth-child(2) span:nth-child(2) {
+    margin-left: 1.49333rem;
+}
+
+.wrap .history .historyCon ul li p:nth-child(2) span:nth-child(3) {
+    float: right;
+    margin-right: 0.64rem;
+}
+
+.wrap .history .historyCon ul li p:nth-child(3) {
+    font-size: 0.55467rem;
+    color: #666;
+}
+
+.wrap .history .historyCon ul li:nth-child(2) p:nth-child(1), .wrap .history .historyCon ul li:nth-child(3) p:nth-child(1) {
+    margin-top: 0.42667rem;
+}
+
+.wrap .history .historyCon ul li:nth-child(2) p:nth-child(3), .wrap .history .historyCon ul li:nth-child(3) p:nth-child(3) {
+    margin-bottom: 0.42667rem;
+}
+
+@media screen and (min-width: 960px) {
+    .wrap .top .top_con {
+        font-size: 0.768rem;
+    }
+
+    .wrap .mainJob .duty .dutyTitle span {
+        font-size: 0.68267rem;
+        font-weight: 900;
+    }
+
+    .wrap .mainJob .mainCon ul li {
+        font-size: 0.59733rem;
+    }
+
+    .wrap .mainJob .person {
+        font-size: 0.55467rem;
+    }
+
+    .wrap .history .historyTitle span {
+        font-size: 0.68267rem;
+        font-weight: 900;
+    }
+
+    .wrap .history .historyCon ul li p:nth-child(1) {
+        font-size: 0.59733rem;
+        font-weight: 900;
+    }
+
+    .wrap .history .historyCon ul li p:nth-child(2) {
+        font-size: 0.55467rem;
+    }
+
+    .wrap .history .historyCon ul li p:nth-child(3) {
+        font-size: 0.55467rem;
+    }
+
+    .wrap .mainJob .mainCon .img ul li:nth-child(5) {
+        margin-left: 0.384rem;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 959px) {
+    .wrap .top .top_con {
+        font-size: 0.72533rem;
+    }
+
+    .wrap .mainJob .duty .dutyTitle span {
+        font-size: 0.64rem;
+        font-weight: 900;
+    }
+
+    .wrap .mainJob .mainCon ul li {
+        font-size: 0.55467rem;
+    }
+
+    .wrap .mainJob .person {
+        font-size: 0.512rem;
+    }
+
+    .wrap .history .historyTitle span {
+        font-size: 0.64rem;
+        font-weight: 900;
+    }
+
+    .wrap .history .historyCon ul li p:nth-child(1) {
+        font-size: 0.55467rem;
+        font-weight: 900;
+    }
+
+    .wrap .history .historyCon ul li p:nth-child(2) {
+        font-size: 0.512rem;
+    }
+
+    .wrap .history .historyCon ul li p:nth-child(3) {
+        font-size: 0.512rem;
+    }
+
+    .wrap .mainJob .mainCon .img ul li:nth-child(5) {
+        margin-left: 0.384rem;
+    }
+}
+
+@media screen and (min-width: 480px) and (max-width: 767px) {
+    .wrap .top .top_con {
+        font-size: 0.68267rem;
+    }
+
+    .wrap .mainJob .duty .dutyTitle span {
+        font-size: 0.59733rem;
+        font-weight: 900;
+    }
+
+    .wrap .mainJob .mainCon ul li {
+        font-size: 0.512rem;
+    }
+
+    .wrap .mainJob .person {
+        font-size: 0.46933rem;
+    }
+
+    .wrap .history .historyTitle span {
+        font-size: 0.59733rem;
+        font-weight: 900;
+    }
+
+    .wrap .history .historyCon ul li p:nth-child(1) {
+        font-size: 0.512rem;
+        font-weight: 900;
+    }
+
+    .wrap .history .historyCon ul li p:nth-child(2) {
+        font-size: 0.46933rem;
+    }
+
+    .wrap .history .historyCon ul li p:nth-child(3) {
+        font-size: 0.46933rem;
+    }
+
+    /*.wrap .mainJob .mainCon .img ul li:nth-child(5){
+      margin-left: 18/$ppr;
+    }*/
+}
+
+@media screen and (max-width: 479px) {
+    .wrap .top .top_con {
+        font-size: 0.64rem;
+    }
+
+    .wrap .mainJob .duty .dutyTitle span {
+        font-size: 0.55467rem;
+        font-weight: 900;
+    }
+
+    .wrap .mainJob .mainCon ul li {
+        font-size: 0.46933rem;
+    }
+
+.wrap .mainJob .person {
+        font-size: 0.42667rem;
+    }
+
+    .wrap .history .historyTitle span {
+        font-size: 0.55467rem;
+        font-weight: 900;
+    }
+
+    .wrap .history .historyCon ul li p:nth-child(1) {
+        font-size: 0.46933rem;
+        font-weight: 900;
+    }
+
+    .wrap .history .historyCon ul li p:nth-child(2) {
+        font-size: 0.42667rem;
+    }
+
+    .wrap .history .historyCon ul li p:nth-child(3) {
+        font-size: 0.42667rem;
+    }
+}
+
+/*# sourceMappingURL=job.css.map */

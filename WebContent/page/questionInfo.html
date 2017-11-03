@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="QuestionInfoApp">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+	<title>质量安全详情</title>
+	<!--jquery && bootstrap-->
+    <script src="../js/jquery-1.8.3.js"></script>
+	<!--angular-->
+    <script src="common/angular/angular.js"></script>
+    <script src="common/angular/angular-route.js"></script>
+    <script src="common/angular/angular-file-upload.min.js"></script>
+	<!-- css -->
+    <link rel="stylesheet" href="../css/commonstyle.css">
+    <link rel="stylesheet" href="../css/questionInfo.css">
+	<link rel="stylesheet" href="project/css/question.css">
+<!-- js -->
+	<script src="project/scripts/questionInfoController.js"></script>
+	<script src="project/scripts/questionInfoService.js"></script>
+
+
+</head>
+<body>
+<div ng-controller="questionInfoController">>
+<div class="wrap">
+    <!--头部-->
+    <div class="top">
+        <div class="top_con">
+            <div class="back"><i><img src="../images/back.png" alt=""></i><span>返回</span></div>
+            <div class="jobDetail">质量安全详情</div>
+            <div class="qr"><i><img src="../images/qr.png" alt=""></i></div>
+        </div>
+    </div>
+    <!--内容部分-->
+    <div class="mainJob">
+        <!--title-->
+        <div class="duty">
+            <div class="dutyTitle"><i></i><span>整改单</span></div>
+            <div class="writer"></div>
+        </div>
+        <!--内容-->
+        <div class="mainCon">
+            <ul>
+                <li class="projectName">标题：{{questionInfo.name}}</li>
+                <li class="projectTime">内容：{{questionInfo.intro}}</li>
+				<li class="questionFile">
+					<div class="img">
+						<ul class="clear">
+							<li ng-repeat="img in questionImgList">
+								<img height="85" width="85" ng-src="http://jasobim.com.cn/{{img}}" alt="">
+							</li>
+							<li>
+								<div ng-repeat="qfile in questionVoiceList" style="margin-top:10px;">
+									<p class="weixinAudo">
+										<audio ng-src="http://jasobim.com.cn/{{qfile}}" id="media" width="1" height="1" preload>
+										</audio>
+										<span id="audio_area" class="db audio_area">
+											<span class="audio_wrp db">
+												<span class="audio_play_area">
+													<i class="icon_audio_default"></i>
+													<i class="icon_audio_playing"></i>
+												</span>
+												<span id="audio_length" class="audio_length tips_global"></span>
+												<span id="audio_progress" class="progress_bar" style="width: 0%;"></span>
+											</span>
+										</span>
+									</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</li>
+                <li class="projectPerson">指派人员：{{questionInfo.userList}}</li>
+            </ul>
+            
+        </div>
+        <div class="person">
+            <div class="bg">{{name}}</div>
+            <div class="finishPer"><span class="personName">{{questionInfo.userId}}</span><span class="finishTime">{{questionInfo.questionDate}}</span></div>
+        </div>
+    </div>
+    <!--流转历程-->
+    <div class="history">
+        <div class="historyTitle"><i></i><span>回复记录</span><i style="float:right;margin-bottom:15px;margin-right:35px;"><img width="75px" height="31.5px" src="../images/backidea.png" alt=""/></i></div>
+        <div class="historyCon">
+            <ul>
+            	<div ng-repeat="message in messageListInfo">
+	                <li>
+	                    <p><span>{{message.realName}}</span><span style="float:right;margin-right:10px;">{{message.messageDate}}</span></p>
+	                    <p>{{message.content}}</p>
+						<p>
+							<ul class="clear">
+								<div ng-repeat="ss in messageLists">
+									<div ng-if="ss[2]==message.id">
+										<div ng-repeat="mimg in ss[0]">
+											<li style="margin-left: 0px;border-bottom:none;">
+												<img width="85" height="85" ng-src="http://jasobim.com.cn/{{mimg}}" alt="">
+											</li>
+										</div>
+										<div ng-repeat="mvoice in ss[1]">
+											<li style="margin-left: 0px;border-bottom:none;">
+												<div style="margin-top:10px;">
+													<p class="weixinAudo">
+														<audio ng-src="http://jasobim.com.cn/files/questions/{{mvoice}}" id="media" width="1" height="1" preload>
+														</audio>
+														<span id="audio_area" class="db audio_area">
+															<span class="audio_wrp db">
+																<span class="audio_play_area">
+																	<i class="icon_audio_default"></i>
+																	<i class="icon_audio_playing"></i>
+																</span>
+																<span id="audio_length" class="audio_length tips_global"></span>
+																<span id="audio_progress" class="progress_bar" style="width: 0%;"></span>
+															</span>
+														</span>
+													</p>
+												</div>
+											</li>
+										</div>
+									</div>
+								</div>
+							</ul>
+						</p>
+	                </li>
+                </div>
+            </ul>
+
+        </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script src="../js/weixinAudio.js" type="text/javascript"></script>
+<script>
+		$('.weixinAudo').weixinAudio(false);
+</script>
+</body>
+</html>

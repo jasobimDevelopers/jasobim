@@ -1,0 +1,74 @@
+
+
+	<div id="addcontent_question">
+        <div id="addhead">
+        	<div id="addusertitle"><span>问题详情</span></div>
+            <div id="returnuser">
+            	<a href="" ng-click="returnQuestionlist()"><span style="color:#86B5D7">返回问题列表</span>
+            	</a>
+           	</div>
+        </div>
+        <div id="addquestionbody">
+        	<div class="addinput_question" style="display:none;">
+        		<div><span>问题编号:</span></div>
+        		<div><input type="text" ng-model="findQuestionInfo.id" id="inputname"/></div>
+            </div>
+            <div class="addinput_question">
+        		<div><span>项目名称:</span></div>
+        		<div>
+        			<select type="text" ng-model="findQuestionInfo.projectId" class="addquestionSelect">
+        				<option ng-repeat="projectinfo in projectLists" value="{{projectinfo.id}}">{{projectinfo.name}}</option>
+        			</select>
+        		</div>
+            </div>
+            <div class="addinput_question">
+        		<div><span>问题名称:</span></div>
+        		<div><input type="text" ng-model="findQuestionInfo.name" id="inputpassword" /></div>
+            </div>
+            <div class="addinput_question">
+            	<div><span>所属专业:</span></div>
+            	<div><input type="text"  id="inputnick" ng-model="findQuestionInfo.trades" /></div>
+            </div>
+            <div class="addinput_question">
+            	<div>
+            		<span>问题类型:</span>
+            	</div>
+            	<div>
+            		<select type="text" ng-model="findQuestionInfo.questionType" class="addquestionSelect">
+            			<option value="0">质量</option>
+            			<option value="1">安全</option>
+            			<option value="2">其他</option>
+            		</select>
+            	</div>
+            </div>
+            <div class="addinput_question">
+            	<div>
+            		<span>问题等级:</span>
+            	</div>
+            	<div>
+            		<select  type="text" ng-model="findQuestionInfo.priority" class="addquestionSelect">
+            			<option value="0">一般</option>
+            			<option value="1">重要</option>
+            			<option value="2">紧急</option>
+            		</select>
+            	</div>
+            </div>
+            <div class="addinput_question">
+            	<div><span>问题详情:</span></div>
+            	<div><textarea id="inputdetail" ng-model="findQuestionInfo.intro" ></textarea></div>
+            </div>
+            <div class="addinput_question">
+            	<div><span>现场图片上传:</span></div>
+            	<div><input type="file"  id="inputicon" multiple="multiple" accept="image/*"/></div>
+            </div>
+           <!--  <div class="addinput_question">
+            	<div><span>二维码图片上传:</span></div>
+            	<div><input type="file"  id="codeImg"/></div>
+            </div> -->
+            <div id="addbutton" style="margin-top:86px;">
+            	<input class="btn btn-default" type="button" ng-click="addQuestionByAdmin()" value="确定" />
+                <input type="button" ng-click="resetQuestion()" class="btn btn-default" value="重置" />
+            </div>
+        </div>
+        
+	</div>

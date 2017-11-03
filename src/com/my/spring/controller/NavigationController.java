@@ -3,9 +3,6 @@ package com.my.spring.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Controller
 public class NavigationController {
     @RequestMapping(value="/home")
@@ -80,5 +77,40 @@ public class NavigationController {
     public String productionPage(){
         return "user_home";
     }
+
+    
+    ///////////////
+    @RequestMapping(value="/new_user_home")
+    public String newUserMainPage(){
+        return "new_user_home";
+    }
+   /* @RequestMapping(value="/new_user_projectList")
+    public String newUserProjectPage(){
+        return "new_user_home";
+    }
+    
+    @RequestMapping(value="/new_user_projectQuestionList")
+    public String newUserQuestionPage(){
+        return "new_user_home";
+    }
+    
+    @RequestMapping(value="/codeInformationList")
+    public String newCodeInformationListPage(){
+    	return "new_user_home";
+    }
+    
+    @RequestMapping(value="/aboutList")
+    public String newUserAboutusPage(){
+        return "new_user_home";
+    }
+    
+    @RequestMapping(value="/suggesttionList")
+    public String newUserSuggesttionPage(){
+    	return "new_user_home";
+    }
+    @RequestMapping(value="/productionList")
+    public String newProductionPage(){
+        return "new_user_home";
+    }*/
     
 }

@@ -224,6 +224,37 @@ size bigint(20),
 studyType int
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;/////完成
 
+create table measured_data_list(
+id serial primary key,
+check_content varchar(50),
+check_templete varchar(50),
+shice_data int,#实测数据个数
+pass_data int,#合格数据个数
+design_level varchar(50),
+location_size varchar(50),
+input_data varchar(50),
+measured_data_id bigint(20) unsigned not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table measured_data(
+id serial primary key,
+project_name varchar(50),
+leader_unit varchar(50),
+checkPart varchar(50),
+checkType varchar(50),
+check_content varchar(50),
+check_templete varchar(50),
+measured_data varchar(50),#实测数据个数
+qualified_data varchar(50),#合格数据个数
+measured_data_sum varchar(50),
+qualified_data_sum varchar(50),
+design_level varchar(50),
+leader_name varchar(50),
+constructor varchar(50),
+quantiter varchar(50),
+location_size varchar(50)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 create index item_project_id_idx on item(project_id);
 create index item_building_num_idx on item(building_num);
 create index item_unit_num_idx on item(unit_num);

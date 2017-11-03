@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>项目管理</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/project.css">
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
+    <script src="js/jquery-1.8.3.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <!--头部-->
+    <div class="head">
+        <div class="head_con">
+            <div class="logo">
+                <img src="images/logo.png" alt=""><span></span><span>嘉实智慧安装</span>
+            </div>
+            <!--导航-->
+            <div class="nav">
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="project.html" class="active">项目管理</a></li>
+                    <li><a href="#">质量安全管理</a></li>
+                    <li><a href="#">二维码专区</a></li>
+                    <li><a href="#">关于我们</a></li>
+                    <li><a href="#">意见反馈</a></li>
+                    <li><button><img src="images/logo.png" alt=""><span>头像</span>注销</button></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--search-->
+    <div class="search">
+        <div class="search_con">
+            <input type="text" placeholder="搜索">
+            <button id="search">高级搜索</button>
+        </div>
+        <!--搜索内容-->
+        <div class="search_list">
+            <div>
+                <label><span>项目名称</span><input type="text"></label>
+                <label><span>施工单位</span><input type="text"></label>
+                <label><span>项目负责人</span><input type="text"></label>
+                <button style="background: #3ba16e; color: #fff;">筛选</button>
+            </div>
+            <div>
+                <label><span>施工地点</span><input type="text"></label>
+                <label><span>施工时间</span><input type="text"></label>
+                <label style="margin-left: 15px;"><span>施工周期</span><input type="text"></label>
+                <button style="color: #333; border: 1px solid #dcdcdc">重置</button>
+            </div>
+
+        </div>
+    </div>
+    <!--表格-->
+    <div class="formMain">
+        <template>
+            <el-table :data="tableData" stripe style="width: 100%">
+                <el-table-column fixed prop="num" label="序号" width="100">
+                </el-table-column>
+                <el-table-column prop="name" label="项目名称" width="200">
+                </el-table-column>
+                <el-table-column prop="province" label="施工单位" width="280">
+                </el-table-column>
+                <el-table-column prop="person" label="负责人" width="120">
+                </el-table-column>
+                <el-table-column prop="address" label="施工地点" width="300">
+                </el-table-column>
+                <el-table-column prop="data" label="施工时间" width="200">
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="100">
+                    <template scope="scope">
+                        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </template>
+    </div>
+    <div id="page">
+        <el-pagination small layout="prev, pager, next" :total="30"></el-pagination>
+    </div>
+    <!--底部-->
+    <div class="foot">
+        <div class="smll_ball"></div>
+        <div class="big_ball"></div>
+        <ul class="foot_top">
+            <li>联系我们</li>
+            <li>快速链接</li>
+            <li>关注我们</li>
+        </ul>
+        <div class="foot_con">
+            <ul>
+                <li>地址 ：上海市曹安公路4800号嘉实1号楼</li>
+                <li>电邮 ： Marketing@jaso.com.cn</li>
+                <li>电话 ： 86(21)6958 9518</li>
+            </ul>
+            <ul>
+                <li>嘉实集团企业网站</li>
+                <li>南京分公司</li>
+                <li>苏州分公司</li>
+                <li>中原分公司</li>
+            </ul>
+            <div class="weixin"><img src="images/wechat.png" alt=""></div>
+        </div>
+        <div class="copyright"><p><span>嘉实集团版权所有</span><span>沪备024121545号</span> </p></div>
+    </div>
+</div>
+</body>
+<!--引入vue-->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+//    搜索
+    $(".search_list").css('display','none');
+    $("#search").on('click',function () {
+        $(".search_list").toggle()
+    });
+//表格
+    var Main = {
+        methods:{
+            handleClick:function(row) {
+                console.log(row);
+            }
+        },
+
+        data:function () {
+            return {
+                tableData: [
+                    {
+                    num: '1',
+                    name: '无锡万科金域缇香',
+                    province: '上海嘉实（集团）有限公司',
+                    person: '黄宗',
+                    address: '无锡万科金域缇香南区A地块（三期）',
+                    data: '2016-04-20'
+                },
+                    {
+                        num: '2',
+                        name: '无锡万科金域缇香',
+                        province: '上海嘉实（集团）有限公司',
+                        person: '黄宗',
+                        address: '无锡万科金域缇香南区A地块（三期）',
+                        data: '2016-04-20'
+                    },
+                    {
+                        num: '3',
+                        name: '无锡万科金域缇香',
+                        province: '上海嘉实（集团）有限公司',
+                        person: '黄宗',
+                        address: '无锡万科金域缇香南区A地块（三期）',
+                        data: '2016-04-20'
+                    },
+                    {
+                        num: '4',
+                        name: '无锡万科金域缇香',
+                        province: '上海嘉实（集团）有限公司',
+                        person: '黄宗',
+                        address: '无锡万科金域缇香南区A地块（三期）',
+                        data: '2016-04-20'
+                    },
+                    {
+                        num: '5',
+                        name: '无锡万科金域缇香',
+                        province: '上海嘉实（集团）有限公司',
+                        person: '黄宗',
+                        address: '无锡万科金域缇香南区A地块（三期）',
+                        data: '2016-04-20'
+                    },
+                    {
+                        num: '6',
+                        name: '无锡万科金域缇香',
+                        province: '上海嘉实（集团）有限公司',
+                        person: '黄宗',
+                        address: '无锡万科金域缇香南区A地块（三期）',
+                        data: '2016-04-20'
+                    },
+                    {
+                        num: '7',
+                        name: '无锡万科金域缇香',
+                        province: '上海嘉实（集团）有限公司',
+                        person: '黄宗',
+                        address: '无锡万科金域缇香南区A地块（三期）',
+                        data: '2016-04-20'
+                    },
+                    {
+                        num: '8',
+                        name: '无锡万科金域缇香',
+                        province: '上海嘉实（集团）有限公司',
+                        person: '黄宗',
+                        address: '无锡万科金域缇香南区A地块（三期）',
+                        data: '2016-04-20'
+                    }
+                ]
+            }
+        }
+    };
+    var Ctor = Vue.extend(Main);
+    new Ctor().$mount('.formMain');
+//    分页
+new Vue().$mount('#page')
+</script>
+</html>

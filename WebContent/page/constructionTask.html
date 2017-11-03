@@ -1,0 +1,71 @@
+<!DOCTYPE html> 
+<html lang="en"  ng-app="ConstructionTaskApp"> 
+	<head> 
+	<meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+<!--jquery && bootstrap-->
+    <script src="common/jquery/jquery.js"></script>
+    <script src="common/jquery/jquery-1.11.1.js"></script>
+<!--angular-->
+    <script src="common/angular/angular.js"></script>
+    <script src="common/angular/angular-route.js"></script>
+    <script src="common/angular/angular-file-upload.min.js"></script>
+<!-- css -->
+    <link rel="stylesheet" href="../css/commonstyle.css">
+    <link rel="stylesheet" href="../css/job02.css">
+<!-- js -->
+	<script src="project/scripts/constructionTaskController.js"></script>
+	<script src="project/scripts/constructionTaskService.js"></script>
+	</head>
+	<body>
+		<div  ng-controller="constructionTaskController">
+			<div class="wrap">
+			    <!--头部-->
+			    <div class="top">
+			        <div class="top_con">
+			            <div class="back"><i><img src="../images/back.png" alt=""></i><span>返回</span></div>
+			            <div class="jobDetail">任务单详情</div>
+			            <div class="qr"><i><img src="../images/qr.png" alt=""></i></div>
+			        </div>
+			    </div>
+			    <!--内容部分-->
+			    <div class="mainJob">
+			        <!--title-->
+			        <div class="duty">
+			            <div class="dutyTitle"><i></i><span>任务清单</span></div>
+			            <div class="writer"></div>
+			        </div>
+			        <!--内容-->
+			        <div class="mainCon">
+			            <ul>
+			                <li class="projectName">{{constructionTask.companyName}}</li>
+			                <li class="projectTime">限定完成时间：{{constructionTask.finishedDate}}</li>
+			                <li class="projectPerson">指派人员：{{constructionTask.workPeopleNameList}}</li>
+			                <li class="projectContainer">交底内容：{{constructionTask.detailContent}}</li>
+			            </ul>
+			        </div>
+			        <div class="person">
+			            <div class="bg">{{createUserName}}</div>
+			            <div class="finishPer"><span class="personName">{{constructionTask.createUserName}}</span> <span class="finishTime">{{constructionTask.createDate}}</span></div>
+			        </div>
+			    </div>
+			    <!--流转历程-->
+			    <div class="history">
+			        <div class="historyTitle"><i></i><span>流转历程</span></div>
+			        <div class="historyCon">
+			            <ul>
+			                <li>
+			                    <p>开始填写</p>
+			                    <p><span>{{constructionTask.createUserName}}</span> <span>提交</span> <span>{{constructionTask.createDate}}</span></p>
+			                </li>
+			                <li ng-repeat="item in worklist">
+			                    <p>{{item[0]}}</p>
+			                    <p><span>{{item[1]}}</span> <span>{{item[2]}}</span> <span>{{item[3]}}</span></p>
+			                    <p>意见：{{item[4]}}</p>
+			                </li>
+			            </ul>
+			        </div>
+			    </div>
+			</div>
+		</div>
+	</body>
+</html>

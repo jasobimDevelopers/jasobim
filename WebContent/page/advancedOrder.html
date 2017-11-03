@@ -1,0 +1,75 @@
+<!DOCTYPE html> 
+<html lang="en"  ng-app="AdvancedOrderApp"> 
+	<head> 
+	<meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+<!--jquery && bootstrap-->
+    <script src="common/jquery/jquery.js"></script>
+    <script src="common/jquery/jquery-1.11.1.js"></script>
+<!--angular-->
+    <script src="common/angular/angular.js"></script>
+    <script src="common/angular/angular-route.js"></script>
+    <script src="common/angular/angular-file-upload.min.js"></script>
+<!-- css -->
+    <link rel="stylesheet" href="../css/commonstyle.css">
+    <link rel="stylesheet" href="../css/detail.css">
+<!-- js -->
+	<script src="project/scripts/advancedOrderController.js"></script>
+	<script src="project/scripts/advancedOrderService.js"></script>
+	</head>
+	<body>
+		<div  ng-controller="advancedOrderController">
+			<div class="wrap">
+			    <!--头部-->
+			    <div class="top">
+			        <div class="top_con">
+			            <div class="back"><i><img src="../images/back.png" alt=""></i><span>返回</span></div>
+			            <div class="jobDetail">任务单详情</div>
+			            <div class="qr"><i><img src="../images/qrcheck.png" alt=""></i></div>
+			        </div>
+			    </div>
+			    <!--内容部分-->
+			    <div class="mainJob">
+			        <!--title-->
+			        <div class="duty">
+			            <div class="dutyTitle"><i></i><span>预付单</span></div>
+			            <div class="writer"></div>
+			        </div>
+			        <!--内容-->
+			        <div class="mainCon">
+			            <ul>
+			                <li class="projectName">{{advancedOrder.projectName}}</li>
+			                <li class="projectTime">施工部位： {{advancedOrder.constructPart}}</li>
+			                <li class="projectPerson">工程量： 
+			                    <ol>
+			                        <li style="list-style-type:none;">{{advancedOrder.quantityDes}}</li>
+			                    </ol>
+			                </li>
+			            </ul>
+			        </div>
+			        <div class="person">
+			            <div class="bg">{{name}}</div>
+			            <div class="finishPer"><span class="personName">{{advancedOrder.createUserName}}</span> <span class="finishTime">{{advancedOrder.createDate}}</span></div>
+			        </div>
+			    </div>
+			    <!--流转历程-->
+			    <div class="history">
+			        <div class="historyTitle"><i></i><span>流转历程</span></div>
+			        <div class="historyCon">
+			            <ul>
+			                <li>
+			                    <p>开始填写</p>
+			                    <p><span>{{advancedOrder.createUserName}}</span> <span>提交</span> <span>{{advancedOrder.createDate}}</span></p>
+			                </li>
+			                <li ng-repeat=" item in worklist">
+			                    <p>{{item[0]}}</p>
+			                    <p><span>{{item[1]}}</span> <span>{{item[2]}}</span> <span>{{item[3]}}</span></p>
+			                    <p>意见：{{item[4]}}</p>
+			                </li>
+			            </ul>
+			
+			        </div>
+			    </div>
+			</div>
+		</div>
+	</body>
+</html>
