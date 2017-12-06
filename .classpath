@@ -18,13 +18,11 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/classmate-1.1.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/fastjson-1.1.43.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/guava-15.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jackson-annotations-2.4.4.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jackson-core-2.4.4.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jackson-databind-2.4.4.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.servlet-api-3.1.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/joda-time-2.5.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mybatis-3.2.4.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mybatis-spring-1.2.2.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/org.apache.servicemix.bundles.xmlbeans-2.4.0_1.jar"/>
@@ -32,8 +30,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-ooxml-3.9-20121203.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-ooxml-schemas-3.7-20101029.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/sdk.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-api-1.7.5.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-log4j12-1.7.5.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-aop-4.3.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-aspects-4.3.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-beans-4.3.0.RELEASE.jar"/>
@@ -61,8 +57,11 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/ehcache-spring-annotations-1.2.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.mail.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jedis-2.1.0.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jiguang-common-1.0.7.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jpush-client-3.3.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/freemarker.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/guava-17.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mockwebserver-1.5.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/zxing-2.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

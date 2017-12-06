@@ -1,9 +1,6 @@
 package com.my.spring.model;
 
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 public class MinItemPojo {
     private String projectName;
     private Integer buildingNum;
@@ -23,6 +20,12 @@ public class MinItemPojo {
     private String typeName;//类型名
     private Long selfId;
     private Long id;
+    private String installUser;
+    private String installUnit;
+    private String installDate;
+    private String itemBrand;
+    private Long projectId;
+    private String modelFlag;
     private Integer professionType;//专业类型 0、电气 1、暖通 2、给水 3、排水 4.消防
 
 
@@ -179,6 +182,55 @@ public class MinItemPojo {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getInstallUser() {
+		return installUser;
+	}
+
+	public void setInstallUser(String installUser) {
+		this.installUser = installUser;
+	}
+
+	public String getInstallUnit() {
+		return installUnit;
+	}
+
+	public void setInstallUnit(String installUnit) {
+		this.installUnit = installUnit;
+	}
+
+	public String getInstallDate() {
+		return installDate;
+	}
+
+	public void setInstallDate(String installDate) {
+		this.installDate = installDate;
+	}
+
+	public String getItemBrand() {
+		return itemBrand;
+	}
+
+	public void setItemBrand(String itemBrand) {
+		this.itemBrand = itemBrand;
+	}
+
+
+	public Long getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getModelFlag() {
+		return modelFlag;
+	}
+
+	public void setModelFlag(String modelFlag) {
+		this.modelFlag = modelFlag;
 	}
 
    

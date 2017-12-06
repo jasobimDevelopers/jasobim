@@ -3,42 +3,31 @@ package com.my.spring.serviceImpl;
 import com.my.spring.DAO.AdvancedOrderCollectDao;
 import com.my.spring.DAO.AdvancedOrderDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.jpush.PushExample;
 import com.my.spring.model.AdvancedOrder;
 import com.my.spring.model.AdvancedOrderCollect;
 import com.my.spring.model.AdvancedOrderPojo;
-import com.my.spring.model.ConstructionTask;
-import com.my.spring.model.ConstructionTaskPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.User;
-import com.my.spring.parameters.Parameters;
+import com.my.spring.model.UserLog;
 import com.my.spring.service.AdvancedOrderService;
 import com.my.spring.service.FileService;
 import com.my.spring.utils.DataExportWordTest;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.NumberToCN;
 import com.my.spring.utils.SessionManager;
-
-import cn.jpush.api.JPushClient;
-import cn.jpush.api.common.APIConnectionException;
-import cn.jpush.api.common.APIRequestException;
-import cn.jpush.api.push.PushResult;
-import cn.jpush.api.push.model.PushPayload;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.Date;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 @Service("advancedOrderService")
@@ -48,6 +37,8 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
     @Autowired
     UserDao userDao;
     @Autowired
+    UserLogDao userLogDao;
+    @Autowired
     AdvancedOrderCollectDao advancedOrderCollectDao;
     @Autowired
     FileService filesService;
@@ -55,18 +46,12 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
     @SuppressWarnings("unused")
 	private NumberToCN numberChange;
     @Override
-    public DataWrapper<Void> addAdvancedOrder(AdvancedOrder advancedOrder,String token,MultipartFile[] contentFiles,MultipartFile[] photoOfFinished,HttpServletRequest request) {
+    public DataWrapper<Void> addAdvancedOrder(AdvancedOrder advancedOrder,String token,MultipartFile[] contentFiles,HttpServletRequest request) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(advancedOrder!=null){
 				if(advancedOrder.getProjectId()!=null){
-					if(photoOfFinished.length>0){
-						Files photoFile =filesService.uploadFile("advancedOrder/"+advancedOrder.getProjectId(), photoOfFinished[0], 5, request);
-						if(photoFile!=null){
-							advancedOrder.setPhotoOfFinished(photoFile.getId().toString());
-						}
-					}
 					if(contentFiles.length>0){
 						String fileIdList="";
 						for(int i=0;i<contentFiles.length;i++){
@@ -85,7 +70,6 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 					}
 					
 				}
-				
 				advancedOrder.setNextApprovalPeopleType("施工员");
 				advancedOrder.setSubmitUserId(userInMemory.getId());
 				advancedOrder.setCreateUserName(userInMemory.getRealName());
@@ -107,25 +91,21 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 					advancedOrderCollectDao.addAdvancedOrderCollect(aoc);
 		///////////////////////////
 					List<User> userList = new ArrayList<User>();
-					userList=userDao.findUserLikeRealName(advancedOrder.getNextReceivePeopleId()).getData();
-					String[] userids= new String[userList.size()];
-					for(int b =0;b<userList.size();b++){
-						userids[b]=userList.get(b).getId().toString();
+					int adminFlag=0;
+					if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 || userInMemory.getUserType()==2){
+	        			adminFlag=-1;
+	        		}
+					if(advancedOrder.getNextReceivePeopleId()!=null){
+						userList=userDao.findGetPushUsers(advancedOrder.getNextReceivePeopleId(),adminFlag).getData();
+						String content=userInMemory.getRealName()+"提交了一个预付单需要您审批";
+						String[] userids=new String[userList.size()];
+						for(int b =0;b<userList.size();b++){
+							userids[b]=userList.get(b).getId().toString();
+						}
+						PushExample.testSendPushWithCustomConfig_ios(userids, content);
+						PushExample.testSendPushWithCustomConfig_android(userids, content);
 					}
-					JPushClient jpushClient = new JPushClient(Parameters.masterSecret, Parameters.appKey, 3);
-					  String content=userInMemory.getRealName()+"提交了一个预付单需要您审批";
-			    	  PushPayload payload = PushExample.buildPushObject_all_alias_alert(userids,content);
-			          try {
-			              PushResult result = jpushClient.sendPush(payload);
-			              System.out.println(result);
-			          } catch (APIConnectionException e) {
-			            e.printStackTrace();         
-			          } catch (APIRequestException e) {
-			              System.out.println("Should review the error, and fix the request"+ e);
-			              System.out.println("HTTP Status: " + e.getStatus());
-			              System.out.println("Error Code: " + e.getErrorCode());
-			              System.out.println("Error Message: " + e.getErrorMessage());
-			          }
+					
 					///////////////////////////////
 				}
 			}else{
@@ -138,13 +118,14 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
     }
 
     @Override
-    public DataWrapper<Void> deleteAdvancedOrder(Long id,String token ) {
+    public DataWrapper<Void> deleteAdvancedOrder(String id,String token) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
-				if(id!=null){
-					AdvancedOrder advancedOrder = advancedOrderDao.getById(id);
+			if(id!=null){
+				String[] ids=id.split(",");
+				for(int s=0;s<ids.length;s++){
+					AdvancedOrder advancedOrder = advancedOrderDao.getById(Long.valueOf(ids[s]));
 					if(advancedOrder!=null){
 						if(advancedOrder.getPhotoOfFinished()!=null){
 							filesService.deleteFileById(Long.valueOf(advancedOrder.getPhotoOfFinished()));
@@ -154,15 +135,17 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 								filesService.deleteFileById(Long.valueOf(advancedOrder.getContentFilesId().split(",")[i]));
 							}
 						}
+						AdvancedOrderCollect advancedOrderCollect= advancedOrderCollectDao.getAdvancedOrderCollectByOrderId(advancedOrder.getId());
+						if(advancedOrderCollect!=null){
+							advancedOrderCollectDao.deleteAdvancedOrderCollect(advancedOrderCollect.getId());
+						}
 					}
-					if(!advancedOrderDao.deleteAdvancedOrder(id)){
+					if(!advancedOrderDao.deleteAdvancedOrder(Long.valueOf(ids[s]))){
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					}
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}
 			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
@@ -179,6 +162,21 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
         User userInMemory = SessionManager.getSession(token);
         int adminFlag=1;
         if (userInMemory != null) {
+        		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
+        			UserLog userLog = new UserLog();
+        			userLog.setProjectPart(10);
+        			userLog.setActionDate(new Date());
+        			userLog.setUserId(userInMemory.getId());
+        			userLog.setSystemType(userInMemory.getSystemId());
+        			userLog.setVersion("3.0");
+        			if(advancedOrder.getProjectId()!=null){
+        				userLog.setProjectId(advancedOrder.getProjectId());
+        			}
+        			if(advancedOrder.getId()!=null){
+        				userLog.setFileId(advancedOrder.getId());
+        			}
+        			userLogDao.addUserLog(userLog);
+        		}
         		if(advancedOrder.getCreateUserName()==null && userInMemory.getUserType()==3){
         			advancedOrder.setCreateUserName(userInMemory.getRealName());
         		}

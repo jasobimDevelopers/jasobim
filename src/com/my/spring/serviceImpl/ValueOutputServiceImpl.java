@@ -123,6 +123,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     	Double nums=0.0;
     	Double finisheds=0.0;
     	if(userInMemory!=null){
+    		
     		String projectList=userInMemory.getProjectList();
     		if(userInMemory.getUserType()!=0 && !userInMemory.getWorkName().equals("总经理") ){
     			dataWrapperPojo=ValueOutputDao.getValueOutputList(projectList).getData();
@@ -164,25 +165,23 @@ public class ValueOutputServiceImpl implements ValueOutputService {
         Double nums=0.0;
     	Double finisheds=0.0;
         if(userInMemory != null) {
-        	if(projectName!=null){
-        		UserLog userLog = new UserLog(); 
-        		userLog.setFileId(ValueOutputDao.getValueOutputListByProjectName(projectName).getData().get(0).getId());
-        		userLog.setActionDate(new Date());
-        		userLog.setSystemType(userInMemory.getSystemType());
-        		if(projectId!=null){
-        			userLog.setProjectId(projectId);
-        		}else{
-        			userLog.setProjectId((long) -1);
-        		}
-        		userLog.setProjectPart(7);
-        		userLog.setUserId(userInMemory.getId());
-        		userLog.setVersion("-1");
-        		userLogSerivce.addUserLog(userLog, token);
-        	}
+        	if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
+        		
+    			UserLog userLog = new UserLog();
+    			userLog.setProjectPart(7);
+    			userLog.setActionDate(new Date());
+    			userLog.setUserId(userInMemory.getId());
+    			userLog.setSystemType(userInMemory.getSystemId());
+    			userLog.setVersion("3.0");
+    			if(projectId!=null){
+    				userLog.setProjectId(projectId);
+    			}
+    			if(projectName!=null){
+    				userLog.setFileId(ValueOutputDao.getValueOutputListByProjectName(projectName).getData().get(0).getId());
+    			}
+    			userLogSerivce.addUserLog(userLog, token);
+    		}
         	String[] projectLists=null;
-        	/*if(!userInMemory.getWorkName().equals("总经理") && userInMemory.getUserType()!=0){
-    	    		projectLists=userInMemory.getProjectList().split(",");
-    	    	}*/
 		    	valueOutputss=ValueOutputDao.getValueOutputByProjectId(projectId,projectName,projectLists).getData();
 				if(valueOutputss!=null && valueOutputss.size()>0){
 	    			for(int i=0;i<valueOutputss.size();i++){

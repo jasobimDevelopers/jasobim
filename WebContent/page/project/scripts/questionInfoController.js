@@ -1,4 +1,11 @@
-function questionInfoController($scope, $sce,questionInfoService) {
+﻿function questionInfoController($scope, $sce,questionInfoService) {
+	
+	// 修改了返回的对象,以前的无法接收
+	
+	// 添加单一播放的逻辑
+	/*$('.weixinAudio').on('click',function(event) {
+	    
+	});*/
 	var name="id";
 	$scope.questionInfo="";
 	$scope.worklist=[];
@@ -13,6 +20,8 @@ function questionInfoController($scope, $sce,questionInfoService) {
     $scope.messageVoiceList=[];
     $scope.messageList=[];
     $scope.messageLists=[];
+    $scope.messageImgItem=[];
+    $scope.messageVoiceItem=[];
     var j=0;
     var k=0;
     var q=0;
@@ -24,10 +33,10 @@ function questionInfoController($scope, $sce,questionInfoService) {
 		  		if($scope.questionInfo.fileList!=null){
 		  			var test=$scope.questionInfo.fileList;
 		  			for(var i=0;i<test.length;i++){
-		  				if(test[i].split(".")[1]=="wmv" || test[i].split(".")[1]=="mp3"){
+		  				if(test[i].split(".")[1]=="wav" || test[i].split(".")[1]=="mp3"){
 		  					$scope.questionVoiceList[j]=test[i];
 		  					j++;
-		  				}else{
+		  				}else if(test[i].split(".")[1]!="dat"){
 		  					$scope.questionImgList[k]=test[i];
 		  					k++;
 		  				}
@@ -47,13 +56,18 @@ function questionInfoController($scope, $sce,questionInfoService) {
 		  	  $scope.messageListInfo = result.data;
 		  	if($scope.messageListInfo!=""){
 		  		for(var g=0;g<$scope.messageListInfo.length;g++){
+					$scope.messageList=[];
+		  			$scope.messageImgItem=[];
+		  			$scope.messageVoiceItem=[];
+					q=0;
+					p=0;	
 		  			if($scope.messageListInfo[g].fileList!=null){
 			  			var tests=$scope.messageListInfo[g].fileList;
 			  			for(var t=0;t<tests.length;t++){
-			  				if(tests[t].split(".")[1]=="wmv" || tests[t].split(".")[1]=="mp3"){
+			  				if(tests[t].split(".")[1]=="wav" || tests[t].split(".")[1]=="mp3"){
 			  					$scope.messageVoiceItem[q]=tests[t];
 			  					q++;
-			  				}else{
+			  				}else if(tests[t].split(".")[1]!="dat"){
 			  					$scope.messageImgItem[p]=tests[t];
 			  					p++;
 			  				}
@@ -69,6 +83,54 @@ function questionInfoController($scope, $sce,questionInfoService) {
 		  	  }
 		  });
 	}
+    var baseUrl="http://jasobim.com.cn/";
+    $scope.play = function(index){
+		var item=$($('.question-wrap')[index]).find('.weixinAudio')[0];
+		var $item=$(item);
+		if(!item._audio){
+			var test=$item.find("audio")[0];
+			test.setAttribute('src',baseUrl + $scope.questionVoiceList[index]);	
+			//var weixinAudioObj = item.weixinAudio(false);
+			item._audio=$item.weixinAudio(false).weixinAudio0;
+			test.onloadedmetadata=function(){
+				item._audio.updateTotalTime();
+			}
+			
+		}
+		item._audio.play();
+		$('.weixinAudio').each(function(index,obj){
+			if(!$(obj).find("audio")[0].paused&&obj!=item){
+				if(obj._audio)
+					obj._audio.pause();
+			}
+		});
+	};
+	 $scope.plays = function(index,pIndex){
+		var indexs=index;
+		index=$scope.questionVoiceList.length+index;
+		var item=$($('.reply-wrap')[pIndex]).find('.weixinAudio')[indexs];
+		var $item=$(item);
+		if(!item._audio){
+			var test=$item.find("audio")[0];
+			test.setAttribute('src',baseUrl + $scope.messageLists[pIndex][1][indexs]);	
+			//var weixinAudioObj = item.weixinAudio(false);
+			item._audio=$item.weixinAudio(false).weixinAudio0;
+			test.onloadedmetadata=function(){
+				item._audio.updateTotalTime();
+			}
+			
+		}
+		item._audio.play();
+		$('.weixinAudio').each(function(index,obj){
+			if(!$(obj).find("audio")[0].paused&&obj!=item){
+				if(obj._audio)
+					obj._audio.pause();
+			}
+		});
+	};
+
+	
+	
 	
 }
 function getQueryStringByName(name){

@@ -1,6 +1,6 @@
 package com.my.spring.serviceImpl;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.Project;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
 import com.my.spring.service.FileService;
@@ -32,6 +34,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	UserLogDao userLogDao;
 	@Autowired
 	ProjectDao projectDao;
 	@Autowired
@@ -53,7 +57,7 @@ public class UserServiceImpl implements UserService {
 			user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
 			user.setUserType(UserTypeEnum.User.getType());
 			//user.setUserType(user.getUserType());
-			user.setRegisterDate(new Date(System.currentTimeMillis()));
+			user.setRegisterDate(new Date());
 			if(!userDao.addUser(user)) {
 				dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 			}
@@ -304,48 +308,98 @@ public class UserServiceImpl implements UserService {
 		DataWrapper<List<User>> userList=new DataWrapper<List<User>>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
-			if (adminInMemory.getUserType() == UserTypeEnum.Admin.getType() || adminInMemory.getTeamId()!=null || adminInMemory.getWorkName().equals("总经理")) {
-				user.setTeamInformation(adminInMemory.getTeamInformation());
-				userList=userDao.getUserList(pageSize, pageIndex,user);
-				if(userList.getData().size()>0){
-					for(int i=0;i<userList.getData().size();i++){
-						UserPojo userpojo=new UserPojo();
-						userpojo.setSystemType(userList.getData().get(i).getSystemType());
-						userpojo.setEmail(userList.getData().get(i).getEmail());
-						userpojo.setId(userList.getData().get(i).getId());
-						userpojo.setProjectList(userList.getData().get(i).getProjectList());
-						userpojo.setPassword(userList.getData().get(i).getPassword());
-						userpojo.setRealName(userList.getData().get(i).getRealName());
-						userpojo.setTel(userList.getData().get(i).getTel());
-						userpojo.setRegisterDate(userList.getData().get(i).getRegisterDate());
-						userpojo.setUserName(userList.getData().get(i).getUserName());
-						userpojo.setUserType(userList.getData().get(i).getUserType());
-						userpojo.setUserIcon(userList.getData().get(i).getUserIcon());
-						userpojo.setWorkName(userList.getData().get(i).getWorkName());
-						if(userList.getData().get(i).getMenuItemList()!=null){
-							userpojo.setMenuItemList(userList.getData().get(i).getMenuItemList().split(","));
-						}
-						userpojo.setTeamInformation(userList.getData().get(i).getTeamInformation());
-						if(userList.getData().get(i).getUserIcon()!=null){
-							Files file=fileService.getById(userList.getData().get(i).getUserIcon());
-							if(file!=null){
-								userpojo.setUserIconUrl(file.getUrl());
-							}
-						}
-						userpojoList.add(i, userpojo);
+			//if (adminInMemory.getUserType() == UserTypeEnum.Admin.getType() || adminInMemory.getTeamId()!=null || adminInMemory.getWorkName().equals("总经理")) {
+			user.setTeamInformation(adminInMemory.getTeamInformation());
+			userList=userDao.getUserList(pageSize, pageIndex,user);
+			if(userList.getData().size()>0){
+				for(int i=0;i<userList.getData().size();i++){
+					UserPojo userpojo=new UserPojo();
+					userpojo.setSystemType(userList.getData().get(i).getSystemType());
+					userpojo.setEmail(userList.getData().get(i).getEmail());
+					userpojo.setId(userList.getData().get(i).getId());
+					userpojo.setProjectList(userList.getData().get(i).getProjectList());
+					userpojo.setPassword(userList.getData().get(i).getPassword());
+					userpojo.setRealName(userList.getData().get(i).getRealName());
+					userpojo.setTel(userList.getData().get(i).getTel());
+					userpojo.setRegisterDate(userList.getData().get(i).getRegisterDate());
+					userpojo.setUserName(userList.getData().get(i).getUserName());
+					userpojo.setUserType(userList.getData().get(i).getUserType());
+					userpojo.setUserIcon(userList.getData().get(i).getUserIcon());
+					userpojo.setWorkName(userList.getData().get(i).getWorkName());
+					if(userList.getData().get(i).getMenuItemList()!=null){
+						userpojo.setMenuItemList(userList.getData().get(i).getMenuItemList().split(","));
 					}
-					dataWrapper.setData(userpojoList);
-					dataWrapper.setCallStatus(userList.getCallStatus());
-					dataWrapper.setCurrentPage(userList.getCurrentPage());
-					dataWrapper.setErrorCode(userList.getErrorCode());
-					dataWrapper.setNumberPerPage(userList.getNumberPerPage());
-					dataWrapper.setTotalNumber(userList.getTotalNumber());
-					dataWrapper.setTotalPage(userList.getTotalPage());
+					userpojo.setTeamInformation(userList.getData().get(i).getTeamInformation());
+					if(userList.getData().get(i).getUserIcon()!=null){
+						Files file=fileService.getById(userList.getData().get(i).getUserIcon());
+						if(file!=null){
+							userpojo.setUserIconUrl(file.getUrl());
+						}
+					}
+					userpojoList.add(i, userpojo);
 				}
-				
-			} else {
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+				dataWrapper.setData(userpojoList);
+				dataWrapper.setCallStatus(userList.getCallStatus());
+				dataWrapper.setCurrentPage(userList.getCurrentPage());
+				dataWrapper.setErrorCode(userList.getErrorCode());
+				dataWrapper.setNumberPerPage(userList.getNumberPerPage());
+				dataWrapper.setTotalNumber(userList.getTotalNumber());
+				dataWrapper.setTotalPage(userList.getTotalPage());
 			}
+				
+			/*} else {
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}*/
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return dataWrapper;
+	}
+	@Override
+	public DataWrapper<List<UserPojo>> getUserLists(Integer pageIndex, Integer pageSize, User user, String token) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<UserPojo>> dataWrapper = new DataWrapper<List<UserPojo>>();
+		List<UserPojo> userpojoList=new ArrayList<UserPojo>();
+		DataWrapper<List<User>> userList=new DataWrapper<List<User>>();
+		User adminInMemory = SessionManager.getSession(token);
+		if (adminInMemory != null) {
+			userList=userDao.getUserLists(pageSize, pageIndex,user);
+			if(userList.getData().size()>0){
+				for(int i=0;i<userList.getData().size();i++){
+					UserPojo userpojo=new UserPojo();
+					userpojo.setSystemType(userList.getData().get(i).getSystemType());
+					userpojo.setEmail(userList.getData().get(i).getEmail());
+					userpojo.setId(userList.getData().get(i).getId());
+					userpojo.setProjectList(userList.getData().get(i).getProjectList());
+					userpojo.setPassword(userList.getData().get(i).getPassword());
+					userpojo.setRealName(userList.getData().get(i).getRealName());
+					userpojo.setTel(userList.getData().get(i).getTel());
+					userpojo.setRegisterDate(userList.getData().get(i).getRegisterDate());
+					userpojo.setUserName(userList.getData().get(i).getUserName());
+					userpojo.setUserType(userList.getData().get(i).getUserType());
+					userpojo.setUserIcon(userList.getData().get(i).getUserIcon());
+					userpojo.setWorkName(userList.getData().get(i).getWorkName());
+					if(userList.getData().get(i).getMenuItemList()!=null){
+						userpojo.setMenuItemList(userList.getData().get(i).getMenuItemList().split(","));
+					}
+					userpojo.setTeamInformation(userList.getData().get(i).getTeamInformation());
+					if(userList.getData().get(i).getUserIcon()!=null){
+						Files file=fileService.getById(userList.getData().get(i).getUserIcon());
+						if(file!=null){
+							userpojo.setUserIconUrl(file.getUrl());
+						}
+					}
+					userpojoList.add(i, userpojo);
+				}
+				dataWrapper.setData(userpojoList);
+				dataWrapper.setCallStatus(userList.getCallStatus());
+				dataWrapper.setCurrentPage(userList.getCurrentPage());
+				dataWrapper.setErrorCode(userList.getErrorCode());
+				dataWrapper.setNumberPerPage(userList.getNumberPerPage());
+				dataWrapper.setTotalNumber(userList.getTotalNumber());
+				dataWrapper.setTotalPage(userList.getTotalPage());
+			}
+				
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -361,6 +415,19 @@ public class UserServiceImpl implements UserService {
 		String[] workNameList={"项目经理","常务经理","技术负责人","土建负责人","安装负责人","技术员","质量员","施工员",
 				"材料员","资料员","预算员","机管员","安全员","钢筋翻样员","木工翻样员","BIM工程师"};
 		if (adminInMemory != null) {
+				if(adminInMemory.getSystemId()==0 || adminInMemory.getSystemId()==1){
+	        		
+	    			UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(8);
+	    			userLog.setActionDate(new Date());
+	    			userLog.setUserId(adminInMemory.getId());
+	    			userLog.setSystemType(adminInMemory.getSystemId());
+	    			userLog.setVersion("3.0");
+	    			if(projectId!=null){
+	    				userLog.setProjectId(projectId);
+	    			}
+	    			userLogDao.addUserLog(userLog);
+	    		}
 				userList=userDao.getUserTeam(null, -1,projectId);
 				if(userList.getData().size()>0){
 					for(int i=0;i<userList.getData().size();i++){

@@ -168,16 +168,47 @@
 		</dependency>
 
 		<!-- JSON -->
-		 <dependency>
-		           <groupId>com.google.code.gson</groupId>
-		           <artifactId>gson</artifactId>
-		           <version>2.2.4</version>
-		  </dependency>
-		  <!-- <dependency>
-		      <groupId>cn.jpush.api</groupId>
-		      <artifactId>jpush-client</artifactId>
-		      <version>3.2.3</version>
-		  </dependency> -->
+		<!-- 极光推送 -->
+		<dependency>
+            <groupId>cn.jpush.api</groupId>
+            <artifactId>jiguang-common</artifactId>
+            <version>1.0.8</version>
+        </dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.3</version>
+            <scope>compile</scope>
+		</dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.6.Final</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.7</version>
+		</dependency>
+
+
+		<!-- Test Dependencies -->
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.7</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- 极光推送结束  -->
+		 
 		  <dependency>
 		    <groupId>net.sf.json-lib</groupId>
 		    <artifactId>json-lib</artifactId>
@@ -439,7 +470,7 @@
 			<scope>compile</scope>
 		</dependency>
 		<!-- google S -->
-		<dependency>
+	    <dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
 			<version>3.1.0</version>
@@ -506,28 +537,18 @@
 			<version>2.0.2.RELEASE</version>
 		</dependency>
 		<!-- oauth 结束 -->
-		<!-- 极光推送依赖包 -->
- 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>15.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
-		</dependency>
+		
 		<!-- 极光推送依赖包结束 -->
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 			<version>1.8.5</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
 			<version>2.0</version>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>com.google.zxing</groupId>

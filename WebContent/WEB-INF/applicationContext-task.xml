@@ -11,7 +11,7 @@
 						http://www.springframework.org/schema/task/spring-task-3.1.xsd
 						">
 	<!--要调用的工作 -->
-	<bean id="taskTest" class="com.my.spring.jpush.PushMessage"></bean>
+	<!-- <bean id="taskTest" class="com.my.spring.jpush.PushMessage"></bean> -->
    <!--  <task:scheduled-tasks>
 		<task:scheduled ref="taskTest" method="testSch" cron="0 00 14 ? * *" />
 	</task:scheduled-tasks> -->

@@ -2,7 +2,7 @@ package com.my.spring.model;
 
 
 public class NormativefilesPojo {
-	private Integer id;
+	private Long id;
 	private String projectName;///项目id
 	private String content;////文件内容
 	private String[] fileUrlList;/////文件id列表
@@ -15,10 +15,10 @@ public class NormativefilesPojo {
 	private Integer studyType;////0、质量   1、安全   2、技术
 	private Long size;
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

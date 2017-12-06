@@ -244,16 +244,16 @@ public class ReadExcel {
                 	   cell.setCellType(Cell.CELL_TYPE_STRING);
                 	   String name=cell.getStringCellValue();
                 	   item.setName(name);//构件名称
-                	   if(name.equals("电缆桥架") || name.equals("电缆桥架配件") || name.equals("电气设备")){
+                	   if(name.contains("电缆桥架") || name.contains("电器配件") || name.contains("导管") || name.contains("电缆桥架配件") || name.contains("电气设备") || name.contains("照明设备") || name.contains("线管配件")){
                 		 item.setProfessionType(0);  
                 	   }
-                	   if(name.equals("风管") || name.equals("风管附件") || name.equals("风管管件") || name.equals("风道末端") || name.equals("柜式离心风机") || name.equals("高效低噪声混流风机")){
+                	   if(name.contains("风管") || name.contains("风管附件") || name.contains("风管管件") || name.contains("风道末端") || name.contains("柜式离心风机") || name.contains("高效低噪声混流风机")){
                 		   item.setProfessionType(1);
                 	   }
-                	   if(name.equals("消火栓箱") || name.equals("潜污泵")){
+                	   if(name.contains("消火栓箱") || name.contains("潜污泵") || name.contains("机械设备") || name.contains("离心泵")){
                 		   item.setProfessionType(3);
                 	   }
-                	   if(name.equals("卫浴装置")){
+                	   if(name.contains("卫浴装置")){
                 		   item.setProfessionType(2);
                 	   }
                    }else if(c==3){
@@ -309,6 +309,34 @@ public class ReadExcel {
                 		   str="";
                 	   }
                 	   item.setSystemType(str);//构件的系统类型
+                   }else if(c==14){
+                	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   item.setInstallUnit(str);
+                   }else if(c==15){
+                	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   item.setInstallUser(str);
+                   }else if(c==16){
+                	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   item.setItemBrand(str);//构件的系统类型
+                   }else if(c==17){
+                	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                	   String str=cell.getStringCellValue();
+                	   if(str==null){
+                		   str="";
+                	   }
+                	   item.setInstallDate(str);//构件的系统类型
                    }
                }
            }

@@ -41,9 +41,6 @@ public class NormativefilesDaoImpl extends BaseDao<Normativefiles> implements No
         if(Normativefiles.getStudyType()!=null){
         	criteria.add(Restrictions.eq("studyType", Normativefiles.getStudyType()));
         }
-        if(Normativefiles.getContent()!=null){
-        	criteria.add(Restrictions.like("title", "%"+Normativefiles.getTitle()+"%"));
-        }
         criteria.addOrder(Order.desc("submitDate"));
    
         if (pageSize == null) {
@@ -57,7 +54,9 @@ public class NormativefilesDaoImpl extends BaseDao<Normativefiles> implements No
         criteria.setProjection(Projections.rowCount());
         int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
         int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
-
+        if(Normativefiles.getContent()!=null){
+        	pageIndex=-1;
+        }
         // 真正取值
         criteria.setProjection(null);
         if (pageSize > 0 && pageIndex > 0) {

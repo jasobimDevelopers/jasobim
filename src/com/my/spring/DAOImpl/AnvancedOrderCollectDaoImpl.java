@@ -1,7 +1,6 @@
 package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.AdvancedOrderCollectDao;
-import com.my.spring.model.AdvancedOrder;
 import com.my.spring.model.AdvancedOrderCollect;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -88,6 +87,24 @@ public class AnvancedOrderCollectDaoImpl extends BaseDao<AdvancedOrderCollect> i
         }
         if (ret != null && ret.size() > 0) {
 			retDataWrapper.setData(ret);
+		}
+		return retDataWrapper;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public AdvancedOrderCollect getAdvancedOrderCollectByOrderId(Long submitUserId) {
+		AdvancedOrderCollect retDataWrapper = new AdvancedOrderCollect();
+		List<AdvancedOrderCollect> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(AdvancedOrderCollect.class);
+        criteria.add(Restrictions.eq("advancedOrderId",submitUserId));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+			retDataWrapper=ret.get(0);
 		}
 		return retDataWrapper;
 	}

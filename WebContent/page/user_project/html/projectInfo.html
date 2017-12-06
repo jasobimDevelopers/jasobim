@@ -1,19 +1,477 @@
 <div id="projectDetail">
-	<div id="projectDetail_head">
-		<div style="display:none"><span>{{projectTitle}}</span></div>
-		<div style="display:none" ng-model="findProjectInfo.id"></div>
-		<input type="hidden" ng-model="projectid"/>
-		<div class="bt_menu" ng-click="projectInfoChange(headerItem.name)" ng-repeat="headerItem in projectInfoHead" ><span>{{headerItem.name}}</span></div>
-		<div id="returnbt" ng-click="returnProjects()">
+		<!-- <div id="returnbt" ng-click="returnProjects()">
 			<a><span>返回</span></a>
-		</div>
-	</div>
-	<div id="project_body">
-		<div ng-include="'page/user_project/html/projectSelfInfo.html'" style="display:block;position:absolute; z-index:1;" id="projectSelfInfoHtml"></div>
-		<div ng-include="'page/user_project/html/projectItemInfo.html'" style="display:none;position:absolute; z-index:1;" id="projectItemInfoHtml"></div>
-		<div ng-include="'page/user_project/html/projectPaperInfo.html'" style="display:none;position:absolute; z-index:1;" id="projectPaperInfoHtml"></div>
-		<div ng-include="'page/user_project/html/projectQuantityInfo.html'" style="display:none;position:absolute; z-index:1;" id="projectQuantityInfoHtml"></div>
-		<div ng-include="'page/user_project/html/projectVideoInfo.html'" style="display:none;position:absolute;  z-index:1;" id="projectVideoInfoHtml"></div>
-		<div ng-include="'page/user_project/html/projectQuestionInfo.html'" style="display:none;position:absolute; z-index:1;" id="projectQuestionInfo"></div>
-	</div>
+		</div> -->
+	
+	<!--内容部分-->
+    <div class="project">
+        <!--tab-->
+        <div class="projectPill">
+            <div class="line"></div>
+            <ul class="clear">
+                <li class="active"><a href="#">基本</a></li>
+                <li ng-click="getProjectItemList(findProjectInfo.id,10,1,null)"><a href="#">构件</a></li>
+                <li ng-click="getProjectQuantityList(findProjectInfo.id,10,1,null)"><a href="#">工程量</a></li>
+                <li ng-click="getProjectPaperList(findProjectInfo.id,10,1,null)"><a href="#">图纸</a></li>
+                <li ng-click="getProjectVideoList(findProjectInfo.id,10,1,null)"><a href="#">交底</a></li>
+                <li ng-click="getProjectQuestionList(findProjectInfo.id,10,1,null)"><a href="#">问题</a></li>
+            </ul>
+            <a class="back" ng-click="returnProjects()">返回上一级</a>
+        </div>
+     <!--tab 切换-->
+        <div class="projectCon">
+            <!--基本-->
+            <div class="projectConItem" style="display: block; padding-top: 50px;">
+                <div class="itemImg">
+                	<div ng-if="findProjectInfo.picUrl=='null'">
+                		<img src="page/new_user/images/EasyConnect.lnk.png" alt="图片">
+                	</div>
+                	<div ng-if="findProjectInfo.picUrl!='null'">
+                		<img ng-src="http://jasobim.com.cn/{{findProjectInfo.picUrl}}" alt="图片">
+                	</div>
+                </div>
+                <div class="projectText">
+                    <h2>{{findProjectInfo.name}}</h2>
+                    <p>{{findProjectInfo.description}}</p>
+                </div>
+                <!--项目介绍-->
+                <div class="projectDescript">
+                    <ul>
+                        <li>项目名称：<span>{{findProjectInfo.name}}</span></li>
+                        <li>工程编码：<span>{{findProjectInfo.num}}</span></li>
+                        <li>施工地点：<span>{{findProjectInfo.place}}</span></li>
+                        <li>设计单位：<span>{{findProjectInfo.designUnit}}</span></li>
+                        <li>施工周期：<span>{{findProjectInfo.phase}}</span></li>
+                        <li ng-if="findProjectInfo.state==0">状态：<span>未上线</span></li>
+                        <li ng-if="findProjectInfo.state==1">状态：<span>已上线</span></li>
+                    </ul>
+                    <ul>
+                        <li>施工时间：<span>{{findProjectInfo.startDate}}</span></li>
+                        <li>项目负责人：<span>{{findProjectInfo.leader}}</span></li>
+                        <li>建设单位：<span>{{findProjectInfo.buildingUnit}}</span></li>
+                        <li>施工单位：<span>{{findProjectInfo.constructionUnit}}</span></li>
+                        <li>版本：<span>2.3{{findProjectInfo.version}}</span></li>
+                    </ul>
+                </div>
+            </div>
+            <!--构件-->
+            <div class="projectConItem">
+               <div class="safeMain">
+                   <div class="search_con item_search">
+			            <input type="text" placeholder="搜索" id="project_item_search"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findItemLike()"></a>
+	        		</div>
+                   <div class="choose">
+                       <ul class="clear">
+                           <li style="width:86px;text-align:center">专业</li>
+                           <!-- <li style="margin-right: 50px;">栋号</li>
+                           <li style="margin-right: 50px;">楼层</li> -->
+                       </ul>
+                   </div>
+                   <!--选择列表-->
+                   <div class="select">
+                       <select name="select" id="select01" ng-change="setPhase(this,flag[1])" ng-model="item_phase">
+                       		<option value="全部" ng-click="setPhase('all',flag[1])">全部</option>
+                       		<option ng-repeat="item_phase in projectPhaseInfo" value="{{item_phase.name}}">{{item_phase.name}}</option>
+                       </select>
+                      
+                       <!-- <select name="select" id="select03" ng-repeat="buildingNumber in buildingArray">
+                       	   <option value="全部" ng-click="setBuildingNum('all',flag[1])">全部</option>
+                           <option value="{{number}}" ng-repeat="number in buildingNumber" ng-click="setBuildingNum(building[$index],flag[1],$index)">#{{number}}</option>
+                       </select>
+                       <div ng-repeat="floorNumber in floorArray">
+	                        <select name="select" id="select02" ng-change="setFloorNum(floors[$index],flag[1],$index)"  ng-model="floors[$index]">
+	                          	<option value="title">F{{$index*10+1}} -F{{$index*10+10}}</option>
+		    					<option value="{{numbers}}" ng-repeat=" numbers in floorNumber">F{{numbers}}</option>
+	                       </select>
+                       </div> -->
+                       <!-- <select name="select" id="select04">
+                       	   <option value="全部" ng-click="setHouseholdNum('all',flag[1])">全部</option>
+                           <option value="{{household.name}}" ng-repeat="household in projectHouseholdInfo">
+                           		<div ng-click="setHouseholdNum($index,flag[1])">{{household.name}}</div>
+                           	</option>
+                       </select> -->
+                   </div>
+                   <div class="table">
+                       <table width="1200" border="0" cellspacing="0" cellpadding="0" >
+                           <thead>
+                           <tr style="background: #eee;">
+                               <th style="border-left: 1px solid #aaa;width:80px;text-align:center;">序号</th>
+                               <th style="width:250px;text-align:center;">构件名称</th>
+                               <th style="width:200px;text-align:center;">底部高程</th>
+                               <th style="width:200px;text-align:center;">系统类型</th>
+                               <th style="width:500px;text-align:center;">尺寸</th>
+                               <th style="width:200px;text-align:center;">长度</th>
+                           </tr>
+                           </thead>
+                           <tbody class="tbody01">
+	                           <tr ng-repeat="item in projectItemList">
+	                               <td style="border-left:1px solid #aaa;">{{$index+1}}</td>
+	                               <td>{{item.name}}</td>
+	                               <td>{{item.bottomElevation}}</td>
+	                               <td>{{item.systemType}}</td>
+	                               <td>{{item.size}}</td>
+	                               <td>{{item.length}}</td>
+	                           </tr>
+                           </tbody>
+                       </table>
+                   </div>
+				   <div id="table-buton2" style="float:right;margin-right:350px;margin-top:50px;">
+						<div id="ItemPageCode"></div>
+				   </div>
+               </div>
+           </div>
+            <!--工程量-->
+            <div class="projectConItem">
+                <div class="safeMain">
+                    <div class="search_con item_search">
+			            <input type="text" placeholder="搜索" id="project_quantity_search"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findQuantityLike()"></a>
+	        		</div>
+                    <div class="choose">
+                        <ul class="clear">
+                            <li style="width:86px;text-align:center">专业</li>
+                            <li style="width:86px;text-align:center">栋号</li>
+                            <!-- <li style="margin-right: 50px;">楼层</li> -->
+                            <li style="width:86px;text-align:center">户型</li>
+                        </ul>
+                    </div>
+                    <!--选择列表-->
+                    <div class="select">
+                        <select name="select" id="select05" ng-change="setPhase(this,flag[0])" ng-model="quantity_phase">
+                        	<option value="全部" ng-click="setPhase('all',flag[0])">全部</option>
+                            <option ng-repeat="quantity_phase in projectPhaseInfo" value="{{quantity_phase.name}}">{{quantity_phase.name}}</option>
+                        </select>
+                        <select name="select" id="select06">
+                            <option value="全部">全部</option>
+                            <option value="#1">#1</option>
+                            <option value="#2">#2</option>
+                            <option value="#3">#3</option>
+                            <option value="#4">#4</option>
+                            <option value="#5">#5</option>
+                            <option value="#6">#6</option>
+                        </select>
+                       <!--  <select name="select" id="select07">
+                            <option value="#1">#1</option>
+                        </select> -->
+                        <select name="select" id="select08" >
+                            <option value="{{household.name}}" ng-repeat="household in projectHouseholdInfo">{{household.name}}</option>
+                        </select>
+                        <!-- <button class="change" ng-click="importQuantity()"><span>+</span>变更签证</button> -->
+                        <a href="{{quantityUrl}}" target="_blank" download="{{quantityExcel.originName}}">
+							<button class="down">下载列表</button>
+						</a>
+                        
+                    </div>
+                    <div class="table">
+                        <table width="1200" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr style="background: #eee;">
+                                <th style="border-left: 1px solid #aaa;width:80px;text-align:center;">序号</th>
+                                <th style="width:250px;text-align:center;">构件名称</th>
+                                <th style="width:200px;text-align:center;">系统类型</th>
+                                <th style="width:100px;text-align:center;">数值</th>
+                                <th style="width:100px;text-align:center;">单位</th>
+                                <th style="width:400px;text-align:center;">尺寸</th>
+                                <th style="width:400px;text-align:center;">材质</th>
+                            </tr>
+                            </thead>
+                            <tbody class="tbody02" >
+                            <tr ng-repeat="quantity in projectQuantityList">
+                                <td style="border-left:1px solid #aaa;">{{$index+1}}</td>
+                                <td>{{quantity.name}}</td>
+                                <td>{{quantity.systemType}}</td>
+                                <td>{{quantity.value}}</td>
+                                <td>{{quantity.unit}}</td>
+                                <td>{{quantity.size}}</td>
+                                <td>{{quantity.material}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="table-buton3" style="float:right;margin-right:350px;margin-top:50px;">
+						<div id="quantityPageCode"></div>
+				   	</div>
+                </div>
+            </div>
+            <!--图纸-->
+            <div class="projectConItem">
+                <div class="safeMain">
+                    <div class="search_con item_search">
+			            <input type="text" placeholder="搜索" id="project_paper_search"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findPaperLike()"></a>
+	        		</div>
+                    <div class="choose">
+                        <ul class="clear">
+                            <li style="width:86px;text-align:center">专业</li>
+                            <li style="width:86px;text-align:center">栋号</li>
+                            <li style="width:86px;text-align:center">楼层</li>
+                        </ul>
+                    </div>
+                    <!--选择列表-->
+                    <div class="select">
+                        <select name="select" id="select09" ng-change="setPhase(this,flag[2])" ng-model="paper_phase">
+                        	<option value="全部" ng-click="setPhase('all',flag[2])">全部</option>
+                            <option ng-repeat="paper_phase in projectPhaseInfo" value="{{paper_phase.name}}">{{paper_phase.name}}</option>
+                        </select>
+                        <select name="select" id="select10">
+                            <option value="全部">全部</option>
+                            <option value="{{$index+1}}" ng-repeat="buildingNum in paperBuildingNum">{{buildingNum}}</option>
+                        </select>
+                        <select name="select" id="select11">
+                        	<option value="全部">全部</option>
+                            <option value="{{$index+1}}" ng-repeat="buildingNum in paperBuildingNum">{{buildingNum}}</option>
+                        </select>
+                        <a ng-click="showPaperBox()" style="cursor: pointer"><button class="change"><span>+</span>图纸</button></a>
+                        <div id="show_paper" style="display: none">
+                            <div class="addCon">
+                                <div class="addConMain">
+                                    <div class="tuzhi">
+                                        <span>图&nbsp;&nbsp;&nbsp;纸</span><input type="file" id="paper_files" multiple="multiple">
+                                    </div>
+                                    <div class="louceng">
+                                        <span>专&nbsp;&nbsp;&nbsp;业</span>
+                                        <select id="paper_profession_type">
+                                            <option value="{{$index}}" ng-repeat="paperProfessionType in projectPhaseInfo">{{paperProfessionType.name}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="loudong">
+                                        <span>楼栋号</span>
+                                        <select id="paper_buildingNum">
+                                            <option value="{{$index+1}}" ng-repeat="buildingNum in paperBuildingNum">{{buildingNum}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="louceng">
+                                        <span>楼层号</span>
+                                        <select id="paper_floorNum">
+                                            <option value="{{$index}}" ng-repeat="floorNum in paperFloorNum">{{floorNum}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table width="1200" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr style="background: #eee;">
+                                <th style="border-left: 1px solid #aaa;width:80px;text-align:center;">序号</th>
+                                <th style="width:250px;text-align:center;">图纸信息</th>
+                                <th style="width:100px;text-align:center;">楼栋号</th>
+                                <th style="width:100px;text-align:center;">楼层</th>
+                                <th style="width:150px;text-align:center;">专业</th>
+                                <th style="width:100px;text-align:center;">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="tbody03">
+                            <tr ng-repeat="paper in projectPaperList">
+                                <td style="border-left:1px solid #aaa;">{{$index+1}}</td>
+                                <td>{{paper.originName}}</td>
+                                <td>{{paper.buildingNum}}</td>
+                                <td>{{paper.floorNum}}</td>
+                                <td>{{projectPhaseInfos[paper.professionType].name}}</td>
+                                <td class="tds" >
+									    <a href="{{paper.url}}" target="_blank" download="{{paper.originName}}">
+					                        <button id="uploadbutton">
+				                        	</button>
+			                        	</a>
+			                        	<a href="">
+					                        <button id="deletebutton" ng-click="deletePaper(paper.id)">
+					                        </button>
+				                        </a>
+				                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="table-buton6" style="float:right;margin-right:350px;margin-top:50px;">
+						<div id="paperPageCode"></div>
+				   	</div>
+                </div>
+            </div>
+            <!--交底-->
+            <div class="projectConItem">
+                <div class="safeMain">
+                   <div class="search_con item_search">
+			            <input type="text" placeholder="搜索" id="project_video_search"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findVideoLike()"></a>
+	        		</div>
+                    <div class="choose">
+                        <ul class="clear">
+                            <li style="width:86px;text-align:center">专业</li>
+                            <li style="width:86px;text-align:center">栋号</li>
+                        </ul>
+                    </div>
+                    <!--选择列表-->
+                    <div class="select">
+                        <select name="select" id="select13" ng-change="setPhase(this,flag[4])" ng-model="video_phase">
+                        	<option value="全部" ng-click="setPhase('all',flag[4])">全部</option>
+                            <option ng-repeat="video_phase in projectPhaseInfo" value="{{video_phase.name}}">{{video_phase.name}}</option>
+                        </select>
+                        <select name="select" id="select14">
+                            <option value="全部">全部</option>
+                            <option value="#1">#1</option>
+                            <option value="#2">#2</option>
+                            <option value="#3">#3</option>
+                            <option value="#4">#4</option>
+                            <option value="#5">#5</option>
+                            <option value="#6">#6</option>
+                        </select>
+                        <a href="#" ng-click="showVideo()" style="cursor: pointer"><button class="change"><span>+</span>交底</button></a>
+                        <!--<button>居中弹出</button>-->
+                        <div id="show_video" style="display: none">
+                            <div class="addCon">
+                                <div class="addConMain">
+                                    <div class="tuzhi">
+                                        <span>交&nbsp;&nbsp;&nbsp;底</span><input type="file" multiple="multiple" id="videofiles"/>
+                                    </div>
+                                    <div class="louceng">
+                                        <span>类&nbsp;&nbsp;&nbsp;型</span>
+                                        <select id="videoType">
+                                            <option value="{{$index}}" ng-repeat="type in projectQuestionType">{{type.name}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="loudong">
+                                        <span>格&nbsp;&nbsp;&nbsp;式</span>
+                                        <select id="videofileType">
+                                            <option value="0">视频</option>
+                                            <option value="1">pdf文档</option>
+                                            <option value="2">文本文档(word)</option>
+                                            <option value="3">其他</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--<button class="change"><span>+</span>交底</button>-->
+                    </div>
+                    <div class="table">
+                        <table width="1200" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr style="background: #eee;">
+                                    <th style="border-left: 1px solid #aaa;width:15%;text-align:center;">序号</th>
+                                    <th style="width:25%;text-align:center;">名称</th>
+                                    <th style="width:20%;text-align:center;">楼栋号</th>
+                                    <th style="width:20%;text-align:center;">专业</th>
+                                    <th style="width:20%;text-align:center;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tbody04">
+	                            <tr ng-repeat="video in videoList">
+	                                <td style="border-left:1px solid #aaa;">{{$index+1}}</td>
+	                                <td>{{video.originName}}</td>
+	                                <td>{{video.buildingNum}}</td>
+	                                <td>{{projectPhaseInfos[video.professionType].name}}</td>
+	                                <td class="tds" >
+				                        <a href="{{video.url}}" target="_blank" download="{{video.originName}}">
+					                         <button id="uploadbutton">
+				                        	</button>
+				                        </a>
+				                        <button id="deletebutton" ng-click="deleteVideo(video.id,video.fileId)">
+				                        </button>
+				                    </td>
+	                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="table-buton5" style="float:right;margin-right:350px;margin-top:50px;">
+						<div id="videoPageCode"></div>
+				   	</div>
+                </div>
+            </div>
+            <!--问题-->
+            <div class="projectConItem">
+                <div class="safeMain">
+                    <div class="search_con item_search">
+			            <input type="text" placeholder="搜索" id="project_question_search"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findQuestionLike()"></a>
+	        		</div>
+                    <div class="choose">
+                        <ul class="clear">
+                            <li style="width:86px;text-align:center">类型</li>
+                            <li style="width:86px;text-align:center">等级</li>
+                            <li style="width:86px;text-align:center">状态</li>
+                        </ul>
+                    </div>
+                    
+                    <!--选择列表-->
+                    <div class="select">
+                        <select name="select" id="select17" ng-change="setPhase(this,flag[3])" ng-model="question_phase">
+                        	<option value="全部" ng-click="setPhase('all',flag[3])">全部</option>
+                            <option value="{{question_phase.name}}"  ng-repeat="question_phase in projectQuestionType">{{question_phase.name}}</option>
+                        </select>
+                        <select name="select" id="select18" ng-change="setQuestionPrority(this)" ng-model="questionPriority">
+                            <option value="全部" ng-click="setQuestionPrority('all')">全部</option>
+                            <option value="{{questionPriority.name}}" ng-repeat="questionPriority in projectQuestionOfPriority">{{questionPriority.name}}</option>
+                        </select>
+                        <select name="select" id="select19" ng-change="setQuestionState(this)" ng-model="questionStatus">
+                        	<option value="全部" ng-click="setQuestionState('all')">全部</option>
+                            <option value="{{questionStatus.name}}" ng-repeat="questionStatus in projectQuestionOfStatus">{{questionStatus.name}}</option>
+                            
+                        </select>
+                    </div>
+                    <div class="table">
+                        <table width="1200" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr style="background: #eee;">
+                                <th style="border-left: 1px solid #aaa;width:80px;text-align:center;">序号</th>
+                                <th style="width:395px;text-align:center;">名称</th>
+                                <th style="width:200px;text-align:center;">提交人</th>
+                                <th style="width:141px;text-align:center;">类型</th>
+                                <th style="width:112px;text-align:center;">专业</th>
+                                <th style="width:400px;text-align:center;">创建时间</th>
+                                <th style="width:200px;text-align:center;">等级</th>
+                                <th style="width:200px;text-align:center;">状态</th>
+                            </tr>
+                            </thead>
+                            <tbody class="tbody05">
+	                            <tr ng-repeat="question in projectQuestionList">
+	                                <td style="border-left:1px solid #aaa;">{{$index+1}}</td>
+	                                <td >{{question.name}}</td>
+	                                <td>{{question.userId}}</td>
+	                                <td>{{question.trades}}</td>
+	                                <td>{{projectPhaseInfo[question.questionType].name}}</td>
+	                                <td>{{question.questionDate}}</td>
+	                                <td>{{projectQuestionOfPriority[question.priority].name}}</td>
+	                                <td>{{projectQuestionOfStatus[question.state].name}}</td>
+	                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="table-buton4" style="float:right;margin-right:350px;margin-top:50px;">
+						<div id="questionPageCode"></div>
+				   	</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<script>
+//    菜单导航
+   /* $(".projectPill ul li").on("click",function () {
+        $(".projectPill ul li").removeClass("active");
+        $(this).addClass("active")
+    })*/
+//    二级菜单
+var len = $('.projectPill ul li').length;
+$('.projectPill ul li').click(function(){
+    for(i=0;i<len;i++){
+        $('.projectConItem').eq(i).css('display','none');
+        $('.projectPill ul li').removeClass('active')
+    }
+    $('.projectConItem').eq($(this).index('.projectPill ul li')).css('display','block');
+    $(this).addClass('active')
+});
+/*$.each(userList,function(i,item){
+
+    console.log(i, item);
+
+});*/
+//弹框
+
+//交底
+function showBox01(){
+    layer.open({
+        type:1,
+        title: '上传交底',
+        area: '500px',
+        content:$("#show01").html()
+    })
+}
+</script>

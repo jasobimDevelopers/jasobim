@@ -4,6 +4,7 @@ import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Normativefiles;
 import com.my.spring.model.NormativefilesPojo;
+import com.my.spring.model.NormativefilesPojos;
 import com.my.spring.service.NormativefilesService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,9 @@ public class NormativefilesController {
     @ResponseBody
     public DataWrapper<Void> deleteNormativefiles(
             @RequestParam(value = "id",required = true) Long id,
+            @RequestParam(value = "fileId",required = true) Long fileId,
             @RequestParam(value = "token",required = true) String token){
-        return NormativefilesService.deleteNormativefiles(id,token);
+        return NormativefilesService.deleteNormativefiles(id,token,fileId);
     }
 
     @RequestMapping(value="/admin/getNormativefilesList", method = RequestMethod.GET)
@@ -54,6 +56,15 @@ public class NormativefilesController {
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute Normativefiles ps){
         return NormativefilesService.getNormativefilesList(token,pageIndex,pageSize,ps);
+    }
+    @RequestMapping(value="/getNormativefilesLists", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<NormativefilesPojos>> getNormativefilesLists(
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Normativefiles ps){
+        return NormativefilesService.getNormativefilesLists(token,pageIndex,pageSize,ps);
     }
     ////通过用户id查找留言
     @RequestMapping(value="/getNormativefilesListByUserId",method = RequestMethod.GET)

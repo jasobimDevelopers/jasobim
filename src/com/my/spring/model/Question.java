@@ -25,6 +25,7 @@ public class Question {
 	private Integer state;   ///问题的状态(0.待解决 1.已解决)
 	private String codeInformation;/////图片的二维码信息
 	private String position;///图片位置
+	private String modelFlag;
 	//////
 	private String voiceIdList;//语音idList
 	private String userList;///接收到人
@@ -37,6 +38,15 @@ public class Question {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	@Basic
+    @Column(name = "model_flag")
+	public String getModelFlag() {
+		return modelFlag;
+	}
+	public void setModelFlag(String modelFlag) {
+		this.modelFlag = modelFlag;
 	}
 	
 	@Basic

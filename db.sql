@@ -436,4 +436,6 @@ create table production(
     some_thing varchar(64),
     date date
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 				 

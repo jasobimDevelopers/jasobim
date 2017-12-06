@@ -132,7 +132,7 @@ public class DuctLogServiceImpl implements DuctLogService {
             		if(DuctLogList.get(i).getUserId()!=null){
             			User user=userDao.getById(DuctLogList.get(i).getUserId());
             			if(user.getUserName()!=null){
-            				DuctLogPojo.setUserName(user.getUserName());
+            				DuctLogPojo.setUserName(user.getRealName());
             			}
             		}
             		DuctLogPojoList.add(i,DuctLogPojo);

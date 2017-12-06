@@ -168,6 +168,16 @@ public class UserController {
         return userService.getUserList(pageIndex,pageSize,user,token);
     }
 	//管理员获取用户列表
+	@RequestMapping(value="/admin/getUserLists", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<UserPojo>> getUserListByAdmins(
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute User user,
+    		@RequestParam(value="token",required=true) String token) {
+        return userService.getUserLists(pageIndex,pageSize,user,token);
+    }
+	//管理员获取用户列表
 		@RequestMapping(value="/getUserTeam", method = RequestMethod.GET)
 	    @ResponseBody
 	    public DataWrapper<List<UserPadPojo>> getUserTeam(

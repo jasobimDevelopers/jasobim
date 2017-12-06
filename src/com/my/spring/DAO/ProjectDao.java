@@ -12,7 +12,7 @@ public interface ProjectDao {
     boolean addProject(Project project);
     boolean deleteProject(Long id);
     boolean updateProject(Project project);
-    DataWrapper<List<Project>> getProjectList(Integer pageSize, Integer pageIndex, Project project ,String projectId);
+    DataWrapper<List<Project>> getProjectList(Integer pageSize, Integer pageIndex, Project project ,String projectId,String content, Integer isios);
     Project getById(Long id);
 	DataWrapper<Project> findProjectLike(Project project);
 }

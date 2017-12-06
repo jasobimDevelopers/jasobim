@@ -2,6 +2,7 @@ package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.UserLogDao;
 import com.my.spring.DAO.VideoDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Video;
@@ -30,6 +31,8 @@ public class VideoServiceImpl implements VideoService {
     VideoDao videoDao;
     @Autowired
     UserDao userDao;
+    @Autowired
+    UserLogDao userLogDao;
     @Autowired
     FileDao fileDao;
     @Autowired
@@ -110,15 +113,21 @@ public class VideoServiceImpl implements VideoService {
     	DataWrapper<List<Video>> dataWrappers=new DataWrapper<List<Video>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
-    		if(video.getId()!=null){
-    			UserLog userLog=new UserLog();
-    			userLog.setActionDate(new Date());
-    			userLog.setVersion("-1");
-    			userLog.setUserId(userInMemory.getId());
-    			userLog.setFileId(video.getId());
-    			userLog.setProjectPart(3);
-    			userLogService.addUserLog(userLog,token);
-    		}
+	    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
+	    			UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(3);
+	    			userLog.setActionDate(new Date());
+	    			userLog.setUserId(userInMemory.getId());
+	    			userLog.setSystemType(userInMemory.getSystemId());
+	    			userLog.setVersion("3.0");
+	    			if(projectId!=null){
+	    				userLog.setProjectId(projectId);
+	    			}
+	    			if(video.getId()!=null){
+	    				userLog.setFileId(video.getId());
+	    			}
+	    			userLogDao.addUserLog(userLog);
+	    		}
     			dataWrappers=videoDao.getVideoList(projectId, pageIndex, pageSize, video,beginDate,endDate);
     			for(int i=0;i<dataWrappers.getData().size();i++){
     				

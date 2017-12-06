@@ -43,7 +43,7 @@ public class ConstructionTaskController {
     @RequestMapping(value="/deleteConstructionTask",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteConstructionTask(
-            @RequestParam(value = "id",required = true) Long id,
+            @RequestParam(value = "id",required = true) String id,
             @RequestParam(value = "token",required = true) String token){
         return ConstructionTaskService.deleteConstructionTask(id,token);
     }

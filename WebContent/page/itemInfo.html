@@ -87,6 +87,22 @@
 						<div class="context"><span>面积</span></div>
 						<div class="cont">{{itemInfo.area}}</div>
 					</div>
+					<div ng-if="itemInfo.installUser!=null && itemInfo.installUser!=''">
+						<div class="context"><span>安装人员</span></div>
+						<div class="cont">{{itemInfo.installUser}}</div>
+					</div>
+					<div ng-if="itemInfo.installUnit!=null && itemInfo.installUnit!=''">
+						<div class="context"><span>安装单位</span></div>
+						<div class="cont">{{itemInfo.installUnit}}</div>
+					</div>
+					<div ng-if="itemInfo.itemBrand!=null && itemInfo.itemBrand!=''">
+						<div class="context"><span>构件品牌</span></div>
+						<div class="cont">{{itemInfo.itemBrand}}</div>
+					</div>
+					<div ng-if="itemInfo.installDate!=null && itemInfo.installDate!=''">
+						<div class="context"><span>安装时间</span></div>
+						<div class="cont">{{itemInfo.installDate}}</div>
+					</div>
 					<!-- <div>
 						<div class="context"><span>构件名称</span></div>
 						<div class="cont"></div>

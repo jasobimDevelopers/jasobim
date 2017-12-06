@@ -4,11 +4,11 @@
 	margin: 0px;
 	padding: 0px;
 }
-body{
-	background:url(../images/backgroundss.png) no-repeat fixed center;
+#login_body{
+	background: url(../images/backgroundss.png) no-repeat fixed center;
 	margin:0 auto;
 	padding:0;
-	background-color:#fff;
+	background-color:white;
 }
 #bodys{
 	margin:0 auto;

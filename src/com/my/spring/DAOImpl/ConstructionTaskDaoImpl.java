@@ -46,6 +46,15 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
         if(constructionTask.getTaskFlag()!=null){
         	criteria.add(Restrictions.eq("taskFlag", constructionTask.getTaskFlag()));
         }
+        if(constructionTask.getOthersAttention()!=null){
+        	criteria.add(Restrictions.like("companyName", "%"+constructionTask.getOthersAttention()+"%"));
+        }
+        if(constructionTask.getCompanyName()!=null){
+        	criteria.add(Restrictions.like("companyName", "%"+constructionTask.getCompanyName()+"%"));
+        }
+        if(constructionTask.getNextReceivePeopleId()!=null){
+        	criteria.add(Restrictions.like("nextReceivePeopleId", "%"+constructionTask.getNextReceivePeopleId()+"%"));
+        }
         if(!constructionTask.getUserProjectIdList().equals("-1")){
         	criteria.add(Restrictions.or(Restrictions.like("approvalPeopleName", "%"+constructionTask.getApprovalPeopleName()+"%"),
                     Restrictions.eq("nextReceivePeopleId", constructionTask.getNextReceivePeopleId()),

@@ -5,12 +5,13 @@
 	padding: 0px;
 }
 body{
-	background:url(../images/backgroundss.png) no-repeat fixed center;
+
 	margin:0 auto;
 	padding:0;
 	background-color:#fff;
 }
 #bodys{
+    background: url(../images/backgroundss.png) no-repeat fixed center;
 	margin:0 auto;
 	height:900px;
 	width:1300px;

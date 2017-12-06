@@ -64,6 +64,10 @@ public class NavigationController {
     	return "user_home";
     }
     
+    @RequestMapping(value="/videoCodeList")
+    public String videoCodeListPage(){
+    	return "user_home";
+    }
     @RequestMapping(value="/aboutList")
     public String userAboutusPage(){
         return "user_home";
@@ -77,7 +81,22 @@ public class NavigationController {
     public String productionPage(){
         return "user_home";
     }
-
+    @RequestMapping(value="/user_constructionTask")
+    public String userConstructionPage(){
+        return "user_home";
+    }
+    @RequestMapping(value="/measured_data")
+    public String userMeasuredDataPage(){
+        return "user_home";
+    }
+    @RequestMapping(value="/normativefilesList")
+    public String userNormativeDataPage(){
+        return "user_home";
+    }
+    @RequestMapping(value="/user_advancedOrder")
+    public String userAdvancedPage(){
+        return "user_home";
+    }
     
     ///////////////
     @RequestMapping(value="/new_user_home")

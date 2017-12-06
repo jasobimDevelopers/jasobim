@@ -24,7 +24,9 @@ public class QuestionPojo {
 	private String[] userNameLists;
 	private String voiceUrlList;
 	private Integer userid;
+	private String projectPicUrl;
 	private String userList;
+	private String modelFlag;
 	private Integer roleFlag;//0.普通用户（只能看指定的项目的所有内容）
 							 //1.总经理(能看所有，但是问题只看紧急和重要) 
 	                         //2.投资方（只能看所述项目的内容，另外项目里面的工程量和紧急和重要问题不能看）
@@ -184,6 +186,18 @@ public class QuestionPojo {
 	}
 	public void setUserList(String userList) {
 		this.userList = userList;
+	}
+	public String getProjectPicUrl() {
+		return projectPicUrl;
+	}
+	public void setProjectPicUrl(String projectPicUrl) {
+		this.projectPicUrl = projectPicUrl;
+	}
+	public String getModelFlag() {
+		return modelFlag;
+	}
+	public void setModelFlag(String modelFlag) {
+		this.modelFlag = modelFlag;
 	}
 	
 	

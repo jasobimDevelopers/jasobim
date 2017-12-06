@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface ProjectService {
     DataWrapper<ProjectPojo> addProject(Project project, String token, MultipartFile[] file,MultipartFile[] picfile, HttpServletRequest request);
-    DataWrapper<List<ProjectPojo>> getProjectList(Integer pageIndex, Integer pageSize, Project project, String token);
+    DataWrapper<List<ProjectPojo>> getProjectList(Integer pageIndex, Integer pageSize, Project project, String token,String content);
     //DataWrapper<List<Project>> findProjectLike(Project project,String token);
 	DataWrapper<ProjectPojo> getProjectDetailsByAdmin(Long projectId,String token);
 	DataWrapper<Void> deleteProject(Long id, String token, HttpServletRequest request);

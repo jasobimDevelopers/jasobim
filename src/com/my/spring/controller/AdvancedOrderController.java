@@ -25,16 +25,15 @@ import javax.servlet.http.HttpServletRequest;
 public class AdvancedOrderController {
     @Autowired
     AdvancedOrderService AdvancedOrderService;
-    @RequestMapping(value="/admin/addAdvancedOrder", method = RequestMethod.POST)
+    @RequestMapping(value="/addAdvancedOrder", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addAdvancedOrder(
             @ModelAttribute AdvancedOrder ps,
             HttpServletRequest request,
             @RequestParam(value = "contentFiles",required = false) MultipartFile[] contentFiles,
-            @RequestParam(value = "photoOfFinished",required = false) MultipartFile[] photoOfFinished,
             @RequestParam(value = "token",required = true) String token){
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-		dataWrapper=AdvancedOrderService.addAdvancedOrder(ps,token,contentFiles,photoOfFinished,request);
+		dataWrapper=AdvancedOrderService.addAdvancedOrder(ps,token,contentFiles,request);
 		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
             	return dataWrapper;
     	}else{
@@ -46,7 +45,7 @@ public class AdvancedOrderController {
     @ResponseBody
     
     public DataWrapper<Void> deleteAdvancedOrder(
-            @RequestParam(value = "id",required = true) Long id,
+            @RequestParam(value = "id",required = true) String id,
             @RequestParam(value = "token",required = true) String token){
         return AdvancedOrderService.deleteAdvancedOrder(id,token);
     }

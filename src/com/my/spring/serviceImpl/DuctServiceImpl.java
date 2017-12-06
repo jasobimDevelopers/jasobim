@@ -9,6 +9,7 @@ import com.my.spring.DAO.DuctDao;
 import com.my.spring.DAO.DuctLogDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Duct;
@@ -53,6 +54,8 @@ public class DuctServiceImpl implements DuctService {
     ProjectDao projectDao;
     @Autowired
     UserDao userDao;
+    @Autowired
+    UserLogDao userLogDao;
     @Autowired
     FileService fileSerivce;
     @Autowired
@@ -145,13 +148,28 @@ public class DuctServiceImpl implements DuctService {
     	DataWrapper<List<Duct>> ductListst=new  DataWrapper<List<Duct>>();
     	User userInMemory = SessionManager.getSession(token);
     	if(userInMemory!=null){
+    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
+    			UserLog userLog = new UserLog();
+    			userLog.setProjectPart(4);
+    			userLog.setActionDate(new Date());
+    			userLog.setUserId(userInMemory.getId());
+    			userLog.setSystemType(userInMemory.getSystemId());
+    			userLog.setVersion("3.0");
+    			if(duct.getProjectId()!=null){
+    				userLog.setProjectId(duct.getProjectId());
+    			}
+    			if(duct.getId()!=null){
+    				userLog.setFileId(duct.getId());
+    			}
+    			userLogDao.addUserLog(userLog);
+    		}
     		if(duct.getId()!=null && duct.getProjectId()!=null){
         		UserLog userLog = new UserLog();
         		userLog.setActionDate(new Date());
         		userLog.setFileId(duct.getId());
         		userLog.setProjectPart(4);
         		userLog.setUserId(userInMemory.getId());
-        		userLog.setVersion("-1");
+        		userLog.setVersion("3.0");
         		userLogSerivce.addUserLog(userLog, token);
         	}
     		SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -192,6 +210,7 @@ public class DuctServiceImpl implements DuctService {
     	    		String str=sdf.format(ductList.get(i).getDate()); 
     	    		ductPojo.setDate(str);
     	    		ductPojo.setProjectName(projectName);
+    	    		ductPojo.setModelFlag(ductList.get(i).getModelFlag());
 	    			ductPojo.setFamilyAndType(ductList.get(i).getFamilyAndType());
     	    		ductPojo.setId(ductList.get(i).getId().toString());
 	    			ductPojo.setLevel(ductList.get(i).getLevel());

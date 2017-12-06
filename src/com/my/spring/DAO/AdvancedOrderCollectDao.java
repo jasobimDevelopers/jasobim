@@ -13,4 +13,5 @@ public interface AdvancedOrderCollectDao {
     AdvancedOrderCollect getAdvancedOrderById(Long id);
     DataWrapper<List<AdvancedOrderCollect>> getAdvancedOrderCollectsList(Integer pageIndex, Integer pageSize, AdvancedOrderCollect advancedOrder);
     DataWrapper<List<AdvancedOrderCollect>> getAdvancedOrderCollectByUserId(Long userId);
+    AdvancedOrderCollect getAdvancedOrderCollectByOrderId(Long userId);
 }

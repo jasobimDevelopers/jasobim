@@ -28,6 +28,11 @@ public class Item {
     private String typeName;//类型名
     private Integer professionType;//专业类型
     private String modelFlag;//////模型标志
+    private String installUser;///安装人员
+    private String installUnit;///安装单位
+    private String installDate;///安装日期
+    private String itemBrand;///构件品牌
+    
     
     @Id
     @GeneratedValue
@@ -50,7 +55,47 @@ public class Item {
 		this.modelFlag = modelFlag;
 	}
 
-    @Basic
+	@Basic
+    @Column(name = "install_user")
+    public String getInstallUser() {
+		return installUser;
+	}
+
+	public void setInstallUser(String installUser) {
+		this.installUser = installUser;
+	}
+
+	@Basic
+    @Column(name = "install_unit")
+	public String getInstallUnit() {
+		return installUnit;
+	}
+
+	public void setInstallUnit(String installUnit) {
+		this.installUnit = installUnit;
+	}
+
+	@Basic
+    @Column(name = "install_date")
+	public String getInstallDate() {
+		return installDate;
+	}
+
+	public void setInstallDate(String installDate) {
+		this.installDate = installDate;
+	}
+
+	@Basic
+    @Column(name = "item_brand")
+	public String getItemBrand() {
+		return itemBrand;
+	}
+
+	public void setItemBrand(String itemBrand) {
+		this.itemBrand = itemBrand;
+	}
+
+	@Basic
     @Column(name = "project_id")
 	public Long getProjectId() {
 		return projectId;
@@ -112,11 +157,11 @@ public class Item {
 
 	@Basic
 	@Column(name = "bottom_elevation")
-	public double getBottomElevation() {
+	public Double getBottomElevation() {
 		return bottomElevation;
 	}
 
-	public void setBottomElevation(double bottomElevation) {
+	public void setBottomElevation(Double bottomElevation) {
 		this.bottomElevation = bottomElevation;
 	}
 
@@ -132,11 +177,11 @@ public class Item {
 
 	@Basic
 	@Column(name = "length")
-	public double getLength() {
+	public Double getLength() {
 		return length;
 	}
 
-	public void setLength(double length) {
+	public void setLength(Double length) {
 		this.length = length;
 	}
 
@@ -172,21 +217,21 @@ public class Item {
 
 	@Basic
 	@Column(name = "offset")
-	public double getOffset() {
+	public Double getOffset() {
 		return offset;
 	}
 
-	public void setOffset(double offset) {
+	public void setOffset(Double offset) {
 		this.offset = offset;
 	}
 
 	@Basic
 	@Column(name = "area")
-	public double getArea() {
+	public Double getArea() {
 		return area;
 	}
 
-	public void setArea(double area) {
+	public void setArea(Double area) {
 		this.area = area;
 	}
 

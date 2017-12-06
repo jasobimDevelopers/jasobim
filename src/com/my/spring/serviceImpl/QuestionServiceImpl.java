@@ -7,12 +7,15 @@ import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.QuestionFileDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.jpush.PushExample;
+import com.my.spring.jpush.PushExamples;
 import com.my.spring.model.Files;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageFile;
+import com.my.spring.model.Project;
 import com.my.spring.model.Question;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.model.QuestionPojo;
@@ -25,9 +28,10 @@ import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
+import cn.jiguang.common.ClientConfig;
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
 import cn.jpush.api.JPushClient;
-import cn.jpush.api.common.APIConnectionException;
-import cn.jpush.api.common.APIRequestException;
 import cn.jpush.api.push.PushResult;
 import cn.jpush.api.push.model.PushPayload;
 
@@ -54,6 +58,8 @@ public class QuestionServiceImpl implements QuestionService {
     QuestionFileDao questionFileDao;
     @Autowired
     UserDao userDao;
+    @Autowired
+    UserLogDao userLogDao;
     @Autowired
     MessageDao messageDao;
     @Autowired
@@ -90,11 +96,9 @@ public class QuestionServiceImpl implements QuestionService {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					return dataWrapper;
 				}else{ 
-					
 					if(fileList.length>0)
 					{
 						for(int k=0;k<fileList.length;k++){
-							
 							String path=filePath+"/"+"questions";
 						 	Files newfile=fileService.uploadFile(path, fileList[k],fileType,request);
 						 	QuestionFile questionFile=new QuestionFile();
@@ -128,30 +132,18 @@ public class QuestionServiceImpl implements QuestionService {
 					/////////////////////////
 				///////////////////////////
 				List<User> userList = new ArrayList<User>();
-				userList=userDao.findUserLikeProjct(question.getProjectId(),userInMemory.getId());
-				String[] userids= new String[userList.size()];
-				
+				int adminFlag=0;
+				if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 || userInMemory.getUserType()==2){
+        			adminFlag=-1;
+        		}
+				userList=userDao.findUserLikeProjct(question.getProjectId(),userInMemory.getUserType());
+				 String content=userInMemory.getRealName()+"提交了一个标题为："+question.getName()+"的问题";
+				 String[] userids=new String[userList.size()];
 				for(int b =0;b<userList.size();b++){
 					userids[b]=userList.get(b).getId().toString();
 				}
-				JPushClient jpushClient = new JPushClient(Parameters.masterSecret, Parameters.appKey, 3);
-		          // For push, all you need do is to build PushPayload object.
-		          //PushPayload payload =  buildPushObject_android_tag_alertWithTitle();
-				  String content=userInMemory.getRealName()+"提交了一个标题为："+question.getName()+"的问题";
-		    	  PushPayload payload = PushExample.buildPushObject_all_alias_alert(userids,content);
-		          try {
-		              PushResult result = jpushClient.sendPush(payload);
-		              System.out.println(result);
-		          } catch (APIConnectionException e) {
-		            e.printStackTrace();         
-		          } catch (APIRequestException e) {
-		              System.out.println("Should review the error, and fix the request"+ e);
-		              System.out.println("HTTP Status: " + e.getStatus());
-		              System.out.println("Error Code: " + e.getErrorCode());
-		              System.out.println("Error Message: " + e.getErrorMessage());
-		          }
-				///////////////////////////////
-				/////////////////////////////////
+				PushExample.testSendPushWithCustomConfig_ios(userids, content);
+				PushExample.testSendPushWithCustomConfig_android(userids, content);
 				}
 
 			}
@@ -245,7 +237,6 @@ public class QuestionServiceImpl implements QuestionService {
         if (userInMemory != null) {
 			User userInDB = userDao.getById(userInMemory.getId());
 			if (userInDB != null) {
-				if(userInDB.getUserType()==UserTypeEnum.Admin.getType()){
 					if(id!=null){
 						/////删除问题所对应的问题文件
 						questionFileList=questionFileDao.getQuestionFileByQuestionId(id);
@@ -296,9 +287,6 @@ public class QuestionServiceImpl implements QuestionService {
 					}else{
 						dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 					}
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-				}
 			} else {
 				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);
 			}
@@ -374,18 +362,23 @@ public class QuestionServiceImpl implements QuestionService {
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		Long[] userIdList=null;
+    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
+    			UserLog userLog = new UserLog();
+    			userLog.setProjectPart(5);
+    			userLog.setActionDate(new Date());
+    			userLog.setUserId(userInMemory.getId());
+    			userLog.setSystemType(userInMemory.getSystemId());
+    			userLog.setVersion("3.0");
+    			if(question.getProjectId()!=null){
+    				userLog.setProjectId(question.getProjectId());
+    			}
+    			if(question.getId()!=null){
+    				userLog.setFileId(question.getId());
+    			}
+    			userLogDao.addUserLog(userLog);
+    		}
 			if(content!=null){
-				if(question.getId()!=null){
-	        		UserLog userLog = new UserLog();
-	        		userLog.setActionDate(new Date());
-	        		userLog.setFileId(question.getId());
-	        		userLog.setSystemType(userInMemory.getSystemId());
-	        		userLog.setProjectId((long)-1);
-	        		userLog.setProjectPart(5);
-	        		userLog.setUserId(userInMemory.getId());
-	        		userLog.setVersion("-1");
-	        		userLogService.addUserLog(userLog, token);
-	        	}
+				
 				//////问题类型搜索
 				if("安全".contains(content))
 				{
@@ -423,11 +416,11 @@ public class QuestionServiceImpl implements QuestionService {
 			/////问题等级搜索
 			/////当用户是总经理级别的时候,问题搜索只能搜索重要和紧急，同时也只能看重要和紧急问题，不看一般问题 
 			if(userInMemory.getWorkName()!=null){
-				if(userInMemory.getWorkName().equals("总经理"))
+				/*if(userInMemory.getWorkName().equals("总经理"))
 				{
 					if(question.getPriority()==null)
 						question.setPriority(-1);
-				}
+				}*/
 				/////当用户是投资方（甲方）的时候，问题搜索只能搜索一般问题，同时也只能看一般问题，不能重要和紧急问题
 				if(userInMemory.getWorkName().equals("投资方"))
 				{
@@ -483,6 +476,7 @@ public class QuestionServiceImpl implements QuestionService {
 	        	}
 	        	String username=userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName();
 	        	questionpojo.setUserId(username);
+	        	questionpojo.setModelFlag(dataWrappers.getData().get(i).getModelFlag());
 	        	questionpojo.setCodeInformation(dataWrappers.getData().get(i).getCodeInformation());
 	        	questionpojo.setPriority(dataWrappers.getData().get(i).getPriority());
 	        	questionpojo.setId(dataWrappers.getData().get(i).getId());
@@ -554,51 +548,54 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public DataWrapper<QuestionPojo> getQuestionDetailsByAdmin(Long questionId, String token,String weixin) {
 		DataWrapper<QuestionPojo> dataWrapper = new DataWrapper<QuestionPojo>();
-		 if(weixin.equals("weixin")){
-			 Question question=questionDao.getById(questionId);
-				if(question!=null){
-					QuestionPojo questionPojo=new QuestionPojo();
-					questionPojo.setId(question.getId());
-					questionPojo.setCodeInformation(question.getCodeInformation());
-					questionPojo.setIntro(question.getIntro());
-					questionPojo.setName(question.getName());
-					questionPojo.setPriority(question.getPriority());
-					questionPojo.setProjectId(question.getProjectId());
-					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-					questionPojo.setQuestionDate(sdf.format(question.getQuestionDate()));
-					questionPojo.setQuestionType(question.getQuestionType());
-					questionPojo.setState(question.getState());
-					questionPojo.setTrades(question.getTrades());
-					String userlist="";
-					if(question.getUserList()!=null){
-						for(int s=0;s<question.getUserList().split(",").length;s++){
-							if(s==0){
-								userlist=userDao.getById(Long.valueOf(question.getUserList().split(",")[s])).getRealName();
-							}else{
-								userlist=userlist+","+userDao.getById(Long.valueOf(question.getUserList().split(",")[s])).getRealName();
+		if(weixin!=null){
+			if(weixin.equals("weixin")){
+				 Question question=questionDao.getById(questionId);
+					if(question!=null){
+						QuestionPojo questionPojo=new QuestionPojo();
+						questionPojo.setId(question.getId());
+						questionPojo.setCodeInformation(question.getCodeInformation());
+						questionPojo.setIntro(question.getIntro());
+						questionPojo.setName(question.getName());
+						questionPojo.setPriority(question.getPriority());
+						questionPojo.setProjectId(question.getProjectId());
+						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+						questionPojo.setQuestionDate(sdf.format(question.getQuestionDate()));
+						questionPojo.setQuestionType(question.getQuestionType());
+						questionPojo.setState(question.getState());
+						questionPojo.setModelFlag(question.getModelFlag());
+						questionPojo.setTrades(question.getTrades());
+						String userlist="";
+						if(question.getUserList()!=null){
+							for(int s=0;s<question.getUserList().split(",").length;s++){
+								if(s==0){
+									userlist=userDao.getById(Long.valueOf(question.getUserList().split(",")[s])).getRealName();
+								}else{
+									userlist=userlist+","+userDao.getById(Long.valueOf(question.getUserList().split(",")[s])).getRealName();
+								}
 							}
 						}
-					}
-					questionPojo.setUserList(userlist);
-					questionPojo.setUserId(userDao.getById(question.getUserId()).getRealName());
-					DataWrapper<List<QuestionFile>> file=new DataWrapper<List<QuestionFile>>();
-					file=questionFileDao.getQuestionFileByQuestionId(question.getId());
-					if(file.getData()!=null && file.getData().size()>0){
-						String[] fileList=new String[file.getData().size()];
-						for(int i=0;i<file.getData().size();i++){
-							Files files=new Files();
-							files=fileDao.getById(file.getData().get(i).getFileId());
-							if(files!=null){
-								fileList[i]=files.getUrl();
+						questionPojo.setUserList(userlist);
+						questionPojo.setUserId(userDao.getById(question.getUserId()).getRealName());
+						DataWrapper<List<QuestionFile>> file=new DataWrapper<List<QuestionFile>>();
+						file=questionFileDao.getQuestionFileByQuestionId(question.getId());
+						if(file.getData()!=null && file.getData().size()>0){
+							String[] fileList=new String[file.getData().size()];
+							for(int i=0;i<file.getData().size();i++){
+								Files files=new Files();
+								files=fileDao.getById(file.getData().get(i).getFileId());
+								if(files!=null){
+									fileList[i]=files.getUrl();
+								}
 							}
+							questionPojo.setFileList(fileList);
 						}
-						questionPojo.setFileList(fileList);
+						
+						dataWrapper.setData(questionPojo);
 					}
-					
-					dataWrapper.setData(questionPojo);
-				}
-				return dataWrapper;
-		 }
+					return dataWrapper;
+			 }
+		} 
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory==null ){
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
@@ -617,6 +614,21 @@ public class QuestionServiceImpl implements QuestionService {
 						questionPojo.setName(question.getName());
 						questionPojo.setPriority(question.getPriority());
 						questionPojo.setProjectId(question.getProjectId());
+						if(question.getProjectId()!=null){
+							Project projects= new Project();
+							projects=projectDao.getById(question.getProjectId());
+							if(projects!=null){
+								if(projects.getPicId()!=null && !projects.getPicId().equals(""))
+								{
+									Files files=new Files();
+									files=fileDao.getById(Long.valueOf(projects.getPicId()));
+									if(files!=null){
+										questionPojo.setProjectPicUrl(files.getUrl());
+									}
+								}
+								
+							}
+						}
 						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 						questionPojo.setQuestionDate(sdf.format(question.getQuestionDate()));
 						questionPojo.setQuestionType(question.getQuestionType());

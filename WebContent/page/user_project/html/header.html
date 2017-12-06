@@ -1,19 +1,42 @@
 <div ng-controller="HeaderController">
 		<div class="wrap">
-		  <!--   头部 -->
-		    <div class="head">
-		        <div class="logo">
-		           <img src="images/logo.png" alt=""><span></span><span>嘉实智慧安装</span>
-		        </div>
-		        <!-- 导航 -->
-		        <div class="nav">
-		            <ul>
-		                <li ng-repeat="headerItem in headerItems" ng-click="headCssChange($index)"><a ng-click="goPage(headerItem.page,$index)" class="active">{{headerItem.name}}</a></li>
-		                <li><button ng-click="goLogin()">登录</button></li>
-		            </ul>
+		    <!--头部-->
+		    <div class="headMain">
+		        <div class="head">
+		            <div class="logo">
+		                <img src="page/new_user/images/logo.png" alt=""><span></span><span>嘉实智慧安装</span>
+		            </div>
+		            <!--导航-->
+		            <div class="nav">
+		                <ul class="navMenu">
+		                    <li><a ng-click="goPage('user_projectList')">项目管理</a>
+		                        <ul class="submenu">
+		                            <li><a ng-click="goPage('user_constructionTask')">施工任务单</a></li>
+		                            <li><a ng-click="goPage('user_advancedOrder')">施工预付单</a></li>
+		                            <li><a ng-click="goPage('measured_data')">实测实量</a></li>
+		                        </ul>
+		                    </li>
+		                    <li><a ng-click="goPage('user_projectQuestionList')">质量安全管理</a></li>
+		                    <li><a ng-click="goPage('codeInformationList')">二维码专区</a>
+		                    	<ul class="submenu">
+		                            <li><a ng-click="goPage('codeInformationList')">图纸区域</a></li>
+		                            <li><a ng-click="goPage('videoCodeList')">交底区域</a></li>
+		                        </ul>
+		                    </li>
+		                    <li><a ng-click="goPage('normativefilesList')">规范查阅</a></li>
+		                    <li><a ng-click="goPage('aboutList')">关于我们</a></li>
+		                    <li><a ng-click="goPage('suggesttionList')">意见反馈</a></li>
+		                </ul>
+		            </div>
+		            <div class="login">
+		                <div><img src="page/new_user/images/logo.png" alt=""></div>
+		                <div>{{userName}}</div>
+		                <div ng-click="goLogin()">注销</div>
+		            </div>
 		        </div>
 		    </div>
-		</div>
+		</div> 	
+</div> 
 <script>
 //    导航
     $(".nav ul li a").on('click',function () {
@@ -21,23 +44,3 @@
         $(this).addClass('active')
     });
 </script>
-	 
-	 	<!-- <div id="headBackground">
-	 	</div>
-	 	
-	 	<div id="home_head">
-		 	<div class="container">
-			 	<div id="content">
-			 		<ul id="head_home_ul" >
-		                    <li ng-repeat="headerItem in headerItems" ng-click="headCssChange($index)" class="head_li">
-		                        <a ng-click="goPage(headerItem.page,$index)" id="menutext">{{headerItem.name}}</a>
-		                    </li>
-		            </ul>
-		            <div id="portrait">
-							<a href="#"><img src="{{userIcon}}" id="portrait_image"/></a><span>{{userName}}</span><a href="" ng-click="logout()" class="glyphicon glyphicon-off" id="out_login"></a>
-				    </div>
-			 	</div>
-		 	</div>
-	 	</div>  -->
-	 	
-</div> 

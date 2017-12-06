@@ -9,6 +9,7 @@ import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.jpush.PushExample;
+import com.my.spring.jpush.PushExamples;
 import com.my.spring.model.Files;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageFile;
@@ -22,9 +23,9 @@ import com.my.spring.service.MessageService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
 import cn.jpush.api.JPushClient;
-import cn.jpush.api.common.APIConnectionException;
-import cn.jpush.api.common.APIRequestException;
 import cn.jpush.api.push.PushResult;
 import cn.jpush.api.push.model.PushPayload;
 
@@ -91,26 +92,15 @@ public class MessageServiceImpl implements MessageService {
 						}
 						///////////////////////////
 						List<User> userList = new ArrayList<User>();
-						userList=userDao.findUserLikeProjct(questions.getProjectId(),userInMemory.getId());
+						userList=userDao.findUserLikeProjct(questions.getProjectId(),userInMemory.getUserType());
 						String[] userids= new String[userList.size()];
 				
 						for(int b =0;b<userList.size();b++){
 							userids[b]=userList.get(b).getId().toString();
 						}
-						JPushClient jpushClient = new JPushClient(Parameters.masterSecret, Parameters.appKey, 3);
-						String content=userInMemory.getRealName()+"对标题为："+questions.getName()+"的问题提交了一个回复";
-						PushPayload payload = PushExample.buildPushObject_all_alias_alert(userids,content);
-						try {
-							PushResult result = jpushClient.sendPush(payload);
-							System.out.println(result);
-						} catch (APIConnectionException e) {
-							e.printStackTrace();         
-						} catch (APIRequestException e) {
-							System.out.println("Should review the error, and fix the request"+ e);
-							System.out.println("HTTP Status: " + e.getStatus());
-							System.out.println("Error Code: " + e.getErrorCode());
-							System.out.println("Error Message: " + e.getErrorMessage());
-						}
+						String content=userInMemory.getRealName()+"提交了一条留言，请您注意查看";
+						PushExample.testSendPushWithCustomConfig_ios(userids, content);
+						PushExample.testSendPushWithCustomConfig_android(userids, content);
 				///////////////////////////////
 						}
 					else
@@ -277,7 +267,80 @@ public class MessageServiceImpl implements MessageService {
 	public DataWrapper<List<MessagePojo>> getMessageListByQuestionId(Long questionId,String token,String weixin) {
 		DataWrapper<List<MessagePojo>> dataWrapper = new DataWrapper<List<MessagePojo>>();
 		DataWrapper<List<Message>> dataWrappers = new DataWrapper<List<Message>>();
-		if(weixin.equals("weixin")){
+		if(weixin!=null){
+			if(weixin.equals("weixin")){
+				if(questionId!=null)
+				{
+					dataWrappers=messageDao.getMessageListByQuestionId(questionId);
+					if(dataWrappers.getData()==null || dataWrappers.getData().size()<=0) 
+			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					else{
+						List<MessagePojo> messagePojoList = new ArrayList<MessagePojo>();
+						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+						for(Message message : dataWrappers.getData())
+						{
+							MessagePojo messagePojo =new MessagePojo();
+							messagePojo.setContent(message.getContent());
+							messagePojo.setMessageDate(sdf.format(message.getMessageDate()));
+							messagePojo.setQuestionId(message.getQuestionId());
+							messagePojo.setRealName(userDao.getById(message.getUserId()).getRealName());
+							messagePojo.setId(message.getId());
+							List<MessageFile> messagefile = new ArrayList<MessageFile>();
+							messagefile = messageFileDao.getMessageFileListByMessageId(message.getId()).getData();
+							if(messagefile!=null && messagefile.size()>0){
+								String[] urllist = new String[messagefile.size()];
+								for(int i=0;i<messagefile.size();i++){
+									Files files = new Files();
+									files = fileDao.getById(messagefile.get(i).getFileId());
+									urllist[i]=files.getUrl();
+								}
+								messagePojo.setFileList(urllist);
+							}
+							if(message.getUserId()!=null)
+							{
+								messagePojo.setUserId(message.getUserId());
+								User user= new User();
+								user=userDao.getById(message.getUserId());
+								if(user.getUserIcon()!=null)
+								{
+									Files files=fileDao.getById(user.getUserIcon());
+									if(files.getUrl()!=null)
+									{
+										messagePojo.setUserIconUrl(files.getUrl());
+									}
+								}
+								if(user!=null)
+								{
+									messagePojo.setUserName(user.getUserName());
+								}
+								
+							}
+							if(messagePojo!=null)
+							{
+								messagePojoList.add(messagePojo);
+							}
+							if(messagePojoList!=null && messagePojoList.size()>0)
+							{
+								dataWrapper.setData(messagePojoList);
+								dataWrapper.setTotalNumber(dataWrappers.getTotalNumber());
+								dataWrapper.setCurrentPage(dataWrappers.getCurrentPage());
+								dataWrapper.setTotalPage(dataWrappers.getTotalPage());
+								dataWrapper.setNumberPerPage(dataWrappers.getNumberPerPage());
+							}
+							else
+							{
+								dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+							}
+						}
+					}
+				}else{
+					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+				}
+				return dataWrapper;
+			}
+		}
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
 			if(questionId!=null)
 			{
 				dataWrappers=messageDao.getMessageListByQuestionId(questionId);
@@ -285,11 +348,11 @@ public class MessageServiceImpl implements MessageService {
 		            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				else{
 					List<MessagePojo> messagePojoList = new ArrayList<MessagePojo>();
-					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 					for(Message message : dataWrappers.getData())
 					{
 						MessagePojo messagePojo =new MessagePojo();
 						messagePojo.setContent(message.getContent());
+						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 						messagePojo.setMessageDate(sdf.format(message.getMessageDate()));
 						messagePojo.setQuestionId(message.getQuestionId());
 						messagePojo.setRealName(userDao.getById(message.getUserId()).getRealName());
@@ -310,66 +373,6 @@ public class MessageServiceImpl implements MessageService {
 							messagePojo.setUserId(message.getUserId());
 							User user= new User();
 							user=userDao.getById(message.getUserId());
-							if(user.getUserIcon()!=null)
-							{
-								Files files=fileDao.getById(user.getUserIcon());
-								if(files.getUrl()!=null)
-								{
-									messagePojo.setUserIconUrl(files.getUrl());
-								}
-							}
-							if(user!=null)
-							{
-								messagePojo.setUserName(user.getUserName());
-							}
-							
-						}
-						if(messagePojo!=null)
-						{
-							messagePojoList.add(messagePojo);
-						}
-						if(messagePojoList!=null && messagePojoList.size()>0)
-						{
-							dataWrapper.setData(messagePojoList);
-							dataWrapper.setTotalNumber(dataWrappers.getTotalNumber());
-							dataWrapper.setCurrentPage(dataWrappers.getCurrentPage());
-							dataWrapper.setTotalPage(dataWrappers.getTotalPage());
-							dataWrapper.setNumberPerPage(dataWrappers.getNumberPerPage());
-						}
-						else
-						{
-							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-						}
-					}
-				}
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
-			}
-			return dataWrapper;
-		}
-        User userInMemory = SessionManager.getSession(token);
-        if (userInMemory != null) {
-			if(questionId!=null)
-			{
-				dataWrappers=messageDao.getMessageListByQuestionId(questionId);
-				if(dataWrappers.getData()==null || dataWrappers.getData().size()<=0) 
-		            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-				else{
-					List<MessagePojo> messagePojoList = new ArrayList<MessagePojo>();
-					for(int i=0;i<dataWrappers.getData().size();i++)
-					{
-						MessagePojo messagePojo =new MessagePojo();
-						messagePojo.setContent(dataWrappers.getData().get(i).getContent());
-						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-						messagePojo.setMessageDate(sdf.format(dataWrapper.getData().get(i).getMessageDate()));
-						messagePojo.setQuestionId(dataWrappers.getData().get(i).getQuestionId());
-						messagePojo.setRealName(userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName());
-						messagePojo.setId(dataWrappers.getData().get(i).getId());
-						if(dataWrappers.getData().get(i).getUserId()!=null)
-						{
-							messagePojo.setUserId(dataWrappers.getData().get(i).getUserId());
-							User user= new User();
-							user=userDao.getById(dataWrappers.getData().get(i).getUserId());
 							if(user.getUserIcon()!=null)
 							{
 								Files files=fileDao.getById(user.getUserIcon());

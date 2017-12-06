@@ -9,11 +9,16 @@ angular.module('DuctApp',[])
   this.getDuctDetail=function(id,selfId,projectId){
 	  var deferred = $q.defer();
       console.log("读取构建详细数据");
-      var api = '/jasobim/api/duct/admin/getDuctBySelfId?';
+      var api = '/api/duct/admin/getDuctBySelfId?';
       if(id!=null && id!=undefined && id!=''){
     	  api=api+'id='+id
       }else{
-    	  api=api+'selfId='+selfId+'&projectId='+projectId;
+    	  if(projectId!=null && projectId!=undefined && projectId!=''){
+    		  api=api+'selfId='+selfId+'&projectId='+projectId;
+    	  }else{
+    		  api=api+'selfId='+selfId;
+    	  }
+    	  
       }
       $http.get(encodeURI(api))
           .success(function(data, status, headers, config){

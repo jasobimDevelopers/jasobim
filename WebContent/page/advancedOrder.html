@@ -19,14 +19,6 @@
 	<body>
 		<div  ng-controller="advancedOrderController">
 			<div class="wrap">
-			    <!--头部-->
-			    <div class="top">
-			        <div class="top_con">
-			            <div class="back"><i><img src="../images/back.png" alt=""></i><span>返回</span></div>
-			            <div class="jobDetail">任务单详情</div>
-			            <div class="qr"><i><img src="../images/qrcheck.png" alt=""></i></div>
-			        </div>
-			    </div>
 			    <!--内容部分-->
 			    <div class="mainJob">
 			        <!--title-->
@@ -44,6 +36,9 @@
 			                        <li style="list-style-type:none;">{{advancedOrder.quantityDes}}</li>
 			                    </ol>
 			                </li>
+			                <li ng-repeat="img in fileUrls">
+								<img height="85" width="85" ng-src="http://jasobim.com.cn/{{img}}" alt="">
+							</li>
 			            </ul>
 			        </div>
 			        <div class="person">

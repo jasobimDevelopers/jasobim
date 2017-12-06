@@ -1,113 +1,31 @@
 
 	<div id="addcontent" ng-controller="CodeInformationController">
 		<div id="codecontent">
-			<div id="codecontent1" class="filePaper" style="display:block">
-		        <div class="addcodehead">
-		       		<div id="addusertitle"><span>{{titlePaper}}</span></div>
-		    	</div>
-		    	<div id="codebody">
-			       	<div class="paperCode">
-			       		<div style="width:153px;height:125px;"><a href="#" ng-click="getPapers('建筑')"><img src="page/user_project/images/jianzhu.png" width="87px" height="118px"/></a></div>
-			       		<div><span>建筑</span></div>
-			       	</div>
-			       	<div class="paperCode">
-			       		<div style="width:153px;height:125px;"><a href="#" ng-click="getPapers('暖通')"><img src="page/user_project/images/nuantong.png" width="87px" height="118px"/></a></div>
-			       		<div><span>暖通</span></div>
-			       	</div>
-			       	<div class="paperCode">
-			       		<div style="width:153px;height:125px;"><a href="#" ng-click="getPapers('给排水')"><img src="page/user_project/images/paishui.png" width="87px" height="118px"/></a></div>
-			       		<div><span>给排水</span></div>
-			       	</div>
-			       	<div class="paperCode">
-			       		<div style="width:153px;height:125px;"><a href="#" ng-click="getPapers('消防')"><img src="page/user_project/images/xiaofang.png" width="87px" height="118px"/></a></div>
-			       		<div><span>消防</span></div>
-			       	</div>
-			       	<div class="paperCode">
-			       		<div style="width:153px;height:125px;"><a href="#" ng-click="getPapers('电气')"><img src="page/user_project/images/dianqi.png" width="87px" height="118px"/></a></div>
-			       		<div><span>电气</span></div>
-			       	</div>
-		       </div>
+			<!--内容部分-->
+		    <div class="qrCode">
+		        <!--tab-->
+		        <div class="qrCodePill">
+		            <div class="line"></div>
+		            <ul class="clear" id="tab">
+		                <li class="active" ng-click="getPapers('建筑')" id="jianzhu"><a>建筑</a></li>
+		                <li ng-click="getPapers('暖通')" id="nuantong"><a>暖通</a></li>
+		                <li ng-click="getPapers('给排水')" id="geipaishui"><a>给排水</a></li>
+		                <li ng-click="getPapers('消防')" id="xiaofang"><a>消防</a></li>
+		                <li ng-click="getPapers('电气')" id="dianqi"><a>电气</a></li>
+		            </ul>
+		
+		        </div>
 		    </div>
-		    <!--  //////////////////-->
-		    <div id="codecontent1s" style="display:none" class="paperDetail jianzhuimg">
-		        <div class="addcodehead">
-		       		<div id="addusertitle">
-		       			<span>{{titlePaper}}</span>
-	       			</div>
-		       		<div id="returnpaperlist">
-	            		<a href="" ng-click="returnPaperList()"><span>返回图纸列表</span></a>
-          			</div>
-		    	</div>
-		    	<div id="codebody">
-			       	<div class="paperCodes" ng-repeat="paper in codePapers">
-			       		<div><a href="#"><img src="{{paper.url}}" width="117px" height="119px" onclick="showOneBig(this)"/></a></div>
-			       		<div class="paperName"><span>{{paper.originName}}</span></div>
-			       	</div>
-		       </div>
-		       <div id="table-buton6" >
-					<div id="paperPageCode" style="padding-left:700px;"></div>
-		       </div>
+		    <!--二维码-->
+		    <div class="qrCodeList">
+	            <ul class="clear" style="display: block">
+	                <li ng-repeat="paper in codePapers">
+	                	<img src="{{paper.url}}" alt="" >
+	                	<p>{{paper.originName}}</p>
+	                </li>
+	            </ul>
 		    </div>
-		    <!--  //////////////////-->
-		    
-		    <div id="codecontent2" class="fileVideo" style="display:block">
-		       <div class="addcodehead">
-		       		<div id="addusertitle"><span>{{titleVideo}}</span></div>
-		       </div>
-		       <div id="codeOfbody1">
-			       	<div class="videoCode" style="width:90px; margin-right:60px;">
-			       		<div style="margin-bottom:5px;"><a href="#" ng-click="getVideos('安全')"><img src="page/user_project/images/anquan.png" width="87px" height="118px"/></a></div>
-			       		<div><span>安全交底</span></div>
-			       	</div>
-			       	<div class="videoCode" style="width:90px; margin-right:60px;">
-			       		<div style="margin-bottom:5px;"><a href="#" ng-click="getVideos('质量')"><img src="page/user_project/images/zhiliang.png" width="87px" height="118px"/></a></div>
-			       		<div><span>质量交底</span></div>
-			       	</div>
-			       	<div class="videoCode" style="width:90px; margin-right:60px;">
-			       		<div style="margin-bottom:5px;"><a href="#" ng-click="getVideos('技术')"><img src="page/user_project/images/jishu.png" width="87px" height="118px"/></a></div>
-			       		<div><span>技术交底</span></div>
-			       	</div>
-			       	
-		       </div>
-		    </div>
-		    <div id="codecontent2" style="display:none;margin-top:0px" class="videoDetail" >
-		       <div class="addcodehead">
-		       		<div id="addusertitle"><span>{{titleVideo}}</span></div>
-		       		<div id="returnuser" style="margin-left:615px;">
-	            		<a href="" ng-click="returnVideoList()"><span>返回交底视频列表</span></a>
-          			</div>
-		       </div>
-		       <div id="codeOfbody1">
-			       	<div class="videoCode" style="margin-right:15px;width:120px;height:170px;">
-			       		<div><img src="page/user_project/images/anquan_shipin.png" width="119px" height="119px" onclick="showOneBig(this)"/></div>
-			       		<div style="width:119px; height:19px"><span>视频：大型设备吊装施工工艺</span></div>
-			       	</div>
-			       	<div class="videoCode" style="margin-right:15px;width:120px;height:170px;">
-			       		<div><img src="page/user_project/images/anquan_shipin1.png" width="119px" height="119px" onclick="showOneBig(this)"/></div>
-			       		<div style="width:119px; height:19px"><span>视频：防雷接地施工工艺</span></div>
-			       	</div>
-			       	<div class="videoCode" style="margin-right:15px;width:120px;height:170px;">
-			       		<div><img src="page/user_project/images/anquan_shipin2.png" width="119px" height="119px" onclick="showOneBig(this)"/></div>
-			       		<div style="width:119px; height:19px"><span>视频：风管安装施工工艺</span></div>
-			       	</div>
-			       	<div class="videoCode" style="margin-right:15px;width:120px;height:170px;">
-			       		<div><img src="page/user_project/images/1482193964.png" width="119px" height="119px" onclick="showOneBig(this)"/></div>
-			       		<div style="width:119px; height:19px"><span>文档：机电安装施工工艺图册(电气)</span></div>
-			       	</div>
-			       	<div class="videoCode" style="margin-right:15px;width:120px;height:170px;">
-			       		<div><img src="page/user_project/images/1482193940.png" width="119px" height="119px" onclick="showOneBig(this)"/></div>
-			       		<div style="width:119px; height:19px"><span>文档：机电安装施工工艺图册(给排水)</span></div>
-			       	</div>
-			       	<div class="videoCode" style="margin-right:15px;width:120px;height:170px;">
-			       		<div><img src="page/user_project/images/1482193929.png" width="119px" height="119px" onclick="showOneBig(this)"/></div>
-			       		<div style="width:119px; height:19px"><span>文档：机电安装施工工艺图册(暖通)</span></div>
-			       	</div>
-			       	<div class="videoCode" style="margin-right:15px;width:120px;height:170px;">
-			       		<div><img src="page/user_project/images/1482193882.png" width="119px" height="119px" onclick="showOneBig(this)"/></div>
-			       		<div style="width:119px; height:19px"><span>文档：机电安装施工工艺图册(策划)</span></div>
-			       	</div>
-		       </div>
-		    </div>
+			
         </div>
 	</div>
 <script>
@@ -122,7 +40,22 @@
   		content: '<div style="background-size: 100% 100%;width:600px;height:360px;background-image: url(' +scope.src+')"/></div>'
   	  });
 	});
+	 //    菜单导航
+    $(".qrCodePill ul li").on("click",function () {
+        $(".qrCodePill ul li").removeClass("active");
+        $(this).addClass("active")
+    })
+   //    二级菜单
+    var len = $('#tab li').length;
+    $('#tab li').click(function(){
+        for(i=0;i<len;i++){
+            $('.qrCodeList ul').eq(i).css('display','none');
+            $('#tab li').removeClass('active')
+        }
+        $('.qrCodeList ul').eq($(this).index('#tab li')).css('display','block');
+        $(this).addClass('active')
 
+    })
 
 
 

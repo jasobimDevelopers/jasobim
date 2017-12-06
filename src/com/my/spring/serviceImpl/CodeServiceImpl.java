@@ -105,9 +105,9 @@ public class CodeServiceImpl implements CodeService {
 					Map hints = new HashMap();  
 			        //内容所使用编码  
 			        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
-			        BitMatrix bitMatrix = multiFormatWriter.encode("jasobim.com.cn/"+content,BarcodeFormat.QR_CODE, 200, 200, hints);  
+			        BitMatrix bitMatrix = multiFormatWriter.encode("http://jasobim.com.cn/"+content,BarcodeFormat.QR_CODE, 200, 200, hints);  
 			        //生成二维码  
-			        File outputFile = new File("C:/jasobim/tomcat80/webapps/ROOT/files/code",str+".png"); 
+			        File outputFile = new File("C:/jasobim/tomcat80/webapps/own/files/code",str+".png"); 
 			        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile);  
 				} catch (Exception e) {
 					e.printStackTrace();

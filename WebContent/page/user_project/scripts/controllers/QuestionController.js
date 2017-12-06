@@ -12,12 +12,14 @@ function QuestionController($scope,QuestionService) {
 	var content=null;
 	$scope.currentPage = 1;
 	$scope.findQuestionInfo = {};
-	$scope.questionType="all";
-	$scope.questionPority="all";
-	$scope.questionStatu="all";
-	$scope.questionProjectId="all";
-	$scope.questionTitles=["序号","问题类型","问题提交人","问题标题","专业","问题创建时间","问题等级","问题状态","操作"];
+	$scope.questionImgList=[];
+	$scope.messageImgItem=[];
+	$scope.questionType="全部";
+	$scope.questionPority="全部";
+	$scope.questionStatu="全部";
+	$scope.questionProjectId="全部";
 	$scope.projectQuestionOfType=[{name:"安全"},{name:"质量"},{name:"其他"}];
+	$scope.questionTitles=["序号","问题类型","问题提交人","问题标题","专业","问题创建时间","问题等级","问题状态","操作"];
 	////一般用户等级查询列表
 	$scope.projectQuestionOfPriority=[{name:"一般"},{name:"重要"},{name:"紧急"}];
 	$scope.projectQuestionOfPrioritys=[{name:"一般"},{name:"重要"},{name:"紧急"}];
@@ -26,114 +28,73 @@ function QuestionController($scope,QuestionService) {
 	$scope.percentOfQuestion=[{name:"一般",value:""},{name:"重要",value:""},{name:"紧急",value:""}];
 	$scope.questionAddOrUpdate=["添加","更新"];
 	$scope.flag="";
-	$scope.restStyle = function (a,b,c,d) {
-		a ? document.getElementById("questionOfProject").style.display = 'none' :'';
-		b ? document.getElementById("questionOfType").style.display = 'none' : '';
-		c ? document.getElementById("questionOfPority").style.display = 'none': '';
-		d ? document.getElementById("questionOfStatu").style.display = 'none': '';
-	}
-	$scope.showProjects=function(){
-		$scope.getProjectLists(pageSize,pageIndex,project);
-		$scope.restStyle(false,true,true,true);
-		var idom = document.getElementById("questionOfProject");
-		console.log(idom.style.display);
-		if(idom.style.display == 'none') {
-			idom.style.display = 'block';
-		} else {
-			idom.style.display = 'none';
-		}
-	}
+	$scope.questionfiles=null;
+	$scope.questionTitle="";
+	$scope.messageImgList=[];
+    $scope.messageVoiceList=[];
+    $scope.messageList=[];
+    $scope.messageLists=[];
+    $scope.messageImgItem=[];
+    $scope.messageVoiceItem=[];
+    $scope.projectNameList=[];
+    $scope.flag=["项目名称","问题类型","问题程度","问题状态"];
+	var j=0;
+    var k=0;
+    var q=0;
+    var p=0;
 	
-	
-	$scope.showQuestionType=function(){
-		$scope.restStyle(true,false,true,true);
-		var idom = document.getElementById("questionOfType");
-		if(idom.style.display == 'none') {
-			idom.style.display = 'block';
-		} else {
-			idom.style.display = 'none';
-		}
-	}
-	$scope.showQuestionPority=function (){
-		$scope.restStyle(true,true,false,true);
-		var idom = document.getElementById("questionOfPority");
-		if(idom.style.display == 'none') {
-			idom.style.display = 'block';
-		} else {
-			idom.style.display = 'none';
-		}
-	}
-	$scope.showQuestionStatu=function (){
-		$scope.restStyle(true,true,true,false);
-		var idom = document.getElementById("questionOfStatu");
-		if(idom.style.display == 'none') {
-			idom.style.display = 'block';
-		} else {
-			idom.style.display = 'none';
-		}
-	}
 	 ////////问题分页回调函数
 	  $scope.questionPage = function(iPageCount,iCurrent) {
-		  $("#questionsPageCode").remove();
-		  $("#table-buton10").append("<div id=\"questionsPageCode\"></div>");
-		  $("#questionsPageCode").createPage({
+		  $("#questionPageCode").remove();
+		  $("#table-buton-question").append("<div id=\"questionPageCode\"></div>");
+		  $("#questionPageCode").createPage({
 
 		      pageCount:iPageCount,
 
 		      current:iCurrent,
 
 		      backFn:function(p){
-		    	  $scope.getQuestionList(pageSize,p,question);
+		    	  $scope.getQuestionLists(pageSize,p,question);
 		      }
 		  });
 	  }
-
-
 	  $scope.getQuestionLists = function(pageSize,pageIndex,question) {
 		     
-			 if($scope.questionType!="all"){
+			 if($scope.questionType!="全部"){
 				 question+= "questionType=" + $scope.questionType;
 			 }
-			 if($scope.questionPority!="all"){
+			 if($scope.questionPority!="全部"){
 				 question+= "priority=" + $scope.questionPority;
 			 }
-			 if($scope.questionStatu!="all"){
+			 if($scope.questionStatu!="全部"){
 				 question+= "state=" + $scope.questionStatu;
 			 }
-			 if($scope.questionProjectId!="all"){
+			 if($scope.questionProjectId!="全部"){
 				 question+= "projectId=" +$scope.questionProjectId;
 			 }
 			 QuestionService.getQuestionList(pageSize,pageIndex,question,null).then(function (result){
+				 
 			  	  $scope.questionList = result.data;
-			  	  if($scope.questionList[0].roleFlag==1){
-			  		  ////总经理等级查询列表
-			  		$scope.projectQuestionOfPrioritys=[{name:"重要"},{name:"紧急"}];
-			  	  }
-			  	  if($scope.questionList[0].roleFlag==2){
-			  		 ////投资方等级查询列表
-			  		$scope.projectQuestionOfPrioritys=[{name:"一般"}];
-			  	  }
 			      $scope.currentPage = result.currentPage;
 			      $scope.totalPage = result.totalPage;
 			      $scope.questionPage($scope.totalPage,$scope.currentPage);
-
-			      $scope.refreshCircle();
+			     
 			  });
 		  }
 	   
 	  	////////////////////////问题列表分页获取
 		$scope.getQuestionList = function(pageSize,pageIndex,question) {
-			 content=document.getElementById("paperList_find").value;
-			 if($scope.questionType!="all"){
+			 content=document.getElementById("project_question_search").value;
+			 if($scope.questionType!="全部"){
 				 question+= "questionType=" + $scope.questionType;
 			 }
-			 if($scope.questionPority!="all"){
+			 if($scope.questionPority!="全部"){
 				 question+= "priority=" + $scope.questionPority;
 			 }
-			 if($scope.questionStatu!="all"){
+			 if($scope.questionStatu!="全部"){
 				 question+= "state=" + $scope.questionStatu;
 			 }
-			 if($scope.questionProjectId!="all"){
+			 if($scope.questionProjectId!="全部"){
 				 question+= "projectId=" +$scope.questionProjectId;
 			 }
 			 QuestionService.getQuestionList(pageSize,pageIndex,question,content).then(function (result){
@@ -141,7 +102,7 @@ function QuestionController($scope,QuestionService) {
 			      $scope.currentPage = result.currentPage;
 			      $scope.totalPage = result.totalPage;
 			      $scope.questionPage($scope.totalPage,$scope.currentPage);
-			      $scope.refreshCircle();
+			      $scope.drawCircle();
 			  });
 		  }
 		 ////////////////////////我的问题列表分页获取
@@ -155,7 +116,7 @@ function QuestionController($scope,QuestionService) {
 			  });
 		  }
 	 /////初始化获取问题列表
-	 $scope.getQuestionLists(pageSize,pageIndex,question);
+	 $scope.getQuestionList(pageSize,pageIndex,question);
 	 ////////问题重置
 	 $scope.resetQuestion = function(){
 		 $scope.findQuestionInfo={};
@@ -163,37 +124,25 @@ function QuestionController($scope,QuestionService) {
 	
 	 /////增加问题
 	 $scope.addQuestionByAdmin = function(){
-		 if($scope.flag=="添加"){
+		 if($scope.questionTitle=="质量安全问题添加"){
 			 var formData = new FormData();
-			 for (var key in $scope.findQuestionInfo) {
-				   if($scope.findQuestionInfo[key] != null) {
-					   formData.append(key, $scope.findQuestionInfo[key]);
+			 for (var key in $scope.addQuestionInfo) {
+				   if($scope.addQuestionInfo[key] != null) {
+					   formData.append(key, $scope.addQuestionInfo[key]);
 				   }
 			 }
-			/* var fileCode="";
-			 var fileCode=document.getElementById("codeImg").files;*/
-			 var file="";
-	    	 file=document.getElementById("inputicon").files;
-	    	/* if(fileCode!=null && fileCode.length>0){
-	    		 formData.append("fileCode",fileCode[0]);
-	    	 }*/
-	    	 if(file!==null && file.length>0){
-				 for(var i = 0; i < file.length;i++) {
-					 formData.append("file",file[i]);
+	    	 if($scope.questionfiles!==null && $scope.questionfiles.length>0){
+				 for(var i = 0; i < $scope.questionfiles.length;i++) {
+					 formData.append("file",$scope.questionfiles[i]);
 				 }
 	    	 }
 			 QuestionService.addQuestionByAdmin(formData).then(function(result){
 			       $scope.questionInfo=result.data; 
-			      // $scope.removeState();
+			       $scope.getQuestionLists(pageSize,pageIndex,question);
 			       $scope.questionList=[];
-			      // $scope.appendDiv();
-//			       $scope.getQuestionList(pageSize,1,question);
-//			       $scope.refreshData();
-			       //window.navigate(location);
-			       
 			    });
 		 }
-		 if($scope.flag=="更新"){
+		 if($scope.questionTitle=="更新"){
 			 var file="";
 			 var formData = new FormData();
 			 for (var key in $scope.findQuestionInfo) {
@@ -204,28 +153,37 @@ function QuestionController($scope,QuestionService) {
 			 formData.append('file',null);
 			 QuestionService.updateQuestionByAdmin(formData).then(function(result){
 			       $scope.questionInfo=result.data; 
-			       //$scope.removeState();
 			       $scope.questionList=[];
-			      // $scope.appendDiv();
-			       $scope.getQuestionList(pageSize,1,question);
-//			       $scope.refreshData();
-			       //window.navigate(location);
-			      
+			       $scope.getQuestionLists(pageSize,1,question);
 			    });
 		 }
 			 
 	 }
-	 
 	 ////显示问题详细界面
 	 $scope.questionChangeClick = function(questionId){
 		    QuestionService.findQuestion(questionId).then(function(result){
 		      $scope.findQuestionInfo=result.data;
-		      $scope.flag=$scope.questionAddOrUpdate[1];
-		      $scope.getMessageListByQuestionId(questionId);
+		      if($scope.questionInfo!=""){
+			  		if($scope.findQuestionInfo.fileList!=null){
+			  			var test=$scope.findQuestionInfo.fileList;
+			  			for(var i=0;i<test.length;i++){
+			  				if(test[i].split(".")[1]=="wav" || test[i].split(".")[1]=="mp3"){
+			  				}else if(test[i].split(".")[1]!="dat"){
+			  					$scope.questionImgList[k]=test[i];
+			  					k++;
+			  				}
+			  			}
+			  		}
+			  		$scope.questionId=$scope.findQuestionInfo.id;
+			  		$scope.flag=$scope.questionAddOrUpdate[1];
+				    $scope.getMessageListByQuestionId(questionId);
+			  		var length=($scope.findQuestionInfo.userId).length;
+			  		$scope.name=($scope.findQuestionInfo.userId).substr(length-2);
+		  	  }
 		      document.getElementById("detailQuestionHtml").style.display = 'block';
 			  document.getElementById("projectDetail_body_questions").style.display='none';
 		    });
-		 }
+	 }
 	 ////显示问题修改界面
 	 $scope.questionChangeClicks = function(questionId,userId){
 		 	
@@ -250,7 +208,7 @@ function QuestionController($scope,QuestionService) {
 			 state=1;
 		 }
 	     QuestionService.changeQuestionState(questionId,state).then(function(result){
-	    	 $scope.getQuestionList(pageSize,pageIndex,question);
+	    	 $scope.getQuestionLists(pageSize,pageIndex,question);
 	    	 //window.navigate(location);
 
 		    });
@@ -269,7 +227,7 @@ function QuestionController($scope,QuestionService) {
 		 $scope.findQuestionInfo={};
 		 document.getElementById("addQuestionHtml").style.display = 'none';
 	     document.getElementById("projectDetail_body_questions").style.display='block';
-	     $scope.getQuestionList(pageSize,pageIndex,question);
+	     $scope.getQuestionLists(pageSize,pageIndex,question);
 	     
 	 }
 	 /////返回问题列表
@@ -279,7 +237,7 @@ function QuestionController($scope,QuestionService) {
 		 document.getElementById("editQuestionHtml").style.display = 'none';
 	     document.getElementById("projectDetail_body_questions").style.display='block';
 	     
-	     $scope.getQuestionList(pageSize,pageIndex,question);
+	     $scope.getQuestionLists(pageSize,pageIndex,question);
 	 }
 	
 	 ////隐藏问题添加页面
@@ -324,65 +282,61 @@ function QuestionController($scope,QuestionService) {
 		  });
 	  }
 
+	
 	 ///////分页获取项目列表
 	$scope.getProjectLists = function(pageSize,pageIndex,project) {
-		  QuestionService.getProjectLists(pageSize,pageIndex,project).then(function (result){
+		  QuestionService.getProjectLists(pageSize,-1,project).then(function (result){
 		  	  $scope.projectLists = result.data;
 		  });
 	  }
 	////////问题列表的查询
-	/////通过项目名称查询
-	$scope.setProjectName = function(projectId){
-		$scope.questionProjectId=projectId;
-		$scope.questionType="all";
-		$scope.questionPority="all";
-		$scope.questionStatu="all";
-		$scope.getQuestionList(pageSize,pageIndex,question);
-		document.getElementById("questionOfProject").style.display = 'none';
+	
+	 $scope.getProjectLists(pageSize,pageIndex,project);
+	
+	/////显示添加页面
+	$scope.showAddQuestionHtml=function(){
+		 layer.open({
+		        type:1,
+		        title: '质量安全问题添加',
+		        area: ['700px','600px'],
+		        btn:['确定','取消'],
+		        yes:function(index,layero){
+		        	$scope.addQuestionInfo={};
+		        	$scope.addQuestionInfo.name=layero.find('#questionTitle')[0].value;
+		        	var projectNames=layero.find('#projectName')[0].value;
+		        	$scope.questionfiles=layero.find('#questionPics')[0].files;
+		        	var questionPority=layero.find('#questionPority')[0].value;
+		        	for(var k=0;k<$scope.projectQuestionOfPriority.length;k++){
+		        		if($scope.projectQuestionOfPriority[k].name==questionPority){
+		        			$scope.addQuestionInfo.questionPority=k;
+		        		}
+		        	}
+		        	var questionType=layero.find('#questionType')[0].value;
+		        	for(var i=0;i<$scope.projectQuestionOfType.length;i++){
+		        		if($scope.projectQuestionOfType[i].name==questionType){
+		        			$scope.addQuestionInfo.questionType=i;
+		        		}
+		        	}
+		        	for(var j=0;j<$scope.projectLists.length;j++){
+		        		if($scope.projectLists[j].name==projectNames){
+		        			$scope.addQuestionInfo.projectId=$scope.projectLists[j].id;
+		        		}
+		        	}
+		        	$scope.addQuestionInfo.trades=layero.find('#questionPhase')[0].value;
+		        	$scope.addQuestionInfo.questionDetail=layero.find('#questionDetail')[0].value;
+		        	$scope.questionTitle="质量安全问题添加";
+		        	$scope.addQuestionByAdmin();
+		        	
+		        },
+		        content:$("#show03s").html()
+		    });
 		
-	}
-	/////通过问题的类型查询
-	$scope.setQuestionType = function(type){
-		$scope.questionType=type;
-		$scope.questionPority="all";
-		$scope.questionStatu="all";
-		$scope.questionProjectId="all";
-		$scope.getQuestionList(pageSize,pageIndex,question);
-		document.getElementById("questionOfType").style.display = 'none';
-		
-	}
-	/////通过问题的等级查询
-	$scope.setQuestionPority = function(it){
-		if(it.pority.name=="一般"){
-			pority=0;
-		}
-		if(it.pority.name=="重要"){
-			pority=1;
-		}
-		if(it.pority.name=="紧急"){
-			pority=2;
-		}
-		$scope.questionPority=pority;
-		$scope.questionType="all";
-		$scope.questionStatu="all";
-		$scope.questionProjectId="all";
-		$scope.getQuestionList(pageSize,pageIndex,question);
-		document.getElementById("questionOfPority").style.display = 'none';
-		
-	}
-	////通过问题的状态查询
-	$scope.setQuestionStatu = function(statu){
-		$scope.questionStatu=statu;
-		$scope.questionType="all";
-		$scope.questionPority="all";
-		$scope.questionProjectId="all";
-		$scope.getQuestionList(pageSize,pageIndex,question);
-		document.getElementById("questionOfStatu").style.display = 'none';
-		
-	}
+	 };
+	
+	
 	/////问题搜索
-	$scope.search = function(){
-		var content=document.getElementById("paperList_find").value;
+	$scope.findQuestionLike = function(){
+		var content=document.getElementById("project_question_search").value;
 		QuestionService.getQuestionList(pageSize,pageIndex,question,content).then(function (result){
 		  	  $scope.questionList = result.data;
 		      $scope.currentPage = result.currentPage;
@@ -396,15 +350,41 @@ function QuestionController($scope,QuestionService) {
 		$scope.questionSelfId=questionId;
 		QuestionService.getMessageListByQuestionId(questionId).then(function (result){
 		  	  $scope.messageListInfo = result.data;
+		  	  if($scope.messageListInfo!=""){
+		  		for(var g=0;g<$scope.messageListInfo.length;g++){
+					$scope.messageList=[];
+		  			$scope.messageImgItem=[];
+		  			$scope.messageVoiceItem=[];
+					q=0;
+					p=0;	
+		  			if($scope.messageListInfo[g].fileList!=null){
+			  			var tests=$scope.messageListInfo[g].fileList;
+			  			for(var t=0;t<tests.length;t++){
+			  				if(tests[t].split(".")[1]=="wav" || tests[t].split(".")[1]=="mp3"){
+			  					$scope.messageVoiceItem[q]=tests[t];
+			  					q++;
+			  				}else if(tests[t].split(".")[1]!="dat"){
+			  					$scope.messageImgItem[p]=tests[t];
+			  					p++;
+			  				}
+			  			}
+			  			$scope.messageList[0]=$scope.messageImgItem;
+			  			$scope.messageList[1]=$scope.messageVoiceItem;
+			  			$scope.messageList[2]=$scope.messageListInfo[g].id;
+			  		}
+		  			$scope.messageLists[g]=$scope.messageList;
+		  			
+		  		}
+		  		
+		  	  }
 		  });
 	}
 	///////根据问题id添加问题的留言
 	$scope.addMessage = function(questionId){
 		var formData = new FormData();
-		var content=document.getElementById("messageArea").value;
+		var content=document.getElementById("message_content").value;
 		formData.append("content", content);
 		formData.append("questionId", questionId);
-		/*formData.append("file","");*/
 		QuestionService.addMessage(formData).then(function (result){
 		  	  $scope.addMessageInfo = result.data;
 		  	  $scope.getMessageListByQuestionId(questionId);
@@ -423,31 +403,37 @@ function QuestionController($scope,QuestionService) {
 		      $scope.findMessageInfo=result.data;
 		      $scope.getMessageListByQuestionId(questionId);
 		      document.getElementById("addMessageHtml").style.display = 'block';
-			 // document.getElementById("projectDetail_body_questions").style.display='none';
 		    });
 	}
-   //////移除、加载圆饼统计模块
-	$scope.refreshCircle = function() {
-		$scope.removeState();
-		$scope.appendDiv();
-		document.getElementById("myStats").attributes["data-percent"].value = $scope.questionList[0].sortPercent;
-	    document.getElementById("myStats1").attributes["data-percent"].value = $scope.questionList[0].importantPercent;
-	    document.getElementById("myStats2").attributes["data-percent"].value = $scope.questionList[0].urgentPercent;
-	    $('#myStats').circliful();
-	  	$('#myStats1').circliful();
-	  	$('#myStats2').circliful();	
+	///////问题筛选
+	$scope.setChoice = function(index,str){
+		var self=index;
+		if(str=="项目名称"){
+			$scope.questionProjectId=index;
+		}
+		if(str=="问题类型"){
+			$scope.questionType=index;
+		}
+		if(str=="问题程度"){
+			$scope.questionPority=index;
+		}
+		if(str=="问题状态"){
+			$scope.questionStatu=index;
+		}
+		 $scope.getQuestionLists(pageSize,pageIndex,question);
 	}
-	$scope.removeState = function(){
-		
-		$("#myStats").remove();
-		$("#myStats1").remove();
-		$("#myStats2").remove();
-		
-	}
-	/////加载
-	$scope.appendDiv = function(){
-		$("#dataShow").append("<div id=\"myStats\" data-dimension=\"180\"  data-text=\"" + $scope.questionList[0].sortPercent +"%\" data-info=\"一般\" data-width=\"30\" data-fontsize=\"38\" data-percent=\"50\" data-fgcolor=\"#F55852\" data-bgcolor=\"#FDD4D2\" data-fill=\"#ddd\"></div>"
-				+"<div id=\"myStats1\" data-dimension=\"180\"  data-text=\"" + $scope.questionList[0].importantPercent + "%\" data-info=\"重要\" data-width=\"30\" data-fontsize=\"38\" data-percent=\"33\" data-fgcolor=\"#FDDA3D\" data-bgcolor=\"#FBF9E6\" data-fill=\"#ddd\"></div>"
-				+"<div id=\"myStats2\" data-dimension=\"180\"  data-text=\"" + $scope.questionList[0].urgentPercent + "%\" data-info=\"紧急\" data-width=\"30\" data-fontsize=\"38\" data-percent=\"17\" data-fgcolor=\"#9DED55\" data-bgcolor=\"#E5FFD1\" data-fill=\"#ddd\"></div>");
-	}
+	///问题的百分比添加
+	 $scope.drawCircle = function() {
+		  document.getElementById("myStat").attributes["data-percent"].value = $scope.questionList[0].sortPercent;
+	      document.getElementById("myStat").attributes["data-text"].value = $scope.questionList[0].sortPercent + "%";
+	      document.getElementById("myStat1").attributes["data-percent"].value = $scope.questionList[0].importantPercent;
+	      document.getElementById("myStat1").attributes["data-text"].value = $scope.questionList[0].importantPercent + "%";
+	      document.getElementById("myStat2").attributes["data-percent"].value = $scope.questionList[0].urgentPercent;
+	      document.getElementById("myStat2").attributes["data-text"].value = $scope.questionList[0].urgentPercent + "%";
+	      $('#myStat').circliful();
+	  	  $('#myStat1').circliful();
+	  	  $('#myStat2').circliful();
+	 }
+ /////////////////////初始化问题列表数据
+  
 }

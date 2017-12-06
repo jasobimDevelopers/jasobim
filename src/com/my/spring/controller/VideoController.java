@@ -51,7 +51,7 @@ public class VideoController {
     @RequestMapping(value="/admin/getVideoList",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<VideoPojo>> getVideoList(
-    		@RequestParam(value="projectId",required=true) Long projectId,
+    		@RequestParam(value="projectId",required=false) Long projectId,
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@RequestParam(value="beginDate",required=false) String beginDate,

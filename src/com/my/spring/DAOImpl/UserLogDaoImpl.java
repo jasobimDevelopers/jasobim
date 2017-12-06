@@ -3,7 +3,6 @@ package com.my.spring.DAOImpl;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.ParameterMode;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -11,14 +10,12 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.procedure.ProcedureCall;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.UserLogDao;
-import com.my.spring.model.DuctPojos;
 import com.my.spring.model.UserLog;
 import com.my.spring.model.UserLogPojos;
 import com.my.spring.utils.DaoUtil;
@@ -57,6 +54,8 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
         Session session = getSession();
         Criteria criteria = session.createCriteria(UserLog.class);
         criteria.addOrder(Order.desc("actionDate"));
+        criteria.add(Restrictions.ne("systemType", -1));
+        //criteria.add(Restrictions.ne("systemType", null));
         if(UserLog!=null){
         	if(UserLog.getUserId()!=null){
         		criteria.add(Restrictions.eq("userId", UserLog.getUserId()));

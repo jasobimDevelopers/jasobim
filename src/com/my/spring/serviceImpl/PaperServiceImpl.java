@@ -274,15 +274,21 @@ public class PaperServiceImpl implements PaperService {
     	DataWrapper<List<Paper>> dataWrapper = new DataWrapper<List<Paper>>();
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
-		        	if(paper.getId()!=null && projectId!=null){
-		        		UserLog userLog = new UserLog();
-		        		userLog.setActionDate(new Date());
-		        		userLog.setFileId(paper.getId());
-		        		userLog.setProjectPart(1);
-		        		userLog.setUserId(userInMemory.getId());
-		        		userLog.setVersion("-1");
-		        		userLogSerivce.addUserLog(userLog, token);
+		        	if(userInMemory.getSystemId()!=null){
+		        		if(projectId!=null){
+			        		UserLog userLog = new UserLog();
+			        		userLog.setActionDate(new Date());
+			        		if(paper.getId()!=null){
+			        			userLog.setFileId(paper.getId());
+			        		}
+			        		userLog.setProjectPart(10);
+			        		userLog.setUserId(userInMemory.getId());
+			        		userLog.setSystemType(userInMemory.getSystemId());
+			        		userLog.setVersion("3.0");
+			        		userLogSerivce.addUserLog(userLog, token);
+			        	}
 		        	}
+		        	
 	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper,content);
 	        		for(int i=0;i<dataWrapper.getData().size();i++){
 	        			PaperPojo papernew=new PaperPojo();
@@ -363,7 +369,7 @@ public class PaperServiceImpl implements PaperService {
 	        					Map hints = new HashMap();  
 	        			        //内容所使用编码  
 	        			        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
-	        			        BitMatrix bitMatrix = multiFormatWriter.encode("jasobim.com.cn/"+file.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
+	        			        BitMatrix bitMatrix = multiFormatWriter.encode("http://jasobim.com.cn/"+file.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
 	        			        //生成二维码  
 	        			        File outputFile = new File(imgpath,str+".png"); 
 	        			        

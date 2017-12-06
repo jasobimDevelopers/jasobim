@@ -3,8 +3,10 @@ var userIcon=getCookie('userIcon');
 function HeaderController($scope,DataService,$filter) {
 	
   console.log("载入HeaderController");
-  $scope.headerItems = [{name:"首页",page:"/jasobim"},{name:"项目管理",page:"user_projectList"},{name:"质量安全管理",page:"user_projectQuestionList"},{name:"二维码专区",page:"codeInformationList"},{name:"意见反馈",page:"suggesttionList"},{name:"关于我们",page:"aboutList"}];
- /* $scope.getUserList = function(data){
+  $scope.headerItems = [{name:"项目管理",page:"user_projectList"},{name:"质量安全管理",page:"user_projectQuestionList"},{name:"二维码专区",page:"codeInformationList"},{name:"施工规范",page:"normativefilesList"},{name:"意见反馈",page:"suggesttionList"},{name:"关于我们",page:"aboutList"}];
+  $scope.codeInfo_childs= [{name:"图纸区域",page:"codeInformationList"},{name:"交底区域",page:"videoCodeList"}];
+  $scope.project_childs = [{name:"施工任务单",page:"construction_task"},{name:"预付单",page:"advanced_order"},{name:"实测实量",page:"measured_data"}];
+  /* $scope.getUserList = function(data){
 	  $scope.projectvisible = false;
 	  $scope.uservisible = true;
   }

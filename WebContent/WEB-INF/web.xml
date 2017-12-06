@@ -54,6 +54,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>default</servlet-name>
+    <url-pattern>*.chm</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
     <url-pattern>*.wmv</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

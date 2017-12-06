@@ -17,5 +17,7 @@ public interface UserDao {
 	DataWrapper<List<User>> getUserTeam(Integer pageSize, Integer pageIndex,Long projectId);
 	DataWrapper<User> findUserLike(User user);
 	DataWrapper<List<User>> findUserLikeRealName(String username);
-	List<User> findUserLikeProjct(Long projectList,Long id);
+	DataWrapper<List<User>> findGetPushUsers(String username,int adminFlag);
+	List<User> findUserLikeProjct(Long projectList,Integer id);
+	DataWrapper<List<User>> getUserLists(Integer pageSize, Integer pageIndex, User user);
 }

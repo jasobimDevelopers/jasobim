@@ -19,14 +19,7 @@
 	<body>
 		<div  ng-controller="constructionTaskController">
 			<div class="wrap">
-			    <!--头部-->
-			    <div class="top">
-			        <div class="top_con">
-			            <div class="back"><i><img src="../images/back.png" alt=""></i><span>返回</span></div>
-			            <div class="jobDetail">任务单详情</div>
-			            <div class="qr"><i><img src="../images/qr.png" alt=""></i></div>
-			        </div>
-			    </div>
+			   
 			    <!--内容部分-->
 			    <div class="mainJob">
 			        <!--title-->
@@ -41,6 +34,11 @@
 			                <li class="projectTime">限定完成时间：{{constructionTask.finishedDate}}</li>
 			                <li class="projectPerson">指派人员：{{constructionTask.workPeopleNameList}}</li>
 			                <li class="projectContainer">交底内容：{{constructionTask.detailContent}}</li>
+			                <li id="cn_img">
+			                	<div ng-repeat="img in fileUrls">
+									<img height="85" width="85" ng-src="http://jasobim.com.cn/{{img}}" alt="">
+								</div>
+							</li>
 			            </ul>
 			        </div>
 			        <div class="person">

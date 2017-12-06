@@ -55,10 +55,11 @@ public class ProjectController {
     public DataWrapper<List<ProjectPojo>> getProjectList(
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@RequestParam(value="content",required=false) String content,
     		@ModelAttribute Project project,
     		@RequestParam(value="token",required=true) String token)
     {
-        return projectService.getProjectList(pageIndex,pageSize,project,token);
+        return projectService.getProjectList(pageIndex,pageSize,project,token,content);
     }
     @RequestMapping(value="/admin/getProjectDetails",method = RequestMethod.GET)
     @ResponseBody

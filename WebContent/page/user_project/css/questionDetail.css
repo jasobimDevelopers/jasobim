@@ -4,12 +4,7 @@
 	margin: 0px;
 	padding: 0px;
 }
-body{
-	background:url(../images/adminbk.png) no-repeat fixed center;
-	margin:0 auto;
-	padding:0;
-	background-color:#B1BECD;
-}
+
 button{
 	border:none;
 	outline:none;
@@ -265,23 +260,27 @@ text-decoration: none;
 }
 #dataShow{
 	padding-left:20px;
-	height:600px;
-	width: 225px ! important;
 	background-color:white;
 	color:black ! important;
 }
+
 #dataShow span{
 	color:black ! important;
 }
-#dataShow div{
-	margin-top:13px;
+#dataShow{
+	width: 755px;
+    position: absolute;
+    top: -15px;
+    right: 0;
 }
-#questionsPageCode{padding: 15px 20px;text-align: left;color: #ccc; width:800px;padding-left:400px;}
-#questionsPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+#dataShow div{
+	margin-right: 20px;
+	float:left;
+}
 
-#questionsPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
-#questionsPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
-#questionsPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+
+
+
 /*问题增加页面样式*/
 
 
@@ -298,14 +297,6 @@ text-decoration: none;
 	height:32px;
 	width:300px;
 }
-#addcontent_question{
-	background:url(../images/border.png) no-repeat;
-	background-size:100% 100%;
-	height:100%;
-	width:1000px;
-	margin:30px auto;
-}
-
 #message_head{
 	background:url(../images/itemUploadIcon.png) no-repeat 4px 0px;
 	padding-left:20px;
@@ -352,13 +343,7 @@ text-decoration: none;
 #message_area div{
 	float:left;
 }
-#message_content{
-	width:860px;
-	margin-left:72px;
-	overflow:auto;
-    overflow-x: hidden;
-	height:400px; 
-}
+
 #message_content div{
 	float:left;
 }

@@ -3,7 +3,6 @@ package com.my.spring.DAOImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.ParameterMode;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -11,7 +10,6 @@ import org.hibernate.Session;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.procedure.ProcedureCall;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
@@ -79,6 +77,7 @@ public class QuantityDaoImpl extends BaseDao<Quantity> implements QuantityDao {
 					//projectionList.add(Projections.groupProperty("professionType"));
 				}
 	        }
+			criteria.add(Restrictions.ne("name","支吊架"));
 	        if(quantity.getBuildingNum()!=null){
 	        	if(quantity.getBuildingNum()!=-1){
 	        		criteria.add(Restrictions.eq("buildingNum", quantity.getBuildingNum()));

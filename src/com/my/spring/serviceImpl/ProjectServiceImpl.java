@@ -296,7 +296,7 @@ public class ProjectServiceImpl implements ProjectService {
 						projects=projectDao.getById(project.getId());
 						String modelid="";
 						String isIos="";
-						if(modelFile.length>=0){
+						if(modelFile.length>0){
 							for(int i=0;i<modelFile.length;i++){
 								String path=filePath1+"/"+"projectmodels/"+project.getId();
 								Files newfile=fileService.uploadFile(path, modelFile[i],fileType,request);
@@ -311,7 +311,7 @@ public class ProjectServiceImpl implements ProjectService {
 							projects.setModelId(modelid);
 							projects.setIsIos(isIos);
 						}
-						if(picFile.length>=0){
+						if(picFile.length>0){
 							String picid="";
 							for(int i=0;i<picFile.length;i++){
 								String path=filePath1+"/"+"projectpics/"+project.getId();
@@ -381,7 +381,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @SuppressWarnings("unused")
 	@Override
-    public DataWrapper<List<ProjectPojo>> getProjectList(Integer pageIndex, Integer pageSize, Project project, String token) {
+    public DataWrapper<List<ProjectPojo>> getProjectList(Integer pageIndex, Integer pageSize, Project project, String token,String content) {
     	DataWrapper<List<ProjectPojo>> dataWrappers=new DataWrapper<List<ProjectPojo>>();
     	DataWrapper<List<Project>> dataWrapper=new DataWrapper<List<Project>>();
     	List<ProjectPojo> pojoproject=new ArrayList<ProjectPojo>();
@@ -391,9 +391,9 @@ public class ProjectServiceImpl implements ProjectService {
     	if (userInMemory != null) {
     		if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 
     				|| userInMemory.getWorkName().contains("总经理") || userInMemory.getWorkName().contains("科长") || userInMemory.getWorkName().contains("主管")){
-    			dataWrapper=projectDao.getProjectList(pageSize, pageIndex,project,"-1");
+    			dataWrapper=projectDao.getProjectList(pageSize, pageIndex,project,"-1",content,isios);
     		}else{
-    			dataWrapper=projectDao.getProjectList(pageSize, pageIndex,project,userInMemory.getProjectList());
+    			dataWrapper=projectDao.getProjectList(pageSize, pageIndex,project,userInMemory.getProjectList(),content,isios);
     		}
 			for(int i=0;i<dataWrapper.getData().size();i++){
 				ProjectPojo projectpojo=new ProjectPojo();
@@ -410,6 +410,7 @@ public class ProjectServiceImpl implements ProjectService {
 				projectpojo.setStartDate(dataWrapper.getData().get(i).getStartDate());
 				projectpojo.setVersion(dataWrapper.getData().get(i).getVersion());
 				projectpojo.setState(dataWrapper.getData().get(i).getState());
+				projectpojo.setModelPart(dataWrapper.getData().get(i).getModelPart().split(","));
 				String[] tests=null;
 				if(dataWrapper.getData().get(i).getModelPart()!=null && !dataWrapper.getData().get(i).getModelPart().equals("")){
 					tests=dataWrapper.getData().get(i).getModelPart().split(",");
@@ -434,6 +435,34 @@ public class ProjectServiceImpl implements ProjectService {
 					for(int j=0;j<isIos.length;j++){
 						if(isIos[j]==isios){
 							projectpojo.setModelUrl(urlList[j]);
+						}
+					}
+				}
+				if(userInMemory.getUserType()!=3){
+					if(project.getTeamList()!=null){
+						String[] teamNames=project.getTeamList().split(",");
+						String[] teamIds=project.getTeamId().split(",");
+						projectpojo.setTeamList(teamNames);
+						projectpojo.setTeamId(teamIds);
+					}
+				}else{
+					if(userInMemory.getTeamId()!=null){
+						if(project.getTeamList()!=null){
+							String[] teamNames=project.getTeamList().split(",");
+							String[] teamIds=project.getTeamId().split(",");
+							if(userInMemory.getWorkName().equals("安装负责人")){
+								projectpojo.setTeamList(teamNames);
+								projectpojo.setTeamId(teamIds);
+							}else{
+								String[] teamname=userInMemory.getTeamInformation().split(",");								
+								projectpojo.setTeamList(teamname);
+								String[] teamId=new String[teamname.length];
+								for(int j=0;j<teamname.length;j++){
+									teamId[j]=String.valueOf(j);
+								}
+								projectpojo.setTeamId(teamId);
+							}
+							
 						}
 					}
 				}

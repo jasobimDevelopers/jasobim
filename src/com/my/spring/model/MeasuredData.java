@@ -1,5 +1,7 @@
 package com.my.spring.model;
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,6 +11,7 @@ public class MeasuredData {
 	private String projectName;
 	private String leaderUnit;
 	private String checkPart;
+	private String checkUser;
 	private String checkType;//0.检查内容 1.评判标准 2.实测点数 3.合格点数 4.设计标高 5.定位尺寸 6.原始数据 7.备份
 	private String checkContent;//0.户内强电箱 1.户内弱电箱 2.盒子墙面的垂直度 3.开关 4.厨房插座 5.客厅或卧室插座
 								///6.阳台插座 7.闭路电视 8.红外幕帘 9.网络电话 10.手动报警按钮 11.客厅空调插座 12.插座
@@ -21,7 +24,11 @@ public class MeasuredData {
 	private String locationSize;//定位尺寸
 	private String leaderName;
 	private String constructor;
+	private String celiangUser;  //测量人姓名
+	private String checkMoreUser;///复查人姓名
 	private String quantiter;
+	private Date createDate;
+	private String submiteUser;
 	
 	@Id
 	@GeneratedValue
@@ -166,5 +173,49 @@ public class MeasuredData {
 	}
 	public void setQuantiter(String quantiter) {
 		this.quantiter = quantiter;
+	}
+	
+	@Basic 
+	@Column(name = "create_date")
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	@Basic
+	@Column(name = "submite_user")
+	public String getSubmiteUser() {
+		return submiteUser;
+	}
+	public void setSubmiteUser(String submiteUser) {
+		this.submiteUser = submiteUser;
+	}
+	
+	@Basic
+	@Column(name= "check_user")
+	public String getCheckUser() {
+		return checkUser;
+	}
+	public void setCheckUser(String checkUser) {
+		this.checkUser = checkUser;
+	}
+	
+	@Basic
+	@Column(name= "celiang_user")
+	public String getCeliangUser() {
+		return celiangUser;
+	}
+	public void setCeliangUser(String celiangUser) {
+		this.celiangUser = celiangUser;
+	}
+	
+	@Basic
+	@Column(name= "check_more_user")
+	public String getCheckMoreUser() {
+		return checkMoreUser;
+	}
+	public void setCheckMoreUser(String checkMoreUser) {
+		this.checkMoreUser = checkMoreUser;
 	}
 }

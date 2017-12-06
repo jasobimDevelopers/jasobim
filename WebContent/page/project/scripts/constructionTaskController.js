@@ -7,6 +7,7 @@ function constructionTaskController($scope,constructionTaskService) {
 	var approvalPeopleIdea;
 	var approvalUpdateDate;
 	$scope.worklist=[];
+	$scope.fileUrls=[];
 	$scope.createUserName="";
     var id = getQueryStringByName(name);
     $scope.getConstructionTaskDetail = function(id) {
@@ -15,6 +16,14 @@ function constructionTaskController($scope,constructionTaskService) {
 		  	  
 		  	if($scope.constructionTask!=""){
 		  		var length=($scope.constructionTask.createUserName).length;
+		  		if($scope.constructionTask.fileUrlList!=null){
+		  			for(var j=0;j<$scope.constructionTask.fileUrlList.length;j++){
+		  				if($scope.constructionTask.fileUrlList[j].split(".")[1]!="dat"){
+		  					$scope.fileUrls=$scope.constructionTask.fileUrlList;
+		  				}
+		  			}
+		  			
+		  		}
 		  		$scope.createUserName=($scope.constructionTask.createUserName).substr(length-2);
 		  		  if($scope.constructionTask.approvalPeopleTypeList!=null){
 		  			  for(var i=0;i<$scope.constructionTask.approvalPeopleTypeList.length;i++){

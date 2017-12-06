@@ -28,6 +28,7 @@ import com.my.spring.service.ItemService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
+import com.my.spring.utils.QRCodeUtil2;
 import com.my.spring.utils.SessionManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,7 +171,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
 	@Override
-	public boolean batchImport(String name, MultipartFile file,String token,HttpServletRequest request,Long projectId) {
+	public boolean batchImport(String name, MultipartFile file,String token,HttpServletRequest request,Long projectId,String modelPart) {
 		if (file == null || name == null || name.equals("")) {
 			return false;
 		}
@@ -199,6 +200,7 @@ public class ItemServiceImpl implements ItemService {
 		        	
 			        for(Item Item:ItemList){
 			        	if(Item!=null){
+			        		Item.setModelFlag(modelPart);
 			        		if(Item.getBuildingNum()!=null){
 			        			tempb[i]=Item.getBuildingNum();
 			        		}else{
@@ -243,14 +245,12 @@ public class ItemServiceImpl implements ItemService {
 			        	buildingDao.addBuilding(building);	
 			        }
 			        //////////////////
-		           
 		            //迭代添加构件信息
 			        itemDao.addItemList(ItemList);
 			        List <Quantity> quantityList=new ArrayList<Quantity>();
 			    	DataWrapper<List <QuantityPojo>> quantitypojo= itemDao.getSameItem(projectId);
 			    	if(quantitypojo.getData()!=null){
 			    		for(QuantityPojo pojo:quantitypojo.getData()){
-			    			
 			    			Quantity test=new Quantity();
 			    			Long st=pojo.getProject_id();
 			    			test.setProjectId(st);
@@ -258,13 +258,11 @@ public class ItemServiceImpl implements ItemService {
 			    			test.setFloorNum(pojo.getFloor_num());
 			    			test.setUnitNum(pojo.getUnit_num());
 			    			test.setHouseholdNum(pojo.getHousehold_num());
-//			    			test.setTypeName(pojo.getType_name());
 			    			String familyAndType=pojo.getFamily_and_type();
 			    			String typeName=pojo.getType_name();
 			    			if(typeName==null){
 			    				typeName="";
 			    			}
-//			    			test.setTypeName(typeName);
 			    			if(familyAndType==null){
 			    				familyAndType="";
 			    			}
@@ -410,6 +408,12 @@ public class ItemServiceImpl implements ItemService {
 					pojo.setSystemType(item.getSystemType());
 					pojo.setTypeName(item.getTypeName());
 					pojo.setUnitNum(item.getUnitNum());
+					pojo.setInstallDate(item.getInstallDate());
+					pojo.setInstallUnit(item.getInstallUnit());
+					pojo.setInstallUser(item.getInstallUser());
+					pojo.setItemBrand(item.getItemBrand());
+					pojo.setProjectId(item.getProjectId());
+					pojo.setModelFlag(item.getModelFlag());
 					dataWrapper.setData(pojo);
 				}
 			}else{
@@ -535,8 +539,11 @@ public class ItemServiceImpl implements ItemService {
 	   	String imgpath=rootPath+filePath;
 	   	String realPath=rootPath+filePath+"/"+str+".png";
 		try{
-		
-			MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+			File QrCodeFile= new File(imgpath+str+".png");
+    		//qurl=new String("http://jasobim.com.cn/page/itemInfo.html?id="+Integer.valueOf(s));
+			File logoFile = new File("C:/jasobim/tomcat80/webapps/own/jaso_logo.png");
+			QRCodeUtil2.drawLogoQRCode(logoFile, QrCodeFile, codeInformation, null);
+			/*MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 	        @SuppressWarnings("rawtypes")
 			Map hints = new HashMap();  
 	        //内容所使用编码  
@@ -545,7 +552,7 @@ public class ItemServiceImpl implements ItemService {
 	        //生成二维码  
 	        File outputFile = new File(imgpath,str+".png"); 
 	        
-	        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile);  
+	        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile); */ 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -13,15 +13,17 @@ function CodeInformationController($scope,CodeInformationService) {
 	$scope.totalPage=""; 
 	$scope.getPapers = function(flag){
 		if(flag=="建筑"){
+			var div = document.getElementById('jianzhu'); 
+			div.setAttribute("class", "active"); 
+			$("#nuantong").removeClass("active");
+			$("#xiaofang").removeClass("active");
+			$("#dianqi").removeClass("active");
+			$("#geipaishui").removeClass("active");
 			paper="";
 			$scope.titlePaper="建筑";
 			paper+= "professionType=" + 4;
-			
 			CodeInformationService.getCodePapers(projectId,pageSize,pageIndex,paper).then(function (result){
 				$scope.codePapers=result.data;
-				$(".jianzhuimg").css("display","block");
-				$(".filePaper").css("display","none");
-				$(".fileVideo").css("display","none");
 				$scope.currentPage = result.currentPage;
 		        $scope.totalPage = result.totalPage;
 		        $scope.paperPage($scope.totalPage,$scope.currentPage);
@@ -30,14 +32,17 @@ function CodeInformationController($scope,CodeInformationService) {
 			
 		}
 		if(flag=="暖通"){
+			var div = document.getElementById('nuantong'); 
+			div.setAttribute("class", "active"); 
+			$("#jianzhu").removeClass("active");
+			$("#xiaofang").removeClass("active");
+			$("#dianqi").removeClass("active");
+			$("#geipaishui").removeClass("active");
 			paper="";
 			$scope.titlePaper="暖通";
 			paper+= "professionType=" + 1;
 			CodeInformationService.getCodePapers(projectId,pageSize,pageIndex,paper).then(function (result){
 				$scope.codePapers=result.data;
-				$(".jianzhuimg").css("display","block");
-				$(".filePaper").css("display","none");
-				$(".fileVideo").css("display","none");
 				$scope.currentPage = result.currentPage;
 		        $scope.totalPage = result.totalPage;
 		        $scope.paperPage($scope.totalPage,$scope.currentPage);
@@ -45,14 +50,17 @@ function CodeInformationController($scope,CodeInformationService) {
 			
 		}
 		if(flag=="给排水"){
+			var div = document.getElementById('geipaishui'); 
+			div.setAttribute("class", "active"); 
+			$("#nuantong").removeClass("active");
+			$("#xiaofang").removeClass("active");
+			$("#dianqi").removeClass("active");
+			$("#jianzhu").removeClass("active");
 			paper="";
 			$scope.titlePaper="给排水";
 			paper+= "professionType=" + 2;
 			CodeInformationService.getCodePapers(projectId,pageSize,pageIndex,paper).then(function (result){
 				$scope.codePapers=result.data;
-				$(".jianzhuimg").css("display","block");
-				$(".filePaper").css("display","none");
-				$(".fileVideo").css("display","none");
 				$scope.currentPage = result.currentPage;
 		        $scope.totalPage = result.totalPage;
 		        $scope.paperPage($scope.totalPage,$scope.currentPage);
@@ -60,14 +68,18 @@ function CodeInformationController($scope,CodeInformationService) {
 			
 		}
 		if(flag=="消防"){
+			var div = document.getElementById('xiaofang'); 
+			div.setAttribute("class", "active"); 
+			$("#nuantong").removeClass("active");
+			$("#geipaishui").removeClass("active");
+			$("#dianqi").removeClass("active");
+			$("#jianzhu").removeClass("active");
+			paper="";
 			paper="";
 			$scope.titlePaper="消防";
 			paper+= "professionType=" + 3;
 			CodeInformationService.getCodePapers(projectId,pageSize,pageIndex,paper).then(function (result){
 				$scope.codePapers=result.data;
-				$(".jianzhuimg").css("display","block");
-				$(".filePaper").css("display","none");
-				$(".fileVideo").css("display","none");
 				$scope.currentPage = result.currentPage;
 		        $scope.totalPage = result.totalPage;
 		        $scope.paperPage($scope.totalPage,$scope.currentPage);
@@ -75,14 +87,16 @@ function CodeInformationController($scope,CodeInformationService) {
 			
 		}
 		if(flag=="电气"){
+			var div = document.getElementById('dianqi'); 
+			div.setAttribute("class", "active"); 
+			$("#nuantong").removeClass("active");
+			$("#xiaofang").removeClass("active");
+			$("#geipaishui").removeClass("active");
+			$("#jianzhu").removeClass("active");
 			paper="";
-			$scope.titlePaper="电气";
 			paper+= "professionType=" + 0;
 			CodeInformationService.getCodePapers(projectId,pageSize,pageIndex,paper).then(function (result){
 				$scope.codePapers=result.data;
-				$(".jianzhuimg").css("display","block");
-				$(".filePaper").css("display","none");
-				$(".fileVideo").css("display","none");
 				$scope.currentPage = result.currentPage;
 		        $scope.totalPage = result.totalPage;
 		        $scope.paperPage($scope.totalPage,$scope.currentPage);
@@ -92,6 +106,7 @@ function CodeInformationController($scope,CodeInformationService) {
 		
 		
 	}
+	$scope.getPapers("建筑");
 	////////图纸分页回调函数
 	  $scope.paperPage = function(iPageCount,iCurrent) {
 		  $("#paperPageCode").remove();

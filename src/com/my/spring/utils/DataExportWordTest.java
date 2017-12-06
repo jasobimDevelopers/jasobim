@@ -82,10 +82,11 @@ public class DataExportWordTest {
 		try {  
             //模板的路径  
             //File fir = new File("W:/test/wswhr/");  
-            File fir = new File("C:/Users/Han/Desktop/");
+			
+            File fir = new File("C:/jasobim/tomcat80/webapps/ROOT/constructionTask");
               
             //生成文件的路径及文件名。  
-            File outFile = new File("C:/Users/Han/Desktop/施工任务单.doc");  
+            File outFile = new File("C:/jasobim/tomcat80/webapps/ROOT/constructionTask/施工任务单.doc");  
   
             Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), "UTF-8"));  
   
@@ -143,11 +144,11 @@ public class DataExportWordTest {
 		try {  
             //模板的路径  
             //File fir = new File("W:/test/wswhr/");  
-            //File fir = new File("E:/JasoBim/BimAppDocument/tomcat81/webapps/ROOT/advancedOrder/");
-            File fir = new File("C:/Users/Han/Desktop/");  
+            File fir = new File("C:/jasobim/tomcat80/webapps/ROOT/advancedOrder/");
+            //File fir = new File("C:/Users/Han/Desktop/");  
             //生成文件的路径及文件名。  
-            ///File outFile = new File("E:/JasoBim/BimAppDocument/tomcat81/webapps/ROOT/advancedOrder/预付单.doc");  
-            File outFile = new File("C:/Users/Han/Desktop/预付单.doc");  
+            File outFile = new File("C:/jasobim/tomcat80/webapps/ROOT/advancedOrder/预付单.doc");  
+            //File outFile = new File("C:/Users/Han/Desktop/预付单.doc");  
             Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), "UTF-8"));  
   
             // 使用FileTemplateLoader  

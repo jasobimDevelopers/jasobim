@@ -5,10 +5,8 @@
 	padding: 0px;
 }
 body{
-	background:url(../images/adminbk.png) no-repeat fixed center;
 	margin:0 auto;
 	padding:0;
-	background-color:#B1BECD;
 }
 button{
 	border:none;
@@ -195,7 +193,6 @@ table
 	border-spacing: 15px;   
 } 
 .ths,.tds{
-	text-align:left;
 	height:30px; 
 	font-size:14px;
 	font-family:黑体;
@@ -203,27 +200,27 @@ table
 #editbutton{
 	height:25px;
 	width:20px;
-	background:url(../images/find.png) no-repeat;
+	background:url(../images/find.png) no-repeat 0px 6px;
 }
 #statebutton{
 	height:25px;
 	width:20px;
-	background:url(../images/change.png) no-repeat;
+	background:url(../images/change.png) no-repeat 0px 6px;
 }
 .changebutton{
 	height:25px;
 	width:20px;
-	background:url(../images/editIcon.png) no-repeat;
+	background:url(../images/editIcon.png) no-repeat 0px 6px;
 }
 #uploadbutton{
-	height:25px;
-	width:20px;
-	background:url(../images/downloadIcon.png) no-repeat;
+	height: 25px;
+    width: 20px;
+    background: url(../images/downloadIcon.png) no-repeat 0px 6px;
 }
 #deletebutton{
 	height:25px;
 	width:20px;
-	background:url(../images/deleteIcon.png) no-repeat;
+	background: url(../images/deleteIcon.png) no-repeat 0px 6px;
 }
 .usericon{
 	padding:0;
@@ -280,12 +277,12 @@ table
 	background-color:gray ! important;
     opacity:0.5;
 }
-#userPageCode,#projectPageCode,#itemPageCode,#quantityPageCode,#questionPageCode,#videoPageCode,#paperPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
-#userPageCode a,#projectPageCode a,#itemPageCode a,#quantityPageCode a,#questionPageCode a,#videoPageCode a,#paperPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
-#userPageCode a:hover,#projectPageCode a:hover,#itemPageCode a:hover,#quantityPageCode a:hover,
-#questionPageCode a:hover,#videoPageCode a:hover,#paperPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
-#userPageCode span.current,#itemPageCode span.current,#projectPageCode span.current,
-#quantityPageCode span.current,#questionPageCode span.current,#videoPageCode span.current,#paperPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
-#userPageCode span.disabled,#projectPageCode span.disabled,#itemPageCode span.disabled,
+#userPageCode,#advancedOrderPageCode,#measuredDataPageCode,#projectPageCode,#itemPageCode,#quantityPageCode,#questionPageCode,#videoPageCode,#paperPageCode,#constructionPageCode{padding: 15px 20px;text-align: left;color: #ccc;}
+#userPageCode a,#advancedOrderPageCode a,#measuredDataPageCode a,#projectPageCode a,#itemPageCode a,#quantityPageCode a,#questionPageCode a,#videoPageCode a,#paperPageCode a,#constructionPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+#userPageCode a:hover,#advancedOrderPageCode a:hover,#measuredDataPageCode a:hover,#projectPageCode a:hover,#itemPageCode a:hover,#quantityPageCode a:hover,
+#questionPageCode a:hover,#videoPageCode a:hover,#paperPageCode a:hover,#constructionPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+#userPageCode span.current,#advancedOrderPageCode span.current,#measuredDataPageCode span.current,#itemPageCode span.current,#projectPageCode span.current,
+#quantityPageCode span.current,#questionPageCode span.current,#videoPageCode span.current,#paperPageCode span.current,#constructionPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+#userPageCode span.disabled,#advancedOrderPageCode span.disabled,#measuredDataPageCode span.disabled,#projectPageCode span.disabled,#itemPageCode span.disabled,
 #quantityPageCode span.disabled,#questionPageCode span.disabled,#projectPageCode span.disabled,#videoPageCode span.disabled,
-#paperPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+#paperPageCode span.disabled,#constructionPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}

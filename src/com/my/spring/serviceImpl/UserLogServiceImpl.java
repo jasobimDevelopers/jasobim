@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import com.my.spring.DAO.UserLogDao;
 import com.my.spring.DAO.ValueOutputDao;
 import com.my.spring.DAO.VideoDao;
+import com.my.spring.DAO.AdvancedOrderDao;
+import com.my.spring.DAO.ConstructionTaskDao;
 import com.my.spring.DAO.DuctDao;
 import com.my.spring.DAO.ItemDao;
 import com.my.spring.DAO.NewsDao;
@@ -65,6 +67,10 @@ public class UserLogServiceImpl implements UserLogService {
 	QuestionDao questionDao;
 	@Autowired
 	VideoDao videoDao;
+	@Autowired
+	ConstructionTaskDao constructionTaskDao;
+	@Autowired
+	AdvancedOrderDao advancedOrderDao;
 	
 	@Override
 	public DataWrapper<List<UserLogPojo>> getUserLogList(Integer pageIndex, Integer pageSize, UserLog UserLog, String token,String startDate,String finishedDate,String searchContent) {
@@ -73,12 +79,11 @@ public class UserLogServiceImpl implements UserLogService {
     	Date dateFinisheds=null;
 		DataWrapper<List<UserLog>> dataWrapper = new DataWrapper<List<UserLog>>();
 		List<UserLogPojo> UserLogpojo = new ArrayList<UserLogPojo>();
-		String[] projectPart={"模型区域","图纸区域","登录区域","交底区域","预制化区域 ","紧急事项区域","通知区域","产值区域","班组信息区域"};
-		//#0.模型区域 1.图纸区域 2.登录区域 3.交底区域 4.预制化区域 5.其他
-		String[] systemName={"苹果系统","安卓系统",""};
+		String[] projectPart={"模型区域","图纸区域","登录区域","交底区域","预制化区域 ","紧急事项区域","通知区域","产值区域","班组信息区域","施工任务单区域","预付单区域"};
+		String[] systemName={"苹果系统","安卓系统"};
 		DataWrapper<List<UserLogPojo>> dataWrapperpojo = new DataWrapper<List<UserLogPojo>>();
 		User adminInMemory = SessionManager.getSession(token);
-		if (adminInMemory != null) {
+		if (adminInMemory != null && adminInMemory.getSystemId()==-1) {
 			if(searchContent!=null && searchContent!=""){
 				User users=userDao.getByUserName(searchContent);
 				if(users!=null){
@@ -106,45 +111,67 @@ public class UserLogServiceImpl implements UserLogService {
 				if(dataWrapper.getData()!=null){
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						UserLogPojo UserLogpojos=new UserLogPojo();
-						if(dataWrapper.getData().get(i).getProjectPart()==0){
-							if(dataWrapper.getData().get(i).getFileId()!=null){
-								UserLogpojos.setFileName(itemDao.getItemById(dataWrapper.getData().get(i).getFileId()).getName());
-							}
-						}
+						//{"模型区域","图纸查看","登录区域","交底区域","进度管理区域 ","质安管理区域","通知区域","产值区域","班组信息区域","施工任务单区域","预付单区域"};
+						//////图纸文件跟踪
 						if(dataWrapper.getData().get(i).getProjectPart()==1){
 							if(dataWrapper.getData().get(i).getFileId()!=null){
 								UserLogpojos.setFileName(paperDao.getById(dataWrapper.getData().get(i).getFileId()).getOriginName());
 							}
 						}
+						/////交底文件跟踪
 						if(dataWrapper.getData().get(i).getProjectPart()==3){
 							if(dataWrapper.getData().get(i).getFileId()!=null){
 								UserLogpojos.setFileName(videoDao.getById(dataWrapper.getData().get(i).getFileId()).getData().getOriginName());
 							}
 						}
+						/////预制化文件进度管理跟踪
 						if(dataWrapper.getData().get(i).getProjectPart()==4){
 							if(dataWrapper.getData().get(i).getFileId()!=null){
 								UserLogpojos.setFileName(ductDao.getDuctById(dataWrapper.getData().get(i).getFileId()).getName());
 							}
 						}
+						/////质安管理文件跟踪
 						if(dataWrapper.getData().get(i).getProjectPart()==5){
 							if(dataWrapper.getData().get(i).getFileId()!=null){
 								UserLogpojos.setFileName(questionDao.getById(dataWrapper.getData().get(i).getFileId()).getName());
 							}
 						}
+						///////公告公示信息区域
 						if(dataWrapper.getData().get(i).getProjectPart()==6){
 							if(dataWrapper.getData().get(i).getFileId()!=null){
 								UserLogpojos.setFileName(newsDao.getById(dataWrapper.getData().get(i).getFileId()).getTitle());
 							}
 						}
+						//////统计管理区域（各个项目产值）
 						if(dataWrapper.getData().get(i).getProjectPart()==7){
 							if(dataWrapper.getData().get(i).getFileId()!=null){
 								UserLogpojos.setFileName(valueOutputDao.getById(dataWrapper.getData().get(i).getFileId()).getOthers());
 							}
 						}
+						/////班组信息区域(班组消息)
+						if(dataWrapper.getData().get(i).getProjectPart()==8){
+							if(dataWrapper.getData().get(i).getFileId()!=null){
+								UserLogpojos.setFileName(valueOutputDao.getById(dataWrapper.getData().get(i).getFileId()).getOthers());
+							}
+						}
+						////施工任务单区域
+						if(dataWrapper.getData().get(i).getProjectPart()==9){
+							if(dataWrapper.getData().get(i).getFileId()!=null){
+								UserLogpojos.setFileName(constructionTaskDao.getById(dataWrapper.getData().get(i).getFileId()).getCompanyName());
+							}
+						}
+						////预付单区域
+						if(dataWrapper.getData().get(i).getProjectPart()==10){
+							if(dataWrapper.getData().get(i).getFileId()!=null){
+								UserLogpojos.setFileName(advancedOrderDao.getById(dataWrapper.getData().get(i).getFileId()).getProjectName());
+							}
+						}
 						UserLogpojos.setId(dataWrapper.getData().get(i).getId());
 						UserLogpojos.setUserName(userDao.getById(dataWrapper.getData().get(i).getUserId()).getRealName());
-						if(projectDao.getById(dataWrapper.getData().get(i).getProjectId())!=null){
-							UserLogpojos.setProjectName(projectDao.getById(dataWrapper.getData().get(i).getProjectId()).getName());
+						if(dataWrapper.getData().get(i).getProjectId()!=null){
+							if(projectDao.getById(dataWrapper.getData().get(i).getProjectId())!=null){
+								UserLogpojos.setProjectName(projectDao.getById(dataWrapper.getData().get(i).getProjectId()).getName());
+							}
 						}
 						else{
 							UserLogpojos.setProjectName("");
@@ -152,9 +179,12 @@ public class UserLogServiceImpl implements UserLogService {
 						DateFormat df2 = DateFormat.getDateTimeInstance();//可以精确到时分秒 
 	    	    		UserLogpojos.setActionDate(df2.format(dataWrapper.getData().get(i).getActionDate()));
 	    	    		UserLogpojos.setProjectPart(projectPart[dataWrapper.getData().get(i).getProjectPart()]);
-	    	    		UserLogpojos.setSystemType(systemName[dataWrapper.getData().get(i).getSystemType()]);
-	    	    		UserLogpojos.setVersion(dataWrapper.getData().get(i).getVersion());
-	    	    		UserLogpojo.add(UserLogpojos);
+	    	    		if(dataWrapper.getData().get(i).getSystemType()!=null){
+	    	    			UserLogpojos.setSystemType(systemName[dataWrapper.getData().get(i).getSystemType()]);
+		    	    		UserLogpojos.setVersion(dataWrapper.getData().get(i).getVersion());
+		    	    		UserLogpojo.add(UserLogpojos);
+	    	    		}
+	    	    		
 					}
 					dataWrapperpojo.setData(UserLogpojo);
 					dataWrapperpojo.setCallStatus(dataWrapper.getCallStatus());

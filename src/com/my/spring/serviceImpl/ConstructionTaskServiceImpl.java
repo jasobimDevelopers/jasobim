@@ -3,6 +3,7 @@ package com.my.spring.serviceImpl;
 import com.my.spring.DAO.ConstructionTaskDao;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
@@ -11,20 +12,14 @@ import com.my.spring.model.ConstructionTask;
 import com.my.spring.model.ConstructionTaskPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.User;
-import com.my.spring.parameters.Parameters;
+import com.my.spring.model.UserLog;
 import com.my.spring.service.ConstructionTaskService;
 import com.my.spring.service.FileService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.service.UserService;
 import com.my.spring.utils.DataExportWordTest;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
-
-import cn.jpush.api.JPushClient;
-import cn.jpush.api.common.APIConnectionException;
-import cn.jpush.api.common.APIRequestException;
-import cn.jpush.api.push.PushResult;
-import cn.jpush.api.push.model.PushPayload;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,8 +42,11 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
     @Autowired
     FileDao fileDao;
     @Autowired
+    UserLogDao userLogDao;
+    @Autowired
     FileService fileService;
-    
+    @Autowired
+    UserLogService userLogService;
     
     @Autowired
     UserService userService;
@@ -81,6 +79,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 				constructionTask.setTaskFlag(0);/////默认是未完成
 				constructionTask.setNextApprovalPeopleType("班组组长");
 				constructionTask.setCreateUserName(userInMemory.getRealName());
+				constructionTask.setNextReceivePeopleId(userDao.getById(constructionTask.getReceiveUserId()).getRealName());
 				if(userInMemory.getUserType()==3){
 					constructionTask.setUserProjectIdList(userInMemory.getProjectList());
 				}else{
@@ -92,25 +91,20 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 				}
 		///////////////////////////
 				List<User> userList = new ArrayList<User>();
-				userList=userDao.findUserLikeRealName(constructionTask.getNextReceivePeopleId()).getData();
-				String[] userids= new String[userList.size()];
+				int adminFlag=0;
+				if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 || userInMemory.getUserType()==2){
+        			adminFlag=-1;
+        		}
+				userList=userDao.findGetPushUsers(constructionTask.getNextReceivePeopleId(),adminFlag).getData();
+				String content=userInMemory.getRealName()+"提交了一个施工任务单需要您审批";
+				 String[] userids=new String[userList.size()];
 				for(int b =0;b<userList.size();b++){
 					userids[b]=userList.get(b).getId().toString();
 				}
-				JPushClient jpushClient = new JPushClient(Parameters.masterSecret, Parameters.appKey, 3);
-				  String content=userInMemory.getRealName()+"提交了一个施工任务单需要您审批";
-		  	  PushPayload payload = PushExample.buildPushObject_all_alias_alert(userids,content);
-		        try {
-		            PushResult result = jpushClient.sendPush(payload);
-		            System.out.println(result);
-		        } catch (APIConnectionException e) {
-		          e.printStackTrace();         
-		        } catch (APIRequestException e) {
-		            System.out.println("Should review the error, and fix the request"+ e);
-		            System.out.println("HTTP Status: " + e.getStatus());
-		            System.out.println("Error Code: " + e.getErrorCode());
-		            System.out.println("Error Message: " + e.getErrorMessage());
-		        }
+				PushExample.testSendPushWithCustomConfig_ios(userids, content);
+				PushExample.testSendPushWithCustomConfig_android(userids, content);
+					
+
 				///////////////////////////////
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -122,27 +116,33 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
     }
 
     @Override
-    public DataWrapper<Void> deleteConstructionTask(Long id,String token ) {
+    public DataWrapper<Void> deleteConstructionTask(String id,String token ) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
+			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType() || userInMemory.getUserType()==1){
 				if(id!=null){
 					ConstructionTask constructionTask = new ConstructionTask();
-					constructionTask=constructionTaskDao.getById(id);
-					if(constructionTask!=null){
-						if(constructionTask!=null){
-							String fileIdList=constructionTask.getFileIdList();
-							if(fileIdList!=null){
-								for(int i=0;i<fileIdList.split(",").length;i++){
-									fileDao.deleteFiles(Long.valueOf(fileIdList.split(",")[i]));
+					if(id!=null){
+						String[] ids=id.split(",");
+						for(int s=0;s<ids.length;s++){
+							constructionTask=constructionTaskDao.getById(Long.valueOf(ids[s]));
+							if(constructionTask!=null){
+								if(constructionTask!=null){
+									String fileIdList=constructionTask.getFileIdList();
+									if(fileIdList!=null){
+										for(int i=0;i<fileIdList.split(",").length;i++){
+											fileDao.deleteFiles(Long.valueOf(fileIdList.split(",")[i]));
+										}
+									}
+								}
+								if(!constructionTaskDao.deleteConstructionTask(Long.valueOf(ids[s]))){
+									dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 								}
 							}
 						}
-						if(!constructionTaskDao.deleteConstructionTask(id)){
-							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-						}
 					}
+					
 					
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -163,6 +163,21 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
     	DataWrapper<List<ConstructionTask>> dataWrapper = new DataWrapper<List<ConstructionTask>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
+	        	if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
+	    			UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(9);
+	    			userLog.setActionDate(new Date());
+	    			userLog.setUserId(userInMemory.getId());
+	    			userLog.setSystemType(userInMemory.getSystemId());
+	    			userLog.setVersion("3.0");
+	    			if(ConstructionTask.getProjectId()!=null){
+	    				userLog.setProjectId(ConstructionTask.getProjectId());
+	    			}
+	    			if(ConstructionTask.getId()!=null){
+	    				userLog.setFileId(ConstructionTask.getId());
+	    			}
+	    			userLogDao.addUserLog(userLog);
+	    		}
         		if(userInMemory.getUserType()!=3){
         			ConstructionTask.setUserProjectIdList("-1");
         		}
@@ -202,18 +217,20 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 							}
 							constructionTaskPojo.setFileUrlList(filesUrlList);
 						}
-						String[] nameList = dataWrapper.getData().get(i).getWorkPeopleNameList().split(",");
-						String workPeopleName="";
-						for(int k=0;k<nameList.length;k++){
-							String names=userDao.getById(Long.valueOf(nameList[k])).getRealName();
-							if(k==0){
-								workPeopleName=workPeopleName+names;
-							}else{
-								workPeopleName=workPeopleName+"、"+names;
+						if(dataWrapper.getData().get(i).getWorkPeopleNameList()!=null){
+							String[] nameList = dataWrapper.getData().get(i).getWorkPeopleNameList().split(",");
+							String workPeopleName="";
+							for(int k=0;k<nameList.length;k++){
+								String names=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+								if(k==0){
+									workPeopleName=workPeopleName+names;
+								}else{
+									workPeopleName=workPeopleName+"、"+names;
+								}
+								
 							}
-							
+							constructionTaskPojo.setWorkPeopleNameList(workPeopleName);
 						}
-						constructionTaskPojo.setWorkPeopleNameList(workPeopleName);
 						if(dataWrapper.getData().get(i).getUserId()!=null){
 							constructionTaskPojo.setCreateUserName(userDao.getById(dataWrapper.getData().get(i).getUserId()).getRealName());
 						}
@@ -394,7 +411,6 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 					}else{
 						ct.setNextApprovalPeopleType(constructionTask.getNextApprovalPeopleType());
 					}
-					
 					if(!constructionTaskDao.updateConstructionTask(ct)){
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					}
@@ -532,26 +548,26 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 					constructionTaskPojo.setNextReceivePeopleName(constructionTask.getNextReceivePeopleId());
 					constructionTaskPojo.setTaskFlag(constructionTask.getTaskFlag());
 					constructionTaskPojo.setNextApprovalPeopleType(constructionTask.getNextApprovalPeopleType());
-					
-					String[] nameList = constructionTask.getWorkPeopleNameList().split(",");
-					String workPeopleName="";
-					for(int k=0;k<nameList.length;k++){
-						String names=userDao.getById(Long.valueOf(nameList[k])).getRealName();
-						if(k==0){
-							workPeopleName=workPeopleName+names;
-						}else{
-							workPeopleName=workPeopleName+"、"+names;
+					if(constructionTask.getWorkPeopleNameList()!=null){
+						String[] nameList = constructionTask.getWorkPeopleNameList().split(",");
+						String workPeopleName="";
+						for(int k=0;k<nameList.length;k++){
+							String names=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+							if(k==0){
+								workPeopleName=workPeopleName+names;
+							}else{
+								workPeopleName=workPeopleName+"、"+names;
+							}
+							
 						}
-						
+						constructionTaskPojo.setWorkPeopleNameList(workPeopleName);
 					}
-					constructionTaskPojo.setWorkPeopleNameList(workPeopleName);
 					if(constructionTask.getUserId()!=null){
 						constructionTaskPojo.setCreateUserName(userDao.getById(constructionTask.getUserId()).getRealName());
 					}
 					if(constructionTask.getReceiveUserId()!=null){
 						constructionTaskPojo.setReceiveUserName(userDao.getById(constructionTask.getReceiveUserId()).getRealName());
 					}
-					
 					
 					if(constructionTask.getApprovalPeopleTypeList()!=null){
 						String [] approvalPeopleTypeList = constructionTask.getApprovalPeopleTypeList().split("&");

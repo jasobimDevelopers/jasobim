@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en"  ng-app="Demo">
 <head>
   	<meta name="renderer" content="webkit">
@@ -13,34 +12,45 @@
 	<script src="page/user_project/scripts/utils/para.js"></script>
 <!--  -->
 <!--jquery && bootstrap-->
-	<script src="page/common/jquery/jquery-1.8.3.js"></script>
+	<script src="page/common/jquery/jquery-1.11.1.js"></script>
     <script src="page/common/jquery/jquery.page.js"></script>
     <link href="page/common/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="data:text/css;charset=utf-8," data-href="page/common/bootstrap-3.3.5-dist/css/bootstrap-theme.min.css" rel="stylesheet" id="bs-theme-stylesheet">
+    <link rel="stylesheet" href="page/new_user/css/project.css">
+    <link rel="stylesheet" href="page/new_user/css/duty.css">
+    <link rel="stylesheet" href="page/new_user/css/yufudan.css">
+    <link rel="stylesheet" href="page/new_user/css/projectCon.css">
+    <link rel="stylesheet" href="page/new_user/css/safetyManage.css">
+    <link rel="stylesheet" href="page/new_user/css/addTu.css">
+    <link rel="stylesheet" href="page/new_user/css/checkduty.css">
+    <link rel="stylesheet" href="page/new_user/layui/layui/css/layui.css">
+    <link rel="stylesheet" href="page/new_user/css/common.css">
+    <link rel="stylesheet" href="page/new_user/css/style.css">
+    <link rel="stylesheet" href="page/new_user/css/index.css">
+    <link rel="stylesheet" href="page/new_user/css/about.css">
+    <link rel="stylesheet" href="page/new_user/css/suggestion.css">
+    <link rel="stylesheet" href="page/new_user/css/erweima.css">
+    <link rel="stylesheet" href="page/new_user/css/addQuestion.css">
+    <link rel="stylesheet" href="page/new_user/css/problemDetail.css">
+    <link rel="stylesheet" href="page/new_user/css/guiFan.css">
+    
+    <link rel="stylesheet" href="page/user_project/css/questionDetail.css">
+<!--jquery js  -->
+	
     <script src="page/common/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 	<script src="page/common/jquery/jquery.circliful.min.js"></script>
 	<script src="page/common/jquery/jquery.circliful.js"></script>
 	<script src="page/common/layer/layer.js"></script>
-	
     <script src="page/common/jquery/swiper-3.4.1.jquery.min.js"></script>
 <!--angular-->
     <script src="page/common/angular/angular.js"></script>
     <script src="page/common/angular/angular-route.js"></script>
-    <script src="page/common/angular/angular-file-upload.min.js"></script>
-    
+    <script src="page/common/angular/angular-file-upload.min.js"></script>   
+    <script src="page/new_user/layui/layui/layui.all.js"></script>
+    <script src="page/new_user/js/js.js"></script>
 <!-- css -->
 	<link rel="stylesheet" href="page/user_project/css/swiper.min.css">
-    <link rel="stylesheet" href="page/user_project/css/common.css">
-    <link rel="stylesheet" href="page/user_project/css/index.css">
-   <!--  ////////// -->
-	<link href="page/user_project/css/codeInformation.css" rel="stylesheet" />
-	<link href="page/user_project/css/suggestion.css" rel="stylesheet" />
-	<link href="page/user_project/css/aboutUs.css" rel="stylesheet" /> 
-	<link href="page/user_project/css/adduser.css" rel="stylesheet" />
     <link href="page/user_project/css/style.css" rel="stylesheet" />
     <link href="page/user_project/css/jasobim.css" rel="stylesheet" />
-    <link href="page/user_project/css/projectDetail.css" rel="stylesheet" />
-    <link href="page/user_project/css/questionDetail.css" rel="stylesheet" />
     <link href="page/user_project/css/jquery.circliful.css" rel="stylesheet" />
 <!-- app.js -->
     <script src="page/user_project/scripts/app.js"></script>
@@ -53,7 +63,13 @@
     <script src="page/user_project/scripts/controllers/HeaderController.js"></script>
     <script src="page/user_project/scripts/controllers/ProjectController.js"></script>
     <script src="page/user_project/scripts/controllers/ProductionController.js"></script>
+    <script src="page/user_project/scripts/controllers/ConstructionTaskController.js"></script>
+    <script src="page/user_project/scripts/controllers/AdvancedOrderController.js"></script>
+    <script src="page/user_project/scripts/controllers/MeasuredDataController.js"></script>
+    <script src="page/user_project/scripts/controllers/NormativefilesController.js"></script>
 <!-- service.js -->
+	<script src="page/user_project/scripts/services/AdvancedOrderService.js"></script>
+	<script src="page/user_project/scripts/services/ConstructionTaskService.js"></script>
 	<script src="page/user_project/scripts/services/CodeInformationService.js"></script>
 	<script src="page/user_project/scripts/services/AboutUsService.js"></script>
 	<script src="page/user_project/scripts/services/SuggestionService.js"></script>
@@ -61,6 +77,8 @@
     <script src="page/user_project/scripts/services/DemoService.js"></script>
     <script src="page/user_project/scripts/services/ProjectService.js"></script>
     <script src="page/user_project/scripts/services/ProductionService.js"></script>
+    <script src="page/user_project/scripts/services/MeasuredDataService.js"></script>
+    <script src="page/user_project/scripts/services/NormativefilesService.js"></script>
 <!-- directive.js -->
     <script src="page/user_project/scripts/directives/DemoDirectives.js"></script>
 <!-- filter.js -->
@@ -71,9 +89,14 @@
 <div ng-include="'page/user_project/html/projectList.html'" ng-if="currentPath == 'user_projectList'" style="position:relative; z-index:0;"></div>
 <div ng-include="'page/user_project/html/projectQuestionList.html'" ng-if="currentPath == 'user_projectQuestionList'" style="position:relative; z-index:0;" id="questionListHtml"></div>
 <div ng-include="'page/user_project/html/codeInformationList.html'" ng-if="currentPath == 'codeInformationList'" style="position:relative; z-index:0;"></div>
+<div ng-include="'page/user_project/html/videoCodeList.html'" ng-if="currentPath == 'videoCodeList'" style="position:relative; z-index:0;"></div>
 <div ng-include="'page/user_project/html/Feedback.html'" ng-if="currentPath == 'suggesttionList'" style="position:relative; z-index:0;"></div>
 <div ng-include="'page/user_project/html/aboutList.html'" ng-if="currentPath == 'aboutList'" style="position:relative; z-index:0;"></div>
 <div ng-include="'page/user_project/html/productionList.html'" ng-if="currentPath == 'productionList'" style="position:relative; z-index:0;"></div>
+<div ng-include="'page/user_project/html/constructionTask.html'" ng-if="currentPath == 'user_constructionTask'" style="position:relative; z-index:0;"></div>
+<div ng-include="'page/user_project/html/advancedOrder.html'" ng-if="currentPath == 'user_advancedOrder'" style="position:relative; z-index:0;"></div>
+<div ng-include="'page/user_project/html/measuredDataList.html'" ng-if="currentPath == 'measured_data'" style="position:relative; z-index:0;"></div>
+<div ng-include="'page/user_project/html/normativeDataList.html'" ng-if="currentPath == 'normativefilesList'" style="position:relative; z-index:0;"></div>
 </body>
 
 </html>

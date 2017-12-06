@@ -15,6 +15,7 @@ var oloaded;
 function setModel(model) {
 	angular.element(model).scope().$parent.$parent.modelFiles = model.files;
 }
+
 function setPic(pic) {
 	
 	var file = pic.files[0];

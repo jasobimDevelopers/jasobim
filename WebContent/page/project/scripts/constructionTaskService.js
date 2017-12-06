@@ -5,7 +5,7 @@ angular.module('ConstructionTaskApp',[])
   var transform = function(data){
         return $.param(data);
    }
-  var baseUrl="http://localhost:8080/jasobim";
+  var baseUrl="http://jasobim.com.cn";
   var self=this;
   this.getConstructionTaskDetail=function(id){
 	  var deferred = $q.defer();

@@ -9,6 +9,7 @@ import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -40,14 +41,26 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<Project>> getProjectList(Integer pageSize, Integer pageIndex, Project project,String projectList) {
+    public DataWrapper<List<Project>> getProjectList(Integer pageSize, Integer pageIndex, Project project,String projectList,String content,Integer isIos) {
         DataWrapper<List<Project>> retDataWrapper = new DataWrapper<List<Project>>();
         List<Project> ret = new ArrayList<Project>();
-       
         Session session = getSession();
+        
         Criteria criteria = session.createCriteria(Project.class);
         criteria.addOrder(Order.desc("updateDate"));
+        Long projectId=(long) 267;
+        Long projectId2=(long) 268;
+        if(isIos!=2 && isIos!=null && isIos!=-1){
+        	criteria.add(Restrictions.ne("id",projectId));
+        	criteria.add(Restrictions.ne("id", projectId2));
+        }
         ////////
+        if(content!=null){
+        	 Disjunction diss = Restrictions.disjunction();
+        	 diss.add(Restrictions.like("name", content, MatchMode.ANYWHERE));
+        	 diss.add(Restrictions.like("leader", content,MatchMode.ANYWHERE));
+        	 criteria.add(diss);
+        }
         if(!projectList.equals("-1") && projectList!=null && !projectList.equals("null")){
         	String[] ss =projectList.split(",");
             Disjunction dis = Restrictions.disjunction();

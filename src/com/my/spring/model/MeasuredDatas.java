@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="measured_data_list")
-public class MeasuredDataList {
+public class MeasuredDatas {
 	private Long id;
 	private String checkContent;
 	private String checkTemplete;

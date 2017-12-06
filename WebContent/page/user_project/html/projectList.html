@@ -1,46 +1,35 @@
 <div ng-controller="ProjectController">
 <div ng-include="'page/user_project/html/projectInfo.html'" style="display:none; z-index:1;" id="projectInfoHtml"></div>
 <div id="projectContent">
-		<div id="include_header" style="display:block">
-	    	
-	        	<div id="projectnames">
-	        		<div class="choiceItem">
-	     				<div class="allname"><span class="inputtext">项目名称:</span></div>
-	     				<div class="allinput"><input type="text" id="projectName" ng-model="ProjectTofind.name"/></div>
-	     			</div>
-	            	<div class="choiceItem">
-	                	<div class="allname"><span class="inputtext">施工单位:</span></div>
-	                	<div class="allinput"><input type="text" id="constructionUnit" ng-model="ProjectTofind.constructionUnit"/></div>
-	                </div>
-	                <div class="choiceItem">
-	                	<div class="allname"><span class="inputtext">项目负责人:</span></div>
-	                	<div class="allinput"><input type="text" id="leader" ng-model="ProjectTofind.leader"/></div>
-	                </div>
-	            	<div class="choiceItem">
-	            		<div class="allname"><span class="inputtext">施工地点:</span></div>
-	            		<div class="allinput"><input type="text" id="place" ng-model="ProjectTofind.place"/></div>
-	            	</div>
-	            	<div class="choiceItem">
-	            		<div class="allname"><span class="inputtext">施工时间:</span></div>
-	            		<div class="allinput"><input type="text" id="startDate" ng-model="ProjectTofind.startDate"/></div>
-	            	</div>
-	            	<div class="choiceItem">
-	            		<div class="allname"><span class="inputtext">施工周期:</span></div>
-	            		<div class="allinput"><input type="text" id="phase" ng-model="ProjectTofind.phase"/></div>
-	            	</div>
-	                
-	                <div id="findBt">
-	                	<a href=""><button id="find" ng-click="projectFind()" ></button></a>
-	                </div>
+		 <!--search-->
+	    <div class="search">
+	        <div class="search_con">
+	            <input type="text" placeholder="搜索" id="project_search"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findLike()"></a>
+	            <button id="search">高级搜索</button>
+	        </div>
+	        <!--搜索内容-->
+	        <div class="search_list">
+	            <div>
+	                <label><span>项目名称</span><input type="text" ng-model="ProjectTofind.name"></label>
+	                <label><span>施工单位</span><input type="text" ng-model="ProjectTofind.constructionUnit"></label>
+	                <label><span>项目负责人</span><input type="text" ng-model="ProjectTofind.leader"></label>
+	                <button style="background: #3ba16e; color: #fff;" ng-click="projectFind()">筛选</button>
 	            </div>
-	           
+	            <div>
+	                <label><span>施工地点</span><input type="text" ng-model="ProjectTofind.place"></label>
+	                <label><span>施工时间</span><input type="text"></label>
+	                <label style="margin-left: 15px;"><span>施工周期</span><input type="text" ng-model="ProjectTofind.phase"></label>
+	                <button style="color: #333; border: 1px solid #dcdcdc" ng-click="resetProject()">重置</button>
+	            </div>
+	        </div>
 	    </div>
-		<div class="container" style="display:block" id="containers">
-			<div id="include_bodys">
-				<table class="table-striped table table-bordered">
+	    <!--表格-->
+	    <div class="formMain">
+	    	<table class="table-striped table table-bordered">
 					<tbody>
 						<tr>
 							<th ng-repeat="projectTitle in projectTitles">{{projectTitle}}</th>
+		
 						</tr>
 						<tr ng-repeat = "projectInfo in projectList">
 						    <td>{{$index+1}}</td>
@@ -51,16 +40,25 @@
 							<td>{{projectInfo.startDate}}</td>
 							<td>{{projectInfo.phase}}</td>
 							<td class="tds" >
-		                        <button id="editbutton" ng-click="projectChangeClick(projectInfo.id)">
+		                        <button id="editbutton" ng-click="projectChange(projectInfo.id)">
+		                        </button>
+		                        <button id="deletebutton" ng-click="deleteProject(projectInfo.id)">
 		                        </button>
 		                    </td>
 						</tr>
 					</tbody>
-				</table> 
-			<div id="table-buton1" >
+			</table>
+	    </div>
+	    <div id="table-buton1" style="float:right;margin-right:350px;margin-top:50px;">
 				<div id="projectPageCode"></div>
-			</div>
 		</div>
 	</div>
 	</div>
 </div>
+<script>
+//搜索
+$(".search_list").css('display','none');
+$("#search").on('click',function () {
+    $(".search_list").toggle()
+});
+</script>

@@ -46,6 +46,12 @@
 				self.timer = setInterval(self.run.bind(self), 50);
 				self.currentState = "play";
 				self.$audio_area.addClass('playing');
+				
+				//var updateTime;
+				//if (!updateTime) {
+				//	self.updateTotalTime();
+				//	updateTime = true;
+				//}
 			},
 			pause: function() {
 				var self = this;
@@ -58,15 +64,22 @@
 
 			},
 			events: function() {
-				var self = this;
-				var updateTime;
-				self.$audio_area.on('click', function() {
-					self.play();
-					if (!updateTime) {
-						self.updateTotalTime();
-						updateTime = true;
-					}
-				});
+				// var self = this;
+				// var updateTime;
+				// // self.$audio_area.on('click', function() {
+					// // self.play();
+					// // if (!updateTime) {
+						// // self.updateTotalTime();
+						// // updateTime = true;
+					// // }
+				// // });
+				// self.$audio_area[0].onclick=function() {
+					// self.play();
+					// if (!updateTime) {
+						// self.updateTotalTime();
+						// updateTime = true;
+					// }
+				// };
 			},
 			//正在播放
 			run: function() {

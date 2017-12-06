@@ -7,6 +7,7 @@ function advancedOrderController($scope,advancedOrderService) {
 	var approvalPeopleIdea;
 	var approvalUpdateDate;
 	$scope.worklist=[];
+	$scope.fileUrls=[];
 	$scope.name="";
     var id = getQueryStringByName(name);
     $scope.getAdvancedOrderDetail = function() {
@@ -14,6 +15,13 @@ function advancedOrderController($scope,advancedOrderService) {
 		  	  $scope.advancedOrder = result.data;
 		  	  if($scope.advancedOrder!=""){
 		  		  var length=($scope.advancedOrder.createUserName).length;
+		  		  if($scope.advancedOrder.contentFilesId!=null){
+		  			for(var j=0;j<$scope.advancedOrder.contentFilesId.length;j++){
+		  				if($scope.advancedOrder.contentFilesId[j].split(".")[1]!="dat"){
+		  					$scope.fileUrls=$scope.advancedOrder.contentFilesId;
+		  				}
+		  			}
+		  		  }
 		  		  $scope.name=($scope.advancedOrder.createUserName).substr(length-2);
 		  		  if($scope.advancedOrder.approvalPeopleType!=null){
 		  			  for(var i=0;i<$scope.advancedOrder.approvalPeopleType.length;i++){

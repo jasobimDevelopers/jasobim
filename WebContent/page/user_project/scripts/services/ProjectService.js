@@ -83,6 +83,64 @@
           });
       return deferred.promise;
       };
+      
+      
+    //获取项目列表
+      this.getProjectLists = function(pageSize,pageIndex,project,content) {
+
+          var deferred = $q.defer();
+          console.log("读取ProjectList数据");
+          var api = 'api/project/admin/getProjectList?token='+getCookie('token') + "&pageSize=" + pageSize
+          + "&pageIndex="+pageIndex+"&content="+content;
+          if(project.name !== undefined && trimStr(project.name) !== '') {
+          	api += "&name="+trimStr(project.name);
+          }
+          if(project.num !== undefined && trimStr(project.num) !== ''){
+          	api += "&num="+trimStr(project.num);
+          }
+          if(project.constructionUnit !==undefined && trimStr(project.constructionUnit) !== ''){
+          	api += "&constructionUnit="+ trimStr(project.constructionUnit);
+          }
+          if(project.buildingUnit !==undefined && trimStr(project.buildingUnit) !== ''){
+          	api += "&buildingUnit="+ trimStr(project.buildingUnit);
+          }
+          if(project.leader !== undefined && trimStr(project.leader) !== '') {
+            	api += "&leader="+trimStr(project.leader);
+            }
+         if(project.place !== undefined && trimStr(project.place) !== ''){
+        	api += "&place="+trimStr(project.place);
+         }
+         if(project.description !==undefined && trimStr(project.description) !== ''){
+        	api += "&description="+ trimStr(project.description);
+         }
+         if(project.designUnit !==undefined && trimStr(project.designUnit) !== ''){
+        	api += "&designUnit="+ trimStr(project.designUnit);
+         }
+         if(project.version !== undefined && trimStr(project.version) !== ''){
+         	api += "&version="+trimStr(project.version);
+          }
+          if(project.startDate !==undefined && trimStr(project.startDate) !== ''){
+         	api += "&startDate="+ trimStr(project.startDate);
+          }
+          if(project.phase !==undefined && trimStr(project.phase) !== ''){
+         	api += "&phase="+ trimStr(project.phase);
+          }
+          $http.get(encodeURI(api))
+              .success(function(data, status, headers, config){
+                  if(data.callStatus == "SUCCEED"){
+                      deferred.resolve(data);
+                      self.projectList = data;
+                 
+                  }else{
+                      alert("数据读取失败");
+                  }
+                  
+              })
+              .error(function(data, status, headers, config){
+                  deferred.reject(data);
+              });
+          return deferred.promise;
+          };
       //////删除项目信息
    this.deleteProject = function(projectId,token) {
       
@@ -473,7 +531,7 @@
 
                      if(data.callStatus == "SUCCEED"){
                          deferred.resolve(data);
-                         alert("上传图纸信息成功，请继续上传图纸信息")
+                         alert("上传图纸信息成功")
                          self.uploadPaperInfo = data;
                      
                      }else{
@@ -487,10 +545,11 @@
                 return deferred.promise;
            };
 		   /////////////上传交底信息
-          this.uploadVideoFile = function(fileArray,professionType,projectId) {
+          this.uploadVideoFile = function(fileArray,professionType,videoTypeList,projectId) {
              var deferred = $q.defer();
-             console.log("上传图纸数据");
-             $http.post('api/video/admin/addVideo?token='+getCookie('token')+"&professionType="+professionType+"&projectId="+projectId,fileArray,
+             console.log("上传交底数据");
+             $http.post('api/video/admin/addVideo?token='+getCookie('token')+"&professionType="
+            		 +professionType+"&videoType="+videoTypeList+"&projectId="+projectId,fileArray,
             		 {
             	 		headers: {'Content-Type':undefined},
             	 		transformRequest: angular.identity 

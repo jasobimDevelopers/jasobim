@@ -1,13 +1,10 @@
 package com.my.spring.DAOImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -145,6 +142,60 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 
         return dataWrapper;
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<List<User>> getUserLists(Integer pageSize, Integer pageIndex,User user) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<User>> dataWrapper = new DataWrapper<List<User>>();
+        List<User> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        
+        Disjunction dis = Restrictions.disjunction();
+       
+        dis.add(Restrictions.like("workName","%" + "质安" + "%"));
+        dis.add(Restrictions.like("workName","%" + "质量" + "%"));
+        dis.add(Restrictions.like("workName","%" + "预算" + "%"));
+        dis.add(Restrictions.like("workName","%" + "经理" + "%"));
+        if(user.getProjectList()!=null){
+        	dis.add(Restrictions.like("projectList", "%" + user.getProjectList() + "%"));
+        }
+        criteria.add(dis);
+        if(user.getTeamId()!=null){
+        	criteria.add(Restrictions.eq("teamId", user.getTeamId()));
+        }
+        if (pageSize == null) {
+			pageSize = 10;
+		}
+        if (pageIndex == null) {
+			pageIndex = 1;
+		}
+        
+        // 取总页数
+        criteria.setProjection(Projections.rowCount());
+        int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
+        int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
+
+        // 真正取值
+        criteria.setProjection(null);
+        if (pageSize > 0 && pageIndex > 0) {
+            criteria.setMaxResults(pageSize);// 最大显示记录数
+            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        dataWrapper.setData(ret);
+        dataWrapper.setTotalNumber(totalItemNum);
+        dataWrapper.setCurrentPage(pageIndex);
+        dataWrapper.setTotalPage(totalPageNum);
+        dataWrapper.setNumberPerPage(pageSize);
+
+        return dataWrapper;
+	}
+
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -203,6 +254,34 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 		}
 		return users;
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<List<User>> findGetPushUsers(String username,int adminFlag) {
+		List<User> ret = null;
+		DataWrapper<List<User>> users=new DataWrapper<List<User>>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        if(adminFlag==-1){
+        	Disjunction dis = Restrictions.disjunction();
+        	dis.add(Restrictions.eq("id",(long)0));
+        	dis.add(Restrictions.eq("id",(long)1));
+        	dis.add(Restrictions.like("realName","%"+username+"%"));
+        	criteria.add(dis);
+        }else{
+        	criteria.add(Restrictions.like("realName","%"+username+"%"));
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+			users.setData(ret);;
+		}else{
+			users.setErrorCode(ErrorCodeEnum.Error);
+		}
+		return users;
+	}
 
 	@Override
 	public DataWrapper<List<User>> getUserTeam(Integer pageSize, Integer pageIndex, Long projectId) {
@@ -247,13 +326,15 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         return dataWrapper;
 	}
 	@Override
-	public List<User> findUserLikeProjct(Long projectList,Long id) {
+	public List<User> findUserLikeProjct(Long projectList,Integer id) {
 		List<User> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
-        criteria.add(Restrictions.like("projectList","%"+projectList+"%"));
-        criteria.add(Restrictions.eq("userType", 3));
-        criteria.add(Restrictions.ne("id",id));
+        Disjunction dis = Restrictions.disjunction();
+        dis.add(Restrictions.eq("userType", 0));
+        dis.add(Restrictions.eq("userType", 1));
+        dis.add(Restrictions.like("projectList","%"+projectList+"%"));
+        criteria.add(dis);
         try {
             ret = criteria.list();
         }catch (Exception e){
