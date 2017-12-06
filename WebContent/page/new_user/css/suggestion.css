@@ -1,0 +1,31 @@
+.suggestion {
+  width: 1200px;
+  margin: 0 auto; }
+  .suggestion .suggestionTitle {
+    margin: 32px 0;
+    border-bottom: 2px solid #000;
+    line-height: 2; }
+  .suggestion .suggestionCon textarea {
+    width: 1200px;
+    padding: 0 10px;
+    background: #fbfbfb;
+    border: 1px solid #dcdcdc;
+    height: 250px;
+    text-indent: 2em;
+    font-size: 16px;
+    line-height: 2em; }
+  .suggestion .suggestionCon div {
+    width: 1200px;
+    text-align: center;
+    margin-top: 30px; }
+    .suggestion .suggestionCon div button {
+      width: 90px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      color: #fff;
+      font-size: 14px;
+      background: #3ba16e;
+      border-radius: 3px; }
+
+/*# sourceMappingURL=suggestion.css.map */

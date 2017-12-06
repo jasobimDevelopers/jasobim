@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>施工任务单</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/duty.css">
+    <script src="js/jquery-1.8.3.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <!--头部-->
+    <div class="headMain">
+        <div class="head">
+            <div class="logo">
+                <img src="images/logo.png" alt=""><span></span><span>嘉实智慧安装</span>
+            </div>
+            <!--导航-->
+            <div class="nav">
+                <ul class="navMenu">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="project.html" class="active">项目管理</a>
+                        <ul class="submenu">
+                            <li><a href="duty.html">施工任务单</a></li>
+                            <li><a href="yufudan.html">施工预付单</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="safety.html">质量安全管理</a></li>
+                    <li><a href="erweima.html">二维码专区</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="suggestion.html">意见反馈</a></li>
+                </ul>
+            </div>
+            <div class="login">
+                <div><img src="images/logo.png" alt=""></div>
+                <div>用户名</div>
+                <div>注销</div>
+            </div>
+        </div>
+    </div>
+    <!--search-->
+    <div class="search">
+        <div class="search_con">
+            <input type="text" placeholder="搜索">
+            <button id="search">高级搜索</button>
+        </div>
+        <!--搜索内容-->
+        <div class="search_list">
+            <div>
+                <label><span>项目名称</span><input type="text"></label>
+                <label><span>项目负责人</span><input type="text"></label>
+                <button style="background: #3ba16e; color: #fff;">筛选</button> <button style="color: #333; border: 1px solid #dcdcdc;margin-left: 20px;">重置</button>
+            </div>
+        </div>
+    </div>
+    <!--内容部分-->
+    <div class="duty">
+        <div> <a href="#"><button class="add"><span>+</span>新增</button></a></div>
+        <div id="app">
+            <template>
+                <el-table :data="tableData" border stripe style="width: 100%;" max-height="600">
+                    <el-table-column prop="num" label="序号" width="100">
+                    </el-table-column>
+                    <el-table-column prop="name" label="项目名称" width="200">
+                    </el-table-column>
+                    <el-table-column prop="province" label="施工部位" width="280">
+                    </el-table-column>
+                    <el-table-column prop="person" label="负责人" width="120">
+                    </el-table-column>
+                    <el-table-column prop="liang" label="工程量（万方）" width="200">
+                    </el-table-column>
+                    <el-table-column prop="data" label="创建时间" width="200">
+                    </el-table-column>
+                    <el-table-column prop="state" label="状态" width="200">
+                    </el-table-column>
+                    <el-table-column prop="time" label="历时" width="200">
+                    </el-table-column>
+                    <el-table-column fixed="right" label="操作" width="200">
+                        <template scope="scope">
+                            <!--<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>-->
+                            <el-button @click="handleClick()" type="text" size="small"><a href="checkduty.html" class="check">查看</a></el-button>
+                            <el-button type="text" size="small">删除</el-button>
+                            <el-button type="text" size="small">编辑</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </template>
+        </div>
+    </div>
+    <!--打印-->
+    <div class="console"><img src="images/dayin.png" alt="">打印列表</div>
+</div>
+</body>
+<!-- 先引入 Vue -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    //    搜索
+    $(".search_list").css('display','none');
+    $("#search").on('click',function () {
+        $(".search_list").toggle()
+    });
+    //    table 表格
+    var Main = {
+        methods:{
+            /* handleClick:function(row) {
+             console.log(row);
+             }*/
+            handleClick:function () {
+
+            }
+        },
+        data:function () {
+            return {
+                tableData: [
+                    {
+                        num: '1',
+                        name: '地下桥架施工前交底',
+                        province: '地下桥架',
+                        person: '黄宗',
+                        liang: '30',
+                        data: '2017-4-20',
+                        state: '已解决',
+                        time: '2016-04-20'
+                    },
+                    {
+                        num: '1',
+                        name: '地下桥架施工前交底',
+                        province: '地下桥架',
+                        person: '黄宗',
+                        liang: '30',
+                        data: '2017-4-20',
+                        state: '已解决',
+                        time: '2016-04-20'
+                    },
+                    {
+                        num: '1',
+                        name: '地下桥架施工前交底',
+                        province: '地下桥架',
+                        person: '黄宗',
+                        liang: '30',
+                        data: '2017-4-20',
+                        state: '已解决',
+                        time: '2016-04-20'
+                    },
+                    {
+                        num: '1',
+                        name: '地下桥架施工前交底',
+                        province: '地下桥架',
+                        person: '黄宗',
+                        liang: '30',
+                        data: '2017-4-20',
+                        state: '已解决',
+                        time: '2016-04-20'
+                    },
+                    {
+                        num: '1',
+                        name: '地下桥架施工前交底',
+                        province: '地下桥架',
+                        person: '黄宗',
+                        liang: '30',
+                        data: '2017-4-20',
+                        state: '已解决',
+                        time: '2016-04-20'
+                    },
+                    {
+                        num: '1',
+                        name: '地下桥架施工前交底',
+                        province: '地下桥架',
+                        person: '黄宗',
+                        liang: '30',
+                        data: '2017-4-20',
+                        state: '已解决',
+                        time: '2016-04-20'
+                    },
+                    {
+                        num: '1',
+                        name: '地下桥架施工前交底',
+                        province: '地下桥架',
+                        person: '黄宗',
+                        liang: '30',
+                        data: '2017-4-20',
+                        state: '已解决',
+                        time: '2016-04-20'
+                    },
+                    {
+                        num: '1',
+                        name: '地下桥架施工前交底',
+                        province: '地下桥架',
+                        person: '黄宗',
+                        liang: '30',
+                        data: '2017-4-20',
+                        state: '已解决',
+                        time: '2016-04-20'
+                    },
+                    {
+                        num: '1',
+                        name: '地下桥架施工前交底',
+                        province: '地下桥架',
+                        person: '黄宗',
+                        liang: '30',
+                        data: '2017-4-20',
+                        state: '已解决',
+                        time: '2016-04-20'
+                    },
+                    {
+                        num: '1',
+                        name: '地下桥架施工前交底',
+                        province: '地下桥架',
+                        person: '黄宗',
+                        liang: '30',
+                        data: '2017-4-20',
+                        state: '已解决',
+                        time: '2016-04-20'
+                    }
+                ]
+            }
+        }
+    };
+    var Ctor = Vue.extend(Main);
+    new Ctor().$mount('#app');
+</script>
+</html>

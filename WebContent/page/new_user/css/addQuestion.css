@@ -1,0 +1,35 @@
+.addQues {
+  width: 500px;
+  margin: 30px auto; }
+  .addQues .addConMain .pName, .addQues .addConMain .pProblem, .addQues .addConMain .pZhuanye, .addQues .addConMain .pType, .addQues .addConMain .pDengji, .addQues .addConMain .pDetail, .addQues .addConMain .pPic {
+    margin-top: 30px;
+    text-align: center;
+  }
+.addQues .addConMain .pName select, .addQues .addConMain .pProblem input, .addQues .addConMain .pZhuanye input, .addQues .addConMain .pType select, .addQues .addConMain .pDengji select, .addQues .addConMain .pDetail textarea, .addQues .addConMain .pPic input {
+  width: 200px;
+  height: 29px;
+  line-height: 29px;
+  border: 1px solid #dcdcdc;
+  margin-left: 45px;
+  text-align: center;
+  border-radius: 3px;
+}
+.addQues .addConMain .pName span, .addQues .addConMain .pProblem span, .addQues .addConMain .pZhuanye span, .addQues .addConMain .pType span, .addQues .addConMain .pDengji span, .addQues .addConMain .pDetail span, .addQues .addConMain .pPic span {
+ vertical-align: top;
+}
+.addQues .addConMain .pDetail textarea{ height: 100px;}
+.addQues .addConMain .pPic input{ border: none}
+.addQues .addConMain .send{
+  width: 90px;
+  height: 30px;
+  line-height: 30px;
+  background: #3ba16e;
+  text-align: center;
+  margin-top: 70px;
+  margin-left: 200px;
+}
+.addQues .addConMain .send button{
+  color: #fff;
+  border-radius: 3px;
+}
+/*# sourceMappingURL=addQuestion.css.map */

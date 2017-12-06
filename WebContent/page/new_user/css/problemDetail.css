@@ -1,0 +1,107 @@
+.problem {
+  width: 1200px;
+  margin: 0 auto; }
+  .problem .problemTitle {
+    margin: 32px 0;
+    border-bottom: 2px solid #000;
+    line-height: 2;
+    position: relative; }
+    .problem .problemTitle .back {
+      position: absolute;
+      right: 20px;
+      bottom: 0;
+      color: #2f70de;
+      line-height: 2;
+      font-size: 14px; }
+  .problem .problemCon {
+    width: 1200px;
+    margin: 0 auto; }
+    .problem .problemCon div {
+      width: 400px;
+      display: inline-block;
+      vertical-align: top;
+      margin-bottom: 30px; }
+      .problem .problemCon div img {
+        width: 100%; }
+    .problem .problemCon .problemDes {
+      width: 600px;
+      display: inline-block;
+      margin-left: 100px;
+      padding: 30px; }
+      .problem .problemCon .problemDes ul li {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 30px; }
+        .problem .problemCon .problemDes ul li span:nth-child(2) {
+          color: #aaa;
+          margin-left: 15px; }
+        .problem .problemCon .problemDes ul li img {
+          width: 130px;
+          height: 130px;
+          vertical-align: top;
+          margin-left: 15px; }
+  .problem .problemDetail {
+    height: 250px;
+    border-top: 1px solid #eee;
+    margin-top: 30px;
+    padding-top: 30px; }
+    .problem .problemDetail span {
+      font-size: 14px;
+      color: #333; }
+    .problem .problemDetail p {
+      display: inline-block;
+      color: #aaa;
+      font-size: 14px;
+      text-indent: 2em; }
+  .problem .problemWord hr {
+    color: #eee;
+    position: relative; }
+  .problem .problemWord .wordTitle {
+    color: #333;
+    position: absolute;
+    left: 49%;
+    bottom: 7%;
+    background: #fff;
+    padding: 0 6px; }
+  .problem .problemWord .wordCon {
+    margin: 80px 0; }
+    .problem .problemWord .wordCon .liuyan {
+      margin-top: 20px; }
+      .problem .problemWord .wordCon .liuyan img {
+        vertical-align: middle;
+        margin-right: 10px; }
+      .problem .problemWord .wordCon .liuyan span {
+        color: #333; }
+      .problem .problemWord .wordCon .liuyan p {
+        display: inline-block;
+        color: #aaa;
+        font-size: 14px;
+        text-indent: 2em; }
+  .problem .send {
+    margin-bottom: 150px; }
+    .problem .send input {
+    	vertical-align:middle;
+      width: 680px;
+      height: 40px;
+      line-height: 40px;
+      border: 1px solid #eeeeee;
+      background-position-x: 99%;
+      background-position-y: 50%;
+      padding-left: 8px; }
+      #message_img{
+      	 vertical-align:middle;
+      	 opacity:0.5;
+    	 font-size:42px;
+    	 height:48px;
+      }
+    .problem .send .sendTo {
+      background: #3ba16e;
+      width: 90px;
+      height: 40px;
+      text-align: center;
+      color: #fff;
+      line-height: 40px;
+      border-radius: 2px;
+      margin-left: 20px; }
+
+/*# sourceMappingURL=problemDetail.css.map */

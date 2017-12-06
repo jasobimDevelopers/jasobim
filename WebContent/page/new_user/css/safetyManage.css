@@ -1,0 +1,147 @@
+.safeMain {
+  width: 1200px;
+  margin: 0 auto; }
+  .safeMain .search {
+    width: 1200px;
+    margin: 32px auto; }
+     #search_icons_item{
+ 	font-size:21px;
+ 	height:30px;
+ 	color:#333;
+ 	border-right: 2px solid #dcdcdc;
+  	border-top: 2px solid #dcdcdc;
+  	border-bottom: 2px solid #dcdcdc;
+  	border-top-right-radius: 3px;
+  	border-bottom-right-radius: 3px;
+ }
+    .safeMain .search input {
+      width: 200px;
+      height: 36px;
+      line-height: 36px;
+      border-top: 2px solid #dcdcdc;
+      border-bottom: 2px solid #dcdcdc;
+      border-left: 2px solid #dcdcdc;
+      padding-left: 10px;
+      font-style: italic;
+      color: #969696;
+      background-position-x: 180px;
+      background-position-y: 10px; }
+  .safeMain .choose {
+    width: 100%; }
+    .safeMain .choose ul li {
+      float: left;
+      font-size: 14px;
+      color: #aaa; }
+  .safeMain .select select {
+    border: 1px solid #aaaaaa;
+    background: #eee;
+    padding: 3px 10px;
+    font-size: 14px;
+    color: #333;
+    font-family: "Microsoft YaHei";
+    margin-top: 5px;
+    font-weight: bold;
+    border-radius: 3px;
+    margin-right: 5px; }
+  .safeMain .select .change {
+    padding: 0 15px;
+    background: #c85d4d;
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 3px; }
+    .safeMain .select .change span {
+      font-size: 16px;
+      margin-right: 8px; }
+  .safeMain .select .down {
+    padding: 0 15px;
+    line-height: 30px;
+    background: #3ba16e;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 3px; }
+  .safeMain .table {
+    width: 1200px;
+    margin-top: 5px; }
+    .safeMain .table table {
+      border-right: 1px solid #aaa;
+      border-bottom: 1px solid #aaa; }
+      .safeMain .table table thead tr th {
+        border-top: 1px solid #aaa;
+        line-height: 54px; }
+      .safeMain .table table td {
+        border-top: 1px solid #aaa;
+        text-align: center;
+        line-height: 54px;
+        color: #666; }
+      .safeMain .table table .s01 {
+        position: relative; }
+        .safeMain .table table .s01 select {
+          position: absolute;
+          right: 0;
+          top: 0; }
+
+.circle {
+  width: 700px;
+  position: absolute;
+  top: -20px;
+  right: 0; }
+  .circle #test-circle01, .circle #test-circle02, .circle #test-circle03 {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    text-align: center; }
+
+.safeMain .table {
+  border: 1px solid #aaa;
+  overflow-x: hidden;
+  overflow-y: auto;
+ }
+
+.safeMain .table table tbody {
+  padding-top: 41px; }
+
+.el-table td, .el-table th {
+  text-align: center; }
+
+.check {
+  color: #409EFF; }
+
+#app {
+  margin-top: 5px; }
+
+.el-table thead {
+  color: #333;
+  font-size: 14px;
+  font-family: "Microsoft YaHei";
+  font-weight: bold; }
+
+/*# sourceMappingURL=safetyManage.css.map */
+.question_search_con input {
+    height: 30px;
+    border-left: 1px solid #dcdcdc;
+    border-top: 1px solid #dcdcdc;
+    border-bottom: 1px solid #dcdcdc;
+    padding-left: 8px;
+    color: #333;
+    font-size: 14px;
+    font-style: italic;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+.question_search_con{
+	width: 1200px;
+    margin: 45px auto;
+}
+#question_search_icons {
+    font-size: 21px;
+    height: 30px;
+    color: #333;
+    border-right: 1px solid #dcdcdc;
+    border-top: 1px solid #dcdcdc;
+    border-bottom: 1px solid #dcdcdc;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    margin-left: -4px;
+}

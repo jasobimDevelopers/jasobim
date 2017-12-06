@@ -1,0 +1,59 @@
+.addCon{
+    width: 500px;
+    margin: 30px auto;
+}
+.addCon .addConTit{
+    font-family: "Microsoft YaHei";
+    position: relative;
+    height: 40px;
+    border-bottom: 2px solid #000;
+}
+.addCon .addConTit span{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    font-size: 16px;
+    color: #333;
+    display: inline-block;
+    line-height: 40px;
+}
+.addCon .addConTit a{
+    display: inline-block;
+    line-height: 40px;
+    position: absolute;
+    right: 20px;
+    bottom: 0;
+    color: #2f70de;
+    font-size: 14px;
+}
+.addCon .addConMain .tuzhi,.addCon .addConMain .louceng,.addCon .addConMain .loudong{
+    margin-top: 30px;
+    text-align: center;
+    /*margin-right: 45px;*/
+}
+/*.addCon .addConMain .tuzhi input{
+    background: #eee;
+}*/
+.addCon .addConMain .louceng select,.addCon .addConMain .loudong select,.addCon .addConMain .tuzhi input{
+    width: 200px;
+    height: 29px;
+    line-height: 29px;
+    border: 1px solid #dcdcdc;
+    margin-left: 45px;
+    text-align: center;
+    border-radius: 3px;
+}
+.addCon .addConMain .tuzhi input{ border: none}
+.addCon .addConMain .send{
+    width: 90px;
+    height: 30px;
+    line-height: 30px;
+    background: #3ba16e;
+    text-align: center;
+    margin-top: 70px;
+    margin-left: 200px;
+}
+.addCon .addConMain .send button{
+    color: #fff;
+    border-radius: 3px;
+}

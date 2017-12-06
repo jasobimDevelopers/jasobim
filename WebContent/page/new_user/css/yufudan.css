@@ -1,0 +1,86 @@
+.wrap .search {
+  width: 1200px;
+  margin: 45px auto; }
+.wrap .search .search_con input {
+  background: url("../images/search.png") no-repeat;
+  background-position-x: 90%;
+  background-position-y: 50%;
+  width: 184px;
+  height: 30px;
+  border: 1px solid #dcdcdc;
+  padding-left: 8px;
+  color: #333;
+  font-size: 14px;
+  font-style: italic;
+  border-radius: 3px; }
+.wrap .search .search_con button {
+  margin-left: 45px;
+  width: 96px;
+  height: 30px;
+  line-height: 30px;
+  background: #eeeeee;
+  border: 1px solid #dcdcdc;
+  text-align: center;
+  color: #333;
+  cursor: pointer;
+  font-size: 14px; }
+.wrap .search .search_list {
+  width: 95%;
+  margin: 0 auto; }
+.wrap .search .search_list div {
+  margin-top: 40px; }
+.wrap .search .search_list div label {
+  margin-right: 74px; }
+.wrap .search .search_list div label span {
+  margin-right: 10px; }
+.wrap .search .search_list div label input {
+  border: 1px solid #dcdcdc;
+  width: 131px;
+  height: 25px;
+  padding-left: 10px; }
+.wrap .search .search_list div button {
+  display: inline-block;
+  width: 90px;
+  height: 25px;
+  line-height: 25px;
+  font-size: 14px; }
+.wrap .yufudan {
+  width: 1200px;
+  margin: 0 auto; }
+.wrap .yufudan .table table tbody {
+  padding-top: 41px; }
+.wrap .console {
+  width: 1200px;
+  margin: 15px auto;
+  color: #2f70de;
+  font-size: 14px;
+  cursor: pointer; }
+  .wrap .console img {
+    margin-right: 8px;
+    vertical-align: bottom; }
+.wrap .yufudan {
+  width: 1200px;
+  margin: 0 auto; }
+  .wrap .yufudan .el-table td, .wrap .yufudan .el-table th {
+    text-align: center; }
+  .wrap .yufudan .check {
+    color: #409EFF; }
+  .wrap .yufudan .el-table thead {
+    color: #333;
+    font-size: 14px;
+    font-family: "Microsoft YaHei";
+    font-weight: bold; }
+  .wrap .yufudan .add {
+    margin-bottom: 5px;
+    padding: 0 15px;
+    background: #c85d4d;
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 3px; }
+    .wrap .yufudan .add span {
+      font-size: 16px;
+      margin-right: 8px; }
+
+/*# sourceMappingURL=yufudan.css.map */

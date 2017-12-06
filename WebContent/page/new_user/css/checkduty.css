@@ -1,0 +1,116 @@
+body .demo-class .layui-layer-title{background:#c00; color:#fff; border: none;}
+body .demo-class .layui-layer-btn{border-top:1px solid #E9E7E7}
+body .demo-class .layui-layer-btn a{background:#333;}
+body .demo-class .layui-layer-btn{background:#999;text-align:center;}
+
+.checkDutyCon {
+  width: 1200px;
+  margin: 50px auto;
+  font-family: "Regular";
+  overflow: hidden;
+  border-bottom: 1px solid #aaa; }
+.checkDutyCon ul {
+    width: 50%;
+    display: inline-block;
+    float: left; }
+.checkDutyCon ul li {
+      width: 100%;
+      margin-bottom: 31px; }
+.checkDutyCon ul li span:nth-child(1) {
+        width: 120px;
+        display: inline-block;
+        vertical-align: top; 
+        font-size:16px;
+        }
+.checkDutyCon ul li span:nth-child(2) {
+        color: #aaa; }
+.checkDutyCon ul li img {
+        width: 130px;
+        height: 130px;
+        margin-right: 30px;
+        margin-top: 20px; }
+.checkDutyCon ul li div {
+        color: #aaa; }
+.liuCheng {
+  width: 1200px;
+  margin: 0 auto; }
+.liuCheng ul li {
+      padding: 40px;
+      display: flex;
+      border-bottom: 1px solid #aaa; }
+.liuCheng ul li .left {
+        text-align: center;
+        flex: 1;
+        background: #eee; }
+.liuCheng h1{
+	font-size:17px;
+}
+/*全选区域*/
+#all_choice {
+    background: #1ABC9C;
+    margin-bottom: 5px;
+    padding: 0 15px;
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 3px;
+}
+#all_delete {
+    background: #1ABC9C;
+    margin-bottom: 5px;
+    padding: 0 15px;
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 3px;
+}
+.checkBoxItem {
+    height: 28px;
+    width: 21px;
+}
+/*弹出框样式*/
+.addCons {
+    width: 500px;
+    margin: 30px auto;
+     margin-top: 30px;
+    text-align: center;
+}
+.addCons select, .addCons input, .pPic input, .addCons input, .addCons select, .addCons select, .addCons textarea, .addCons input {
+    width: 200px;
+    height: 29px;
+    line-height: 29px;
+    border: 1px solid #dcdcdc;
+    margin-left: 45px;
+    border-radius: 3px;
+}
+
+.addConMain span{
+	font-size:15px;
+}
+.addCons .addConMain .pName, .addCons .addConMain .pProblem, .addCons .addConMain .pZhuanye, .addCons .addConMain .pType, .addCons .addConMain .pDengji, .addCons .addConMain .pDetail, .addCons .addConMain .pPic {
+    margin-top: 30px;
+    text-align: center;
+}
+.liuCheng ul li .left h3 {
+          padding: 20px;
+          margin-top: 10px;
+          font-size: 18px; }
+.liuCheng ul li .left div {
+          padding: 10px; }
+.liuCheng ul li .left div:last-child {
+          margin-bottom: 10px; }
+.liuCheng ul li .right {
+        flex: 4;
+        padding-top: 30px;
+        padding-left: 100px; }
+.liuCheng ul li .right h4 {
+          font-size: 16px;
+          margin-bottom: 5px; }
+.liuCheng ul li .right p {
+          line-height: 2;
+          font-size: 14px;
+          color: #aaa; }
+
+/*# sourceMappingURL=checkduty.css.map */

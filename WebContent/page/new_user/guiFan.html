@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>规范查询</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/guiFan.css">
+</head>
+<body>
+<div class="wrap">
+    <!--头部-->
+    <div class="headMain">
+        <div class="head">
+            <div class="logo">
+                <img src="images/logo.png" alt=""><span></span><span>嘉实智慧安装</span>
+            </div>
+            <!--导航-->
+            <div class="nav">
+                <ul class="navMenu">
+                    <li><a href="#">项目管理</a>
+                        <ul class="submenu">
+                            <li><a href="userHistory.html">质量安全管理</a></li>
+                            <li><a href="chanZhi.html">产值管理</a></li>
+                            <li><a href="count.html">统计管理</a></li>
+                            <li><a href="userAdmin.html">用户管理</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">施工详单</a>
+                        <ul class="submenu">
+                            <li><a href="#">任务单</a></li>
+                            <li><a href="#">预付单</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="guiFan.html" class="active">规范查询</a></li>
+                    <li><a href="erweima.html">二维码专区</a></li>
+                    <li><a href="suggestion.html">意见反馈</a></li>
+                </ul>
+            </div>
+            <div class="login">
+                <div><img src="images/logo.png" alt=""></div>
+                <div>用户名</div>
+                <div>注销</div>
+            </div>
+        </div>
+    </div>
+    <!--查询内容-->
+    <div class="inquiry">
+        <!--标题-->
+        <div class="inquiryTitle">规范查询</div>
+        <!--内容-->
+        <div class="inquiryCon">
+            <!--left-->
+            <div class="left">
+                <ul class="leftMain">
+                    <li>
+                        <a href="#">建筑施工规范 <i></i></a>
+                    <ul class="subMenu">
+                        <li><a href="#">1111</a></li>
+                        <li><a href="#">2222</a></li>
+                    </ul>
+                    </li>
+                    <li><a href="#">建筑设计规范<i></i></a>
+                        <ul class="subMenu">
+                            <li><a href="#">1111</a></li>
+                            <li><a href="#">2222</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">建筑结构规范<i></i></a>
+                        <ul class="subMenu">
+                            <li><a href="#">1111</a></li>
+                            <li><a href="#">2222</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">市政路桥规范<i></i></a>
+                        <ul class="subMenu">
+                            <li><a href="#">1111</a></li>
+                            <li><a href="#">2222</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">造价参考资料<i></i></a>
+                        <ul class="subMenu">
+                            <li><a href="#">1111</a></li>
+                            <li><a href="#">2222</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">国际参考资料<i></i></a>
+                        <ul class="subMenu">
+                            <li><a href="#">1111</a></li>
+                            <li><a href="#">2222</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">本地参考资料<i></i></a>
+                        <ul class="subMenu">
+                            <li><a href="#">1111</a></li>
+                            <li><a href="#">2222</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">学习辅导资料<i></i></a>
+                        <ul class="subMenu">
+                            <li><a href="#">1111</a></li>
+                            <li><a href="#">2222</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">未分类资料<i></i></a>
+                        <ul class="subMenu">
+                            <li><a href="#">1111</a></li>
+                            <li><a href="#">2222</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">人防工程资料<i></i></a>
+                        <ul class="subMenu">
+                            <li><a href="#">1111</a></li>
+                            <li><a href="#">2222</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">水利电力通讯<i></i></a>
+                        <ul class="subMenu">
+                            <li><a href="#">水电力通讯</a></li>
+                            <li><a href="#">水电力通讯</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--right-->
+            <div class="right">
+                <div class="search">
+                    <input type="text" placeholder="搜索"><a href="#"><img src="images/search.png" alt=""></a>
+                </div>
+                <div class="choose">
+                    <ul class="clear">
+                        <li style="margin-right: 30px;">文件格式</li>
+                        <li style="margin-right: 50px;">时间</li>
+                    </ul>
+                </div>
+                <!--选择列表-->
+                <div class="select">
+                    <select name="select" id="select09">
+                        <option value="文件格式">PDF</option>
+                    </select>
+                    <div class="time"><span>从</span> <input type="text"></div>
+                    <div class="time"><span>到</span> <input type="text"></div>
+                </div>
+                <ul class="tabCon">
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="table">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:250px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:250px;">文件大小</th>
+                                    <th style="width:250px;">文件格式</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="js/jquery-1.8.3.js"></script>
+<script>
+    $(".subMenu").hide();
+    $(".leftMain > li > a").click(function () {
+        $(this).toggleClass("active");
+        $(this).siblings(".subMenu").toggle()
+    });
+    //    二级菜单
+    var len = $('.subMenu li').length;
+    $('.subMenu li').click(function(){
+        for(i=0;i<len;i++){
+            $('.tabCon li').eq(i).css('display','none');
+//            $('#tab li').removeClass('active')
+        }
+        $('.tabCon li').eq($(this).index('.subMenu li')).css('display','block');
+//        $(this).addClass('active')
+
+    })
+</script>
+</html>

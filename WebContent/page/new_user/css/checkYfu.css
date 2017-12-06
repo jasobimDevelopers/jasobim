@@ -1,0 +1,61 @@
+.wrap .checkCon {
+  width: 1200px;
+  margin: 50px auto;
+  font-family: "Regular";
+  overflow: hidden;
+  border-bottom: 1px solid #aaa; }
+  .wrap .checkCon ul {
+    width: 50%;
+    display: inline-block;
+    float: left; }
+    .wrap .checkCon ul li {
+      width: 100%;
+      margin-bottom: 31px; }
+      .wrap .checkCon ul li span:nth-child(1) {
+        width: 120px;
+        display: inline-block;
+        vertical-align: top; }
+      .wrap .checkCon ul li span:nth-child(2) {
+        color: #aaa; }
+      .wrap .checkCon ul li img {
+        width: 250px;
+        height: 250px;
+        margin-left: 20px;
+        margin-top: 10px; }
+      .wrap .checkCon ul li div {
+        color: #aaa; }
+.wrap .liuCheng {
+  width: 1200px;
+  margin: 0 auto; }
+  .wrap .liuCheng ul {
+    /*width: 98%;
+    margin: 0 auto;*/ }
+    .wrap .liuCheng ul li {
+      padding: 40px;
+      display: flex;
+      border-bottom: 1px solid #aaa; }
+      .wrap .liuCheng ul li .left {
+        text-align: center;
+        flex: 1;
+        background: #eee; }
+        .wrap .liuCheng ul li .left h3 {
+          padding: 20px;
+          margin-top: 10px;
+          font-size: 18px; }
+        .wrap .liuCheng ul li .left div {
+          padding: 10px; }
+        .wrap .liuCheng ul li .left div:last-child {
+          margin-bottom: 10px; }
+      .wrap .liuCheng ul li .right {
+        flex: 4;
+        padding-top: 30px;
+        padding-left: 100px; }
+        .wrap .liuCheng ul li .right h4 {
+          font-size: 16px;
+          margin-bottom: 5px; }
+        .wrap .liuCheng ul li .right p {
+          line-height: 2;
+          font-size: 14px;
+          color: #aaa; }
+
+/*# sourceMappingURL=checkYfu.css.map */

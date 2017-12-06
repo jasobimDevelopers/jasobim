@@ -1,0 +1,65 @@
+.qrCode {
+  width: 100%;
+  font-family: "Microsoft YaHei";
+  background: #fff;
+  margin-top: 35px; }
+.qrCode .qrCodePill {
+  width: 1200px;
+  margin: 0 auto;
+  height: 36px;
+  position: relative; }
+.qrCode .qrCodePill ul {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 99; }
+.qrCode .qrCodePill ul li {
+  box-sizing: border-box;
+  float: left;
+  margin-right: 8px;
+  border: 1px solid #aaaaaa;
+  border-bottom: 2px solid #000;
+  text-align: center;
+  background: #eee;
+  padding: 0px 15px;
+  line-height: 36px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px; }
+.qrCode .qrCodePill ul li a {
+  color: #333;
+  font-size: 14px; }
+.qrCode .qrCodePill ul li.active {
+  margin-left: 0;
+  border-bottom: none;
+  background: #fff;
+  line-height: 38px; }
+.qrCode .qrCodePill .line {
+  height: 2px;
+  background: #000;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 1200px;
+  margin: 0 auto; }
+#codeOfbody1 div{
+	float:left;
+}
+.qrCodeList {
+  width: 1200px;
+  margin: 0 auto; 
+}
+.qrCodeList ul {
+  display: none; 
+}
+.qrCodeList ul li {
+  float: left;
+  width: 240px;
+  height:240px;
+  text-align: center;
+  margin-bottom: 60px;
+}
+.qrCodeList ul li p{
+	padding:0px 30px;
+}
+
+/*# sourceMappingURL=erweima.css.map */

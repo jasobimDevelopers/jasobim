@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>质量安全管理</title>
+    <!--lay ui-->
+    <link rel="stylesheet" href="layui/layui/css/modules/layer/default/layer.css">
+    <!--element ui-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/safetyManage.css">
+    <!--<link rel="stylesheet" href="css/addTu.css">-->
+    <link rel="stylesheet" href="css/addQuestion.css">
+</head>
+<body>
+<div class="wrap">
+    <!--头部-->
+    <div class="headMain">
+        <div class="head">
+            <div class="logo">
+                <img src="images/logo.png" alt=""><span></span><span>嘉实智慧安装</span>
+            </div>
+            <!--导航-->
+            <div class="nav">
+                <ul class="navMenu">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="project.html">项目管理</a>
+                        <ul class="submenu">
+                            <li><a href="duty.html">施工任务单</a></li>
+                            <li><a href="yufudan.html">施工预付单</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="safety.html" class="active">质量安全管理</a></li>
+                    <li><a href="erweima.html">二维码专区</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="suggestion.html">意见反馈</a></li>
+                </ul>
+            </div>
+            <div class="login">
+                <div><img src="images/logo.png" alt=""></div>
+                <div>用户名</div>
+                <div>注销</div>
+            </div>
+        </div>
+    </div>
+    <!--内容部分-->
+    <div class="safeMain">
+        <div class="search">
+            <input type="text" placeholder="搜索">
+        </div>
+        <!--选择列表-->
+        <div class="select">
+                <select name="select" id="select01">
+                    <option value="给排水1">无锡碧桂园</option>
+                    <option value="给排水1">无锡碧桂园</option>
+                </select>
+            <select name="select" id="select02">
+                <option value="全部">安全</option>
+                <option value="全部">安全</option>
+            </select>
+            <select name="select" id="select03">
+                <option value="#1">紧急</option>
+                <option value="#1">紧急</option>
+            </select>
+            <select name="select" id="select04">
+                <option value="公共部位">待解决</option>
+            </select>
+            <select name="select" id="select05">
+                <option value="公共部位">全部问题</option>
+            </select>
+            <a href="#" onclick="showBox03()"><button class="change"><span>+</span>问题</button></a>
+            <div id="show03" style="display: none">
+                <div class="addQues">
+                    <div class="addConMain">
+                        <div class="pName">
+                            <span>项目名称</span>
+                            <select>
+                                <option value="">汾湖碧桂园</option>
+                                <option value="">汾湖碧桂园</option>
+                                <option value="">汾湖碧桂园</option>
+                                <option value="">汾湖碧桂园</option>
+                            </select>
+                        </div>
+                        <div class="pProblem">
+                            <span>问题名称</span>
+                            <input type="text">
+                        </div>
+                        <div class="pZhuanye">
+                            <span>所属专业</span>
+                            <input type="text">
+                        </div>
+                        <div class="pType">
+                            <span>问题类型</span>
+                            <select>
+                                <option value="">质量</option>
+                                <option value="">安全</option>
+                                <option value="">其他</option>
+                            </select>
+                        </div>
+                        <div class="pDengji">
+                            <span>问题等级</span>
+                            <select>
+                                <option value="">一般</option>
+                                <option value="">重要</option>
+                                <option value="">紧急</option>
+                            </select>
+                        </div>
+                        <div class="pDetail">
+                            <span>问题详情</span>
+                            <textarea name="" id="" cols="30" rows="10"></textarea>
+                        </div>
+                        <div class="pPic">
+                            <span>现场图片</span>
+                            <input type="file">
+                        </div>
+                        <div class="send"><button>上传</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="table" style="overflow-y: scroll;">-->
+            <div id="app">
+                <template>
+                    <el-table :data="tableData" border stripe style="width: 100%" max-height="550">
+                        <!--<el-table-column fixed prop="date" label="日期" width="150">
+                        </el-table-column>-->
+                        <el-table-column prop="num" label="序号" width="120">
+                        </el-table-column>
+                        <el-table-column prop="name" label="标题" width="300">
+                        </el-table-column>
+                        <el-table-column prop="personName" label="提交人" width="120">
+                        </el-table-column>
+                        <el-table-column prop="type" label="类型" width="150">
+                        </el-table-column>
+                        <el-table-column prop="grade" label="等级" width="150">
+                        </el-table-column>
+                        <el-table-column prop="state" label="状态" width="150">
+                        </el-table-column>
+                        <el-table-column prop="data" label="创建时间" width="150">
+                        </el-table-column>
+                        <el-table-column fixed="right" label="操作" width="150">
+                            <template slot-scope="scope">
+                                <el-button type="text" size="small">切换</el-button>
+                                <el-button @click="handleClick()" type="text" size="small"><a href="problemDetail.html" class="check">查看</a></el-button>
+                                <!--<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>-->
+                                <el-button type="text" size="small">编辑</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </div>
+        <!--</div>-->
+    </div>
+    <div class="circle">
+        <div id="test-circle01">一般</div>
+        <div id="test-circle02">重要</div>
+        <div id="test-circle03">紧急</div>
+    </div>
+</div>
+
+</body>
+<script src="js/jquery-1.8.3.js"></script>
+<script src="layui/layui/layui.all.js"></script>
+<script src="layui/layui/lay/modules/layer.js"></script>
+<!-- 先引入 Vue -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="js/circle.js"></script>
+<script src="js/js.js"></script>
+<script>
+    $( document ).ready(function() {
+        $("#test-circle01").circliful({
+            animationStep: 5,
+            foregroundBorderWidth: 20,
+            backgroundBorderWidth: 20,
+            percent: 50,
+            backgroundColor:"#eee",
+            foregroundColor:"#25b8d1"
+        });
+        $("#test-circle02").circliful({
+            animationStep: 5,
+            foregroundBorderWidth: 20,
+            backgroundBorderWidth: 20,
+            percent: 26,
+            backgroundColor:"#eee",
+            foregroundColor:"#68d895"
+        });
+        $("#test-circle03").circliful({
+            animationStep: 5,
+            foregroundBorderWidth: 20,
+            backgroundBorderWidth: 20,
+            percent: 80,
+            backgroundColor:"#eee",
+            foregroundColor:"#7ccb6d"
+        });
+    });
+    function showBox03(){
+        layer.open({
+            type:1,
+            title: '问题详情',
+            area: '500px',
+            content:$("#show03").html()
+        })
+    }
+//    table表格
+    var Main = {
+        methods:{
+            handClick:function () {
+            }
+           /* handleClick(row){
+                console.log(row);
+            }*/
+        },
+
+        data:function (){
+            return {
+                tableData: [{
+                    num: '1',//序号
+                    name: '无锡万科金域缇香',//项目名
+                    personName: '黄卫国',//提交人
+                    type: '安全',//类型
+                    grade: '重要',//等级
+                    state: "已解决",//状态
+                    data: "2016-04-20"//时间
+                },
+                    {
+                        num: '1',
+                        name: '无锡万科金域缇香',
+                        personName: '黄卫国',
+                        type: '安全',
+                        grade: '重要',
+                        state: "已解决",
+                        data: "2016-04-20"
+                    },
+                    {
+                        num: '1',
+                        name: '无锡万科金域缇香',
+                        personName: '黄卫国',
+                        type: '安全',
+                        grade: '重要',
+                        state: "已解决",
+                        data: "2016-04-20"
+                    },
+                    {
+                        num: '1',
+                        name: '无锡万科金域缇香',
+                        personName: '黄卫国',
+                        type: '安全',
+                        grade: '重要',
+                        state: "已解决",
+                        data: "2016-04-20"
+                    },
+                    {
+                        num: '1',
+                        name: '无锡万科金域缇香',
+                        personName: '黄卫国',
+                        type: '安全',
+                        grade: '重要',
+                        state: "已解决",
+                        data: "2016-04-20"
+                    },
+                    {
+                        num: '1',
+                        name: '无锡万科金域缇香',
+                        personName: '黄卫国',
+                        type: '安全',
+                        grade: '重要',
+                        state: "已解决",
+                        data: "2016-04-20"
+                    },
+                    {
+                        num: '1',
+                        name: '无锡万科金域缇香',
+                        personName: '黄卫国',
+                        type: '安全',
+                        grade: '重要',
+                        state: "已解决",
+                        data: "2016-04-20"
+                    },
+                    {
+                        num: '1',
+                        name: '无锡万科金域缇香',
+                        personName: '黄卫国',
+                        type: '安全',
+                        grade: '重要',
+                        state: "已解决",
+                        data: "2016-04-20"
+                    },
+                    {
+                        num: '1',
+                        name: '无锡万科金域缇香',
+                        personName: '黄卫国',
+                        type: '安全',
+                        grade: '重要',
+                        state: "已解决",
+                        data: "2016-04-20"
+                    },
+                    {
+                        num: '1',
+                        name: '无锡万科金域缇香',
+                        personName: '黄卫国',
+                        type: '安全',
+                        grade: '重要',
+                        state: "已解决",
+                        data: "2016-04-20"
+                    }
+                ]
+            }
+        }
+    }
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+</script>
+</html>

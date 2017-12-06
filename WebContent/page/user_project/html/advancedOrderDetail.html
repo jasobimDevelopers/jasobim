@@ -1,0 +1,63 @@
+<div id="cons_content">
+	
+		<!--内容部分-->
+	    <div class="checkDutyCon">
+	    	<div id="returnMenu">
+	    		<ol class="breadcrumb">
+				  <li><a href="user_projectList"><strong>项目管理</strong></a></li>
+				  <li><a ng-click="goOrderList()"><strong>预付单列表</strong></a></li>
+				  <li class="active"><a href="#">预付单详情</a></li>
+				</ol>
+	    	</div>
+	        <ul>
+	            <li><span>项目名称：</span><span>{{advancedOrderInfo[0].projectName}}</span></li>
+	            <li><span>指派人员：</span><span>{{advancedOrderInfo[0].userProjectIdList}}</span></li>
+	            <li><span>项目负责人：</span><span>{{advancedOrderInfo[0].leader}}</span></li>
+	            <li><span>施工部位：</span><span>{{advancedOrderInfo[0].constructPart}}</span></li>
+	            <li><span>创建时间：</span><span>{{advancedOrderInfo[0].createDate}}</span></li>
+	            <li><span>状态：</span><span>{{orderInfosFlag[advancedOrderInfo[0].status]}}</span></li>
+	            <li><span>持续时间(h)：</span><span>{{advancedOrderInfo[0].lastTime}}</span></li>
+	            <li><span>工程量及应付款：</span><div style="display: inline-block; width: 450px;">{{advancedOrderInfo[0].quantityDes}}</div></li>
+	        </ul>
+	        <ul>
+	            <li>
+	                <span>上传图片：</span><span><input type="file"></input></span>
+	                <div ng-repeat="fileitem in orderInfos[0].fileUrlList">
+	                        <a href="http://jasobim.com.cn/{{fileitem}}" rel="lightbox" title="Double click for full size"><img style="width: 130px;" src="http://jasobim.com.cn/{{fileitem}}" alt=""></a>
+	                        <a href="page/new_user/images/EasyConnect.lnk.png" rel="lightbox" title="Double click for full size"><img style="width: 130px;" src="page/new_user/images/EasyConnect.lnk.png" alt=""></a>
+	                </div>
+	                
+	            </li>
+	        </ul>
+	    </div>
+	    <!--流程-->
+	    <div class="liuCheng">
+	        <h1>任务单流程</h1>
+	        <ul>
+	            <li>
+	                <div class="left">
+	                    <h3>开始填写</h3>
+	                    <div><span>操作人：</span><span>{{advancedOrderInfo[0].createUserName}}</span></div>
+	                    <div><span>状态：</span><span>已提交</span></div>
+	                    <div>{{advancedOrderInfo[0].createDate}}</div>
+	                </div>
+	                <div class="right">
+	                    <h4>意见</h4>
+	                    <p>{{advancedOrderInfo[0].rewards}}</p>
+	                </div>
+	            </li>
+	            <li ng-repeat="conslog in conslogList">
+		                <div class="left">
+		                    <h3>{{conslog.type}}审核</h3>
+		                    <div><span>操作人：</span><span>{{conslog.name}}</span></div>
+		                    <div><span>状态：</span><span>{{conslog.idea}}</span></div>
+		                    <div>{{conslog.date}}</div>
+		                </div>
+		                <div class="right">
+		                    <h4>意见</h4>
+		                    <p>{{conslog.note}}</p>
+		                </div>
+	            </li>
+	        </ul>
+	    </div>
+	</div>

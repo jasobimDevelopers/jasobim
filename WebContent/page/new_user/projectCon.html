@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>项目管理</title>
+    <!--lay ui-->
+    <link rel="stylesheet" href="layui/layui/css/modules/layer/default/layer.css">
+    <!--element ui-->
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/projectCon.css">
+    <link rel="stylesheet" href="css/safetyManage.css">
+    <link rel="stylesheet" href="css/addTu.css">
+</head>
+<body>
+<div class="wrap">
+    <!--头部-->
+    <div class="headMain">
+        <div class="head">
+            <div class="logo">
+                <img src="images/logo.png" alt=""><span></span><span>嘉实智慧安装</span>
+            </div>
+            <!--导航-->
+            <div class="nav">
+                <ul class="navMenu">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="project.html" class="active">项目管理</a>
+                        <ul class="submenu">
+                            <li><a href="duty.html">施工任务单</a></li>
+                            <li><a href="yufudan.html">施工预付单</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="safety.html">质量安全管理</a></li>
+                    <li><a href="erweima.html">二维码专区</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="suggestion.html">意见反馈</a></li>
+                </ul>
+            </div>
+            <div class="login">
+                <div><img src="images/logo.png" alt=""></div>
+                <div>用户名</div>
+                <div>注销</div>
+            </div>
+        </div>
+    </div>
+
+<!--内容部分-->
+    <div class="project">
+        <!--tab-->
+        <div class="projectPill">
+            <div class="line"></div>
+            <ul class="clear">
+                <li class="active"><a href="#">基本</a></li>
+                <li><a href="#">构件</a></li>
+                <li><a href="#">工程量</a></li>
+                <li><a href="#">图纸</a></li>
+                <li><a href="#">交底</a></li>
+                <li><a href="#">问题</a></li>
+            </ul>
+            <a href="project.html" class="back">返回上一级</a>
+        </div>
+     <!--tab 切换-->
+        <div class="projectCon">
+            <!--基本-->
+            <div class="projectConItem" style="display: block; padding-top: 50px;">
+                <div class="itemImg"><img src="images/EasyConnect.lnk.png" alt="图片"></div>
+                <div class="projectText">
+                    <h2>无锡万科金域缇香</h2>
+                    <p>子项为无锡万科金域堤香南区A地块（三期）的高层住宅6号楼，为地上32层，地下2层。本栋楼每层均为一梯四户，共4X32=128户。建筑设计使用年限为50年。6号楼总建筑面积：13742.30m2，建筑占地面积：530.25m2，地上建筑面积：12689.81m2，地下建筑面积：1052.49m2。6号楼共有4个户型，N反户型参照N户型，Q反户型参照Q户型。N户型总建筑面积112.11m2，其中套内建筑面积85.04m2，公摊面积24.35m2；Q户型总建筑面积85.17m2，其中套内建筑面积64.33m2，公摊面积18.72m2。</p>
+                </div>
+                <!--项目介绍-->
+                <div class="projectDescript">
+                    <ul>
+                        <li>项目名称：<span>无锡万科项目</span></li>
+                        <li>工程编码：<span>110018</span></li>
+                        <li>施工地点：<span>无锡万科金域缇香南区A地块（三期）</span></li>
+                        <li>设计单位：<span>上海原构设计咨询有限公司</span></li>
+                        <li>施工周期：<span>740天</span></li>
+                        <li>状态：<span>未上线</span></li>
+                    </ul>
+                    <ul>
+                        <li>施工时间：<span>2016-04-20</span></li>
+                        <li>项目负责人：<span>黄宗</span></li>
+                        <li>建设单位：<span>无锡东城房地产有限公司</span></li>
+                        <li>施工单位：<span>上海嘉实（集团）有限公司</span></li>
+                        <li>版本：<span>2.3</span></li>
+                    </ul>
+                </div>
+            </div>
+            <!--构件-->
+            <div class="projectConItem">
+               <div class="safeMain">
+                   <div class="search">
+                       <input type="text" placeholder="搜索">
+                   </div>
+                   <div class="choose">
+                       <ul class="clear">
+                           <li style="margin-right: 80px;">专业</li>
+                           <li style="margin-right: 50px;">栋号</li>
+                           <li style="margin-right: 50px;">楼层</li>
+                           <li>户型</li>
+                       </ul>
+                   </div>
+                   <!--选择列表-->
+                   <div class="select">
+                       <select name="select" id="select01">
+                           <option value="给排水">给排水</option>
+                       </select>
+                       <select name="select" id="select02">
+                           <option value="全部">全部</option>
+                       </select>
+                       <select name="select" id="select03">
+                           <option value="#1">#1</option>
+                       </select>
+                       <select name="select" id="select04">
+                           <option value="公共部位">公共部位</option>
+                       </select>
+                   </div>
+                   <div class="table">
+                       <table width="1200" border="0" cellspacing="0" cellpadding="0" >
+                           <thead>
+                           <tr style="background: #eee;">
+                               <th style="border-left: 1px solid #aaa;width:80px;">序号</th>
+                               <th style="width:250px;">构件名称</th>
+                               <th style="width:200px;">底部高程</th>
+                               <th style="width:200px;">系统类型</th>
+                               <th style="width:500px;">尺寸</th>
+                               <th style="width:200px;">长度</th>
+                           </tr>
+                           </thead>
+                           <tbody class="tbody01">
+                           <tr>
+                               <td style="border-left:1px solid #aaa;">1d</td>
+                               <td>电缆桥架配件</td>
+                               <td>0</td>
+                               <td>-</td>
+                               <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                               <td>0</td>
+                           </tr>
+                           <tr>
+                               <td style="border-left:1px solid #aaa;">1d</td>
+                               <td>电缆桥架配件</td>
+                               <td>0</td>
+                               <td>-</td>
+                               <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                               <td>0</td>
+                           </tr>
+                           <tr>
+                               <td style="border-left:1px solid #aaa;">1d</td>
+                               <td>电缆桥架配件</td>
+                               <td>0</td>
+                               <td>-</td>
+                               <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                               <td>0</td>
+                           </tr>
+                           <tr>
+                               <td style="border-left:1px solid #aaa;">1d</td>
+                               <td>电缆桥架配件</td>
+                               <td>0</td>
+                               <td>-</td>
+                               <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                               <td>0</td>
+                           </tr>
+                           <tr>
+                               <td style="border-left:1px solid #aaa;">1d</td>
+                               <td>电缆桥架配件</td>
+                               <td>0</td>
+                               <td>-</td>
+                               <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                               <td>0</td>
+                           </tr>
+                           <tr>
+                               <td style="border-left:1px solid #aaa;">1d</td>
+                               <td>电缆桥架配件</td>
+                               <td>0</td>
+                               <td>-</td>
+                               <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                               <td>0</td>
+                           </tr>
+                           <tr>
+                               <td style="border-left:1px solid #aaa;">1d</td>
+                               <td>电缆桥架配件</td>
+                               <td>0</td>
+                               <td>-</td>
+                               <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                               <td>0</td>
+                           </tr>
+                           <tr>
+                               <td style="border-left:1px solid #aaa;">1d</td>
+                               <td>电缆桥架配件</td>
+                               <td>0</td>
+                               <td>-</td>
+                               <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                               <td>0</td>
+                           </tr>
+                           </tbody>
+
+
+                       </table>
+                   </div>
+
+               </div>
+           </div>
+            <!--工程量-->
+            <div class="projectConItem">
+                <div class="safeMain">
+                    <div class="search">
+                        <input type="text" placeholder="搜索">
+                    </div>
+                    <div class="choose">
+                        <ul class="clear">
+                            <li style="margin-right: 80px;">专业</li>
+                            <li style="margin-right: 50px;">栋号</li>
+                            <li style="margin-right: 50px;">楼层</li>
+                            <li>户型</li>
+                        </ul>
+                    </div>
+                    <!--选择列表-->
+                    <div class="select">
+                        <select name="select" id="select05">
+                            <option value="给排水">给排水1</option>
+                        </select>
+                        <select name="select" id="select06">
+                            <option value="全部">全部</option>
+                        </select>
+                        <select name="select" id="select07">
+                            <option value="#1">#1</option>
+                        </select>
+                        <select name="select" id="select08">
+                            <option value="户型">户型</option>
+                        </select>
+                        <button class="change"><span>+</span>变更签证</button>
+                        <button class="down">下载列表</button>
+                    </div>
+                    <div class="table">
+                        <table width="1200" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr style="background: #eee;">
+                                <th style="border-left: 1px solid #aaa;width:80px;">序号</th>
+                                <th style="width:250px;">构件名称</th>
+                                <th style="width:200px;">底部高程</th>
+                                <th style="width:200px;">系统类型</th>
+                                <th style="width:500px;">尺寸</th>
+                                <th style="width:200px;">长度</th>
+                            </tr>
+                            </thead>
+                            <tbody class="tbody02" >
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>电缆桥架配件</td>
+                                <td>0</td>
+                                <td>-</td>
+                                <td>1000 mmx150 mmø-1000 mmx150 mmø</td>
+                                <td>0</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <!--图纸-->
+            <div class="projectConItem">
+                <div class="safeMain">
+                    <div class="search">
+                        <input type="text" placeholder="搜索">
+                    </div>
+                    <div class="choose">
+                        <ul class="clear">
+                            <li style="margin-right: 80px;">专业</li>
+                            <li style="margin-right: 50px;">栋号</li>
+                            <li style="margin-right: 50px;">楼层</li>
+                        </ul>
+                    </div>
+                    <!--选择列表-->
+                    <div class="select">
+                        <select name="select" id="select09">
+                            <option value="给排水1">给排水</option>
+                        </select>
+                        <select name="select" id="select10">
+                            <option value="全部">全部</option>
+                        </select>
+                        <select name="select" id="select11">
+                            <option value="#1">#1</option>
+                        </select>
+                        <a href="#" onclick="showBox()" style="cursor: pointer"><button class="change"><span>+</span>图纸</button></a>
+                        <div id="show" style="display: none">
+                            <div class="addCon">
+                                <div class="addConMain">
+                                    <div class="tuzhi">
+                                        <span>图&nbsp;&nbsp;&nbsp;纸</span><input type="file">
+                                    </div>
+                                    <div class="louceng">
+                                        <span>楼层号</span>
+                                        <select>
+                                            <option value="">1#</option>
+                                        </select>
+                                    </div>
+                                    <div class="loudong">
+                                        <span>楼栋号</span>
+                                        <select>
+                                            <option value="">1#</option>
+                                        </select>
+                                    </div>
+                                    <div class="louceng">
+                                        <span>楼层号</span>
+                                        <select>
+                                            <option value="">1#</option>
+                                        </select>
+                                    </div>
+                                    <div class="send"><button>上传</button></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table width="1200" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr style="background: #eee;">
+                                <th style="border-left: 1px solid #aaa;width:80px;">序号</th>
+                                <th style="width:250px;">图纸信息</th>
+                                <th style="width:100px;">楼栋号</th>
+                                <th style="width:100px;">楼层</th>
+                                <th style="width:150px;">专业</th>
+                                <th style="width:100px;">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="tbody03">
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>180（C）户型机电定位图0928</td>
+                                <td>6</td>
+                                <td>8</td>
+                                <td>给排水</td>
+                                <td><span style="margin-right: 10px;"><img src="images/down.png" alt=""></span><span><img src="images/delete.png" alt=""></span></td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>180（C）户型机电定位图0928</td>
+                                <td>6</td>
+                                <td>8</td>
+                                <td>给排水</td>
+                                <td><span style="margin-right: 10px;"><img src="images/down.png" alt=""></span><span><img src="images/delete.png" alt=""></span></td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>180（C）户型机电定位图0928</td>
+                                <td>6</td>
+                                <td>8</td>
+                                <td>给排水</td>
+                                <td><span style="margin-right: 10px;"><img src="images/down.png" alt=""></span><span><img src="images/delete.png" alt=""></span></td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>180（C）户型机电定位图0928</td>
+                                <td>6</td>
+                                <td>8</td>
+                                <td>给排水</td>
+                                <td><span style="margin-right: 10px;"><img src="images/down.png" alt=""></span><span><img src="images/delete.png" alt=""></span></td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>180（C）户型机电定位图0928</td>
+                                <td>6</td>
+                                <td>8</td>
+                                <td>给排水</td>
+                                <td><span style="margin-right: 10px;"><img src="images/down.png" alt=""></span><span><img src="images/delete.png" alt=""></span></td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>180（C）户型机电定位图0928</td>
+                                <td>6</td>
+                                <td>8</td>
+                                <td>给排水</td>
+                                <td><span style="margin-right: 10px;"><img src="images/down.png" alt=""></span><span><img src="images/delete.png" alt=""></span></td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--交底-->
+            <div class="projectConItem">
+                <div class="safeMain">
+                    <div class="search">
+                        <input type="text" placeholder="搜索">
+                    </div>
+                    <div class="choose">
+                        <ul class="clear">
+                            <li style="margin-right: 80px;">专业</li>
+                            <li style="margin-right: 50px;">栋号</li>
+                        </ul>
+                    </div>
+                    <!--选择列表-->
+                    <div class="select">
+                        <select name="select" id="select13">
+                            <option value="给排水">给排水</option>
+                        </select>
+                        <select name="select" id="select14">
+                            <option value="全部">全部</option>
+                        </select>
+                        <a href="#" onclick="showBox01()" style="cursor: pointer"><button class="change"><span>+</span>交底</button></a>
+                        <!--<button>居中弹出</button>-->
+                        <div id="show01" style="display: none">
+                            <div class="addCon">
+                                <div class="addConMain">
+                                    <div class="tuzhi">
+                                        <span>交&nbsp;&nbsp;&nbsp;底</span><input type="file">
+                                    </div>
+                                    <div class="louceng">
+                                        <span>专&nbsp;&nbsp;&nbsp;业</span>
+                                        <select>
+                                            <option value="">质量</option>
+                                        </select>
+                                    </div>
+                                    <div class="loudong">
+                                        <span>格&nbsp;&nbsp;&nbsp;式</span>
+                                        <select>
+                                            <option value="">视频</option>
+                                        </select>
+                                    </div>
+                                    <div class="send"><button>上传</button></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--<button class="change"><span>+</span>交底</button>-->
+                    </div>
+                    <div class="table">
+                        <table width="1200" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr style="background: #eee;">
+                                    <th style="border-left: 1px solid #aaa;width:80px;">序号</th>
+                                    <th style="width:250px;">交底地址</th>
+                                    <th style="width:200px;">楼栋号</th>
+                                    <th style="width:200px;">专业</th>
+                                    <th style="width:500px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tbody04">
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>给排水管道安装施工</td>
+                                <td>0</td>
+                                <td>给排水</td>
+                                <td><span style="margin-right: 10px;"><img src="images/down.png" alt=""></span><span><img src="images/delete.png" alt=""></span></td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>给排水管道安装施工</td>
+                                <td>0</td>
+                                <td>给排水</td>
+                                <td><span style="margin-right: 10px;"><img src="images/down.png" alt=""></span><span><img src="images/delete.png" alt=""></span></td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>给排水管道安装施工</td>
+                                <td>0</td>
+                                <td>给排水</td>
+                                <td><span style="margin-right: 10px;"><img src="images/down.png" alt=""></span><span><img src="images/delete.png" alt=""></span></td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>给排水管道安装施工</td>
+                                <td>0</td>
+                                <td>给排水</td>
+                                <td><span style="margin-right: 10px;"><img src="images/down.png" alt=""></span><span><img src="images/delete.png" alt=""></span></td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1d</td>
+                                <td>给排水管道安装施工</td>
+                                <td>0</td>
+                                <td>给排水</td>
+                                <td><span style="margin-right: 10px;"><img src="images/down.png" alt=""></span><span><img src="images/delete.png" alt=""></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--问题-->
+            <div class="projectConItem">
+                <div class="safeMain">
+                    <div class="search">
+                        <input type="text" placeholder="搜索">
+                    </div>
+                    <div class="choose">
+                        <ul class="clear">
+                            <li style="margin-right: 80px;">类型</li>
+                            <li style="margin-right: 50px;">等级</li>
+                            <li style="margin-right: 50px;">状态</li>
+                        </ul>
+                    </div>
+                    <!--选择列表-->
+                    <div class="select">
+                        <select name="select" id="select17">
+                            <option value="给排水">给排水</option>
+                        </select>
+                        <select name="select" id="select18">
+                            <option value="全部">全部</option>
+                        </select>
+                        <select name="select" id="select19">
+                            <option value="#1">待解决</option>
+                        </select>
+                    </div>
+                    <div class="table">
+                        <table width="1200" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr style="background: #eee;">
+                                <th style="border-left: 1px solid #aaa;width:80px;">序号</th>
+                                <th style="width:250px;">名称</th>
+                                <th style="width:200px;">提交人</th>
+                                <th style="width:200px;">类型</th>
+                                <th style="width:500px;">专业</th>
+                                <th style="width:400px;">创建时间</th>
+                                <th style="width:200px;">等级</th>
+                                <th style="width:200px;">状态</th>
+                            </tr>
+                            </thead>
+                            <tbody class="tbody05">
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            <tr>
+                                <td style="border-left:1px solid #aaa;">1</td>
+                                <td>8月24日室内预埋</td>
+                                <td>阮华良</td>
+                                <td>安全</td>
+                                <td>给排水</td>
+                                <td>2017-08-24 18:23:37</td>
+                                <td>一般</td>
+                                <td>待解决</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script src="js/jquery-1.8.3.js"></script>
+<!--<script src="layui/layui/layui.js"></script>-->
+<script src="layui/layui/layui.all.js"></script>
+<script src="layui/layui/lay/modules/layer.js"></script>
+<script src="js/js.js"></script>
+<script>
+//    菜单导航
+   /* $(".projectPill ul li").on("click",function () {
+        $(".projectPill ul li").removeClass("active");
+        $(this).addClass("active")
+    })*/
+//    二级菜单
+var len = $('.projectPill ul li').length;
+$('.projectPill ul li').click(function(){
+    for(i=0;i<len;i++){
+        $('.projectConItem').eq(i).css('display','none');
+        $('.projectPill ul li').removeClass('active')
+    }
+    $('.projectConItem').eq($(this).index('.projectPill ul li')).css('display','block');
+    $(this).addClass('active')
+});
+/*$.each(userList,function(i,item){
+
+    console.log(i, item);
+
+});*/
+//弹框
+function showBox(){
+    layer.open({
+        type:1,
+        title: '上传图纸',
+        area: '500px',
+        content:$("#show").html()
+    })
+}
+//交底
+function showBox01(){
+    layer.open({
+        type:1,
+        title: '上传交底',
+        area: '500px',
+        content:$("#show01").html()
+    })
+}
+</script>
+</html>

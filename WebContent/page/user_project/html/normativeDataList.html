@@ -1,0 +1,100 @@
+<div id="normative_content" ng-controller="NormativefilesController">
+	<!--查询内容-->
+    <div class="inquiry">
+        <!--标题-->
+        <div class="inquiryTitle">规范查询</div>
+        <!--内容-->
+        <div class="inquiryCon">
+            <!--left-->
+            <div class="left">
+                <ul class="leftMain">
+                    <li ng-repeat="nor in normativeFilesNameList">
+                        <a ng-click="setNorType($index)">{{nor.name}} <i></i></a>
+	                    <!-- <ul class="subMenu">
+	                        <li><a href="#">1111</a></li>
+	                        <li><a href="#">2222</a></li>
+	                    </ul> -->
+                    </li>
+                </ul>
+            </div>
+            <!--right-->
+            <div class="right">
+                <div class="search_con" style="width:400px;margin-bottom:10px;">
+		            <input type="text" placeholder="搜索" id="normative_search"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findNormativeFilesLike()"></a>
+	        	</div>
+                
+                 <!--选择列表-->
+                <!--<div class="select">
+                    <select name="select" id="select09">
+                        <option value="文件格式">PDF</option>
+                    </select>
+                    <div><img src="page/project/images/日历@2x.png" alt=""/><span>查询范围：</span></div>
+					<div style="width:400px;margin-bottom:10px;">
+						<input id="d4311s" class="Wdate" type="text"  ng-model="startTime" ng-change="setTime()" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'d4312\')||\'2020-10-01\'}'})"/><span>到</span>
+						<input id="d4312s" class="Wdate" type="text"  ng-model="finishedTime" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'d4311\')}',maxDate:'2020-10-01'})"/>
+				    </div>
+                </div> -->
+                <ul class="tabCon">
+                    <li>
+                        <div class="tables">
+                            <table border="0" cellspacing="0" cellpadding="0">
+                                <thead>
+                                <tr style="background: #eee;">
+                                    <th style="width:80px;">序号</th>
+                                    <th style="width:500px;">文件名称</th>
+                                    <th style="width:250px;">上传时间</th>
+                                    <th style="width:120px;">文件类型</th>
+                                    <th style="width:80px;">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tbody12">
+                               
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table" style="border-bottom:1px solid #aaa;border-left:1px solid #aaa;border-right:1px solid #aaa;">
+                            <table border="0" cellspacing="0" cellpadding="0" >
+                                <thead>
+                                </thead>
+                                <tbody class="tbody12">
+                                <tr ng-repeat="normative in normativeList">
+                                    <td style="width:80px;">{{$index+1}}</td>
+                                    <td style="width:500px;">{{normative.fileNameList}}</td>
+                                    <td style="width:250px;">{{normative.submitDate}}</td>
+                                    <td style="width:120px;">{{normativeFilesNameLists[normative.studyType]}}</td>
+                                    <td class="tds" style="width:80px;">
+				                        <button id="deletebutton" ng-click="deleteNormativeFiles(normative.id,normative.fileId)">
+				                        </button>
+				                         <a href="{{normative.fileUrlList}}" target="_blank" download="{{normative.fileNameList}}">
+					                        <button id="uploadbutton">
+				                        	</button>
+			                        	</a>
+		                    		</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(".subMenu").hide();
+    $(".leftMain > li > a").click(function () {
+        $(this).toggleClass("active");
+        $(this).siblings(".subMenu").toggle()
+    });
+    //    二级菜单
+    var len = $('.subMenu li').length;
+    $('.subMenu li').click(function(){
+        for(i=0;i<len;i++){
+            $('.tabCon li').eq(i).css('display','none');
+//            $('#tab li').removeClass('active')
+        }
+        $('.tabCon li').eq($(this).index('.subMenu li')).css('display','block');
+//        $(this).addClass('active')
+
+    })
+</script>

@@ -1,0 +1,99 @@
+
+	<div id="addcontent" ng-controller="CodeInformationController">
+		<div id="codecontent">
+			<!--内容部分-->
+		    <div class="qrCode">
+		        <!--tab-->
+		        <div class="qrCodePill">
+		            <div class="line"></div>
+		            <ul class="clear" id="tab">
+		                <li class="active" ng-click="getPapers('建筑')" id="jianzhu"><a>建筑</a></li>
+		                <li ng-click="getPapers('暖通')" id="nuantong"><a>暖通</a></li>
+		                <li ng-click="getPapers('给排水')" id="geipaishui"><a>给排水</a></li>
+		                <li ng-click="getPapers('消防')" id="xiaofang"><a>消防</a></li>
+		                <li ng-click="getPapers('电气')" id="dianqi"><a>电气</a></li>
+		            </ul>
+		
+		        </div>
+		    </div>
+		    <!--二维码-->
+		    <div class="qrCodeList">
+	            
+	            <div id="codeOfbody1">
+			       	<div class="videoCode" style="margin-right: 62px;width:120px;height:170px;padding: 70px;">
+			       		<div><img src="page/user_project/images/大型设备吊装施工工艺.png" width="135px" height="135px" onclick="showOneBig(this)"/></div>
+			       		<div style="width:119px; height:19px"><span>视频：大型设备吊装施工工艺</span></div>
+			       	</div>
+			       	<div class="videoCode" style="margin-right: 62px;width:120px;height:170px;padding: 70px;">
+			       		<div><img src="page/user_project/images/防雷接地施工工艺.png" width="135px" height="135px" onclick="showOneBig(this)"/></div>
+			       		<div style="width:119px; height:19px"><span>视频：防雷接地施工工艺</span></div>
+			       	</div>
+			       	<div class="videoCode" style="margin-right: 62px;width:120px;height:170px;padding: 70px;">
+			       		<div><img src="page/user_project/images/风管安装施工工艺交底.png" width="135px" height="135px" onclick="showOneBig(this)"/></div>
+			       		<div style="width:119px; height:19px"><span>视频：风管安装施工工艺</span></div>
+			       	</div>
+			       	<div class="videoCode" style="margin-right: 62px;width:120px;height:170px;padding: 70px;">
+			       		<div><img src="page/user_project/images/电气安装施工工程交底.png" width="135px" height="135px" onclick="showOneBig(this)"/></div>
+			       		<div style="width:119px; height:19px"><span>文档：机电安装施工工艺图册(电气)</span></div>
+			       	</div>
+			       	<div class="videoCode" style="margin-right: 62px;width:120px;height:170px;padding: 70px;">
+			       		<div><img src="page/user_project/images/给排水.png" width="135px" height="135px" onclick="showOneBig(this)"/></div>
+			       		<div style="width:119px; height:19px"><span>文档：机电安装施工工艺图册(给排水)</span></div>
+			       	</div>
+			       	<div class="videoCode" style="margin-right: 62px;width:120px;height:170px;padding: 70px;">
+			       		<div><img src="page/user_project/images/暖通.png" width="135px" height="135px" onclick="showOneBig(this)"/></div>
+			       		<div style="width:119px; height:19px"><span>文档：机电安装施工工艺图册(暖通)</span></div>
+			       	</div>
+			       	<div class="videoCode" style="margin-right: 62px;width:120px;height:170px;padding: 70px;">
+			       		<div><img src="page/user_project/images/策划1.png" width="135px" height="135px" onclick="showOneBig(this)"/></div>
+			       		<div style="width:119px; height:19px"><span>文档：机电安装施工工艺图册(策划)</span></div>
+			       	</div>
+			       	<div class="videoCode" style="margin-right: 62px;width:120px;height:170px;padding: 70px;">
+			       		<div><img src="page/user_project/images/二次结构配管开槽.png" width="135px" height="135px" onclick="showOneBig(this)"/></div>
+			       		<div style="width:119px; height:19px"><span>文档：二次结构配管开槽(视频交底)</span></div>
+			       	</div>
+			       	<div class="videoCode" style="margin-right: 62px;width:120px;height:170px;padding: 70px;">
+			       		<div><img src="page/user_project/images/自动穿引机.png" width="135px" height="135px" onclick="showOneBig(this)"/></div>
+			       		<div style="width:119px; height:19px"><span>文档：自动穿引机(视频交底)</span></div>
+			       	</div>
+			       	<div class="videoCode" style="margin-right: 62px;width:120px;height:170px;padding: 70px;">
+			       		<div><img src="page/user_project/images/配电箱砼框制作工艺--2017.0401.png" width="135px" height="135px" onclick="showOneBig(this)"/></div>
+			       		<div style="width:119px; height:19px"><span>文档：配电箱砼框制作工艺--2017.0401(视频交底)</span></div>
+			       	</div>
+		       	</div>
+		    </div>
+        </div>
+	</div>
+<script>
+	function showOneBig(scope){
+		
+	layer.ready(function(){ 
+	  layer.open({
+  		type: 1,
+  		title: false,
+  		area: ['360px', '360px'],
+  		shadeClose: true, //点击遮罩关闭
+  		content: '<div style="background-size: 100% 100%;width:360px;height:360px;background-image: url(' +scope.src+')"/></div>'
+  	  });
+	});
+	 //    菜单导航
+    $(".qrCodePill ul li").on("click",function () {
+        $(".qrCodePill ul li").removeClass("active");
+        $(this).addClass("active")
+    })
+   //    二级菜单
+    var len = $('#tab li').length;
+    $('#tab li').click(function(){
+        for(i=0;i<len;i++){
+            $('.qrCodeList ul').eq(i).css('display','none');
+            $('#tab li').removeClass('active')
+        }
+        $('.qrCodeList ul').eq($(this).index('#tab li')).css('display','block');
+        $(this).addClass('active')
+
+    })
+
+
+
+}
+</script>

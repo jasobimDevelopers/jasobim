@@ -1,0 +1,64 @@
+<div ng-controller="MeasuredDataController">
+<div ng-include="'page/user_project/html/measuredDataInfo.html'" style="display:none; z-index:1;" id="measuredDataInfoHtml"></div>
+<div id="projectContent" style="display:block;">
+		 <!--search-->
+	    <div class="search">
+	        <div class="search_con">
+	            <input type="text" placeholder="搜索" id="project_search"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findLike()"></a>
+	            <button id="search">高级搜索</button>
+	        </div>
+	        <!--搜索内容-->
+	        <div class="search_list">
+	            <div>
+	                <label><span>项目名称</span><input type="text" ng-model="MeasuredDataTofind.projectName"></label>
+	                <label><span>总包单位</span><input type="text" ng-model="MeasuredDataTofind.leaderUnit"></label>
+	                <label><span>安装负责人</span><input type="text" ng-model="MeasuredDataTofind.leaderName"></label>
+	                <button style="background: #3ba16e; color: #fff;" ng-click="measuredDataFind()">筛选</button>
+	            </div>
+	            <div>
+	                <label><span>检查人</span><input type="text" ng-model="MeasuredDataTofind.checkUser"></label>
+	                <button style="color: #333; border: 1px solid #dcdcdc" ng-click="resetProject()">重置</button>
+	            </div>
+	        </div>
+	    </div>
+	    <!--表格-->
+	    <div class="formMain">
+	    	<table class="table-striped table table-bordered">
+					<tbody>
+						<tr>
+							<th ng-repeat="measuredDataTitle in measuredDataTitles">{{measuredDataTitle}}</th>
+		
+						</tr>
+						<tr ng-repeat = "measuredDataInfo in measuredDataList">
+						    <td>{{$index+1}}</td>
+							<td>{{measuredDataInfo.projectName}}</td>
+							<td>{{measuredDataInfo.leaderUnit}}</td>
+							<td>{{measuredDataInfo.checkPart}}</td>
+							<td>{{measuredDataInfo.leaderName}}</td>
+							<td>{{measuredDataInfo.checkUser}}</td>
+							<td>{{measuredDataInfo.submiteUser}}</td>
+							<td>{{measuredDataInfo.createDate}}</td>
+							<td ng-class="measuredDataInfo.passPercent!='100%' ? 'tests':'test2'">{{measuredDataInfo.passPercent}}</td>
+							<td class="tds" >
+		                        <button id="editbutton" ng-click="measuredDataChange($index,measuredDataInfo.id)">
+		                        </button>
+		                        <button id="deletebutton" ng-click="deleteMeasuredDataInfo(measuredDataInfo.id)">
+		                        </button>
+		                    </td>
+						</tr>
+					</tbody>
+			</table>
+	    </div>
+	    <div id="table-buton_measured" style="float:right;margin-right:350px;margin-top:50px;">
+				<div id="measuredDataPageCode"></div>
+		</div>
+	</div>
+	</div>
+</div>
+<script>
+//搜索
+$(".search_list").css('display','none');
+$("#search").on('click',function () {
+    $(".search_list").toggle()
+});
+</script>

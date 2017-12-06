@@ -1,0 +1,122 @@
+<div ng-controller="AdvancedOrderController">
+	<div ng-include="'page/user_project/html/advancedOrderDetail.html'" style="display:none; z-index:1;" id="advancedOrderDetailHtml"></div>
+	<div id="projectContent" style="display:block;">
+		<!--search-->
+	    <!--search-->
+	    <div class="search">
+	       <div class="search_con">
+	            <input type="text" placeholder="搜索" id="project_search" ng-model="ConsTofind.othersAttention"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findOrderLike()"></a>
+	            <button id="search">高级搜索</button>
+	        </div>
+	        <!--搜索内容-->
+	        <div class="search_list">
+	            <div>
+	                <label><span>项目名称</span><input type="text"></label>
+	                <label><span>项目负责人</span><input type="text"></label>
+	                <button style="background: #3ba16e; color: #fff;">筛选</button> <button style="color: #333; border: 1px solid #dcdcdc;margin-left: 20px;">重置</button>
+	            </div>
+	        </div>
+	    </div>
+	    <!--内容部分-->
+	    <div class="yufudan">
+	        <div> 
+	        	<a><button class="add" ng-click="showAddOrderHtml()"><span>+</span>新增</button></a>
+	        	<a><button id="all_choice" ng-click="set_checkboxall('app')"><span>全选</span></button></a>
+	         	<a><button id="all_delete" ng-click="delete_choice('app')"><span>删除</span></button></a>
+	        </div>
+	        <div id="show04" style="display: none">
+                <div class="addCons">
+                    <div class="addConMain">
+                        <div class="pName">
+                            <span>项目名称&nbsp&nbsp&nbsp</span>
+                            <select id="projectName">
+                                <option value="请选择"><span>--------  请选择    --------</span></option>
+                                <option value="{{project_item.name}}" ng-repeat="project_item in projectList"><span>{{project_item.name}}</span></option>
+                            </select>
+                        </div>
+                        <div class="pName">
+                            <span>下一审批人</span>
+                            <select id="userName">
+                                <option value="请选择"><span>--------  请选择    --------</span></option>
+                                <option value="{{project_item.realName}}" ng-repeat="project_item in userList"><span>{{project_item.realName}}</span></option>
+                            </select>
+                        </div>
+                        <div class="pName">
+                            <span>月份选择&nbsp&nbsp&nbsp</span>
+                            <select id="month">
+                                <option value="请选择"><span>--------  请选择    --------</span></option>
+                                <option value="{{month}}" ng-repeat="month in monthList"><span>{{month}}</span></option>
+                            </select>
+                        </div>
+                        <div class="pZhuanye">
+                            <span>项目负责人</span>
+                            <input type="text" id="leaderName">
+                        </div>
+                        <div class="pZhuanye">
+                            <span>施工部位&nbsp&nbsp&nbsp</span>
+                            <input type="text" id="constructPart">
+                        </div>
+                        <div class="pZhuanye">
+                            <span>工程量&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+                            <input type="text" id="quantityDes">
+                        </div>
+                        <div class="pPic">
+                            <span>现场图片&nbsp&nbsp&nbsp</span>
+                            <input type="file" multiple="multiple" id="order_img">
+                        </div>
+                        <!-- <div class="pPic">
+                            <span>完成图片&nbsp&nbsp&nbsp</span>
+                            <input type="file" multiple="multiple" id="order_img_finished">
+                        </div> -->
+                       <!--  <div class="send" onClick="addConstruction()"><button ><span>提交</span></button></div> -->
+                    </div>
+                </div>
+            </div>
+	        <div id="app">
+	        	<table class="table-striped table table-bordered">
+					<tbody>
+						<tr>
+							<th ng-repeat="advancedOrderTitle in advancedOrderTitles">{{advancedOrderTitle}}</th>
+						</tr>
+						<tr ng-repeat = "advancedOrder in advancedOrderInfos">
+						    <td>{{$index+1}}</td>
+							<td>{{advancedOrder.projectName}}</td>
+							<td>{{advancedOrder.leader}}</td>
+							<td>{{advancedOrder.constructPart}}</td>
+							<td>{{advancedOrder.nextReceivePeopleId}}</td>
+							<td>{{orderInfosFlag[advancedOrder.status]}}</td>
+							<td>{{advancedOrder.createDate}}</td>
+							<td class="tds" >
+		                        <button id="editbutton" ng-click="advancedOrderChange(advancedOrder.id)">
+		                        </button>
+		                        <button id="deletebutton" ng-click="deleteAdvancedOrder(advancedOrder.id)">
+		                        </button>
+		                        <input type="checkbox" ng-click="setAdvancedOrderId(advancedOrder.id)" class="checkBoxItem">
+		                    </td>
+						</tr>
+					</tbody>
+				</table>
+	        </div>
+	        <div id="table-buton_advancedOrder" style="float:right;margin-right:350px;margin-top:50px;">
+				<div id="advancedOrderPageCode"></div>
+			</div>
+	         <!--打印-->
+	    	<div class="console" ng-click="exportAdvancedOrder()"><img src="page/new_user/images/dayin.png" alt="">预付单导出</div>
+	    	<div style="display:none;width:1200px;margin: 15px auto;font-size: 14px;cursor: pointer;" id="exportDivs"> 
+	    		<a href="{{advancedOrderUrl}}" target="_blank" download="{{advancedOrderUrl}}">
+                       <button id="uploadbutton">
+                      	</button>
+                      	<span>预付单下载</span>
+               	</a>
+            </div>
+	    </div>
+	   
+	</div>
+</div>
+<script>
+//搜索
+$(".search_list").css('display','none');
+$("#search").on('click',function () {
+    $(".search_list").toggle()
+});
+</script>

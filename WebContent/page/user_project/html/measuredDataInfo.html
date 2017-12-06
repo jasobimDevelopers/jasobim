@@ -1,0 +1,80 @@
+<div id="projectDetail">
+		<!-- <div id="returnbt" ng-click="returnProjects()">
+			<a><span>返回</span></a>
+		</div> -->
+	
+	<!--内容部分-->
+    <div class="project">
+        <!--tab-->
+       	<div id="returnMenu" style="width:1200px;margin:0 auto;">
+    		<ol class="breadcrumb">
+			  <li><a href="user_projectList"><strong>项目管理</strong></a></li>
+			  <li><a ng-click="goMeasuredDataList()"><strong>实测实量列表</strong></a></li>
+			  <li class="active"><a href="#">实测实量详情</a></li>
+			</ol>
+    	</div>
+     <!--tab 切换-->
+        <div class="projectCon">
+            <!--基本-->
+            <div class="projectConItem" style="display: block;">
+                <!--项目介绍-->
+                <div class="projectDescript">
+                    <ul>
+                        <li>项目名称：<span>{{MeasuredDataTofind.projectName}}</span></li>
+                        <li>总包单位：<span>{{MeasuredDataTofind.leaderUnit}}</span></li>
+                        <li>检查部位：<span>{{MeasuredDataTofind.checkPart}}</span></li>
+                        <li>总实测点数：<span>{{MeasuredDataTofind.measuredDataSum}}</span></li>
+                        <li>总合格点数：<span>{{MeasuredDataTofind.qualifiedDataSum}}</span></li>
+                        <li>合格率：<span>{{MeasuredDataPassPercent}}</span></li>
+                    </ul>
+                    <ul>
+                        <li>安装负责人：<span>{{MeasuredDataTofind.leaderName}}</span></li>
+                        <li>安装公司检查人：<span>{{MeasuredDataTofind.quantiter}}</span></li>
+                       	<li>测量人：<span>{{MeasuredDataTofind.celiangUser}}</span></li>
+                       	<li>复查人：<span>{{MeasuredDataTofind.checkMoreUser}}</span></li>
+                       	<li>提交人：<span>{{MeasuredDataTofind.submiteUser}}</span></li>
+                       	<li>提交时间：<span>{{MeasuredDataTofind.createDate}}</span></li>
+                    </ul>
+                    
+                </div>
+                <!--表格-->
+			    <div class="formMain">
+			    	<table class="table-striped table table-bordered">
+							<tbody>
+								<tr>
+									<th ng-repeat="measuredDataInfoTitle in measuredDataInfoTitles">{{measuredDataInfoTitle}}</th>
+				
+								</tr>
+								<tr ng-repeat = "measuredDataInfo in measuredDatasList">
+								    <td>{{$index+1}}</td>
+									<td ng-class="measuredDataInfo.shiceData!=measuredDataInfo.passData ? 'tests':'test2'">{{measuredDataInfo.checkContent}}</td>
+									<td>{{measuredDataInfo.checkTemplete}}</td>
+									<td>{{measuredDataInfo.shiceData}}</td>
+									<td>{{measuredDataInfo.passData}}</td>
+									<td>{{measuredDataInfo.designLevel}}</td>
+									<td>{{measuredDataInfo.locationSize}}</td>
+									<td>{{measuredDataInfo.inputData}}</td>
+								</tr>
+							</tbody>
+					</table>
+			    </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+//    二级菜单
+var len = $('.projectPill ul li').length;
+$('.projectPill ul li').click(function(){
+    for(i=0;i<len;i++){
+        $('.projectConItem').eq(i).css('display','none');
+        $('.projectPill ul li').removeClass('active')
+    }
+    $('.projectConItem').eq($(this).index('.projectPill ul li')).css('display','block');
+    $(this).addClass('active')
+});
+
+
+</script>

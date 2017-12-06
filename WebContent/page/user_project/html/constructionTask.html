@@ -1,0 +1,177 @@
+<div ng-controller="ConstructionTaskController">
+	<div ng-include="'page/user_project/html/constructionDetail.html'" style="display:none; z-index:1;" id="constructionDetailHtml"></div>
+	<div id="projectContent" style="display:block;">
+		<!--search-->
+	    <div class="search">
+	        <div class="search_con">
+	            <input type="text" placeholder="搜索" id="project_search" ng-model="ConsTofind.othersAttention"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findConsLike()"></a>
+	            <button id="search">高级搜索</button>
+	        </div>
+	        <!--搜索内容-->
+	        <div class="search_list">
+	            <div>
+	                <label><span>项目名称</span><input type="text" ng-model="ConsTofind.companyName"></label>
+	                <label><span>当前进度</span><input type="text" ng-model="ConsTofind.nextReceivePeopleId"></label>
+	                <button style="background: #3ba16e; color: #fff;" ng-click="findConsLike()">筛选</button> <button style="color: #333; border: 1px solid #dcdcdc;margin-left: 20px;" ng-click="resetCon()">重置</button>
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <div class="duty">
+	        <div>
+	         	<a><button class="add" ng-click="showAddConsHtml()"><span>+</span>新增</button></a>
+	         	<a><button id="all_choice" ng-click="set_checkboxall('app')"><span>全选</span></button></a>
+	         	<a><button id="all_delete" ng-click="delete_choice('app')"><span>删除</span></button></a>
+	        </div>
+	        <div id="show03" style="display: none">
+                <div class="addCons">
+                    <div class="addConMain">
+                        <div class="pName">
+                            <span>项目名称</span>
+                            <select id="projectName">
+                                <option value="请选择"><span>--------  请选择    --------</span></option>
+                                <option value="{{project_item.name}}" ng-repeat="project_item in projectList"><span>{{project_item.name}}</span></option>
+                            </select>
+                        </div>
+                        <div class="pName">
+                            <span>签收人&nbsp&nbsp&nbsp</span>
+                            <select id="receivedName">
+                            	<option value="请选择"><span>--------  请选择    --------</span></option>
+                                <option value="{{user_item.realName}}" ng-repeat="user_item in userList"><span>{{user_item.realName}}</span></option>
+                            </select>
+                        </div>
+                        <div class="pZhuanye">
+                            <span>班组名称</span>
+                            <input type="text" id="teamName">
+                        </div>
+                        <div class="pZhuanye">
+                            <span>施工内容</span>
+                            <input type="text" id="taskContent">
+                        </div>
+                        <div class="pZhuanye">
+                            <span>完成期限</span>
+                            <input type="text" id="finishedDate">
+                        </div>
+                        <div class="pZhuanye">
+                            <span>奖惩内容</span>
+                            <input type="text" id="rewards">
+                        </div>
+                        <div class="pZhuanye">
+                            <span>交底内容</span>
+                            <input type="text" id="detailContent">
+                        </div>
+                        <div class="pPic">
+                            <span>现场图片</span>
+                            <input type="file" multiple="multiple" id="cons_img" id="conspic">
+                        </div>
+                       <!--  <div class="send" onClick="addConstruction()"><button ><span>提交</span></button></div> -->
+                    </div>
+                </div>
+            </div>
+	        <div id="app">
+	            <table class="table-striped table table-bordered">
+					<tbody>
+						<tr>
+							<th ng-repeat="constructionTaskTitle in constructionTaskTitles">{{constructionTaskTitle}}</th>
+						</tr>
+						<tr ng-repeat = "constructionTask in constructionTaskLists">
+						    <td>{{$index+1}}</td>
+							<td>{{constructionTask.companyName}}</td>
+							<td>{{constructionTask.createUserName}}</td>
+							<td>{{constructionTaskFlag[constructionTask.taskFlag]}}</td>
+							<td>{{constructionTask.nextApprovalPeopleType}}</td>
+							<td>{{constructionTask.nextReceivePeopleName}}</td>
+							<td>{{constructionTask.createDate}}</td>
+							<td class="tds" >
+		                        <button id="editbutton" ng-click="constructionTaskChange(constructionTask.id)">
+		                        </button>
+		                        <button id="deletebutton" ng-click="deleteConstructionTask(constructionTask.id)">
+		                        </button>
+		                        <input type="checkbox" ng-click="setConstructionTaskId(constructionTask.id)" class="checkBoxItem">
+		                    </td>
+						</tr>
+					</tbody>
+				</table>
+	        </div>
+	        <div id="table-buton_cons" style="float:right;margin-top:50px;">
+				<div id="constructionPageCode"></div>
+			</div>	
+	         <!--打印-->
+	    	<div class="console" ng-click="exportConstructionTask()"><img src="page/new_user/images/dayin.png" alt="">施工单导出</div>
+	    	<div style="display:none;width:1200px;margin: 15px auto;font-size: 14px;cursor: pointer;" id="exportDiv"> 
+	    		<a href="{{constructionTaskUrl}}" target="_blank" download="{{constructionTaskUrl}}">
+                       <button id="uploadbutton">
+                      	</button>
+                      	<span style="color: #2f70de;">施工单下载</span>
+               	</a>
+            </div>
+	    </div>
+	   
+	</div>
+</div>
+<script>
+$("#projectName").change(function () {
+    alert($("#projectName option:selected").val().toString());
+});
+
+
+//搜索
+$(".search_list").css('display','none');
+$("#search").on('click',function () {
+    $(".search_list").toggle()
+});
+</script>
+<script type="text/javascript">
+	//窗口效果
+	//点击登录class为tc 显示
+	$(".tc").click(function(){
+		$("#gray").show();
+		$("#popup").show();//查找ID为popup的DIV show()显示#gray
+		tc_center();
+	});
+	
+	//点击关闭按钮
+	$("a.guanbi").click(function(){
+		$("#gray").hide();
+		$("#popup").hide();//查找ID为popup的DIV hide()隐藏
+	});
+
+	//窗口水平居中
+	$(window).resize(function(){
+		tc_center();
+	});
+
+	function tc_center(){
+		var _top=($(window).height()-$(".popup").height())/2;
+		var _left=($(window).width()-$(".popup").width())/2;
+		
+		$(".popup").css({top:_top,left:_left});
+	}	
+</script>
+
+	<script type="text/javascript">
+	$(document).ready(function(){ 
+
+		$(".top_nav").mousedown(function(e){ 
+			$(this).css("cursor","move");//改变鼠标指针的形状 
+			var offset = $(this).offset();//DIV在页面的位置 
+			var x = e.pageX - offset.left;//获得鼠标指针离DIV元素左边界的距离 
+			var y = e.pageY - offset.top;//获得鼠标指针离DIV元素上边界的距离 
+			$(document).bind("mousemove",function(ev){ //绑定鼠标的移动事件，因为光标在DIV元素外面也要有效果，所以要用doucment的事件，而不用DIV元素的事件 
+			
+				$(".popup").stop();//加上这个之后 
+				
+				var _x = ev.pageX - x;//获得X轴方向移动的值 
+				var _y = ev.pageY - y;//获得Y轴方向移动的值 
+			
+				$(".popup").animate({left:_x+"px",top:_y+"px"},10); 
+			}); 
+
+		}); 
+
+		$(document).mouseup(function() { 
+			$(".popup").css("cursor","default"); 
+			$(this).unbind("mousemove"); 
+		});
+	}) 
+</script>
