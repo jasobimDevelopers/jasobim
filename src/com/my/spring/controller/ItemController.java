@@ -108,14 +108,7 @@ public class ItemController {
             @RequestParam(value = "token",required = true) String token){
         return itemService.deleteItem(id,token);
     }
-    /*@RequestMapping(value="/deleteItemByTypeNameAndProjectId")
-    @ResponseBody
-    public DataWrapper<Void> deleteItemByTypeNameAndProjectId(
-            @RequestParam(value = "typename",required = true) String typename,
-            @RequestParam(value = "projectId",required = true) Long projectId,
-            @RequestParam(value = "token",required = true) String token){
-        return itemService.deleteItemByTypeNameAndProjectId(projectId,typename,token);
-    }*/
+   
     @RequestMapping(value="/deleteItemByProjectId")
     @ResponseBody
     public DataWrapper<Void> deleteItemByProjectId(
@@ -168,6 +161,12 @@ public class ItemController {
             @RequestParam(value = "token",required = false) String token){
         return itemService.getItemById(itemId,token);
     }
+    @RequestMapping(value="/getItemBySelfId",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<Item> getItemBySelfId(
+            @RequestParam(value = "projectId",required = false) Long projectId){
+        return itemService.getItemBySelfId(projectId);
+    }
     @RequestMapping(value="/getMinItemById",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<MinItemPojo> getMinItemById(
@@ -218,7 +217,6 @@ public class ItemController {
     		HttpServletRequest request,
     		@ModelAttribute Item item
     		){
-    	
         return itemService.getCodeImg(item,request);
     }
 

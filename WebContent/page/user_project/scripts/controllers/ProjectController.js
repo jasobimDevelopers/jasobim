@@ -47,12 +47,14 @@ function ProjectController($scope,ProjectService) {
 	var videoTypeList=[];
 	$scope.videofiles=[];
 	var videoTypeList="";
+	$scope.addVideoInfo={};
 	$scope.floorNumArrays=[];
 	$scope.buildingNumArrays=[];
 	$scope.showOr=[];
-	for(var i=0;i<5;i++){
-		$scope.showOr[i]=0;
-	}
+	var progressBar;
+    var percentageDiv;
+    var uploadTime;
+	
 	////////////////
 	var itemName="";
 	var quantityName="";
@@ -104,6 +106,7 @@ function ProjectController($scope,ProjectService) {
 	$scope.buildingNumInfo=null;
 	$scope.buildingDownInfo=null;
 	$scope.videoTypes="";
+	$scope.addVideoInfo={};
 	
 	$scope.fileTypes="";
 	var item = "";
@@ -325,7 +328,6 @@ function ProjectController($scope,ProjectService) {
 	 $scope.projectQuestionOfPriority=[{name:"一般"},{name:"重要"},{name:"紧急"}];
 	 $scope.projectQuestionOfStatus=[{name:"待解决"},{name:"已解决"}];
 	 $scope.paperBuildingNum=["1#","2#","3#","4#","5#","6#","7#","8#","9#","10#","11#","12#","13#","14#","15#","16#","17#","18#","19#","20#"];
-	 $scope.paperFloorNum=["-2F","-1F","1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F","13F","14F","15F","16F","17F","18F","19F","20F","21F","22F","23F","24F","25F","26F","27F","28F","29F","30F"];
 	 /////////////////////////
 	 /*
 	  * 菜单的选择操作
@@ -636,33 +638,7 @@ function ProjectController($scope,ProjectService) {
 	 }
 
 	
-	 ////////////上传图纸信息
-	 //////
 	
-	 for(var i=1;i<41;i++){
-		 if(i==1){
-			 $scope.floorNumArrays[i-1]="请输入楼层号";
-		 }else{
-			 $scope.floorNumArrays[i-1]="F"+(i-1);
-		 }
-		 
-		
-	 }
-	 for(var j=0;j<20;j++){
-		 if(j==0){
-			 $scope.buildingNumArrays[j]="请输入楼栋号";
-		 }else{
-			 $scope.buildingNumArrays[j]="#"+j;
-		 }
-		 
-	 }
-	 
-	 $scope.setBuildingNumber = function(x) {
-		 $scope.number=x;
-	 }
-	 $scope.setFloorNumber = function(y) {
-		 $scope.numbers=y;
-	 }
 	 ///////图纸上传
 	 $scope.uploadPaperFile=function(){
 		 var building_val=$scope.addPaperInfo.buildingNum;
@@ -696,17 +672,19 @@ function ProjectController($scope,ProjectService) {
 		        area: ['500px','500px'],
 		        btn:['上传','取消'],
 		        yes:function(index,layero){
+		        	layero.find('#process')[0].style.display="block"; 
 		        	$scope.addPaperInfo={};
 		        	$scope.addPaperInfo.buildingNum=layero.find('#paper_buildingNum')[0].value;
 		        	$scope.addPaperInfo.professionType=layero.find('#paper_profession_type')[0].value;
 		        	$scope.constructionfiles=layero.find('#paper_files')[0].files;
-		        	var floorNum=layero.find('#paper_floorNum')[0].value;
-		        	if(floorNum==0 || floorNum==1){
-		        		$scope.addPaperInfo.floorNum=parseInt(floorNum)-2;
-		        	}else{
-		        		$scope.addPaperInfo.floorNum=parseInt(floorNum)-1;
+		        	var floorNum=layero.find('#paper_floors')[0].value;
+		        	if(floorNum!=undefined && floorNum!=null){
+		        		$scope.addPaperInfo.floorNum=parseInt(floorNum);
 		        	}
-		        	$scope.uploadPaperFile();
+		        	progressBar=layero.find('#progressBar')[0];
+		        	percentageDiv=layero.find('#percentage')[0];
+		        	uploadTime=layero.find('#time')[0];
+		        	$scope.UpladFile("paper");
 		        },
 		        content:$("#show_paper").html()
 		    });
@@ -750,11 +728,16 @@ function ProjectController($scope,ProjectService) {
 		        area: ['500px','500px'],
 		        btn:['上传','取消'],
 		        yes:function(index,layero){
+		        	layero.find('#process2')[0].style.display="block"; 
 		        	$scope.addVideoInfo={};
 		        	$scope.addVideoInfo.videoType=layero.find('#videoType')[0].value;
 		        	$scope.addVideoInfo.videofileType=layero.find('#videofileType')[0].value;
 		        	$scope.videofiles=layero.find('#videofiles')[0].files;
-		        	$scope.uploadVideoFile();
+		        	$scope.addVideoInfo.buildingNum=layero.find('#video_buildingNum')[0].value;
+		        	progressBar=layero.find('#progressBar2')[0];
+		        	percentageDiv=layero.find('#percentage2')[0];
+		        	uploadTime=layero.find('#time2')[0];
+		        	$scope.UpladFile("video");
 		        },
 		        content:$("#show_video").html()
 		    });
@@ -790,29 +773,29 @@ function ProjectController($scope,ProjectService) {
 	    
 	     //上传文件方法
 	     $scope.UpladFile=function (test) {
-	    	 var process=document.getElementById("process");
-	    	 process.style.display="block";
 	    	 var form = new FormData(); // FormData 对象
 	    	 if(test=='video'){
-	    		 var fileObj = document.getElementById("video_import").files; // js 获取文件对象
+	    		 var fileObj = $scope.videofiles; // js 获取文件对象
 		         var url = "api/video/admin/addVideo"; // 接收上传文件的后台地址 
-		         if($scope.fileTypes!=""){
-		        	 form.append("videoType",$scope.fileTypes); // 文件对象
+		         if($scope.addVideoInfo.videofileType!=undefined && $scope.addVideoInfo.videofileType!=null){
+		        	 form.append("videoType",$scope.addVideoInfo.videofileType); // 文件对象
 		         }
-		         if($scope.videoTypes!=""){
-		        	 form.append("professionType",$scope.videoTypes);
+		         if($scope.addVideoInfo.videoType!=""){
+		        	 form.append("professionType",$scope.addVideoInfo.videoType);
 		         }
-		        
+		         if($scope.addVideoInfo.buildingNum!="" && $scope.addVideoInfo.buildingNum!=undefined){
+		        	 form.append("buildingNum",$scope.addVideoInfo.buildingNum);
+		         }
 		         
 	    	 }
 	         if(test=='paper'){
-	        	 var fileObj = document.getElementById("paper_import").files; // js 获取文件对象
+	        	 var fileObj = $scope.constructionfiles; // js 获取文件对象
 		         var url = "api/paper/admin/uploadPaper"; // 接收上传文件的后台地址 
-		         if($scope.paperTypes!=null){
-		        	 form.append("professionType",$scope.paperTypes);
+		         if($scope.addPaperInfo.professionType!=null){
+		        	 form.append("professionType",$scope.addPaperInfo.professionType);
 				 }
-		         var paper_buildingNum=document.getElementById("buildingNum_input").value;
-				 var paper_floorNum=document.getElementById("floorNum_input").value;
+		         var paper_buildingNum=$scope.addPaperInfo.buildingNum;
+				 var paper_floorNum=$scope.addPaperInfo.floorNum;
 				 if(paper_floorNum!=undefined && paper_floorNum!=""){
 					 form.append("floorNum",paper_floorNum);
 				 }
@@ -826,7 +809,7 @@ function ProjectController($scope,ProjectService) {
 				 }
 	         }
 	         
-	         form.append("projectId",$scope.findProjectInfo.id);
+	         form.append("projectId",$scope.findprojectId);
 	         form.append("token",token);
 	         xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
 	         xhr.open("post", url, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
@@ -842,8 +825,6 @@ function ProjectController($scope,ProjectService) {
 	     //上传进度实现方法，上传过程中会频繁调用该方法
 	     function progressFunction(evt) {
 	         
-	          var progressBar = document.getElementById("progressBar");
-	          var percentageDiv = document.getElementById("percentage");
 	          // event.total是需要传输的总字节，event.loaded是已经传输的字节。如果event.lengthComputable不为真，则event.total等于0
 	          if (evt.lengthComputable) {//
 	              progressBar.max = evt.total;
@@ -851,7 +832,7 @@ function ProjectController($scope,ProjectService) {
 	              percentageDiv.innerHTML = Math.round(evt.loaded / evt.total * 100) + "%";
 	          }
 	         
-	         var time = document.getElementById("time");
+	         var time = uploadTime;
 	         var nt = new Date().getTime();//获取当前时间
 	         var pertime = (nt-ot)/1000; //计算出上次调用该方法时到现在的时间差，单位为s
 	         ot = new Date().getTime(); //重新赋值时间，用于下次计算
@@ -882,7 +863,8 @@ function ProjectController($scope,ProjectService) {
 	     function uploadComplete(evt) {
 	      //服务断接收完文件返回的结果
 	      //    alert(evt.target.responseText);
-	    	  $scope.getProjectPaperList($scope.projectid,10,1,paper);
+	    	  $scope.getProjectPaperList($scope.findprojectId,10,1,paper);
+	    	  $scope.getProjectVideoList($scope.findprojectId,10,1,video);
 	          alert("上传成功！");
 	     }
 	     //上传失败

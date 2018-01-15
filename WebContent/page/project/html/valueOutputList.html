@@ -12,7 +12,7 @@
 	     			<span class="inputtext">项目名:</span><input type="text" id="projectName" ng-model="valueOutputTofind.others"/>
 	                <span class="inputtext">&nbsp时间:</span><input type="text" id="constructionUnit" ng-model="valueOutputTofind.dates"/>
 	                <a><button id="find" ng-click="valueOutputFind()" ></button></a>
-	                <a><button id="add_valueOutPut_button" ng-click="valueOutputAdd()">新增</button></a>
+	                <a><button id="add_valueOutPut_button" ng-click="showValueOutputAddHtml()">新增</button></a>
 	            </div>
 	           
 	</div>
@@ -21,7 +21,28 @@
 			<button id="all_choice" ng-click="set_checkboxall('include_bodys')"><span>全选</span></button>
 			<button id="all_delete" ng-click="delete_choice('include_bodys')"><span>删除</span></button>
 		</div>
-		
+		<div id="show_valueOutput" style="display: none">
+                <div class="addQues">
+                    <div class="addConMain">
+                        <div class="pProblem">
+                            <span>项目名称&nbsp&nbsp</span>
+                            <input type="text" id="projectName"/>
+                        </div>
+                        <div class="pProblem">
+                            <span>项目id&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+                            <input type="text" id="projectId"/>
+                        </div>
+                        <div class="pZhuanye">
+                            <span>总产值&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+                            <input type="text" id="num"/>
+                        </div>
+                        <div class="pProblem">
+                            <span>当月已完成</span>
+                            <input type="text" id="finished"/>
+                        </div>
+                    </div>
+                </div>
+        </div>
 		<div id="include_bodys">
 			<table class="table-striped table table-bordered">
 				<tbody>

@@ -96,9 +96,9 @@
                            <thead>
                            <tr style="background: #eee;">
                                <th style="border-left: 1px solid #aaa;width:80px;text-align:center;">序号</th>
-                               <th style="width:250px;text-align:center;">构件名称</th>
-                               <th style="width:200px;text-align:center;">底部高程</th>
-                               <th style="width:200px;text-align:center;">系统类型</th>
+                               <th style="width:200px;text-align:center;">构件名称</th>
+                               <th style="width:100px;text-align:center;">底部高程</th>
+                               <th style="width:350px;text-align:center;">类型名称</th>
                                <th style="width:500px;text-align:center;">尺寸</th>
                                <th style="width:200px;text-align:center;">长度</th>
                            </tr>
@@ -108,7 +108,7 @@
 	                               <td style="border-left:1px solid #aaa;">{{$index+1}}</td>
 	                               <td>{{item.name}}</td>
 	                               <td>{{item.bottomElevation}}</td>
-	                               <td>{{item.systemType}}</td>
+	                               <td>{{item.familyAndType}}</td>
 	                               <td>{{item.size}}</td>
 	                               <td>{{item.length}}</td>
 	                           </tr>
@@ -167,18 +167,18 @@
                             <tr style="background: #eee;">
                                 <th style="border-left: 1px solid #aaa;width:80px;text-align:center;">序号</th>
                                 <th style="width:250px;text-align:center;">构件名称</th>
-                                <th style="width:200px;text-align:center;">系统类型</th>
+                                <th style="width:400px;text-align:center;">类型名称</th>
                                 <th style="width:100px;text-align:center;">数值</th>
                                 <th style="width:100px;text-align:center;">单位</th>
                                 <th style="width:400px;text-align:center;">尺寸</th>
-                                <th style="width:400px;text-align:center;">材质</th>
+                                <th style="width:200px;text-align:center;">材质</th>
                             </tr>
                             </thead>
                             <tbody class="tbody02" >
                             <tr ng-repeat="quantity in projectQuantityList">
                                 <td style="border-left:1px solid #aaa;">{{$index+1}}</td>
                                 <td>{{quantity.name}}</td>
-                                <td>{{quantity.systemType}}</td>
+                                <td>{{quantity.familyAndType}}</td>
                                 <td>{{quantity.value}}</td>
                                 <td>{{quantity.unit}}</td>
                                 <td>{{quantity.size}}</td>
@@ -240,10 +240,13 @@
                                     </div>
                                     <div class="louceng">
                                         <span>楼层号</span>
-                                        <select id="paper_floorNum">
-                                            <option value="{{$index}}" ng-repeat="floorNum in paperFloorNum">{{floorNum}}</option>
-                                        </select>
+                                        <input type="text" id="paper_floors"/>
                                     </div>
+                                    <div id="process" style="display:none;width:290px;text-align:left;margin:45px auto;">
+										<progress id="progressBar" value="0" max="100" style="width: 300px;"></progress>
+			    						<span id="percentage"></span><span id="time"></span>
+			    						<br /><br />
+	    							</div>
                                 </div>
                             </div>
                         </div>
@@ -321,6 +324,12 @@
                                     <div class="tuzhi">
                                         <span>交&nbsp;&nbsp;&nbsp;底</span><input type="file" multiple="multiple" id="videofiles"/>
                                     </div>
+                                    <div class="loudong">
+                                        <span>楼栋号</span>
+                                        <select id="video_buildingNum">
+                                            <option value="{{$index+1}}" ng-repeat="buildingNum in paperBuildingNum">{{buildingNum}}</option>
+                                        </select>
+                                    </div>
                                     <div class="louceng">
                                         <span>类&nbsp;&nbsp;&nbsp;型</span>
                                         <select id="videoType">
@@ -336,6 +345,11 @@
                                             <option value="3">其他</option>
                                         </select>
                                     </div>
+                                    <div id="process2" style="display:none;width:290px;text-align:left;margin:45px auto;">
+										<progress id="progressBar2" value="0" max="100" style="width: 300px;"></progress>
+			    						<span id="percentage2"></span><span id="time2"></span>
+			    						<br /><br />
+	    							</div>
                                 </div>
                             </div>
                         </div>
@@ -349,7 +363,7 @@
                                     <th style="border-left: 1px solid #aaa;width:15%;text-align:center;">序号</th>
                                     <th style="width:25%;text-align:center;">名称</th>
                                     <th style="width:20%;text-align:center;">楼栋号</th>
-                                    <th style="width:20%;text-align:center;">专业</th>
+                                    <th style="width:20%;text-align:center;">类型</th>
                                     <th style="width:20%;text-align:center;">操作</th>
                                 </tr>
                             </thead>
@@ -358,7 +372,7 @@
 	                                <td style="border-left:1px solid #aaa;">{{$index+1}}</td>
 	                                <td>{{video.originName}}</td>
 	                                <td>{{video.buildingNum}}</td>
-	                                <td>{{projectPhaseInfos[video.professionType].name}}</td>
+	                                <td>{{projectQuestionType[video.professionType].name}}</td>
 	                                <td class="tds" >
 				                        <a href="{{video.url}}" target="_blank" download="{{video.originName}}">
 					                         <button id="uploadbutton">

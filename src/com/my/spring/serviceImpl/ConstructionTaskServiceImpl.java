@@ -178,6 +178,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 	    			}
 	    			userLogDao.addUserLog(userLog);
 	    		}
+	        	String NextReceivePeopleId=null;
         		if(userInMemory.getUserType()!=3){
         			ConstructionTask.setUserProjectIdList("-1");
         		}
@@ -188,12 +189,12 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
         			ConstructionTask.setApprovalPeopleName(userInMemory.getRealName());
         		}
         		if(ConstructionTask.getNextReceivePeopleId()==null && userInMemory.getUserType()==3){
-        			ConstructionTask.setNextReceivePeopleId(userInMemory.getRealName());
+        			NextReceivePeopleId=userInMemory.getRealName(); 
         		}
         		if(ConstructionTask.getCreateUserName()==null && userInMemory.getUserType()==3){
         			ConstructionTask.setCreateUserName(userInMemory.getRealName());
         		}
-				dataWrapper=constructionTaskDao.getConstructionTasksList(pageIndex,pageSize,ConstructionTask,state,userInMemory.getRealName());
+				dataWrapper=constructionTaskDao.getConstructionTasksList(pageIndex,pageSize,ConstructionTask,state,userInMemory.getRealName(),NextReceivePeopleId);
 				if(dataWrapper.getData()!=null){
 					List<ConstructionTaskPojo> constructionTaskPojoList = new ArrayList<ConstructionTaskPojo>();
 					for(int i=0;i<dataWrapper.getData().size();i++){

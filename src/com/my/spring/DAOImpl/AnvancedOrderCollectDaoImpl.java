@@ -105,6 +105,8 @@ public class AnvancedOrderCollectDaoImpl extends BaseDao<AdvancedOrderCollect> i
         }
         if (ret != null && ret.size() > 0) {
 			retDataWrapper=ret.get(0);
+		}else{
+			retDataWrapper=null;
 		}
 		return retDataWrapper;
 	}

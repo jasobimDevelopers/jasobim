@@ -126,6 +126,25 @@ public class Normativefiles {
 	public void setStudyType(Integer studyType) {
 		this.studyType = studyType;
 	}
+	public Normativefiles(){
+		
+	}
+	public Normativefiles(Long id,String content,String fileIdList,
+			String fileTypeList,Date submitDate,Long submitUserId,
+			String title,String describes,String remark,Long size,
+			Integer studyType){
+		this.id=id;
+		this.content=content;
+		this.fileIdList=fileIdList;
+		this.fileTypeList=fileTypeList;
+		this.remark=remark;
+		this.size=size;
+		this.studyType=studyType;
+		this.submitDate=submitDate;
+		this.submitUserId=submitUserId;
+		this.describes=describes;
+		this.title=title;		
+	}
 	
 	
 }

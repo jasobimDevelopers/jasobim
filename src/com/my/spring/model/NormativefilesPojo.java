@@ -1,5 +1,6 @@
 package com.my.spring.model;
 
+import java.util.Date;
 
 public class NormativefilesPojo {
 	private Long id;
@@ -100,6 +101,23 @@ public class NormativefilesPojo {
 	public void setFileNameList(String[] fileNameList) {
 		this.fileNameList = fileNameList;
 	}
-	
+	public NormativefilesPojo(){
+		
+	}
+	public NormativefilesPojo(String projectName,String content,String[] fileUrlList,
+			String[] fileNameList,String submitDate,
+			String submitUserName,String title,String describe,
+			String remark,Integer studyType,Long size){
+		this.content=content;
+		this.projectName=projectName;
+		this.fileUrlList=fileUrlList;
+		this.remark=remark;
+		this.size=size;
+		this.studyType=studyType;
+		this.submitDate=submitDate;
+		this.submitUserName=submitUserName;
+		this.describe=describe;
+		this.title=title;		
+	}
 	
 }

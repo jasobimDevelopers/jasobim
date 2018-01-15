@@ -29,4 +29,5 @@ public interface ItemService {
 	String getCodeImg(Item item, HttpServletRequest request);
 	DataWrapper<MinItemPojo> getMinItemById(Long id);
 	//public boolean batchImportss(String name,MultipartFile file,String token,HttpServletRequest request, Long projectId);
+	DataWrapper<Item> getItemBySelfId(Long projectId);
 }

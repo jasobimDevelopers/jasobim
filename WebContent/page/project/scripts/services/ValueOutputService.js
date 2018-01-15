@@ -56,4 +56,28 @@ angular.module('Demo')
             });
         return deferred.promise;
      };
+     ///////产值添加
+     this.addValueOutputByAdmin = function(formData) {
+		 var deferred = $q.defer();
+		 console.log("产值增加");
+		 $http.post('api/ValueOutput/addValueOutput?token='+getCookie('token'),formData,
+			  {
+			  		headers: {'Content-Type':undefined},
+			  		transformRequest: angular.identity 
+			  })
+		     .success(function(data, status, headers, config){
+		         if(data.callStatus == "SUCCEED"){
+		             deferred.resolve(data);
+		             self.vauleOutputInfo = data;
+		             alert("产值添加成功！");
+		         }else{
+		             alert("数据添加失败");
+		         }
+		         
+		     })
+		     .error(function(data, status, headers, config){
+		         deferred.reject(data);
+		     });
+		 return deferred.promise;
+     };
 });

@@ -1,6 +1,7 @@
 package com.my.spring.serviceImpl;
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService {
 	FileService fileService;
 	private String filePath="files";
     private Integer fileType=5;
+    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 	@Override
 	public DataWrapper<Void> register(User user) {
 		// TODO Auto-generated method stub
@@ -278,7 +280,8 @@ public class UserServiceImpl implements UserService {
 				userpojo.setPassword(dataWrapper.getData().getPassword());
 				userpojo.setProjectList(dataWrapper.getData().getProjectList());
 				userpojo.setRealName(dataWrapper.getData().getRealName());
-				userpojo.setRegisterDate(dataWrapper.getData().getRegisterDate());
+				 
+				userpojo.setRegisterDate(sdf.format(dataWrapper.getData().getRegisterDate()));
 				userpojo.setTel(dataWrapper.getData().getTel());
 				userpojo.setUserName(dataWrapper.getData().getUserName());
 				userpojo.setUserType(dataWrapper.getData().getUserType());
@@ -321,7 +324,7 @@ public class UserServiceImpl implements UserService {
 					userpojo.setPassword(userList.getData().get(i).getPassword());
 					userpojo.setRealName(userList.getData().get(i).getRealName());
 					userpojo.setTel(userList.getData().get(i).getTel());
-					userpojo.setRegisterDate(userList.getData().get(i).getRegisterDate());
+					userpojo.setRegisterDate(sdf.format(userList.getData().get(i).getRegisterDate()));
 					userpojo.setUserName(userList.getData().get(i).getUserName());
 					userpojo.setUserType(userList.getData().get(i).getUserType());
 					userpojo.setUserIcon(userList.getData().get(i).getUserIcon());
@@ -374,7 +377,7 @@ public class UserServiceImpl implements UserService {
 					userpojo.setPassword(userList.getData().get(i).getPassword());
 					userpojo.setRealName(userList.getData().get(i).getRealName());
 					userpojo.setTel(userList.getData().get(i).getTel());
-					userpojo.setRegisterDate(userList.getData().get(i).getRegisterDate());
+					userpojo.setRegisterDate(sdf.format(userList.getData().get(i).getRegisterDate()));
 					userpojo.setUserName(userList.getData().get(i).getUserName());
 					userpojo.setUserType(userList.getData().get(i).getUserType());
 					userpojo.setUserIcon(userList.getData().get(i).getUserIcon());
@@ -555,7 +558,7 @@ public class UserServiceImpl implements UserService {
 					user.setId(null);
 					user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
 					//user.setUserType(user.getUserType());
-					user.setRegisterDate(new Date(System.currentTimeMillis()));
+					user.setRegisterDate(new Date());
 					if(user.getWorkName()!=null){
 						String[] teamId=user.getWorkName().split(",");
 						String team="";

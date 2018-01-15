@@ -113,19 +113,22 @@ function UserController($scope,UserService) {
     	  document.getElementById("banzuxinxi").style.display = 'block'; 
       }
       //////初始化获取项目列表
-      var test=$scope.findUserInfo.projectList.split(",");
+      if($scope.findUserInfo.projectList!=null){
+    	  var test=$scope.findUserInfo.projectList.split(",");
+      }
       $scope.getProjectLists(pageSize,-1,project);
-     
       document.getElementById("inputpasswords").value = $scope.findUserInfo.password;
       for(var i=0;i<$scope.projectLists.length;i++){
-    	  for(var j=0;j<test.length;j++){
-    		  if($scope.projectLists[i].id==test[j]){
-    			  var PID = document.getElementById("checkBox");
-    			  var cb = PID.getElementsByTagName("input");
-    			  if(cb[i].type == "checkbox"){
-    				 cb[i].checked =true;
-    			  }
-    		  }
+    	  if(test!=undefined && test!=null){
+    		  for(var j=0;j<test.length;j++){
+        		  if($scope.projectLists[i].id==test[j]){
+        			  var PID = document.getElementById("checkBox");
+        			  var cb = PID.getElementsByTagName("input");
+        			  if(cb[i].type == "checkbox"){
+        				 cb[i].checked =true;
+        			  }
+        		  }
+        	  }
     	  }
       }
      

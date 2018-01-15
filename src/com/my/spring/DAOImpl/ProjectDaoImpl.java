@@ -44,15 +44,18 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
     public DataWrapper<List<Project>> getProjectList(Integer pageSize, Integer pageIndex, Project project,String projectList,String content,Integer isIos) {
         DataWrapper<List<Project>> retDataWrapper = new DataWrapper<List<Project>>();
         List<Project> ret = new ArrayList<Project>();
-        Session session = getSession();
-        
+        Session session = getSession();  
         Criteria criteria = session.createCriteria(Project.class);
         criteria.addOrder(Order.desc("updateDate"));
         Long projectId=(long) 267;
         Long projectId2=(long) 268;
+        long projectId3=(long) 270;
+        long projectId4=(long) 271;
         if(isIos!=2 && isIos!=null && isIos!=-1){
         	criteria.add(Restrictions.ne("id",projectId));
         	criteria.add(Restrictions.ne("id", projectId2));
+        	criteria.add(Restrictions.ne("id", projectId3));
+        	criteria.add(Restrictions.ne("id", projectId4));
         }
         ////////
         if(content!=null){

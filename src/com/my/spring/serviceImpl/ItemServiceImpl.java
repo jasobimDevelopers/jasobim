@@ -425,6 +425,14 @@ public class ItemServiceImpl implements ItemService {
 		return dataWrapper;
 	}
 	@Override
+	public DataWrapper<Item> getItemBySelfId(Long projectId) {
+		DataWrapper<Item> dataWrapper = new DataWrapper<Item>();
+		Item item=new Item();
+		item=itemDao.getItemBySelfId(projectId);
+		dataWrapper.setData(item);
+		return dataWrapper;
+	}
+	@Override
 	public DataWrapper<MinItemPojo> getMinItemById(Long id) {
 		DataWrapper<MinItemPojo> dataWrapper = new DataWrapper<MinItemPojo>();
 		MinItemPojo minItemPojo=new MinItemPojo();

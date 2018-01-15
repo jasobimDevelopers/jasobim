@@ -162,6 +162,7 @@ function QuestionController($scope,QuestionService) {
 	 ////显示问题详细界面
 	 $scope.questionChangeClick = function(questionId){
 		    QuestionService.findQuestion(questionId).then(function(result){
+		      k=0;
 		      $scope.findQuestionInfo=result.data;
 		      if($scope.questionInfo!=""){
 			  		if($scope.findQuestionInfo.fileList!=null){
@@ -182,6 +183,7 @@ function QuestionController($scope,QuestionService) {
 		  	  }
 		      document.getElementById("detailQuestionHtml").style.display = 'block';
 			  document.getElementById("projectDetail_body_questions").style.display='none';
+			  
 		    });
 	 }
 	 ////显示问题修改界面

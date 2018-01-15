@@ -165,6 +165,7 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
         List<ValueOutput> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(ValueOutput.class);
+        criteria.addOrder(Order.desc("date"));
         if(valueOutput!=null){
         	if(valueOutput.getDate()!=null){
         		criteria.add(Restrictions.eq("date", valueOutput.getDate()));

@@ -10,6 +10,6 @@ public interface ConstructionTaskDao {
     boolean deleteConstructionTask(Long id);
     boolean updateConstructionTask(ConstructionTask ps);
     ConstructionTask getById(Long id);
-    DataWrapper<List<ConstructionTask>> getConstructionTasksList(Integer pageIndex, Integer pageSize, ConstructionTask constructionTask, Integer state,String userName);
+    DataWrapper<List<ConstructionTask>> getConstructionTasksList(Integer pageIndex, Integer pageSize, ConstructionTask constructionTask, Integer state,String userName,String NextReceivePeopleId);
     DataWrapper<List<ConstructionTask>> getConstructionTasksListByUserId(Long userId);
 }

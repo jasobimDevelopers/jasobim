@@ -11,6 +11,7 @@ function AdvancedOrderController($scope,AdvancedOrderService) {
 	$scope.advancedOrderLists="";
 	$scope.currentPage=1;
 	$scope.totalPage=1;
+	$scope.OrderTofind = {};
 	$scope.advancedOrderInfos=[];
 	$scope.advancedOrderInfo=[];
 	$scope.advancedOrderfiles="";
@@ -73,10 +74,10 @@ function AdvancedOrderController($scope,AdvancedOrderService) {
 		      $scope.projectPage($scope.totalPage,$scope.currentPage);
 		  });
 	};
-	////////模糊查找施工任务单
-	 $scope.findConsLike = function() {
+	////////模糊查找预付单
+	 $scope.findOrderLike = function() {
 		 $scope.currentPage = 1;
-		 $scope.getAdvancedOrderList(pageSize,$scope.currentPage,$scope.ConsTofind);
+		 $scope.getAdvancedOrderList(pageSize,$scope.currentPage,$scope.OrderTofind);
 	 };
 	$scope.findLike=function(){
 		var content=document.getElementById("project_search").value;
@@ -109,6 +110,7 @@ function AdvancedOrderController($scope,AdvancedOrderService) {
     	}
     }
     $scope.goOrderList = function(){
+    	$scope.conslogList=[];
     	$scope.getAdvancedOrderLists(pageSize,$scope.currentPage,null);
     	document.getElementById('advancedOrderDetailHtml').style.display='none';
     	document.getElementById('projectContent').style.display='block';
@@ -232,7 +234,7 @@ function AdvancedOrderController($scope,AdvancedOrderService) {
 		        	$scope.addAdvancedOrderInfo.nextReceivePeopleId=layero.find('#userName')[0].value;
 		        	$scope.addAdvancedOrderInfo.constructPart=layero.find('#constructPart')[0].value;
 		        	$scope.advancedOrderfiles=layero.find('#order_img')[0].files[0];
-		        	$scope.advancedOrderfiles2=layero.find('#order_img_finished')[0].files[0];
+		        	//$scope.advancedOrderfiles2=layero.find('#order_img_finished')[0].files[0];
 		        	for(var j=0;j<$scope.projectList.length;j++){
 		        		if($scope.projectList[j].name==projectNames){
 		        			$scope.addAdvancedOrderInfo.projectId=$scope.projectList[j].id;

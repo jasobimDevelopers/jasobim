@@ -15,7 +15,7 @@ public class UserPojo {
     private Long userIcon;
     private String userIconUrl;
     private String[] projectName;
-    private Date registerDate;
+    private String registerDate;
     private String workName;
     private String teamInformation;////班组信息
     private String projectList;
@@ -77,10 +77,10 @@ public class UserPojo {
 	}
 	
 
-	public Date getRegisterDate() {
+	public String getRegisterDate() {
 		return registerDate;
 	}
-	public void setRegisterDate(Date registerDate) {
+	public void setRegisterDate(String registerDate) {
 		this.registerDate = registerDate;
 	}
 	

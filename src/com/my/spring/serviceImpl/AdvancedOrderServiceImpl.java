@@ -135,7 +135,8 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 								filesService.deleteFileById(Long.valueOf(advancedOrder.getContentFilesId().split(",")[i]));
 							}
 						}
-						AdvancedOrderCollect advancedOrderCollect= advancedOrderCollectDao.getAdvancedOrderCollectByOrderId(advancedOrder.getId());
+						AdvancedOrderCollect advancedOrderCollect= new AdvancedOrderCollect();
+						advancedOrderCollect=advancedOrderCollectDao.getAdvancedOrderCollectByOrderId(advancedOrder.getId());
 						if(advancedOrderCollect!=null){
 							advancedOrderCollectDao.deleteAdvancedOrderCollect(advancedOrderCollect.getId());
 						}

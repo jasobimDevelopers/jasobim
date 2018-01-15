@@ -11,6 +11,8 @@ function ValueOutputController($scope,ValueOutputService) {
   var pageIndex=1;
   var valueOutputid=null;
   var valueOutput="";
+  $scope.valueOutputTitle="";
+  $scope.addValueOutputs="";
   var idList="";
   $scope.valueOutputTitles=["序号","项目名","总产值","已完成","时间","操作"];
   	//////搜索
@@ -108,5 +110,39 @@ function ValueOutputController($scope,ValueOutputService) {
 	       $scope.getvalueOutputList(pageSize,$scope.currentPage,$scope.valueOutputTofind);
 	       
 	    });
+ };
+ $scope.showValueOutputAddHtml = function(){
+	/////显示添加页面
+	 layer.open({
+	        type:1,
+	        title: '每月产值添加',
+	        area: ['500px','400px'],
+	        btn:['确定','取消'],
+	        yes:function(index,layero){
+	        	$scope.addValueOutputInfo={};
+	        	$scope.addValueOutputInfo.others=layero.find('#projectName')[0].value;
+	        	$scope.addValueOutputInfo.projectId=parseInt(layero.find('#projectId')[0].value);
+	        	$scope.addValueOutputInfo.num=Number(layero.find('#num')[0].value);
+	        	$scope.addValueOutputInfo.finished=Number(layero.find('#finished')[0].value);
+	        	$scope.valueOutputTitle="产值添加";
+	        	$scope.addValueOutputByAdmin();
+	        },
+	        content:$("#show_valueOutput").html()
+	    });
+			
+ };
+ $scope.addValueOutputByAdmin = function(){
+	 if($scope.valueOutputTitle=="产值添加"){
+		 var formData = new FormData();
+		 for (var key in $scope.addValueOutputInfo) {
+			   if($scope.addValueOutputInfo[key] != null) {
+				   formData.append(key, $scope.addValueOutputInfo[key]);
+			   }
+		 }
+    	 ValueOutputService.addValueOutputByAdmin(formData).then(function(result){
+		       $scope.addValueOutputs=result.data; 
+		       $scope.getvalueOutputList(pageSize,pageIndex,valueOutput);
+		    });
+	 }
  };
 }

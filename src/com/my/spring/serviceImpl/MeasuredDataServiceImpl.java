@@ -206,6 +206,12 @@ public class MeasuredDataServiceImpl implements MeasuredDataService {
         			dataWrapperss.add(pojo);
         		}
         		dataWrappers.setData(dataWrapperss);
+        		dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
+        		dataWrappers.setCallStatus(dataWrapper.getCallStatus());
+        		dataWrappers.setErrorCode(dataWrapper.getErrorCode());
+        		dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
+        		dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
+        		dataWrappers.setTotalPage(dataWrapper.getTotalPage());
         	}
 		} else {
 			dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);

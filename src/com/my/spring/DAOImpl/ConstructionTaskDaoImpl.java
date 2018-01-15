@@ -34,7 +34,7 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<ConstructionTask>> getConstructionTasksList( Integer pageIndex, Integer pageSize, ConstructionTask constructionTask,Integer state,String userName) {
+    public DataWrapper<List<ConstructionTask>> getConstructionTasksList( Integer pageIndex, Integer pageSize, ConstructionTask constructionTask,Integer state,String userName,String s) {
         DataWrapper<List<ConstructionTask>> retDataWrapper = new DataWrapper<List<ConstructionTask>>();
         List<ConstructionTask> ret = new ArrayList<ConstructionTask>();
         Session session = getSession();
@@ -57,7 +57,7 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
         }
         if(!constructionTask.getUserProjectIdList().equals("-1")){
         	criteria.add(Restrictions.or(Restrictions.like("approvalPeopleName", "%"+constructionTask.getApprovalPeopleName()+"%"),
-                    Restrictions.eq("nextReceivePeopleId", constructionTask.getNextReceivePeopleId()),
+                    Restrictions.eq("nextReceivePeopleId", s),
                     Restrictions.eq("createUserName", constructionTask.getCreateUserName())));
         	String[] idlist = constructionTask.getUserProjectIdList().split(",");
         	Long[] idlists = new Long[idlist.length];

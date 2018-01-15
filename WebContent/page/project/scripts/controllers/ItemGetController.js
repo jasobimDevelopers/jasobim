@@ -1,5 +1,5 @@
 var index;
-function hideUlst(){
+function hideUlst_item(){
 	var idom=document.getElementById("name_div");
 	if(idom.style.display=="none"){
 		document.getElementById("li_show_hide1").style.backgroundImage="url(page/project/images/menuItem2.png)";
@@ -10,7 +10,7 @@ function hideUlst(){
 		
 	}
 }
-function hideUls(){
+function hideUls_item(){
 	var idom=document.getElementById("type_div");
 	if(idom.style.display=="none"){
 		document.getElementById("li_show_hide2").style.backgroundImage="url(page/project/images/menuItem2.png)";
@@ -21,7 +21,7 @@ function hideUls(){
 	}
 	
 }
-function hideUl(){
+function hideUl_item(){
 	var idom=document.getElementById("state_div");
 	if(idom.style.display=="none"){
 		document.getElementById("li_show_hide3").style.backgroundImage="url(page/project/images/menuItem2.png)";

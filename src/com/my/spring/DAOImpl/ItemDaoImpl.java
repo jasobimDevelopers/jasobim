@@ -1,12 +1,17 @@
 package com.my.spring.DAOImpl;
 
+import com.google.zxing.WriterException;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ItemDao;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.Duct;
 import com.my.spring.model.Item;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.QRUtil;
+import com.my.spring.utils.ReadTxt;
+
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -16,6 +21,10 @@ import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,7 +149,70 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		DataWrapper<Item> dataWrapper = new DataWrapper<Item>();
 		return get(id);
 	}
-	
+	@Override
+	public Item getItemBySelfId(Long projectId) {
+		Item dataWrapper=new Item();
+		List<Item> ret = new ArrayList<Item>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Item.class);
+       
+        if(projectId!=null){
+        	criteria.add(Restrictions.eq("projectId",projectId));
+        }
+        QRUtil qr = new QRUtil();
+        File file=new File("C:/Users/Han/Desktop/水电井.txt");  
+        BufferedReader reader=null;  
+        String temp=null;
+       /**/
+        ItemDao itemDao= new ItemDaoImpl();
+        ReadTxt readTxt = new ReadTxt(itemDao);
+        List<Long> itemIdLists = new ArrayList<Long>();
+        try{  
+        	/*QrCodeFile= new File("C://Users/Han/Desktop/水电井二维码/电缆桥架/"+"430685"+".png");
+    		qurl=new String("http://jasobim.com.cn/page/itemInfo.html?id=430685");
+    		QRCodeUtil2.drawLogoQRCode(logoFile, QrCodeFile, qurl, null);*/
+                reader=new BufferedReader(new FileReader(file));  
+                while((temp=reader.readLine())!=null){  
+                    itemIdLists.add(Long.valueOf(temp));
+                }  
+                criteria.add(Restrictions.in("selfId", itemIdLists));
+        }  
+        catch(Exception e){  
+            e.printStackTrace();  
+        }  
+        finally{  
+            if(reader!=null){  
+                try{  
+                    reader.close();  
+                }  
+                catch(Exception e){  
+                    e.printStackTrace();  
+                }  
+            }  
+        }  
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+        	for(Item s: ret){
+        		try {
+					qr.runCode(s);
+				} catch (WriterException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	}
+		}else{
+			dataWrapper=null;
+		}
+       
+		return dataWrapper;
+	}
 
 	
 
