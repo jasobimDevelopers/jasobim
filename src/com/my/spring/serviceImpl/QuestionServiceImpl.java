@@ -23,6 +23,7 @@ import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.FileService;
+import com.my.spring.service.ProjectService;
 import com.my.spring.service.QuestionService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
@@ -137,7 +138,15 @@ public class QuestionServiceImpl implements QuestionService {
         			adminFlag=-1;
         		}
 				userList=userDao.findUserLikeProjct(question.getProjectId(),userInMemory.getUserType());
-				 String content=userInMemory.getRealName()+"提交了一个标题为："+question.getName()+"的问题";
+				Project po = projectDao.getById(question.getProjectId());
+				String content="";
+				if(po!=null){
+					content=userInMemory.getRealName()+"在"+po.getName()+"项目里提交了一个标题为："+question.getName()+"的问题";
+				}else{
+					content=userInMemory.getRealName()+"提交了一个标题为："+question.getName()+"的问题";
+				}
+				
+				 
 				 String[] userids=new String[userList.size()];
 				for(int b =0;b<userList.size();b++){
 					userids[b]=userList.get(b).getId().toString();
@@ -559,6 +568,11 @@ public class QuestionServiceImpl implements QuestionService {
 						questionPojo.setName(question.getName());
 						questionPojo.setPriority(question.getPriority());
 						questionPojo.setProjectId(question.getProjectId());
+						Project test = new Project();
+						test=projectDao.getById(question.getProjectId());
+						if(test!=null){
+							questionPojo.setProjectName(test.getName());
+						}
 						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 						questionPojo.setQuestionDate(sdf.format(question.getQuestionDate()));
 						questionPojo.setQuestionType(question.getQuestionType());
@@ -618,6 +632,7 @@ public class QuestionServiceImpl implements QuestionService {
 							Project projects= new Project();
 							projects=projectDao.getById(question.getProjectId());
 							if(projects!=null){
+								questionPojo.setProjectName(projects.getName());
 								if(projects.getPicId()!=null && !projects.getPicId().equals(""))
 								{
 									Files files=new Files();

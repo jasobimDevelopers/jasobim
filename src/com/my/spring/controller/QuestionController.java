@@ -14,10 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Controller
 @RequestMapping(value="api/question")
 public class QuestionController {

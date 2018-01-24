@@ -107,7 +107,7 @@ function ProjectController($scope,ProjectService) {
 	$scope.buildingDownInfo=null;
 	$scope.videoTypes="";
 	$scope.addVideoInfo={};
-	
+	$scope.video_buildingNum="全部";
 	$scope.fileTypes="";
 	var item = "";
 	var quantity = "";
@@ -186,8 +186,9 @@ function ProjectController($scope,ProjectService) {
 		if(flag=="安全交底页面"){
 			$scope.professionType=-2;
 			$scope.video_phase = index.video_phase;
-			for(var i=0;i<$scope.projectPhaseInfo.length;i++){
-				if($scope.video_phase==$scope.projectPhaseInfo[i].name){
+			//$scope.buildingNum=$scope.video_buildingNum;
+			for(var i=0;i<$scope.projectQuestionType.length;i++){
+				if($scope.video_phase==$scope.projectQuestionType[i].name){
 					$scope.professionType=i;
 				}
 			}
@@ -582,6 +583,11 @@ function ProjectController($scope,ProjectService) {
 			 //video+= "&professionType=" + $scope.flagAll;
 		 }else if($scope.professionType!=-2){
 			 video+= "&professionType=" + $scope.professionType;
+		 }
+		 if($scope.video_buildingNum=="全部"){
+			 
+		 }else{
+			 video+= "&buildingNum=" + $scope.video_buildingNum;
 		 }
 		  ProjectService.getVideoList($scope.findprojectId,pageSize,pageIndex,video).then(function (result){
 		  	  $scope.videoList = result.data;

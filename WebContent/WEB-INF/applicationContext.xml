@@ -79,6 +79,7 @@
                	<value>com.my.spring.model.Normativefiles</value>
                	<value>com.my.spring.model.MeasuredData</value>
                	<value>com.my.spring.model.MeasuredDatas</value>
+               	<value>com.my.spring.model.HouseType</value>
             </list>
         </property>
     </bean>

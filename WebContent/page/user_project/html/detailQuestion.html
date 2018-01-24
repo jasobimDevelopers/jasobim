@@ -10,6 +10,7 @@
                 <div ng-if="findQuestionInfo.projectPicUrl!=null"><img src="{{findQuestionInfo.projectPicUrl}}" alt=""></div>
                 <div class="problemDes">
                     <ul>
+                    	<li><span class="projectName">项目名称：</span><span>{{findQuestionInfo.projectName}}</span></li>
                     	<li><span class="problemName">问题名称：</span><span>{{findQuestionInfo.name}}</span></li>
                         <li><span class="problemType">问题类型：</span><span>{{projectQuestionOfType[findQuestionInfo.questionType].name}}</span></li>
                         <li><span class="problemMoudle">所属专业：</span><span>{{findQuestionInfo.trades}}</span></li>

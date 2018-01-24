@@ -297,7 +297,7 @@
 	        		</div>
                     <div class="choose">
                         <ul class="clear">
-                            <li style="width:86px;text-align:center">专业</li>
+                            <li style="width:86px;text-align:center">类型</li>
                             <li style="width:86px;text-align:center">栋号</li>
                         </ul>
                     </div>
@@ -305,16 +305,16 @@
                     <div class="select">
                         <select name="select" id="select13" ng-change="setPhase(this,flag[4])" ng-model="video_phase">
                         	<option value="全部" ng-click="setPhase('all',flag[4])">全部</option>
-                            <option ng-repeat="video_phase in projectPhaseInfo" value="{{video_phase.name}}">{{video_phase.name}}</option>
+                            <option ng-repeat="video_phase in projectQuestionType" value="{{video_phase.name}}">{{video_phase.name}}</option>
                         </select>
-                        <select name="select" id="select14">
+                        <select name="select" id="select14" ng-change="setPhase(this,flag[4])" ng-model="video_buildingNum">
                             <option value="全部">全部</option>
-                            <option value="#1">#1</option>
-                            <option value="#2">#2</option>
-                            <option value="#3">#3</option>
-                            <option value="#4">#4</option>
-                            <option value="#5">#5</option>
-                            <option value="#6">#6</option>
+                            <option value="1">#1</option>
+                            <option value="2">#2</option>
+                            <option value="3">#3</option>
+                            <option value="4">#4</option>
+                            <option value="5">#5</option>
+                            <option value="6">#6</option>
                         </select>
                         <a href="#" ng-click="showVideo()" style="cursor: pointer"><button class="change"><span>+</span>交底</button></a>
                         <!--<button>居中弹出</button>-->

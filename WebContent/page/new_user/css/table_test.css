@@ -1,0 +1,8 @@
+.table-layout div{
+  display: table-cell;
+}
+.table-layout{
+  height: 350px;
+  margin: 10px;
+  border: 1px solid grey;
+}
