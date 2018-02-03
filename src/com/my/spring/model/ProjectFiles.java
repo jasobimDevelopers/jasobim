@@ -10,10 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="advanced_order")
+@Table(name="project_files")
 public class ProjectFiles {
 	private Long id;
-	private Long fileIds;
+	private Long file;
 	private Long projectId;
 	private Date uploadDate;
 	private Long uploadUserId;
@@ -32,12 +32,12 @@ public class ProjectFiles {
 		this.id = id;
 	}
 	@Basic
-	@Column(name = "file_ids")
-	public Long getFileIds() {
-		return fileIds;
+	@Column(name = "file")
+	public Long getFile() {
+		return file;
 	}
-	public void setFileIds(Long fileIds) {
-		this.fileIds = fileIds;
+	public void setFile(Long file) {
+		this.file = file;
 	}
 	
 	@Basic

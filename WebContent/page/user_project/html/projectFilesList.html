@@ -1,98 +1,144 @@
 <div ng-controller="ProjectFilesController">
-	<div id="projectContent" style="display:block;">
-		<!--search-->
-		<div id="test1" style="display:block;">
-			<div style="width: 1200px;margin: 50px auto;font-family: "Regular";overflow: hidden;border-bottom: 1px solid #aaa;">
-				<div id="returnMenu">
-			    		<ol class="breadcrumb" style="margin:20px auto;">
-						  <li><a href="user_projectFiles"><strong>项目工程资料管理</strong></a></li>
-						  <!-- <li><a ng-click="goConstructionList()"><strong>施工任务单列表</strong></a></li>
-						  <li class="active"><a href="#">施工任务单详情</a></li> -->
-						</ol>
+	<div id="projectContent">
+		<div id="projectContent">
+			<div id="content1" style="display:block;">
+				<div style="width: 1200px;margin: 50px auto;margin-bottom: 20px;font-family: "Regular";overflow: hidden;border-bottom: 1px solid #aaa;">
+					<div id="returnMenu">
+				    		<ol class="breadcrumb" style="margin:20px auto;">
+							  <li><a href="user_projectFiles"><strong>项目列表</strong></a></li>
+							</ol>
+				    </div>
+		    	</div>
+			    <div class="duty">
+			        <div>
+			        	<a><button class="add" ng-click="showAddPfHtml()"><span>+</span>新增</button></a>
+			        </div>
 			    </div>
-		    </div>
-			<div id="mulu">
-				<a href="#">
-					<div id="contents" ng-repeat="text in typeNames" ng-click="getProjectFilesListByType($index)">
-						<div class="imgs"><img src="page/user_project/images/projectFiles.png"/></div>
-						<div class="text"><span>{{text}}</span></div>
-					</div>
-				</a>
+			    <div id="show03" style="display:none">
+		                <div class="addCons">
+		                    <div class="addConMain">
+		                        <div class="pName">
+		                            <span>项目名称</span>
+		                            <select id="projectName">
+		                                <option value="请选择"><span>--------  请选择    --------</span></option>
+		                                <option value="{{project_item.name}}" ng-repeat="project_item in projectList"><span>{{project_item.name}}</span></option>
+		                            </select>
+		                        </div>
+		                        <div class="pName" style="margin-top:55px;">
+		                            <span>文档类型</span>
+		                            <select id="fileType">
+		                            	<option value="请选择"><span>--------  请选择    --------</span></option>
+		                                <option value="{{$index}}" ng-repeat="item in typeNames"><span>{{item}}</span></option>
+		                            </select>
+		                        </div>
+		                        <div class="pPic" style="margin-top:55px;">
+		                            <span>文件选择</span>
+		                            <input type="file" multiple="multiple" id="pf_file">
+		                        </div>
+		                        <div id="process" style="display:none;width:290px;text-align:left;margin:45px auto;">
+										<progress id="progressBar" value="0" max="100" style="width: 300px;"></progress>
+			    						<span id="percentage"></span><span id="time"></span>
+			    						<br /><br />
+	    						</div>
+		                    </div>
+		                </div>
+		        </div>
+			    <div class="formMain" style="height:510px;overflow:auto;">
+			    	<table class="table-striped table table-bordered">
+							<tbody>
+								<tr>
+									<th ng-repeat="projectTitle in projectTitles">{{projectTitle}}</th>
+				
+								</tr>
+								<tr ng-repeat = "projectInfo in projectList">
+								    <td>{{$index+1}}</td>
+									<td>{{projectInfo.name}}</td>
+									<td>{{projectInfo.constructionUnit}}</td>
+									<td>{{projectInfo.leader}}</td>
+									<td>{{projectInfo.place}}</td>
+									<td>{{projectInfo.startDate}}</td>
+									<td>{{projectInfo.phase}}</td>
+									<td class="tds" >
+				                        <button id="editbutton" ng-click="goFiles(projectInfo.id)">
+				                        </button>
+				                    </td>
+								</tr>
+							</tbody>
+					</table>
+		    	</div>
+			    <div id="table-buton-projectFiles" style="float:right;margin-right:350px;margin-top:50px;">
+						<div id="projectFilesPageCode"></div>
+				</div>
 			</div>
 		</div>
-		<div style="display:none;" id="filecontent">
-			<div style="width: 1200px;margin: 50px auto;font-family: "Regular";overflow: hidden;border-bottom: 1px solid #aaa;">
-				<div id="returnMenu">
-			    		<ol class="breadcrumb" style="margin:20px auto;">
-						  <li><a href="#" ng-click="goBack()"><strong>项目工程资料管理</strong></a></li>
-						  <li><a ng-click="goConstructionList()"><strong>{{contentTitle}}</strong></a></li>
-						  <!-- <li class="active"><a href="#">施工任务单详情</a></li> -->
-						</ol>
+		<!--search-->
+		<div id="contentAllFiles" style="display:none;">
+			<div id="test1" style="display:block;">
+				<div style="width: 1200px;margin: 50px auto;font-family: "Regular";overflow: hidden;border-bottom: 1px solid #aaa;">
+					<div id="returnMenu">
+				    		<ol class="breadcrumb" style="margin:20px auto;">
+				    		  <li><a href="#" ng-click="gohead()"><strong>项目列表</strong></a></li>
+							  <li><a href=""><strong>项目工程资料管理</strong></a></li>
+							</ol>
+				    </div>
 			    </div>
-		    </div>
-			<div class="search">
-		        <div class="search_con">
-		            <input type="text" placeholder="搜索" id="project_search" ng-model="ConsTofind.othersAttention"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findConsLike()"></a>
-		        </div>
-		    </div>
+				<div id="mulu">
+					<a href="#">
+						<div id="contents" ng-repeat="text in typeNames" ng-click="getProjectFilesListByType($index)">
+							<div class="imgs"><img src="page/user_project/images/projectFiles.png"/></div>
+							<div class="text"><span>{{text}}</span></div>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div style="display:none;" id="filecontent">
+				<div style="width: 1200px;margin: 50px auto;font-family: "Regular";overflow: hidden;border-bottom: 1px solid #aaa;">
+					<div id="returnMenu">
+				    		<ol class="breadcrumb" style="margin:20px auto;">
+				    		  <li><a href="" ng-click="gohead()"><strong>项目列表</strong></a></li>
+							  <li><a href="#" ng-click="goBack()"><strong>项目工程资料管理</strong></a></li>
+							  <li><a ng-click="goConstructionList()"><strong>{{contentTitle}}</strong></a></li>
+							  <!-- <li class="active"><a href="#">施工任务单详情</a></li> -->
+							</ol>
+				    </div>
+			    </div>
+				<div class="search">
+			        <div class="search_con">
+			            <input type="text" placeholder="搜索" id="project_search" ng-model="pfName"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findPfLike()"></a>
+			        </div>
+			    </div>
 		    
-		    <div class="duty">
-		        <div>
-		         	<a><button class="add" ng-click="showAddPfHtml()"><span>+</span>新增</button></a>
-		         	<a><button id="all_choice" ng-click="set_checkboxall('app')"><span>全选</span></button></a>
-		         	<a><button id="all_delete" ng-click="delete_choice('app')"><span>删除</span></button></a>
-		        </div>
-		        <div id="show03" style="display: none">
-	                <div class="addCons">
-	                    <div class="addConMain">
-	                        <div class="pName">
-	                            <span>项目名称</span>
-	                            <select id="projectName">
-	                                <option value="请选择"><span>--------  请选择    --------</span></option>
-	                                <option value="{{project_item.name}}" ng-repeat="project_item in projectList"><span>{{project_item.name}}</span></option>
-	                            </select>
-	                        </div>
-	                        <div class="pName" style="margin-top:20px;">
-	                            <span>文档类型</span>
-	                            <select id="fileType">
-	                            	<option value="请选择"><span>--------  请选择    --------</span></option>
-	                                <option value="{{index}}" ng-repeat="item in typeNames"><span>{{item}}</span></option>
-	                            </select>
-	                        </div>
-	                        <div class="pPic" style="margin-top:55px;">
-	                            <span>文件选择</span>
-	                            <input type="file" multiple="multiple" id="pf_file">
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-		        <div id="app">
-		            <table class="table-striped table table-bordered">
-						<tbody>
-							<tr>
-								<th ng-repeat="title in projectFilesTitle">{{title}}</th>
-							</tr>
-							<tr ng-repeat = "pf in projectFilesList">
-							    <td>{{$index+1}}</td>
-								<td>{{pf.projectName}}</td>
-								<td>{{pf.fileName}}</td>
-								<td>{{pf.uploadDate}}</td>
-								<td class="tds" >
-			                        <button id="editbutton" ng-click="constructionTaskChange(constructionTask.id)">
-			                        </button>
-			                        <button id="deletebutton" ng-click="deleteConstructionTask(constructionTask.id)">
-			                        </button>
-			                        <input type="checkbox" ng-click="setConstructionTaskId(constructionTask.id)" class="checkBoxItem">
-			                    </td>
-							</tr>
-						</tbody>
-					</table>
-		        </div>
-		        <div id="table-buton_cons" style="float:right;margin-top:50px;">
-					<div id="constructionPageCode"></div>
-				</div>	
-		        
-		    </div>
+		    	<div class="duty">
+			        <div>
+			        	<a><button class="add" ng-click="showAddPfHtml()"><span>+</span>新增</button></a>
+			         	<a><button id="all_choice" ng-click="set_checkboxall('app')"><span>全选</span></button></a>
+			         	<a><button id="all_delete" ng-click="delete_choice('app')"><span>删除</span></button></a>
+			        </div>
+		        	<div id="app">
+			            <table class="table-striped table table-bordered">
+							<tbody>
+								<tr>
+									<th ng-repeat="title in projectFilesTitle">{{title}}</th>
+								</tr>
+								<tr ng-repeat = "pf in projectFilesList">
+								    <td>{{$index+1}}</td>
+									<td>{{pf.projectName}}</td>
+									<td>{{pf.fileName}}</td>
+									<td>{{pf.uploadDate}}</td>
+									<td class="tds" >
+				                        <button id="deletebutton" ng-click="deletePf(pf.id)">
+				                        </button>
+				                        <input type="checkbox" ng-click="setPfId(pf.id)" class="checkBoxItem">
+				                    </td>
+								</tr>
+							</tbody>
+						</table>
+			        </div>
+			        <div id="table-buton_pf" style="float:right;margin-top:50px;">
+						<div id="pfPageCode"></div>
+					</div>	
+		    	</div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -69,18 +69,6 @@ public class PaperServiceImpl implements PaperService {
 				///////验证是不是管理员身份
 				if(paper!=null){////验证上传的实体类是不是为空
 					///////1.文件的上传返回url
-					if(paper.getBuildingNum()!=null){
-						if(paper.getProjectId()!=null){
-							buliding=buildingDao.getBuildingByProjectId(paper.getProjectId()).getData();
-							if(buliding!=null){
-								if(paper.getBuildingNum()>buliding.getBuildingNum()){
-									buliding.setBuildingNum(paper.getBuildingNum());
-									buildingDao.updateBuilding(buliding);
-								}
-							}
-						}
-						
-					}
 					String path=filePath+"/"+"papers/"+paper.getProjectId();
 					Files newfile=fileService.uploadFile(path, file,fileType,request);
 					paper.setFileId(newfile.getId());

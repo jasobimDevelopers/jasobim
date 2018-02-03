@@ -718,7 +718,7 @@ function ProjectController($scope,ProjectService) {
 		        yes:function(index,layero){
 		        	layero.find('#process')[0].style.display="block"; 
 		        	$scope.addPaperInfo={};
-		        	$scope.addPaperInfo.buildingNum=layero.find('#paper_buildingNum')[0].value;
+		        	$scope.addPaperInfo.buildingNum=layero.find('#paper_buildingNums')[0].value;
 		        	$scope.addPaperInfo.professionType=layero.find('#paper_profession_type')[0].value;
 		        	$scope.constructionfiles=layero.find('#paper_files')[0].files;
 		        	var floorNum=layero.find('#paper_floors')[0].value;

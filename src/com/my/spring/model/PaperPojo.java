@@ -3,7 +3,7 @@ package com.my.spring.model;
 public class PaperPojo {
 	private Long id;
     private Long projectId;
-    private Integer buildingNum;
+    private String buildingNum;
     private Integer floorNum;
     private String url;
     private Integer professionType;
@@ -24,10 +24,10 @@ public class PaperPojo {
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
 	}
-	public Integer getBuildingNum() {
+	public String getBuildingNum() {
 		return buildingNum;
 	}
-	public void setBuildingNum(Integer buildingNum) {
+	public void setBuildingNum(String buildingNum) {
 		this.buildingNum = buildingNum;
 	}
 	public String getUrl() {
@@ -45,7 +45,7 @@ public class PaperPojo {
 	public PaperPojo(){
 		
 	}
-	public PaperPojo(Long projectId,Integer buildingNum,String url,Integer professionType,Integer floorNum) {
+	public PaperPojo(Long projectId,String buildingNum,String url,Integer professionType,Integer floorNum) {
 		this.projectId=projectId;
 		this.buildingNum=buildingNum;
 		this.url=url;

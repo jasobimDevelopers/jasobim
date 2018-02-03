@@ -57,14 +57,14 @@ public class ProjectFilesServiceImpl implements ProjectFilesService {
 						
 					String path=filePath+"/"+"projectData/"+projectFiles.getProjectId();
 					Files newfile=fileService.uploadFile(path, file,fileType,request);
-					projectFiles.setFileIds(newfile.getId());
+					projectFiles.setFile(newfile.getId());
 					String originName = file.getOriginalFilename();
 					if (originName.contains(".")) {
 						originName = originName.substring(0, originName.lastIndexOf("."));
 					}
 					projectFiles.setTest(originName);
 					projectFiles.setUploadUserId(userInMemory.getId());
-					//projectFiles.setUploadDate(new Date());
+					projectFiles.setUploadDate(new Date());
 					if(!projectFilesDao.addProjectFiles(projectFiles)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else
@@ -83,21 +83,27 @@ public class ProjectFilesServiceImpl implements ProjectFilesService {
     }
 
     @Override
-    public DataWrapper<Void> deleteProjectFiles(Long id,String token,HttpServletRequest request) {
+    public DataWrapper<Void> deleteProjectFiles(String id,String token,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 				if(id!=null){
-					if(!projectFilesDao.deleteProjectFiles(id)){ ///删除图纸表的信息
-						projectFilesDao.deleteProjectFiles(projectFilesDao.getById(id).getFileIds());//删除文件表的信息
-						Files files=fileDao.getById(id);
-						fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
-			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-					}
-					else
-						return dataWrapper;
-			        
+					String[] idlist = id.split(",");
+					for(int i=0;i<idlist.length;i++){
+						if(projectFilesDao.deleteProjectFiles(Long.valueOf(idlist[i]))){ ///删除图纸表的信息
+							//projectFilesDao.deleteProjectFiles(projectFilesDao.getById(Long.valueOf(idlist[i])).getFile());//删除文件表的信息
+							Files files=fileDao.getById(Long.valueOf(idlist[i]));
+							fileService.deleteFileByPath(files.getUrl(),request);///删除实际文件
+				            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						}
+						else{
+							return dataWrapper;
+						}
+							
+				        
+						}
 				}
+					
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -132,10 +138,10 @@ public class ProjectFilesServiceImpl implements ProjectFilesService {
 	        			}
 	        			pf.setUploadDate(sdf.format(dataWrapper.getData().get(i).getUploadDate()));
 	        			pf.setTypeName(Parameters.projectFilesType[dataWrapper.getData().get(i).getTypeName()]);
-	        			if(dataWrapper.getData().get(i).getFileIds()!=null){
-	        				pf.setFileId(dataWrapper.getData().get(i).getFileIds());
-	        				Files files = fileService.getById(dataWrapper.getData().get(i).getFileIds());
-	        				pf.setFileName(files.getName());
+	        			if(dataWrapper.getData().get(i).getFile()!=null){
+	        				pf.setFileId(dataWrapper.getData().get(i).getFile());
+	        				Files files = fileService.getById(dataWrapper.getData().get(i).getFile());
+	        				pf.setFileName(files.getRealName());
 	        				pf.setUrl(files.getUrl());
 	        			}
 	        			if(pf.getId()!=null){

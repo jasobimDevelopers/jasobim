@@ -191,6 +191,8 @@ public class UserServiceImpl implements UserService {
 				}
 				if(userInDB.getUserType()==0){
 					userInDB.setProjectList(null);
+				}else{
+					userInDB.setProjectList(user.getProjectList());
 				}
 				if (user.getWorkName() != null && !user.getWorkName().equals("")) {
 					userInDB.setWorkName(user.getWorkName());

@@ -54,6 +54,7 @@ function QuestionController($scope,QuestionService) {
 		      current:iCurrent,
 
 		      backFn:function(p){
+		    	  
 		    	  $scope.getQuestionLists(pageSize,p,question);
 		      }
 		  });
@@ -212,7 +213,8 @@ function QuestionController($scope,QuestionService) {
 			 state=1;
 		 }
 	     QuestionService.changeQuestionState(questionId,state).then(function(result){
-	    	 $scope.getQuestionLists(pageSize,pageIndex,question);
+	    	 $scope.getQuestionLists(pageSize,$scope.currentPage,question);
+	    	 //$scope.questionPage(iPageCount,iCurrent);
 	    	 //window.navigate(location);
 
 		    });

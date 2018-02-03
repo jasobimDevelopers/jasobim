@@ -47,7 +47,7 @@ public class ProjectFilesController {
     @RequestMapping(value="/admin/deleteProjectFiles",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteProjectFilesByAdmin(
-            @RequestParam(value = "id",required = true) Long id,
+            @RequestParam(value = "id",required = true) String id,
             HttpServletRequest request,
             @RequestParam(value = "token",required = true) String token){
         return projectFilesService.deleteProjectFiles(id,token,request);

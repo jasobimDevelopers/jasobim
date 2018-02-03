@@ -13,7 +13,7 @@ public class Paper {
 	
 	private Long id;
 	private Long projectId;
-	private Integer buildingNum;
+	private String buildingNum;
 	private Integer floorNum;
 	private Integer professionType;//////专业类型：0. 电气  1.暖通  2.给排水  3.消防  4.建筑 5.装饰 6.结构
 	private Long fileId;
@@ -57,10 +57,10 @@ public class Paper {
 	
 	@Basic
     @Column(name = "building_num")
-	public Integer getBuildingNum() {
+	public String getBuildingNum() {
 		return buildingNum;
 	}
-	public void setBuildingNum(Integer buildingNum) {
+	public void setBuildingNum(String buildingNum) {
 		this.buildingNum = buildingNum;
 	}
 	

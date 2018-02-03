@@ -36,8 +36,8 @@
       var deferred = $q.defer();
       console.log("读取ProjectFilesList数据");
       var api = 'api/projectFiles/admin/getProjectFilesLists?token='+getCookie('token') + "&pageSize=" + pageSize + "&pageIndex="+pageIndex;
-      if(projectFiles.typeName!=null){
-    	  api+="&typeName="+projectFiles.typeName;
+      if(projectFiles!=null && projectFiles!=undefined){
+    	  api+=projectFiles;
       }
       $http.get(encodeURI(api))
           .success(function(data, status, headers, config){
@@ -55,76 +55,18 @@
       return deferred.promise;
   };
   
-  /////增加任务单
-  this.register = function(Project) {
-
+  
+      //////删除项目工程资料
+   this.deletePf = function(ids) {
+      
       var deferred = $q.defer();
-      console.log("读取ConstructionTaskService数据");
-      $http.post('api/Project/admin/getProjectList?token='+getCookie('token'))
+      console.log("删除项目工程资料文件数据");
+      $http.get('api/projectFiles/admin/deleteProjectFiles?id='+ids+'&token='+token)
           .success(function(data, status, headers, config){
               console.log(data);
               if(data.callStatus == "SUCCEED"){
                   deferred.resolve(data);
-                  self.ProjectList = data;
-             
-              }else{
-                  alert("数据读取失败");
-              }
-              
-          })
-          .error(function(data, status, headers, config){
-              deferred.reject(data);
-          });
-      return deferred.promise;
-      };
-  //获取任务单列表
-  this.getConstructionTaskList = function(pageSize,pageIndex,constructionTask) {
-
-      var deferred = $q.defer();
-      console.log("读取ConstructionTaskList数据");
-      var api = 'api/constructionTask/admin/getConstructionTaskList?token='+getCookie('token') + "&pageSize=" + pageSize + "&pageIndex="+pageIndex;
-      if(constructionTask!=null){
-    	  if(constructionTask.companyName !==undefined && trimStr(constructionTask.companyName) !== ''){
-    	      api += "&companyName="+ trimStr(constructionTask.companyName);
-    	  }
-	      if(constructionTask.nextReceivePeopleId !==undefined && trimStr(constructionTask.nextReceivePeopleId) !== ''){
-	    	  api += "&nextReceivePeopleId="+ trimStr(constructionTask.nextReceivePeopleId);
-	      }
-	      if(constructionTask.othersAttention!=undefined && trimStr(constructionTask.othersAttention) !== ''){
-	    	  api += "&othersAttention="+ trimStr(constructionTask.othersAttention);
-	      }
-	      if(constructionTask.id!=undefined && constructionTask.id !== ''){
-	    	  api += "&id="+constructionTask.id;
-	      }
-      }
-      
-      $http.get(encodeURI(api))
-          .success(function(data, status, headers, config){
-              if(data.callStatus == "SUCCEED"){
-                  deferred.resolve(data);
-                  self.constructionTaskList = data;
-             
-              }else{
-                  alert("数据读取失败");
-              }
-              
-          })
-          .error(function(data, status, headers, config){
-              deferred.reject(data);
-          });
-      return deferred.promise;
-      };
-      //////删除项目信息
-   this.deleteConstructionTask = function(ids) {
-      
-      var deferred = $q.defer();
-      console.log("删除任务单数据数据");
-      $http.get('api/constructionTask/deleteConstructionTask?id='+ids+'&token='+token)
-          .success(function(data, status, headers, config){
-              console.log(data);
-              if(data.callStatus == "SUCCEED"){
-                  deferred.resolve(data);
-                  self.deleteConstructionTaskInfo = data;
+                  self.deleteProjectFilesInfo = data;
                   alert("数据删除成功");
               }else{
                   alert("数据删除失败");
@@ -137,11 +79,11 @@
       return deferred.promise;
       };
      
-      ///////增加施工任务单信息
-      this.addProjectFiles = function(findConstructionTaskInfo,token) {
+      ///////上传工程资料
+      this.addProjectFiles = function(findProjectFilesInfo,token) {
           var deferred = $q.defer();
           console.log("添加ProjectFiles数据");
-          $http.post('api/projectFiles//admin/uploadProjectFiles?token='+token,findConstructionTaskInfo,
+          $http.post('api/projectFiles/admin/uploadProjectFiles?token='+token,findProjectFilesInfo,
           		{
         	  		headers: {'Content-Type':undefined},
         	  		transformRequest: angular.identity 
