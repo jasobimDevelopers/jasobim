@@ -225,10 +225,8 @@ function UserController($scope,UserService) {
 		 var userIcon = document.querySelector('input[type=file]').files[0];
 		 //var test=document.getElementById("inputicon").value;
 		 formData.append('file',userIcon);
-		 if(projectNums!=null){
+		 if(projectNums!=null && projectNums!='null' && projectNums!=''){
 			 formData.append('projectList',projectNums);
-		 }else{
-			 formData.append('projectList',$scope.findUserInfo.projectList);
 		 }
 		 
 		 formData.append('userName',$scope.findUserInfo.userName);

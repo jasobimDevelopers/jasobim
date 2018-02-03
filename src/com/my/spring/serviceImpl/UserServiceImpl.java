@@ -189,8 +189,8 @@ public class UserServiceImpl implements UserService {
 				if(user.getEmail() != null && !user.getEmail().equals("")) {
 					userInDB.setEmail(user.getEmail());
 				}
-				if(user.getProjectList()!=null){
-					userInDB.setProjectList(user.getProjectList());
+				if(userInDB.getUserType()==0){
+					userInDB.setProjectList(null);
 				}
 				if (user.getWorkName() != null && !user.getWorkName().equals("")) {
 					userInDB.setWorkName(user.getWorkName());
@@ -313,7 +313,13 @@ public class UserServiceImpl implements UserService {
 		if (adminInMemory != null) {
 			//if (adminInMemory.getUserType() == UserTypeEnum.Admin.getType() || adminInMemory.getTeamId()!=null || adminInMemory.getWorkName().equals("总经理")) {
 			user.setTeamInformation(adminInMemory.getTeamInformation());
-			userList=userDao.getUserList(pageSize, pageIndex,user);
+			user.setProjectList(adminInMemory.getProjectList());
+			if(adminInMemory.getUserType()==0){
+				userList=userDao.getUserList(pageSize, pageIndex,user);
+			}else{
+				userList=userDao.getUserLists(pageSize, pageIndex,user);
+			}
+			
 			if(userList.getData().size()>0){
 				for(int i=0;i<userList.getData().size();i++){
 					UserPojo userpojo=new UserPojo();

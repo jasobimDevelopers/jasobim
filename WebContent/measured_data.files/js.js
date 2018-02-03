@@ -1,6 +1,6 @@
 var c_lTabs=2;
 var c_rgszSh=new Array(c_lTabs);
-c_rgszSh[0]="安装工程全过程管理";
+//c_rgszSh[0]="安装工程全过程管理";
 c_rgszSh[1]="附件二安装工程现场实测数据抽测记录表";
 var g_iShCur=1;
 var g_rglTabX=new Array(c_lTabs+1);
@@ -64,7 +64,7 @@ function fnInit()
 	g_rglTabX[0] = 0;
 	var row = frames['frTabs'].document.all.tbTabs.rows[0];
 	for (var i = 1; i <= c_lTabs; ++i)
-		g_rglTabX[i] = row.cells[i-1].offsetLeft + row.cells[i-1].offsetWidth;
+		g_rglTabX[i] =row.cells[i-1].offsetWidth;
 	fnSetTabProps(g_iShCur, true);
 }
 function fnUpdateTabs(index)
@@ -142,9 +142,9 @@ function fnBuildTabStrip()
 		close();
 	}
 	szHTML = "<html><head>"+"<style>A:link,A:visited,A:active{text-decoration:none;"+"color:#000000;}"+".clTab{cursor:hand;background:"+g_clrs[1]+";font:9pt \"宋体\";padding-left:3px;padding-right:3px;text-align:center;}"+"</style></head><body onload=\"parent.fnInit();\" topmargin=0 leftmargin=0><table id=tbTabs border=1 cellpadding=0 cellspacing=0><tr>"; 
-	for (i = 0; i < c_lTabs; ++i){
-		szHTML+="<td id=tdTab height=1 nowrap class=\"clTab\" "+"onmouseover=\"parent.fnMouseOverTab(event," + i + ");\" onmouseout=\"parent.fnMouseOutTab(event,"+i+");\">"+"<a href=\""+document.all.item("shLink")[i].href+"\" target=\"frSheet\" id=aTab>&nbsp;"+c_rgszSh[i]+"&nbsp;</a></td>"; 
-	}
+	
+	szHTML+="<td id=tdTab height=1 nowrap class=\"clTab\" "+"onmouseover=\"parent.fnMouseOverTab(event," + 1 + ");\" onmouseout=\"parent.fnMouseOutTab(event,"+1+");\">"+"<a href=\""+document.all.item("shLink")[1].href+"\" target=\"frSheet\" id=aTab>&nbsp;"+c_rgszSh[1]+"&nbsp;</a></td>"; 
+	
 	szHTML += "</tr></table></body></html>";
 	with (frames['frTabs'].document){
 		open('text/html','replace');

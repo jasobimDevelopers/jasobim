@@ -49,6 +49,9 @@ public class VideoServiceImpl implements VideoService {
         if (userInMemory != null) {
 			/*if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){*/
 				if(video!=null){
+					if(video.getVideoGrade()==null){
+						video.setVideoGrade(1);
+					}
 					if(file!=null){
 						String path=filePath+"/"+"videos/"+video.getProjectId();
 						Files newfile=fileService.uploadFile(path, file,fileType,request);

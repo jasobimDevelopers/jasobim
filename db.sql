@@ -27,7 +27,23 @@ intro text,
 file_type int,
 url varchar(100)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-#不提供接口，值提供服务             完成上传文件和删除文件       
+#不提供接口，值提供服务             完成上传文件和删除文件   
+
+////施工资料功能接口
+create table project_files(
+id serial primary key,
+remark varchar(50),
+file_id bigint(20) unsigned not null,
+project_id bigint(20) unsigned not null,
+upload_user_id bigint(20) unsigned not null,
+upload_date date,
+file_type int,
+type_name int,
+foreign key(file_id) references file(id),
+foreign key(upload_user_id) references user(id),
+foreign key(project_id) references project(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 create table project(
 id serial primary key,

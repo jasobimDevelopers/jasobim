@@ -74,6 +74,59 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 		// TODO Auto-generated method stub
 		return update(user);
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<List<User>> getUserListByAdmin(Integer pageSize, Integer pageIndex,User user) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<User>> dataWrapper = new DataWrapper<List<User>>();
+        List<User> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        if(user.getUserName() != null && !user.getUserName().equals("")) {
+        	criteria.add(Restrictions.like("userName", "%" + user.getUserName() + "%"));
+        }
+        
+        if(user.getRealName() != null && !user.getRealName().equals("")) {
+        	criteria.add(Restrictions.like("realName", "%" + user.getRealName() + "%"));
+        }
+        if(user.getEmail() != null && !user.getEmail().equals("")) {
+        	criteria.add(Restrictions.like("email", "%" + user.getEmail() + "%"));
+        }
+        if(user.getTel() != null && !user.getTel().equals("")) {
+        	criteria.add(Restrictions.like("tel", "%" + user.getTel() + "%"));
+        }
+         
+        if (pageSize == null) {
+			pageSize = 10;
+		}
+        if (pageIndex == null) {
+			pageIndex = 1;
+		}
+        
+        // 取总页数
+        criteria.setProjection(Projections.rowCount());
+        int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
+        int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
+
+        // 真正取值
+        criteria.setProjection(null);
+        if (pageSize > 0 && pageIndex > 0) {
+            criteria.setMaxResults(pageSize);// 最大显示记录数
+            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        dataWrapper.setData(ret);
+        dataWrapper.setTotalNumber(totalItemNum);
+        dataWrapper.setCurrentPage(pageIndex);
+        dataWrapper.setTotalPage(totalPageNum);
+        dataWrapper.setNumberPerPage(pageSize);
+
+        return dataWrapper;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -158,7 +211,11 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         dis.add(Restrictions.like("workName","%" + "预算" + "%"));
         dis.add(Restrictions.like("workName","%" + "经理" + "%"));
         if(user.getProjectList()!=null){
-        	dis.add(Restrictions.like("projectList", "%" + user.getProjectList() + "%"));
+        	String[] test = user.getProjectList().split(",");
+        	for(int i=0;i<test.length;i++){
+        		dis.add(Restrictions.like("projectList", "%" + test[i] + "%"));
+        	}
+        	
         }
         criteria.add(dis);
         if(user.getTeamId()!=null){
@@ -168,9 +225,9 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 			pageSize = 10;
 		}
         if (pageIndex == null) {
-			pageIndex = 1;
+			
 		}
-        
+        pageIndex = -1;
         // 取总页数
         criteria.setProjection(Projections.rowCount());
         int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
@@ -188,9 +245,9 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
             e.printStackTrace();
         }
         dataWrapper.setData(ret);
-        dataWrapper.setTotalNumber(totalItemNum);
+        dataWrapper.setTotalNumber(0);
         dataWrapper.setCurrentPage(pageIndex);
-        dataWrapper.setTotalPage(totalPageNum);
+        dataWrapper.setTotalPage(0);
         dataWrapper.setNumberPerPage(pageSize);
 
         return dataWrapper;

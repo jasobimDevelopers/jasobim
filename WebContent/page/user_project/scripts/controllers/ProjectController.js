@@ -54,6 +54,7 @@ function ProjectController($scope,ProjectService) {
 	var progressBar;
     var percentageDiv;
     var uploadTime;
+    
 	
 	////////////////
 	var itemName="";
@@ -79,6 +80,8 @@ function ProjectController($scope,ProjectService) {
 	$scope.quantity_phase="全部";
 	$scope.video_phase="全部";
 	$scope.paper_phase="全部";
+	$scope.paper_building_num="全部";
+	$scope.paper_floor="全部";
 	$scope.item_phase="全部";
 	$scope.question_phase="全部";
 	$scope.paper_phase="全部";
@@ -149,6 +152,30 @@ function ProjectController($scope,ProjectService) {
 			}
 		}
 		$scope.getProjectQuestionList($scope.findprojectId,10,1,question);
+	}
+	/////图纸按照楼栋搜索
+	$scope.setBuildingNum = function(index,flag){
+		if(flag=="图纸信息页面"){
+			$scope.paper_building_num = index.paper_building_num;
+			for(var i=0;i<$scope.paperBuildingNum.length;i++){
+				if($scope.paper_building_num==$scope.paperBuildingNum[i].name){
+					$scope.paper_building_num=i+1;
+				}
+			}
+			$scope.getProjectPaperList($scope.findprojectId,10,1,paper);
+		}
+	}
+/////图纸按照楼层搜索
+	$scope.setFloorNum = function(index,flag){
+		if(flag=="图纸信息页面"){
+			$scope.paper_floor = index.paper_floor;
+			for(var i=0;i<$scope.paperFloorNum.length;i++){
+				if($scope.paper_floor==$scope.paperFloorNum[i].name){
+					$scope.paper_floor=i+1;
+				}
+			}
+			$scope.getProjectPaperList($scope.findprojectId,10,1,paper);
+		}
 	}
 	/////按专业自动搜索
 	$scope.setPhase = function(index,flag) {
@@ -329,6 +356,7 @@ function ProjectController($scope,ProjectService) {
 	 $scope.projectQuestionOfPriority=[{name:"一般"},{name:"重要"},{name:"紧急"}];
 	 $scope.projectQuestionOfStatus=[{name:"待解决"},{name:"已解决"}];
 	 $scope.paperBuildingNum=["1#","2#","3#","4#","5#","6#","7#","8#","9#","10#","11#","12#","13#","14#","15#","16#","17#","18#","19#","20#"];
+	 $scope.paperFloorNum=["1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F","13F","14F","15F","16F","17F","18F","19F","20F"];
 	 /////////////////////////
 	 /*
 	  * 菜单的选择操作
@@ -476,6 +504,16 @@ function ProjectController($scope,ProjectService) {
 		 
 		 if(paperName!=""){
 			 paper+= "content=" + paperName;
+		 }
+		 if($scope.paper_building_num=="全部"){
+			 
+		 }else{
+			 paper+= "&buildingNum=" + $scope.paper_building_num;
+		 }
+		 if($scope.paper_floor=="全部"){
+			 
+		 }else{
+			 paper+= "&floorNum=" +$scope.paper_floor;
 		 }
 		 if($scope.paper_phase=="全部"){
 			 //paper+= "&professionType=" + $scope.flagAll;

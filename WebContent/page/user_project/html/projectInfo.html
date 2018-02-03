@@ -211,13 +211,13 @@
                         	<option value="全部" ng-click="setPhase('all',flag[2])">全部</option>
                             <option ng-repeat="paper_phase in projectPhaseInfo" value="{{paper_phase.name}}">{{paper_phase.name}}</option>
                         </select>
-                        <select name="select" id="select10">
+                        <select name="select" id="select10" ng-change="setBuildingNum(this,flag[2])" ng-model="paper_building_num">
                             <option value="全部">全部</option>
                             <option value="{{$index+1}}" ng-repeat="buildingNum in paperBuildingNum">{{buildingNum}}</option>
                         </select>
-                        <select name="select" id="select11">
+                        <select name="select" id="select11" ng-change="setFloorNum(this,flag[2])" ng-model="paper_floor">
                         	<option value="全部">全部</option>
-                            <option value="{{$index+1}}" ng-repeat="buildingNum in paperBuildingNum">{{buildingNum}}</option>
+                            <option value="{{$index+1}}" ng-repeat="floorNum in paperFloorNum">{{floorNum}}</option>
                         </select>
                         <a ng-click="showPaperBox()" style="cursor: pointer"><button class="change"><span>+</span>图纸</button></a>
                         <div id="show_paper" style="display: none">

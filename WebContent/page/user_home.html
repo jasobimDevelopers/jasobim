@@ -52,6 +52,7 @@
     <link href="page/user_project/css/style.css" rel="stylesheet" />
     <link href="page/user_project/css/jasobim.css" rel="stylesheet" />
     <link href="page/user_project/css/jquery.circliful.css" rel="stylesheet" />
+    <link href="page/user_project/css/projectFiles.css" rel="stylesheet" />
 <!-- app.js -->
     <script src="page/user_project/scripts/app.js"></script>
 <!-- controller.js -->
@@ -67,6 +68,7 @@
     <script src="page/user_project/scripts/controllers/AdvancedOrderController.js"></script>
     <script src="page/user_project/scripts/controllers/MeasuredDataController.js"></script>
     <script src="page/user_project/scripts/controllers/NormativefilesController.js"></script>
+    <script src="page/user_project/scripts/controllers/ProjectFilesController.js"></script>
 <!-- service.js -->
 	<script src="page/user_project/scripts/services/AdvancedOrderService.js"></script>
 	<script src="page/user_project/scripts/services/ConstructionTaskService.js"></script>
@@ -79,6 +81,7 @@
     <script src="page/user_project/scripts/services/ProductionService.js"></script>
     <script src="page/user_project/scripts/services/MeasuredDataService.js"></script>
     <script src="page/user_project/scripts/services/NormativefilesService.js"></script>
+    <script src="page/user_project/scripts/services/ProjectFilesService.js"></script>
 <!-- directive.js -->
     <script src="page/user_project/scripts/directives/DemoDirectives.js"></script>
 <!-- filter.js -->
@@ -97,6 +100,7 @@
 <div ng-include="'page/user_project/html/advancedOrder.html'" ng-if="currentPath == 'user_advancedOrder'" style="position:relative; z-index:0;"></div>
 <div ng-include="'page/user_project/html/measuredDataList.html'" ng-if="currentPath == 'measured_data'" style="position:relative; z-index:0;"></div>
 <div ng-include="'page/user_project/html/normativeDataList.html'" ng-if="currentPath == 'normativefilesList'" style="position:relative; z-index:0;"></div>
+<div ng-include="'page/user_project/html/projectFilesList.html'" ng-if="currentPath == 'user_projectFiles'" style="position:relative; z-index:0;"></div>
 </body>
 
 </html>

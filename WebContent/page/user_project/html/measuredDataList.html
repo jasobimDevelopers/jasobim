@@ -6,6 +6,12 @@
 	        <div class="search_con">
 	            <input type="text" placeholder="搜索" id="project_search"><a class="glyphicon glyphicon-search" id="search_icons" ng-click="findLike()"></a>
 	            <button id="search">高级搜索</button>
+	            <span>实测实量二维码：</span>
+	            <img style="width:40px;height:40px;" src="page/user_project/images/measuredCode.png" onclick="showOneBig(this)"/>
+	            <span style="margin-left:10px;">二维码下载：</span>
+	            <a href="page/user_project/images/measuredCode.png" target="_blank" download="实测实量二维码">
+                    <img src="page/user_project/images/downloadIcon.png" />
+               	</a>
 	        </div>
 	        <!--搜索内容-->
 	        <div class="search_list">
@@ -56,9 +62,22 @@
 	</div>
 </div>
 <script>
+function showOneBig(scope){
+	
+	layer.ready(function(){ 
+	  layer.open({
+  		type: 1,
+  		title: false,
+  		area: ['360px', '360px'],
+  		shadeClose: true, //点击遮罩关闭
+  		content: '<div style="background-size: 100% 100%;width:360px;height:360px;background-image: url(' +scope.src+')"/></div>'
+  	  });
+	});
+}
 //搜索
 $(".search_list").css('display','none');
 $("#search").on('click',function () {
     $(".search_list").toggle()
 });
+
 </script>

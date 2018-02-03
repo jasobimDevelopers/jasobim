@@ -203,6 +203,8 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 						constructionTaskPojo.setDetailContent(dataWrapper.getData().get(i).getDetailContent());
 						constructionTaskPojo.setFinishedDate(dataWrapper.getData().get(i).getFinishedDate());
 						constructionTaskPojo.setId(dataWrapper.getData().get(i).getId());
+						
+						
 						constructionTaskPojo.setRewards(dataWrapper.getData().get(i).getRewards());
 						constructionTaskPojo.setTaskContent(dataWrapper.getData().get(i).getTaskContent());
 						constructionTaskPojo.setTeamName(dataWrapper.getData().get(i).getTeamName());

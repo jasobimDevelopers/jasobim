@@ -40,6 +40,7 @@ function ProjectController($scope,ProjectService) {
 	console.log("载入ProjectController");
 	$scope.fileTypes="";
 	$scope.videoTypes="";
+	$scope.videoGrade="";
 	var videoBuildingNums="";
 	var paperBuildingNums="";
 	var paperBuildingNum=1;
@@ -1333,6 +1334,11 @@ function ProjectController($scope,ProjectService) {
 				 }else{
 					 formData.append("videoType",0);
 				 }
+				 if($scope.videoGrade!=""){
+					 formData.append("videoGrade",$scope.videoGrade);
+				 }else{
+					 formData.append("videoGrade",1);
+				 }
 				 if(videoBuildingNums!=""){
 					 formData.append("buildingNum",videoBuildingNums);
 				 }else{
@@ -1391,6 +1397,9 @@ function ProjectController($scope,ProjectService) {
 	     $scope.setFileType = function(index){
 	    	 $scope.fileTypes=index.videoFiles;
 	     }
+	     $scope.setVideoGrade = function(index){
+	    	 $scope.videoGrade=index.videoGrade;
+	     }
 	     
 	     //////返回项目列表按钮
 	     $scope.returnProjects = function(){
@@ -1409,6 +1418,11 @@ function ProjectController($scope,ProjectService) {
 		         if($scope.fileTypes!=""){
 		        	 form.append("videoType",$scope.fileTypes); // 文件对象
 		         }
+		         if($scope.videoGrade!=""){
+		        	 form.append("videoGrade",$scope.videoGrade);
+				 }else{
+					 form.append("videoGrade",1);
+				 }
 		         if($scope.videoTypes!=""){
 		        	 form.append("professionType",$scope.videoTypes);
 		         }

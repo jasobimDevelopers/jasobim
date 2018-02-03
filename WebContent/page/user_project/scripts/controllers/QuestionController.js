@@ -161,6 +161,8 @@ function QuestionController($scope,QuestionService) {
 	 }
 	 ////显示问题详细界面
 	 $scope.questionChangeClick = function(questionId){
+		 $scope.questionImgList=[];
+		 $scope.messageListInfo="";
 		    QuestionService.findQuestion(questionId).then(function(result){
 		      k=0;
 		      $scope.findQuestionInfo=result.data;

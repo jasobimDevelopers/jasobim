@@ -80,6 +80,7 @@
                	<value>com.my.spring.model.MeasuredData</value>
                	<value>com.my.spring.model.MeasuredDatas</value>
                	<value>com.my.spring.model.HouseType</value>
+               	<value>com.my.spring.model.ProjectFiles</value>
             </list>
         </property>
     </bean>

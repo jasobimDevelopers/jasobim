@@ -67,7 +67,7 @@ public class QRCodeUtil2 {
 
             int width = image.getWidth();
             int height = image.getHeight();
-            if (Objects.nonNull(logoFile) && logoFile.exists()) {
+            if ( logoFile.exists()) {
                 // 构建绘图对象
                 Graphics2D g = image.createGraphics();
                 // 读取Logo图片

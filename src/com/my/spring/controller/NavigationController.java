@@ -97,39 +97,16 @@ public class NavigationController {
     public String userAdvancedPage(){
         return "user_home";
     }
+    @RequestMapping(value="/user_projectFiles")
+    public String userProjectFilesPage(){
+        return "user_home";
+    }
     
     ///////////////
     @RequestMapping(value="/new_user_home")
     public String newUserMainPage(){
         return "new_user_home";
     }
-   /* @RequestMapping(value="/new_user_projectList")
-    public String newUserProjectPage(){
-        return "new_user_home";
-    }
-    
-    @RequestMapping(value="/new_user_projectQuestionList")
-    public String newUserQuestionPage(){
-        return "new_user_home";
-    }
-    
-    @RequestMapping(value="/codeInformationList")
-    public String newCodeInformationListPage(){
-    	return "new_user_home";
-    }
-    
-    @RequestMapping(value="/aboutList")
-    public String newUserAboutusPage(){
-        return "new_user_home";
-    }
-    
-    @RequestMapping(value="/suggesttionList")
-    public String newUserSuggesttionPage(){
-    	return "new_user_home";
-    }
-    @RequestMapping(value="/productionList")
-    public String newProductionPage(){
-        return "new_user_home";
-    }*/
+   
     
 }

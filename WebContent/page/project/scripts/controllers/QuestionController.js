@@ -1,9 +1,16 @@
 var index;
 function QuestionController($scope,QuestionService) {
 	console.log("载入QuestionController");
+	var j=0;
+    var k=0;
+    var q=0;
+    var p=0;
 	var project="";
 	var question="";
 	var pageSize=10;
+	$scope.findQuestionInfo = {};
+	$scope.questionImgList=[];
+	$scope.messageImgItem=[];
 	var pageIndex=1;
 	$scope.questionSelfId="";
 	var questionId="";
@@ -217,6 +224,19 @@ function QuestionController($scope,QuestionService) {
 	 ////显示问题详细界面
 	 $scope.questionChangeClick = function(questionId){
 		    QuestionService.findQuestion(questionId).then(function(result){
+		    	k=0;
+		    	$scope.questionImgList=[];
+			    $scope.findQuestionInfo=result.data;
+		    	if($scope.findQuestionInfo.fileList!=null){
+		  			var test=$scope.findQuestionInfo.fileList;
+		  			for(var i=0;i<test.length;i++){
+		  				if(test[i].split(".")[1]=="wav" || test[i].split(".")[1]=="mp3"){
+		  				}else if(test[i].split(".")[1]!="dat"){
+		  					$scope.questionImgList[k]=test[i];
+		  					k++;
+		  				}
+		  			}
+		  		}
 		      $scope.findQuestionInfo=result.data;
 		      $scope.flag=$scope.questionAddOrUpdate[1];
 		      $scope.getMessageListByQuestionId(questionId);

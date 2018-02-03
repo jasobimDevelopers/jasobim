@@ -215,7 +215,7 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						advancedOrderPojo.setProjectName("安装公司"+dataWrapper.getData().get(i).getProjectName()+"项目部"+dataWrapper.getData().get(i).getMonth()+"月份预付单");
+						advancedOrderPojo.setProjectName(dataWrapper.getData().get(i).getProjectName()+"项目部"+dataWrapper.getData().get(i).getMonth()+"月份预付单");
 						if(dataWrapper.getData().get(i).getApprovalPeopleIdea()!=null){
 							String[] approvalPeopleIdeas=dataWrapper.getData().get(i).getApprovalPeopleIdea().split("&");
 							advancedOrderPojo.setApprovalPeopleIdea(approvalPeopleIdeas);

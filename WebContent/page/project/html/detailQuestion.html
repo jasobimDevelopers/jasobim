@@ -41,12 +41,12 @@
             </div>
              <div class="addinput_question">
             	<div><span>现场图片:</span></div>
-            	<div ng-repeat="pic in findQuestionInfo.fileList" style="margin-right:10px;"><img width="100px" height="100px" src="{{pic}}" /></div>
+            	<div style="margin-right:10px;"><img style="width:100px;height:100px;margin:0 5px;" src="{{img}}" ng-repeat="img in questionImgList" onclick="showOneBig(this)" alt=""></div>
             </div>
-            <div class="addinput_question" style="margin-top:100px;width:auto;">
+            <!-- <div class="addinput_question" style="margin-top:100px;width:auto;">
             	<div><span>查看二维码:</span></div>
             	<div><img width="100px" height="100px" src="{{findQuestionInfo.codeInformation}}" /></div>
-            </div>
+            </div> -->
 
             <div id="addbutton" style="margin-top:86px;display:none;">
             	<input class="btn btn-default" type="button" ng-click="addQuestionByAdmin()" value="确定" />
@@ -88,3 +88,22 @@
     			visibility: hidden;    /* 隐藏 */
 			}
 	</style>
+	<script>
+	function showOneBig(scope){
+		
+	layer.ready(function(){ 
+	  layer.open({
+  		type: 1,
+  		title: false,
+  		area: ['360px', '360px'],
+  		shadeClose: true, //点击遮罩关闭
+  		content: '<div style="background-size: 100% 100%;width:360px;height:360px;background-image: url(' +scope.src+')"/></div>'
+  	  });
+	});
+
+
+
+
+}
+</script>
+	
