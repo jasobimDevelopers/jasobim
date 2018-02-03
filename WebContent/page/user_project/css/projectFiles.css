@@ -1,0 +1,30 @@
+/*工程资料css*/
+ #mulu{
+	width:1200px;
+ 	height:800px;
+ 	margin:20px auto;
+ }
+ #mulu div{
+ 	float:left;
+ }
+ .imgs{
+  width:65px;
+  margin-right:73px;
+  padding-left:45px;
+ }
+ #contents{
+ 	width:160px;
+ 	height:100px;
+ 	margin-bottom:48px;
+ }
+ #contents div{
+ 	float:left;
+ }
+ .text{
+    width:150px;
+ 	margin-right:73px;
+ 	text-align:center;
+ }
+ #mulu div img{
+ 	margin-bottom:28px;
+ }
