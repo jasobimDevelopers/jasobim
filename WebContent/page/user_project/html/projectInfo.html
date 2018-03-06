@@ -9,14 +9,14 @@
         <div class="projectPill">
             <div class="line"></div>
             <ul class="clear">
-                <li class="active"><a href="#">基本</a></li>
+                <li class="active" id="a"><a href="#">基本</a></li>
                 <li ng-click="getProjectItemList(findProjectInfo.id,10,1,null)"><a href="#">构件</a></li>
                 <li ng-click="getProjectQuantityList(findProjectInfo.id,10,1,null)"><a href="#">工程量</a></li>
                 <li ng-click="getProjectPaperList(findProjectInfo.id,10,1,null)"><a href="#">图纸</a></li>
                 <li ng-click="getProjectVideoList(findProjectInfo.id,10,1,null)"><a href="#">交底</a></li>
                 <li ng-click="getProjectQuestionList(findProjectInfo.id,10,1,null)"><a href="#">问题</a></li>
             </ul>
-            <a class="back" ng-click="returnProjects()">返回上一级</a>
+            <a class="back" ng-click="returnProjectlist('user_projectList')">返回上一级</a>
         </div>
      <!--tab 切换-->
         <div class="projectCon">
@@ -258,6 +258,7 @@
                                 <th style="width:100px;text-align:center;">楼栋号</th>
                                 <th style="width:100px;text-align:center;">楼层</th>
                                 <th style="width:150px;text-align:center;">专业</th>
+                                <th style="width:150px;text-align:center;">上传时间</th>
                                 <th style="width:100px;text-align:center;">操作</th>
                             </tr>
                             </thead>
@@ -268,6 +269,7 @@
                                 <td>{{paper.buildingNum}}</td>
                                 <td>{{paper.floorNum}}</td>
                                 <td>{{projectPhaseInfos[paper.professionType].name}}</td>
+                                <td>{{paper.uploadDate}}</td>
                                 <td class="tds" >
 									    <a href="{{paper.url}}" target="_blank" download="{{paper.originName}}">
 					                        <button id="uploadbutton">
@@ -360,9 +362,12 @@
                                 <tr style="background: #eee;">
                                     <th style="border-left: 1px solid #aaa;width:15%;text-align:center;">序号</th>
                                     <th style="width:25%;text-align:center;">名称</th>
-                                    <th style="width:20%;text-align:center;">楼栋号</th>
-                                    <th style="width:20%;text-align:center;">类型</th>
-                                    <th style="width:20%;text-align:center;">操作</th>
+                                    <th style="width:15%;text-align:center;">楼栋号</th>
+                                    <th style="width:10%;text-align:center;">类型</th>
+                                    <th style="width:10%;text-align:center;">级别</th>
+                                    <th style="35%;text-align:center;">上传时间</th>
+                                    
+                                    <th style="width:10%;text-align:center;">操作</th>
                                 </tr>
                             </thead>
                             <tbody class="tbody04">
@@ -371,6 +376,8 @@
 	                                <td>{{video.originName}}</td>
 	                                <td>{{video.buildingNum}}</td>
 	                                <td>{{projectQuestionType[video.professionType].name}}</td>
+	                                <td>{{projectVideoTypes[video.videoGrade].name}}</td>
+	                                <td>{{video.uploadDate}}</td>
 	                                <td class="tds" >
 				                        <a href="{{video.url}}" target="_blank" download="{{video.originName}}">
 					                         <button id="uploadbutton">

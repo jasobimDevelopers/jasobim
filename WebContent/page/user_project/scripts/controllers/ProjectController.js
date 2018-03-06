@@ -77,6 +77,7 @@ function ProjectController($scope,ProjectService) {
 	$scope.paperTitles=["序号","图纸信息","楼栋号","楼层","专业","操作"];
 	///////////////
 	$scope.flag=["工程量页面","构件信息页面","图纸信息页面","问题列表页面","安全交底页面"];
+	$scope.videoTypes=["公司总交底","项目交底","留底资料","通用交底"];
 	$scope.quantity_phase="全部";
 	$scope.video_phase="全部";
 	$scope.paper_phase="全部";
@@ -169,10 +170,14 @@ function ProjectController($scope,ProjectService) {
 	$scope.setFloorNum = function(index,flag){
 		if(flag=="图纸信息页面"){
 			$scope.paper_floor = index.paper_floor;
-			for(var i=0;i<$scope.paperFloorNum.length;i++){
-				if($scope.paper_floor==$scope.paperFloorNum[i].name){
-					$scope.paper_floor=i+1;
-				}
+			if($scope.paper_floor==3){
+				$scope.paper_floor=-1;
+			}else if($scope.paper_floor==2){
+				$scope.paper_floor=-2					
+			}else if($scope.paper_floor==1){
+				$scope.paper_floor=-3
+			}else{
+				$scope.paper_floor=$scope.paper_floor-3;
 			}
 			$scope.getProjectPaperList($scope.findprojectId,10,1,paper);
 		}
@@ -325,9 +330,10 @@ function ProjectController($scope,ProjectService) {
 		 }
 	 }
 	 /////返回项目列表
-	 $scope.returnProjectlist = function(){
+	 $scope.returnProjectlist = function(page){
 		 	var project={};
-	       document.getElementById("addProjectHtml").style.display = 'none';
+		    window.location.href = page;
+
 	 }
 	 //////重置添加项目信息
 	 $scope.resetProject = function(){
@@ -351,12 +357,13 @@ function ProjectController($scope,ProjectService) {
 	 $scope.projectPhaseInfo=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"}];
 	 $scope.projectPhaseInfos=[{name:"电气"},{name:"暖通"},{name:"给排水"},{name:"消防"},{name:"建筑"},{name:"装饰"},{name:"结构"}];
 	 $scope.projectQuestionType=[{name:"质量"},{name:"安全"},{name:"技术"}];
+	 $scope.projectVideoTypes=[{name:"公司总交底"},{name:"项目交底"},{name:"留底资料"},{name:"通用资料"}];
 	 $scope.projectHouseholdInfo=[{name:"公共部位"},{name:"N户型"},{name:"Q户型"},{name:"Q户型反"},{name:"N户型反"}];
 	 $scope.projectQuestionOfType=[{name:"安全"},{name:"质量"},{name:"其他"}];
 	 $scope.projectQuestionOfPriority=[{name:"一般"},{name:"重要"},{name:"紧急"}];
 	 $scope.projectQuestionOfStatus=[{name:"待解决"},{name:"已解决"}];
 	 $scope.paperBuildingNum=["1#","2#","3#","4#","5#","6#","7#","8#","9#","10#","11#","12#","13#","14#","15#","16#","17#","18#","19#","20#"];
-	 $scope.paperFloorNum=["1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F","13F","14F","15F","16F","17F","18F","19F","20F"];
+	 $scope.paperFloorNum=["-3F","-2F","-1F","1F","2F","3F","4F","5F","6F","7F","8F","9F","10F","11F","12F","13F","14F","15F","16F","17F","18F","19F","20F"];
 	 /////////////////////////
 	 /*
 	  * 菜单的选择操作
@@ -813,6 +820,7 @@ function ProjectController($scope,ProjectService) {
 	    	 document.getElementById("projectInfoHtml").style.display = 'none';
 		     document.getElementById("projectContent").style.display = 'block';
 		     $scope.findProjectInfo={};
+		     $scope.videoList=[];
 	     };
 	    
 	     //上传文件方法

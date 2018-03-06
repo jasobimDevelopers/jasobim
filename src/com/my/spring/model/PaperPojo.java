@@ -9,6 +9,7 @@ public class PaperPojo {
     private Integer professionType;
     private String originName;
     private Long size;
+    private String uploadDate;
     
     
 	
@@ -69,6 +70,12 @@ public class PaperPojo {
 	}
 	public void setSize(Long size) {
 		this.size = size;
+	}
+	public String getUploadDate() {
+		return uploadDate;
+	}
+	public void setUploadDate(String uploadDate) {
+		this.uploadDate = uploadDate;
 	}
 	
 }

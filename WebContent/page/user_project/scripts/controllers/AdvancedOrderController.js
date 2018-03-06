@@ -52,6 +52,16 @@ function AdvancedOrderController($scope,AdvancedOrderService) {
 		      $scope.projectPage($scope.totalPage,$scope.currentPage);
 		  });
 	};
+	$scope.getAdvancedOrderListss = function(pageSize,pageIndex,advancedOrder) {
+		AdvancedOrderService.getAdvancedOrderList(pageSize,pageIndex,advancedOrder).then(function (result){
+		  	  $scope.advancedOrderInfos = result.data;
+		  	  if(pageIndex==1){
+		  		 $scope.currentPage = result.currentPage; 
+		  	  }
+		      $scope.totalPage = result.totalPage;
+		      $scope.projectPage($scope.totalPage,$scope.currentPage);
+		  });
+	};
 	$scope.getAdvancedOrderById = function(pageSize,pageIndex,advancedOrder) {
 		AdvancedOrderService.getAdvancedOrderById(pageSize,pageIndex,advancedOrder).then(function (result){
 		  	  $scope.advancedOrderInfo = result.data;
@@ -69,9 +79,7 @@ function AdvancedOrderController($scope,AdvancedOrderService) {
 		  		  }
 		  		  
 		  	  }
-		      $scope.currentPage = result.currentPage;
-		      $scope.totalPage = result.totalPage;
-		      $scope.projectPage($scope.totalPage,$scope.currentPage);
+		     
 		  });
 	};
 	////////模糊查找预付单
@@ -98,7 +106,7 @@ function AdvancedOrderController($scope,AdvancedOrderService) {
    
     $scope.advancedOrderChange = function(index){
     	$scope.orderTofind.id=index;
-    	$scope.getAdvancedOrderById(pageSize,$scope.currentPage,$scope.orderTofind);
+    	$scope.getAdvancedOrderById(pageSize,1,$scope.orderTofind);
     	document.getElementById('advancedOrderDetailHtml').style.display='block';
     	document.getElementById('projectContent').style.display='none';
     }
@@ -111,7 +119,7 @@ function AdvancedOrderController($scope,AdvancedOrderService) {
     }
     $scope.goOrderList = function(){
     	$scope.conslogList=[];
-    	$scope.getAdvancedOrderLists(pageSize,$scope.currentPage,null);
+    	$scope.getAdvancedOrderListss(pageSize,$scope.currentPage,null);
     	document.getElementById('advancedOrderDetailHtml').style.display='none';
     	document.getElementById('projectContent').style.display='block';
     }
@@ -162,7 +170,7 @@ function AdvancedOrderController($scope,AdvancedOrderService) {
 	 }
 	$scope.getAdvancedOrderList = function(pageSize,pageIndex,advancedOrder) {
 		AdvancedOrderService.getAdvancedOrderList(pageSize,pageIndex,advancedOrder).then(function (result){
-		  	  $scope.advancedOrderLists = result.data;
+		  	  $scope.advancedOrderInfos = result.data;
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
 		      $scope.projectPage($scope.totalPage,$scope.currentPage);
@@ -184,6 +192,7 @@ function AdvancedOrderController($scope,AdvancedOrderService) {
 	
 		      backFn:function(p){
 		    	  console.log($scope.ProjectTofind);
+		    	  $scope.currentPage=p;
 		    	  $scope.getAdvancedOrderList(pageSize,p,advancedOrder);
 		    	  
 		      }

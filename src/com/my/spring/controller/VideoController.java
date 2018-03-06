@@ -30,8 +30,7 @@ public class VideoController {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
     	for(int i=0;i<fileList.length;i++){
     		dataWrapper=VideoService.addVideo(video, token, fileList[i], request);
-    		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
-            	
+    		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){          	
             }else{
             	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
             }

@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 		} else {
 			user.setId(null);
 			user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
-			user.setUserType(UserTypeEnum.User.getType());
+			//user.setUserType(UserTypeEnum.User.getType());
 			//user.setUserType(user.getUserType());
 			user.setRegisterDate(new Date());
 			if(!userDao.addUser(user)) {

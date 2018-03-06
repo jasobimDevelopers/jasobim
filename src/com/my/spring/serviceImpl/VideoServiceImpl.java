@@ -156,6 +156,7 @@ public class VideoServiceImpl implements VideoService {
     				Files file=fileDao.getById(dataWrappers.getData().get(i).getFileId());
     				if(file!=null){
     					videoPojo.setUrl(file.getUrl());
+    					videoPojo.setUploadDate(file.getIntro());
     				}
     				videopojo.add(i,videoPojo);
     			}

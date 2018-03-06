@@ -54,7 +54,7 @@ function QuestionController($scope,QuestionService) {
 		      current:iCurrent,
 
 		      backFn:function(p){
-		    	  
+		    	  $scope.currentPage=p;
 		    	  $scope.getQuestionLists(pageSize,p,question);
 		      }
 		  });
@@ -76,7 +76,9 @@ function QuestionController($scope,QuestionService) {
 			 QuestionService.getQuestionList(pageSize,pageIndex,question,null).then(function (result){
 				 
 			  	  $scope.questionList = result.data;
-			      $scope.currentPage = result.currentPage;
+			  	  if($scope.currentPage==1){
+			  		$scope.currentPage = result.currentPage;
+			  	  }
 			      $scope.totalPage = result.totalPage;
 			      $scope.questionPage($scope.totalPage,$scope.currentPage);
 			     
@@ -243,7 +245,7 @@ function QuestionController($scope,QuestionService) {
 		 document.getElementById("editQuestionHtml").style.display = 'none';
 	     document.getElementById("projectDetail_body_questions").style.display='block';
 	     
-	     $scope.getQuestionLists(pageSize,pageIndex,question);
+	     $scope.getQuestionLists(pageSize,$scope.currentPage,question);
 	 }
 	
 	 ////隐藏问题添加页面

@@ -98,6 +98,10 @@ public class VideoDaoImpl extends BaseDao<Video> implements VideoDao {
                 	criteria.add(Restrictions.eq("projectId", projectId));
                 }
             }
+        }else{
+        	if(video.getProjectId()!=null){
+            	criteria.add(Restrictions.eq("projectId", projectId));
+            }
         }
         if (pageSize == null) {
 			pageSize = 10;

@@ -485,9 +485,9 @@ function submit(){
 	checkMoreUser=document.getElementById('fucha_user').value;
 	postData();
 }
-var baseUrl="http://jasobim.com.cn/";
+//var baseUrl="http://jasobim.com.cn/";
 var webToken="jasobim";
-//var baseUrl="http://localhost:8080/jasobim/";
+var baseUrl="http://localhost:8080/jasobim/";
 function postData(){
 	$.ajax({
          type: "POST",

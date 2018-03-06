@@ -13,7 +13,6 @@ function ConstructionTaskController($scope,ConstructionTaskService) {
 	var constructionTask;
 	$scope.constructionTaskLists="";
 	$scope.ConsTofind = {};
-	$scope.currentPage=1;
 	$scope.totalPage=1;
 	var pageSize=10;
 	var pageIndex=1;
@@ -196,6 +195,7 @@ function ConstructionTaskController($scope,ConstructionTaskService) {
 	
 		      backFn:function(p){
 		    	  console.log($scope.ConsTofind);
+		    	  $scope.currentPage=p;
 		    	  $scope.getConstructionTaskList(pageSize,p,$scope.ConsTofind);
 		    	  
 		      }
@@ -228,9 +228,33 @@ function ConstructionTaskController($scope,ConstructionTaskService) {
 		  		  }
 		  		  
 		  	  }
+		  	  if($scope.currentPage==1){
+		  		$scope.currentPage = result.currentPage;
+		  	  }
+		  	 $scope.totalPage = result.totalPage;
+		      $scope.projectPage($scope.totalPage,$scope.currentPage);
+		  });
+	};
+	$scope.getConstructionTaskListss = function(pageSize,pageIndex,constructionTask) {
+		ConstructionTaskService.getConstructionTaskList(pageSize,pageIndex,constructionTask).then(function (result){
+		  	  $scope.constructionTaskInfos = result.data;
+		  	  if($scope.constructionTaskInfos!={}){
+		  		  if($scope.constructionTaskInfos[0].approvalPeopleNameList!=null){
+		  			  for(var i=0;i<$scope.constructionTaskInfos[0].approvalPeopleNameList.length;i++){
+		  				  	$scope.conslogitem={"type":"","name":"","idea":"","date":"","note":""};
+		  					$scope.conslogitem.type=$scope.constructionTaskInfos[0].approvalPeopleTypeList[i];
+		  					$scope.conslogitem.name=$scope.constructionTaskInfos[0].approvalPeopleNameList[i];
+		  					$scope.conslogitem.idea=$scope.constructionTaskInfos[0].approvalPeopleIdeaList[i];
+		  					$scope.conslogitem.date=$scope.constructionTaskInfos[0].approvalDateList[i];
+		  					$scope.conslogitem.note=$scope.constructionTaskInfos[0].approvalPeopleNoteList[i];
+		  					$scope.conslogList[i]=$scope.conslogitem;
+		  			  }
+		  		  }
+		  		  
+		  	  }
 		      $scope.currentPage = result.currentPage;
 		      $scope.totalPage = result.totalPage;
-		      $scope.projectPage($scope.totalPage,$scope.currentPage);
+		      $scope.projectPage($scope.totalPage,pageIndex);
 		  });
 	};
 	////////模糊查找施工任务单
@@ -246,7 +270,7 @@ function ConstructionTaskController($scope,ConstructionTaskService) {
    
     $scope.constructionTaskChange = function(index){
     	$scope.ConsTofind.id=index;
-    	$scope.getConstructionTaskLists(pageSize,$scope.currentPage,$scope.ConsTofind);
+    	$scope.getConstructionTaskLists(pageSize,1,$scope.ConsTofind);
     	document.getElementById('constructionDetailHtml').style.display='block';
     	document.getElementById('projectContent').style.display='none';
     };
@@ -258,7 +282,8 @@ function ConstructionTaskController($scope,ConstructionTaskService) {
     	}
     };
     $scope.goConstructionList = function(){
-    	$scope.getConstructionTaskLists(pageSize,$scope.currentPage,null);
+    	$scope.ConsTofind = {};
+    	$scope.getConstructionTaskListss(pageSize,$scope.currentPage,null);
     	document.getElementById('constructionDetailHtml').style.display='none';
     	document.getElementById('projectContent').style.display='block';
     };

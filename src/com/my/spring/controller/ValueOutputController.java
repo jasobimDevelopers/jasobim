@@ -25,7 +25,7 @@ public class ValueOutputController {
             @RequestParam(value = "token",required = true) String token){
         return ValueOutputService.addValueOutput(ValueOutput,token);
     }
-    @RequestMapping(value="/deleteValueOutput")
+    @RequestMapping(value="/deleteValueOutput",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteValueOutput(
             @RequestParam(value = "idList",required = true) String idList,

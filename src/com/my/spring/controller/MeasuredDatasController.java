@@ -2,6 +2,7 @@ package com.my.spring.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +29,12 @@ public class MeasuredDatasController {
     public DataWrapper<Void> addMeasuredDatas(
             @ModelAttribute MeasuredDatas measuredDatas,
             @RequestParam(value = "token",required = false) String token,
+            HttpServletResponse response,
             @RequestParam(value = "sceneFlag",required = false) String sceneFlag){
+    	response.setHeader("Access-Control-Allow-Origin", "*");
+    	// 指定允许其他域名访问  
+    	// 响应头设置  
+    	response.setHeader("Access-Control-Allow-Headers:x-requested-with", "content-type");  
         return measuredDatasService.addMeasuredDatas(measuredDatas,token,sceneFlag);
     }
     @RequestMapping(value="/deleteMeasuredDatas")

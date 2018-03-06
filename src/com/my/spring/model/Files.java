@@ -52,11 +52,11 @@ public class Files {
 
 	@Basic
 	@Column(name = "intro")
-	public String getDesc() {
+	public String getIntro() {
 		return intro;
 	}
 
-	public void setDesc(String desc) {
+	public void setIntro(String desc) {
 		this.intro = desc;
 	}
 	@Basic

@@ -273,6 +273,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         }
         if (ret != null && ret.size() > 0) {
         	userList.setData(ret);
+        	users.setData(userList.getData().get(0));
         	User us=new User();
         	us=userList.getData().get(0);
         	us.setPassword(MD5Util.getMD5String(MD5Util.getMD5String("123456") + "嘉实安装"));
@@ -280,7 +281,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 		}else{
 			users.setErrorCode(ErrorCodeEnum.Error);
 		}
-        users.setData(userList.getData().get(0));
+        
 		return users;
 	}
 

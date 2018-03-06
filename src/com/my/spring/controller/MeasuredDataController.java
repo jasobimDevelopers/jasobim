@@ -2,7 +2,7 @@ package com.my.spring.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,18 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.Item;
 import com.my.spring.model.MeasuredData;
 import com.my.spring.model.MeasuredDataPojo;
-import com.my.spring.model.MinItem;
-import com.my.spring.model.MinItemPojo;
-import com.my.spring.service.ItemService;
 import com.my.spring.service.MeasuredDataService;
 import com.my.spring.utils.DataWrapper;
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin("http://jasobim.com")
 @Controller
 @RequestMapping(value="api/measuredData")
 public class MeasuredDataController {
@@ -36,8 +30,13 @@ public class MeasuredDataController {
     @ResponseBody
     public DataWrapper<Void> addMeasuredData(
             @ModelAttribute MeasuredData measuredData,
+            HttpServletResponse response,
             @RequestParam(value = "token",required = false) String token,
             @RequestParam(value = "webToken",required = false) String webToken){
+    	// 指定允许其他域名访问 
+    	response.setHeader("Access-Control-Allow-Origin", "*");
+    	// 响应头设置  
+    	response.setHeader("Access-Control-Allow-Headers:x-requested-with", "content-type");  
         return measuredDataService.addMeasuredData(measuredData,token,webToken);
     }
     @RequestMapping(value="/deleteMeasuredData")

@@ -53,7 +53,7 @@ public class FileServiceImpl implements FileService  {
             Date date=new Date();
             DateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time=format.format(date);
-            files.setDesc(time);
+            files.setIntro(time);
             String realPath=filePath + "/"+ newFileName;
             files.setName(newFileName);//////构件的url
             files.setUrl(realPath);

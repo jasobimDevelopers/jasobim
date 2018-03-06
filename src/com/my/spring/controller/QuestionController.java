@@ -42,7 +42,7 @@ public class QuestionController {
         return dataWrappers;
     }
     //////根据项目id和问题id删除问题
-    @RequestMapping(value="/admin/deleteQuestion")
+    @RequestMapping(value="/admin/deleteQuestion",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteQuestion(
             @RequestParam(value = "questionId",required = true) Long questionId,

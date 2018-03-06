@@ -620,6 +620,9 @@ public class QuestionServiceImpl implements QuestionService {
 			if (userInDB != null) {
 				if(questionId!=null){
 					Question question=questionDao.getById(questionId);
+					if(question==null){
+						dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+					}
 					if(question!=null){
 						QuestionPojo questionPojo=new QuestionPojo();
 						questionPojo.setId(question.getId());
@@ -674,7 +677,7 @@ public class QuestionServiceImpl implements QuestionService {
 					}
 				}
 			} else {
-				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);
+				dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 			}
 		} 
 		return dataWrapper;

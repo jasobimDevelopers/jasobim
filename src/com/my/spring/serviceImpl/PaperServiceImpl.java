@@ -290,6 +290,7 @@ public class PaperServiceImpl implements PaperService {
 	        			Files file=fileDao.getById(dataWrapper.getData().get(i).getFileId());
 	        			if(file!=null){
 	        				papernew.setUrl(file.getUrl());
+	        				papernew.setUploadDate(file.getIntro());
 	        			}
 	        			if(papernew.getId()!=null){
 	        				papers.add(papernew);
