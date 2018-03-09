@@ -28,3 +28,12 @@ window.addEventListener('load', function () {
     var el = document.querySelectorAll('img.zoom:not(.no-lightense),.lightense');
     Lightense(el);
 }, false);*/
+
+(function() {
+  var $menuWrapper = $('.headMain .head');
+  var $menuBtn = $('.menu-wrapper img');
+
+  $menuBtn.on('click', function() {
+    $menuWrapper.toggleClass('active');
+  });
+})();

@@ -258,20 +258,24 @@ text-decoration: none;
 #table-buton10{
 	float:right;
 }
+
+#projectDetail_body_questions .header-wrapper {
+  margin-top: 32px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#projectDetail_body_questions .question_search_con{
+	width: auto;
+}
+
 #dataShow{
 	padding-left:20px;
-	background-color:white;
 	color:black ! important;
 }
 
 #dataShow span{
 	color:black ! important;
-}
-#dataShow{
-	width: 755px;
-    position: absolute;
-    top: -15px;
-    right: 0;
 }
 #dataShow div{
 	margin-right: 20px;

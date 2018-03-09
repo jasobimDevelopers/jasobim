@@ -131,7 +131,6 @@
     border-bottom-left-radius: 3px;
 }
 .question_search_con{
-	width: 1200px;
     margin: 45px auto;
 }
 #question_search_icons {
@@ -145,3 +144,13 @@
     border-bottom-right-radius: 3px;
     margin-left: -4px;
 }
+
+/** media **/
+@media (max-width: 1200px) {
+  .safeMain,
+  .safeMain .table {
+    padding: 0 15px;
+    width: 100%;
+  }
+}
+/** /media **/

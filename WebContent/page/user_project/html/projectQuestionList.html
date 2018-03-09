@@ -7,98 +7,110 @@
 	<div id="projectDetail_body_questions" style="display:block">
 	    <!--内容部分-->
     <div class="safeMain">
-        <div class="question_search_con">
-	            <input type="text" placeholder="搜索" id="project_question_search" ng-model="questionTofind.othersAttention">
-	            <a class="glyphicon glyphicon-search" id="question_search_icons" ng-click="findQuestionLike()"></a>
-	    </div>
-        <!--选择列表-->
-        <div class="select">
-            <select name="select" id="projectName" ng-change="setChoice(questionProjectId,flag[0])" ng-model="questionProjectId">
-            	<option value="全部" ng-click="setPhase('all',flag[0])">全部</option>
-                <option value="{{project.id}}" ng-repeat="project in projectLists">{{project.name}}</option>
-            </select>
-            <select name="select" id="select02" ng-change="setChoice(questionType,flag[1])" ng-model="questionType">
-                <option value="全部" ng-click="setChoice('all',flag[1])">全部</option>
-                <option value="{{$index}}" ng-repeat="type in projectQuestionOfType">{{type.name}}</option>
-            </select>
-            <select name="select" id="select03" ng-change="setChoice(questionPority,flag[2])" ng-model="questionPority">
-            	<option value="全部" ng-click="setChoice('all',flag[2])">全部</option>
-                <option value="{{$index}}" ng-repeat="pority in projectQuestionOfPriority">{{pority.name}}</option>
-            </select>
-            <select name="select" id="select04" ng-change="setChoice(questionStatu,flag[3])" ng-model="questionStatu">
-            	<option value="全部" ng-click="setChoice('all',flag[3])">全部</option>
-                <option value="{{$index}}" ng-repeat="statu in projectQuestionOfStatus">{{statu.name}}</option>
-            </select>
-            <a href="#" ng-click="showAddQuestionHtml()"><button class="change"><span>+</span>问题</button></a>
-            <div id="show03s" style="display: none">
-                <div class="addQues">
-                    <div class="addConMain">
-                        <div class="pName">
-                            <span>项目名称</span>
-                            <select id="projectName">
-                                <option value="{{project.name}}" ng-repeat="project in projectLists">{{project.name}}</option>
-                            </select>
-                        </div>
-                        <div class="pProblem">
-                            <span>问题名称</span>
-                            <input type="text" id="questionTitle"/>
-                        </div>
-                        <div class="pZhuanye">
-                            <span>所属专业</span>
-                            <input type="text" id="questionPhase"/>
-                        </div>
-                        <div class="pType">
-                            <span>问题类型</span>
-                            <select id="questionType">
-                                <option value="{{type.name}}" ng-repeat="type in projectQuestionOfType">{{type.name}}</option>
-                            </select>
-                        </div>
-                        <div class="pDengji">
-                            <span>问题等级</span>
-                            <select id="questionPority">
-                                <option value="{{pority.name}}" ng-repeat="pority in projectQuestionOfPriority">{{pority.name}}</option>
-                            </select>
-                        </div>
-                        <div class="pDetail">
-                            <span>问题详情</span>
-                            <textarea name="" id="questionDetail" cols="30" rows="10"></textarea>
-                        </div>
-                        <div class="pPic">
-                            <span>现场图片</span>
-                            <input type="file" id="questionPics" multiple="multiple"/>
-                        </div>
-                    </div>
-                </div>
+        <div class="header-wrapper">
+          <div class="filter-wrapper">
+            <div class="question_search_con">
+              <input type="text" placeholder="搜索" id="project_question_search" ng-model="questionTofind.othersAttention">
+              <a class="glyphicon glyphicon-search" id="question_search_icons" ng-click="findQuestionLike()"></a>
+            </div>
+            <!--选择列表-->
+            <div class="select">
+              <select name="select" id="projectName" ng-change="setChoice(questionProjectId,flag[0])" ng-model="questionProjectId">
+                <option value="全部" ng-click="setPhase('all',flag[0])">全部</option>
+                  <option value="{{project.id}}" ng-repeat="project in projectLists">{{project.name}}</option>
+              </select>
+              <select name="select" id="select02" ng-change="setChoice(questionType,flag[1])" ng-model="questionType">
+                  <option value="全部" ng-click="setChoice('all',flag[1])">全部</option>
+                  <option value="{{$index}}" ng-repeat="type in projectQuestionOfType">{{type.name}}</option>
+              </select>
+              <select name="select" id="select03" ng-change="setChoice(questionPority,flag[2])" ng-model="questionPority">
+                <option value="全部" ng-click="setChoice('all',flag[2])">全部</option>
+                  <option value="{{$index}}" ng-repeat="pority in projectQuestionOfPriority">{{pority.name}}</option>
+              </select>
+              <select name="select" id="select04" ng-change="setChoice(questionStatu,flag[3])" ng-model="questionStatu">
+                <option value="全部" ng-click="setChoice('all',flag[3])">全部</option>
+                  <option value="{{$index}}" ng-repeat="statu in projectQuestionOfStatus">{{statu.name}}</option>
+              </select>
+              <a href="#" ng-click="showAddQuestionHtml()"><button class="change"><span>+</span>问题</button></a>
+              <div id="show03s" style="display: none">
+                  <div class="addQues">
+                      <div class="addConMain">
+                          <div class="pName">
+                              <span>项目名称</span>
+                              <select id="projectName">
+                                  <option value="{{project.name}}" ng-repeat="project in projectLists">{{project.name}}</option>
+                              </select>
+                          </div>
+                          <div class="pProblem">
+                              <span>问题名称</span>
+                              <input type="text" id="questionTitle"/>
+                          </div>
+                          <div class="pZhuanye">
+                              <span>所属专业</span>
+                              <input type="text" id="questionPhase"/>
+                          </div>
+                          <div class="pType">
+                              <span>问题类型</span>
+                              <select id="questionType">
+                                  <option value="{{type.name}}" ng-repeat="type in projectQuestionOfType">{{type.name}}</option>
+                              </select>
+                          </div>
+                          <div class="pDengji">
+                              <span>问题等级</span>
+                              <select id="questionPority">
+                                  <option value="{{pority.name}}" ng-repeat="pority in projectQuestionOfPriority">{{pority.name}}</option>
+                              </select>
+                          </div>
+                          <div class="pDetail">
+                              <span>问题详情</span>
+                              <textarea name="" id="questionDetail" cols="30" rows="10"></textarea>
+                          </div>
+                          <div class="pPic">
+                              <span>现场图片</span>
+                              <input type="file" id="questionPics" multiple="multiple"/>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          </div>
+          <div id="dataShow" >
+              <div id="myStat" data-dimension="110"  data-text="123" data-info="一般" data-width="12" data-fontsize="15" data-percent="" data-fgcolor="#FFFF00" data-bgcolor="#E5FFD1" data-fill="#ddd">
+              </div>
+              <div id="myStat1" data-dimension="110"  data-text="" data-info="重要" data-width="12" data-fontsize="15" data-percent="" data-fgcolor="#FF6100" data-bgcolor="#E5FFD1" data-fill="#ddd">
+              </div>
+              <div id="myStat2" data-dimension="110"  data-text="" data-info="紧急" data-width="12" data-fontsize="15" data-percent="" data-fgcolor="#ff0033" data-bgcolor="#E5FFD1" data-fill="#ddd">
+              </div>
             </div>
         </div>
        	<div id="app">
             <table class="table-striped table table-bordered">
-				<tbody>
-					<tr>
-						<th ng-repeat="questionTitle in questionTitles" style="height:20px;">{{questionTitle}}</th>
-					</tr>
-					<tr ng-repeat = "question in questionList">
-					   <td>{{$index+1}}</td>
-						<td>{{projectQuestionOfType[question.questionType].name}}</td>
-						<td>{{question.userId}}</td>
-						<td>{{question.name}}</td>
-						<td>{{question.trades}}</td>
-						<!-- <td>{{question.intro}}</td> -->
-						<td>{{question.questionDate}}</td>
-						<td>{{projectQuestionOfPriority[question.priority].name}}</td>
-						<td>{{projectQuestionOfStatus[question.state].name}}</td>
-						<td class="tds">
-							<button id="statebutton" ng-click="questionStateChange(question.id,question.state)">
-	                        </button>
-	                        <button id="editbutton" ng-click="questionChangeClick(question.id)">
-	                        </button>
-	                        <button id="deletebutton" ng-click="deleteQuestion(question.id)">
-	                        </button>
-                            
-	                    </td>
-					</tr>
-				</tbody>
-			</table>
+            <tbody>
+              <tr>
+                <th ng-repeat="questionTitle in questionTitles" style="height:20px;">{{questionTitle}}</th>
+              </tr>
+              <tr ng-repeat = "question in questionList">
+                <td>{{$index+1}}</td>
+                <td>{{projectQuestionOfType[question.questionType].name}}</td>
+                <td>{{question.userId}}</td>
+                <td>{{question.name}}</td>
+                <td>{{question.trades}}</td>
+                <!-- <td>{{question.intro}}</td> -->
+                <td>{{question.questionDate}}</td>
+                <td>{{projectQuestionOfPriority[question.priority].name}}</td>
+                <td>{{projectQuestionOfStatus[question.state].name}}</td>
+                <td class="tds">
+                  <button id="statebutton" ng-click="questionStateChange(question.id,question.state)">
+                              </button>
+                              <button id="editbutton" ng-click="questionChangeClick(question.id)">
+                              </button>
+                              <button id="deletebutton" ng-click="deleteQuestion(question.id)">
+                              </button>
+                                
+                          </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 		<div id="table-buton-question" style="float:right;margin-top:50px;">
 			<div id="questionPageCode"></div>
@@ -110,15 +122,6 @@
         <div id="test-circle02">重要</div>
         <div id="test-circle03">紧急</div>
     </div> -->
-    <div id="dataShow" >
-		<div id="myStat" data-dimension="110"  data-text="123" data-info="一般" data-width="12" data-fontsize="15" data-percent="" data-fgcolor="#FFFF00" data-bgcolor="#E5FFD1" data-fill="#ddd">
-		</div>
-		<div id="myStat1" data-dimension="110"  data-text="" data-info="重要" data-width="12" data-fontsize="15" data-percent="" data-fgcolor="#FF6100" data-bgcolor="#E5FFD1" data-fill="#ddd">
-		</div>
-		<div id="myStat2" data-dimension="110"  data-text="" data-info="紧急" data-width="12" data-fontsize="15" data-percent="" data-fgcolor="#ff0033" data-bgcolor="#E5FFD1" data-fill="#ddd">
-		</div>
-	</div>
-    
 	</div>
 </div>
 
