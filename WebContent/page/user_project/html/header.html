@@ -3,9 +3,15 @@
 		    <!--头部-->
 		    <div class="headMain">
 		        <div class="head">
-		            <div class="logo">
-		                <img src="page/new_user/images/logo.png" alt=""><span></span><span>嘉实智慧安装</span>
-		            </div>
+		            <div class="menu-wrapper">
+                    <img src="page/new_user/images/menu.png" alt="" class="open">
+                    <img src="page/new_user/images/close.png" alt="" class="close">
+                </div>
+                <div class="logo flex-row">
+                    <img src="page/new_user/images/logo.png" alt="">
+                    <span></span>
+                    <span>嘉实智慧安装</span>
+                </div>
 		            <!--导航-->
 		            <div class="nav">
 		                <ul class="navMenu">
@@ -43,5 +49,12 @@
     $(".nav ul li a").on('click',function () {
         $(".nav ul li a").removeClass('active')
         $(this).addClass('active')
+    });
+
+    var $menuWrapper = $('.headMain .head');
+    var $menuBtn = $('.menu-wrapper img');
+
+    $menuBtn.on('click', function() {
+      $menuWrapper.toggleClass('active');
     });
 </script>

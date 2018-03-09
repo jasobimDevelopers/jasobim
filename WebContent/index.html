@@ -3,19 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>嘉实智慧安装</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
     <link rel="stylesheet" href="page/new_user/css/swiper.min.css">
     <link rel="stylesheet" href="page/new_user/css/common.css">
     <link rel="stylesheet" href="page/new_user/css/index.css">
-    <script src="page/new_user/js/jquery-1.8.3.js"></script>
-    <script src="page/new_user/js/js.js"></script>
 </head>
 <body>
 <div class="wrap">
     <!--头部-->
     <div class="headMain">
         <div class="head">
-            <div class="logo">
-                <img src="page/new_user/images/logo.png" alt=""><span></span><span>嘉实智慧安装</span>
+            <div class="menu-wrapper">
+                <img src="page/new_user/images/menu.png" alt="" class="open">
+                <img src="page/new_user/images/close.png" alt="" class="close">
+            </div>
+            <div class="logo flex-row">
+                <img src="page/new_user/images/logo.png" alt="">
+                <span></span>
+                <span>嘉实智慧安装</span>
             </div>
             <!--导航-->
             <div class="nav">
@@ -33,8 +38,8 @@
                     <li><a href="#">意见反馈</a></li>
                 </ul>
             </div>
-            <div class="login">
-                <div style="line-height: 80px" onClick="goLogin()">登录</div>
+            <div class="login" onClick="goLogin()">
+                登录
             </div>
         </div>
     </div>
@@ -62,7 +67,7 @@
     </div>
     <!--新闻部分-->
     <div class="news">
-        <div class="news_con">
+        <div class="news_con flex-row-center">
             <img src="page/new_user/images/news.png" alt="">
             <p>新闻公告     2月10日，嘉实管理团队在董事长章永泉先生的带领下踏上浙江天台山开启践行十年蓝图的荣耀之旅</p>
         </div>
@@ -71,29 +76,38 @@
     <div class="foot">
         <div class="smll_ball"></div>
         <div class="big_ball"></div>
-        <ul class="foot_top">
-            <li>联系我们</li>
-            <li>快速链接</li>
-            <li>关注我们</li>
-        </ul>
-        <div class="foot_con">
-            <ul>
-                <li>地址 ：上海市曹安公路4800号嘉实1号楼</li>
-                <li>电邮 ： Marketing@jaso.com.cn</li>
-                <li>电话 ： 86(21)6958 9518</li>
-            </ul>
-            <ul>
-                <li>嘉实集团企业网站</li>
-                <li>南京分公司</li>
-                <li>苏州分公司</li>
-                <li>中原分公司</li>
-            </ul>
-            <div class="weixin"><img src="page/new_user/images/wechat.png" alt=""></div>
+        <div class="foot_wrapper">
+            <div class="foot_item">
+              <header>联系我们</header>
+              <ul>
+                  <li>地址 ：上海市曹安公路4800号嘉实1号楼</li>
+                  <li>电邮 ： Marketing@jaso.com.cn</li>
+                  <li>电话 ： 86(21)6958 9518</li>
+              </ul>
+            </div>
+            <div class="foot_item">
+                <header>快速链接</header>
+                <ul>
+                    <li>嘉实集团企业网站</li>
+                    <li>南京分公司</li>
+                    <li>苏州分公司</li>
+                    <li>中原分公司</li>
+                </ul>
+            </div>
+            <div class="foot_item">
+              <header>关注我们</header>
+              <ul>
+                  <li>
+                    <img src="page/new_user/images/wechat.png" alt="">
+                  </li>
+              </ul>
+            </div>
         </div>
         <div class="copyright"><p><span>嘉实集团版权所有</span><span>沪备024121545号</span> </p></div>
     </div>
 </div>
 </body>
+<script src="page/new_user/js/jquery-1.8.3.js"></script>
 <script src="page/new_user/js/swiper-3.4.1.jquery.min.js"></script>
 <script src="page/new_user/js/js.js"></script>
 <script>

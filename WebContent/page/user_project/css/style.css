@@ -5,10 +5,11 @@
 	padding: 0px;
 }
 #login_body{
-	background: url(../images/backgroundss.png) no-repeat fixed center;
+	background: url(../images/backgroundss.png) no-repeat fixed;
 	margin:0 auto;
 	padding:0;
-	background-color:white;
+  background-color:white;
+  background-size: cover;
 }
 #bodys{
 	margin:0 auto;
