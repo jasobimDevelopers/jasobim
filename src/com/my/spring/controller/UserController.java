@@ -201,7 +201,7 @@ public class UserController {
     }
 	@RequestMapping(value="/admin/updateUser", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Void> changeUserTypeByAdmin(
+    public DataWrapper<String> changeUserTypeByAdmin(
     		@ModelAttribute User user,
     		HttpServletRequest request,
     		@RequestParam(value = "file", required = false) MultipartFile file,

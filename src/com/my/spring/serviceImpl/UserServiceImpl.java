@@ -188,58 +188,64 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public DataWrapper<Void> updateUserByAdmin(User user, String token,MultipartFile file,HttpServletRequest request) {
+	public DataWrapper<String> updateUserByAdmin(User user, String token,MultipartFile file,HttpServletRequest request) {
 		// TODO Auto-generated method stub
-		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+		DataWrapper<String> dataWrapper = new DataWrapper<String>();
 		User adminInMemory = SessionManager.getSession(token);
-		if (adminInMemory != null && adminInMemory.getUserType() == UserTypeEnum.Admin.getType()) {
-			User userInDB = userDao.getById(user.getId());
-			if (userInDB != null) {
-				if(file !=null){
-						String path=filePath+"/"+"userIcons"+"/";
-						Files newfile=fileService.uploadFile(path, file,fileType,request);
-						userInDB.setUserIcon(newfile.getId());
+		if (adminInMemory != null) {
+			Long userId=user.getId();
+			Long localUserID=adminInMemory.getId();
+			if((adminInMemory.getUserType() == 0) || (userId.equals(localUserID))){
+				User userInDB = userDao.getById(user.getId());
+				if (userInDB != null) {
+					if(file !=null){
+							String path=filePath+"/"+"userIcons";
+							Files newfile=fileService.uploadFile(path, file,fileType,request);
+							userInDB.setUserIcon(newfile.getId());
+							userInDB.setUserIconUrl(newfile.getUrl());
+					}
+					if(user.getUserName() != null && !user.getUserName().equals("")) {
+						userInDB.setUserName(user.getUserName());
+					}
+					if(user.getPassword()!=null){
+						userInDB.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
+					}
+					if(user.getRealName() != null && !user.getRealName().equals("")) {
+						userInDB.setRealName(user.getRealName());
+					}
+					if(user.getSystemType()!=null){
+						userInDB.setSystemType(user.getSystemType());
+					}
+					if(user.getEmail() != null && !user.getEmail().equals("")) {
+						userInDB.setEmail(user.getEmail());
+					}
+					if(user.getProjectList()!=null && !user.getProjectList().equals("")){
+						userInDB.setProjectList(user.getProjectList());
+					}
+					if (user.getWorkName() != null && !user.getWorkName().equals("")) {
+						userInDB.setWorkName(user.getWorkName());
+					}
+					if (user.getTel() != null && !user.getTel().equals("")) {
+						userInDB.setTel(user.getTel());
+					}
+					if(user.getUserType() !=null && !user.getUserType().equals(""))
+					{
+						userInDB.setUserType(user.getUserType());
+					}
+					if (!userDao.updateUser(userInDB)) {
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}else{
+						dataWrapper.setData(userInDB.getUserIconUrl());
+					}
+				} else {
+					dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);
 				}
-				if(user.getUserName() != null && !user.getUserName().equals("")) {
-					userInDB.setUserName(user.getUserName());
-				}
-				if(!user.getPassword().equals(userInDB.getPassword())){
-					userInDB.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
-				}
-				if(user.getRealName() != null && !user.getRealName().equals("")) {
-					userInDB.setRealName(user.getRealName());
-				}
-				if(user.getSystemType()==null){
-					userInDB.setSystemType(0);
-				}else{
-					userInDB.setSystemType(1);
-				}
-				if(user.getEmail() != null && !user.getEmail().equals("")) {
-					userInDB.setEmail(user.getEmail());
-				}
-				if(userInDB.getUserType()==0){
-					userInDB.setProjectList(null);
-				}else{
-					userInDB.setProjectList(user.getProjectList());
-				}
-				if (user.getWorkName() != null && !user.getWorkName().equals("")) {
-					userInDB.setWorkName(user.getWorkName());
-				}
-				if (user.getTel() != null && !user.getTel().equals("")) {
-					userInDB.setTel(user.getTel());
-				}
-				if(user.getUserType() !=null && !user.getUserType().equals(""))
-				{
-					userInDB.setUserType(user.getUserType());
-				}
-				if (!userDao.updateUser(userInDB)) {
-					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-				}
-			} else {
-				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);
+			}else {
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
-		} else {
-			dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			
+		} else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return dataWrapper;
 	}

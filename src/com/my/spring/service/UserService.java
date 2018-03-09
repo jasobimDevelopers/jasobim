@@ -25,7 +25,7 @@ public interface UserService {
 	DataWrapper<User> findUserLike(User user,String token);
 	DataWrapper<Void> deleteUser(Long userId, String token);
 	DataWrapper<Void> addUser(User user,String token, MultipartFile file, HttpServletRequest request);
-	DataWrapper<Void> updateUserByAdmin(User user,String token, MultipartFile file,HttpServletRequest request);
+	DataWrapper<String> updateUserByAdmin(User user,String token, MultipartFile file,HttpServletRequest request);
 	DataWrapper<User> FindPs(User user);
 	DataWrapper<Void> updateUserBySelf(String oldPs,String newPs,String token);
 	DataWrapper<List<UserPadPojo>> getUserTeam(String token,Long projectId);
