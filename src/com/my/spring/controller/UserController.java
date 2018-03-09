@@ -37,8 +37,9 @@ public class UserController {
 	@RequestMapping(value="/register", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> register(
-    		@ModelAttribute User user) {
-        return userService.register(user);
+    		@ModelAttribute User user,
+    		HttpServletRequest request) {
+        return userService.register(user,request);
     }
 	@RequestMapping(value="/admin/addUser", method = RequestMethod.POST)
     @ResponseBody

@@ -15,7 +15,7 @@ import com.my.spring.utils.DataWrapper;
 
 public interface UserService {
 	
-	DataWrapper<Void> register(User user);
+	DataWrapper<Void> register(User user, HttpServletRequest request);
 	DataWrapper<UserPojo> login(String userName,String password, Integer systemId);
 	DataWrapper<Void> updateUser(User user,String token);
 	DataWrapper<User> getUserDetails(String token);

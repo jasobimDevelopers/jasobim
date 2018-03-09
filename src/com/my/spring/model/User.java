@@ -19,6 +19,7 @@ public class User {
     private String email;
     private String tel;
     private Long userIcon;
+    private String userIconUrl;
     private Date registerDate;
     private String projectList;
     private String teamInformation;////班组信息
@@ -63,6 +64,14 @@ public class User {
 		this.userName = userName;
 	}
 	
+	@Basic
+    @Column(name = "user_icon_url")
+	public String getUserIconUrl() {
+		return userIconUrl;
+	}
+	public void setUserIconUrl(String userIconUrl) {
+		this.userIconUrl = userIconUrl;
+	}
 
 	@Basic
     @Column(name = "work_name")

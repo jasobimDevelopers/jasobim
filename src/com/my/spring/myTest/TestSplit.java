@@ -7,24 +7,8 @@ import java.io.InputStream;
 public class TestSplit {
 	Process process;
 	public static void main(String[] args) {
-		String test="123,124,125,126";
-		test = test.replace("126,","");
-		System.out.println(test);
-		for(int j=0;j<test.split(",").length;j++){
-			System.out.println(test.split(",").length);
-			System.out.println(test.split(",")[j]);
-		}
-		
-		/*String sa="0a1:3,1a2:4,2a4:5";
-		String[] str=sa.split(",");
-		for(int i=0;i<str.length;i++){
-			System.out.println(str[i]);
-			String[] strs=str[i].split("a");
-			for(int j=0;j<strs.length;j++){
-				System.out.println(strs[j]);
-			}
-			
-		}*/
+		String aString="张三丰";
+		System.out.println(aString.substring(aString.length()-2, aString.length()));
 	}
 	public void sendParams(String params) {
 		

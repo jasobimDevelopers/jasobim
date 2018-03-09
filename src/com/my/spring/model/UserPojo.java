@@ -19,7 +19,14 @@ public class UserPojo {
     private String workName;
     private String teamInformation;////班组信息
     private String projectList;
-    private Integer systemType;
+    private String[] projectLists;
+    public String[] getProjectLists() {
+		return projectLists;
+	}
+	public void setProjectLists(String[] projectLists) {
+		this.projectLists = projectLists;
+	}
+	private Integer systemType;
     private String[] menuItemList;
 	public Long getId() {
 		return id;

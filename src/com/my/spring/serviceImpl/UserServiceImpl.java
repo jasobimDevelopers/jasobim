@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserLogDao;
+import com.my.spring.controller.UserAvatar;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
     private Integer fileType=5;
     private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 	@Override
-	public DataWrapper<Void> register(User user) {
+	public DataWrapper<Void> register(User user,HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		DataWrapper<Void> dataWrapper = new DataWrapper<>();
 		if (user.getUserName() == null ||user.getUserName().equals("")
@@ -59,6 +60,12 @@ public class UserServiceImpl implements UserService {
 			user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
 			//user.setUserType(UserTypeEnum.User.getType());
 			//user.setUserType(user.getUserType());
+			if(user.getRealName()!=null){
+				Files file=UserAvatar.CreateUserIcon(user.getRealName(),request,"files/userIcons");
+				if(file!=null){
+					user.setUserIcon(file.getId());
+				}
+			}
 			user.setRegisterDate(new Date());
 			if(!userDao.addUser(user)) {
 				dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -94,6 +101,23 @@ public class UserServiceImpl implements UserService {
 				if(user.getMenuItemList()!=null){
 					users.setMenuItemList(user.getMenuItemList().split(","));
 				}
+				if(user.getUserType()==0 || user.getUserType()==1){
+					
+					Integer pageSize=10;
+					Integer pageIndex=-1;
+					Project projectsb = new Project();
+					DataWrapper<List<Project>> projects=projectDao.getProjectList(pageSize, pageIndex, projectsb, "-1", null,2);
+					String[] projectName = new String[projects.getData().size()];
+					String[] projectList = new String[projects.getData().size()];
+					for(int i=0;i<projects.getData().size();i++){
+						projectName[i]=projects.getData().get(i).getName();
+					}
+					users.setProjectName(projectName);
+					for(int i=0;i<projects.getData().size();i++){
+						projectList[i]=projects.getData().get(i).getId().toString();
+					}
+					users.setProjectLists(projectList);
+				}
 				if(user.getProjectList()!=null){
 					String[] projectList=user.getProjectList().split(",");
 					String[] projectName = new String[projectList.length];
@@ -107,6 +131,7 @@ public class UserServiceImpl implements UserService {
 						}
 					}
 					users.setProjectName(projectName);
+					users.setProjectLists(projectList);
 				}
 				users.setUserName(user.getUserName());
 				users.setWorkName(user.getWorkName());
@@ -119,6 +144,9 @@ public class UserServiceImpl implements UserService {
 					if(file!=null){
 						users.setUserIconUrl(file.getUrl());
 					}
+				}
+				if(user.getUserIconUrl()!=null){
+					users.setUserIconUrl(user.getUserIconUrl());
 				}
 				dataWrapper.setData(users);
 			}
@@ -347,6 +375,9 @@ public class UserServiceImpl implements UserService {
 							userpojo.setUserIconUrl(file.getUrl());
 						}
 					}
+					if(userList.getData().get(i).getUserIconUrl()!=null){
+						userpojo.setUserIconUrl(userList.getData().get(i).getUserIconUrl());
+					}
 					userpojoList.add(i, userpojo);
 				}
 				dataWrapper.setData(userpojoList);
@@ -562,6 +593,14 @@ public class UserServiceImpl implements UserService {
 						String path=filePath+"/"+"userIcons"+"/";
 						Files newfile=fileService.uploadFile(path, file,fileType,request);
 						user.setUserIcon(newfile.getId());
+						user.setUserIconUrl(newfile.getUrl());
+					}
+					if(user.getRealName()!=null && file==null){
+						String names=user.getRealName().substring(user.getRealName().length()-2, user.getRealName().length());
+						String url=UserAvatar.CreateUserIcon(names);
+						if(url!=null){
+							user.setUserIconUrl(url);
+						}
 					}
 					user.setId(null);
 					user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
