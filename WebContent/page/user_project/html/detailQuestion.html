@@ -73,7 +73,8 @@
 
   // Editor for message area
   var E = window.wangEditor;
-  window.QuestionEditor = new E('#message_editor');console.log('edior', window.QuestionEditor);
+  window.QuestionEditor = new E('#message_editor');
+  window.QuestionEditor.customConfig.uploadImgShowBase64 = true;
   window.QuestionEditor.create();
 </script>
 	
