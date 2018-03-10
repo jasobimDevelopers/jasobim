@@ -389,13 +389,15 @@ function QuestionController($scope,QuestionService) {
 	}
 	///////根据问题id添加问题的留言
 	$scope.addMessage = function(questionId){
-		var formData = new FormData();
-		var content=document.getElementById("message_content").value;
+    var formData = new FormData();
+    // var content=document.getElementById("message_content").value;
+    var content = window.QuestionEditor.txt.html();
 		formData.append("content", content);
 		formData.append("questionId", questionId);
 		QuestionService.addMessage(formData).then(function (result){
 		  	  $scope.addMessageInfo = result.data;
-		  	  $scope.getMessageListByQuestionId(questionId);
+          $scope.getMessageListByQuestionId(questionId);
+          window.QuestionEditor.txt.html('');
 		  });
 	}
 	///////删除留言

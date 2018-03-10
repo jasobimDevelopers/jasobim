@@ -25,9 +25,8 @@
                 <hr>
                 <div class="wordCon">
                     <div class="liuyan" ng-repeat="message in messageListInfo">
-                        <p><span>{{message.realName}}</span><span style="float:right;margin-right:10px;">{{message.messageDate}}</span></p>
-	                    <p>{{message.content}}</p>
-	                    <p>
+                        <div class="content-wrapper"><span>{{message.realName}}</span><span style="margin: 0 10px">{{message.messageDate}}</span></div>
+	                      <div class="content-wrapper" ng-bind-html="message.content | trustHtml"></div>
 							<ul class="clear">
 								<div ng-repeat="ss in messageLists">
 									<div ng-if="ss[2]==message.id">
@@ -45,7 +44,10 @@
             </div>
 	        <!--问题发表-->
 	        <div class="send">
-	            <input type="text" id="message_content" placeholder="发表留言..."><a id="message_img" class="glyphicon glyphicon-picture"></a><button type="submit" class="sendTo" ng-click="addMessage(findQuestionInfo.id)">发表</button>
+              <div id="message_editor">
+              </div>
+              <!-- <input type="text" id="message_content" placeholder="发表留言..."><a id="message_img" class="glyphicon glyphicon-picture"></a> -->
+              <button type="submit" class="sendTo" ng-click="addMessage(findQuestionInfo.id)">发表</button>
 	        </div>
 	    </div>
        
@@ -57,21 +59,21 @@
 </style>
 
 <script>
-	function showOneBig(scope){
-		
-	layer.ready(function(){ 
-	  layer.open({
-  		type: 1,
-  		title: false,
-  		area: ['360px', '360px'],
-  		shadeClose: true, //点击遮罩关闭
-  		content: '<div style="background-size: 100% 100%;width:360px;height:360px;background-image: url(' +scope.src+')"/></div>'
-  	  });
-	});
+  function showOneBig(scope){
+    layer.ready(function(){ 
+      layer.open({
+        type: 1,
+        title: false,
+        area: ['360px', '360px'],
+        shadeClose: true, //点击遮罩关闭
+        content: '<div style="background-size: 100% 100%;width:360px;height:360px;background-image: url(' +scope.src+')"/></div>'
+        });
+    });
+  }
 
-
-
-
-}
+  // Editor for message area
+  var E = window.wangEditor;
+  window.QuestionEditor = new E('#message_editor');console.log('edior', window.QuestionEditor);
+  window.QuestionEditor.create();
 </script>
 	

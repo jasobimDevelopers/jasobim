@@ -66,17 +66,19 @@
   .problem .problemWord .wordCon {
     margin: 80px 0; }
     .problem .problemWord .wordCon .liuyan {
+      display: flex;
       margin-top: 20px; }
       .problem .problemWord .wordCon .liuyan img {
         vertical-align: middle;
         margin-right: 10px; }
       .problem .problemWord .wordCon .liuyan span {
         color: #333; }
-      .problem .problemWord .wordCon .liuyan p {
+      .problem .problemWord .wordCon .liuyan .content-wrapper {
         display: inline-block;
         color: #aaa;
         font-size: 14px;
-        text-indent: 2em; }
+        /* text-indent: 2em; */
+      }
   .problem .send {
     margin-bottom: 150px; }
     .problem .send input {
@@ -95,13 +97,15 @@
     	 height:48px;
       }
     .problem .send .sendTo {
-      background: #3ba16e;
+      float: right;
+      margin-top: 20px;
       width: 90px;
       height: 40px;
       text-align: center;
       color: #fff;
       line-height: 40px;
       border-radius: 2px;
-      margin-left: 20px; }
+      background: #3ba16e;
+    }
 
 /*# sourceMappingURL=problemDetail.css.map */
