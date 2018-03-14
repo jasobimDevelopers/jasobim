@@ -206,9 +206,15 @@ public class UserController {
     		HttpServletRequest request,
     		@RequestParam(value = "file", required = false) MultipartFile file,
     		@RequestParam(value="token",required=true) String token) {
-   
 		return userService.updateUserByAdmin(user, token,file,request);
     }
+	@RequestMapping(value="/common/getUserInfo", method = RequestMethod.GET)
+	@ResponseBody
+	public DataWrapper<UserPojo> getUserInfo(
+    		@ModelAttribute User user,
+    		@RequestParam(value="token",required=true) String token){
+		return userService.getUserInfo(token);
+	}
 	
 
 }

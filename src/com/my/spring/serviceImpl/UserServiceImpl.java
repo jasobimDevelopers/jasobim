@@ -316,7 +316,6 @@ public class UserServiceImpl implements UserService {
 				userpojo.setPassword(dataWrapper.getData().getPassword());
 				userpojo.setProjectList(dataWrapper.getData().getProjectList());
 				userpojo.setRealName(dataWrapper.getData().getRealName());
-				 
 				userpojo.setRegisterDate(sdf.format(dataWrapper.getData().getRegisterDate()));
 				userpojo.setTel(dataWrapper.getData().getTel());
 				userpojo.setUserName(dataWrapper.getData().getUserName());
@@ -647,6 +646,33 @@ public class UserServiceImpl implements UserService {
 		DataWrapper<User> dataWrapper = new DataWrapper<User>(); 
 		dataWrapper=userDao.findUserLike(user);
 		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<UserPojo> getUserInfo(String token) {
+		DataWrapper<UserPojo> userPojo = new DataWrapper<UserPojo>();
+		UserPojo userpo = new UserPojo();
+		User userInMeMory = SessionManager.getSession(token);
+		if(userInMeMory!=null){
+			userpo.setEmail(userInMeMory.getEmail());
+			if(userInMeMory.getUserIconUrl()!=null){
+				userpo.setUserIconUrl(userInMeMory.getUserIconUrl());
+			}else if(userInMeMory.getUserIcon()!=null){
+				Files file = fileService.getById(userInMeMory.getUserIcon());
+				userpo.setUserIconUrl(file.getUrl());
+			}
+			userpo.setRealName(userInMeMory.getRealName());
+			userpo.setRegisterDate(sdf.format(userInMeMory.getRegisterDate()));
+			userpo.setUserName(userInMeMory.getUserName());
+			userpo.setUserType(userInMeMory.getUserType());
+			userpo.setTel(userInMeMory.getTel());
+			userpo.setTeamInformation(userInMeMory.getTeamInformation());
+			userpo.setWorkName(userInMeMory.getWorkName());
+			userPojo.setData(userpo);
+		}else{
+			userPojo.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return userPojo;
 	}
 
 }

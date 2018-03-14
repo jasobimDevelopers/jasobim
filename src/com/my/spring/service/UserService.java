@@ -30,5 +30,6 @@ public interface UserService {
 	DataWrapper<Void> updateUserBySelf(String oldPs,String newPs,String token);
 	DataWrapper<List<UserPadPojo>> getUserTeam(String token,Long projectId);
 	DataWrapper<List<UserPojo>> getUserLists(Integer pageIndex, Integer pageSize, User user, String token);
+	DataWrapper<UserPojo> getUserInfo(String token);
 	
 }
