@@ -154,9 +154,10 @@ public class UserController {
 	@RequestMapping(value="/admin/deleteUser", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteUserByAdmin(
-    		@RequestParam(value="userId",required=true) Long userId,
-	    		@RequestParam(value="token",required=true) String token) {
-	        return userService.deleteUser(userId,token);
+    		@RequestParam(value="userId",required=false) Long userId,
+    		@RequestParam(value="userIdList",required=false) String userIdList,
+	    	@RequestParam(value="token",required=true) String token) {
+	        return userService.deleteUser(userId,token,userIdList);
     }
 	
 	//管理员获取用户列表

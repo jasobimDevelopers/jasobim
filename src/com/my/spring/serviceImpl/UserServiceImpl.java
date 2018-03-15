@@ -583,16 +583,25 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataWrapper<Void> deleteUser(Long userId, String token) {
+	public DataWrapper<Void> deleteUser(Long userId, String token,String userIdList) {
 		DataWrapper<Void> dataWrapper=new DataWrapper<Void>();
 		User userInMemory=SessionManager.getSession(token);
 		if(userInMemory!=null){
 			User adminInDB = userDao.getById(userInMemory.getId());
 			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
-				if(userDao.deleteUser(userId)){
-					dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
+				if(userIdList!=null){
+					String[] ids = userIdList.split(",");
+					if(userDao.deleteUserList(ids)){
+						dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
+					}else{
+						dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+					}
 				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+					if(userDao.deleteUser(userId)){
+						dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
+					}else{
+						dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+					}
 				}
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
