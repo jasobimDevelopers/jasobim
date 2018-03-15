@@ -149,11 +149,20 @@ public class NormativefilesServiceImpl implements NormativefilesService {
 							String[] idlist = dataWrapper.getData().get(i).getFileIdList().split(",");
 							String[] fileUrlList = new String[idlist.length];
 							String[] fileNameList = new String[idlist.length];
-							for(int s=0;s<idlist.length;s++){
+							int s=0;
+							do{
 								Files files = fileService.getById(Long.valueOf(idlist[s]));
-								fileUrlList[s]=files.getUrl();
-								fileNameList[s]=files.getRealName();
-							}
+								if(Normativefiles.getDescribes()!=null){
+									if(files.getRealName().contains(Normativefiles.getDescribes())){
+										fileUrlList[s]=files.getUrl();
+										fileNameList[s]=files.getRealName();
+									}
+								}else{
+									fileUrlList[s]=files.getUrl();
+									fileNameList[s]=files.getRealName();
+								}
+								s++;
+							}while(s<idlist.length);
 							NormativefilesPojo.setFileUrlList(fileUrlList);
 							NormativefilesPojo.setFileNameList(fileNameList);
 						}

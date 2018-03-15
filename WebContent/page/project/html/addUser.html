@@ -37,7 +37,7 @@
 		            <table cellpadding="0" cellspacing="0" style="border:none;" ng-model="findUserInfo.projectList">
 						<tr ng-repeat="enum in projectLists">
 						   	<td class="title">{{enum.name}}</td>
-					       	<td><input type="checkbox" id="my" ng-click="choice(enum.id)" ng-checked="true"/></td>
+					       	<td><input type="checkbox" id="my" ng-click="choice(enum.id)"/></td>
 					    </tr>
 					</table>
 				</div>
@@ -125,7 +125,7 @@
             <div class="addinput">
             	<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;头像上传:</span>
             	<img width="100px" height="90px" src="{{findUserInfo.userIconUrl}}"  id="showId"/>
-            	<input style="float:right" type="file"  id="inputicon" onchange="showUserIcon()"  accept="image/gif,image/jpg" />
+            	<input style="float:right" type="file"  id="inputicon" onchange="showUserIcon()"  accept="image/jpg,image/png,image/gif" />
             </div>
             <div id="addbutton" style="margin-top:86px;">
             	<input class="btn btn-default" type="button" ng-click="addUserByAdmin()" value="确定" />

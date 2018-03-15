@@ -205,32 +205,55 @@ public class UserServiceImpl implements UserService {
 							userInDB.setUserIconUrl(newfile.getUrl());
 					}
 					if(user.getUserName() != null && !user.getUserName().equals("")) {
-						userInDB.setUserName(user.getUserName());
+						if(!user.getUserName().equals(userInDB.getUserName())){
+							userInDB.setUserName(user.getUserName());
+						}
 					}
 					if(user.getPassword()!=null){
-						userInDB.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
+						if(!user.getPassword().equals(userInDB.getPassword())){
+							userInDB.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
+						}
 					}
 					if(user.getRealName() != null && !user.getRealName().equals("")) {
-						userInDB.setRealName(user.getRealName());
+						if(!user.getRealName().equals(userInDB.getRealName())){
+							userInDB.setRealName(user.getRealName());
+						}
 					}
 					if(user.getSystemType()!=null){
-						userInDB.setSystemType(user.getSystemType());
+						if(!user.getSystemType().equals(userInDB.getSystemType())){
+							userInDB.setSystemType(user.getSystemType());
+						}
+					}
+					if(user.getTeamInformation()!=null){
+						if(!user.getTeamInformation().equals(userInDB.getTeamInformation())){
+							userInDB.setTeamInformation(user.getTeamInformation());
+						}
 					}
 					if(user.getEmail() != null && !user.getEmail().equals("")) {
-						userInDB.setEmail(user.getEmail());
+						if(!user.getEmail().equals(userInDB.getEmail())){
+							userInDB.setEmail(user.getEmail());
+						}
 					}
 					if(user.getProjectList()!=null && !user.getProjectList().equals("")){
-						userInDB.setProjectList(user.getProjectList());
+						if(!user.getProjectList().equals(userInDB.getProjectList())){
+							userInDB.setProjectList(user.getProjectList());
+						}
 					}
 					if (user.getWorkName() != null && !user.getWorkName().equals("")) {
-						userInDB.setWorkName(user.getWorkName());
+						if(!user.getWorkName().equals(userInDB.getWorkName())){
+							userInDB.setWorkName(user.getWorkName());
+						}
 					}
 					if (user.getTel() != null && !user.getTel().equals("")) {
-						userInDB.setTel(user.getTel());
+						if(!user.getTel().equals(userInDB.getTel())){
+							userInDB.setTel(user.getTel());
+						}
 					}
 					if(user.getUserType() !=null && !user.getUserType().equals(""))
 					{
-						userInDB.setUserType(user.getUserType());
+						if(!user.getUserType().equals(userInDB.getUserType())){
+							userInDB.setUserType(user.getUserType());
+						}
 					}
 					if (!userDao.updateUser(userInDB)) {
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);

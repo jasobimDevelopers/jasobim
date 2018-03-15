@@ -50,6 +50,7 @@ public class UserController {
     		@RequestParam(value="token",required=true) String token) {
          return userService.addUser(user,token,file,request);
     }
+	/////网页端忘记密码，重置密码接口
 	@RequestMapping(value="/findUserLike", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<User> findUserLike(

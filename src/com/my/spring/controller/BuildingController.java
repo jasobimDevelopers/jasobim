@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Controller
 @RequestMapping(value="api/building")
 public class BuildingController {
