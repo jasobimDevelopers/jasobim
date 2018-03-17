@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.BuildingInfo;
 import com.my.spring.model.Item;
 import com.my.spring.model.MinItem;
 import com.my.spring.model.MinItemPojo;
@@ -176,29 +177,40 @@ public class ItemController {
     	dataWrapper=itemService.getMinItemById(id);
         return dataWrapper;
     }
-    /*
+   /* 
      * 查询项目相应栋号下的地下层层数
-     * */
-    @RequestMapping(value="/getItemByBase",method=RequestMethod.GET)
+     * 
+    @RequestMapping(value="/getItem",method=RequestMethod.GET)
     @ResponseBody
     public Long getItemByBase(
     	@RequestParam(value = "projectId",required = true) Long projectId,
     	@RequestParam(value = "buildingId",required = true) Long buildingId,
     	@RequestParam(value = "token",required = true) String token
     		){
-        return itemService.getItemByBase(projectId,buildingId,token);
-    }
+        return ;
+    }*/
     /*
      * 查询项目相应栋号楼层数
      * */
-    @RequestMapping(value="/getItemByBuidlingNum",method=RequestMethod.GET)
+    @RequestMapping(value="/getItemByBuidlingInfo",method=RequestMethod.GET)
     @ResponseBody
-    public Long getItemByBuidlingNum(
+    public BuildingInfo getItemByBuidlingInfo(
     	@RequestParam(value = "projectId",required = true) Long projectId,
     	@RequestParam(value = "buildingId",required = true) Long buildingId,
     	@RequestParam(value = "token",required = true) String token
     		){
-        return itemService.getItemByBuidlingNum(projectId,buildingId,token);
+    	Long str1=itemService.getItemByBase(projectId,buildingId,token);
+    	Long str2=itemService.getItemByBuidlingNum(projectId,buildingId,token);
+    	BuildingInfo buildingInfo = new BuildingInfo();
+    	if(str1!=null){
+    		String buildingNumBase=str1.toString();
+    		buildingInfo.setBuildingNumBase(buildingNumBase);
+    	}
+    	if(str2!=null){
+    		String buildingNum=str2.toString();
+    		buildingInfo.setBuildingNum(buildingNum);
+    	}
+        return buildingInfo;
     }
     
     @RequestMapping(value="/getHouseHoldType",method=RequestMethod.GET)
