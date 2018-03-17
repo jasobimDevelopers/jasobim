@@ -177,18 +177,30 @@ public class ItemController {
     	dataWrapper=itemService.getMinItemById(id);
         return dataWrapper;
     }
-   /* 
+    /*
      * 查询项目相应栋号下的地下层层数
-     * 
-    @RequestMapping(value="/getItem",method=RequestMethod.GET)
+     * */
+    @RequestMapping(value="/getItemByBase",method=RequestMethod.GET)
     @ResponseBody
     public Long getItemByBase(
     	@RequestParam(value = "projectId",required = true) Long projectId,
     	@RequestParam(value = "buildingId",required = true) Long buildingId,
     	@RequestParam(value = "token",required = true) String token
     		){
-        return ;
-    }*/
+        return itemService.getItemByBase(projectId,buildingId,token);
+    }
+    /*
+     * 查询项目相应栋号楼层数
+     * */
+    @RequestMapping(value="/getItemByBuidlingNum",method=RequestMethod.GET)
+    @ResponseBody
+    public Long getItemByBuidlingNum(
+    	@RequestParam(value = "projectId",required = true) Long projectId,
+    	@RequestParam(value = "buildingId",required = true) Long buildingId,
+    	@RequestParam(value = "token",required = true) String token
+    		){
+        return itemService.getItemByBuidlingNum(projectId,buildingId,token);
+    }
     /*
      * 查询项目相应栋号楼层数
      * */
@@ -212,7 +224,6 @@ public class ItemController {
     	}
         return buildingInfo;
     }
-    
     @RequestMapping(value="/getHouseHoldType",method=RequestMethod.GET)
     @ResponseBody
     public List<Object> getHouseHoldType(
