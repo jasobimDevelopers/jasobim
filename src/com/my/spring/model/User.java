@@ -24,7 +24,7 @@ public class User {
     private String projectList;
     private String teamInformation;////班组信息
     private Integer teamId;
-    private Integer systemId;//0.IOS  1.android
+    private Integer systemId;//0.IOS  1.android -1.web
     private Integer systemType;//0.安装人员 1.土建人员
     private String menuItemList;
     @Id

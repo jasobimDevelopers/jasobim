@@ -116,7 +116,7 @@ public class VideoServiceImpl implements VideoService {
     	DataWrapper<List<Video>> dataWrappers=new DataWrapper<List<Video>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
-	    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
+	    		if(userInMemory.getSystemId()!=null){
 	    			UserLog userLog = new UserLog();
 	    			userLog.setProjectPart(3);
 	    			userLog.setActionDate(new Date());

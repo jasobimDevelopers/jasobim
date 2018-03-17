@@ -23,6 +23,7 @@ import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.UserService;
 import com.my.spring.utils.DataWrapper;
@@ -89,6 +90,14 @@ public class UserServiceImpl implements UserService {
 			} else if(!user.getPassword().equals(MD5Util.getMD5String(password + salt))) {
 				dataWrapper.setErrorCode(ErrorCodeEnum.Password_Error);
 			} else {
+				if(system!=null){
+					UserLog userLog = new UserLog();
+					userLog.setActionDate(new Date());
+					userLog.setSystemType(system);
+					userLog.setUserId(user.getId());
+					userLog.setProjectPart(ProjectDatas.Login_area.getCode());
+				}
+				
 				SessionManager.removeSessionByUserId(user.getId());
 				if(system!=null){
 					user.setSystemId(system);

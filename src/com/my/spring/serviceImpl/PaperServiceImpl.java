@@ -17,6 +17,7 @@ import com.my.spring.model.Paper;
 import com.my.spring.model.PaperPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.PaperService;
 import com.my.spring.service.UserLogService;
@@ -269,10 +270,9 @@ public class PaperServiceImpl implements PaperService {
 			        		if(paper.getId()!=null){
 			        			userLog.setFileId(paper.getId());
 			        		}
-			        		userLog.setProjectPart(10);
+			        		userLog.setProjectPart(ProjectDatas.Paper_area.getCode());
 			        		userLog.setUserId(userInMemory.getId());
 			        		userLog.setSystemType(userInMemory.getSystemId());
-			        		userLog.setVersion("3.0");
 			        		userLogSerivce.addUserLog(userLog, token);
 			        	}
 		        	}

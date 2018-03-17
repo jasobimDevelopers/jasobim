@@ -34,7 +34,7 @@ public class ItemController {
             @RequestParam(value = "fileList", required = false) MultipartFile[] fileList,
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value = "projectId",required = true) Long projectId,
-            @RequestParam(value = "modelPart",required = true) String modelPart,
+            @RequestParam(value = "modelPart",required = false) String modelPart,
             HttpServletRequest request){
     	String filePath = "/fileupload/items"+"/"+projectId;
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();

@@ -22,6 +22,7 @@ import com.my.spring.model.QuestionPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ProjectService;
 import com.my.spring.service.QuestionService;
@@ -371,13 +372,13 @@ public class QuestionServiceImpl implements QuestionService {
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		Long[] userIdList=null;
-    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
+    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1 || userInMemory.getSystemId()==-1){
     			UserLog userLog = new UserLog();
-    			userLog.setProjectPart(5);
+    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
     			userLog.setActionDate(new Date());
     			userLog.setUserId(userInMemory.getId());
     			userLog.setSystemType(userInMemory.getSystemId());
-    			userLog.setVersion("3.0");
+    			//userLog.setVersion("3.0");
     			if(question.getProjectId()!=null){
     				userLog.setProjectId(question.getProjectId());
     			}
@@ -624,56 +625,63 @@ public class QuestionServiceImpl implements QuestionService {
 						dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 					}
 					if(question!=null){
-						QuestionPojo questionPojo=new QuestionPojo();
-						questionPojo.setId(question.getId());
-						questionPojo.setCodeInformation(question.getCodeInformation());
-						questionPojo.setIntro(question.getIntro());
-						questionPojo.setName(question.getName());
-						questionPojo.setPriority(question.getPriority());
-						questionPojo.setProjectId(question.getProjectId());
-						if(question.getProjectId()!=null){
-							Project projects= new Project();
-							projects=projectDao.getById(question.getProjectId());
-							if(projects!=null){
-								questionPojo.setProjectName(projects.getName());
-								if(projects.getPicId()!=null && !projects.getPicId().equals(""))
-								{
+						Long projectId=question.getProjectId();
+						String projectList = userInDB.getProjectList();
+						if(userInDB.getUserType()==1 || userInDB.getUserType()==0 || projectList.contains(projectId.toString())){
+							QuestionPojo questionPojo=new QuestionPojo();
+							questionPojo.setId(question.getId());
+							questionPojo.setCodeInformation(question.getCodeInformation());
+							questionPojo.setIntro(question.getIntro());
+							questionPojo.setName(question.getName());
+							questionPojo.setPriority(question.getPriority());
+							questionPojo.setProjectId(question.getProjectId());
+							if(question.getProjectId()!=null){
+								Project projects= new Project();
+								projects=projectDao.getById(question.getProjectId());
+								if(projects!=null){
+									questionPojo.setProjectName(projects.getName());
+									if(projects.getPicId()!=null && !projects.getPicId().equals(""))
+									{
+										Files files=new Files();
+										files=fileDao.getById(Long.valueOf(projects.getPicId()));
+										if(files!=null){
+											questionPojo.setProjectPicUrl(files.getUrl());
+										}
+									}
+									
+								}
+							}
+							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+							questionPojo.setQuestionDate(sdf.format(question.getQuestionDate()));
+							questionPojo.setQuestionType(question.getQuestionType());
+							questionPojo.setState(question.getState());
+							questionPojo.setTrades(question.getTrades());
+							questionPojo.setUserId(userDao.getById(question.getUserId()).getRealName());
+							Long userIdis=userDao.getById(question.getUserId()).getId();
+							if(userIdis==userInMemory.getId()){
+								questionPojo.setUserid(1);
+							}else{
+								questionPojo.setUserid(0);
+							}
+							DataWrapper<List<QuestionFile>> file=new DataWrapper<List<QuestionFile>>();
+							file=questionFileDao.getQuestionFileByQuestionId(question.getId());
+							if(file.getData()!=null && file.getData().size()>0){
+								String[] fileList=new String[file.getData().size()];
+								for(int i=0;i<file.getData().size();i++){
 									Files files=new Files();
-									files=fileDao.getById(Long.valueOf(projects.getPicId()));
+									files=fileDao.getById(file.getData().get(i).getFileId());
 									if(files!=null){
-										questionPojo.setProjectPicUrl(files.getUrl());
+										fileList[i]=files.getUrl();
 									}
 								}
-								
+								questionPojo.setFileList(fileList);
 							}
-						}
-						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-						questionPojo.setQuestionDate(sdf.format(question.getQuestionDate()));
-						questionPojo.setQuestionType(question.getQuestionType());
-						questionPojo.setState(question.getState());
-						questionPojo.setTrades(question.getTrades());
-						questionPojo.setUserId(userDao.getById(question.getUserId()).getRealName());
-						Long userIdis=userDao.getById(question.getUserId()).getId();
-						if(userIdis==userInMemory.getId()){
-							questionPojo.setUserid(1);
+							
+							dataWrapper.setData(questionPojo);
 						}else{
-							questionPojo.setUserid(0);
-						}
-						DataWrapper<List<QuestionFile>> file=new DataWrapper<List<QuestionFile>>();
-						file=questionFileDao.getQuestionFileByQuestionId(question.getId());
-						if(file.getData()!=null && file.getData().size()>0){
-							String[] fileList=new String[file.getData().size()];
-							for(int i=0;i<file.getData().size();i++){
-								Files files=new Files();
-								files=fileDao.getById(file.getData().get(i).getFileId());
-								if(files!=null){
-									fileList[i]=files.getUrl();
-								}
-							}
-							questionPojo.setFileList(fileList);
+							dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 						}
 						
-						dataWrapper.setData(questionPojo);
 					}
 				}
 			} else {

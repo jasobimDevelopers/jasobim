@@ -250,7 +250,6 @@ public class ProjectServiceImpl implements ProjectService {
 								dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 							}
 						}
-						
 					}
 					/////删除项目自身文件
 					if(!projectDao.deleteProject(id))
@@ -468,8 +467,10 @@ public class ProjectServiceImpl implements ProjectService {
 				}
 				if(dataWrapper.getData().get(i).getPicId()!=null && !dataWrapper.getData().get(i).getPicId().equals("")){
 					Files filess=fileDao.getById(Long.valueOf(dataWrapper.getData().get(i).getPicId()));
-					projectpojo.setPicUrl(filess.getUrl());
-					projectpojo.setPicName(filess.getName());
+					if(filess!=null){
+						projectpojo.setPicUrl(filess.getUrl());
+						projectpojo.setPicName(filess.getName());
+					}
 				}
 				pojoproject.add(i, projectpojo);;
 			}

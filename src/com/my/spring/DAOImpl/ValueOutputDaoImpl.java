@@ -87,7 +87,7 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
 	            e.printStackTrace();
 	            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 	        }
-		 
+		
 		return dataWrapper;
 	}
 
@@ -114,9 +114,7 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
 	        }*/
 	        if(projectId!=null){
 	        	criteria.add(Restrictions.eq("projectId",projectId));
-	        	criteria.add(Restrictions.eq("others", projectName));
-	        }else{
-	        	criteria.add(Restrictions.eq("others",projectName));
+	        	//criteria.add(Restrictions.eq("others", projectName));
 	        }
 	        
 	        /*criteria.add(Restrictions.sqlRestriction("select id,sum(finished) as finished,sum(num) as num,others,date from value_output a group by project_id ORDER BY date DESC"));
@@ -214,5 +212,53 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
 	public ValueOutput getById(Long fileId) {
 		// TODO Auto-generated method stub
 		return get(fileId);
+	}
+
+	@Override
+	public DataWrapper<List<ValueOutput>> getValueOutputListByProjectId(Long projectId) {
+		 DataWrapper<List<ValueOutput>> retDataWrapper = new DataWrapper<List<ValueOutput>>();
+	        List<ValueOutput> ret = new ArrayList<ValueOutput>();
+	        Session session = getSession();
+	        Criteria criteria = session.createCriteria(ValueOutput.class);
+	        //criteria.addOrder(Order.desc("date"));
+	        if(projectId!=null){
+	        	criteria.add(Restrictions.eq("project_id", projectId));
+	        }
+	        try {
+	            ret = criteria.list();
+	        }catch (Exception e){
+	            e.printStackTrace();
+	        }
+	        retDataWrapper.setData(ret);
+	        return retDataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<ValueOutputPojo>> getValueOutputListnew(Long projectId) {
+
+    	String sql="";
+    	if(projectId!=null){
+    		sql = "select id,others,num,sum(finished) as finished,date,project_id "
+        			+ "from value_output where project_id="+projectId+" GROUP BY project_id ORDER BY date DESC";
+    	}
+		DataWrapper<List<ValueOutputPojo>> dataWrapper=new DataWrapper<List<ValueOutputPojo>>();
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("id",StandardBasicTypes.LONG)
+					 .addScalar("others", StandardBasicTypes.STRING)
+					 .addScalar("num",StandardBasicTypes.DOUBLE)
+					 .addScalar("project_id",StandardBasicTypes.LONG)
+					 .addScalar("finished", StandardBasicTypes.DOUBLE)
+					 .addScalar("date", StandardBasicTypes.DATE)
+					 .setResultTransformer(Transformers.aliasToBean(ValueOutputPojo.class)); 
+			 dataWrapper.setData(query.list());
+	            
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	        }
+		
+		return dataWrapper;
 	}
 }

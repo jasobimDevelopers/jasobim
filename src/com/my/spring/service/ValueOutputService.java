@@ -10,7 +10,9 @@ public interface ValueOutputService {
     DataWrapper<Void> deleteValueOutput(String id,String token);
     DataWrapper<Void> updateValueOutput(ValueOutput ValueOutput,String token);
     DataWrapper<List<ValueOutputPojo>> getValueOutputList(String token);
+    DataWrapper<ValueOutputPojo> getValueOutputListnew(String token,Long projectId);
 	DataWrapper<List<ValueOutputPojo>> getValueOutputByProjectId(String projectName,Long projectId,String token);
 	DataWrapper<List<ValueOutputPojo>> getValueOutputLists(Integer pageIndex, Integer pageSize, ValueOutput valueOutput,
 			String token,String dates);
+	DataWrapper<List<ValueOutputPojo>> getValueOutputByProjectName(String projectName, Long projectId, String token);
 }

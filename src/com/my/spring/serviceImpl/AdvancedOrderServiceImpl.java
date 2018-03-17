@@ -13,6 +13,7 @@ import com.my.spring.model.AdvancedOrderPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.AdvancedOrderService;
 import com.my.spring.service.FileService;
 import com.my.spring.utils.DataExportWordTest;
@@ -165,11 +166,11 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
         if (userInMemory != null) {
         		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
         			UserLog userLog = new UserLog();
-        			userLog.setProjectPart(10);
+        			userLog.setProjectPart(ProjectDatas.AdvancedOrder_area.getCode());
         			userLog.setActionDate(new Date());
         			userLog.setUserId(userInMemory.getId());
         			userLog.setSystemType(userInMemory.getSystemId());
-        			userLog.setVersion("3.0");
+        			//userLog.setVersion("3.0");
         			if(advancedOrder.getProjectId()!=null){
         				userLog.setProjectId(advancedOrder.getProjectId());
         			}

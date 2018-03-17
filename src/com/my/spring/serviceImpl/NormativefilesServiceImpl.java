@@ -11,6 +11,7 @@ import com.my.spring.model.NormativefilesPojo;
 import com.my.spring.model.NormativefilesPojos;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.NormativefilesService;
 import com.my.spring.service.UserLogService;
@@ -126,9 +127,13 @@ public class NormativefilesServiceImpl implements NormativefilesService {
         		UserLog userLog = new UserLog();
         		userLog.setActionDate(new Date());
         		//userLog.setFileId(Normativefiles.getId());
-        		userLog.setProjectPart(6);
+        		if(Normativefiles.getFileIdList()!=null){
+        			String[] fileids=Normativefiles.getFileIdList().split(",");
+        			userLog.setFileId(Long.valueOf(fileids[0]));
+        		}
+        		userLog.setProjectPart(ProjectDatas.NormativeFile_area.getCode());
         		userLog.setUserId(userInMemory.getId());
-        		userLog.setVersion("-1");
+        		//userLog.setVersion("-1");
         		userLogSerivce.addUserLog(userLog, token);
         	}
 				dataWrapper=normativefilesDao.getNormativefilessList(pageIndex,pageSize,Normativefiles);

@@ -7,6 +7,9 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.ValueOutput;
 import com.my.spring.model.ValueOutputPojo;
+import com.my.spring.parameters.ProjectDatas;
+import com.my.spring.model.Files;
+import com.my.spring.model.Project;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.service.ValueOutputService;
@@ -152,8 +155,108 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     	}else{
     		dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}
+    	//dataWrappersn.setData(dataWrappers.getData().get(0));
         return dataWrappers;
     }
+    
+    @Override
+    public DataWrapper<ValueOutputPojo> getValueOutputListnew(String token,Long projectId) {
+    	List<ValueOutputPojo> dataWrapperPojo = new ArrayList<ValueOutputPojo>();
+    	DataWrapper<ValueOutputPojo> dataWrappers = new DataWrapper<ValueOutputPojo>();
+    	User userInMemory=SessionManager.getSession(token);
+    	Double nums=0.0;
+    	Double finisheds=0.0;
+    	if(userInMemory!=null){
+    		dataWrapperPojo=ValueOutputDao.getValueOutputListnew(projectId).getData();
+    		if(dataWrapperPojo!=null){
+    			if(dataWrapperPojo.get(0).getProject_id()!=null){
+    				Project projectss=projectDao.getById(Long.valueOf(dataWrapperPojo.get(0).getProject_id()));
+    				dataWrapperPojo.get(0).setLeader(projectss.getLeader());
+    				if(projectss.getPicId()!=null){
+    					Files files = new Files();
+    					files=fileSerivce.getById(Long.valueOf(projectss.getPicId()));
+    					if(files!=null){
+    						dataWrapperPojo.get(0).setProjectPicUrl(files.getUrl());
+    					}
+    				}
+    			}
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+	    		String str=sdf.format(dataWrapperPojo.get(0).getDate()); 
+	    		dataWrapperPojo.get(0).setDates(str);
+	    		dataWrapperPojo.get(0).setProjectName(dataWrapperPojo.get(0).getOthers());
+				nums=dataWrapperPojo.get(0).getNum();
+				finisheds=dataWrapperPojo.get(0).getFinished();
+				DecimalFormat df=new DecimalFormat(".##");
+    			String st=df.format(nums);
+    			String st1=df.format(finisheds);
+				dataWrapperPojo.get(0).setNums(Double.valueOf(st));
+				dataWrapperPojo.get(0).setFinisheds(Double.valueOf(st1));
+    			dataWrappers.setData(dataWrapperPojo.get(0));
+    		}else{
+    			dataWrappers.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+    		}
+    	}else{
+    		dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+    	}
+    	//dataWrappersn.setData(dataWrappers.getData().get(0));
+        return dataWrappers;
+    }
+	@Override
+	public DataWrapper<List<ValueOutputPojo>> getValueOutputByProjectName(String projectName,Long projectId,String token) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<ValueOutputPojo>> dataWrapper = new DataWrapper<List<ValueOutputPojo>>();
+		List<ValueOutputPojo> valueOutputs=new ArrayList<ValueOutputPojo>();
+        User userInMemory = SessionManager.getSession(token);
+        Double nums=0.0;
+    	Double finisheds=0.0;
+        if(userInMemory != null) {
+        	if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1 || userInMemory.getSystemId()==-1){
+        		
+    			UserLog userLog = new UserLog();
+    			userLog.setProjectPart(ProjectDatas.ValueOut_area.getCode());
+    			userLog.setActionDate(new Date());
+    			userLog.setUserId(userInMemory.getId());
+    			userLog.setSystemType(userInMemory.getSystemId());
+    			//userLog.setVersion("3.0");
+    			if(projectId!=null){
+    				userLog.setProjectId(projectId);
+    			}
+    			if(projectName!=null){
+    				userLog.setFileId(ValueOutputDao.getValueOutputListByProjectId(projectId).getData().get(0).getId());
+    			}
+    			userLogSerivce.addUserLog(userLog, token);
+    		}
+        	String[] projectLists=null;
+		    	valueOutputs=ValueOutputDao.getValueOutputList(projectName).getData();
+				if(valueOutputs!=null && valueOutputs.size()>0){
+	    			for(int i=0;i<valueOutputs.size();i++){
+	    				ValueOutputPojo strone=new ValueOutputPojo();
+	    				strone.setFinished(valueOutputs.get(i).getFinished());
+	    				strone.setNum(valueOutputs.get(i).getNum());
+	    				strone.setProject_id(valueOutputs.get(i).getProject_id());
+	    				strone.setId(valueOutputs.get(i).getId());
+	    				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+	    	    		String str=sdf.format(valueOutputs.get(i).getDate()); 
+	    	    		strone.setDates(str);
+	    	    		strone.setProjectName(valueOutputs.get(i).getOthers());
+	    	    		valueOutputs.add(i, strone);
+	    				nums=valueOutputs.get(i).getNum();
+	    				finisheds+=valueOutputs.get(i).getFinished();
+	    			}
+	    			DecimalFormat df=new DecimalFormat(".##");
+	    			String st=df.format(nums);
+	    			String st1=df.format(finisheds);
+					valueOutputs.get(0).setNums(Double.valueOf(st));
+					valueOutputs.get(0).setFinisheds(Double.valueOf(st1));
+	    			dataWrapper.setData(valueOutputs);
+	    		}else{
+	    			dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	    		}
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return dataWrapper;
+	}
 
 	@Override
 	public DataWrapper<List<ValueOutputPojo>> getValueOutputByProjectId(String projectName,Long projectId,String token) {
@@ -165,19 +268,19 @@ public class ValueOutputServiceImpl implements ValueOutputService {
         Double nums=0.0;
     	Double finisheds=0.0;
         if(userInMemory != null) {
-        	if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
+        	if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1 || userInMemory.getSystemId()==-1){
         		
     			UserLog userLog = new UserLog();
-    			userLog.setProjectPart(7);
+    			userLog.setProjectPart(ProjectDatas.ValueOut_area.getCode());
     			userLog.setActionDate(new Date());
     			userLog.setUserId(userInMemory.getId());
     			userLog.setSystemType(userInMemory.getSystemId());
-    			userLog.setVersion("3.0");
+    			//userLog.setVersion("3.0");
     			if(projectId!=null){
     				userLog.setProjectId(projectId);
     			}
     			if(projectName!=null){
-    				userLog.setFileId(ValueOutputDao.getValueOutputListByProjectName(projectName).getData().get(0).getId());
+    				userLog.setFileId(ValueOutputDao.getValueOutputListByProjectId(projectId).getData().get(0).getId());
     			}
     			userLogSerivce.addUserLog(userLog, token);
     		}
@@ -190,9 +293,12 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 	    				strone.setNum(valueOutputss.get(i).getNum());
 	    				strone.setProject_id(valueOutputss.get(i).getProjectId());
 	    				strone.setId(valueOutputss.get(i).getId());
-	    				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-	    	    		String str=sdf.format(valueOutputss.get(i).getDate()); 
+	    				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	    				SimpleDateFormat sdfs=new SimpleDateFormat("yyyy-MM-dd"); 
+	    	    		String str=sdfs.format(valueOutputss.get(i).getDate()); 
+	    	    		String strs=sdf.format(valueOutputss.get(i).getDate());
 	    	    		strone.setDates(str);
+	    	    		//strone.setDate(strs);
 	    	    		strone.setProjectName(valueOutputss.get(i).getOthers());
 	    	    		valueOutputs.add(i, strone);
 	    				nums=valueOutputss.get(i).getNum();
