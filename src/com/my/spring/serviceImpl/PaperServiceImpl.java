@@ -81,6 +81,9 @@ public class PaperServiceImpl implements PaperService {
 					long fileSize=file.getSize()/1024;////文件大小kb单位 
 					paper.setSize(fileSize);
 					paper.setOriginName(originName);
+					if(paper.getDiyProfessionType()!=null){
+						paper.setProfessionType(7);///其他
+					}
 					if(!paperDao.addPaper(paper)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else
@@ -259,7 +262,7 @@ public class PaperServiceImpl implements PaperService {
 			Paper paper,String content) {
 		DataWrapper<List<PaperPojo>> dataWrappers = new DataWrapper<List<PaperPojo>>();
     	List<PaperPojo> papers=new ArrayList<PaperPojo>();
-    	
+    	String[] professionNameList={"电气","暖通","给排水","消防","建筑","装饰","结构"};
     	DataWrapper<List<Paper>> dataWrapper = new DataWrapper<List<Paper>>();
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
@@ -276,7 +279,6 @@ public class PaperServiceImpl implements PaperService {
 			        		userLogSerivce.addUserLog(userLog, token);
 			        	}
 		        	}
-		        	
 	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper,content);
 	        		for(int i=0;i<dataWrapper.getData().size();i++){
 	        			PaperPojo papernew=new PaperPojo();
@@ -287,6 +289,14 @@ public class PaperServiceImpl implements PaperService {
 	        			papernew.setFloorNum(dataWrapper.getData().get(i).getFloorNum());
 	        			papernew.setOriginName(dataWrapper.getData().get(i).getOriginName());
 	        			papernew.setSize(dataWrapper.getData().get(i).getSize());
+	        			if(dataWrapper.getData().get(i).getProfessionType()!=null){
+	        				if(dataWrapper.getData().get(i).getProfessionType()==7){
+	        					papernew.setProfessionName(dataWrapper.getData().get(i).getDiyProfessionType());
+	        				}else{
+	        					papernew.setProfessionName(professionNameList[dataWrapper.getData().get(i).getProfessionType()]);
+	        				}
+	        				
+	        			}
 	        			Files file=fileDao.getById(dataWrapper.getData().get(i).getFileId());
 	        			if(file!=null){
 	        				papernew.setUrl(file.getUrl());
