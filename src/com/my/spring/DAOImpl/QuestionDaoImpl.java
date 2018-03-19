@@ -128,7 +128,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         if(question.getId()!=null){
             criteria.add(Restrictions.eq("id", question.getId()));
         } 
-        if(content!=null){
+        if(content!=null && !content.equals("")){
         	String test = "";
         	for(int i=0;i<content.length();i++)
         	{

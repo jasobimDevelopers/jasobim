@@ -155,8 +155,8 @@ public class QuestionServiceImpl implements QuestionService {
 				for(int b =0;b<userList.size();b++){
 					userids[b]=userList.get(b).getId().toString();
 				}
-				PushExample.testSendPushWithCustomConfig_ios(userids, content);
-				PushExample.testSendPushWithCustomConfig_android(userids, content);
+				//PushExample.testSendPushWithCustomConfig_ios(userids, content);
+				//PushExample.testSendPushWithCustomConfig_android(userids, content);
 				}
 
 			}
@@ -807,7 +807,7 @@ public class QuestionServiceImpl implements QuestionService {
     			}
     			userLogDao.addUserLog(userLog);
     		}
-			if(content!=null){
+			if(content!=null && !content.equals("")){
 				
 				//////问题类型搜索
 				if("安全".contains(content))

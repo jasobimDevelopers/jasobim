@@ -204,8 +204,6 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 						constructionTaskPojo.setDetailContent(dataWrapper.getData().get(i).getDetailContent());
 						constructionTaskPojo.setFinishedDate(dataWrapper.getData().get(i).getFinishedDate());
 						constructionTaskPojo.setId(dataWrapper.getData().get(i).getId());
-						
-						
 						constructionTaskPojo.setRewards(dataWrapper.getData().get(i).getRewards());
 						constructionTaskPojo.setTaskContent(dataWrapper.getData().get(i).getTaskContent());
 						constructionTaskPojo.setTeamName(dataWrapper.getData().get(i).getTeamName());
@@ -236,7 +234,14 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 							constructionTaskPojo.setWorkPeopleNameList(workPeopleName);
 						}
 						if(dataWrapper.getData().get(i).getUserId()!=null){
-							constructionTaskPojo.setCreateUserName(userDao.getById(dataWrapper.getData().get(i).getUserId()).getRealName());
+							User user =userDao.getById(dataWrapper.getData().get(i).getUserId());
+							if(user.getUserIconUrl()!=null){
+								Files file=fileService.getById(user.getUserIcon());
+								constructionTaskPojo.setCreateUserIcon(file.getUrl());
+							}else{
+								constructionTaskPojo.setCreateUserIcon(user.getUserIconUrl());
+							}
+							constructionTaskPojo.setCreateUserName(user.getRealName());
 						}
 						if(dataWrapper.getData().get(i).getReceiveUserId()!=null){
 							constructionTaskPojo.setReceiveUserName(userDao.getById(dataWrapper.getData().get(i).getReceiveUserId()).getRealName());
