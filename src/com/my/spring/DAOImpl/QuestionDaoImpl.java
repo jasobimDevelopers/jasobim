@@ -162,7 +162,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 			}
 			if(question.getState()!=null)
 			{
-				dis.add(Restrictions.eq("state", question.getState()));
+				criteria.add(Restrictions.eq("state", question.getState()));
 			}
 			criteria.add(dis);
         }else{
