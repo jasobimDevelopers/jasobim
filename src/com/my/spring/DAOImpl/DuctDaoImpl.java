@@ -280,6 +280,7 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 			}
 			i++;
 		}
+		
 		if(content!=null && !content.equals("")){
 			if(i>=1){
 				selsql=selsql+" and name like "+"'"+content+"'";
