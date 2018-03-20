@@ -505,9 +505,19 @@ public class DuctServiceImpl implements DuctService {
     }
 
 	@Override
-	public DataWrapper<List<DuctPojos>> getDuctStateSum() {
+	public DataWrapper<List<DuctPojos>> getDuctStateSum(String dateStart, String dateFinished, Duct duct, String token,
+			String content) {
 		DataWrapper<List<DuctPojos>> dataWrapper = new DataWrapper<List<DuctPojos>>();
-		dataWrapper=DuctDao.getDuctLists();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(user.getUserType()==0){
+				dataWrapper=DuctDao.getDuctLists(dateStart,dateFinished,duct,token,content);
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
 		// TODO Auto-generated method stub
 		return dataWrapper;
 	}

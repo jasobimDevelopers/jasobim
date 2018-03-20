@@ -49,8 +49,13 @@ public class DuctController {
     
     @RequestMapping(value="/getDuctStateSum",method=RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<List<DuctPojos>> getDuctStateSum(){
-        return ductService.getDuctStateSum();
+    public DataWrapper<List<DuctPojos>> getDuctStateSum(
+    		@RequestParam(value = "dateStart",required = false) String dateStart,
+            @RequestParam(value = "dateFinished",required = false) String dateFinished,
+    		@ModelAttribute Duct duct,
+    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="content",required=false) String content){
+        return ductService.getDuctStateSum(dateStart,dateFinished,duct,token,content);
     }
     
     @RequestMapping(value="/admin/getDuctByProjectId",method=RequestMethod.GET)

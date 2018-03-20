@@ -155,8 +155,8 @@ public class QuestionServiceImpl implements QuestionService {
 				for(int b =0;b<userList.size();b++){
 					userids[b]=userList.get(b).getId().toString();
 				}
-				//PushExample.testSendPushWithCustomConfig_ios(userids, content);
-				//PushExample.testSendPushWithCustomConfig_android(userids, content);
+				PushExample.testSendPushWithCustomConfig_ios(userids, content);
+				PushExample.testSendPushWithCustomConfig_android(userids, content);
 				}
 
 			}
@@ -951,7 +951,7 @@ public class QuestionServiceImpl implements QuestionService {
 		    	}else{
 		    		importantPercent=Math.floor(importantPercent);
 		    	}
-		    	
+		    	datawrapper.setPage(pageInfos);
 		    	if(pojo!=null && pojo.size()>0){
 		    		HashMap<String,String> sm = new HashMap<String,String>();
 		    		String ip=importantPercent+"";
@@ -961,7 +961,6 @@ public class QuestionServiceImpl implements QuestionService {
 		    		sm.put("urgentPercent", up);
 		    		sm.put("sortPercent", sp);
 		    		datawrapper.setData(pojo);
-		    		datawrapper.setPage(pageInfos);
 		    		datawrapper.setOthers(sm);
 		    	}
 			}

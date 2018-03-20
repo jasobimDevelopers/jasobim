@@ -262,5 +262,71 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 		return dataWrapper;
 	}
 
+	@Override
+	public DataWrapper<List<DuctPojos>> getDuctLists(String dateStart, String dateFinished, Duct duct, String token,
+			String content) {
+		DataWrapper<List<DuctPojos>> dataWrapper=new DataWrapper<List<DuctPojos>>();
+		String selsql="select * from duct";
+		int i=0;
+		if(dateStart!=null){
+			selsql+=selsql+" where date>"+dateStart;
+			i++;
+		}
+		if(dateFinished!=null){
+			if(i>=1){
+				selsql=selsql+" and date<"+dateFinished;
+			}else{
+				selsql=selsql+" where date<"+dateFinished;
+			}
+			i++;
+		}
+		if(content!=null && !content.equals("")){
+			if(i>=1){
+				selsql=selsql+" and name like "+"'"+content+"'";
+			}else{
+				selsql=selsql+" where name like "+"'"+content+"'";
+			}
+			i++;
+		}
+		if(duct.getProjectId()!=null){
+			if(i>=1){
+				selsql=selsql+" and project_id="+duct.getProjectId();
+			}else{
+				selsql=selsql+" where project_id="+duct.getProjectId();
+			}
+			i++;
+		}
+		if(duct.getName()!=null && !duct.getName().equals("")){
+			if(i>=1){
+				selsql=selsql+" and name="+"'"+duct.getName()+"'";
+			}else{
+				selsql=selsql+" where name="+"'"+duct.getName()+"'";
+			}
+			i++;
+		}
+		if(duct.getState()!=null && !duct.getState().equals("")){
+			if(i>=1){
+				selsql=selsql+" and state="+duct.getState();
+			}else{
+				selsql=selsql+" where state="+duct.getState();
+			}
+			i++;
+		}
+		String sql = "select DATE_FORMAT(date,'%Y-%m') as month,count(date) as sum_date,state  from"+ "("+selsql+")"+"a group by month,state";
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("month", StandardBasicTypes.STRING)
+					 .addScalar("sum_date", StandardBasicTypes.LONG)
+					 .addScalar("state", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(DuctPojos.class));
+			 dataWrapper.setData(query.list());
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return dataWrapper;
+	}
+
 
 }

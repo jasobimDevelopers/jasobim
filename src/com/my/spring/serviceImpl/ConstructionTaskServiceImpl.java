@@ -164,107 +164,108 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
     	DataWrapper<List<ConstructionTask>> dataWrapper = new DataWrapper<List<ConstructionTask>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-	        	if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
-	    			UserLog userLog = new UserLog();
-	    			userLog.setProjectPart(ProjectDatas.ConstructionTask_area.getCode());
-	    			userLog.setActionDate(new Date());
-	    			userLog.setUserId(userInMemory.getId());
-	    			userLog.setSystemType(userInMemory.getSystemId());
-	    			//userLog.setVersion("3.0");
-	    			if(ConstructionTask.getProjectId()!=null){
-	    				userLog.setProjectId(ConstructionTask.getProjectId());
-	    			}
-	    			if(ConstructionTask.getId()!=null){
-	    				userLog.setFileId(ConstructionTask.getId());
-	    			}
-	    			userLogDao.addUserLog(userLog);
-	    		}
-	        	String NextReceivePeopleId=null;
-        		if(userInMemory.getUserType()!=3){
-        			ConstructionTask.setUserProjectIdList("-1");
-        		}
-        		else{
-        			ConstructionTask.setUserProjectIdList(userInMemory.getProjectList());
-        		}
-        		if(ConstructionTask.getApprovalPeopleName()==null && userInMemory.getUserType()==3){
-        			ConstructionTask.setApprovalPeopleName(userInMemory.getRealName());
-        		}
-        		if(ConstructionTask.getNextReceivePeopleId()==null && userInMemory.getUserType()==3){
-        			NextReceivePeopleId=userInMemory.getRealName(); 
-        		}
-        		if(ConstructionTask.getCreateUserName()==null && userInMemory.getUserType()==3){
-        			ConstructionTask.setCreateUserName(userInMemory.getRealName());
-        		}
-				dataWrapper=constructionTaskDao.getConstructionTasksList(pageIndex,pageSize,ConstructionTask,state,userInMemory.getRealName(),NextReceivePeopleId);
-				if(dataWrapper.getData()!=null){
-					List<ConstructionTaskPojo> constructionTaskPojoList = new ArrayList<ConstructionTaskPojo>();
-					for(int i=0;i<dataWrapper.getData().size();i++){
-						ConstructionTaskPojo constructionTaskPojo =new ConstructionTaskPojo();
-						constructionTaskPojo.setCreateDate(sdf.format(dataWrapper.getData().get(i).getCreateDate()));
-						constructionTaskPojo.setDetailContent(dataWrapper.getData().get(i).getDetailContent());
-						constructionTaskPojo.setFinishedDate(dataWrapper.getData().get(i).getFinishedDate());
-						constructionTaskPojo.setId(dataWrapper.getData().get(i).getId());
-						constructionTaskPojo.setRewards(dataWrapper.getData().get(i).getRewards());
-						constructionTaskPojo.setTaskContent(dataWrapper.getData().get(i).getTaskContent());
-						constructionTaskPojo.setTeamName(dataWrapper.getData().get(i).getTeamName());
-						constructionTaskPojo.setCompanyName(dataWrapper.getData().get(i).getCompanyName());
-						constructionTaskPojo.setNextReceivePeopleName(dataWrapper.getData().get(i).getNextReceivePeopleId());
-						constructionTaskPojo.setTaskFlag(dataWrapper.getData().get(i).getTaskFlag());
-						constructionTaskPojo.setNextApprovalPeopleType(dataWrapper.getData().get(i).getNextApprovalPeopleType());
-						if(dataWrapper.getData().get(i).getFileIdList()!=null){
-							String[] filesUrl=dataWrapper.getData().get(i).getFileIdList().split(",");
-							String[] filesUrlList = new String[filesUrl.length];
-							for(int j=0;j<filesUrl.length;j++){
-								filesUrlList[j]=fileDao.getById(Long.valueOf(filesUrl[j])).getUrl();
-							}
-							constructionTaskPojo.setFileUrlList(filesUrlList);
+        	if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
+    			UserLog userLog = new UserLog();
+    			userLog.setProjectPart(ProjectDatas.ConstructionTask_area.getCode());
+    			userLog.setActionDate(new Date());
+    			userLog.setUserId(userInMemory.getId());
+    			userLog.setSystemType(userInMemory.getSystemId());
+    			//userLog.setVersion("3.0");
+    			if(ConstructionTask.getProjectId()!=null){
+    				userLog.setProjectId(ConstructionTask.getProjectId());
+    			}
+    			if(ConstructionTask.getId()!=null){
+    				userLog.setFileId(ConstructionTask.getId());
+    			}
+    			userLogDao.addUserLog(userLog);
+    		}
+        	String NextReceivePeopleId=null;
+    		if(userInMemory.getUserType()!=3){
+    			ConstructionTask.setUserProjectIdList("-1");
+    		}
+    		else{
+    			ConstructionTask.setUserProjectIdList(userInMemory.getProjectList());
+    		}
+    		if(ConstructionTask.getApprovalPeopleName()==null && userInMemory.getUserType()==3){
+    			ConstructionTask.setApprovalPeopleName(userInMemory.getRealName());
+    		}
+    		if(ConstructionTask.getNextReceivePeopleId()==null && userInMemory.getUserType()==3){
+    			NextReceivePeopleId=userInMemory.getRealName(); 
+    		}
+    		if(ConstructionTask.getCreateUserName()==null && userInMemory.getUserType()==3){
+    			ConstructionTask.setCreateUserName(userInMemory.getRealName());
+    		}
+			dataWrapper=constructionTaskDao.getConstructionTasksList(pageIndex,pageSize,ConstructionTask,state,userInMemory.getRealName(),NextReceivePeopleId);
+			if(dataWrapper.getData()!=null && dataWrapper.getData().size()>0){
+				List<ConstructionTaskPojo> constructionTaskPojoList = new ArrayList<ConstructionTaskPojo>();
+				for(int i=0;i<dataWrapper.getData().size();i++){
+					ConstructionTaskPojo constructionTaskPojo =new ConstructionTaskPojo();
+					constructionTaskPojo.setCreateDate(sdf.format(dataWrapper.getData().get(i).getCreateDate()));
+					constructionTaskPojo.setDetailContent(dataWrapper.getData().get(i).getDetailContent());
+					constructionTaskPojo.setFinishedDate(dataWrapper.getData().get(i).getFinishedDate());
+					constructionTaskPojo.setId(dataWrapper.getData().get(i).getId());
+					constructionTaskPojo.setRewards(dataWrapper.getData().get(i).getRewards());
+					constructionTaskPojo.setTaskContent(dataWrapper.getData().get(i).getTaskContent());
+					constructionTaskPojo.setTeamName(dataWrapper.getData().get(i).getTeamName());
+					constructionTaskPojo.setCompanyName(dataWrapper.getData().get(i).getCompanyName());
+					constructionTaskPojo.setNextReceivePeopleName(dataWrapper.getData().get(i).getNextReceivePeopleId());
+					constructionTaskPojo.setTaskFlag(dataWrapper.getData().get(i).getTaskFlag());
+					constructionTaskPojo.setNextApprovalPeopleType(dataWrapper.getData().get(i).getNextApprovalPeopleType());
+					if(dataWrapper.getData().get(i).getFileIdList()!=null){
+						String[] filesUrl=dataWrapper.getData().get(i).getFileIdList().split(",");
+						String[] filesUrlList = new String[filesUrl.length];
+						for(int j=0;j<filesUrl.length;j++){
+							filesUrlList[j]=fileDao.getById(Long.valueOf(filesUrl[j])).getUrl();
 						}
-						if(dataWrapper.getData().get(i).getWorkPeopleNameList()!=null){
-							String[] nameList = dataWrapper.getData().get(i).getWorkPeopleNameList().split(",");
-							String workPeopleName="";
-							for(int k=0;k<nameList.length;k++){
-								String names=userDao.getById(Long.valueOf(nameList[k])).getRealName();
-								if(k==0){
-									workPeopleName=workPeopleName+names;
-								}else{
-									workPeopleName=workPeopleName+"、"+names;
-								}
-								
-							}
-							constructionTaskPojo.setWorkPeopleNameList(workPeopleName);
-						}
-						if(dataWrapper.getData().get(i).getUserId()!=null){
-							User user =userDao.getById(dataWrapper.getData().get(i).getUserId());
-							if(user.getUserIconUrl()!=null){
-								Files file=fileService.getById(user.getUserIcon());
-								constructionTaskPojo.setCreateUserIcon(file.getUrl());
+						constructionTaskPojo.setFileUrlList(filesUrlList);
+					}
+					if(dataWrapper.getData().get(i).getWorkPeopleNameList()!=null){
+						String[] nameList = dataWrapper.getData().get(i).getWorkPeopleNameList().split(",");
+						String workPeopleName="";
+						for(int k=0;k<nameList.length;k++){
+							String names=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+							if(k==0){
+								workPeopleName=workPeopleName+names;
 							}else{
-								constructionTaskPojo.setCreateUserIcon(user.getUserIconUrl());
+								workPeopleName=workPeopleName+"、"+names;
 							}
-							constructionTaskPojo.setCreateUserName(user.getRealName());
+							
 						}
-						if(dataWrapper.getData().get(i).getReceiveUserId()!=null){
-							constructionTaskPojo.setReceiveUserName(userDao.getById(dataWrapper.getData().get(i).getReceiveUserId()).getRealName());
+						constructionTaskPojo.setWorkPeopleNameList(workPeopleName);
+					}
+					if(dataWrapper.getData().get(i).getUserId()!=null){
+						User user =userDao.getById(dataWrapper.getData().get(i).getUserId());
+						if(user.getUserIconUrl()==null){
+							Files file=fileService.getById(user.getUserIcon());
+							constructionTaskPojo.setCreateUserIcon(file.getUrl());
+						}else{
+							constructionTaskPojo.setCreateUserIcon(user.getUserIconUrl());
 						}
-						
-						try {
-							long day=0;
-							Date endDate=sdf.parse(sdf.format(new Date(System.currentTimeMillis())));
-							Date beginDate=sdf.parse(sdf.format(dataWrapper.getData().get(i).getCreateDate()));
-							day=(endDate.getTime()-beginDate.getTime())/(60*60*1000); 
-							constructionTaskPojo.setLastDate(String.valueOf(day));
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						constructionTaskPojo.setCreateUserName(user.getRealName());
+					}
+					if(dataWrapper.getData().get(i).getReceiveUserId()!=null){
+						constructionTaskPojo.setReceiveUserName(userDao.getById(dataWrapper.getData().get(i).getReceiveUserId()).getRealName());
+					}
+					
+					try {
+						long day=0;
+						Date endDate=sdf.parse(sdf.format(new Date(System.currentTimeMillis())));
+						Date beginDate=sdf.parse(sdf.format(dataWrapper.getData().get(i).getCreateDate()));
+						day=(endDate.getTime()-beginDate.getTime())/(60*60*1000); 
+						constructionTaskPojo.setLastDate(String.valueOf(day));
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(dataWrapper.getData().get(i).getFileIdList()!=null){
+						String[] fileIdList = dataWrapper.getData().get(i).getFileIdList().split(",");
+						String[] fileUrlList = new String[fileIdList.length];
+						for(int j=0;j<fileIdList.length;j++){
+							fileUrlList[j]=fileDao.getById(Long.valueOf(fileIdList[j])).getUrl();
 						}
-						if(dataWrapper.getData().get(i).getFileIdList()!=null){
-							String[] fileIdList = dataWrapper.getData().get(i).getFileIdList().split(",");
-							String[] fileUrlList = new String[fileIdList.length];
-							for(int j=0;j<fileIdList.length;j++){
-								fileUrlList[j]=fileDao.getById(Long.valueOf(fileIdList[j])).getUrl();
-							}
-							constructionTaskPojo.setFileUrlList(fileUrlList);
-						}
+						constructionTaskPojo.setFileUrlList(fileUrlList);
+					}
+					if(ConstructionTask.getId()!=null){
 						if(dataWrapper.getData().get(i).getApprovalPeopleTypeList()!=null){
 							String [] approvalPeopleTypeList = dataWrapper.getData().get(i).getApprovalPeopleTypeList().split("&");
 							constructionTaskPojo.setApprovalPeopleTypeList(approvalPeopleTypeList);
@@ -283,27 +284,31 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 						}
 						if(dataWrapper.getData().get(i).getApprovalPeopleName()!=null){
 							String [] approvalPeopleNameList = dataWrapper.getData().get(i).getApprovalPeopleName().split("&");
-							constructionTaskPojo.setCurrentUserName(approvalPeopleNameList[approvalPeopleNameList.length-1]);
 							constructionTaskPojo.setApprovalPeopleNameList(approvalPeopleNameList);
 						}
-						
-						if(constructionTaskPojo!=null){
-							constructionTaskPojoList.add(constructionTaskPojo);
-						}
 					}
-					if(constructionTaskPojoList!=null && constructionTaskPojoList.size()>0){
-						dataWrappers.setData(constructionTaskPojoList);
-						dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
-						dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
-						dataWrappers.setTotalPage(dataWrapper.getTotalPage());
-						dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
-					}else{
-						dataWrappers.setErrorCode(ErrorCodeEnum.Error);
+					if(dataWrapper.getData().get(i).getApprovalPeopleName()!=null){
+						String [] approvalPeopleNameList = dataWrapper.getData().get(i).getApprovalPeopleName().split("&");
+						constructionTaskPojo.setCurrentUserName(approvalPeopleNameList[approvalPeopleNameList.length-1]);
+					}
+					
+					if(constructionTaskPojo!=null){
+						constructionTaskPojoList.add(constructionTaskPojo);
 					}
 				}
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+				if(constructionTaskPojoList!=null && constructionTaskPojoList.size()>0){
+					dataWrappers.setData(constructionTaskPojoList);
+					dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
+					dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
+					dataWrappers.setTotalPage(dataWrapper.getTotalPage());
+					dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
+				}else{
+					dataWrappers.setErrorCode(ErrorCodeEnum.Error);
+				}
 			}
+		}else{
+			dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
         return dataWrappers;
     }
 

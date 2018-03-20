@@ -18,4 +18,6 @@ public interface DuctDao {
 	Duct getDuctById(Long id);
 	DataWrapper<List<DuctPojos>> getDuctLists();
 	DataWrapper<Duct> getDuctBySelfId(Long id,String selfId,Long projectId);
+	DataWrapper<List<DuctPojos>> getDuctLists(String dateStart, String dateFinished, Duct duct, String token,
+			String content);
 }

@@ -100,7 +100,7 @@ public class MessageServiceImpl implements MessageService {
 						}
 						String content=userInMemory.getRealName()+"提交了一条留言，请您注意查看";
 						PushExample.testSendPushWithCustomConfig_ios(userids, content);
-						PushExample.testSendPushWithCustomConfig_android(userids, content);
+						//testSendPushWithCustomConfig_android(userids, content);
 				///////////////////////////////
 						}
 					else
@@ -345,7 +345,7 @@ public class MessageServiceImpl implements MessageService {
 			{
 				dataWrappers=messageDao.getMessageListByQuestionId(questionId);
 				if(dataWrappers.getData()==null || dataWrappers.getData().size()<=0) 
-		            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+		            return dataWrapper;
 				else{
 					List<MessagePojo> messagePojoList = new ArrayList<MessagePojo>();
 					for(Message message : dataWrappers.getData())
