@@ -13,6 +13,14 @@
        http://www.springframework.org/schema/task  
 	   http://www.springframework.org/schema/task/spring-task-3.1.xsd ">
 	   <context:annotation-config/>  
+	  <!--  <mvc:cors>
+		    <mvc:mapping path="/api/**"
+		        allowed-origins="http://www.jasobim.com, http://localhost:80/jasobim"
+		        allowed-methods="GET, PUT"
+		        allowed-headers="header1, header2, header3"
+		        exposed-headers="header1, header2" allow-credentials="false"
+		        max-age="3600" />
+	   </mvc:cors> -->
 	<!--    <mvc:cors>  
     		<mvc:mapping path="/cross/*"/>  
 	   </mvc:cors>  -->
