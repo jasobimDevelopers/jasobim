@@ -108,7 +108,7 @@ public class FeedBackServiceImpl implements FeedBackService {
 		User userInMemory=SessionManager.getSession(token);
 		if(userInMemory!=null){
 			feedBack.setDate(new Date(System.currentTimeMillis()));
-			feedBack.setUserName(userInMemory.getUserName());
+			feedBack.setUserName(userInMemory.getRealName());
 			if(!feedBackDao.addFeedBack(feedBack)) {
 				dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 			}
