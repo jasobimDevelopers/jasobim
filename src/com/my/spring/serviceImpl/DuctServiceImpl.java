@@ -19,6 +19,7 @@ import com.my.spring.model.DuctPojos;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.DuctService;
 import com.my.spring.service.FileService;
 import com.my.spring.service.UserLogService;
@@ -148,13 +149,13 @@ public class DuctServiceImpl implements DuctService {
     	DataWrapper<List<Duct>> ductListst=new  DataWrapper<List<Duct>>();
     	User userInMemory = SessionManager.getSession(token);
     	if(userInMemory!=null){
-    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
+    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1 || userInMemory.getSystemId()==-1){
     			UserLog userLog = new UserLog();
-    			userLog.setProjectPart(4);
+    			userLog.setProjectPart(ProjectDatas.ProcessManager_area.getCode());
     			userLog.setActionDate(new Date());
     			userLog.setUserId(userInMemory.getId());
     			userLog.setSystemType(userInMemory.getSystemId());
-    			userLog.setVersion("3.0");
+    			//userLog.setVersion("3.0");
     			if(duct.getProjectId()!=null){
     				userLog.setProjectId(duct.getProjectId());
     			}
@@ -504,9 +505,19 @@ public class DuctServiceImpl implements DuctService {
     }
 
 	@Override
-	public DataWrapper<List<DuctPojos>> getDuctStateSum() {
+	public DataWrapper<List<DuctPojos>> getDuctStateSum(String dateStart, String dateFinished, Duct duct, String token,
+			String content) {
 		DataWrapper<List<DuctPojos>> dataWrapper = new DataWrapper<List<DuctPojos>>();
-		dataWrapper=DuctDao.getDuctLists();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(user.getUserType()==0){
+				dataWrapper=DuctDao.getDuctLists(dateStart,dateFinished,duct,token,content);
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
 		// TODO Auto-generated method stub
 		return dataWrapper;
 	}

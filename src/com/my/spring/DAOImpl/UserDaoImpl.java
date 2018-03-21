@@ -291,7 +291,12 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 		
 		return delete(get(userid));
 	}
-
+	@Override
+	public boolean deleteUserList(String[] userList) {
+		// TODO Auto-generated method stub
+		
+		return deleteList(userList);
+	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<User>> findUserLikeRealName(String username) {

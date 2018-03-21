@@ -15,7 +15,8 @@ public class Paper {
 	private Long projectId;
 	private String buildingNum;
 	private Integer floorNum;
-	private Integer professionType;//////专业类型：0. 电气  1.暖通  2.给排水  3.消防  4.建筑 5.装饰 6.结构
+	private Integer professionType;//////专业类型：0. 电气  1.暖通  2.给排水  3.消防  4.建筑 5.装饰 6.结构 7.其他自己定义的专业
+	private String diyProfessionType;///自定义的图纸专业
 	private Long fileId;
 	private String originName;
 	private Long size;///图纸文件大小
@@ -27,6 +28,15 @@ public class Paper {
 	}
 	public void setOriginName(String originName) {
 		this.originName = originName;
+	}
+	
+	@Basic
+    @Column(name = "diy_profession_type")
+	public String getDiyProfessionType() {
+		return diyProfessionType;
+	}
+	public void setDiyProfessionType(String diyProfessionType) {
+		this.diyProfessionType = diyProfessionType;
 	}
 	@Basic
     @Column(name = "size")

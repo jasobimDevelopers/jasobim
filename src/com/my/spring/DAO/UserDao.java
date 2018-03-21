@@ -21,4 +21,5 @@ public interface UserDao {
 	List<User> findUserLikeProjct(Long projectList,Integer id);
 	DataWrapper<List<User>> getUserLists(Integer pageSize, Integer pageIndex, User user);
 	DataWrapper<List<User>> getUserListByAdmin(Integer pageSize, Integer pageIndex, User user);
+	boolean deleteUserList(String[] userList);
 }

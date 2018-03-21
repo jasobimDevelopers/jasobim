@@ -50,6 +50,7 @@ public class UserController {
     		@RequestParam(value="token",required=true) String token) {
          return userService.addUser(user,token,file,request);
     }
+	/////网页端忘记密码，重置密码接口
 	@RequestMapping(value="/findUserLike", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<User> findUserLike(
@@ -153,9 +154,10 @@ public class UserController {
 	@RequestMapping(value="/admin/deleteUser", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteUserByAdmin(
-    		@RequestParam(value="userId",required=true) Long userId,
-	    		@RequestParam(value="token",required=true) String token) {
-	        return userService.deleteUser(userId,token);
+    		@RequestParam(value="userId",required=false) Long userId,
+    		@RequestParam(value="userIdList",required=false) String userIdList,
+	    	@RequestParam(value="token",required=true) String token) {
+	        return userService.deleteUser(userId,token,userIdList);
     }
 	
 	//管理员获取用户列表
@@ -201,14 +203,20 @@ public class UserController {
     }
 	@RequestMapping(value="/admin/updateUser", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Void> changeUserTypeByAdmin(
+    public DataWrapper<String> changeUserTypeByAdmin(
     		@ModelAttribute User user,
     		HttpServletRequest request,
     		@RequestParam(value = "file", required = false) MultipartFile file,
     		@RequestParam(value="token",required=true) String token) {
-   
 		return userService.updateUserByAdmin(user, token,file,request);
     }
+	@RequestMapping(value="/common/getUserInfo", method = RequestMethod.GET)
+	@ResponseBody
+	public DataWrapper<UserPojo> getUserInfo(
+    		@ModelAttribute User user,
+    		@RequestParam(value="token",required=true) String token){
+		return userService.getUserInfo(token);
+	}
 	
 
 }

@@ -6,6 +6,7 @@ public class ConstructionTaskPojo {
 	private String companyName;//劳务公司名称
 	private String createDate;//任务单创建时间
 	private String createUserName;////任务单创建人姓名
+	private String createUserIcon;////任务单创建人姓名
 	private String receiveUserName;////签收人姓名
 	private String teamName;///班组名称
 	private String taskContent;///任务单内容、施工部位
@@ -167,6 +168,12 @@ public class ConstructionTaskPojo {
 	}
 	public void setState(Integer state) {
 		this.state = state;
+	}
+	public String getCreateUserIcon() {
+		return createUserIcon;
+	}
+	public void setCreateUserIcon(String createUserIcon) {
+		this.createUserIcon = createUserIcon;
 	}
 	
 	

@@ -23,6 +23,7 @@ import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ItemService;
 import com.my.spring.service.UserLogService;
@@ -145,9 +146,12 @@ public class ItemServiceImpl implements ItemService {
         		UserLog userLog = new UserLog();
         		userLog.setActionDate(new Date());
         		userLog.setFileId(item.getId());
-        		userLog.setProjectPart(0);
+        		userLog.setProjectPart(ProjectDatas.Item_area.getCode());
+        		if(adminInMemory.getSystemId()!=null){
+        			userLog.setSystemType(adminInMemory.getSystemId());
+        		}
         		userLog.setUserId(adminInMemory.getId());
-        		userLog.setVersion("-1");
+        		//userLog.setVersion("-1");
         		userLogSerivce.addUserLog(userLog, token);
         	}
         	dataWrapper =itemDao.getItemList(projectId,pageSize, pageIndex,item);

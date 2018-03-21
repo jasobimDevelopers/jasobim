@@ -41,14 +41,29 @@ public class ValueOutputController {
         return ValueOutputService.getValueOutputList(token);
     }
     
+    @RequestMapping(value="/getValueOutputListnew",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<ValueOutputPojo> getValueOutputListnew(
+    		@RequestParam(value = "token",required = true) String token,
+    		@RequestParam(value = "projectId",required = true) Long projectId){
+        return ValueOutputService.getValueOutputListnew(token,projectId);
+    }
     
-    @RequestMapping(value="/admin/getValueOutputByProjectName",method=RequestMethod.GET)
+    @RequestMapping(value="/admin/getValueOutputByProjectId",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<ValueOutputPojo>> getValueOutputByProjectId(
-    		@RequestParam(value = "projectName",required = true) String projectName,
+    		@RequestParam(value = "projectName",required = false) String projectName,
     		@RequestParam(value = "projectId",required = false) Long projectId,
     		@RequestParam(value = "token",required = true) String token){
         return ValueOutputService.getValueOutputByProjectId(projectName,projectId,token);
+    }
+    @RequestMapping(value="/admin/getValueOutputByProjectName",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<ValueOutputPojo>> getValueOutputByProjectName(
+    		@RequestParam(value = "projectName",required = false) String projectName,
+    		@RequestParam(value = "projectId",required = false) Long projectId,
+    		@RequestParam(value = "token",required = true) String token){
+        return ValueOutputService.getValueOutputByProjectName(projectName,projectId,token);
     }
     
     @RequestMapping(value="/updateValueOutput",method=RequestMethod.POST)

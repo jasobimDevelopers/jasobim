@@ -15,6 +15,7 @@ import com.my.spring.jpush.PushExamples;
 import com.my.spring.model.Files;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageFile;
+import com.my.spring.model.PageInfo;
 import com.my.spring.model.Project;
 import com.my.spring.model.Question;
 import com.my.spring.model.QuestionFile;
@@ -22,11 +23,13 @@ import com.my.spring.model.QuestionPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ProjectService;
 import com.my.spring.service.QuestionService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.DataWrappern;
 import com.my.spring.utils.SessionManager;
 
 import cn.jiguang.common.ClientConfig;
@@ -41,6 +44,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -371,13 +375,13 @@ public class QuestionServiceImpl implements QuestionService {
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		Long[] userIdList=null;
-    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
+    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1 || userInMemory.getSystemId()==-1){
     			UserLog userLog = new UserLog();
-    			userLog.setProjectPart(5);
+    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
     			userLog.setActionDate(new Date());
     			userLog.setUserId(userInMemory.getId());
     			userLog.setSystemType(userInMemory.getSystemId());
-    			userLog.setVersion("3.0");
+    			//userLog.setVersion("3.0");
     			if(question.getProjectId()!=null){
     				userLog.setProjectId(question.getProjectId());
     			}
@@ -624,56 +628,63 @@ public class QuestionServiceImpl implements QuestionService {
 						dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 					}
 					if(question!=null){
-						QuestionPojo questionPojo=new QuestionPojo();
-						questionPojo.setId(question.getId());
-						questionPojo.setCodeInformation(question.getCodeInformation());
-						questionPojo.setIntro(question.getIntro());
-						questionPojo.setName(question.getName());
-						questionPojo.setPriority(question.getPriority());
-						questionPojo.setProjectId(question.getProjectId());
-						if(question.getProjectId()!=null){
-							Project projects= new Project();
-							projects=projectDao.getById(question.getProjectId());
-							if(projects!=null){
-								questionPojo.setProjectName(projects.getName());
-								if(projects.getPicId()!=null && !projects.getPicId().equals(""))
-								{
+						Long projectId=question.getProjectId();
+						String projectList = userInDB.getProjectList();
+						if(userInDB.getUserType()==1 || userInDB.getUserType()==0 || projectList.contains(projectId.toString())){
+							QuestionPojo questionPojo=new QuestionPojo();
+							questionPojo.setId(question.getId());
+							questionPojo.setCodeInformation(question.getCodeInformation());
+							questionPojo.setIntro(question.getIntro());
+							questionPojo.setName(question.getName());
+							questionPojo.setPriority(question.getPriority());
+							questionPojo.setProjectId(question.getProjectId());
+							if(question.getProjectId()!=null){
+								Project projects= new Project();
+								projects=projectDao.getById(question.getProjectId());
+								if(projects!=null){
+									questionPojo.setProjectName(projects.getName());
+									if(projects.getPicId()!=null && !projects.getPicId().equals(""))
+									{
+										Files files=new Files();
+										files=fileDao.getById(Long.valueOf(projects.getPicId()));
+										if(files!=null){
+											questionPojo.setProjectPicUrl(files.getUrl());
+										}
+									}
+									
+								}
+							}
+							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+							questionPojo.setQuestionDate(sdf.format(question.getQuestionDate()));
+							questionPojo.setQuestionType(question.getQuestionType());
+							questionPojo.setState(question.getState());
+							questionPojo.setTrades(question.getTrades());
+							questionPojo.setUserId(userDao.getById(question.getUserId()).getRealName());
+							Long userIdis=userDao.getById(question.getUserId()).getId();
+							if(userIdis==userInMemory.getId()){
+								questionPojo.setUserid(1);
+							}else{
+								questionPojo.setUserid(0);
+							}
+							DataWrapper<List<QuestionFile>> file=new DataWrapper<List<QuestionFile>>();
+							file=questionFileDao.getQuestionFileByQuestionId(question.getId());
+							if(file.getData()!=null && file.getData().size()>0){
+								String[] fileList=new String[file.getData().size()];
+								for(int i=0;i<file.getData().size();i++){
 									Files files=new Files();
-									files=fileDao.getById(Long.valueOf(projects.getPicId()));
+									files=fileDao.getById(file.getData().get(i).getFileId());
 									if(files!=null){
-										questionPojo.setProjectPicUrl(files.getUrl());
+										fileList[i]=files.getUrl();
 									}
 								}
-								
+								questionPojo.setFileList(fileList);
 							}
-						}
-						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-						questionPojo.setQuestionDate(sdf.format(question.getQuestionDate()));
-						questionPojo.setQuestionType(question.getQuestionType());
-						questionPojo.setState(question.getState());
-						questionPojo.setTrades(question.getTrades());
-						questionPojo.setUserId(userDao.getById(question.getUserId()).getRealName());
-						Long userIdis=userDao.getById(question.getUserId()).getId();
-						if(userIdis==userInMemory.getId()){
-							questionPojo.setUserid(1);
+							
+							dataWrapper.setData(questionPojo);
 						}else{
-							questionPojo.setUserid(0);
-						}
-						DataWrapper<List<QuestionFile>> file=new DataWrapper<List<QuestionFile>>();
-						file=questionFileDao.getQuestionFileByQuestionId(question.getId());
-						if(file.getData()!=null && file.getData().size()>0){
-							String[] fileList=new String[file.getData().size()];
-							for(int i=0;i<file.getData().size();i++){
-								Files files=new Files();
-								files=fileDao.getById(file.getData().get(i).getFileId());
-								if(files!=null){
-									fileList[i]=files.getUrl();
-								}
-							}
-							questionPojo.setFileList(fileList);
+							dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 						}
 						
-						dataWrapper.setData(questionPojo);
 					}
 				}
 			} else {
@@ -765,6 +776,195 @@ public class QuestionServiceImpl implements QuestionService {
     	    		datawrapper.getData().get(0).setSortPercent((int)sortPercent);
     	    	}
     	    	
+    	}else{
+    		datawrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+    	}
+    	return datawrapper;
+	}
+	public DataWrappern< PageInfo,List<QuestionPojo>,HashMap<String,String>> getQuestionHash(String content, Long projectId, String token,
+			Integer pageIndex, Integer pageSize, Question question) {
+		DataWrappern<PageInfo,List<QuestionPojo>, HashMap<String, String>> datawrapper=new DataWrappern<PageInfo,List<QuestionPojo>,HashMap<String, String>>();
+    	List<QuestionPojo> pojo = new ArrayList<QuestionPojo>();
+    	HashMap<String, PageInfo> map = new HashMap<String, PageInfo>();
+		PageInfo pageInfos = new PageInfo(); 
+    	DataWrapper<List<Question>> dataWrappers = new DataWrapper<List<Question>>();
+    	DataWrapper<List<QuestionFile>> dataWrapperFiles = new DataWrapper<List<QuestionFile>>();
+    	User userInMemory=SessionManager.getSession(token);
+    	if(userInMemory!=null){
+    		Long[] userIdList=null;
+    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1 || userInMemory.getSystemId()==-1){
+    			UserLog userLog = new UserLog();
+    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
+    			userLog.setActionDate(new Date());
+    			userLog.setUserId(userInMemory.getId());
+    			userLog.setSystemType(userInMemory.getSystemId());
+    			//userLog.setVersion("3.0");
+    			if(question.getProjectId()!=null){
+    				userLog.setProjectId(question.getProjectId());
+    			}
+    			if(question.getId()!=null){
+    				userLog.setFileId(question.getId());
+    			}
+    			userLogDao.addUserLog(userLog);
+    		}
+			if(content!=null && !content.equals("")){
+				
+				//////问题类型搜索
+				if("安全".contains(content))
+				{
+					question.setQuestionType(0);
+				}
+				if("质量".contains(content))
+				{
+					question.setQuestionType(1);
+				}
+				if("其他".contains(content))
+				{
+					question.setQuestionType(2);
+				}
+				/////问题状态搜索
+				if("待解决".contains(content)){
+					question.setState(0);
+				}
+				if("已解决".contains(content)){
+					question.setState(1);
+				}
+				List<User> users=new ArrayList<User>();
+				users=userDao.findUserLikeRealName(content).getData();
+    			if(users!=null)
+    			{
+					if(users.size()>0)
+					{
+						userIdList=new Long[users.size()];
+						for(int i=0;i<users.size();i++)
+						{
+							userIdList[i]=users.get(i).getId();
+						}
+					}
+				}
+			}
+			/////问题等级搜索
+			/////当用户是总经理级别的时候,问题搜索只能搜索重要和紧急，同时也只能看重要和紧急问题，不看一般问题 
+			if(userInMemory.getWorkName()!=null){
+				/*if(userInMemory.getWorkName().equals("总经理"))
+				{
+					if(question.getPriority()==null)
+						question.setPriority(-1);
+				}*/
+				/////当用户是投资方（甲方）的时候，问题搜索只能搜索一般问题，同时也只能看一般问题，不能重要和紧急问题
+				if(userInMemory.getWorkName().equals("投资方"))
+				{
+					if(question.getPriority()==null)
+						question.setPriority(0);
+				}
+			}
+			String projectList=null;
+			if(userInMemory.getUserType()==2 || userInMemory.getUserType()==3){
+				projectList=userInMemory.getProjectList();
+			}
+			dataWrappers= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question,userIdList,projectList);
+			for(int i=0;i<dataWrappers.getData().size();i++)
+	        {
+	        	QuestionPojo questionpojo=new QuestionPojo();
+	        	
+        		dataWrapperFiles=questionFileDao.getQuestionFileByQuestionId(dataWrappers.getData().get(i).getId());
+	        	if(dataWrapperFiles.getData()!=null)
+	        	{
+	        		String[] fileLists=new String[dataWrapperFiles.getData().size()];
+	            	String[] fileNameLists=new String[dataWrapperFiles.getData().size()];
+	            	int flag=0;
+	        		for(int j=0;j<dataWrapperFiles.getData().size();j++)
+	        		{
+	        			Long fileId=dataWrapperFiles.getData().get(j).getFileId();
+	        			Files file=fileDao.getById(fileId);
+	        			if(file!=null)
+	        			{
+	        				String fileItem=file.getUrl();
+	        				fileLists[flag]=fileItem;
+	        				String nameList=dataWrapperFiles.getData().get(j).getOriginName();
+	            			if(nameList!=null)
+	            				fileNameLists[flag]=nameList;
+	        				flag++;
+	        			}
+		        	}
+	        		if(fileLists!=null)
+	        		{
+	        			questionpojo.setFileList(fileLists);
+	        		}				
+		        }
+	        	if(dataWrappers.getData().get(i).getUserList()!=null){
+	        		String[] nameList = dataWrappers.getData().get(i).getUserList().split(",");
+	        		if(nameList.length>0){
+	        			String[] nameLists =new String[nameList.length] ;
+	        			for(int k=0;k<nameList.length;k++){
+	        			   nameLists[k]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+	        			}
+	        			questionpojo.setUserNameLists(nameLists);
+		        	}else{
+		        		questionpojo.setUserNameLists(null);
+		        	}
+	        	}
+	        	String username=userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName();
+	        	questionpojo.setUserId(username);
+	        	questionpojo.setModelFlag(dataWrappers.getData().get(i).getModelFlag());
+	        	questionpojo.setCodeInformation(dataWrappers.getData().get(i).getCodeInformation());
+	        	questionpojo.setPriority(dataWrappers.getData().get(i).getPriority());
+	        	questionpojo.setId(dataWrappers.getData().get(i).getId());
+	        	questionpojo.setIntro(dataWrappers.getData().get(i).getIntro());
+	        	questionpojo.setName(dataWrappers.getData().get(i).getName());
+	        	questionpojo.setProjectId(dataWrappers.getData().get(i).getProjectId());
+	        	questionpojo.setProjectName(projectDao.getById(dataWrappers.getData().get(i).getProjectId()).getName());
+	        	questionpojo.setPosition(dataWrappers.getData().get(i).getPosition());
+	        	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+	        	questionpojo.setQuestionDate(sdf.format(dataWrappers.getData().get(i).getQuestionDate()));
+	        	questionpojo.setQuestionType(dataWrappers.getData().get(i).getQuestionType());
+	        	questionpojo.setState(dataWrappers.getData().get(i).getState());
+	        	questionpojo.setTrades(dataWrappers.getData().get(i).getTrades());        	        	
+	        	pojo.add(i, questionpojo);
+	        }
+			if(pojo.size()>0){
+				 
+				pageInfos.setCurrentPage(dataWrappers.getCurrentPage());
+				pageInfos.setNumberPerPage(dataWrappers.getNumberPerPage());
+				pageInfos.setTotalNumber(dataWrappers.getTotalNumber());
+				pageInfos.setTotalPage(dataWrappers.getTotalPage());
+		
+				Long questionSort=questionDao.getQuestionListOfSort();
+				Long questionImportant=questionDao.getQuestionListOfImportant();
+				Long questionAll=questionDao.getQuestionList();
+				NumberFormat nf = NumberFormat.getNumberInstance();   
+		        nf.setMaximumFractionDigits(2);   
+		    	double sortPercent=( (double)questionSort/(double)questionAll);
+		    	sortPercent=sortPercent*100;
+		    	if((sortPercent+0.5)>Math.ceil(sortPercent))
+		    	{
+		    		sortPercent=Math.ceil(sortPercent);
+		    	}else{
+		    		sortPercent=Math.floor(sortPercent);
+		    	}
+		    	
+		    	double importantPercent=((double)questionImportant/(double)questionAll);
+		    	importantPercent=importantPercent*100;
+		    	if((importantPercent+0.5)>Math.ceil(importantPercent))
+		    	{
+		    		importantPercent=Math.ceil(importantPercent);
+		    	}else{
+		    		importantPercent=Math.floor(importantPercent);
+		    	}
+		    	datawrapper.setPage(pageInfos);
+		    	if(pojo!=null && pojo.size()>0){
+		    		HashMap<String,String> sm = new HashMap<String,String>();
+		    		String ip=importantPercent+"";
+		    		String up=(100-importantPercent-sortPercent)+"";
+		    		String sp=sortPercent+"";
+		    		sm.put("importantPercent", ip);
+		    		sm.put("urgentPercent", up);
+		    		sm.put("sortPercent", sp);
+		    		datawrapper.setData(pojo);
+		    		datawrapper.setOthers(sm);
+		    	}
+			}
+			
     	}else{
     		datawrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}

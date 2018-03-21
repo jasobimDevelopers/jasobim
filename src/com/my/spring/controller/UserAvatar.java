@@ -30,7 +30,7 @@ public class UserAvatar {
 	private static FileDao fileDao;
 	public static void main(String[] arg){
 		try {
-			createImage("王峰", new Font("黑体", Font.PLAIN, 43), new File("C:/Users/Han/Desktop/outpt/" +"ceshi.png"));
+			createImage("王峰", new Font("黑体", Font.PLAIN, 43), new File("C:/Users/Han/Desktop/sss/" +"ceshi.png"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,7 +40,7 @@ public class UserAvatar {
 		 try {
 			 	String newFileName = MD5Util.getMD5String(new Date() + UUID.randomUUID().toString()).replace(".","");
 			 	//批量导入。参数：文件名，文件。
-			 	createImage(name, new Font("黑体", Font.PLAIN, 43), new File("D:/jasobim/tomcat_80/webapps/userIcons/" +newFileName+ ".png"));
+			 	createImage(name, new Font("黑体", Font.PLAIN, 43), new File("D:/jasobim/tomcat_3001/webapps/userIcons/" +newFileName+ ".png"));
 	           
 	            return "userIcons/"+newFileName+".png";
 	        } catch (Exception e) {
@@ -53,8 +53,8 @@ public class UserAvatar {
 		 try {
 			 	String newFileName = MD5Util.getMD5String(new Date() + UUID.randomUUID().toString()).replace(".","");
 			 	//批量导入。参数：文件名，文件。
-			 	createImage(name, new Font("黑体", Font.PLAIN, 43), new File("D:/jasobim/tomcat_80/webapps/userIcons/" +newFileName+ ".png"));
-	            File file = new File("D:/jasobim/tomcat_80/webapps/userIcons/" +newFileName+ ".png");
+			 	createImage(name, new Font("黑体", Font.PLAIN, 43), new File("D:/jasobim/tomcat_3001/webapps/userIcons/" +newFileName+ ".png"));
+	            File file = new File("D:/jasobim/tomcat_3001/webapps/userIcons/" +newFileName+ ".png");
 	            if (file == null || filePath == null || filePath.equals("")) {
 	    			return null;
 	    		}

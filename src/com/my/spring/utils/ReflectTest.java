@@ -7,7 +7,30 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.my.spring.model.User;
 public class ReflectTest {  
+	public static void main(){
+		User user = new User();
+		user.setUserName("username");
+		user.setRealName("ceshi");
+		List<String> test = new ArrayList<String>();
+		try {
+			test=reflectTest(user);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
          public static List<String> reflectTest(Object model) throws NoSuchMethodException,  
                          IllegalAccessException, IllegalArgumentException,  
                          InvocationTargetException {  

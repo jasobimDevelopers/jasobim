@@ -2,15 +2,19 @@ package com.my.spring.controller;
 
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.PageInfo;
 import com.my.spring.model.Question;
 import com.my.spring.model.QuestionPojo;
 import com.my.spring.service.QuestionService;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.DataWrappern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -106,6 +110,19 @@ public class QuestionController {
     		@RequestParam(value = "token",required = true) String token)
     {
         return questionService.getQuestionList(content,projectId,token,pageIndex,pageSize,question);
+    }
+    ////////////hashMap返回测试
+    @RequestMapping(value="/admin/getQuestionHash",method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrappern< PageInfo,List<QuestionPojo>,HashMap<String,String>>  getQuestionHash(
+    		@RequestParam(value="content",required=false) String content,
+    		@RequestParam(value="projectId",required=false) Long projectId,
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Question question,
+    		@RequestParam(value = "token",required = true) String token)
+    {
+        return questionService.getQuestionHash(content,projectId,token,pageIndex,pageSize,question);
     }
     
     @RequestMapping(value="/getQuestionListByUserId",method = RequestMethod.GET)

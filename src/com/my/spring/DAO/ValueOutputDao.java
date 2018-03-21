@@ -18,4 +18,6 @@ public interface ValueOutputDao {
 	DataWrapper<List<ValueOutput>> getValueOutputListByProjectName(String projectName);
 	DataWrapper<List<ValueOutput>> getValueOutputLists(Integer pageIndex, Integer pageSize, ValueOutput valueOutput,String dates);
 	ValueOutput getById(Long fileId);
+	DataWrapper<List<ValueOutput>> getValueOutputListByProjectId(Long projectId);
+	DataWrapper<List<ValueOutputPojo>> getValueOutputListnew(Long projectId);
 }

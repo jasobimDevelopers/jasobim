@@ -5,16 +5,33 @@ import java.util.Date;
 public class ValueOutputPojo {
 	private Long id;
 	private String others;
-	private Double nums;   ///所有项目的总产值
-	private Double finisheds;///所有项目已完成
+	private Double nums;   ///当前项目的总产值
+	private Double finisheds;///当前项目已完成
 	private Double num;    //单个项目总产值
 	private Double finished;    //已完成
 	private Date date;
 	private String dates;/////上传的时间
 	private String projectName;///项目名称
 	private Long project_id;////项目id
+	private String leader;///项目负责人
+	private String projectPicUrl;
 	
-	
+	public String getLeader() {
+		return leader;
+	}
+
+	public void setLeader(String leader) {
+		this.leader = leader;
+	}
+
+	public String getProjectPicUrl() {
+		return projectPicUrl;
+	}
+
+	public void setProjectPicUrl(String projectPicUrl) {
+		this.projectPicUrl = projectPicUrl;
+	}
+
 	public Long getId(){
 		return id;
 	}

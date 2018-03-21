@@ -5,6 +5,7 @@ public class AdvancedOrderPojo {
 	private Long id;
 	private Long submitUserId;////预付单提交人
 	private String createUserName;////预付单提交人姓名
+	private String createUserIcon;////预付单提交人姓名
 	private String projectName;///项目部名称
 	private String leader;////项目负责人
 	private Integer month;////预付单月份
@@ -163,6 +164,12 @@ public class AdvancedOrderPojo {
 	}
 	public void setLastTime(String lastTime) {
 		this.lastTime = lastTime;
+	}
+	public String getCreateUserIcon() {
+		return createUserIcon;
+	}
+	public void setCreateUserIcon(String createUserIcon) {
+		this.createUserIcon = createUserIcon;
 	}
 	
 	

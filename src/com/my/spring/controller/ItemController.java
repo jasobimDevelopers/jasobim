@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.BuildingInfo;
 import com.my.spring.model.Item;
 import com.my.spring.model.MinItem;
 import com.my.spring.model.MinItemPojo;
@@ -34,7 +35,7 @@ public class ItemController {
             @RequestParam(value = "fileList", required = false) MultipartFile[] fileList,
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value = "projectId",required = true) Long projectId,
-            @RequestParam(value = "modelPart",required = true) String modelPart,
+            @RequestParam(value = "modelPart",required = false) String modelPart,
             HttpServletRequest request){
     	String filePath = "/fileupload/items"+"/"+projectId;
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -200,7 +201,29 @@ public class ItemController {
     		){
         return itemService.getItemByBuidlingNum(projectId,buildingId,token);
     }
-    
+    /*
+     * 查询项目相应栋号楼层数
+     * */
+    @RequestMapping(value="/getItemByBuidlingInfo",method=RequestMethod.GET)
+    @ResponseBody
+    public BuildingInfo getItemByBuidlingInfo(
+    	@RequestParam(value = "projectId",required = true) Long projectId,
+    	@RequestParam(value = "buildingId",required = true) Long buildingId,
+    	@RequestParam(value = "token",required = true) String token
+    		){
+    	Long str1=itemService.getItemByBase(projectId,buildingId,token);
+    	Long str2=itemService.getItemByBuidlingNum(projectId,buildingId,token);
+    	BuildingInfo buildingInfo = new BuildingInfo();
+    	if(str1!=null){
+    		String buildingNumBase=str1.toString();
+    		buildingInfo.setBuildingNumBase(buildingNumBase);
+    	}
+    	if(str2!=null){
+    		String buildingNum=str2.toString();
+    		buildingInfo.setBuildingNum(buildingNum);
+    	}
+        return buildingInfo;
+    }
     @RequestMapping(value="/getHouseHoldType",method=RequestMethod.GET)
     @ResponseBody
     public List<Object> getHouseHoldType(

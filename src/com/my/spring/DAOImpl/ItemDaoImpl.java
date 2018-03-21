@@ -261,7 +261,7 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 	@Override
 	public Long getItemByBase(Long projectId,Long buildingId) {
 		Session session=getSession();
-		int flag=4;
+		int flag=1;
 		Query query=session.createSQLQuery("select count(distinct(floor_num)) from item where project_id=" + projectId + " and building_num=" + buildingId + " and floor_num<"+flag);
 		return  Long.parseLong(query.list().get(0).toString());
 	}
