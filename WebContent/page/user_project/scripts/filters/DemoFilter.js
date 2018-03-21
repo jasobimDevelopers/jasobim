@@ -39,8 +39,4 @@ angular.module('Demo')
         }
         return array;
     };
-}).filter('trustHtml', function($sce) {
-  return function (input) {
-    return $sce.trustAsHtml(input);
-  }
 });

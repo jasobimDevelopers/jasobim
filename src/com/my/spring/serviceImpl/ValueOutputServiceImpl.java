@@ -268,7 +268,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
         Double nums=0.0;
     	Double finisheds=0.0;
         if(userInMemory != null) {
-        	if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1 || userInMemory.getSystemId()==-1){
+        	if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
         		
     			UserLog userLog = new UserLog();
     			userLog.setProjectPart(ProjectDatas.ValueOut_area.getCode());

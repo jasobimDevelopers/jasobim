@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
 				if(system!=null){
 					user.setSystemId(system);
 				}else{
-					user.setSystemId(-1);
+					user.setSystemId(2);
 				}
 				String token = SessionManager.newSession(user);
 				dataWrapper.setToken(token);

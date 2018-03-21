@@ -375,7 +375,7 @@ public class QuestionServiceImpl implements QuestionService {
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		Long[] userIdList=null;
-    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1 || userInMemory.getSystemId()==-1){
+    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
     			UserLog userLog = new UserLog();
     			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
     			userLog.setActionDate(new Date());

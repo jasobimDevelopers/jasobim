@@ -80,10 +80,10 @@ public class UserLogServiceImpl implements UserLogService {
 		DataWrapper<List<UserLog>> dataWrapper = new DataWrapper<List<UserLog>>();
 		List<UserLogPojo> UserLogpojo = new ArrayList<UserLogPojo>();
 		String[] projectPart={"模型区域","图纸区域","登录区域","交底区域","预制化区域 ","紧急事项区域","通知区域","产值区域","班组信息区域","施工任务单区域","预付单区域"};
-		String[] systemName={"苹果系统","安卓系统"};
+		String[] systemName={"苹果系统","安卓系统","电脑端"};
 		DataWrapper<List<UserLogPojo>> dataWrapperpojo = new DataWrapper<List<UserLogPojo>>();
 		User adminInMemory = SessionManager.getSession(token);
-		if (adminInMemory != null && adminInMemory.getSystemId()==-1) {
+		if (adminInMemory != null) {
 			if(searchContent!=null && searchContent!=""){
 				User users=userDao.getByUserName(searchContent);
 				if(users!=null){

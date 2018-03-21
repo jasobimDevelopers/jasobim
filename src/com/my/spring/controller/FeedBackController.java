@@ -52,9 +52,10 @@ public class FeedBackController {
     public DataWrapper<List<FeedBackPojo>> getFeedBackListByAdmin(
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@RequestParam(value="dates",required=false) String dates,
     		@ModelAttribute FeedBack feedBack,
     		@RequestParam(value="token",required=true) String token) {
-        return feedBackService.getFeedBackList(pageIndex,pageSize,feedBack,token);
+        return feedBackService.getFeedBackList(pageIndex,pageSize,feedBack,token,dates);
     }
 	
 

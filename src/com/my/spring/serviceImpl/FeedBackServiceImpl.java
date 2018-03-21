@@ -28,7 +28,7 @@ public class FeedBackServiceImpl implements FeedBackService {
 	@Autowired
 	UserDao userDao;
 	@Override
-	public DataWrapper<List<FeedBackPojo>> getFeedBackList(Integer pageIndex, Integer pageSize, FeedBack feedBack, String token) {
+	public DataWrapper<List<FeedBackPojo>> getFeedBackList(Integer pageIndex, Integer pageSize, FeedBack feedBack, String token,String dates) {
 		// TODO Auto-generated method stub
 		DataWrapper<List<FeedBack>> dataWrapper = new DataWrapper<List<FeedBack>>();
 		List<FeedBackPojo> feedbackpojo = new ArrayList<FeedBackPojo>();
@@ -38,7 +38,7 @@ public class FeedBackServiceImpl implements FeedBackService {
 		if (adminInMemory != null) {
 			User adminInDB = userDao.getById(adminInMemory.getId());
 			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
-				dataWrapper=feedBackDao.getFeedBackList(pageSize, pageIndex,feedBack);
+				dataWrapper=feedBackDao.getFeedBackList(pageSize, pageIndex,feedBack,dates);
 				if(dataWrapper.getData()!=null){
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						FeedBackPojo feedbackpojos=new FeedBackPojo();

@@ -131,6 +131,9 @@ public class NormativefilesServiceImpl implements NormativefilesService {
         			String[] fileids=Normativefiles.getFileIdList().split(",");
         			userLog.setFileId(Long.valueOf(fileids[0]));
         		}
+        		if(userInMemory.getSystemId()!=null){
+        			userLog.setSystemType(userInMemory.getSystemId());
+        		}
         		userLog.setProjectPart(ProjectDatas.NormativeFile_area.getCode());
         		userLog.setUserId(userInMemory.getId());
         		//userLog.setVersion("-1");

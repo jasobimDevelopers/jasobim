@@ -226,17 +226,11 @@
                                     <div class="tuzhi">
                                         <span>图&nbsp;&nbsp;&nbsp;纸</span><input type="file" id="paper_files" multiple="multiple">
                                     </div>
-                                    <div class="louceng search-select-wrapper">
+                                    <div class="louceng">
                                         <span>专&nbsp;&nbsp;&nbsp;业</span>
-                                        <!-- <select id="paper_profession_type">
+                                        <select id="paper_profession_type">
                                             <option value="{{$index}}" ng-repeat="paperProfessionType in projectPhaseInfo">{{paperProfessionType.name}}</option>
-                                        </select> -->
-                                        <div class="search-select">
-                                          <input type="text" id="paper_profession_type" ng-value="projectPhaseInfo[0].name" />
-                                          <div class="select-wrapper">
-                                              <div class="select-item" data-value="{{$index}}" data-name="{{paperProfessionType.name}}" ng-repeat="paperProfessionType in projectPhaseInfo">{{paperProfessionType.name}}</div>
-                                          </div>
-                                        </div>
+                                        </select>
                                     </div>
                                     <div class="loudong">
                                         <span>楼栋号</span>

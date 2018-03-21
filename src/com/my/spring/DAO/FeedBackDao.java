@@ -7,11 +7,12 @@ import java.util.List;
 
 
 public interface FeedBackDao {
-	DataWrapper<List<FeedBack>> getFeedBackList(Integer pageSize, Integer pageIndex, FeedBack feedBack);
 
 	boolean addFeedBack(FeedBack feedBack);
 
 	boolean deleteFeedBack(String[] ids);
 
 	FeedBack getById(Long id);
+
+	DataWrapper<List<FeedBack>> getFeedBackList(Integer pageSize, Integer pageIndex, FeedBack feedBack, String dates);
 }

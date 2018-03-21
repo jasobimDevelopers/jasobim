@@ -1,5 +1,9 @@
 package com.my.spring.DAOImpl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -35,18 +39,34 @@ public class FeedBackDaoImpl extends BaseDao<FeedBack> implements FeedBackDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<FeedBack>> getFeedBackList(Integer pageSize, Integer pageIndex,FeedBack feedBack) {
+	public DataWrapper<List<FeedBack>> getFeedBackList(Integer pageSize, Integer pageIndex,FeedBack feedBack,String dates) {
 		// TODO Auto-generated method stub
 		DataWrapper<List<FeedBack>> dataWrapper = new DataWrapper<List<FeedBack>>();
         List<FeedBack> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(FeedBack.class);
         criteria.addOrder(Order.asc("date"));
+        if(dates!=null && !dates.equals("")){
+        	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+    		try {
+				Date input=sdf.parse(dates);
+				Calendar rightNow = Calendar.getInstance();
+        	    rightNow.setTime(input);
+        	    rightNow.add(Calendar.DAY_OF_YEAR,1);//日期加1天
+        	    Date dt1=rightNow.getTime();
+        		criteria.add(Restrictions.ge("date",input));
+            	//查询制定时间之后的记录  
+        		criteria.add(Restrictions.le("date",dt1)); 
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
         if(feedBack!=null){
-        	if(feedBack.getUserName()!=null){
+        	if(feedBack.getUserName()!=null && !feedBack.getUserName().equals("")){
         		criteria.add(Restrictions.like("userName", "%" + feedBack.getUserName() + "%"));
         	}
-        	if(feedBack.getContent()!=null){
+        	if(feedBack.getContent()!=null && !feedBack.getContent().equals("")){
         		criteria.add(Restrictions.like("content", "%"+feedBack.getContent()+"%"));
         	}
         	if(feedBack.getDate()!=null){

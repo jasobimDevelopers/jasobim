@@ -7,6 +7,7 @@ import com.my.spring.DAO.VideoDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Video;
 import com.my.spring.model.VideoPojo;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.model.Files;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
@@ -118,7 +119,7 @@ public class VideoServiceImpl implements VideoService {
     	if(userInMemory!=null){
 	    		if(userInMemory.getSystemId()!=null){
 	    			UserLog userLog = new UserLog();
-	    			userLog.setProjectPart(3);
+	    			userLog.setProjectPart(ProjectDatas.Video_area.getCode());
 	    			userLog.setActionDate(new Date());
 	    			userLog.setUserId(userInMemory.getId());
 	    			userLog.setSystemType(userInMemory.getSystemId());

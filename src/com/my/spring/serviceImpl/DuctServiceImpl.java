@@ -149,7 +149,7 @@ public class DuctServiceImpl implements DuctService {
     	DataWrapper<List<Duct>> ductListst=new  DataWrapper<List<Duct>>();
     	User userInMemory = SessionManager.getSession(token);
     	if(userInMemory!=null){
-    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1 || userInMemory.getSystemId()==-1){
+    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
     			UserLog userLog = new UserLog();
     			userLog.setProjectPart(ProjectDatas.ProcessManager_area.getCode());
     			userLog.setActionDate(new Date());
