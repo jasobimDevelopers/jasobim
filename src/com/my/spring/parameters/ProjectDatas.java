@@ -15,7 +15,7 @@ public enum ProjectDatas implements Serializable {
     ConstructionTask_area("construction_task",9),///施工任务单区域
     AdvancedOrder_area("advanced_order",10),///预付单区域
     NormativeFile_area("normative_file",11),///在线预览区域
-    Item_area("item",11)///模型构建信息区域
+    Item_area("item",12)///模型构建信息区域
     ;
     private String label;
     private Integer code;

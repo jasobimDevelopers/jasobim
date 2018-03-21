@@ -240,7 +240,7 @@ public class DuctServiceImpl implements DuctService {
         		ductLists.setTotalPage(ductListst.getTotalPage());
         		ductLists.setNumberPerPage(ductListst.getNumberPerPage());
     		}else{
-    			ductLists.setErrorCode(ErrorCodeEnum.Error);
+    			return ductLists;
     		}
     	}else{
     		ductLists.setErrorCode(ErrorCodeEnum.User_Not_Logined);
