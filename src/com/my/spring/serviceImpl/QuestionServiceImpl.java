@@ -3,6 +3,7 @@ package com.my.spring.serviceImpl;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.MessageDao;
 import com.my.spring.DAO.MessageFileDao;
+import com.my.spring.DAO.NoticeDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.QuestionFileDao;
@@ -15,6 +16,7 @@ import com.my.spring.jpush.PushExamples;
 import com.my.spring.model.Files;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageFile;
+import com.my.spring.model.Notice;
 import com.my.spring.model.PageInfo;
 import com.my.spring.model.Project;
 import com.my.spring.model.Question;
@@ -25,19 +27,12 @@ import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
-import com.my.spring.service.ProjectService;
 import com.my.spring.service.QuestionService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.DataWrappern;
 import com.my.spring.utils.SessionManager;
 
-import cn.jiguang.common.ClientConfig;
-import cn.jiguang.common.resp.APIConnectionException;
-import cn.jiguang.common.resp.APIRequestException;
-import cn.jpush.api.JPushClient;
-import cn.jpush.api.push.PushResult;
-import cn.jpush.api.push.model.PushPayload;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,9 +47,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Service("questionService")
 public class QuestionServiceImpl implements QuestionService {
     @Autowired
@@ -65,6 +57,8 @@ public class QuestionServiceImpl implements QuestionService {
     UserDao userDao;
     @Autowired
     UserLogDao userLogDao;
+    
+    NoticeDao noticeDao;
     @Autowired
     MessageDao messageDao;
     @Autowired
@@ -101,6 +95,34 @@ public class QuestionServiceImpl implements QuestionService {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					return dataWrapper;
 				}else{ 
+					///////添加通知关系
+					List<Notice> nl = new ArrayList<Notice>();
+					if(question.getUserList()!=null){
+						String[] ul = question.getUserList().split(",");
+						for(String s:ul){
+							Notice nl2 = new Notice();
+							nl2.setAboutId(question.getId());
+							nl2.setCreateDate(new Date());
+							nl2.setUserId(Long.valueOf(s));
+							nl2.setNoticeType(0);
+							nl2.setReadState(0);
+							nl.add(nl2);
+						}
+					}
+					
+					Notice nl1 = new Notice();
+					nl1.setAboutId(question.getId());
+					nl1.setCreateDate(new Date());
+					nl1.setUserId(userInMemory.getId());
+					nl1.setNoticeType(0);
+					nl1.setReadState(0);
+					nl.add(nl1);
+					noticeDao.addNoticeList(nl);
+					/////////////
+					HashMap<String,String> hq = new HashMap<String,String>();
+					hq.put("title", question.getName());
+					hq.put("content", question.getIntro());
+					
 					if(fileList.length>0)
 					{
 						for(int k=0;k<fileList.length;k++){
@@ -113,6 +135,7 @@ public class QuestionServiceImpl implements QuestionService {
 							if (originName.contains(".")) {
 								originName = originName.substring(0, originName.lastIndexOf("."));
 							}
+							hq.put("file"+k+1, newfile.getUrl());
 							questionFile.setOriginName(originName);
 						 	questionFileDao.addQuestionFile(questionFile);
 						}
@@ -135,28 +158,40 @@ public class QuestionServiceImpl implements QuestionService {
 						}
 					}
 					/////////////////////////
-				///////////////////////////
-				List<User> userList = new ArrayList<User>();
-				int adminFlag=0;
-				if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 || userInMemory.getUserType()==2){
-        			adminFlag=-1;
-        		}
-				userList=userDao.findUserLikeProjct(question.getProjectId(),userInMemory.getUserType());
-				Project po = projectDao.getById(question.getProjectId());
-				String content="";
-				if(po!=null){
-					content=userInMemory.getRealName()+"在"+po.getName()+"项目里提交了一个标题为："+question.getName()+"的问题";
-				}else{
-					content=userInMemory.getRealName()+"提交了一个标题为："+question.getName()+"的问题";
-				}
-				
-				 
-				 String[] userids=new String[userList.size()];
-				for(int b =0;b<userList.size();b++){
-					userids[b]=userList.get(b).getId().toString();
-				}
-				PushExample.testSendPushWithCustomConfig_ios(userids, content);
-				PushExample.testSendPushWithCustomConfig_android(userids, content);
+					///////////////////////////
+					List<User> userList = new ArrayList<User>();
+					int adminFlag=0;
+					if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 || userInMemory.getUserType()==2){
+	        			adminFlag=-1;
+	        		}
+					userList=userDao.findUserLikeProjct(question.getProjectId(),userInMemory.getUserType());
+					Project po = projectDao.getById(question.getProjectId());
+					hq.put("userName", userInMemory.getRealName());
+					if(userInMemory.getUserIconUrl()!=null){
+						hq.put("iconUrl", userInMemory.getUserIconUrl());
+					}else{
+						if(userInMemory.getUserIcon()!=null){
+							Files files = fileService.getById(userInMemory.getUserIcon());
+							hq.put("iconUrl", files.getUrl());
+						}
+					}
+					
+					hq.put("projectInfo", "来自  "+po.getName());
+					hq.put("date", Parameters.getSdfs().format(new Date()));
+					String content="";
+					if(po!=null){
+						content=userInMemory.getRealName()+"在"+po.getName()+"项目里提交了一个标题为："+question.getName()+"的问题";
+					}else{
+						content=userInMemory.getRealName()+"提交了一个标题为："+question.getName()+"的问题";
+					}
+					
+					 
+					 String[] userids=new String[userList.size()];
+					for(int b =0;b<userList.size();b++){
+						userids[b]=userList.get(b).getId().toString();
+					}
+					PushExample.testSendPushWithCustomConfig_ios(userids, content,0,hq);
+					PushExample.testSendPushWithCustomConfig_android(userids, content,0,hq);
 				}
 
 			}
@@ -391,7 +426,6 @@ public class QuestionServiceImpl implements QuestionService {
     			userLogDao.addUserLog(userLog);
     		}
 			if(content!=null){
-				
 				//////问题类型搜索
 				if("安全".contains(content))
 				{
@@ -428,83 +462,81 @@ public class QuestionServiceImpl implements QuestionService {
 			}
 			/////问题等级搜索
 			/////当用户是总经理级别的时候,问题搜索只能搜索重要和紧急，同时也只能看重要和紧急问题，不看一般问题 
-			if(userInMemory.getWorkName()!=null){
-				/*if(userInMemory.getWorkName().equals("总经理"))
-				{
-					if(question.getPriority()==null)
-						question.setPriority(-1);
-				}*/
-				/////当用户是投资方（甲方）的时候，问题搜索只能搜索一般问题，同时也只能看一般问题，不能重要和紧急问题
-				if(userInMemory.getWorkName().equals("投资方"))
-				{
-					if(question.getPriority()==null)
-						question.setPriority(0);
-				}
-			}
 			String projectList=null;
-			if(userInMemory.getUserType()==2 || userInMemory.getUserType()==3){
-				projectList=userInMemory.getProjectList();
-			}
 			dataWrappers= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question,userIdList,projectList);
-			for(int i=0;i<dataWrappers.getData().size();i++)
-	        {
-	        	QuestionPojo questionpojo=new QuestionPojo();
-	        	
-        		dataWrapperFiles=questionFileDao.getQuestionFileByQuestionId(dataWrappers.getData().get(i).getId());
-	        	if(dataWrapperFiles.getData()!=null)
-	        	{
-	        		String[] fileLists=new String[dataWrapperFiles.getData().size()];
-	            	String[] fileNameLists=new String[dataWrapperFiles.getData().size()];
-	            	int flag=0;
-	        		for(int j=0;j<dataWrapperFiles.getData().size();j++)
-	        		{
-	        			Long fileId=dataWrapperFiles.getData().get(j).getFileId();
-	        			Files file=fileDao.getById(fileId);
-	        			if(file!=null)
-	        			{
-	        				String fileItem=file.getUrl();
-	        				fileLists[flag]=fileItem;
-	        				String nameList=dataWrapperFiles.getData().get(j).getOriginName();
-	            			if(nameList!=null)
-	            				fileNameLists[flag]=nameList;
-	        				flag++;
-	        			}
+			if(dataWrappers.getData()!=null && dataWrappers.getData().size()>0){
+				for(int i=0;i<dataWrappers.getData().size();i++)
+		        {
+		        	QuestionPojo questionpojo=new QuestionPojo();
+	        		dataWrapperFiles=questionFileDao.getQuestionFileByQuestionId(dataWrappers.getData().get(i).getId());
+		        	if(dataWrapperFiles.getData()!=null)
+		        	{
+		        		String[] fileLists=new String[dataWrapperFiles.getData().size()];
+		            	String[] fileNameLists=new String[dataWrapperFiles.getData().size()];
+		            	int flag=0;
+		        		for(int j=0;j<dataWrapperFiles.getData().size();j++)
+		        		{
+		        			Long fileId=dataWrapperFiles.getData().get(j).getFileId();
+		        			Files file=fileDao.getById(fileId);
+		        			if(file!=null)
+		        			{
+		        				String fileItem=file.getUrl();
+		        				fileLists[flag]=fileItem;
+		        				String nameList=dataWrapperFiles.getData().get(j).getOriginName();
+		            			if(nameList!=null)
+		            				fileNameLists[flag]=nameList;
+		        				flag++;
+		        			}
+			        	}
+		        		if(fileLists!=null)
+		        		{
+		        			questionpojo.setFileList(fileLists);
+		        		}				
+			        }
+		        	if(dataWrappers.getData().get(i).getUserList()!=null){
+		        		String[] nameList = dataWrappers.getData().get(i).getUserList().split(",");
+		        		if(nameList.length>0){
+		        			String[] nameLists =new String[nameList.length] ;
+		        			for(int k=0;k<nameList.length;k++){
+		        			   nameLists[k]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+		        			}
+		        			questionpojo.setUserNameLists(nameLists);
+			        	}else{
+			        		questionpojo.setUserNameLists(null);
+			        	}
 		        	}
-	        		if(fileLists!=null)
-	        		{
-	        			questionpojo.setFileList(fileLists);
-	        		}				
+		        	String username=userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName();
+		        	questionpojo.setUserId(username);
+		        	questionpojo.setModelFlag(dataWrappers.getData().get(i).getModelFlag());
+		        	questionpojo.setCodeInformation(dataWrappers.getData().get(i).getCodeInformation());
+		        	questionpojo.setPriority(dataWrappers.getData().get(i).getPriority());
+		        	questionpojo.setId(dataWrappers.getData().get(i).getId());
+		        	questionpojo.setIntro(dataWrappers.getData().get(i).getIntro());
+		        	questionpojo.setName(dataWrappers.getData().get(i).getName());
+		        	questionpojo.setProjectId(dataWrappers.getData().get(i).getProjectId());
+		        	questionpojo.setProjectName(projectDao.getById(dataWrappers.getData().get(i).getProjectId()).getName());
+		        	questionpojo.setPosition(dataWrappers.getData().get(i).getPosition());
+		        	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+		        	questionpojo.setQuestionDate(sdf.format(dataWrappers.getData().get(i).getQuestionDate()));
+		        	questionpojo.setQuestionType(dataWrappers.getData().get(i).getQuestionType());
+		        	questionpojo.setState(dataWrappers.getData().get(i).getState());
+		        	questionpojo.setTrades(dataWrappers.getData().get(i).getTrades());    
+		        	if(dataWrappers.getData().get(i).getUserId()!=null){
+		        		User users = userDao.getById(dataWrappers.getData().get(i).getUserId());
+		        		if(users!=null){
+		        			if(users.getUserIconUrl()!=null){
+		        				questionpojo.setCreateUserIcon(users.getUserIconUrl());
+		        			}else{
+		        				Files files = fileService.getById(users.getUserIcon());
+		        				questionpojo.setCreateUserIcon(files.getUrl());
+		        			}
+		        			
+		        		}
+		        	}
+		        	pojo.add(i, questionpojo);
 		        }
-	        	if(dataWrappers.getData().get(i).getUserList()!=null){
-	        		String[] nameList = dataWrappers.getData().get(i).getUserList().split(",");
-	        		if(nameList.length>0){
-	        			String[] nameLists =new String[nameList.length] ;
-	        			for(int k=0;k<nameList.length;k++){
-	        			   nameLists[k]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
-	        			}
-	        			questionpojo.setUserNameLists(nameLists);
-		        	}else{
-		        		questionpojo.setUserNameLists(null);
-		        	}
-	        	}
-	        	String username=userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName();
-	        	questionpojo.setUserId(username);
-	        	questionpojo.setModelFlag(dataWrappers.getData().get(i).getModelFlag());
-	        	questionpojo.setCodeInformation(dataWrappers.getData().get(i).getCodeInformation());
-	        	questionpojo.setPriority(dataWrappers.getData().get(i).getPriority());
-	        	questionpojo.setId(dataWrappers.getData().get(i).getId());
-	        	questionpojo.setIntro(dataWrappers.getData().get(i).getIntro());
-	        	questionpojo.setName(dataWrappers.getData().get(i).getName());
-	        	questionpojo.setProjectId(dataWrappers.getData().get(i).getProjectId());
-	        	questionpojo.setProjectName(projectDao.getById(dataWrappers.getData().get(i).getProjectId()).getName());
-	        	questionpojo.setPosition(dataWrappers.getData().get(i).getPosition());
-	        	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-	        	questionpojo.setQuestionDate(sdf.format(dataWrappers.getData().get(i).getQuestionDate()));
-	        	questionpojo.setQuestionType(dataWrappers.getData().get(i).getQuestionType());
-	        	questionpojo.setState(dataWrappers.getData().get(i).getState());
-	        	questionpojo.setTrades(dataWrappers.getData().get(i).getTrades());        	        	
-	        	pojo.add(i, questionpojo);
-	        }
+			}
+			
 			if(pojo.size()>0){
 				datawrapper.setData(pojo);
 				datawrapper.setCurrentPage(dataWrappers.getCurrentPage());
@@ -534,17 +566,6 @@ public class QuestionServiceImpl implements QuestionService {
 		    	}else{
 		    		importantPercent=Math.floor(importantPercent);
 		    	}
-		    	if(datawrapper.getData()!=null && datawrapper.getData().size()>0){
-		    		if(userInMemory.getWorkName()!=null){
-		    			if(userInMemory.getWorkName().equals("总经理")){
-							datawrapper.getData().get(0).setRoleFlag(1);
-						}else if(userInMemory.getWorkName().equals("投资方")){
-							datawrapper.getData().get(0).setRoleFlag(2);
-						}else{
-							datawrapper.getData().get(0).setRoleFlag(0);
-						}
-		    		}
-				}
 		    	if(datawrapper.getData()!=null && datawrapper.getData().size()>0){
 		    		datawrapper.getData().get(0).setImportantPercent((int)importantPercent);
 	    	    	datawrapper.getData().get(0).setUrgentPercent(100-(int)sortPercent-(int)importantPercent);
@@ -628,9 +649,7 @@ public class QuestionServiceImpl implements QuestionService {
 						dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 					}
 					if(question!=null){
-						Long projectId=question.getProjectId();
-						String projectList = userInDB.getProjectList();
-						if(userInDB.getUserType()==1 || userInDB.getUserType()==0 || projectList.contains(projectId.toString())){
+						if(userInDB.getUserType()==1 || userInDB.getUserType()==0){
 							QuestionPojo questionPojo=new QuestionPojo();
 							questionPojo.setId(question.getId());
 							questionPojo.setCodeInformation(question.getCodeInformation());
@@ -679,7 +698,12 @@ public class QuestionServiceImpl implements QuestionService {
 								}
 								questionPojo.setFileList(fileList);
 							}
-							
+							if(questionPojo!=null){
+								Notice notice = new Notice();
+								notice=noticeDao.getByAdoutIdAndUserId(userInDB.getId(),questionId,0);
+								notice.setReadState(1);
+								noticeDao.updateNotice(notice);
+							}
 							dataWrapper.setData(questionPojo);
 						}else{
 							dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
@@ -845,23 +869,7 @@ public class QuestionServiceImpl implements QuestionService {
 			}
 			/////问题等级搜索
 			/////当用户是总经理级别的时候,问题搜索只能搜索重要和紧急，同时也只能看重要和紧急问题，不看一般问题 
-			if(userInMemory.getWorkName()!=null){
-				/*if(userInMemory.getWorkName().equals("总经理"))
-				{
-					if(question.getPriority()==null)
-						question.setPriority(-1);
-				}*/
-				/////当用户是投资方（甲方）的时候，问题搜索只能搜索一般问题，同时也只能看一般问题，不能重要和紧急问题
-				if(userInMemory.getWorkName().equals("投资方"))
-				{
-					if(question.getPriority()==null)
-						question.setPriority(0);
-				}
-			}
 			String projectList=null;
-			if(userInMemory.getUserType()==2 || userInMemory.getUserType()==3){
-				projectList=userInMemory.getProjectList();
-			}
 			dataWrappers= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question,userIdList,projectList);
 			for(int i=0;i<dataWrappers.getData().size();i++)
 	        {

@@ -100,6 +100,34 @@ public class FileServiceImpl implements FileService  {
 		// TODO Auto-generated method stub
 		return fileDao.addFiles(file);
 	}
+
+	@Override
+	public boolean deleteFileByIdList(String[] id) {
+		// TODO Auto-generated method stub
+		return fileDao.deleteFilesList(id);
+	}
+
+	@Override
+	public boolean deleteFileByReal(Long id,HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		boolean sss=true;
+		Files file = new Files();
+		file = fileDao.getById(id);
+		if(file!=null){
+			fileDao.deleteFiles(id);
+			String rootPath = request.getSession().getServletContext().getRealPath("/");
+			File filess = new File(rootPath + file.getUrl());
+	        try {
+	        	sss = filess.delete();
+	        }catch (Exception e) {
+	            e.printStackTrace();
+	            return false;
+	        }
+		}else{
+			sss=false;
+		}
+		return sss;
+	}
 	
 
 

@@ -8,4 +8,5 @@ public interface FileDao {
 	boolean deleteFiles(Long id);
 	boolean addFiles(Files file);
 	DataWrapper<List<Files>> getFilesList();
+	boolean deleteFilesList(String[] ids);
 }

@@ -8,14 +8,15 @@ public enum ProjectDatas implements Serializable {
     Login_area("login", 2),///登录区域
     Video_area("video", 3),///交底区域
     ProcessManager_area("process_manager",4),////预制化进度管理区域
-    Question_area("question",5),///质量安全区域
+    Question_area("question",5),///安全区域
     Notification_area("notification",6),
     ValueOut_area("value_out",7),///产值统计管理区域
     UserTeam_area("user_team",8),///班组信息区域
     ConstructionTask_area("construction_task",9),///施工任务单区域
     AdvancedOrder_area("advanced_order",10),///预付单区域
     NormativeFile_area("normative_file",11),///在线预览区域
-    Item_area("item",12)///模型构建信息区域
+    Item_area("item",12),///模型构建信息区域
+    Quality_area("question",5)///质量区域
     ;
     private String label;
     private Integer code;

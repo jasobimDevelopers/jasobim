@@ -81,6 +81,20 @@ public class QuestionFileDaoImpl extends BaseDao<QuestionFile> implements Questi
 	        }
 		return temp;
 	}
+	@Override
+	public boolean deleteQuestionFileByQualityId(Long id) {
+		String sql = "delete from question_file where quality_id="+id;
+		Session session=getSession();
+		boolean temp=true;
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()!=1){
+			 }
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		return temp;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -90,6 +104,25 @@ public class QuestionFileDaoImpl extends BaseDao<QuestionFile> implements Questi
 		Session session = getSession();
 		Criteria criteria = session.createCriteria(QuestionFile.class);
 		criteria.add(Restrictions.eq("questionId",questionId));
+		try {
+			ret = criteria.list();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		if (ret != null && ret.size() > 0) {
+			retDataWrapper.setData(ret);
+		}
+		return retDataWrapper;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<List<QuestionFile>> getQuestionFileByQualityId(Long qualityId) {
+		DataWrapper<List<QuestionFile>> retDataWrapper = new DataWrapper<List<QuestionFile>>();
+		List<QuestionFile> ret = null;
+		Session session = getSession();
+		Criteria criteria = session.createCriteria(QuestionFile.class);
+		criteria.add(Restrictions.eq("qualityId",qualityId));
 		try {
 			ret = criteria.list();
 		}catch (Exception e){

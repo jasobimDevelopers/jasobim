@@ -40,7 +40,7 @@ public class UserAvatar {
 		 try {
 			 	String newFileName = MD5Util.getMD5String(new Date() + UUID.randomUUID().toString()).replace(".","");
 			 	//批量导入。参数：文件名，文件。
-			 	createImage(name, new Font("黑体", Font.PLAIN, 43), new File("D:/jasobim/tomcat_3001/webapps/userIcons/" +newFileName+ ".png"));
+			 	createImage(name, new Font("黑体", Font.PLAIN, 43), new File("D:/jasobim/tomcat_8080/webapps/userIcons/" +newFileName+ ".png"));
 	           
 	            return "userIcons/"+newFileName+".png";
 	        } catch (Exception e) {

@@ -4,23 +4,25 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Project;
+import com.my.spring.model.Projectvs;
+import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Repository
 public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 
@@ -41,7 +43,7 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<Project>> getProjectList(Integer pageSize, Integer pageIndex, Project project,String projectList,String content,Integer isIos) {
+    public DataWrapper<List<Project>> getProjectList(Integer pageSize, Integer pageIndex, Project project,String content,Integer isIos) {
         DataWrapper<List<Project>> retDataWrapper = new DataWrapper<List<Project>>();
         List<Project> ret = new ArrayList<Project>();
         Session session = getSession();  
@@ -64,15 +66,7 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
         	 diss.add(Restrictions.like("leader", content,MatchMode.ANYWHERE));
         	 criteria.add(diss);
         }
-        if(!projectList.equals("-1") && projectList!=null && !projectList.equals("null")){
-        	String[] ss =projectList.split(",");
-            Disjunction dis = Restrictions.disjunction();
-            for (int i = 0; i < ss.length; i++) {
-            	long test=Integer.valueOf(ss[i]);
-                dis.add(Restrictions.eq("id", test));
-            }
-            criteria .add(dis);
-        }
+        
         /////////
         if(project.getName() != null && !project.getName().equals("")) {
         	criteria.add(Restrictions.like("name", "%" + project.getName() + "%"));
@@ -207,6 +201,52 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 			}
 			return projects;
 		
+	}
+
+	@Override
+	public DataWrapper<List<Projectvs>> getProjectList(Integer pageSize, Integer pageIndex, Project project,
+			User userInMemory) {
+		DataWrapper<List<Projectvs>> retDataWrapper = new DataWrapper<List<Projectvs>>();
+		String sql = "select a.* from project a,user_project b where a.id=b.project_id and b.user_id="+userInMemory.getId();
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+				 .addScalar("id",StandardBasicTypes.LONG)
+				 .addScalar("name", StandardBasicTypes.STRING)
+				 .addScalar("num",StandardBasicTypes.STRING)
+				 .addScalar("construction_unit",StandardBasicTypes.STRING)
+				 .addScalar("construction_unit_user",StandardBasicTypes.STRING)
+				 .addScalar("leader", StandardBasicTypes.STRING)
+				 .addScalar("building_unit", StandardBasicTypes.STRING)
+				 .addScalar("pic_id", StandardBasicTypes.STRING)
+				 .addScalar("model_id", StandardBasicTypes.STRING)
+				 .addScalar("place", StandardBasicTypes.STRING)
+				 .addScalar("description", StandardBasicTypes.STRING)
+				 .addScalar("version", StandardBasicTypes.STRING)
+				 .addScalar("start_date", StandardBasicTypes.STRING)
+				 .addScalar("finished_date", StandardBasicTypes.STRING)
+				 .addScalar("state", StandardBasicTypes.STRING)
+				 .addScalar("is_ios", StandardBasicTypes.STRING)
+				 .addScalar("phase", StandardBasicTypes.STRING)
+				 .addScalar("model_part",StandardBasicTypes.STRING)
+				 .addScalar("team_list",StandardBasicTypes.STRING)
+				 .addScalar("team_id",StandardBasicTypes.STRING)
+				 .addScalar("design_unit",StandardBasicTypes.STRING)
+				 .addScalar("design_unit_user",StandardBasicTypes.STRING)
+				 .addScalar("construction_control_unit",StandardBasicTypes.STRING)
+				 .addScalar("construction_control_user",StandardBasicTypes.STRING)
+				 .addScalar("short_name", StandardBasicTypes.STRING)
+				 .addScalar("update_date",StandardBasicTypes.DATE)
+				 .addScalar("create_date",StandardBasicTypes.DATE)
+				 .setResultTransformer(Transformers.aliasToBean(Projectvs.class)); 
+		    retDataWrapper.setData(query.list());
+            
+        }catch(Exception e){
+        	retDataWrapper.setErrorCode(ErrorCodeEnum.Error);
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+	    return retDataWrapper;
 	}
 
 }

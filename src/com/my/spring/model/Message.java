@@ -18,6 +18,7 @@ public class Message {
 	private Long questionId;
 	private Long userId;
 	private Long projectId;
+	private Long qualityId;
 	
 	@Id
     @GeneratedValue
@@ -63,6 +64,15 @@ public class Message {
 	}
 	public void setQuestionId(Long questionId) {
 		this.questionId = questionId;
+	}
+	
+	@Basic
+    @Column(name = "quality_id")
+	public Long getQualityId() {
+		return qualityId;
+	}
+	public void setQualityId(Long qualityId) {
+		this.qualityId = qualityId;
 	}
 	
 	@Basic

@@ -21,6 +21,7 @@ public class QuestionPojo {
 	private int importantPercent;/////重要问题的百分比
 	private int urgentPercent;//////紧急问题的百分比
 	private String position;//位置
+	private String createUserIcon;
 	private String[] userNameLists;
 	private String voiceUrlList;
 	private Integer userid;
@@ -198,6 +199,12 @@ public class QuestionPojo {
 	}
 	public void setModelFlag(String modelFlag) {
 		this.modelFlag = modelFlag;
+	}
+	public String getCreateUserIcon() {
+		return createUserIcon;
+	}
+	public void setCreateUserIcon(String createUserIcon) {
+		this.createUserIcon = createUserIcon;
 	}
 	
 	

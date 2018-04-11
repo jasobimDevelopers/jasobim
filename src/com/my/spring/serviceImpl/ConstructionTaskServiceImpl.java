@@ -13,6 +13,7 @@ import com.my.spring.model.ConstructionTaskPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.ConstructionTaskService;
 import com.my.spring.service.FileService;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,6 +58,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
     public DataWrapper<Void> addConstructionTask(ConstructionTask constructionTask,String token,MultipartFile[] files,HttpServletRequest request) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
+        HashMap<String,String> hq = new HashMap<String,String>();
         String filesUrlList="";
         if (userInMemory != null) {
 			if(constructionTask!=null){
@@ -63,6 +66,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 					for(int i=0;i<files.length;i++){
 						Files filess=fileService.uploadFile("constructionFiles/"+constructionTask.getProjectId(), files[i], 5, request);
 						if(filess!=null){
+							hq.put("file"+i+1, filess.getUrl());
 							if(filesUrlList.equals("")){
 								filesUrlList=filess.getId().toString();
 							}else{
@@ -81,29 +85,39 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 				constructionTask.setNextApprovalPeopleType("班组组长");
 				constructionTask.setCreateUserName(userInMemory.getRealName());
 				constructionTask.setNextReceivePeopleId(userDao.getById(constructionTask.getReceiveUserId()).getRealName());
-				if(userInMemory.getUserType()==3){
-					constructionTask.setUserProjectIdList(userInMemory.getProjectList());
-				}else{
-					constructionTask.setUserProjectIdList("all");
-				}
 				if(!constructionTaskDao.addConstructionTask(constructionTask)) 
 				{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}else{
+					if(userInMemory.getUserIconUrl()!=null){
+						hq.put("iconUrl", userInMemory.getUserIconUrl());
+					}else{
+						if(userInMemory.getUserIcon()!=null){
+							Files fileput = fileService.getById(userInMemory.getUserIcon());
+							hq.put("iconUrl", fileput.getUrl());
+						}
+					}
+					hq.put("date", Parameters.getSdfs().format(new Date()));
+					hq.put("userName", userInMemory.getRealName());
+					hq.put("content", constructionTask.getDetailContent());
+					hq.put("projectInfo","来自  "+ constructionTask.getCompanyName());
+					List<User> userList = new ArrayList<User>();
+					int adminFlag=0;
+					if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 || userInMemory.getUserType()==2){
+	        			adminFlag=-1;
+	        		}
+					userList=userDao.findGetPushUsers(constructionTask.getNextReceivePeopleId(),adminFlag).getData();
+					String content=userInMemory.getRealName()+"提交了一个施工任务单需要您审批";
+					 String[] userids=new String[userList.size()];
+					for(int b =0;b<userList.size();b++){
+						userids[b]=userList.get(b).getId().toString();
+					}
+					PushExample.testSendPushWithCustomConfig_ios(userids, content,2,hq);
+					PushExample.testSendPushWithCustomConfig_android(userids, content,2,hq);
 				}
 		///////////////////////////
-				List<User> userList = new ArrayList<User>();
-				int adminFlag=0;
-				if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 || userInMemory.getUserType()==2){
-        			adminFlag=-1;
-        		}
-				userList=userDao.findGetPushUsers(constructionTask.getNextReceivePeopleId(),adminFlag).getData();
-				String content=userInMemory.getRealName()+"提交了一个施工任务单需要您审批";
-				 String[] userids=new String[userList.size()];
-				for(int b =0;b<userList.size();b++){
-					userids[b]=userList.get(b).getId().toString();
-				}
-				PushExample.testSendPushWithCustomConfig_ios(userids, content);
-				PushExample.testSendPushWithCustomConfig_android(userids, content);
+				
+				
 					
 
 				///////////////////////////////
@@ -182,9 +196,6 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
         	String NextReceivePeopleId=null;
     		if(userInMemory.getUserType()!=3){
     			ConstructionTask.setUserProjectIdList("-1");
-    		}
-    		else{
-    			ConstructionTask.setUserProjectIdList(userInMemory.getProjectList());
     		}
     		if(ConstructionTask.getApprovalPeopleName()==null && userInMemory.getUserType()==3){
     			ConstructionTask.setApprovalPeopleName(userInMemory.getRealName());

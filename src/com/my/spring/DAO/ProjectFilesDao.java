@@ -1,5 +1,4 @@
 package com.my.spring.DAO;
-import com.my.spring.model.Paper;
 import com.my.spring.model.ProjectFiles;
 import com.my.spring.model.User;
 import com.my.spring.utils.DataWrapper;

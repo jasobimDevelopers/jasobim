@@ -10,6 +10,7 @@ import javax.persistence.*;
 public class Project {
     private Long id;//工程id
     private String name;//工程名
+    private String shortName;//项目名简称
     private String num;//工程編碼
     private String constructionUnit;//施工單位
     private String leader;//项目负责人
@@ -20,7 +21,13 @@ public class Project {
     private String description;//項目工程描述
     private String designUnit;//设计单位
     private String version;//版本
-    private String startDate;//施工時間
+    private String startDate;//施工开始時間
+    private String finishedDate;///结束时间
+    private String buildingUnitUser;//建设单位联系人
+    private String constructionUnitUser;//施工单位联系人
+    private String designUnitUser;//设计单位联系人
+    private String constructionControlUnit;///监理单位
+    private String constructionControlUser;//监理单位联系人
     private String phase;//施工周期
     private String state;//上线不上线的标志0.未上线 1.已上线
     private String isIos;//1.安卓	 0.ios   2.pad模型
@@ -28,6 +35,7 @@ public class Project {
     private String teamList;
     private String teamId;
     private Date updateDate;
+    private Date createDate;
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -206,6 +214,16 @@ public class Project {
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
+	
+	@Basic
+    @Column(name = "finished_date")
+	public String getFinishedDate() {
+		return finishedDate;
+	}
+
+	public void setFinishedDate(String finishedDate) {
+		this.finishedDate = finishedDate;
+	}
 
 	@Basic
     @Column(name = "phase")
@@ -225,6 +243,76 @@ public class Project {
 
 	public void setTeamId(String teamId) {
 		this.teamId = teamId;
+	}
+
+	@Basic
+    @Column(name = "building_unit_user")
+	public String getBuildingUnitUser() {
+		return buildingUnitUser;
+	}
+
+	public void setBuildingUnitUser(String buildingUnitUser) {
+		this.buildingUnitUser = buildingUnitUser;
+	}
+
+	@Basic
+    @Column(name = "construction_unit_user")
+	public String getConstructionUnitUser() {
+		return constructionUnitUser;
+	}
+
+	public void setConstructionUnitUser(String constructionUnitUser) {
+		this.constructionUnitUser = constructionUnitUser;
+	}
+
+	@Basic
+    @Column(name = "design_unit_user")
+	public String getDesignUnitUser() {
+		return designUnitUser;
+	}
+
+	public void setDesignUnitUser(String designUnitUser) {
+		this.designUnitUser = designUnitUser;
+	}
+
+	@Basic
+	@Column(name = "construction_control_unit")
+	public String getConstructionControlUnit() {
+		return constructionControlUnit;
+	}
+
+	public void setConstructionControlUnit(String constructionControlUnit) {
+		this.constructionControlUnit = constructionControlUnit;
+	}
+
+	@Basic
+	@Column(name = "construction_control_user")
+	public String getConstructionControlUser() {
+		return constructionControlUser;
+	}
+
+	public void setConstructionControlUser(String constructionControlUser) {
+		this.constructionControlUser = constructionControlUser;
+	}
+
+	@Basic
+	@Column(name ="short_name")
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
+	@Basic
+    @Column(name = "create_date")
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
     

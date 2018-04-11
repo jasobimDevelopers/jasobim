@@ -28,12 +28,14 @@ import cn.jiguang.common.resp.APIRequestException;
 import cn.jpush.api.JPushClient;
 import cn.jpush.api.push.PushResult;
 import cn.jpush.api.push.model.PushPayload;
+import scala.xml.PrettyPrinter.Para;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +77,19 @@ public class MessageServiceImpl implements MessageService {
 					}
 					if(messageDao.addMessage(message)) 
 					{
+						HashMap<String,String> hq = new HashMap<String,String>();
+						hq.put("content", message.getContent());
+						hq.put("date",Parameters.getSdfs().format(new Date()));
+						hq.put("userName", userInMemory.getRealName());
+						hq.put("projectInfo", "来自  "+projectDao.getById(questions.getProjectId()).getName());
+						if(userInMemory.getUserIconUrl()!=null){
+							hq.put("iconUrl", userInMemory.getUserIconUrl());
+						}else{
+							if(userInMemory.getUserIcon()!=null){
+								Files files = fileService.getById(userInMemory.getUserIcon());
+								hq.put("iconUrl", files.getUrl());
+							}
+						}
 						if(file.length>0){
 							for(int i=0;i<file.length;i++){
 								String path=filePath+"/"+"messages";
@@ -85,6 +100,7 @@ public class MessageServiceImpl implements MessageService {
 								if (originName.contains(".")) {
 									originName = originName.substring(0, originName.lastIndexOf("."));
 								}
+								hq.put("file"+i+1, newfile.getUrl());
 								messageFile.setOriginName(originName);
 								messageFile.setMessageId(message.getId());
 								messageFileDao.addMessageFile(messageFile);
@@ -99,7 +115,8 @@ public class MessageServiceImpl implements MessageService {
 							userids[b]=userList.get(b).getId().toString();
 						}
 						String content=userInMemory.getRealName()+"提交了一条留言，请您注意查看";
-						PushExample.testSendPushWithCustomConfig_ios(userids, content);
+						PushExample.testSendPushWithCustomConfig_ios(userids, content,1,hq);
+						PushExample.testSendPushWithCustomConfig_android(userids, content,1,hq);
 						//testSendPushWithCustomConfig_android(userids, content);
 				///////////////////////////////
 						}

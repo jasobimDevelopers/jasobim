@@ -64,4 +64,9 @@ public class FileDaoImpl extends BaseDao<Files> implements FileDao {
 		 
 		return dataWrapper;
 	}
+	@Override
+	public boolean deleteFilesList(String[] ids) {
+		// TODO Auto-generated method stub
+		return deleteList(ids);
+	}
 }

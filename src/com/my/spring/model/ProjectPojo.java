@@ -20,14 +20,53 @@ public class ProjectPojo {
     private String place;//施工地點
     private String description;//項目工程描述
     private String designUnit;//设计单位
+    private String designUnitUser;//设计单位负责人
+    private String constructionUnitUser;///施工单位负责人
+    private String buildingUnitUser;//建设单位负责人
+    private String constructionControlUnit;//监理单位
+    private String constructionControlUser;///监理单位负责人
     private String version;//版本
     private String startDate;//施工時間
+    private String finishedDate;
     private String phase;//施工周期
     private String state;//状态
+    private String shortName;///项目简称
+    private String createDate;
     private Integer isIos;///1.ios 0.安卓   2.pad模型
     private String[] modelPart;//all.整体	rf.顶层     standard.标准层     B1.地下一层     B2.地下二层      B3.地下三层
     private String[] teamList;
     private String[] teamId;
+    
+	public String getDesignUnitUser() {
+		return designUnitUser;
+	}
+	public void setDesignUnitUser(String designUnitUser) {
+		this.designUnitUser = designUnitUser;
+	}
+	public String getConstructionUnitUser() {
+		return constructionUnitUser;
+	}
+	public void setConstructionUnitUser(String constructionUnitUser) {
+		this.constructionUnitUser = constructionUnitUser;
+	}
+	public String getBuildingUnitUser() {
+		return buildingUnitUser;
+	}
+	public void setBuildingUnitUser(String buildingUnitUser) {
+		this.buildingUnitUser = buildingUnitUser;
+	}
+	public String getConstructionControlUnit() {
+		return constructionControlUnit;
+	}
+	public void setConstructionControlUnit(String constructionControlUnit) {
+		this.constructionControlUnit = constructionControlUnit;
+	}
+	public String getConstructionControlUser() {
+		return constructionControlUser;
+	}
+	public void setConstructionControlUser(String constructionControlUser) {
+		this.constructionControlUser = constructionControlUser;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -159,5 +198,23 @@ public class ProjectPojo {
 	}
 	public void setTeamId(String[] teamId) {
 		this.teamId = teamId;
+	}
+	public String getFinishedDate() {
+		return finishedDate;
+	}
+	public void setFinishedDate(String finishedDate) {
+		this.finishedDate = finishedDate;
+	}
+	public String getShortName() {
+		return shortName;
+	}
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+	public String getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
 	}
 }

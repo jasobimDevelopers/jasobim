@@ -1,6 +1,10 @@
 package com.my.spring.model;
 
 import java.util.Date;
+import java.util.List;
+
+
+import net.sf.json.JSONArray;
 
 
 
@@ -20,6 +24,7 @@ public class UserPojo {
     private String teamInformation;////班组信息
     private String projectList;
     private String[] projectLists;
+    private Object menuList;
     public String[] getProjectLists() {
 		return projectLists;
 	}
@@ -139,6 +144,12 @@ public class UserPojo {
 	}
 	public void setMenuItemList(String[] menuItemList) {
 		this.menuItemList = menuItemList;
+	}
+	public Object getMenuList() {
+		return menuList;
+	}
+	public void setMenuList(Object object) {
+		this.menuList = object;
 	}
     
 }

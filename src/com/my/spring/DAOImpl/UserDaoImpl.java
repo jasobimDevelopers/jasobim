@@ -3,16 +3,22 @@ package com.my.spring.DAOImpl;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.MenuListCopy;
 import com.my.spring.model.User;
+import com.my.spring.model.UserCopy;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
@@ -46,6 +52,23 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
         criteria.add(Restrictions.eq("userName",userName));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+			return ret.get(0);
+		}
+		return null;
+	}
+	@Override
+	public User getByUserTel(String mobile) {
+		// TODO Auto-generated method stub
+		List<User> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.eq("tel",mobile));
         try {
             ret = criteria.list();
         }catch (Exception e){
@@ -136,39 +159,72 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         List<User> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
-        if(user.getUserName() != null && !user.getUserName().equals("")) {
-        	criteria.add(Restrictions.like("userName", "%" + user.getUserName() + "%"));
-        }
+        	if(user.getUserName() != null && !user.getUserName().equals("")) {
+            	criteria.add(Restrictions.like("userName", "%" + user.getUserName() + "%"));
+            }
+            
+            if(user.getRealName() != null && !user.getRealName().equals("")) {
+            	criteria.add(Restrictions.like("realName", "%" + user.getRealName() + "%"));
+            }
+            if(user.getEmail() != null && !user.getEmail().equals("")) {
+            	criteria.add(Restrictions.like("email", "%" + user.getEmail() + "%"));
+            }
+            if(user.getTel() != null && !user.getTel().equals("")) {
+            	criteria.add(Restrictions.like("tel", "%" + user.getTel() + "%"));
+            }
+             
+            
+            if(user.getTeamId()!=null){
+            	criteria.add(Restrictions.eq("teamId", user.getTeamId()));
+            }
         
-        if(user.getRealName() != null && !user.getRealName().equals("")) {
-        	criteria.add(Restrictions.like("realName", "%" + user.getRealName() + "%"));
-        }
-        if(user.getEmail() != null && !user.getEmail().equals("")) {
-        	criteria.add(Restrictions.like("email", "%" + user.getEmail() + "%"));
-        }
-        if(user.getTel() != null && !user.getTel().equals("")) {
-        	criteria.add(Restrictions.like("tel", "%" + user.getTel() + "%"));
-        }
-         
-        if(user.getTeamInformation()!=null && !user.getTeamInformation().equals("")){
-        	String[] teamInformation=user.getTeamInformation().split(",");
-        	 Disjunction dis = Restrictions.disjunction();
-             for (int i = 0; i < teamInformation.length; i++) {
-                 dis.add(Restrictions.eq("teamInformation", teamInformation[i]));
-             }
-             criteria .add(dis);
-        }
-        if(user.getProjectList()!=null){
-        	criteria.add(Restrictions.like("projectList", "%" + user.getProjectList() + "%"));
-        }
-        if(user.getTeamId()!=null){
-        	criteria.add(Restrictions.eq("teamId", user.getTeamId()));
-        }
         if (pageSize == null) {
 			pageSize = 10;
 		}
         if (pageIndex == null) {
 			pageIndex = 1;
+		}
+        
+        // 取总页数
+        criteria.setProjection(Projections.rowCount());
+        int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
+        int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
+
+        // 真正取值
+        criteria.setProjection(null);
+        if (pageSize > 0 && pageIndex > 0) {
+            criteria.setMaxResults(pageSize);// 最大显示记录数
+            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        dataWrapper.setData(ret);
+        dataWrapper.setTotalNumber(totalItemNum);
+        dataWrapper.setCurrentPage(pageIndex);
+        dataWrapper.setTotalPage(totalPageNum);
+        dataWrapper.setNumberPerPage(pageSize);
+
+        return dataWrapper;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<List<User>> getUserListForSql(Integer pageSize, Integer pageIndex,User user) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<User>> dataWrapper = new DataWrapper<List<User>>();
+        List<User> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.like("projectList", "%,%"));
+        criteria.add(Restrictions.eq("userType", 3));
+        if (pageSize == null) {
+			pageSize = 10;
+		}
+        if (pageIndex == null) {
+			pageIndex = -1;
 		}
         
         // 取总页数
@@ -204,20 +260,6 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
         
-        Disjunction dis = Restrictions.disjunction();
-       
-        dis.add(Restrictions.like("workName","%" + "质安" + "%"));
-        dis.add(Restrictions.like("workName","%" + "质量" + "%"));
-        dis.add(Restrictions.like("workName","%" + "预算" + "%"));
-        dis.add(Restrictions.like("workName","%" + "经理" + "%"));
-        if(user.getProjectList()!=null){
-        	String[] test = user.getProjectList().split(",");
-        	for(int i=0;i<test.length;i++){
-        		dis.add(Restrictions.like("projectList", "%" + test[i] + "%"));
-        	}
-        	
-        }
-        criteria.add(dis);
         if(user.getTeamId()!=null){
         	criteria.add(Restrictions.eq("teamId", user.getTeamId()));
         }
@@ -347,45 +389,35 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 	}
 
 	@Override
-	public DataWrapper<List<User>> getUserTeam(Integer pageSize, Integer pageIndex, Long projectId) {
-		DataWrapper<List<User>> dataWrapper = new DataWrapper<List<User>>();
-        List<User> ret = null;
+	public DataWrapper<List<UserCopy>> getUserTeam(Long projectId) {
         Session session = getSession();
-        Criteria criteria = session.createCriteria(User.class);
-        
-        if(projectId!=null){
-        	criteria.add(Restrictions.like("projectList", "%" + projectId + "%"));
-        }
-        criteria.add(Restrictions.eq("userType",3));
-        if (pageSize == null) {
-			pageSize = 10;
-		}
-        if (pageIndex == null) {
-			pageIndex = 1;
-		}
-        
-        // 取总页数
-        criteria.setProjection(Projections.rowCount());
-        int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
-        int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
-
-        // 真正取值
-        criteria.setProjection(null);
-        if (pageSize > 0 && pageIndex > 0) {
-            criteria.setMaxResults(pageSize);// 最大显示记录数
-            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
-        }
-        try {
-            ret = criteria.list();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        dataWrapper.setData(ret);
-        dataWrapper.setTotalNumber(totalItemNum);
-        dataWrapper.setCurrentPage(pageIndex);
-        dataWrapper.setTotalPage(totalPageNum);
-        dataWrapper.setNumberPerPage(pageSize);
-
+        String sql="select * from user where id in (select user_id from user_project where project_id="+projectId+")";
+        DataWrapper<List<UserCopy>> dataWrapper=new DataWrapper<List<UserCopy>>();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("id",StandardBasicTypes.LONG)
+					 .addScalar("user_name", StandardBasicTypes.STRING)
+					 .addScalar("password",StandardBasicTypes.STRING)
+					 .addScalar("real_name",StandardBasicTypes.STRING)
+					 .addScalar("user_type", StandardBasicTypes.INTEGER)
+					 .addScalar("email", StandardBasicTypes.STRING)
+					 .addScalar("tel", StandardBasicTypes.STRING)
+					 .addScalar("user_icon", StandardBasicTypes.LONG)
+					 .addScalar("user_icon_url", StandardBasicTypes.STRING)
+					 .addScalar("register_date", StandardBasicTypes.DATE)
+					 .addScalar("update_date", StandardBasicTypes.DATE)
+					 .addScalar("team_id", StandardBasicTypes.LONG)
+					 .addScalar("system_id", StandardBasicTypes.INTEGER)
+					 .addScalar("system_type", StandardBasicTypes.INTEGER)
+					 .addScalar("role_id", StandardBasicTypes.LONG)
+					 .addScalar("department_id", StandardBasicTypes.LONG)
+					 .addScalar("menu_item_list", StandardBasicTypes.STRING)
+					 .setResultTransformer(Transformers.aliasToBean(UserCopy.class)); 
+			 dataWrapper.setData(query.list());
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	        }
         return dataWrapper;
 	}
 	@Override

@@ -127,12 +127,6 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     	Double finisheds=0.0;
     	if(userInMemory!=null){
     		
-    		String projectList=userInMemory.getProjectList();
-    		if(userInMemory.getUserType()!=0 && !userInMemory.getWorkName().equals("总经理") ){
-    			dataWrapperPojo=ValueOutputDao.getValueOutputList(projectList).getData();
-    		}else{
-    			dataWrapperPojo=ValueOutputDao.getValueOutputList(null).getData();
-    		}
     		
     		if(dataWrapperPojo!=null){
     			for(int i=0;i<dataWrapperPojo.size();i++){

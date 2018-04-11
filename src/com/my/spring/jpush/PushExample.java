@@ -23,6 +23,8 @@ import cn.jpush.api.push.model.notification.IosNotification;
 import cn.jpush.api.push.model.notification.Notification;
 
 import com.google.gson.*;
+import com.my.spring.model.QuestionPojo;
+
 import io.netty.handler.codec.http.HttpMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,7 +95,7 @@ public class PushExample {
                 .setNotification(Notification.alert(content))
                 .build();
     }
-    public static PushPayload buildPushObject_all_alias_alerts_ios(String userids[],String content) {
+    public static PushPayload buildPushObject_all_alias_alerts_ios(String userids[],String content,int type,HashMap<String,String> qp) {
         return PushPayload.newBuilder()
         		.setPlatform(Platform.ios())
                 .setAudience(Audience.alias(userids))
@@ -103,6 +105,8 @@ public class PushExample {
                                 .setBadge(1)
                                 .setSound("happy")
                                 .addExtra("from", "Jaso")
+                                .addExtra("type", type)///0 、质量安全   1、留言   2、施工任务单  3、 预付单
+                                .addExtras(qp)
                                 .build())
                         .build())
                  .setMessage(Message.content(MSG_CONTENT))
@@ -111,7 +115,7 @@ public class PushExample {
                          .build())
                  .build();
     }
-    public static PushPayload buildPushObject_all_alias_alert_android(String userids[],String content) {
+    public static PushPayload buildPushObject_all_alias_alert_android(String userids[],String content,int type,HashMap<String,String> hq) {
         return PushPayload.newBuilder()
         		.setPlatform(Platform.android())
                 .setAudience(Audience.alias(userids))
@@ -119,6 +123,8 @@ public class PushExample {
                         .addPlatformNotification(AndroidNotification.newBuilder()
                                 .setAlert(content)
                                 .addExtra("from", "Jaso")
+                                .addExtra("type", type)///0 、质量安全   1、留言   2、施工任务单  3、 预付单
+                                .addExtras(hq)
                                 .build())
                         .build())
                  .setMessage(Message.content(MSG_CONTENT))
@@ -169,7 +175,7 @@ public class PushExample {
                 .build();
     }
 
-    public static void testSendPushWithCustomConfig(String userids[],String content) {
+    public static void testSendPushWithCustomConfig(String userids[],String content,int type,HashMap<String,String> hp) {
         ClientConfig config = ClientConfig.getInstance();
         // Setup the custom hostname
         config.setPushHostName("https://api.jpush.cn");
@@ -178,7 +184,7 @@ public class PushExample {
 
         // For push, all you need do is to build PushPayload object.
        // PushPayload payload = buildPushObject_all_alias_alerts(userids,content);
-        PushPayload payload = buildPushObject_all_alias_alerts_ios(userids,content);
+        PushPayload payload = buildPushObject_all_alias_alerts_ios(userids,content,type,hp);
         try {
             PushResult result = jpushClient.sendPush(payload);
             LOG.info("Got result - " + result);
@@ -194,7 +200,7 @@ public class PushExample {
             LOG.info("Msg ID: " + e.getMsgId());
         }
     }
-    public static void testSendPushWithCustomConfig_android(String userids[],String content) {
+    public static void testSendPushWithCustomConfig_android(String userids[],String content,int type,HashMap<String,String> hq) {
         ClientConfig config = ClientConfig.getInstance();
         // Setup the custom hostname
         config.setPushHostName("https://api.jpush.cn");
@@ -202,7 +208,7 @@ public class PushExample {
         JPushClient jpushClient = new JPushClient(MASTER_SECRET, APP_KEY, null, config);
 
         // For push, all you need do is to build PushPayload object.
-        PushPayload payload = buildPushObject_all_alias_alert_android(userids,content);
+        PushPayload payload = buildPushObject_all_alias_alert_android(userids,content,type,hq);
        // PushPayload payload = buildPushObject_ios_audienceMore_messageWithExtras();
         try {
             PushResult result = jpushClient.sendPush(payload);
@@ -219,7 +225,7 @@ public class PushExample {
             LOG.info("Msg ID: " + e.getMsgId());
         }
     }
-    public static void testSendPushWithCustomConfig_ios(String[] userids,String content) {
+    public static void testSendPushWithCustomConfig_ios(String[] userids,String content,int type,HashMap<String,String> hp) {
         ClientConfig config = ClientConfig.getInstance();
         // Setup the custom hostname
         config.setPushHostName("https://api.jpush.cn");
@@ -227,7 +233,7 @@ public class PushExample {
         JPushClient jpushClient = new JPushClient(MASTER_SECRET, APP_KEY, null, config);
 
         // For push, all you need do is to build PushPayload object.
-        PushPayload payload = buildPushObject_all_alias_alerts_ios(userids,content);
+        PushPayload payload = buildPushObject_all_alias_alerts_ios(userids,content,type,hp);
 
         try {
             PushResult result = jpushClient.sendPush(payload);

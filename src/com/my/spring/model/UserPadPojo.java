@@ -5,6 +5,7 @@ public class UserPadPojo {
     private String realName;
     private String tel;
     private String workName;
+    private String userIcon;
 	public Integer getId() {
 		return id;
 	}
@@ -32,6 +33,12 @@ public class UserPadPojo {
 	}
 	public void setWorkName(String workName) {
 		this.workName = workName;
+	}
+	public String getUserIcon() {
+		return userIcon;
+	}
+	public void setUserIcon(String userIcon) {
+		this.userIcon = userIcon;
 	}
 	
 }

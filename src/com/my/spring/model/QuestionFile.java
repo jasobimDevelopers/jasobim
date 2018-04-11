@@ -14,7 +14,7 @@ public class QuestionFile {
 	private Long fileId;
 	private Long questionId;
 	private String originName;
-	
+	private Long qualityId;
 	@Id
     @GeneratedValue
     @Column(name = "id")
@@ -41,6 +41,15 @@ public class QuestionFile {
 	}
 	public void setQuestionId(Long questionId) {
 		this.questionId = questionId;
+	}
+	
+	@Basic
+    @Column(name = "quality_id")
+	public Long getQualityId() {
+		return qualityId;
+	}
+	public void setQualityId(Long qualityId) {
+		this.qualityId = qualityId;
 	}
 	
 	@Basic

@@ -1,7 +1,7 @@
 package com.my.spring.enums;
 import java.io.Serializable;
 public enum UserTypeEnum implements Serializable {
-	Admin(0),User(1);
+	Admin(0),User(1),Investors(2),Leader(3),Visitor(4);
 	private Integer type;
 	UserTypeEnum() {
 	}

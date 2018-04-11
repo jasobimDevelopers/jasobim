@@ -13,20 +13,20 @@ public class User {
     private String userName;
     private String password;
     private String realName;
-    private Integer userType;//0:超级管理员、1:普通管理员、2:安全员、3:质量员、4:施工员、5:资料员、6:材料员、7:Bim工程师
-   						///8:技术员、9:预算员、10:项目负责人
-    private String	workName;///职位名称
+    private Integer userType;//0:超级管理员、1:普通用户、2:投资方、3:项目负责人/项目人员、4:游客
     private String email;
     private String tel;
     private Long userIcon;
     private String userIconUrl;
     private Date registerDate;
-    private String projectList;
-    private String teamInformation;////班组信息
-    private Integer teamId;
+    private Date updateDate;
+    private Long teamId;
     private Integer systemId;//0.IOS  1.android -1.web
     private Integer systemType;//0.安装人员 1.土建人员
+    private Long roleId;
+    private Long departmentId;
     private String menuItemList;
+    
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -37,23 +37,6 @@ public class User {
 		this.id = id;
 	}
 	
-	@Basic
-    @Column(name = "project_list")
-	public String getProjectList() {
-		return projectList;
-	}
-	public void setProjectList(String projectList) {
-		this.projectList = projectList;
-	}
-	
-	@Basic
-    @Column(name = "team_information")
-	public String getTeamInformation() {
-		return teamInformation;
-	}
-	public void setTeamInformation(String teamInformation) {
-		this.teamInformation = teamInformation;
-	}
 	
 	@Basic
     @Column(name = "user_name")
@@ -73,14 +56,6 @@ public class User {
 		this.userIconUrl = userIconUrl;
 	}
 
-	@Basic
-    @Column(name = "work_name")
-	public String getWorkName() {
-		return workName;
-	}
-	public void setWorkName(String workName) {
-		this.workName = workName;
-	}
 	
 	@Basic
     @Column(name = "password")
@@ -156,10 +131,10 @@ public class User {
 	
 	@Basic
     @Column(name = "team_id")
-	public Integer getTeamId() {
+	public Long getTeamId() {
 		return teamId;
 	}
-	public void setTeamId(Integer teamId) {
+	public void setTeamId(Long teamId) {
 		this.teamId = teamId;
 	}
 	@Basic
@@ -172,13 +147,40 @@ public class User {
 	}
 	
 	@Basic
-	@Column(name = "menu_item_list")
+	@Column(name="update_date")
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+	
+	@Basic
+	@Column(name="role_id")
+	public Long getRoleId() {
+		return roleId;
+	}
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
+	}
+	
+	@Basic
+	@Column(name="department_id")
+	public Long getDepartmentId() {
+		return departmentId;
+	}
+	public void setDepartmentId(Long departmentId) {
+		this.departmentId = departmentId;
+	}
+	
+	@Basic
+	@Column(name="menu_item_list")
 	public String getMenuItemList() {
 		return menuItemList;
 	}
 	public void setMenuItemList(String menuItemList) {
 		this.menuItemList = menuItemList;
 	}
-    
+	
     
 }

@@ -12,7 +12,11 @@ public enum ErrorCodeEnum implements Serializable {
     //////项目错误
     Project_Not_Existed("Project Does not Existed!",8),
     Target_Not_Existed("Target Does not Existed!",9),
-    Password_Not_Fit("Password Does not match!",10),
+    Password_Not_Fit("密码错误!",10),
+    Phone_Format_Error("手机格式错误!",11),
+    Phone_Time_Error("验证码超时!",12),
+    Phone_Code_Error("验证码不匹配!",13),
+    Phone_Existed_Error("手机号码已注册！",14)
     ;
     private String label;
     private Integer code;

@@ -334,9 +334,6 @@ public class PaperServiceImpl implements PaperService {
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
 	        	String projectIdList=null;
-	        	if(userInMemory.getUserType()==3){
-	        		projectIdList=userInMemory.getProjectList();
-	        	}
 	        	if(projectIdList==null){
 	        		projectIdList="79";
 	        	}	

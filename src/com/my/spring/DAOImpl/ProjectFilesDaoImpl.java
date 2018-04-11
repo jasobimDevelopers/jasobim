@@ -1,11 +1,8 @@
 package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
-import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.ProjectFilesDao;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.Files;
-import com.my.spring.model.Paper;
 import com.my.spring.model.ProjectFiles;
 import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
@@ -13,8 +10,6 @@ import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;

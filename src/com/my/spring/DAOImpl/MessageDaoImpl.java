@@ -133,10 +133,47 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 		}
 		return retDataWrapper;
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataWrapper<List<Message>> getMessageListByQualityId(Long id) {
+	 DataWrapper<List<Message>> retDataWrapper = new DataWrapper<List<Message>>();
+	 List<Message> ret = null;
+     Session session = getSession();
+     Criteria criteria = session.createCriteria(Message.class);
+     criteria.add(Restrictions.eq("qualityId",id));
+     criteria.addOrder(Order.asc("messageDate"));
+     try {
+         ret = criteria.list();
+     }catch (Exception e){
+         e.printStackTrace();
+     }
+     if (ret != null && ret.size() > 0) {
+			retDataWrapper.setData(ret);
+		}
+		return retDataWrapper;
+	}
 
 	@Override
 	public boolean deleteMessageByQuestionId(Long questionId) {
 		String sql = "delete from message where question_id="+questionId;
+		Session session=getSession();
+		boolean test=false;
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 int temp=query.executeUpdate();
+			 if(temp!=0){
+				 test= true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return test;
+	}
+	@Override
+	public boolean deleteMessageByQualityId(Long qualityId) {
+		String sql = "delete from message where quality_id="+qualityId;
 		Session session=getSession();
 		boolean test=false;
 		 try{

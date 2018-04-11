@@ -4,6 +4,7 @@ import com.my.spring.enums.ErrorCodeEnum;
 public class DataWrapper<T>  {
     private CallStatusEnum callStatus;
     private ErrorCodeEnum errorCode;
+    private String errorInfo;
     private T data;
     private String token;
 
@@ -94,4 +95,12 @@ public class DataWrapper<T>  {
                 "Num per Page:" + this.numberPerPage + "\n" +
                 "Total Num:" + this.totalNumber + "\n" ;
     }
+
+	public String getErrorInfo() {
+		return errorInfo;
+	}
+
+	public void setErrorInfo(String errorInfo) {
+		this.errorInfo = errorInfo;
+	}
 }

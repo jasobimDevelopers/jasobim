@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONArray;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.User;
 import com.my.spring.model.UserPadPojo;
@@ -212,11 +213,58 @@ public class UserController {
     }
 	@RequestMapping(value="/common/getUserInfo", method = RequestMethod.GET)
 	@ResponseBody
-	public DataWrapper<UserPojo> getUserInfo(
+	public DataWrapper<Object> getUserInfo(
     		@ModelAttribute User user,
     		@RequestParam(value="token",required=true) String token){
 		return userService.getUserInfo(token);
 	}
+	/////////////上市版本接口
+	////////////
+	/*
+	 * web端获取手机短信验证码接口
+	 * 参数：mobile 手机号码;systemType 系统（0.移动端 1.电脑端）
+	 * */
+	@RequestMapping(value="/web/getIdentifyingCode" , method = RequestMethod.GET)
+	@ResponseBody
+	public DataWrapper<Void> getIdentifyingCode(
+    		@RequestParam(value="mobile",required=true) String mobile,
+    		@RequestParam(value="systemType",required=true) Integer systemType) {
+		return userService.getIdentifyingCode(mobile,systemType);
+    }
+	/**
+	 * web端验证手机验证码接口，有效时间一分钟
+	 * 参数：mobile 手机号码; code 验证码
+	 * 
+	 * */
+	@RequestMapping(value="/web/getIdentifyingInfo" , method = RequestMethod.GET)
+	@ResponseBody
+	public DataWrapper<Void> getIdentifyingInfo(
+    		@RequestParam(value="mobile",required=true) String mobile,
+    		@RequestParam(value="code",required=true) String code) {
+		return userService.getIdentifyingInfo(mobile,code);
+    }
 	
+	/**
+	 * web端验证手机注册接口
+	 * 参数：mobile 手机号码; userName 昵称; realName 姓名; email 邮箱
+	 * 
+	 * */
+	@RequestMapping(value="/web/registerUserInfo" , method = RequestMethod.POST)
+	@ResponseBody
+	public DataWrapper<Void> registerUserInfo(
+			@ModelAttribute User user) {
+		return userService.registerUserInfo(user);
+    }
+	/**
+	 * web端验证手机注册接口
+	 * 参数：mobile 手机号码; userName 昵称; realName 姓名; email 邮箱
+	 * 
+	 * */
+	@RequestMapping(value="/getUserInfoSql" , method = RequestMethod.GET)
+	@ResponseBody
+	public DataWrapper<Void> getUserInfoSql(
+			@ModelAttribute User user) {
+		return userService.getUserInfoSql(user);
+    }
 
 }

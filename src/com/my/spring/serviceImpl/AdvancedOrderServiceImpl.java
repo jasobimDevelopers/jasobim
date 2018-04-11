@@ -13,6 +13,7 @@ import com.my.spring.model.AdvancedOrderPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.AdvancedOrderService;
 import com.my.spring.service.FileService;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.Date;
+import java.util.HashMap;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,6 +42,8 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
     @Autowired
     UserLogDao userLogDao;
     @Autowired
+    FileService fileService;
+    @Autowired
     AdvancedOrderCollectDao advancedOrderCollectDao;
     @Autowired
     FileService filesService;
@@ -50,13 +54,16 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
     public DataWrapper<Void> addAdvancedOrder(AdvancedOrder advancedOrder,String token,MultipartFile[] contentFiles,HttpServletRequest request) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
+        HashMap<String,String> hq = new HashMap<String,String>();
         if (userInMemory != null) {
 			if(advancedOrder!=null){
 				if(advancedOrder.getProjectId()!=null){
+					
 					if(contentFiles.length>0){
 						String fileIdList="";
 						for(int i=0;i<contentFiles.length;i++){
 							Files photoFiles =filesService.uploadFile("advancedOrder/"+advancedOrder.getProjectId(), contentFiles[i], 5, request);
+							hq.put("file"+i, photoFiles.getUrl());
 							if(photoFiles!=null){
 								if(!fileIdList.equals("")){
 									fileIdList+=","+photoFiles.getId();
@@ -74,13 +81,25 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 				advancedOrder.setNextApprovalPeopleType("施工员");
 				advancedOrder.setSubmitUserId(userInMemory.getId());
 				advancedOrder.setCreateUserName(userInMemory.getRealName());
-				advancedOrder.setUserProjectIdList(userInMemory.getProjectList());
 				advancedOrder.setStatus(0);
 				advancedOrder.setCreateDate(new Date(System.currentTimeMillis()));
 				if(!advancedOrderDao.addAdvancedOrder(advancedOrder)) 
 				{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}else{
+					
+					if(userInMemory.getUserIconUrl()!=null){
+						hq.put("iconUrl", userInMemory.getUserIconUrl());
+					}else{
+						if(userInMemory.getUserIcon()!=null){
+							Files files = fileService.getById(userInMemory.getUserIcon());
+							hq.put("iconUrl", files.getUrl());
+						}
+					}
+					hq.put("date", Parameters.getSdfs().format(new Date()));
+					hq.put("userName", userInMemory.getRealName());
+					hq.put("content", advancedOrder.getQuantityDes());
+					hq.put("projectInfo","来自  "+ advancedOrder.getProjectName());
 					AdvancedOrderCollect aoc = new AdvancedOrderCollect();
 					aoc.setAdvancedOrderId(advancedOrder.getId());
 					aoc.setConstructPart(advancedOrder.getConstructPart());
@@ -103,8 +122,8 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 						for(int b =0;b<userList.size();b++){
 							userids[b]=userList.get(b).getId().toString();
 						}
-						PushExample.testSendPushWithCustomConfig_ios(userids, content);
-						PushExample.testSendPushWithCustomConfig_android(userids, content);
+						PushExample.testSendPushWithCustomConfig_ios(userids, content,3,hq);
+						PushExample.testSendPushWithCustomConfig_android(userids, content,3,hq);
 					}
 					
 					///////////////////////////////
@@ -192,7 +211,7 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
         			adminFlag=-1;
         		}
 				dataWrapper=advancedOrderDao.getAdvancedOrdersList(pageIndex,pageSize,advancedOrder,adminFlag);
-				if(dataWrapper.getData()!=null){
+				if(dataWrapper.getData()!=null && dataWrapper.getData().size()>0){
 					List<AdvancedOrderPojo> advancedOrderPojoList = new ArrayList<AdvancedOrderPojo>();
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						AdvancedOrderPojo advancedOrderPojo =new AdvancedOrderPojo();

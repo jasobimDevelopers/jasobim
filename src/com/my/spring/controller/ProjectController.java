@@ -68,5 +68,16 @@ public class ProjectController {
     		@RequestParam(value="token",required=true) String token){
         return projectService.getProjectDetailsByAdmin(projectId,token);
     }
+    //////游客新建项目
+    @RequestMapping(value="/visitor/addProject", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<ProjectPojo> addVisitorProject(
+            @ModelAttribute Project project,
+            @RequestParam(value = "token",required = true) String token,
+            HttpServletRequest request,
+            @RequestParam(value = "modelFile", required = false) MultipartFile[] modelFile,
+            @RequestParam(value = "picFile", required = false) MultipartFile[] picFile){
+        return projectService.addProject(project,token,modelFile,picFile,request);
+    }
     
 }
