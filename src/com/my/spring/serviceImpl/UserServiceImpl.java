@@ -23,6 +23,7 @@ import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
+import com.my.spring.model.UserWebPojo;
 import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.UserService;
@@ -714,6 +715,51 @@ public class UserServiceImpl implements UserService {
 			userPojo.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return userPojo;
+	}
+
+	@Override
+	public DataWrapper<List<UserWebPojo>> getUserWebTeam(String token,Long projectId) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<UserWebPojo>> dataWrapper = new DataWrapper<List<UserWebPojo>>();
+		List<UserWebPojo> userpojoList=new ArrayList<UserWebPojo>();
+		DataWrapper<List<User>> userList=new DataWrapper<List<User>>();
+		User adminInMemory = SessionManager.getSession(token);
+		if (adminInMemory != null) {
+				if(adminInMemory.getSystemId()==0 || adminInMemory.getSystemId()==1){
+	        		
+	    			UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(8);
+	    			userLog.setActionDate(new Date());
+	    			userLog.setUserId(adminInMemory.getId());
+	    			userLog.setSystemType(adminInMemory.getSystemId());
+	    			userLog.setVersion("3.0");
+	    			if(projectId!=null){
+	    				userLog.setProjectId(projectId);
+	    			}
+	    			userLogDao.addUserLog(userLog);
+	    		}
+				userList=userDao.getUserTeam(null, -1,projectId);
+				if(userList.getData().size()>0){
+					for(int i=0;i<userList.getData().size();i++){
+						UserWebPojo userpadpojo=new UserWebPojo();
+						userpadpojo.setId(userList.getData().get(i).getId());
+						userpadpojo.setRealName(userList.getData().get(i).getRealName());
+						userpadpojo.setTel(userList.getData().get(i).getTel());
+						userpadpojo.setWorkName(userList.getData().get(i).getWorkName());
+						userpojoList.add(userpadpojo);
+					}
+					dataWrapper.setData(userpojoList);
+					dataWrapper.setCallStatus(userList.getCallStatus());
+					dataWrapper.setCurrentPage(userList.getCurrentPage());
+					dataWrapper.setErrorCode(userList.getErrorCode());
+					dataWrapper.setNumberPerPage(userList.getNumberPerPage());
+					dataWrapper.setTotalNumber(userList.getTotalNumber());
+					dataWrapper.setTotalPage(userList.getTotalPage());
+				}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return dataWrapper;
 	}
 
 }

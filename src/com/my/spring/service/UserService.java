@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.my.spring.model.User;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
+import com.my.spring.model.UserWebPojo;
 import com.my.spring.utils.DataWrapper;
 
 
@@ -31,5 +32,6 @@ public interface UserService {
 	DataWrapper<List<UserPojo>> getUserLists(Integer pageIndex, Integer pageSize, User user, String token);
 	DataWrapper<UserPojo> getUserInfo(String token);
 	DataWrapper<Void> deleteUser(Long userId, String token, String userIdList);
+	DataWrapper<List<UserWebPojo>> getUserWebTeam(String token, Long projectId);
 	
 }

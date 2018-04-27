@@ -38,9 +38,15 @@
                           <div class="pName">
                               <span>项目名称</span>
                               <select id="projectName">
-                                  <option value="{{project.name}}" ng-repeat="project in projectLists">{{project.name}}</option>
+                                  <option value="{{project.name}}" data-id="{{project.id}}" ng-repeat="project in projectLists">{{project.name}}</option>
                               </select>
                           </div>
+						  <div class="uName" style="margin-top:30px;text-align:center;" >
+                            <span style="margin-right: 45px;">指定人员</span>
+                            <select id="userName" name="userId[]" multiple="multiple" style="width: 200px;height: 29px;line-height: 29px;border: 1px solid #dcdcdc;margin-left: 45px;text-align: center;border-radius: 3px;">
+                                <option ng-repeat="user in projectUserLists" value="{{user.id}}">{{user.realName}}</option>
+                            </select>
+						  </div>
                           <div class="pProblem">
                               <span>问题名称</span>
                               <input type="text" id="questionTitle"/>

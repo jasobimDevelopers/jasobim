@@ -44,6 +44,35 @@
     border-radius: 3px;
 }
 .addCon .addConMain .tuzhi input{ border: none}
+.addCon .addConMain .search-select-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.addCon .addConMain .search-select-wrapper .search-select {
+  position: relative;
+}
+.addCon .addConMain .search-select-wrapper .search-select input {
+  width: 200px;
+  height: 29px;
+  line-height: 29px;
+  border: 1px solid #dcdcdc;
+  margin-left: 45px;
+  text-align: center;
+  border-radius: 3px;
+}
+.addCon .addConMain .search-select-wrapper .select-wrapper {
+  display: none;
+  position: absolute;
+  top: 32px;
+  left: 45px;
+  right: 0;
+  border: 1px solid #dcdcdc;
+  border-radius: 3px;
+  background-color: #fff;
+}
+.addCon .addConMain .search-select-wrapper .select-wrapper .select-item:hover {
+  background-color: #1E9FFF;
+}
 .addCon .addConMain .send{
     width: 90px;
     height: 30px;

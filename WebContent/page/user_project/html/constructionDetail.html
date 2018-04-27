@@ -10,11 +10,12 @@
 	    	</div>
 	        <ul>
 	            <li><span>工程名称：</span><span>{{constructionTaskInfos[0].companyName}}</span></li>
-	            <li><span>指派人员：</span><span>{{constructionTaskInfos[0].workPeopleNameList}}</span></li>
-	            <li><span>项目负责人：</span><span>{{constructionTaskInfos[0].createUserName}}</span></li>
+	            <li><span>签收人员：</span><span>{{constructionTaskInfos[0].receiveUserName}}</span></li>
+	            <li><span>创建人：</span><span>{{constructionTaskInfos[0].createUserName}}</span></li>
 	            <li><span>限定完成时间：</span><span>{{constructionTaskInfos[0].finishedDate}}</span></li>
 	            <li><span>创建时间：</span><span>{{constructionTaskInfos[0].createDate}}</span></li>
 	            <li><span>状态：</span><span>{{constructionTaskFlag[constructionTaskInfos[0].taskFlag]}}</span></li>
+	            <li><span>施工内容：</span><div style="display: inline-block; width: 450px;">{{constructionTaskInfos[0].taskContent}}</div></li>
 	            <li><span>交底内容：</span><div style="display: inline-block; width: 450px;">{{constructionTaskInfos[0].detailContent}}</div></li>
 	        </ul>
 	        <ul>

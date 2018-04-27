@@ -716,30 +716,78 @@ function ProjectController($scope,ProjectService) {
 		 
 	 }
 	
-	 $scope.showPaperBox = function(){
-		 layer.open({
-		        type:1,
-		        title: '图纸上传',
-		        area: ['500px','500px'],
-		        btn:['上传','取消'],
-		        yes:function(index,layero){
-		        	layero.find('#process')[0].style.display="block"; 
-		        	$scope.addPaperInfo={};
-		        	$scope.addPaperInfo.buildingNum=layero.find('#paper_buildingNums')[0].value;
-		        	$scope.addPaperInfo.professionType=layero.find('#paper_profession_type')[0].value;
-		        	$scope.constructionfiles=layero.find('#paper_files')[0].files;
-		        	var floorNum=layero.find('#paper_floors')[0].value;
-		        	if(floorNum!=undefined && floorNum!=null){
-		        		$scope.addPaperInfo.floorNum=parseInt(floorNum);
-		        	}
-		        	progressBar=layero.find('#progressBar')[0];
-		        	percentageDiv=layero.find('#percentage')[0];
-		        	uploadTime=layero.find('#time')[0];
-		        	$scope.UpladFile("paper");
-		        },
-		        content:$("#show_paper").html()
-		    });
-	 }
+  $scope.showPaperBox = function(){
+    layer.open({
+      type:1,
+      title: '图纸上传',
+      area: ['500px','500px'],
+      btn:['上传','取消'],
+      yes:function(index,layero){
+        layero.find('#process')[0].style.display="block"; 
+        $scope.addPaperInfo={};
+        $scope.addPaperInfo.buildingNum=layero.find('#paper_buildingNums')[0].value;
+        // $scope.addPaperInfo.professionType=layero.find('#paper_profession_type')[0].value;
+		$scope.addPaperInfo.diyProfessionType=layero.find('#paper_profession_type')[0].value;
+        $scope.constructionfiles=layero.find('#paper_files')[0].files;
+        var floorNum=layero.find('#paper_floors')[0].value;
+        if(floorNum!=undefined && floorNum!=null){
+          $scope.addPaperInfo.floorNum=parseInt(floorNum);
+        }
+        progressBar=layero.find('#progressBar')[0];
+        percentageDiv=layero.find('#percentage')[0];
+        uploadTime=layero.find('#time')[0];
+        $scope.UpladFile("paper");
+      },
+      content:$("#show_paper").html()
+    });
+
+    // select profession type
+    var $selectInput = $('.layui-layer #paper_profession_type');
+    var $selectWrapper = $('.layui-layer .select-wrapper');
+    $selectInput.on('focus', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      $selectWrapper.show();
+    }).on('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }).on('input', function(e) {
+      var keyword = $selectInput.val();
+      var tempList = [];
+
+      if (keyword === '') {
+        tempList = $scope.projectPhaseInfo;
+      } else {
+        $scope.projectPhaseInfo.forEach(function(info) {
+          if (info.name.indexOf(keyword) >= 0) {
+            tempList.push(info);
+          }
+        });
+      }
+
+      $selectWrapper.empty();
+      if (tempList.length > 0) {
+        tempList.forEach(function(info, i) {
+          $selectWrapper.append('<div class="select-item" data-value="' + i + '" data-name="' + info.name + '">' + info.name + '</div>');
+        });
+      } else {
+        $selectWrapper.append('<div>没有相关专业</div>');
+      }
+    });
+    
+    $selectWrapper.on('click', '.select-item', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      $selectInput.val($(this).data('name'));
+      $selectWrapper.hide();
+    });
+    $(document).on('click', function() {
+      var $wrapper = $('.layui-layer .select-wrapper');
+      if ($wrapper) {
+        $wrapper.hide();
+      }
+    });
+	}
 	
 	
 	 /////删除交底
@@ -845,6 +893,9 @@ function ProjectController($scope,ProjectService) {
 		         var url = "api/paper/admin/uploadPaper"; // 接收上传文件的后台地址 
 		         if($scope.addPaperInfo.professionType!=null){
 		        	 form.append("professionType",$scope.addPaperInfo.professionType);
+				 }
+				 if($scope.addPaperInfo.diyProfessionType!=null){
+		        	 form.append("diyProfessionType",$scope.addPaperInfo.diyProfessionType);
 				 }
 		         var paper_buildingNum=$scope.addPaperInfo.buildingNum;
 				 var paper_floorNum=$scope.addPaperInfo.floorNum;

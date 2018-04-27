@@ -1,4 +1,4 @@
-  var token=getCookie('token');
+﻿  var token=getCookie('token');
   angular.module('Demo')
 .service('QuestionService', function QuestionService($http, $q) {
   
@@ -61,6 +61,28 @@
           });
       return deferred.promise;
       };
+      
+//////////通过项目id获取用户列表
+		this.getUserTeams = function(projectId){
+			 var deferred = $q.defer();
+			console.log("读取userTeam数据");
+			var api = 'api/user/getUserTeams?token='+getCookie('token') + "&projectId=" + projectId;
+			  $http.get(encodeURI(api))
+				  .success(function(data, status, headers, config){
+					  if(data.callStatus == "SUCCEED"){
+						  deferred.resolve(data);
+						  self.userTeamLists = data;
+					  }else{
+						  alert("数据读取失败");
+					  }
+					  
+				  })
+				  .error(function(data, status, headers, config){
+					  deferred.reject(data);
+				  });
+			  return deferred.promise;
+			
+		};
   /////增加问题
   this.addQuestionByAdmin = function(formData) {
 

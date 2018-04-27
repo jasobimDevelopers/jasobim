@@ -226,11 +226,17 @@
                                     <div class="tuzhi">
                                         <span>图&nbsp;&nbsp;&nbsp;纸</span><input type="file" id="paper_files" multiple="multiple">
                                     </div>
-                                    <div class="louceng">
+                                    <div class="louceng search-select-wrapper">
                                         <span>专&nbsp;&nbsp;&nbsp;业</span>
-                                        <select id="paper_profession_type">
+                                        <!-- <select id="paper_profession_type">
                                             <option value="{{$index}}" ng-repeat="paperProfessionType in projectPhaseInfo">{{paperProfessionType.name}}</option>
-                                        </select>
+                                        </select> -->
+                                        <div class="search-select">
+                                          <input type="text" id="paper_profession_type" ng-value="projectPhaseInfo[0].name" />
+                                          <div class="select-wrapper">
+                                              <div class="select-item" data-value="{{$index}}" data-name="{{paperProfessionType.name}}" ng-repeat="paperProfessionType in projectPhaseInfo">{{paperProfessionType.name}}</div>
+                                          </div>
+                                        </div>
                                     </div>
                                     <div class="loudong">
                                         <span>楼栋号</span>
@@ -268,7 +274,8 @@
                                 <td>{{paper.originName}}</td>
                                 <td>{{paper.buildingNum}}</td>
                                 <td>{{paper.floorNum}}</td>
-                                <td>{{projectPhaseInfos[paper.professionType].name}}</td>
+                                <!-- <td>{{projectPhaseInfos[paper.professionType].name}}</td> -->
+								<td>{{paper.professionName}}</td>
                                 <td>{{paper.uploadDate}}</td>
                                 <td class="tds" >
 									    <a href="{{paper.url}}" target="_blank" download="{{paper.originName}}">

@@ -18,6 +18,7 @@ import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.User;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
+import com.my.spring.model.UserWebPojo;
 import com.my.spring.service.UserService;
 import com.my.spring.utils.DataWrapper;
 
@@ -217,6 +218,14 @@ public class UserController {
     		@RequestParam(value="token",required=true) String token){
 		return userService.getUserInfo(token);
 	}
-	
+	//管理员获取用户列表
+	@RequestMapping(value="/getUserTeams", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<UserWebPojo>> getUserWebTeam(
+   	    		@RequestParam(value="token",required=true) String token,
+   	    		@RequestParam(value="projectId",required=true) Long projectId) {
+        return userService.getUserWebTeam(token,projectId);
+    }
+		
 
 }

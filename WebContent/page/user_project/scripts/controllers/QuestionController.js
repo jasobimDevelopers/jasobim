@@ -295,8 +295,16 @@ function QuestionController($scope,QuestionService) {
 	$scope.getProjectLists = function(pageSize,pageIndex,project) {
 		  QuestionService.getProjectLists(pageSize,-1,project).then(function (result){
 		  	  $scope.projectLists = result.data;
+		  	  $scope.getUserTeamList($scope.projectLists[0].id);
 		  });
 	  }
+
+	///////根据项目id获取用户列表
+	 $scope.getUserTeamList = function(projectId){
+		 QuestionService.getUserTeams(projectId).then(function (result){
+		  	  $scope.projectUserLists = result.data;
+		  });
+	 };
 	////////问题列表的查询
 	
 	 $scope.getProjectLists(pageSize,pageIndex,project);
@@ -304,41 +312,61 @@ function QuestionController($scope,QuestionService) {
 	/////显示添加页面
 	$scope.showAddQuestionHtml=function(){
 		 layer.open({
-		        type:1,
-		        title: '质量安全问题添加',
-		        area: ['700px','600px'],
-		        btn:['确定','取消'],
-		        yes:function(index,layero){
-		        	$scope.addQuestionInfo={};
-		        	$scope.addQuestionInfo.name=layero.find('#questionTitle')[0].value;
-		        	var projectNames=layero.find('#projectName')[0].value;
-		        	$scope.questionfiles=layero.find('#questionPics')[0].files;
-		        	var questionPority=layero.find('#questionPority')[0].value;
-		        	for(var k=0;k<$scope.projectQuestionOfPriority.length;k++){
-		        		if($scope.projectQuestionOfPriority[k].name==questionPority){
-		        			$scope.addQuestionInfo.questionPority=k;
-		        		}
-		        	}
-		        	var questionType=layero.find('#questionType')[0].value;
-		        	for(var i=0;i<$scope.projectQuestionOfType.length;i++){
-		        		if($scope.projectQuestionOfType[i].name==questionType){
-		        			$scope.addQuestionInfo.questionType=i;
-		        		}
-		        	}
-		        	for(var j=0;j<$scope.projectLists.length;j++){
-		        		if($scope.projectLists[j].name==projectNames){
-		        			$scope.addQuestionInfo.projectId=$scope.projectLists[j].id;
-		        		}
-		        	}
-		        	$scope.addQuestionInfo.trades=layero.find('#questionPhase')[0].value;
-		        	$scope.addQuestionInfo.questionDetail=layero.find('#questionDetail')[0].value;
-		        	$scope.questionTitle="质量安全问题添加";
-		        	$scope.addQuestionByAdmin();
-		        	
-		        },
-		        content:$("#show03s").html()
-		    });
+			type:1,
+			title: '质量安全问题添加',
+			area: ['700px','600px'],
+			btn:['确定','取消'],
+			yes:function(index,layero){
+				$scope.addQuestionInfo={};
+				$scope.addQuestionInfo.name=layero.find('#questionTitle')[0].value;
+				var projectNames=layero.find('#projectName')[0].value;
+				$scope.questionfiles=layero.find('#questionPics')[0].files;
+				var questionPority=layero.find('#questionPority')[0].value;
+				for(var k=0;k<$scope.projectQuestionOfPriority.length;k++){
+					if($scope.projectQuestionOfPriority[k].name==questionPority){
+						$scope.addQuestionInfo.questionPority=k;
+					}
+				}
+				var questionType=layero.find('#questionType')[0].value;
+				for(var i=0;i<$scope.projectQuestionOfType.length;i++){
+					if($scope.projectQuestionOfType[i].name==questionType){
+						$scope.addQuestionInfo.questionType=i;
+					}
+				}
+				for(var j=0;j<$scope.projectLists.length;j++){
+					if($scope.projectLists[j].name==projectNames){
+						$scope.addQuestionInfo.projectId=$scope.projectLists[j].id;
+					}
+				}
+				// users
+				$scope.addQuestionInfo.userList = $users.select2("val").join(',');
+				$scope.addQuestionInfo.trades=layero.find('#questionPhase')[0].value;
+				$scope.addQuestionInfo.questionDetail=layero.find('#questionDetail')[0].value;
+				$scope.questionTitle="质量安全问题添加";
+				console.log('params', $scope.addQuestionInfo);
+				$scope.addQuestionByAdmin();
+				
+			},
+			content:$("#show03s").html()
+		});
 		
+		var $project = $('.layui-layer #projectName');
+		var $users = $('.layui-layer #userName');
+		$users.select2();
+		$project.on('change', function() {
+			var id = $project.find('option:selected').data('id');
+			QuestionService.getUserTeams(id).then(function (result){
+				var list = result.data;
+				$scope.projectUserLists = list;
+				
+				// empty list first
+				$users.empty();
+				for (var i = 0; i < list.length; i += 1) {
+					var user = list[i];
+					$users.append('<option value="' + user.realName + ' class="ng-scope ng-binding">' + user.realName + '</option>');
+				}
+		  });
+		});
 	 };
 	
 	
