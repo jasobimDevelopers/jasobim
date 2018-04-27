@@ -17,6 +17,7 @@ public interface MenuListService {
 	DataWrapper<Void> addMenuList(String token, MenuList file);
 	DataWrapper<String> getMenuListMapByIdList(String token, String[] id);
 	DataWrapper<String> getMenuListMapByIdList(String[] id);
-	DataWrapper<String> getMenuLists(String token);
+	DataWrapper<List<MenuList>> getMenuLists(String token);
 	DataWrapper<String> getMenuListMapByIdList(List<MenuListCopy> menu);
+	DataWrapper<Void> updateMenu(String token, MenuList item);
 }

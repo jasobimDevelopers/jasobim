@@ -29,6 +29,13 @@ public class DepartmentController {
             @RequestParam(value = "token",required = true) String token){
         return departmentService.addDepartment(token,department);
     }
+    @RequestMapping(value="/admin/updateDepartment", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> updateDepartment(
+            @ModelAttribute Department department,
+            @RequestParam(value = "token",required = true) String token){
+        return departmentService.updateDepartment(token,department);
+    }
     @RequestMapping(value="/admin/deleteDepartment",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteDepartment(

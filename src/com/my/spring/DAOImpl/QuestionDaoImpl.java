@@ -5,8 +5,11 @@ import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.QuestionFileDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
+import com.my.spring.model.Projectvs;
 import com.my.spring.model.Question;
+import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.model.QuestionPojo;
 import com.my.spring.utils.DaoUtil;
@@ -19,6 +22,8 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -26,9 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Repository
 public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
     @Autowired
@@ -67,12 +69,11 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 		Session session=getSession();
 		boolean bool=false;
 		 try{
-			 Query query = session.createSQLQuery(sql);
-			 int temp=query.executeUpdate();
-			 if(temp==1){
-				 bool =true;
-			 }
-			 
+				 Query query = session.createSQLQuery(sql);
+				 int temp=query.executeUpdate();
+				 if(temp==1){
+					 bool =true;
+				 }
 	        }catch(Exception e){
 	            e.printStackTrace();
 	        }
@@ -156,10 +157,6 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         		}
         		
 			}
-			if(question.getQuestionType()!=null)
-			{
-				dis.add(Restrictions.eq("questionType", question.getQuestionType()));
-			}
 			if(question.getState()!=null)
 			{
 				criteria.add(Restrictions.eq("state", question.getState()));
@@ -175,9 +172,6 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
                 }else{
                 	criteria.add(Restrictions.eq("priority", question.getPriority()));
                 }
-             }
-             if(question.getQuestionType()!=null){
-             	criteria.add(Restrictions.eq("questionType", question.getQuestionType()));
              }
              if(question.getState()!=null){
              	criteria.add(Restrictions.eq("state", question.getState()));
@@ -350,7 +344,6 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         	questionpojo.setPosition(ret.get(i).getPosition());
         	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
         	questionpojo.setQuestionDate(sdf.format(ret.get(i).getQuestionDate()));
-        	questionpojo.setQuestionType(ret.get(i).getQuestionType());
         	questionpojo.setState(ret.get(i).getState());
         	questionpojo.setTrades(ret.get(i).getTrades());        	        	
         	retpojo.add(i, questionpojo);
@@ -362,5 +355,137 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         retDataWrapperPojo.setNumberPerPage(pageSize);
         
         return retDataWrapperPojo;
+	}
+
+	@Override
+	public List<QuestionCopy> getQuestionListByLeader(Long id,Integer pageIndex,Integer pageSize) {
+		if(pageIndex==null){
+			pageIndex=1;
+		}
+		if(pageSize==null){
+			pageSize=10;
+		}
+		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+		List<QuestionCopy> retDataWrapper = new ArrayList<QuestionCopy>();
+		String sql = "select *,COUNT(1) as total from question where id in(select e.about_id "
+		+"from notice e where e.notice_type=1 and e.user_id="+id+" and e.read_state=0 "
+		+"and (e.about_id in (select a.id from question a where a.project_id "
+		+"in (select c.project_id from user_project c where c.user_id="+id+"))))";
+		if(pageIndex!=-1){
+			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
+		}
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+				 .addScalar("id",StandardBasicTypes.LONG)
+				 .addScalar("user_id", StandardBasicTypes.LONG)
+				 .addScalar("name",StandardBasicTypes.STRING)
+				 .addScalar("trades",StandardBasicTypes.STRING)
+				 .addScalar("intro", StandardBasicTypes.STRING)
+				 .addScalar("question_date", StandardBasicTypes.DATE)
+				 .addScalar("priority", StandardBasicTypes.INTEGER)
+				 .addScalar("state", StandardBasicTypes.INTEGER)
+				 .addScalar("code_information", StandardBasicTypes.STRING)
+				 .addScalar("project_id",StandardBasicTypes.LONG)
+				 .addScalar("position", StandardBasicTypes.STRING)
+				 .addScalar("user_list", StandardBasicTypes.STRING)
+				 .addScalar("voice_id_list", StandardBasicTypes.STRING)
+				 .addScalar("model_flag", StandardBasicTypes.STRING)
+				 .addScalar("total", StandardBasicTypes.INTEGER)
+				 .setResultTransformer(Transformers.aliasToBean(QuestionCopy.class)); 
+		    retDataWrapper=query.list();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+		return retDataWrapper;
+	}
+
+	@Override
+	public List<QuestionCopy> getQuestionListByAdmin(Long userId,Integer pageIndex, Integer pageSize) {
+		if(pageIndex==null){
+			pageIndex=1;
+		}
+		if(pageSize==null){
+			pageSize=10;
+		}
+		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+		List<QuestionCopy> retDataWrapper = new ArrayList<QuestionCopy>();
+		String sql = "select a.*,COUNT(1) as total from question a,notice b where b.notice_type=1 "
+		+"and b.read_state=0 and b.about_id=a.id and a.user_id!="+userId;
+		if(pageIndex!=-1){
+			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
+		}
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+		    		.addScalar("id",StandardBasicTypes.LONG)
+					 .addScalar("user_id", StandardBasicTypes.LONG)
+					 .addScalar("name",StandardBasicTypes.STRING)
+					 .addScalar("trades",StandardBasicTypes.STRING)
+					 .addScalar("intro", StandardBasicTypes.STRING)
+					 .addScalar("question_date", StandardBasicTypes.DATE)
+					 .addScalar("priority", StandardBasicTypes.INTEGER)
+					 .addScalar("state", StandardBasicTypes.INTEGER)
+					 .addScalar("code_information", StandardBasicTypes.STRING)
+					 .addScalar("project_id",StandardBasicTypes.LONG)
+					 .addScalar("position", StandardBasicTypes.STRING)
+					 .addScalar("user_list", StandardBasicTypes.STRING)
+					 .addScalar("voice_id_list", StandardBasicTypes.STRING)
+					 .addScalar("model_flag", StandardBasicTypes.STRING)
+					 .addScalar("total",StandardBasicTypes.INTEGER)
+				 .setResultTransformer(Transformers.aliasToBean(QuestionCopy.class)); 
+		    retDataWrapper=query.list();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+		return retDataWrapper;
+	}
+
+	@Override
+	public List<QuestionCopy> getQuestionListByNorUser(Long id, Integer pageIndex, Integer pageSize) {
+		if(pageIndex==null){
+			pageIndex=1;
+		}
+		if(pageSize==null){
+			pageSize=10;
+		}
+		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+		List<QuestionCopy> retDataWrapper = new ArrayList<QuestionCopy>();
+		String sql = "select b.*,COUNT(1) as total from notice a,question b where a.user_id="+id
+		+" and a.read_state=0 and a.notice_type=1 and a.about_id=b.id";
+		if(pageIndex!=-1){
+			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
+		}
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+		    		.addScalar("id",StandardBasicTypes.LONG)
+					 .addScalar("user_id", StandardBasicTypes.LONG)
+					 .addScalar("name",StandardBasicTypes.STRING)
+					 .addScalar("trades",StandardBasicTypes.STRING)
+					 .addScalar("intro", StandardBasicTypes.STRING)
+					 .addScalar("question_date", StandardBasicTypes.DATE)
+					 .addScalar("priority", StandardBasicTypes.INTEGER)
+					 .addScalar("state", StandardBasicTypes.INTEGER)
+					 .addScalar("code_information", StandardBasicTypes.STRING)
+					 .addScalar("project_id",StandardBasicTypes.LONG)
+					 .addScalar("position", StandardBasicTypes.STRING)
+					 .addScalar("user_list", StandardBasicTypes.STRING)
+					 .addScalar("voice_id_list", StandardBasicTypes.STRING)
+					 .addScalar("model_flag", StandardBasicTypes.STRING)
+					 .addScalar("total",StandardBasicTypes.INTEGER)
+				 .setResultTransformer(Transformers.aliasToBean(QuestionCopy.class)); 
+		    retDataWrapper=query.list();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+		return retDataWrapper;
+		
 	}
 }

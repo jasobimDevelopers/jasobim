@@ -3,9 +3,11 @@ package com.my.spring.serviceImpl;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.MessageDao;
 import com.my.spring.DAO.MessageFileDao;
+import com.my.spring.DAO.NoticeDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QualityQuestionDao;
 import com.my.spring.DAO.QuestionFileDao;
+import com.my.spring.DAO.RoleDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.ErrorCodeEnum;
@@ -15,11 +17,14 @@ import com.my.spring.jpush.PushExamples;
 import com.my.spring.model.Files;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageFile;
+import com.my.spring.model.Notice;
 import com.my.spring.model.PageInfo;
 import com.my.spring.model.Project;
 import com.my.spring.model.QualityQuestion;
 import com.my.spring.model.QuestionFile;
+import com.my.spring.model.Role;
 import com.my.spring.model.QualityQuestionPojo;
+import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
@@ -69,6 +74,10 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     @Autowired
     FileDao fileDao;
     @Autowired
+    NoticeDao noticeDao;
+    @Autowired
+    RoleDao roleDao;
+    @Autowired
     ProjectDao projectDao;
     @Autowired
     FileService fileService;
@@ -98,6 +107,7 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					return dataWrapper;
 				}else{ 
+					HashMap<String,String> hq = new HashMap<String,String>();
 					if(fileList.length>0)
 					{
 						for(int k=0;k<fileList.length;k++){
@@ -107,6 +117,7 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 						 	QualityQuestionFile.setQualityId(QualityQuestion.getId());
 						 	QualityQuestionFile.setFileId(newfile.getId());
 						 	String originName = fileList[k].getOriginalFilename();
+						 	hq.put("imagUrl", newfile.getUrl());
 							if (originName.contains(".")) {
 								originName = originName.substring(0, originName.lastIndexOf("."));
 							}
@@ -133,13 +144,45 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 					}
 					/////////////////////////
 				///////////////////////////
+				List<Notice> nl = new ArrayList<Notice>();
+				if(QualityQuestion.getUserList()!=null){
+					String[] ul = QualityQuestion.getUserList().split(",");
+					for(String s:ul){
+						Notice nl2 = new Notice();
+						nl2.setAboutId(QualityQuestion.getId());
+						nl2.setCreateDate(new Date());
+						nl2.setUserId(Long.valueOf(s));
+						nl2.setNoticeType(0);
+						nl2.setReadState(0);
+						nl.add(nl2);
+					}
+				}
+				noticeDao.addNoticeList(nl);
+				/////////////
+				
+				hq.put("title", QualityQuestion.getName());
+				hq.put("content", QualityQuestion.getIntro());
+				hq.put("createUserName", userInMemory.getRealName());
+				if(userInMemory.getUserIconUrl()!=null){
+					hq.put("userIconUrl", userInMemory.getUserIconUrl());
+				}else{
+					if(userInMemory.getUserIcon()!=null){
+						Files files = fileService.getById(userInMemory.getUserIcon());
+						hq.put("userIconUrl", files.getUrl());
+					}
+				}
+				
+				
 				List<User> userList = new ArrayList<User>();
 				int adminFlag=0;
 				if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 || userInMemory.getUserType()==2){
         			adminFlag=-1;
         		}
-				userList=userDao.findUserLikeProjct(QualityQuestion.getProjectId(),userInMemory.getUserType());
+				userList=userDao.findUserLikeProjct(userInMemory.getUserType(),QualityQuestion.getUserList());
 				Project po = projectDao.getById(QualityQuestion.getProjectId());
+				hq.put("projectName", "来自  "+po.getName());
+				hq.put("aboutId", QualityQuestion.getId().toString());
+				hq.put("createDate", Parameters.getSdfs().format(new Date()));
 				String content="";
 				if(po!=null){
 					content=userInMemory.getRealName()+"在"+po.getName()+"项目里提交了一个标题为："+QualityQuestion.getName()+"的问题";
@@ -152,8 +195,9 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 				for(int b =0;b<userList.size();b++){
 					userids[b]=userList.get(b).getId().toString();
 				}
-				//PushExample.testSendPushWithCustomConfig_ios(userids, content);
-				//PushExample.testSendPushWithCustomConfig_android(userids, content);
+				///0、质量   1、安全   2、施工任务单  3、 预付单  4、留言
+				PushExample.testSendPushWithCustomConfig_ios(userids, content,0,hq);
+				PushExample.testSendPushWithCustomConfig_android(userids, content,0,hq);
 				}
 
 			}
@@ -344,7 +388,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 							QualityQuestionOld.setName(QualityQuestion.getName());
 							QualityQuestionOld.setState(QualityQuestion.getState());
 							QualityQuestionOld.setTrades(QualityQuestion.getTrades());
-							QualityQuestionOld.setQuestionType(QualityQuestion.getQuestionType());
 							QualityQuestionDao.updateQualityQuestion(QualityQuestionOld);
 						}
 						else
@@ -389,19 +432,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     		}
 			if(content!=null){
 				
-				//////问题类型搜索
-				if("安全".contains(content))
-				{
-					QualityQuestion.setQuestionType(0);
-				}
-				if("质量".contains(content))
-				{
-					QualityQuestion.setQuestionType(1);
-				}
-				if("其他".contains(content))
-				{
-					QualityQuestion.setQuestionType(2);
-				}
 				/////问题状态搜索
 				if("待解决".contains(content)){
 					QualityQuestion.setState(0);
@@ -488,7 +518,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 		        	QualityQuestionpojo.setPosition(dataWrappers.getData().get(i).getPosition());
 		        	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 		        	QualityQuestionpojo.setQuestionDate(sdf.format(dataWrappers.getData().get(i).getQuestionDate()));
-		        	QualityQuestionpojo.setQuestionType(dataWrappers.getData().get(i).getQuestionType());
 		        	QualityQuestionpojo.setState(dataWrappers.getData().get(i).getState());
 		        	QualityQuestionpojo.setTrades(dataWrappers.getData().get(i).getTrades());    
 		        	if(dataWrappers.getData().get(i).getUserId()!=null){
@@ -573,7 +602,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 						}
 						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 						QualityQuestionPojo.setQuestionDate(sdf.format(QualityQuestion.getQuestionDate()));
-						QualityQuestionPojo.setQuestionType(QualityQuestion.getQuestionType());
 						QualityQuestionPojo.setState(QualityQuestion.getState());
 						QualityQuestionPojo.setModelFlag(QualityQuestion.getModelFlag());
 						QualityQuestionPojo.setTrades(QualityQuestion.getTrades());
@@ -622,8 +650,7 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 						dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 					}
 					if(QualityQuestion!=null){
-						Long projectId=QualityQuestion.getProjectId();
-						if(userInDB.getUserType()==1 || userInDB.getUserType()==0 ){
+						if(userInDB.getUserType()==1 || userInDB.getUserType()==0 || userInDB.getUserType()==3){
 							QualityQuestionPojo QualityQuestionPojo=new QualityQuestionPojo();
 							QualityQuestionPojo.setId(QualityQuestion.getId());
 							QualityQuestionPojo.setCodeInformation(QualityQuestion.getCodeInformation());
@@ -649,7 +676,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 							}
 							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 							QualityQuestionPojo.setQuestionDate(sdf.format(QualityQuestion.getQuestionDate()));
-							QualityQuestionPojo.setQuestionType(QualityQuestion.getQuestionType());
 							QualityQuestionPojo.setState(QualityQuestion.getState());
 							QualityQuestionPojo.setTrades(QualityQuestion.getTrades());
 							QualityQuestionPojo.setUserId(userDao.getById(QualityQuestion.getUserId()).getRealName());
@@ -672,7 +698,22 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 								}
 								QualityQuestionPojo.setFileList(fileList);
 							}
-							
+							////////////更新消息为已读
+							Notice notice = new Notice();
+							notice=noticeDao.getByAdoutIdAndUserId(userInDB.getId(),QualityQuestion.getId(),0);
+							if(notice!=null){
+								notice.setReadState(1);
+								notice.setUpdateDate(new Date());
+								noticeDao.updateNotice(notice);
+							}
+							//////添加打点记录
+							UserLog userLog = new UserLog();
+							userLog.setActionDate(new Date());
+							userLog.setFileId(QualityQuestion.getId());
+							userLog.setProjectId(QualityQuestion.getProjectId());
+							userLog.setProjectPart(ProjectDatas.Quality_area.getCode());
+							userLog.setUserId(userInDB.getId());
+							userLogDao.addUserLog(userLog);
 							dataWrapper.setData(QualityQuestionPojo);
 						}else{
 							dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
@@ -778,7 +819,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 			Integer pageIndex, Integer pageSize, QualityQuestion QualityQuestion) {
 		DataWrappern<PageInfo,List<QualityQuestionPojo>, HashMap<String, String>> datawrapper=new DataWrappern<PageInfo,List<QualityQuestionPojo>,HashMap<String, String>>();
     	List<QualityQuestionPojo> pojo = new ArrayList<QualityQuestionPojo>();
-    	HashMap<String, PageInfo> map = new HashMap<String, PageInfo>();
 		PageInfo pageInfos = new PageInfo(); 
     	DataWrapper<List<QualityQuestion>> dataWrappers = new DataWrapper<List<QualityQuestion>>();
     	DataWrapper<List<QuestionFile>> dataWrapperFiles = new DataWrapper<List<QuestionFile>>();
@@ -802,19 +842,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     		}
 			if(content!=null && !content.equals("")){
 				
-				//////问题类型搜索
-				if("安全".contains(content))
-				{
-					QualityQuestion.setQuestionType(0);
-				}
-				if("质量".contains(content))
-				{
-					QualityQuestion.setQuestionType(1);
-				}
-				if("其他".contains(content))
-				{
-					QualityQuestion.setQuestionType(2);
-				}
 				/////问题状态搜索
 				if("待解决".contains(content)){
 					QualityQuestion.setState(0);
@@ -894,13 +921,11 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 	        	QualityQuestionpojo.setPosition(dataWrappers.getData().get(i).getPosition());
 	        	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 	        	QualityQuestionpojo.setQuestionDate(sdf.format(dataWrappers.getData().get(i).getQuestionDate()));
-	        	QualityQuestionpojo.setQuestionType(dataWrappers.getData().get(i).getQuestionType());
 	        	QualityQuestionpojo.setState(dataWrappers.getData().get(i).getState());
 	        	QualityQuestionpojo.setTrades(dataWrappers.getData().get(i).getTrades());        	        	
 	        	pojo.add(i, QualityQuestionpojo);
 	        }
 			if(pojo.size()>0){
-				 
 				pageInfos.setCurrentPage(dataWrappers.getCurrentPage());
 				pageInfos.setNumberPerPage(dataWrappers.getNumberPerPage());
 				pageInfos.setTotalNumber(dataWrappers.getTotalNumber());
@@ -919,7 +944,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 		    	}else{
 		    		sortPercent=Math.floor(sortPercent);
 		    	}
-		    	
 		    	double importantPercent=((double)QualityQuestionImportant/(double)QualityQuestionAll);
 		    	importantPercent=importantPercent*100;
 		    	if((importantPercent+0.5)>Math.ceil(importantPercent))
@@ -946,5 +970,39 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     		datawrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}
     	return datawrapper;
+	}
+
+	@Override
+	public DataWrapper<List<QuestionCopy>> getQuestionListOfNotRead(String token, Integer pageIndex, Integer pageSize) {
+		DataWrapper<List<QuestionCopy>> resultList = new DataWrapper<List<QuestionCopy>>();
+		List<QuestionCopy> questionCopys = new ArrayList<QuestionCopy>();
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null){
+			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType() || userInMemory.getUserType()==UserTypeEnum.User.getType()){
+				questionCopys=QualityQuestionDao.getQuestionListByAdmin(userInMemory.getId(),pageIndex,pageSize);
+				resultList.setTotalNumber(questionCopys.get(0).getTotal());
+			}else if(userInMemory.getUserType()==UserTypeEnum.Leader.getType()){
+				Role role = new Role();
+				role = roleDao.getById(userInMemory.getRoleId());
+				////////////
+				/////////////当前用户是该项目的项目负责人能看所有问题
+				if(role!=null){
+					if(role.getName()!=null){
+						if(role.getName().equals("项目负责人")){
+							/////获取当前角色所管项目的所有可读问题(已读)
+							questionCopys=QualityQuestionDao.getQuestionListByLeader(userInMemory.getId(),pageIndex,pageSize);
+							resultList.setTotalNumber(questionCopys.get(0).getTotal());
+						}else{
+							questionCopys=QualityQuestionDao.getQuestionListByNorUser(userInMemory.getId(),pageIndex,pageSize);
+							resultList.setTotalNumber(questionCopys.get(0).getTotal());
+						}
+					}
+				}
+			}
+			resultList.setData(questionCopys);
+		}else{
+			resultList.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return resultList;
 	}
 }

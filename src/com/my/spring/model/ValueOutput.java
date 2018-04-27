@@ -13,10 +13,12 @@ import javax.persistence.GeneratedValue;
 public class ValueOutput {
 	private Long id;
 	private String others;
-	private Double num;    //总产值
+	private Integer month;
 	private Double finished;    //已完成
 	private Date date;/////上传的时间
 	private Long projectId;///项目id
+	private Integer year;
+	private Double num;
 	
 	@Id
     @GeneratedValue
@@ -29,15 +31,6 @@ public class ValueOutput {
 		this.id=id;
 	}
 	
-	@Basic
-	@Column(name = "num")
-	public double getNum() {
-		return num;
-	}
-
-	public void setNum(double num) {
-		this.num = num;
-	}
 	
 	@Basic
 	@Column(name = "finished")
@@ -78,5 +71,32 @@ public class ValueOutput {
 		this.projectId = projectId;
 	}
 
-	
+	@Basic
+	@Column(name="month")
+	public Integer getMonth() {
+		return month;
+	}
+
+	public void setMonth(Integer month) {
+		this.month = month;
+	}
+
+	@Basic
+	@Column(name="year")
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+	@Basic
+	@Column(name="num")
+	public Double getNum() {
+		return num;
+	}
+
+	public void setNum(Double num) {
+		this.num = num;
+	}
 }

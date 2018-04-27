@@ -3,6 +3,8 @@ package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.MessageDao;
 import com.my.spring.model.Message;
+import com.my.spring.model.MessageCopy;
+import com.my.spring.model.QuestionCopy;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
@@ -11,6 +13,8 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -193,5 +197,42 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 	@Override
 	public Message getMessageListById(Long id) {
 		return get(id);
+	}
+
+	@Override
+	public List<MessageCopy> getMessageListNotRead(Long id, Integer pageSize, Integer pageIndex) {
+		if(pageIndex==null){
+			pageIndex=1;
+		}
+		if(pageSize==null){
+			pageSize=10;
+		}
+		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+		List<MessageCopy> retDataWrapper = new ArrayList<MessageCopy>();
+		String sql = "select a.*,COUNT(1) as total from message a,notice b "
+		+"where a.id=b.about_id and b.notice_type=4 and b.read_state=0 "
+		+"and b.user_id="+id;
+		if(pageIndex!=-1){
+			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
+		}
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+				 .addScalar("id",StandardBasicTypes.LONG)
+				 .addScalar("content", StandardBasicTypes.STRING)
+				 .addScalar("message_date",StandardBasicTypes.DATE)
+				 .addScalar("user_id",StandardBasicTypes.LONG)
+				 .addScalar("question_id", StandardBasicTypes.LONG)
+				 .addScalar("project_id", StandardBasicTypes.LONG)
+				 .addScalar("quality_id", StandardBasicTypes.LONG)
+				 .addScalar("total",StandardBasicTypes.INTEGER)
+				 .setResultTransformer(Transformers.aliasToBean(MessageCopy.class)); 
+		    retDataWrapper=query.list();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+		return retDataWrapper;
 	}
 }

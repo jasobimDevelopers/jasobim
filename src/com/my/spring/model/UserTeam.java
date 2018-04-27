@@ -16,6 +16,7 @@ public class UserTeam {
 	private Long createUser;
 	private Date createDate;
 	private String remark;
+	private Date updateDate;
 	
 	@Id
 	@GeneratedValue
@@ -61,6 +62,15 @@ public class UserTeam {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	
+	@Basic
+	@Column(name="update_date")
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 	
 	

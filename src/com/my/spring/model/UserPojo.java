@@ -25,6 +25,7 @@ public class UserPojo {
     private String projectList;
     private String[] projectLists;
     private Object menuList;
+    private Integer readState;///0 可读  1可写
     public String[] getProjectLists() {
 		return projectLists;
 	}
@@ -150,6 +151,12 @@ public class UserPojo {
 	}
 	public void setMenuList(Object object) {
 		this.menuList = object;
+	}
+	public Integer getReadState() {
+		return readState;
+	}
+	public void setReadState(Integer readState) {
+		this.readState = readState;
 	}
     
 }

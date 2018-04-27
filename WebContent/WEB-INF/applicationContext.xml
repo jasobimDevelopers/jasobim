@@ -30,7 +30,18 @@
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">  
         <property name="cacheManager" ref="cacheManagerFactory"/>  
     </bean>   -->
+	<!-- 配置RestTemplate -->
+    <!--Http client Factory -->
+    <bean id="httpClientFactory"
+        class="org.springframework.http.client.SimpleClientHttpRequestFactory">
+        <property name="connectTimeout" value="10000" />
+        <property name="readTimeout" value="10000" />
+    </bean>
 
+    <!--RestTemplate -->
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+        <constructor-arg ref="httpClientFactory" />
+    </bean>
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
@@ -45,8 +56,8 @@
                 <prop key="hiberante.format_sql">true</prop>
                 <prop key="hiberante.connection.autocommit">true</prop>
                 <!-- <prop key="hibernate.connection.url">jdbc:mysql://10.3.103.20:3306/bimdatas</prop> -->
-               <!--  <prop key="hibernate.connection.url">jdbc:mysql://192.168.2.57:3306/bimdatas</prop> -->
-                <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas</prop>
+                <!-- <prop key="hibernate.connection.url">jdbc:mysql://10.3.103.20:3306/bimdatas_test</prop> -->
+                <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas_new</prop>
             </props>
         </property>
         <property name="annotatedClasses">
@@ -81,6 +92,23 @@
                	<value>com.my.spring.model.MeasuredDatas</value>
                	<value>com.my.spring.model.HouseType</value>
                	<value>com.my.spring.model.ProjectFiles</value>
+               	<value>com.my.spring.model.Folder</value>
+               	<value>com.my.spring.model.SignUserInfo</value>
+               	<value>com.my.spring.model.UserProject</value>
+               	<value>com.my.spring.model.ConstructionLog</value>
+               	<value>com.my.spring.model.QualityQuestion</value>
+               	<value>com.my.spring.model.Material</value>
+               	<value>com.my.spring.model.MaterialLog</value>
+               	<value>com.my.spring.model.Role</value>
+               	<value>com.my.spring.model.UserTeam</value>
+               	<value>com.my.spring.model.Department</value>
+               	<value>com.my.spring.model.MenuList</value>
+               	<value>com.my.spring.model.Notice</value>
+               	<value>com.my.spring.model.MaterialType</value>
+               	<value>com.my.spring.model.MaterialFile</value>
+               	<value>com.my.spring.model.AttenceModel</value>
+               	<value>com.my.spring.model.Mechanic</value>
+               	<value>com.my.spring.model.MechanicPrice</value>
             </list>
         </property>
     </bean>
@@ -88,8 +116,8 @@
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <!-- <property name="url" value="jdbc:mysql://10.3.103.20:3306/bimdatas?characterEncoding=utf-8" /> -->
-        <!-- <property name="url" value="jdbc:mysql://192.168.2.57:3306/bimdatas?characterEncoding=utf-8" /> -->
-        <property name="url" value="jdbc:mysql://localhost:3306/bimdatas?characterEncoding=utf-8" />
+        <!-- <property name="url" value="jdbc:mysql://10.3.103.20:3306/bimdatas_test?characterEncoding=utf-8" /> -->
+        <property name="url" value="jdbc:mysql://localhost:3306/bimdatas_new?characterEncoding=utf-8" />
         <property name="username" value="root" />
         <property name="password" value="108158" />
     </bean>
@@ -98,8 +126,6 @@
           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
-
-
     <bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
         <property name="sessionFactory" ref="sessionFactory"></property>
     </bean>

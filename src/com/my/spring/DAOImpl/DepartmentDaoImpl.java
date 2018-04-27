@@ -2,7 +2,6 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.DepartmentDao;
-import com.my.spring.model.ConstructionTask;
 import com.my.spring.model.Department;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -74,5 +73,10 @@ public class DepartmentDaoImpl extends BaseDao<Department> implements Department
 	public boolean deleteDepartmentList(String[] ids) {
 		// TODO Auto-generated method stub
 		return deleteList(ids);
+	}
+	@Override
+	public boolean updateDepartment(Department dp) {
+		// TODO Auto-generated method stub
+		return update(dp);
 	}
 }

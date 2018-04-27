@@ -41,7 +41,7 @@ public class ConstructionLogController {
     @RequestMapping(value="/deleteConstructionLog",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteConstructionLog(
-            @RequestParam(value = "id",required = true) String id,
+            @RequestParam(value = "id",required = true) Long id,
             @RequestParam(value = "token",required = true) String token){
         return constructionLogService.deleteConstructionLog(id,token);
     }

@@ -8,4 +8,5 @@ public interface UserTeamDao {
 	boolean addUserTeam(UserTeam role);
 	boolean deleteUserTeamList(String[] ids);
 	DataWrapper<List<UserTeam>> getUserTeamList(Integer pageSize, Integer pageIndex, UserTeam userTeam);
+	boolean updateUserTeamList(UserTeam userTeam);
 }

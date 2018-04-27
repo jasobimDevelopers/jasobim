@@ -1,6 +1,7 @@
 package com.my.spring.DAO;
 
 import com.my.spring.model.Message;
+import com.my.spring.model.MessageCopy;
 import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
@@ -17,4 +18,5 @@ public interface MessageDao {
 	Message getMessageListById(Long id);
 	DataWrapper<List<Message>> getMessageListByQualityId(Long id);
 	boolean deleteMessageByQualityId(Long qualityId);
+	List<MessageCopy> getMessageListNotRead(Long id, Integer pageSize, Integer pageIndex);
 }

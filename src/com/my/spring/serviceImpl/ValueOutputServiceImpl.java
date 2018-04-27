@@ -17,6 +17,7 @@ import com.my.spring.service.FileService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
+import com.my.spring.utils.WriteDataToExcel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -131,10 +132,10 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     		if(dataWrapperPojo!=null){
     			for(int i=0;i<dataWrapperPojo.size();i++){
     				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-    	    		String str=sdf.format(dataWrapperPojo.get(i).getDate()); 
+    	    		String str=sdf.format(dataWrapperPojo.get(i).getDates()); 
     	    		dataWrapperPojo.get(i).setDates(str);
-    	    		dataWrapperPojo.get(i).setProjectName(dataWrapperPojo.get(i).getOthers());
-    				nums=nums+dataWrapperPojo.get(i).getNum();
+    	    		//Project projectss=projectDao.getById(Long.valueOf(dataWrapperPojo.get(0).getProject_id()));
+    				//nums=nums+Double.valueOf(projectss.getPrice());
     				finisheds=finisheds+dataWrapperPojo.get(i).getFinished();
     			}
 				DecimalFormat df=new DecimalFormat(".##");
@@ -165,20 +166,13 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     		if(dataWrapperPojo!=null){
     			if(dataWrapperPojo.get(0).getProject_id()!=null){
     				Project projectss=projectDao.getById(Long.valueOf(dataWrapperPojo.get(0).getProject_id()));
-    				dataWrapperPojo.get(0).setLeader(projectss.getLeader());
-    				if(projectss.getPicId()!=null){
-    					Files files = new Files();
-    					files=fileSerivce.getById(Long.valueOf(projectss.getPicId()));
-    					if(files!=null){
-    						dataWrapperPojo.get(0).setProjectPicUrl(files.getUrl());
-    					}
-    				}
     			}
 				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-	    		String str=sdf.format(dataWrapperPojo.get(0).getDate()); 
+	    		String str=sdf.format(dataWrapperPojo.get(0).getDates()); 
 	    		dataWrapperPojo.get(0).setDates(str);
 	    		dataWrapperPojo.get(0).setProjectName(dataWrapperPojo.get(0).getOthers());
-				nums=dataWrapperPojo.get(0).getNum();
+	    		Project projectss=projectDao.getById(Long.valueOf(dataWrapperPojo.get(0).getProject_id()));
+				nums=Double.valueOf(projectss.getPrice());
 				finisheds=dataWrapperPojo.get(0).getFinished();
 				DecimalFormat df=new DecimalFormat(".##");
     			String st=df.format(nums);
@@ -226,15 +220,15 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 	    			for(int i=0;i<valueOutputs.size();i++){
 	    				ValueOutputPojo strone=new ValueOutputPojo();
 	    				strone.setFinished(valueOutputs.get(i).getFinished());
-	    				strone.setNum(valueOutputs.get(i).getNum());
+	    				Project projectss=projectDao.getById(Long.valueOf(valueOutputs.get(i).getProject_id()));
 	    				strone.setProject_id(valueOutputs.get(i).getProject_id());
 	    				strone.setId(valueOutputs.get(i).getId());
 	    				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-	    	    		String str=sdf.format(valueOutputs.get(i).getDate()); 
+	    	    		String str=sdf.format(valueOutputs.get(i).getDates()); 
 	    	    		strone.setDates(str);
 	    	    		strone.setProjectName(valueOutputs.get(i).getOthers());
 	    	    		valueOutputs.add(i, strone);
-	    				nums=valueOutputs.get(i).getNum();
+	    				nums=Double.valueOf(projectss.getPrice());
 	    				finisheds+=valueOutputs.get(i).getFinished();
 	    			}
 	    			DecimalFormat df=new DecimalFormat(".##");
@@ -283,8 +277,8 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 				if(valueOutputss!=null && valueOutputss.size()>0){
 	    			for(int i=0;i<valueOutputss.size();i++){
 	    				ValueOutputPojo strone=new ValueOutputPojo();
+	    				Project projects = projectDao.getById(valueOutputss.get(i).getProjectId());
 	    				strone.setFinished(valueOutputss.get(i).getFinished());
-	    				strone.setNum(valueOutputss.get(i).getNum());
 	    				strone.setProject_id(valueOutputss.get(i).getProjectId());
 	    				strone.setId(valueOutputss.get(i).getId());
 	    				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
@@ -295,7 +289,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 	    	    		//strone.setDate(strs);
 	    	    		strone.setProjectName(valueOutputss.get(i).getOthers());
 	    	    		valueOutputs.add(i, strone);
-	    				nums=valueOutputss.get(i).getNum();
+	    				nums=Double.valueOf(projects.getPrice());
 	    				finisheds+=valueOutputss.get(i).getFinished();
 	    			}
 	    			DecimalFormat df=new DecimalFormat(".##");
@@ -333,9 +327,10 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
     	    		String str=sdf.format(dataWrappers.getData().get(i).getDate()); 
     	    		valueOutputPojo.setDates(str);
+    	    		valueOutputPojo.setMonth(dataWrappers.getData().get(i).getMonth());
     	    		valueOutputPojo.setProjectName(dataWrappers.getData().get(i).getOthers());
     	    		valueOutputPojo.setFinished(dataWrappers.getData().get(i).getFinished());
-    	    		valueOutputPojo.setNum(dataWrappers.getData().get(i).getNum());
+    	    		valueOutputPojo.setYear(dataWrappers.getData().get(i).getYear());
     	    		valueOutputPojo.setId(dataWrappers.getData().get(i).getId());
     	    		dataWrapperPojo.add(valueOutputPojo);
     			}
@@ -353,6 +348,49 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     		dataWrapperspojo.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}
         return dataWrapperspojo;
+	}
+
+	@Override
+	public DataWrapper<ValueOutputPojo> getValueOutputByDate(Integer month, Integer year, Long projectId,
+			String token) {
+		DataWrapper<ValueOutputPojo> result = new DataWrapper<ValueOutputPojo>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			ValueOutput valueOutput = ValueOutputDao.getValueOutputByDate(month, year, projectId);
+			if(valueOutput!=null){
+				ValueOutputPojo vp = new ValueOutputPojo();
+				vp.setFinished(valueOutput.getFinished());
+				vp.setId(valueOutput.getId());
+				result.setData(vp);
+			}else{
+				result.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+
+	@Override
+	public DataWrapper<String> exportValueOutput(Long projectId, String token) {
+    	DataWrapper<String> result = new DataWrapper<String>();
+    	DataWrapper<List<ValueOutput>> dataWrapperspojo = new DataWrapper<List<ValueOutput>>();
+    	User userInMemory=SessionManager.getSession(token);
+    	if(userInMemory!=null){
+    		Project project = new Project();
+    		ValueOutput valueOutput = new ValueOutput();
+    		valueOutput.setProjectId(projectId);
+    		dataWrapperspojo=ValueOutputDao.getValueOutputLists(10,-1,valueOutput,null);
+    		if(projectId!=null){
+    			project = projectDao.getById(projectId);
+    			WriteDataToExcel wd = new WriteDataToExcel();
+    			String url=wd.WriteData(dataWrapperspojo.getData(), project.getPrice());
+    			result.setData(url);
+    		}
+    	}else{
+    		result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+    	}
+		return result;
 	}
 	
 }

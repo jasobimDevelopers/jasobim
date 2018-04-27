@@ -84,6 +84,7 @@ public class DepartmentServiceImpl implements DepartmentService  {
 					for(Department dpss:dt.getData()){
 						DepartmentPojo dps = new DepartmentPojo();
 						dps.setName(dpss.getName());
+						dps.setId(dpss.getId());
 						dps.setRemark(dpss.getRemark());
 						dps.setCreateDate(Parameters.getSdf().format(dpss.getCreateDate()));
 						if(dpss.getCreateUser()!=null){
@@ -126,6 +127,29 @@ public class DepartmentServiceImpl implements DepartmentService  {
 			dp.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return dp;
+	}
+
+	@Override
+	public DataWrapper<Void> updateDepartment(String token, Department department) {
+		DataWrapper<Void> result = new DataWrapper<Void>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(department!=null){
+				Department dp = new Department();
+				dp = departmentDao.getById(department.getId());
+				dp.setUpdateDate(new Date());
+				if(department.getName()!=null){
+					dp.setName(department.getName());
+				}
+				if(!departmentDao.updateDepartment(dp)){
+					result.setErrorCode(ErrorCodeEnum.Error);
+				}
+			}
+			
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
 	}
 
 	

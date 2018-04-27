@@ -46,8 +46,8 @@ public class PushExample {
     protected static final Logger LOG = LoggerFactory.getLogger(PushExample.class);
 
     // demo App defined in resources/jpush-api.conf 
-    protected static final String APP_KEY ="2ed99b3ba766b7d5dd77e586";
-    protected static final String MASTER_SECRET = "c0f6b0390232ce987afa0346";
+    protected static final String APP_KEY ="02dfa5b53a1c4e59b8da19bf";
+    protected static final String MASTER_SECRET = "194740667b5d97847d902c8d";
     protected static final String GROUP_PUSH_KEY = "2c88a01e073a0fe4fc7b167c";
     protected static final String GROUP_MASTER_SECRET = "b11314807507e2bcfdeebe2e";
 	
@@ -104,8 +104,7 @@ public class PushExample {
                                 .setAlert(content)
                                 .setBadge(1)
                                 .setSound("happy")
-                                .addExtra("from", "Jaso")
-                                .addExtra("type", type)///0 、质量安全   1、留言   2、施工任务单  3、 预付单
+                                .addExtra("noticeType", type)///0、质量   1、安全   2、施工任务单  3、 预付单  4、留言
                                 .addExtras(qp)
                                 .build())
                         .build())
@@ -122,8 +121,7 @@ public class PushExample {
                 .setNotification(Notification.newBuilder()
                         .addPlatformNotification(AndroidNotification.newBuilder()
                                 .setAlert(content)
-                                .addExtra("from", "Jaso")
-                                .addExtra("type", type)///0 、质量安全   1、留言   2、施工任务单  3、 预付单
+                                .addExtra("noticeType", type)///0 、质量安全   1、留言   2、施工任务单  3、 预付单
                                 .addExtras(hq)
                                 .build())
                         .build())

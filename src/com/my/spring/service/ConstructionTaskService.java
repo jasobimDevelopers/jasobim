@@ -1,6 +1,7 @@
 package com.my.spring.service;
 
 import com.my.spring.model.ConstructionTask;
+import com.my.spring.model.ConstructionTaskCopy;
 import com.my.spring.model.ConstructionTaskPojo;
 import com.my.spring.utils.DataWrapper;
 
@@ -19,4 +20,5 @@ public interface ConstructionTaskService {
 	DataWrapper<Void> updateConstructionTask(ConstructionTask ct,String token);
 	DataWrapper<ConstructionTaskPojo> getConstructionTaskById(Long id, String token, String weixin);
 	DataWrapper<String> exportConstructionTaskById(Long id, String token);
+	DataWrapper<List<ConstructionTaskCopy>> getConstructionTaskListNotRead(String token,Integer pageSize,Integer pageIndex);
 }

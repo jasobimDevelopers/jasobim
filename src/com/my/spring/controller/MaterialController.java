@@ -6,16 +6,22 @@ import com.my.spring.model.Material;
 import com.my.spring.model.MaterialPojo;
 import com.my.spring.service.MaterialService;
 import com.my.spring.utils.DataWrapper;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 
 @Controller
 @RequestMapping(value="api/material")
 public class MaterialController {
+	@Autowired
     MaterialService materialService;
     @RequestMapping(value="/vs/addMaterial", method = RequestMethod.POST)
     @ResponseBody
@@ -57,6 +63,16 @@ public class MaterialController {
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute Material News){
         return materialService.getMaterialList(token,pageIndex,pageSize,News);
+    }
+    /////导入物资清单
+    @RequestMapping(value="/web/importMaterial", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> importMaterialList(
+    		 @RequestParam(value = "file", required = false) MultipartFile file,
+             @RequestParam(value = "token",required = true) String token,
+             @ModelAttribute Material News,
+            HttpServletRequest request){
+    	return materialService.importMaterial(file,request,token,News);
     }
    
 }

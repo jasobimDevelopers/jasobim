@@ -44,16 +44,6 @@ public class PaperPojo {
 	public void setProfessionType(Integer professionType) {
 		this.professionType = professionType;
 	}
-	public PaperPojo(){
-		
-	}
-	public PaperPojo(Long projectId,String buildingNum,String url,Integer professionType,Integer floorNum) {
-		this.projectId=projectId;
-		this.buildingNum=buildingNum;
-		this.url=url;
-		this.professionType=professionType;
-		this.floorNum=floorNum;
-	}
 	public Integer getFloorNum() {
 		return floorNum;
 	}

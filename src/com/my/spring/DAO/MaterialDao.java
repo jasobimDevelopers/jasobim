@@ -1,7 +1,6 @@
 package com.my.spring.DAO;
 
 import com.my.spring.model.Material;
-import com.my.spring.model.MaterialType;
 import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
@@ -13,4 +12,5 @@ public interface MaterialDao {
 	boolean addMaterial(Material m);
 	boolean deleteMaterial(Long id);
 	boolean updateMaterial(Material m);
+	boolean addMaterialList(List<Material> mst);
 }

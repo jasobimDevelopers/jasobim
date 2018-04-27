@@ -3,6 +3,8 @@
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Message;
+import com.my.spring.model.MessageCopy;
+import com.my.spring.model.MessageCopyPojo;
 import com.my.spring.model.MessagePojo;
 import com.my.spring.service.MessageService;
 import com.my.spring.utils.DataWrapper;
@@ -88,5 +90,13 @@ public class MessageController {
     		@RequestParam(value = "weixin",required = false) String weixin,
             @RequestParam(value = "token",required = false) String token){
         return messageService.getMessageListByQuestionId(questionId,token,weixin);
+    }
+    @RequestMapping(value="/app/getMessageListOfNotRead",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<MessageCopyPojo>> getMessageListOfNotRead(
+    		@RequestParam(value = "pageSize",required = false) Integer pageSize,
+    		@RequestParam(value = "pageIndex",required = false) Integer pageIndex,
+            @RequestParam(value = "token",required = false) String token){
+        return messageService.getMessageListOfNotRead(token, pageSize, pageIndex);
     }
 }

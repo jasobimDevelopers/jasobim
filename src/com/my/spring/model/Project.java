@@ -36,6 +36,7 @@ public class Project {
     private String teamId;
     private Date updateDate;
     private Date createDate;
+    private Integer price;
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -46,6 +47,16 @@ public class Project {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    @Basic
+    @Column(name = "price")
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
 
     @Basic
     @Column(name = "model_part")

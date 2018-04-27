@@ -679,6 +679,7 @@ public class UserServiceImpl implements UserService {
 			if(userInMeMory.getRoleId()!=null){
 				Role role = roleDao.getById(userInMeMory.getRoleId());
 				if(role!=null){
+					userpo.setReadState(role.getReadState());
 					List<MenuListCopy> menu = menuDao.getMenuListByIdList(role.getMenuList().split(",")).getData();
 					if(menu!=null){
 						if(menu.size()>0){

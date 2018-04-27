@@ -11,7 +11,7 @@
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd
        http://www.springframework.org/schema/task  
-	   http://www.springframework.org/schema/task/spring-task-3.1.xsd ">
+       http://www.springframework.org/schema/task/spring-task-3.1.xsd ">
 	   <context:annotation-config/>  
 	  <!--  <mvc:cors>
 		    <mvc:mapping path="/api/**"

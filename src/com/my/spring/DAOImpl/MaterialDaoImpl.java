@@ -95,6 +95,12 @@ public class MaterialDaoImpl extends BaseDao<Material> implements MaterialDao {
 		return get(id);
 	}
 
+	@Override
+	public boolean addMaterialList(List<Material> mst) {
+		// TODO Auto-generated method stub
+		return saveList(mst);
+	}
+
 
 	
 

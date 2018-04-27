@@ -421,14 +421,23 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         return dataWrapper;
 	}
 	@Override
-	public List<User> findUserLikeProjct(Long projectList,Integer id) {
+	public List<User> findUserLikeProjct(Integer id,String userList) {
 		List<User> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
         Disjunction dis = Restrictions.disjunction();
-        dis.add(Restrictions.eq("userType", 0));
-        dis.add(Restrictions.eq("userType", 1));
-        dis.add(Restrictions.like("projectList","%"+projectList+"%"));
+        Long userId=(long)426;
+        Long userId2=(long)33;
+        dis.add(Restrictions.eq("id", userId));
+        dis.add(Restrictions.eq("id", userId2));
+        //dis.add(Restrictions.eq("userType", 1));
+        //dis.add(Restrictions.or(Restrictions.eq("userType", 3),Restrictions.eq("roleId", 1)));
+        /*if(userList!=null){
+        	String[] ids = userList.split(",");
+        	for(int i=0;i<ids.length;i++){
+        		dis.add(Restrictions.eq("id", Long.valueOf(ids[i])));
+        	}
+        }*/
         criteria.add(dis);
         try {
             ret = criteria.list();

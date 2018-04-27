@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.my.spring.model.Role;
+import com.my.spring.model.RolePojo;
 import com.my.spring.service.RoleService;
 import com.my.spring.utils.DataWrapper;
 
@@ -48,7 +49,7 @@ public class RoleController {
 
     @RequestMapping(value="/admin/getRoleList", method=RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<List<Role>> getRoleList(
+    public DataWrapper<List<RolePojo>> getRoleList(
             @RequestParam(value = "token",required = false) String token){
         return roleService.getRoleList(token);
     }

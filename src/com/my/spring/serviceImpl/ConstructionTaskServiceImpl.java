@@ -2,15 +2,19 @@ package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.ConstructionTaskDao;
 import com.my.spring.DAO.FileDao;
+import com.my.spring.DAO.NoticeDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.jpush.PushExample;
+import com.my.spring.model.AdvancedOrderCopy;
 import com.my.spring.model.ConstructionTask;
+import com.my.spring.model.ConstructionTaskCopy;
 import com.my.spring.model.ConstructionTaskPojo;
 import com.my.spring.model.Files;
+import com.my.spring.model.Notice;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
@@ -39,7 +43,8 @@ import javax.servlet.http.HttpServletRequest;
 public class ConstructionTaskServiceImpl implements ConstructionTaskService {
     @Autowired
     ConstructionTaskDao constructionTaskDao;
-
+    @Autowired
+    NoticeDao noticeDao;
     @Autowired
     UserDao userDao;
     @Autowired
@@ -66,7 +71,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 					for(int i=0;i<files.length;i++){
 						Files filess=fileService.uploadFile("constructionFiles/"+constructionTask.getProjectId(), files[i], 5, request);
 						if(filess!=null){
-							hq.put("file"+i+1, filess.getUrl());
+							hq.put("imagUrl", filess.getUrl());
 							if(filesUrlList.equals("")){
 								filesUrlList=filess.getId().toString();
 							}else{
@@ -75,6 +80,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 							
 						}
 					}
+					
 				}
 				if(!filesUrlList.equals("")){
 					constructionTask.setFileIdList(filesUrlList);
@@ -90,17 +96,29 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}else{
 					if(userInMemory.getUserIconUrl()!=null){
-						hq.put("iconUrl", userInMemory.getUserIconUrl());
+						hq.put("userIconUrl", userInMemory.getUserIconUrl());
 					}else{
 						if(userInMemory.getUserIcon()!=null){
 							Files fileput = fileService.getById(userInMemory.getUserIcon());
-							hq.put("iconUrl", fileput.getUrl());
+							hq.put("userIconUrl", fileput.getUrl());
 						}
 					}
-					hq.put("date", Parameters.getSdfs().format(new Date()));
-					hq.put("userName", userInMemory.getRealName());
+					
+					if(constructionTask.getReceiveUserId()!=null){
+						Notice notice = new Notice();
+						notice.setCreateDate(new Date());
+						notice.setNoticeType(2);
+						notice.setUserId(constructionTask.getReceiveUserId());
+						notice.setReadState(0);
+						notice.setAboutId(constructionTask.getId());
+						noticeDao.addNotice(notice);
+					}
+					hq.put("createDate", Parameters.getSdfs().format(new Date()));
+					hq.put("createUserName", userInMemory.getRealName());
+					hq.put("aboutId", constructionTask.getId().toString());
 					hq.put("content", constructionTask.getDetailContent());
-					hq.put("projectInfo","来自  "+ constructionTask.getCompanyName());
+					hq.put("projectName","来自  "+ constructionTask.getCompanyName());
+					hq.put("title", "提交了一个施工任务单需要您审批");
 					List<User> userList = new ArrayList<User>();
 					int adminFlag=0;
 					if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 || userInMemory.getUserType()==2){
@@ -208,6 +226,14 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
     		}
 			dataWrapper=constructionTaskDao.getConstructionTasksList(pageIndex,pageSize,ConstructionTask,state,userInMemory.getRealName(),NextReceivePeopleId);
 			if(dataWrapper.getData()!=null && dataWrapper.getData().size()>0){
+				if(ConstructionTask.getId()!=null){
+					Notice notice = noticeDao.getByAdoutIdAndUserId(userInMemory.getId(), ConstructionTask.getId(), 2);
+					if(notice!=null){
+						notice.setUpdateDate(new Date());
+						notice.setReadState(1);
+						noticeDao.updateNotice(notice);
+					}
+				}
 				List<ConstructionTaskPojo> constructionTaskPojoList = new ArrayList<ConstructionTaskPojo>();
 				for(int i=0;i<dataWrapper.getData().size();i++){
 					ConstructionTaskPojo constructionTaskPojo =new ConstructionTaskPojo();
@@ -630,6 +656,27 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<ConstructionTaskCopy>> getConstructionTaskListNotRead(String token, Integer pageSize,
+			Integer pageIndex) {
+		DataWrapper<List<ConstructionTaskCopy>> resultList = new DataWrapper<List<ConstructionTaskCopy>>();
+		List<ConstructionTaskCopy> result = new ArrayList<ConstructionTaskCopy>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			result = constructionTaskDao.getAdvancedOrdersListNotRead(user.getId(),pageSize,pageIndex);
+			if(result.size()>=0 && result!=null){
+				resultList.setTotalNumber(result.get(0).getTotal());
+			}else{
+				resultList.setTotalNumber(0);
+			}
+			
+			resultList.setData(result);
+		}else{
+			resultList.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return resultList;
 	}
 
 

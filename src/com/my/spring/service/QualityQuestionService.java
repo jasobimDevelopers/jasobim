@@ -4,6 +4,7 @@ import com.my.spring.model.PageInfo;
 import com.my.spring.model.QualityQuestion;
 import com.my.spring.model.QualityQuestionPojo;
 import com.my.spring.model.Question;
+import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.QuestionPojo;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.DataWrappern;
@@ -27,5 +28,5 @@ public interface QualityQuestionService {
 	DataWrapper<List<QualityQuestionPojo>> getQualityQuestionListByUserId(String token, Integer pageIndex, Integer pageSize);
 	DataWrappern<PageInfo, List<QualityQuestionPojo>, HashMap<String, String>> getQualityQuestionHash(String content, Long projectId,
 			String token, Integer pageIndex, Integer pageSize, QualityQuestion question);
-
+	DataWrapper<List<QuestionCopy>> getQuestionListOfNotRead(String token,Integer pageIndex, Integer pageSize);
 }

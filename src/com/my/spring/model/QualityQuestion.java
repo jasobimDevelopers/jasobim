@@ -15,7 +15,6 @@ import javax.persistence.Table;
 public class QualityQuestion {
 	private Long id;       ////问题编号
 	private Long projectId;////项目工程id
-	private Integer questionType;////问题类型(0.安全1.质量2.其他)
 	private Long userId;  ///问题提交人id
 	private String name;  ///问题名称
 	private String trades;///问题专业
@@ -29,7 +28,6 @@ public class QualityQuestion {
 	//////
 	private String voiceIdList;//语音idList
 	private String userList;///接收到人
-	private String readState;///接收人的已读和未读情况
 	@Id
     @GeneratedValue
     @Column(name = "id")
@@ -67,14 +65,6 @@ public class QualityQuestion {
 		this.projectId = projectId;
 	}
 	
-	@Basic
-    @Column(name = "question_type")
-	public Integer getQuestionType() {
-		return questionType;
-	}
-	public void setQuestionType(Integer questionType) {
-		this.questionType = questionType;
-	}
 	
 	@Basic
     @Column(name = "user_id")
@@ -157,14 +147,6 @@ public class QualityQuestion {
 		this.position = position;
 	}
 	
-	@Basic
-	@Column(name = "read_state")
-	public String getReadState() {
-		return readState;
-	}
-	public void setReadState(String readState) {
-		this.readState = readState;
-	}
 	
 	@Basic
 	@Column(name = "voice_id_list")

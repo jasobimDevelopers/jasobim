@@ -12,4 +12,5 @@ public interface DepartmentService {
 	DataWrapper<List<DepartmentPojo>> getDepartmentList(Integer pageIndex, Integer pageSize, Department department,
 			String token);
 	DataWrapper<DepartmentPojo> getDepartmentById(String token, Long id);
+	DataWrapper<Void> updateDepartment(String token, Department department);
 }

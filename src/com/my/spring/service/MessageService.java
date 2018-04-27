@@ -1,6 +1,8 @@
 package com.my.spring.service;
 
 import com.my.spring.model.Message;
+import com.my.spring.model.MessageCopy;
+import com.my.spring.model.MessageCopyPojo;
 import com.my.spring.model.MessagePojo;
 import com.my.spring.utils.DataWrapper;
 
@@ -20,4 +22,5 @@ public interface MessageService {
 	DataWrapper<List<MessagePojo>> getMessageListByQuestionId(Long questionId, String token, String weixin);
 	DataWrapper<Void> updateMessage(Message message, String token);
 	DataWrapper<Message> getMessageListById(Long id, String token);
+	DataWrapper<List<MessageCopyPojo>> getMessageListOfNotRead(String token,Integer pageSize,Integer pageIndex);
 }

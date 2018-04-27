@@ -10,7 +10,7 @@ public class Notice {
 	private Long id;
 	private Long userId;
 	private Long aboutId;
-	private Integer noticeType;///通知关联表：0 质量问题、 1 安全问题、 2 施工任务单、 3 预付单
+	private Integer noticeType;///通知关联表：0 质量问题、 1 安全问题、 2 施工任务单、 3 预付单 、4 留言
 	private Integer readState;////0 未读 1已读
 	private Date createDate;
 	private Date updateDate;

@@ -78,6 +78,12 @@ public class UserTeamDaoImpl extends BaseDao<UserTeam> implements UserTeamDao {
 		return deleteList(ids);
 	}
 
+	@Override
+	public boolean updateUserTeamList(UserTeam userTeam) {
+		// TODO Auto-generated method stub
+		return update(userTeam);
+	}
+
 
 
 

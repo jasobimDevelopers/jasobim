@@ -2,13 +2,18 @@ package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.AdvancedOrderDao;
 import com.my.spring.model.AdvancedOrder;
+import com.my.spring.model.AdvancedOrderCopy;
+import com.my.spring.model.QuestionCopy;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -133,6 +138,46 @@ public class AnvancedOrderDaoImpl extends BaseDao<AdvancedOrder> implements Adva
 	@Override
 	public boolean updateConstructionTask(AdvancedOrder ct) {
 		 return update(ct);
+	}
+
+	@Override
+	public List<AdvancedOrderCopy> getAdvancedOrdersListNotRead(Long id, Integer pageSize, Integer pageIndex) {
+		if(pageIndex==null){
+			pageIndex=1;
+		}
+		if(pageSize==null){
+			pageSize=10;
+		}
+		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+		List<AdvancedOrderCopy> retDataWrapper = new ArrayList<AdvancedOrderCopy>();
+		String sql = "select a.id,a.project_name,a.create_date,a.submit_user_id,a.create_user_name,a.construct_part,a.quantity_des,a.month,"
+				+"a.project_id,a.status,a.content_files_id,COUNT(1) as total from advanced_order a,notice b where a.id=b.about_id and b.user_id="
+				+id+" and b.notice_type=3 and b.read_state=0";
+		if(pageIndex!=-1){
+			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
+		}
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+		    		.addScalar("id",StandardBasicTypes.LONG)
+					 .addScalar("project_name", StandardBasicTypes.STRING)
+					 .addScalar("create_date", StandardBasicTypes.DATE)
+					 .addScalar("submit_user_id", StandardBasicTypes.LONG)
+					 .addScalar("create_user_name", StandardBasicTypes.STRING)
+					 .addScalar("construct_part", StandardBasicTypes.STRING)
+					 .addScalar("quantity_des",StandardBasicTypes.STRING)
+					 .addScalar("month", StandardBasicTypes.INTEGER)
+					 .addScalar("project_id", StandardBasicTypes.LONG)
+					 .addScalar("status", StandardBasicTypes.INTEGER)
+					 .addScalar("content_files_id", StandardBasicTypes.STRING)
+					 .addScalar("total", StandardBasicTypes.INTEGER)
+				 .setResultTransformer(Transformers.aliasToBean(AdvancedOrderCopy.class)); 
+		    retDataWrapper=query.list();
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+		return retDataWrapper;
 	}
 
 	

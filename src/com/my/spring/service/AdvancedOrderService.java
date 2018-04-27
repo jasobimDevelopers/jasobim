@@ -1,6 +1,7 @@
 package com.my.spring.service;
 
 import com.my.spring.model.AdvancedOrder;
+import com.my.spring.model.AdvancedOrderCopy;
 import com.my.spring.model.AdvancedOrderPojo;
 import com.my.spring.utils.DataWrapper;
 
@@ -19,4 +20,5 @@ public interface AdvancedOrderService {
 	DataWrapper<Void> updateAdvancedOrder(AdvancedOrder advancedOrder, String token,HttpServletRequest request,MultipartFile photoOfFinished);
 	DataWrapper<AdvancedOrderPojo> getAdvancedOrderById(Long id, String token, String weixin);
 	DataWrapper<String> exportAdvancedOrder(Long id, String token);
+	DataWrapper<List<AdvancedOrderCopy>> getAdvancedOrderListOfNotRead(String token,Integer pageSize,Integer pageIndex);
 }

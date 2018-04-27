@@ -7,30 +7,13 @@ public class ValueOutputPojo {
 	private String others;
 	private Double nums;   ///当前项目的总产值
 	private Double finisheds;///当前项目已完成
-	private Double num;    //单个项目总产值
 	private Double finished;    //已完成
-	private Date date;
+	private Integer month;
 	private String dates;/////上传的时间
 	private String projectName;///项目名称
 	private Long project_id;////项目id
-	private String leader;///项目负责人
-	private String projectPicUrl;
+	private Integer year;
 	
-	public String getLeader() {
-		return leader;
-	}
-
-	public void setLeader(String leader) {
-		this.leader = leader;
-	}
-
-	public String getProjectPicUrl() {
-		return projectPicUrl;
-	}
-
-	public void setProjectPicUrl(String projectPicUrl) {
-		this.projectPicUrl = projectPicUrl;
-	}
 
 	public Long getId(){
 		return id;
@@ -39,15 +22,6 @@ public class ValueOutputPojo {
 	public void setId(Long id){
 		this.id=id;
 	}
-	
-	public double getNum() {
-		return num;
-	}
-
-	public void setNum(double num) {
-		this.num = num;
-	}
-	
 	
 	public double getFinished() {
 		return finished;
@@ -73,12 +47,6 @@ public class ValueOutputPojo {
 		this.dates = dates;
 	}
 	
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
 	
 	public String getProjectName() {
 		return projectName;
@@ -109,6 +77,23 @@ public class ValueOutputPojo {
 
 	public void setProject_id(Long project_id) {
 		this.project_id = project_id;
+	}
+
+
+	public Integer getMonth() {
+		return month;
+	}
+
+	public void setMonth(Integer month) {
+		this.month = month;
+	}
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
 	}
 
 	

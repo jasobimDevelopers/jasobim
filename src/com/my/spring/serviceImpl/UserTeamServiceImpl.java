@@ -107,4 +107,28 @@ public class UserTeamServiceImpl implements UserTeamService  {
 		return result;
 	}
 
+	@Override
+	public DataWrapper<Void> updateUserTeam(String token, UserTeam userTeam) {
+		DataWrapper<Void> result = new DataWrapper<Void>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(userTeam!=null){
+				UserTeam ut = userTeamDao.getById(userTeam.getId());
+				if(userTeam.getName()!=null){
+					ut.setName(userTeam.getName());
+					ut.setUpdateDate(new Date());
+				}
+				if(!userTeamDao.updateUserTeamList(ut)){
+					result.setErrorCode(ErrorCodeEnum.Error);
+				}
+			}else{
+				result.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+			
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+
 }

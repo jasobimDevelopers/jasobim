@@ -1,14 +1,19 @@
 package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ConstructionTaskDao;
+import com.my.spring.model.AdvancedOrderCopy;
 import com.my.spring.model.ConstructionTask;
+import com.my.spring.model.ConstructionTaskCopy;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -55,16 +60,9 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
         if(constructionTask.getNextReceivePeopleId()!=null){
         	criteria.add(Restrictions.like("nextReceivePeopleId", "%"+constructionTask.getNextReceivePeopleId()+"%"));
         }
-        if(!constructionTask.getUserProjectIdList().equals("-1")){
-        	criteria.add(Restrictions.or(Restrictions.like("approvalPeopleName", "%"+constructionTask.getApprovalPeopleName()+"%"),
-                    Restrictions.eq("nextReceivePeopleId", s),
-                    Restrictions.eq("createUserName", constructionTask.getCreateUserName())));
-        	String[] idlist = constructionTask.getUserProjectIdList().split(",");
-        	Long[] idlists = new Long[idlist.length];
-        	for(int j=0;j<idlist.length;j++){
-        		idlists[j]=Long.valueOf(idlist[j]);
-        	}
-        }
+    	criteria.add(Restrictions.or(Restrictions.like("approvalPeopleName", "%"+constructionTask.getApprovalPeopleName()+"%"),
+                Restrictions.eq("nextReceivePeopleId", s),
+                Restrictions.eq("createUserName", constructionTask.getCreateUserName())));
         if(constructionTask.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", constructionTask.getProjectId()));
         }
@@ -132,6 +130,43 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
 	public ConstructionTask getById(Long id) {
 		// TODO Auto-generated method stub
 		return get(id);
+	}
+
+	@Override
+	public List<ConstructionTaskCopy> getAdvancedOrdersListNotRead(Long id, Integer pageSize, Integer pageIndex) {
+		if(pageIndex==null){
+			pageIndex=1;
+		}
+		if(pageSize==null){
+			pageSize=10;
+		}
+		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+		List<ConstructionTaskCopy> retDataWrapper = new ArrayList<ConstructionTaskCopy>();
+		String sql = "select a.id,a.company_name,a.work_people_name_list,a.create_date,a.user_id,a.detail_content,"
+				+"a.project_id,a.file_id_list,COUNT(1) as total from construction_task a,notice b where a.id=b.about_id and b.user_id="
+				+id+" and b.notice_type=2 and b.read_state=0";
+		if(pageIndex!=-1){
+			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
+		}
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+		    		.addScalar("id",StandardBasicTypes.LONG)
+					 .addScalar("company_name", StandardBasicTypes.STRING)
+					 .addScalar("work_people_name_list", StandardBasicTypes.STRING)
+					 .addScalar("create_date", StandardBasicTypes.DATE)
+					 .addScalar("user_id", StandardBasicTypes.LONG)
+					 .addScalar("detail_content", StandardBasicTypes.STRING)
+					 .addScalar("project_id",StandardBasicTypes.LONG)
+					 .addScalar("file_id_list", StandardBasicTypes.STRING)
+					 .addScalar("total", StandardBasicTypes.INTEGER)
+				 .setResultTransformer(Transformers.aliasToBean(ConstructionTaskCopy.class)); 
+		    retDataWrapper=query.list();
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+		return retDataWrapper;
 	}
 
 	

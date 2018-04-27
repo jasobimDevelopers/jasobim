@@ -32,6 +32,13 @@ public class UserTeamController {
         return userTeamService.addUserTeam(token, userTeam);
     }
     
+    @RequestMapping(value="/admin/updateUserTeam", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> updateUserTeam(
+    		@ModelAttribute UserTeam userTeam,
+            @RequestParam(value = "token",required = true) String token){
+        return userTeamService.updateUserTeam(token, userTeam);
+    }
   
     
     

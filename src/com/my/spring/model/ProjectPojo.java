@@ -1,9 +1,6 @@
 package com.my.spring.model;
 
 
-
-//@Entity
-//@Table(name="")
 public class ProjectPojo {
 	
 	private Long id;//工程id
@@ -18,6 +15,7 @@ public class ProjectPojo {
     private String picName;///项目图片文件名
     private String modelName;///项目模型文件名
     private String place;//施工地點
+    private Integer price;
     private String description;//項目工程描述
     private String designUnit;//设计单位
     private String designUnitUser;//设计单位负责人
@@ -216,5 +214,11 @@ public class ProjectPojo {
 	}
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
+	}
+	public Integer getPrice() {
+		return price;
+	}
+	public void setPrice(Integer price) {
+		this.price = price;
 	}
 }

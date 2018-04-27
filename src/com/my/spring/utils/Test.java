@@ -7,10 +7,10 @@ import java.util.List;
 
 public class Test {
     public static void main(String[] args) {
-       String str = new String("12311");
-       List<String> list = new ArrayList<String>();
-       list.add(str);
-       str="aaaaa";
-       System.out.println(list.get(0));
+       String str = ("131,121,151");
+       String strs="asdadsad";
+       strs.replace("d", "");
+      
+      System.out.println(str.replace(",121", ""));
     }
 }

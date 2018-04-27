@@ -11,4 +11,6 @@ public interface MenuListDao {
 	DataWrapper<List<MenuListCopy>> getMenuListByIdList(String[] id);
 	DataWrapper<List<MenuList>> getMenuListByIdLists(String[] id);
 	DataWrapper<List<MenuList>> getMenuLists();
+	boolean updateMenuList(MenuList ml);
+	List<MenuListCopy> getMenuParrentByChild(List<MenuListCopy> ml);
 }

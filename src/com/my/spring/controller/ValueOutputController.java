@@ -8,12 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Controller
-@RequestMapping(value="api/ValueOutput")
+@RequestMapping(value="api/valueOutput")
 public class ValueOutputController {
     @Autowired
     ValueOutputService ValueOutputService;
@@ -65,7 +63,7 @@ public class ValueOutputController {
     		@RequestParam(value = "token",required = true) String token){
         return ValueOutputService.getValueOutputByProjectName(projectName,projectId,token);
     }
-    
+    ///////
     @RequestMapping(value="/updateValueOutput",method=RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateValueOutput(
@@ -74,6 +72,7 @@ public class ValueOutputController {
     	return ValueOutputService.updateValueOutput(ValueOutput, token);
     	
     }
+    //////////////
     //管理员分页获取产值列表
   	@RequestMapping(value="/admin/getValueOutputLists", method = RequestMethod.GET)
       @ResponseBody
@@ -83,18 +82,23 @@ public class ValueOutputController {
       		@RequestParam(value="dates",required=false) String dates,
       		@ModelAttribute ValueOutput valueOutput,
       		@RequestParam(value="token",required=true) String token) {
-  		  if(dates!=null){
-  			try  
-  			{  
-  			    SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-  			  valueOutput.setDate(sdf.parse(dates));  
-  			}  
-  			catch (ParseException e)  
-  			{  
-  			    System.out.println(e.getMessage());  
-  			}  
-
-  		  }
           return ValueOutputService.getValueOutputLists(pageIndex,pageSize,valueOutput,token,dates);
       }
+  	@RequestMapping(value="/getValueOutputByDate", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<ValueOutputPojo> getValueOutputByDate(
+    		@RequestParam(value="month",required=false) Integer month,
+    		@RequestParam(value="year",required=false) Integer year,
+    		@RequestParam(value="projectId",required=false) Long projectId,
+    		@RequestParam(value="token",required=true) String token) {
+        return ValueOutputService.getValueOutputByDate(month,year,projectId,token);
+    }
+  	@RequestMapping(value="/exportValueOutput", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<String> getValueOutputByDate(
+    		@RequestParam(value="projectId",required=false) Long projectId,
+    		@RequestParam(value="token",required=true) String token) {
+        return ValueOutputService.exportValueOutput(projectId,token);
+    }
+  	
 }

@@ -2,6 +2,7 @@ package com.my.spring.controller;
 
 
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,14 @@ public class MenuListController {
             @RequestParam(value = "token",required = true) String token){
         return menuListService.addMenuList(token,item);
     }
+    
+    @RequestMapping(value="/admin/updateMenu", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> updateMenu(
+            @ModelAttribute MenuList item,
+            @RequestParam(value = "token",required = true) String token){
+        return menuListService.updateMenu(token,item);
+    }
     @RequestMapping(value="/admin/deleteMenu", method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteMenu(
@@ -42,7 +51,7 @@ public class MenuListController {
   
     @RequestMapping(value="/admin/getMenuListList", method=RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<String> getMenuLists(
+    public DataWrapper<List<MenuList>> getMenuLists(
             @RequestParam(value = "token",required = false) String token){
         return menuListService.getMenuLists(token);
     }

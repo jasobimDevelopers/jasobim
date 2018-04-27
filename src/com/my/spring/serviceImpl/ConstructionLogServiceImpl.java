@@ -66,7 +66,7 @@ public class ConstructionLogServiceImpl implements ConstructionLogService {
 						constructionLogPojo.setUserId(cl.getUserId());
 						constructionLogPojo.setWeather(cl.getWeather());
 						if(cl.getUserId()!=null){
-							User user = userDao.getById(cl.getId());
+							User user = userDao.getById(cl.getUserId());
 							if(user!=null){
 								constructionLogPojo.setCreateUserName(user.getRealName());
 							}
@@ -91,6 +91,10 @@ public class ConstructionLogServiceImpl implements ConstructionLogService {
 						clpsss.add(constructionLogPojo);
 					}
 					clp.setData(clpsss);
+					clp.setTotalNumber(clps.getTotalNumber());
+					clp.setNumberPerPage(clps.getNumberPerPage());
+					clp.setTotalPage(clps.getTotalPage());
+					clp.setCurrentPage(clps.getCurrentPage());
 				}
 			}
 		}else{
@@ -140,14 +144,13 @@ public class ConstructionLogServiceImpl implements ConstructionLogService {
 	}
 
 	@Override
-	public DataWrapper<Void> deleteConstructionLog(String id, String token) {
+	public DataWrapper<Void> deleteConstructionLog(Long id, String token) {
 		// TODO Auto-generated method stub
 		DataWrapper<Void> result = new DataWrapper<Void>();
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null){
 			if(id!=null){
-				String[] ids = id.split(",");
-				if(!constructionLogDao.deleteConstructionLogList(ids)){
+				if(!constructionLogDao.deleteConstructionLog(id)){
 					result.setErrorCode(ErrorCodeEnum.Error);
 				}
 			}

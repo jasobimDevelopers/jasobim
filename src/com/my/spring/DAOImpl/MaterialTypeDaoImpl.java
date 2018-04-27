@@ -2,7 +2,9 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.MaterialTypeDao;
+import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.MaterialType;
+import com.my.spring.model.Project;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 
@@ -48,14 +50,14 @@ public class MaterialTypeDaoImpl extends BaseDao<MaterialType> implements Materi
 	        List<MaterialType> ret = new ArrayList<MaterialType>();
 	        Session session = getSession();
 	        Criteria criteria = session.createCriteria(MaterialType.class);
-	       
-	        if(m.getUserId()!=null){
-	        	criteria.add(Restrictions.eq("userId", m.getUserId()));
+	        if(m!=null){
+	        	  if(m.getUserId()!=null){
+	  	        	criteria.add(Restrictions.eq("userId", m.getUserId()));
+	  	        }
+	  	        if(m.getId()!=null){
+	  	        	criteria.add(Restrictions.eq("id", m.getId()));
+	  	        }
 	        }
-	        if(m.getId()!=null){
-	        	criteria.add(Restrictions.eq("id", m.getId()));
-	        }
-	   
 	        if (pageSize == null) {
 				pageSize = 10;
 			}
@@ -85,6 +87,24 @@ public class MaterialTypeDaoImpl extends BaseDao<MaterialType> implements Materi
 	        retDataWrapper.setTotalPage(totalPageNum);
 	        retDataWrapper.setNumberPerPage(pageSize);
 	        return retDataWrapper;
+	}
+
+	@Override
+	public MaterialType getMaterialByName(String materialName) {
+		List<MaterialType> ret = null;
+		MaterialType ss= new MaterialType();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(MaterialType.class);
+        criteria.add(Restrictions.eq("name", materialName));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+        	ss=ret.get(0);
+		}
+		return ss;
 	}
 
 

@@ -1,6 +1,7 @@
 package com.my.spring.parameters;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class Parameters {
 	private static final String pan = "C";
@@ -23,7 +24,22 @@ public class Parameters {
 		return sdf;
 	} 
 	private static final SimpleDateFormat sdfs=new SimpleDateFormat("yyyy-MM-dd");
+	
+	private static final SimpleDateFormat sdfDay=new SimpleDateFormat("HH:mm:ss");
 	public static SimpleDateFormat getSdfs() {
 		return sdfs;
+	}
+	public static SimpleDateFormat getSdfday() {
+		return sdfDay;
 	} 
+	public static int getDaysByYearMonth(int year, int month) {
+		  
+		         Calendar a = Calendar.getInstance();
+		         a.set(Calendar.YEAR, year);
+		          a.set(Calendar.MONTH, month - 1);
+		         a.set(Calendar.DATE, 1);
+		         a.roll(Calendar.DATE, -1);
+		         int maxDate = a.get(Calendar.DATE);
+		         return maxDate;
+		     }
 }

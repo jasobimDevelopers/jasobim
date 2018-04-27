@@ -60,6 +60,18 @@
     <servlet-name>default</servlet-name>
     <url-pattern>*.pdf</url-pattern>
   </servlet-mapping>
+   <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.stl</url-pattern>
+  </servlet-mapping>
+   <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.obj</url-pattern>
+  </servlet-mapping>
+   <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.fbx</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>*.docx</url-pattern>

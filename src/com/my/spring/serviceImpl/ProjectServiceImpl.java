@@ -432,6 +432,9 @@ public class ProjectServiceImpl implements ProjectService {
 						if(project.getBuildingUnitUser()!=null){
 							projects.setBuildingUnitUser(project.getBuildingUnitUser());
 						}
+						if(project.getPrice()!=null){
+							projects.setPrice(project.getPrice());
+						}
 						if(project.getConstructionControlUser()!=null){
 							projects.setConstructionControlUser(project.getConstructionControlUser());
 						}
@@ -762,6 +765,7 @@ public class ProjectServiceImpl implements ProjectService {
 					projectPojo.setLeader(project.getLeader());
 					projectPojo.setName(project.getName());
 					projectPojo.setNum(project.getNum());
+					projectPojo.setPrice(project.getPrice());
 					projectPojo.setPhase(project.getPhase());
 					projectPojo.setPlace(project.getPlace());
 					projectPojo.setStartDate(project.getStartDate());

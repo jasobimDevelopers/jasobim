@@ -16,6 +16,7 @@ public class Department {
 	private String name;
 	private Long createUser;
 	private Date createDate;
+	private Date updateDate;
 	private String remark;
 	
 	@Id
@@ -62,6 +63,15 @@ public class Department {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	
+	@Basic
+	@Column(name="update_date")
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 	
 }

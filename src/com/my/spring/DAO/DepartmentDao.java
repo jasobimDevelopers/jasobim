@@ -8,4 +8,5 @@ public interface DepartmentDao {
 	boolean addDepartment(Department role);
 	boolean deleteDepartmentList(String[] ids);
 	DataWrapper<List<Department>> getDepartmentList(Integer pageIndex, Integer pageSize, Department department);
+	boolean updateDepartment(Department dp);
 }

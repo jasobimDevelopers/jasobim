@@ -3,6 +3,7 @@ package com.my.spring.serviceImpl;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.MessageDao;
 import com.my.spring.DAO.MessageFileDao;
+import com.my.spring.DAO.NoticeDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.UserDao;
@@ -12,8 +13,11 @@ import com.my.spring.jpush.PushExample;
 import com.my.spring.jpush.PushExamples;
 import com.my.spring.model.Files;
 import com.my.spring.model.Message;
+import com.my.spring.model.MessageCopy;
+import com.my.spring.model.MessageCopyPojo;
 import com.my.spring.model.MessageFile;
 import com.my.spring.model.MessagePojo;
+import com.my.spring.model.Notice;
 import com.my.spring.model.Project;
 import com.my.spring.model.Question;
 import com.my.spring.model.User;
@@ -47,6 +51,8 @@ public class MessageServiceImpl implements MessageService {
 	@Autowired
     MessageDao messageDao;
 	@Autowired
+	NoticeDao noticeDao;
+	@Autowired
     MessageFileDao messageFileDao;
 	@Autowired
     FileDao fileDao;
@@ -77,17 +83,53 @@ public class MessageServiceImpl implements MessageService {
 					}
 					if(messageDao.addMessage(message)) 
 					{
+						//////新增留言未读记录
+						List<Notice> notices = new ArrayList<Notice>();
+						
+						
+						if(questions.getUserList()!=null){
+							String[] userList = questions.getUserList().split(",");
+							for(int i=0;i<userList.length;i++){
+								Notice noticess = new Notice();
+								noticess.setAboutId(message.getId());
+								noticess.setCreateDate(new Date());
+								noticess.setNoticeType(4);
+								noticess.setReadState(0);
+								noticess.setUserId(questions.getUserId());
+								if(!userInMemory.getId().equals(questions.getUserId())){
+									noticess.setUserId(questions.getUserId());
+								}
+								if(!Long.valueOf(userList[i]).equals(userInMemory.getId())){
+									noticess.setUserId(Long.valueOf(userList[i]));
+								}
+								notices.add(noticess);
+							}
+						}else{
+							if(!questions.getUserId().equals(userInMemory.getId())){
+								Notice notice = new Notice();
+								notice.setAboutId(message.getId());
+								notice.setCreateDate(new Date());
+								notice.setNoticeType(4);
+								notice.setUserId(questions.getUserId());
+								notices.add(notice);
+							}
+						}
+						
+						noticeDao.addNoticeList(notices);
+						//////
 						HashMap<String,String> hq = new HashMap<String,String>();
 						hq.put("content", message.getContent());
-						hq.put("date",Parameters.getSdfs().format(new Date()));
-						hq.put("userName", userInMemory.getRealName());
-						hq.put("projectInfo", "来自  "+projectDao.getById(questions.getProjectId()).getName());
+						hq.put("createDate",Parameters.getSdfs().format(new Date()));
+						hq.put("createUserName", userInMemory.getRealName());
+						hq.put("aboutId", questions.getId().toString());
+						hq.put("title", "提交了一条留言请查看");
+						hq.put("projectName", "来自  "+projectDao.getById(questions.getProjectId()).getName());
 						if(userInMemory.getUserIconUrl()!=null){
-							hq.put("iconUrl", userInMemory.getUserIconUrl());
+							hq.put("userIconUrl", userInMemory.getUserIconUrl());
 						}else{
 							if(userInMemory.getUserIcon()!=null){
 								Files files = fileService.getById(userInMemory.getUserIcon());
-								hq.put("iconUrl", files.getUrl());
+								hq.put("userIconUrl", files.getUrl());
 							}
 						}
 						if(file.length>0){
@@ -100,7 +142,7 @@ public class MessageServiceImpl implements MessageService {
 								if (originName.contains(".")) {
 									originName = originName.substring(0, originName.lastIndexOf("."));
 								}
-								hq.put("file"+i+1, newfile.getUrl());
+								hq.put("imagUrl", newfile.getUrl());
 								messageFile.setOriginName(originName);
 								messageFile.setMessageId(message.getId());
 								messageFileDao.addMessageFile(messageFile);
@@ -108,15 +150,22 @@ public class MessageServiceImpl implements MessageService {
 						}
 						///////////////////////////
 						List<User> userList = new ArrayList<User>();
-						userList=userDao.findUserLikeProjct(questions.getProjectId(),userInMemory.getUserType());
+						String userLists = questions.getUserList();
+						if(userInMemory.getId()!=questions.getUserId()){
+							userLists=userInMemory.getId()+","+userLists;
+						}
+						if(userList.contains(userInMemory.getId())){
+							userList=userDao.findUserLikeProjct(userInMemory.getUserType(),userLists.replace(","+userInMemory.getId(), ""));
+						}else{
+							userList=userDao.findUserLikeProjct(userInMemory.getUserType(),userLists);
+						}
 						String[] userids= new String[userList.size()];
-				
 						for(int b =0;b<userList.size();b++){
 							userids[b]=userList.get(b).getId().toString();
 						}
 						String content=userInMemory.getRealName()+"提交了一条留言，请您注意查看";
-						PushExample.testSendPushWithCustomConfig_ios(userids, content,1,hq);
-						PushExample.testSendPushWithCustomConfig_android(userids, content,1,hq);
+						PushExample.testSendPushWithCustomConfig_ios(userids, content,4,hq);
+						PushExample.testSendPushWithCustomConfig_android(userids, content,4,hq);
 						//testSendPushWithCustomConfig_android(userids, content);
 				///////////////////////////////
 						}
@@ -367,6 +416,14 @@ public class MessageServiceImpl implements MessageService {
 					List<MessagePojo> messagePojoList = new ArrayList<MessagePojo>();
 					for(Message message : dataWrappers.getData())
 					{
+						/////遍历更新留言的未读记录
+						Notice notice = new Notice();
+						notice = noticeDao.getByAdoutIdAndUserId(userInMemory.getId(), message.getId(), 4);
+						if(notice!=null){
+							notice.setUpdateDate(new Date());
+							notice.setReadState(1);
+							noticeDao.updateNotice(notice);
+						}
 						MessagePojo messagePojo =new MessagePojo();
 						messagePojo.setContent(message.getContent());
 						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
@@ -448,5 +505,54 @@ public class MessageServiceImpl implements MessageService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
         return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<MessageCopyPojo>> getMessageListOfNotRead(String token, Integer pageSize, Integer pageIndex) {
+		DataWrapper<List<MessageCopyPojo>> resultList = new DataWrapper<List<MessageCopyPojo>>();
+		List<MessageCopy> result = new ArrayList<MessageCopy>();
+		List<MessageCopyPojo> resultPojo = new ArrayList<MessageCopyPojo>();
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null){
+			result = messageDao.getMessageListNotRead(userInMemory.getId(),pageSize,pageIndex);
+			if(result.size()>0){
+				if(result.get(0).getId()!=null){
+					for(MessageCopy mc:result){
+						MessageCopyPojo mcp = new MessageCopyPojo();
+						mcp.setId(mc.getId());
+						mcp.setMessage_date(Parameters.getSdfs().format(mc.getMessage_date()));
+						mcp.setQuality_id(mc.getQuality_id());
+						mcp.setQuestion_id(mc.getQuestion_id());
+						mcp.setContent(mc.getContent());
+						mcp.setTotal(mc.getTotal());
+						if(mc.getProject_id()!=null){
+							Project project = projectDao.getById(mc.getProject_id());
+							if(project!=null){
+								mcp.setProjectInfo("来自  "+project.getName());
+							}
+						}
+						if(mc.getUser_id()!=null){
+							User user = userDao.getById(mc.getUser_id());
+							if(user!=null){
+								mcp.setUserName(user.getRealName());
+								if(user.getUserIcon()!=null){
+									Files file = fileDao.getById(user.getUserIcon());
+									if(file!=null){
+										mcp.setUserIcon(file.getUrl());
+									}
+								}else if(user.getUserIconUrl()!=null){
+									mcp.setUserIcon(user.getUserIconUrl());
+								}
+							}
+						}
+						resultPojo.add(mcp);
+					}
+					resultList.setData(resultPojo);
+				}
+			}
+		}else{
+			resultList.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return resultList;
 	}
 }

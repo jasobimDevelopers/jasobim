@@ -10,4 +10,5 @@ public interface UserTeamService {
 	DataWrapper<Void> addUserTeam(String token,UserTeam role);
 	DataWrapper<Void> deleteUserTeamByIdList(String token,String[] id);
 	DataWrapper<List<UserTeamPojo>> getUserTeamList(Integer pageIndex, Integer pageSize, UserTeam item, String token);
+	DataWrapper<Void> updateUserTeam(String token, UserTeam userTeam);
 }

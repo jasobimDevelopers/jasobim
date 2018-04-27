@@ -2,6 +2,7 @@ package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.AdvancedOrderCollectDao;
 import com.my.spring.DAO.AdvancedOrderDao;
+import com.my.spring.DAO.NoticeDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
@@ -9,8 +10,10 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.jpush.PushExample;
 import com.my.spring.model.AdvancedOrder;
 import com.my.spring.model.AdvancedOrderCollect;
+import com.my.spring.model.AdvancedOrderCopy;
 import com.my.spring.model.AdvancedOrderPojo;
 import com.my.spring.model.Files;
+import com.my.spring.model.Notice;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
@@ -42,6 +45,8 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
     @Autowired
     UserLogDao userLogDao;
     @Autowired
+    NoticeDao noticeDao;
+    @Autowired
     FileService fileService;
     @Autowired
     AdvancedOrderCollectDao advancedOrderCollectDao;
@@ -58,7 +63,6 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
         if (userInMemory != null) {
 			if(advancedOrder!=null){
 				if(advancedOrder.getProjectId()!=null){
-					
 					if(contentFiles.length>0){
 						String fileIdList="";
 						for(int i=0;i<contentFiles.length;i++){
@@ -89,17 +93,20 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 				}else{
 					
 					if(userInMemory.getUserIconUrl()!=null){
-						hq.put("iconUrl", userInMemory.getUserIconUrl());
+						hq.put("userIconUrl", userInMemory.getUserIconUrl());
 					}else{
 						if(userInMemory.getUserIcon()!=null){
 							Files files = fileService.getById(userInMemory.getUserIcon());
-							hq.put("iconUrl", files.getUrl());
+							hq.put("userIconUrl", files.getUrl());
 						}
 					}
-					hq.put("date", Parameters.getSdfs().format(new Date()));
-					hq.put("userName", userInMemory.getRealName());
+					hq.put("createDate", Parameters.getSdfs().format(new Date()));
+					hq.put("createUserName", userInMemory.getRealName());
 					hq.put("content", advancedOrder.getQuantityDes());
-					hq.put("projectInfo","来自  "+ advancedOrder.getProjectName());
+					hq.put("projectName","来自  "+ advancedOrder.getProjectName());
+					hq.put("aboutId", advancedOrder.getId().toString());
+					hq.put("title", "提交了一个预付单需要您审批");
+					hq.put("imagUrl",null);
 					AdvancedOrderCollect aoc = new AdvancedOrderCollect();
 					aoc.setAdvancedOrderId(advancedOrder.getId());
 					aoc.setConstructPart(advancedOrder.getConstructPart());
@@ -120,6 +127,15 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 						String content=userInMemory.getRealName()+"提交了一个预付单需要您审批";
 						String[] userids=new String[userList.size()];
 						for(int b =0;b<userList.size();b++){
+							if(userList.get(b).getRealName().equals(advancedOrder.getNextReceivePeopleId())){
+								Notice notice = new Notice();
+								notice.setCreateDate(new Date());
+								notice.setNoticeType(3);
+								notice.setUserId(userList.get(b).getId());
+								notice.setReadState(0);
+								notice.setAboutId(advancedOrder.getId());
+								noticeDao.addNotice(notice);
+							}
 							userids[b]=userList.get(b).getId().toString();
 						}
 						PushExample.testSendPushWithCustomConfig_ios(userids, content,3,hq);
@@ -212,6 +228,14 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
         		}
 				dataWrapper=advancedOrderDao.getAdvancedOrdersList(pageIndex,pageSize,advancedOrder,adminFlag);
 				if(dataWrapper.getData()!=null && dataWrapper.getData().size()>0){
+					if(advancedOrder.getId()!=null){
+						Notice notice = noticeDao.getByAdoutIdAndUserId(userInMemory.getId(), advancedOrder.getId(), 3);
+						if(notice!=null){
+							notice.setUpdateDate(new Date());
+							notice.setReadState(1);
+							noticeDao.updateNotice(notice);
+						}
+					}
 					List<AdvancedOrderPojo> advancedOrderPojoList = new ArrayList<AdvancedOrderPojo>();
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						AdvancedOrderPojo advancedOrderPojo =new AdvancedOrderPojo();
@@ -609,6 +633,26 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 		}
 		
         return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<AdvancedOrderCopy>> getAdvancedOrderListOfNotRead(String token, Integer pageSize,
+			Integer pageIndex) {
+		DataWrapper<List<AdvancedOrderCopy>> resultList = new DataWrapper<List<AdvancedOrderCopy>>();
+		List<AdvancedOrderCopy> result = new ArrayList<AdvancedOrderCopy>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			result = advancedOrderDao.getAdvancedOrdersListNotRead(user.getId(),pageSize,pageIndex);
+			if(result!=null && result.size()>=0){
+				resultList.setTotalNumber(result.get(0).getTotal());
+			}else{
+				resultList.setTotalNumber(0);
+			}
+			resultList.setData(result);
+		}else{
+			resultList.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return resultList;
 	}
 
 	

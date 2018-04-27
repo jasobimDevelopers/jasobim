@@ -16,5 +16,7 @@ public interface MaterialTypeDao {
 	boolean updateMaterialType(MaterialType m);
 
 	DataWrapper<List<MaterialType>> getMaterialTypeList(Integer pageIndex, Integer pageSize, MaterialType m);
+
+	MaterialType getMaterialByName(String materialName);
 	
 }

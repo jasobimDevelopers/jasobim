@@ -1,14 +1,13 @@
 package com.my.spring.DAO;
 
 import com.my.spring.model.Question;
+import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.QuestionPojo;
 import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
+
 public interface QuestionDao {
     boolean addQuestion(Question question);
     boolean deleteQuestion(Long id,Long projectId);
@@ -23,4 +22,7 @@ public interface QuestionDao {
 	DataWrapper<List<Question>> getQuestionListByLike(String content);
 	DataWrapper<List<Question>> getQuestionList(String content, Long projectId, Integer pageIndex, Integer pageSize, Question question, Long[] userIdList,String projectList);
 	DataWrapper<List<QuestionPojo>> getQuestionList(Integer pageIndex, Integer pageSize, Question question);
+	List<QuestionCopy> getQuestionListByLeader(Long id, Integer pageIndex, Integer pageSize);
+	List<QuestionCopy> getQuestionListByAdmin(Long long1, Integer pageIndex, Integer pageSize);
+	List<QuestionCopy> getQuestionListByNorUser(Long id, Integer pageIndex, Integer pageSize);
 }

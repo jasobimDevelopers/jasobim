@@ -167,10 +167,9 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
         List<ValueOutput> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(ValueOutput.class);
-        criteria.addOrder(Order.desc("date"));
+        criteria.addOrder(Order.asc("year")).addOrder(Order.asc("month"));
         if(valueOutput!=null){
         	if(dates!=null && !dates.equals("")){
-        	    
         		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         		try {
 					Date input=sdf.parse(dates);
@@ -279,5 +278,34 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
 	        }
 		
 		return dataWrapper;
+	}
+
+	@Override
+	public ValueOutput getValueOutputByDate(Integer month, Integer year, Long projectId) {
+		 List<ValueOutput> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(ValueOutput.class);
+        //criteria.addOrder(Order.desc("date"));
+        if(month!=null){
+        	criteria.add(Restrictions.eq("month", month));
+        }
+        if(projectId!=null){
+        	criteria.add(Restrictions.eq("projectId", projectId));
+        }
+        if(year!=null){
+        	criteria.add(Restrictions.eq("year", year));
+        }
+        try {
+        	ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(ret!=null){
+        	if(ret.size()>=0){
+        		return ret.get(0);
+        	}
+        }
+        return null;
+	        
 	}
 }

@@ -18,7 +18,7 @@ public class Message {
 	private Long questionId;
 	private Long userId;
 	private Long projectId;
-	private Long qualityId;
+	private Long qualityId;///// 0 质量留言 1.安全留言
 	
 	@Id
     @GeneratedValue

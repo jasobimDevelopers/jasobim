@@ -15,4 +15,6 @@ public interface ValueOutputService {
 	DataWrapper<List<ValueOutputPojo>> getValueOutputLists(Integer pageIndex, Integer pageSize, ValueOutput valueOutput,
 			String token,String dates);
 	DataWrapper<List<ValueOutputPojo>> getValueOutputByProjectName(String projectName, Long projectId, String token);
+	DataWrapper<ValueOutputPojo> getValueOutputByDate(Integer month, Integer year, Long projectId, String token);
+	DataWrapper<String> exportValueOutput(Long projectId, String token);
 }

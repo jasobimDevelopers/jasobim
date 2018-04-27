@@ -1,25 +1,37 @@
 package com.my.spring.serviceImpl;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.my.spring.DAO.MenuListDao;
 import com.my.spring.DAO.RoleDao;
+import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.MenuList;
+import com.my.spring.model.MenuListCopy;
 import com.my.spring.model.Role;
+import com.my.spring.model.RolePojo;
 import com.my.spring.model.User;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.service.RoleService;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.MenuNodeUtil;
 import com.my.spring.utils.SessionManager;
 
 @Service("roleService")
 public class RoleServiceImpl implements RoleService  {
 	@Autowired
 	RoleDao roleDao;
-	
-
+	@Autowired
+	MenuListDao menuDao;
+	@Autowired
+	UserDao userDao;
 	
 
 	@Override
@@ -95,11 +107,89 @@ public class RoleServiceImpl implements RoleService  {
 	}
 
 	@Override
-	public DataWrapper<List<Role>> getRoleList(String token) {
-		DataWrapper<List<Role>> result = new DataWrapper<List<Role>>();
+	public DataWrapper<List<RolePojo>> getRoleList(String token) {
+		DataWrapper<List<RolePojo>> result = new DataWrapper<List<RolePojo>>();
+		List<RolePojo> resultList = new ArrayList<RolePojo>();
+		DataWrapper<List<Role>> results = new DataWrapper<List<Role>>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			result = roleDao.getRoleList();
+			results = roleDao.getRoleList();
+			if(results.getData()!=null){
+				if(results.getData().size()>0){
+					for(Role rs:results.getData()){
+						RolePojo rp = new RolePojo();
+						rp.setCreateDate(Parameters.getSdf().format(rs.getCreateDate()));
+						rp.setId(rs.getId());
+						rp.setReadState(rs.getReadState());
+						rp.setName(rs.getName());
+						rp.setCreateUser(userDao.getById(rs.getCreateUser()).getRealName());
+						if(rs.getMenuList()!=null){
+							List<MenuListCopy> mp=menuDao.getMenuListByIdList(rs.getMenuList().split(",")).getData();
+							List<MenuListCopy> mpp=menuDao.getMenuParrentByChild(mp);
+							List dataList = new ArrayList();  
+							if(mpp!=null){
+								for(MenuListCopy ssp:mpp){
+									HashMap dataRecord1p = new HashMap();  
+									dataRecord1p.put("id", ssp.getId().toString());
+									dataRecord1p.put("menuPath", ssp.getMenuPath());
+									dataRecord1p.put("name", ssp.getMenuName());
+									if(ssp.getPid()==null){
+										dataRecord1p.put("pid", "");
+									}else{
+										dataRecord1p.put("pid", ssp.getPid().toString());
+									}
+									String str=Parameters.getSdf().format(ssp.getCreateDate());
+									dataRecord1p.put("createDate", str);
+									if(ssp.getCreateUser()!=null){
+										User userss = userDao.getById(ssp.getCreateUser());
+										if(userss!=null){
+											String userName=userss.getUserName();
+											dataRecord1p.put("createUser", userName);
+										}else{
+											dataRecord1p.put("createUser", "");
+										}
+									}
+									dataList.add(dataRecord1p);
+								}
+							}
+							if(mp!=null){
+								for(MenuListCopy ss:mp){
+									HashMap dataRecord1 = new HashMap();  
+									dataRecord1.put("id", ss.getId().toString());
+									dataRecord1.put("menuPath", ss.getMenuPath());
+									dataRecord1.put("name", ss.getMenuName());
+									if(ss.getPid()==null){
+										dataRecord1.put("pid", "");
+									}else{
+										dataRecord1.put("pid", ss.getPid().toString());
+									}
+									String str=Parameters.getSdf().format(ss.getCreateDate());
+									dataRecord1.put("createDate", str);
+									if(ss.getCreateUser()!=null){
+										User userss = userDao.getById(ss.getCreateUser());
+										if(userss!=null){
+											String userName=userss.getUserName();
+											dataRecord1.put("createUser", userName);
+										}else{
+											dataRecord1.put("createUser", "");
+										}
+									}
+									dataList.add(dataRecord1);
+								}
+								MenuNodeUtil nodeUtil = new MenuNodeUtil();
+								String resultString=nodeUtil.getJasonStringOfMenu(dataList);
+								rp.setMenuList(JSONArray.parse(resultString));
+							}
+						}
+						resultList.add(rp);
+					}
+					result.setData(resultList);
+				}else{
+					result.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+				}
+			}else{
+				result.setErrorCode(ErrorCodeEnum.Error);
+			}
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

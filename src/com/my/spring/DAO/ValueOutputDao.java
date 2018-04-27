@@ -20,4 +20,5 @@ public interface ValueOutputDao {
 	ValueOutput getById(Long fileId);
 	DataWrapper<List<ValueOutput>> getValueOutputListByProjectId(Long projectId);
 	DataWrapper<List<ValueOutputPojo>> getValueOutputListnew(Long projectId);
+	ValueOutput getValueOutputByDate(Integer month, Integer year, Long projectId);
 }

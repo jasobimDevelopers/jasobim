@@ -1,24 +1,36 @@
 package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.MaterialDao;
+import com.my.spring.DAO.MaterialFileDao;
 import com.my.spring.DAO.MaterialTypeDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.Files;
+import com.my.spring.model.ImportMaterial;
 import com.my.spring.model.Material;
+import com.my.spring.model.MaterialFile;
 import com.my.spring.model.MaterialPojo;
+import com.my.spring.model.MaterialType;
 import com.my.spring.model.User;
 import com.my.spring.parameters.Parameters;
+import com.my.spring.service.FileService;
 import com.my.spring.service.MaterialService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.MD5Util;
+import com.my.spring.utils.ReadMaterialExcel;
 import com.my.spring.utils.SessionManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service("materialService")
 public class MaterialServiceImpl implements MaterialService {
@@ -30,6 +42,10 @@ public class MaterialServiceImpl implements MaterialService {
     UserDao userDao;
     @Autowired
     UserLogService userLogSerivce;
+    @Autowired
+    FileService fileService;
+    @Autowired
+    MaterialFileDao materialFileDao;
     @Override
     public DataWrapper<Void> addMaterial(Material m,String token) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -137,6 +153,71 @@ public class MaterialServiceImpl implements MaterialService {
 		}
         return dataWrappers;
     }
+
+	@Override
+	public DataWrapper<Void> importMaterial(MultipartFile file, HttpServletRequest request, String token,Material material) {
+		// TODO Auto-generated method stub
+		DataWrapper<Void> result = new DataWrapper<Void>();
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null){
+			if(file!=null){
+				material.setCreateDate(new Date());
+				material.setUserId(userInMemory.getId());
+				List<Material> mst = new ArrayList<Material>();
+				List<ImportMaterial> ms = new ArrayList<ImportMaterial>();
+				ReadMaterialExcel rm = new ReadMaterialExcel();
+				String newFileName = MD5Util.getMD5String(file.getOriginalFilename() + new Date() + UUID.randomUUID().toString()).replace(".","")
+	                    + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+				ms=rm.getExcelInfo(newFileName, file);
+				if(ms!=null){
+					Files files=fileService.uploadFile("fileUploads/materialFiles", file, 10, request,userInMemory.getId());
+					MaterialFile mf = new MaterialFile();
+					mf.setUploadDate(new Date());
+					mf.setFileId(mf.getId());
+					mf.setProjectId(material.getProjectId());
+					mf.setUserId(userInMemory.getId());
+					materialFileDao.addMaterialFile(mf);
+				}
+				Material m = new Material();
+				MaterialType mq = new MaterialType();
+				mq.setCreateDate(new Date());
+				mq.setUserId(userInMemory.getId());
+				m.setCreateDate(new Date());
+				m.setProjectId(material.getProjectId());
+				m.setUserId(userInMemory.getId());
+				for(ImportMaterial im:ms){
+					m.setMaterialName(im.getMaterialName());
+					m.setUnicode(im.getUnicode());
+					m.setUnit(im.getUnit());
+					m.setSize(im.getSize());
+					m.setRemark(im.getRemark());
+					if(im.getMaterialType()!=null){
+						MaterialType sp = new MaterialType();
+						sp=materialTypeDao.getMaterialByName(im.getMaterialName());
+						if(sp==null){
+							mq.setName(im.getMaterialName());
+							if(materialTypeDao.addMaterialType(mq)){
+								m.setMaterialType(mq.getId());
+							}
+						}else{
+							m.setMaterialType(sp.getId());
+						}
+					}
+					mst.add(m);
+				}
+				if(mst.size()>0){
+					if(!materialDao.addMaterialList(mst)){
+						result.setErrorCode(ErrorCodeEnum.Error);
+					}
+				}
+			}else{
+				result.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
 
 	
 }
