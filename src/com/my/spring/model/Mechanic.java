@@ -14,6 +14,7 @@ public class Mechanic {
 	private int daySalary;
 	private String remark;
 	private Date createDate;
+	private Integer dayHours;
 	private Long createUser;
 	private Long idCardImg;
 	
@@ -115,6 +116,15 @@ public class Mechanic {
 	}
 	public void setIdCardImg(Long idCardImg) {
 		this.idCardImg = idCardImg;
+	}
+	
+	@Basic
+	@Column(name="day_hours")
+	public Integer getDayHours() {
+		return dayHours;
+	}
+	public void setDayHours(Integer dayHours) {
+		this.dayHours = dayHours;
 	}
 	
 	

@@ -24,7 +24,7 @@ public interface QuestionService {
 	DataWrapper<List<Question>> getQuestionsByLike(String content, String token);
 	DataWrapper<Void> updateQuestionState(Long questionId, String token, Integer state);
 	DataWrapper<List<QuestionPojo>> getQuestionListByUserId(String token, Integer pageIndex, Integer pageSize);
-	DataWrappern<PageInfo, List<QuestionPojo>, HashMap<String, String>> getQuestionHash(String content, Long projectId,
+	DataWrappern<PageInfo, List<QuestionPojo>, HashMap<String, String>> getQuestionHash(Integer searchType,String content, Long projectId,
 			String token, Integer pageIndex, Integer pageSize, Question question);
 	DataWrapper<List<QuestionCopy>> getQuestionListOfNotRead(String token,Integer pageIndex, Integer pageSize);
 }

@@ -23,4 +23,5 @@ public interface MessageService {
 	DataWrapper<Void> updateMessage(Message message, String token);
 	DataWrapper<Message> getMessageListById(Long id, String token);
 	DataWrapper<List<MessageCopyPojo>> getMessageListOfNotRead(String token,Integer pageSize,Integer pageIndex);
+	DataWrapper<List<MessagePojo>> getMessageListByQualityId(Long qualityId, String token, String weixin);
 }

@@ -67,29 +67,6 @@ public class ReadMaterialExcel {
       //把spring文件上传的MultipartFile转换成CommonsMultipartFile类型
        CommonsMultipartFile cf= (CommonsMultipartFile)Mfile; //获取本地存储路径
        //File file = new  File("D://jasobim/tomcat_8080/webapps/fileUploads");
-       File file = new File("D:\\fileupload");
-       Files filess = new Files();
-       filess.setFileType(10);
-       
-       filess.setName(Mfile.getName());
-       
-       
-       //创建一个目录 （它的路径名由当前 File 对象指定，包括任一必须的父路径。）
-       if (!file.exists()) file.mkdirs();
-       //新建一个文件
-       long str=new Date().getTime();
-       filess.setUrl("/fileUploads/"+str+".xls");
-       filess.setRealName(Mfile.getOriginalFilename());
-       filess.setIntro(str+"");
-       fileService.addFiles(filess);
-       File file1 = new File(file +"/"+ str + ".xls"); 
-       //将上传的文件写入新建的文件中
-       try {
-           cf.getFileItem().write(file1); 
-       } catch (Exception e) {
-           e.printStackTrace();
-       }
-       
        //初始化客户信息的集合    
        List<ImportMaterial> elementList=new ArrayList<ImportMaterial>();
        //初始化输入流
@@ -227,9 +204,7 @@ public class ReadMaterialExcel {
        List<ImportMaterial> elementList=new ArrayList<ImportMaterial>();
        ImportMaterial item;    
        //循环Excel行数,从第二行开始。标题不入库
-       int flag=1;
        for(int r=2;r<totalRows;r++){
-    	   if(flag>0){
     		   Row row = sheet.getRow(r);
                if (row == null) continue;
                item = new ImportMaterial();
@@ -241,35 +216,30 @@ public class ReadMaterialExcel {
                     	   cell.setCellType(Cell.CELL_TYPE_STRING);
                     	   String str=cell.getStringCellValue();
                     	   if(str==null || str.equals("")){
-                    		   flag=-1;
                     	   }
                     	   item.setMaterialType(str);
                        }else if(c==1){
                     	   cell.setCellType(Cell.CELL_TYPE_STRING);
                     	   String str=cell.getStringCellValue();
                     	   if(str==null || str.equals("")){
-                    		   flag=-1;
                     	   }
                     	   item.setUnicode(str);
                        }else if(c==2){
                     	   cell.setCellType(Cell.CELL_TYPE_STRING);
                     	   String str=cell.getStringCellValue();
                     	   if(str==null || str.equals("")){
-                    		   flag=-1;
                     	   }
                     	   item.setMaterialName(str);
                        }else if(c==3){
                     	   cell.setCellType(Cell.CELL_TYPE_STRING);
                     	   String str=cell.getStringCellValue();
                     	   if(str==null || str.equals("")){
-                    		   flag=-1;
                     	   }
                     	   item.setSize(str);
                        }else if(c==4){
                     	   cell.setCellType(Cell.CELL_TYPE_STRING);
                     	   String str=cell.getStringCellValue();
                     	   if(str==null || str.equals("")){
-                    		   flag=-1;
                     	   }
                     	   item.setUnit(str);
                        }else if(c==5){
@@ -279,18 +249,17 @@ public class ReadMaterialExcel {
                        }
                    }
                }
-               
                try{
-            	   if(flag>0){
-            		   elementList.add(item);
+            	   if(item!=null){
+            		   if(!(item.getMaterialName()==null && item.getMaterialType()==null && item.getSize()==null && item.getUnicode()==null && item.getUnit()==null)){
+            			   if(!(item.getMaterialName().equals("") && item.getMaterialType().equals("") && item.getSize().equals("") && item.getUnicode().equals("") && item.getUnit().equals(""))){
+            				   elementList.add(item); 
+            			   }
+            		   }
             	   }
                }catch(Exception e){
             	   e.printStackTrace();
                }
-    	   }else{
-    		   break;
-    	   }
-         
        }
        return elementList;
   }

@@ -1,10 +1,15 @@
 package com.my.spring.model;
+
+import java.util.List;
+
 public class MechanicPricePojo {
 	private Long id;
-	private Long mechanicId;
+	private String userName;
+	private String workName;
 	private Integer hour;
 	private String editDate;
 	private String createDate;
+	private List<MechanicPrice> mp;
 	
 	public Long getId() {
 		return id;
@@ -13,12 +18,6 @@ public class MechanicPricePojo {
 		this.id = id;
 	}
 	
-	public Long getMechanicId() {
-		return mechanicId;
-	}
-	public void setMechanicId(Long mechanicId) {
-		this.mechanicId = mechanicId;
-	}
 	
 	public Integer getHour() {
 		return hour;
@@ -39,6 +38,24 @@ public class MechanicPricePojo {
 	}
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getWorkName() {
+		return workName;
+	}
+	public void setWorkName(String workName) {
+		this.workName = workName;
+	}
+	public List<MechanicPrice> getMp() {
+		return mp;
+	}
+	public void setMp(List<MechanicPrice> mp) {
+		this.mp = mp;
 	}
 	
 	

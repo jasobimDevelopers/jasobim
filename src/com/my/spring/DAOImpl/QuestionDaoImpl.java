@@ -106,6 +106,77 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 
     @SuppressWarnings("unchecked")
 	@Override
+	/////searchType(0.1.2.)
+    public DataWrapper<List<Question>> getQuestionLists(Integer searchType,String content,Long projectId ,Integer pageIndex, Integer pageSize, Question question,Long[] userIdList) {
+    	DataWrapper<List<Question>> retDataWrapperPojo = new DataWrapper<List<Question>>();
+        List<Question> ret = new ArrayList<Question>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Question.class);
+        ///////
+        criteria.addOrder(Order.desc("questionDate"));
+        /////////
+        if(question.getProjectId()!=null){
+            criteria.add(Restrictions.eq("projectId", question.getProjectId()));
+        } 
+        if(question.getId()!=null){
+            criteria.add(Restrictions.eq("id", question.getId()));
+        } 
+        if(searchType!=null){
+        	 /////通过创建人搜索
+            if(searchType==0){
+            	if(content!=null && !content.equals("")){
+                    criteria.add(Restrictions.eq("userId", Long.valueOf(content)));
+                } 
+            }
+            /////通过问题名称
+            if(searchType==1){
+            	if(content!=null && !content.equals("")){
+            		criteria.add(Restrictions.like("name", "%"+content+"%"));
+            	}
+            }
+            /////通过问题详情
+            if(searchType==2){
+            	if(content!=null && !content.equals("")){
+            		criteria.add(Restrictions.like("intro", "%"+content+"%"));
+            	}
+            }
+        }
+       
+        if (pageSize == null){
+			pageSize = 10;
+		}
+        if (pageIndex == null){
+			pageIndex = 1;
+		}
+        
+        // 取总页数
+        criteria.setProjection(Projections.rowCount());
+        int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
+        int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
+       
+        criteria.setProjection(null);
+       
+        if (pageSize > 0 && pageIndex > 0) {
+            criteria.setMaxResults(pageSize);// 最大显示记录数
+            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+            /////////////
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        
+        retDataWrapperPojo.setData(ret);
+        retDataWrapperPojo.setTotalNumber(totalItemNum);
+        retDataWrapperPojo.setCurrentPage(pageIndex);
+        retDataWrapperPojo.setTotalPage(totalPageNum);
+        retDataWrapperPojo.setNumberPerPage(pageSize);
+        
+        return retDataWrapperPojo;
+    }
+    @SuppressWarnings("unchecked")
+	@Override
     public DataWrapper<List<Question>> getQuestionList(String content,Long projectId ,Integer pageIndex, Integer pageSize, Question question,Long[] userIdList,String projectList) {
     	DataWrapper<List<Question>> retDataWrapperPojo = new DataWrapper<List<Question>>();
         List<Question> ret = new ArrayList<Question>();
@@ -412,8 +483,8 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 		}
 		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
 		List<QuestionCopy> retDataWrapper = new ArrayList<QuestionCopy>();
-		String sql = "select a.*,COUNT(1) as total from question a,notice b where b.notice_type=1 "
-		+"and b.read_state=0 and b.about_id=a.id and a.user_id!="+userId;
+		String sql = "select a.* from question a,notice b where b.notice_type=1 "
+		+"and b.read_state=0 and b.about_id=a.id and b.user_id="+userId;
 		if(pageIndex!=-1){
 			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
 		}
@@ -434,7 +505,6 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 					 .addScalar("user_list", StandardBasicTypes.STRING)
 					 .addScalar("voice_id_list", StandardBasicTypes.STRING)
 					 .addScalar("model_flag", StandardBasicTypes.STRING)
-					 .addScalar("total",StandardBasicTypes.INTEGER)
 				 .setResultTransformer(Transformers.aliasToBean(QuestionCopy.class)); 
 		    retDataWrapper=query.list();
             

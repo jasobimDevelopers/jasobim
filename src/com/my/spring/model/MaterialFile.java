@@ -51,7 +51,7 @@ public class MaterialFile {
 	}
 	
 	@Basic
-	@Column(name="update_date")
+	@Column(name="upload_date")
 	public Date getUploadDate() {
 		return uploadDate;
 	}

@@ -2,11 +2,8 @@ package com.my.spring.controller;
 
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.Paper;
-import com.my.spring.model.PaperPojo;
 import com.my.spring.model.ProjectFiles;
 import com.my.spring.model.ProjectFilesPojo;
-import com.my.spring.service.PaperService;
 import com.my.spring.service.ProjectFilesService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -10,7 +10,6 @@ public class MessageCopy {
 	private Long user_id;
 	private Long project_id;
 	private Long quality_id;
-	private Integer total;
 	public Long getId() {
 		return id;
 	}
@@ -52,12 +51,6 @@ public class MessageCopy {
 	}
 	public void setQuality_id(Long quality_id) {
 		this.quality_id = quality_id;
-	}
-	public Integer getTotal() {
-		return total;
-	}
-	public void setTotal(Integer total) {
-		this.total = total;
 	}
 	
 	

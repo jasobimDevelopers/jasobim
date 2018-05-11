@@ -45,8 +45,8 @@ public class AttenceLogController {
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
-    		@RequestParam(value = "year",required = true) Integer year,
-    		@RequestParam(value = "month",required = true) Integer month,
+    		@RequestParam(value = "year",required = false) Integer year,
+    		@RequestParam(value = "month",required = false) Integer month,
     		@ModelAttribute AttenceLog ps){
         return amService.getAttenceLogList(token, ps, pageSize, pageIndex,year,month);
     }

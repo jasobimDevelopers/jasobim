@@ -644,7 +644,7 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 		if(user!=null){
 			result = advancedOrderDao.getAdvancedOrdersListNotRead(user.getId(),pageSize,pageIndex);
 			if(result!=null && result.size()>=0){
-				resultList.setTotalNumber(result.get(0).getTotal());
+				resultList.setTotalNumber(result.size());
 			}else{
 				resultList.setTotalNumber(0);
 			}

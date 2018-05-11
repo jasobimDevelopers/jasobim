@@ -12,6 +12,7 @@ public class MaterialType {
 	private Long userId;
 	private Date createDate;
 	private Date updateDate;
+	private Long projectId;
 	private String remark;
 	
 	@Id
@@ -67,6 +68,15 @@ public class MaterialType {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	
+	@Basic
+	@Column(name="project_id")
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 	
 	

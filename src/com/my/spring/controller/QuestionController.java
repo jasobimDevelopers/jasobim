@@ -116,13 +116,14 @@ public class QuestionController {
     @ResponseBody
     public DataWrappern< PageInfo,List<QuestionPojo>,HashMap<String,String>>  getQuestionHash(
     		@RequestParam(value="content",required=false) String content,
+    		@RequestParam(value="searchType",required=false) Integer searchType,
     		@RequestParam(value="projectId",required=false) Long projectId,
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute Question question,
     		@RequestParam(value = "token",required = true) String token)
     {
-        return questionService.getQuestionHash(content,projectId,token,pageIndex,pageSize,question);
+        return questionService.getQuestionHash(searchType,content,projectId,token,pageIndex,pageSize,question);
     }
     
     @RequestMapping(value="/getQuestionListByUserId",method = RequestMethod.GET)

@@ -21,4 +21,6 @@ public interface ProjectService {
 	DataWrapper<Void> deleteProject(Long id, String token, HttpServletRequest request);
 	DataWrapper<Void> updateProject(Project project, String token, MultipartFile[] modelFile, MultipartFile[] picFile,
 			HttpServletRequest request);
+	DataWrapper<Void> updateWorkHour(Long projectId, String token, Integer workHour);
+	DataWrapper<String> getProjectHour(Long projectId, String token);
 }

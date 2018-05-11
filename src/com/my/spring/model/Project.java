@@ -37,6 +37,7 @@ public class Project {
     private Date updateDate;
     private Date createDate;
     private Integer price;
+    private Integer workHour;
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -324,6 +325,16 @@ public class Project {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	@Basic
+    @Column(name = "work_hour")
+	public Integer getWorkHour() {
+		return workHour;
+	}
+
+	public void setWorkHour(Integer workHour) {
+		this.workHour = workHour;
 	}
 
     

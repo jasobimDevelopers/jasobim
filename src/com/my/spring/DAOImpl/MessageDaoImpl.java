@@ -46,12 +46,14 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
         Session session = getSession();
         Criteria criteria = session.createCriteria(Message.class);
 //      criteria.add(Restrictions.eq("projectId", projectId));
-       
+        if(message.getQuestionType()!=null){
+        	criteria.add(Restrictions.eq("questionType", message.getQuestionType()));
+        }
         if(message.getUserId()!=null){
         	criteria.add(Restrictions.eq("userId", message.getUserId()));
         }
-        if(message.getQuestionId()!=null){
-        	criteria.add(Restrictions.eq("questionId", message.getQuestionId()));
+        if(message.getAboutId()!=null){
+        	criteria.add(Restrictions.eq("questionId", message.getAboutId()));
         }
         if(message.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", message.getProjectId()));
@@ -125,7 +127,8 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 	 List<Message> ret = null;
      Session session = getSession();
      Criteria criteria = session.createCriteria(Message.class);
-     criteria.add(Restrictions.eq("questionId",id));
+     criteria.add(Restrictions.eq("aboutId",id));
+     criteria.add(Restrictions.eq("questionType",1));
      criteria.addOrder(Order.asc("messageDate"));
      try {
          ret = criteria.list();
@@ -144,7 +147,8 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 	 List<Message> ret = null;
      Session session = getSession();
      Criteria criteria = session.createCriteria(Message.class);
-     criteria.add(Restrictions.eq("qualityId",id));
+     criteria.add(Restrictions.eq("aboutId",id));
+     criteria.add(Restrictions.eq("questionType",0));
      criteria.addOrder(Order.asc("messageDate"));
      try {
          ret = criteria.list();
@@ -159,7 +163,7 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 
 	@Override
 	public boolean deleteMessageByQuestionId(Long questionId) {
-		String sql = "delete from message where question_id="+questionId;
+		String sql = "delete from message where about_id="+questionId+" and question_type=1";
 		Session session=getSession();
 		boolean test=false;
 		 try{
@@ -177,7 +181,7 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 	}
 	@Override
 	public boolean deleteMessageByQualityId(Long qualityId) {
-		String sql = "delete from message where quality_id="+qualityId;
+		String sql = "delete from message where quality_id="+qualityId+" and question_type=0";
 		Session session=getSession();
 		boolean test=false;
 		 try{
@@ -209,7 +213,7 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 		}
 		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
 		List<MessageCopy> retDataWrapper = new ArrayList<MessageCopy>();
-		String sql = "select a.*,COUNT(1) as total from message a,notice b "
+		String sql = "select a.* from message a,notice b "
 		+"where a.id=b.about_id and b.notice_type=4 and b.read_state=0 "
 		+"and b.user_id="+id;
 		if(pageIndex!=-1){
@@ -225,7 +229,6 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 				 .addScalar("question_id", StandardBasicTypes.LONG)
 				 .addScalar("project_id", StandardBasicTypes.LONG)
 				 .addScalar("quality_id", StandardBasicTypes.LONG)
-				 .addScalar("total",StandardBasicTypes.INTEGER)
 				 .setResultTransformer(Transformers.aliasToBean(MessageCopy.class)); 
 		    retDataWrapper=query.list();
             

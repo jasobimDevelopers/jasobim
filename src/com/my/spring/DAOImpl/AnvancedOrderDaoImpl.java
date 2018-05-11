@@ -151,7 +151,7 @@ public class AnvancedOrderDaoImpl extends BaseDao<AdvancedOrder> implements Adva
 		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
 		List<AdvancedOrderCopy> retDataWrapper = new ArrayList<AdvancedOrderCopy>();
 		String sql = "select a.id,a.project_name,a.create_date,a.submit_user_id,a.create_user_name,a.construct_part,a.quantity_des,a.month,"
-				+"a.project_id,a.status,a.content_files_id,COUNT(1) as total from advanced_order a,notice b where a.id=b.about_id and b.user_id="
+				+"a.project_id,a.status,a.content_files_id from advanced_order a,notice b where a.id=b.about_id and b.user_id="
 				+id+" and b.notice_type=3 and b.read_state=0";
 		if(pageIndex!=-1){
 			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
@@ -170,7 +170,6 @@ public class AnvancedOrderDaoImpl extends BaseDao<AdvancedOrder> implements Adva
 					 .addScalar("project_id", StandardBasicTypes.LONG)
 					 .addScalar("status", StandardBasicTypes.INTEGER)
 					 .addScalar("content_files_id", StandardBasicTypes.STRING)
-					 .addScalar("total", StandardBasicTypes.INTEGER)
 				 .setResultTransformer(Transformers.aliasToBean(AdvancedOrderCopy.class)); 
 		    retDataWrapper=query.list();
         }catch(Exception e){

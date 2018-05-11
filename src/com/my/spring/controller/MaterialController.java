@@ -45,12 +45,11 @@ public class MaterialController {
         return materialService.deleteMaterial(id,token);
     }
 
-    @RequestMapping(value="updateMaterial",method = RequestMethod.POST)
+    @RequestMapping(value="/updateMaterial",method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateMaterial(
             @ModelAttribute Material News,
             @RequestParam(value = "token",required = false) String token){
-        System.out.println(News);
         return materialService.updateMaterial(News,token);
     }
 

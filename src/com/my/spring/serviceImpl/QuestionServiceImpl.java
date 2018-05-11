@@ -86,9 +86,13 @@ public class QuestionServiceImpl implements QuestionService {
     public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile[] fileList,HttpServletRequest request,MultipartFile fileCode,MultipartFile[] voices) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
+    	String userLists="";
+		String[] userList=null;
+		List<String> aa = new ArrayList<String>();
+		List<Notice> nl = new ArrayList<Notice>();
         if (userInMemory != null) {
         	question.setUserId(userInMemory.getId());
-			if(question!=null){
+        	if(question!=null){
 				if(question.getQuestionDate()==null){
 					question.setQuestionDate(new Date());
 				}
@@ -105,10 +109,21 @@ public class QuestionServiceImpl implements QuestionService {
 					return dataWrapper;
 				}else{ 
 					///////添加通知关系
-					List<Notice> nl = new ArrayList<Notice>();
+				
 					if(question.getUserList()!=null){
-						String[] ul = question.getUserList().split(",");
-						for(String s:ul){
+						userLists=question.getUserList();
+						if(userInMemory.getId()!=question.getUserId()){
+							userLists=question.getUserId()+","+userLists;
+						}
+						userList = userLists.split(",");
+						if(userList!=null){
+							for(String bb:userList){
+								if(!bb.equals(userInMemory.getId())){
+									aa.add(bb);
+								}
+							}
+						}
+						for(String s:aa){
 							Notice nl2 = new Notice();
 							nl2.setAboutId(question.getId());
 							nl2.setCreateDate(new Date());
@@ -146,11 +161,11 @@ public class QuestionServiceImpl implements QuestionService {
 						for(int s=0;s<voices.length;s++){
 							
 							String path=filePath+"/"+"questions";
-						 	Files newfile=fileService.uploadFile(path, fileList[s],fileType,request);
+						 	Files newfile=fileService.uploadFile(path, voices[s],fileType,request);
 						 	QuestionFile questionFiles=new QuestionFile();
 						 	questionFiles.setQuestionId(question.getId());
 						 	questionFiles.setFileId(newfile.getId());
-						 	String originName = fileList[s].getOriginalFilename();
+						 	String originName = voices[s].getOriginalFilename();
 							if (originName.contains(".")) {
 								originName = originName.substring(0, originName.lastIndexOf("."));
 							}
@@ -160,12 +175,12 @@ public class QuestionServiceImpl implements QuestionService {
 					}
 					/////////////////////////
 					///////////////////////////
-					List<User> userList = new ArrayList<User>();
-					int adminFlag=0;
-					if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 || userInMemory.getUserType()==2){
-	        			adminFlag=-1;
-	        		}
-					userList=userDao.findUserLikeProjct(userInMemory.getUserType(),question.getUserList());
+					
+					List<User> users=userDao.findUserLikeProjct(aa);
+					String[] userids= new String[users.size()];
+					for(int b =0;b<users.size();b++){
+						userids[b]=users.get(b).getId().toString();
+					}
 					Project po = projectDao.getById(question.getProjectId());
 					hq.put("createUserName", userInMemory.getRealName());
 					if(userInMemory.getUserIconUrl()!=null){
@@ -181,21 +196,15 @@ public class QuestionServiceImpl implements QuestionService {
 					hq.put("aboutId", question.getId().toString());
 					hq.put("createDate", Parameters.getSdfs().format(new Date()));
 					String content="";
-					if(po!=null){
+					if(po!=null)
 						content=userInMemory.getRealName()+"在"+po.getName()+"项目里提交了一个标题为："+question.getName()+"的问题";
-					}else{
+					else
 						content=userInMemory.getRealName()+"提交了一个标题为："+question.getName()+"的问题";
-					}
-					String[] userids=new String[userList.size()];
-					for(int b =0;b<userList.size();b++){
-						userids[b]=userList.get(b).getId().toString();
-					}
 					///0、质量   1、安全   2、施工任务单  3、 预付单  4、留言
 					PushExample.testSendPushWithCustomConfig_ios(userids, content,1,hq);
 					PushExample.testSendPushWithCustomConfig_android(userids, content,1,hq);
 				}
-
-			}
+        	}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -254,7 +263,7 @@ public class QuestionServiceImpl implements QuestionService {
 										}
 									}
 								}
-								messageDao.deleteMessageByQuestionId(messageList.getData().get(j).getQuestionId());
+								messageDao.deleteMessageByQuestionId(messageList.getData().get(j).getAboutId());
 							}
 							
 						}
@@ -325,7 +334,7 @@ public class QuestionServiceImpl implements QuestionService {
 									}
 								}
 								////////无区别删除该问题对应的所有留言
-								messageDao.deleteMessageByQuestionId(messageList.getData().get(j).getQuestionId());
+								messageDao.deleteMessageByQuestionId(messageList.getData().get(j).getAboutId());
 							}
 							
 						}
@@ -595,6 +604,7 @@ public class QuestionServiceImpl implements QuestionService {
 						questionPojo.setState(question.getState());
 						questionPojo.setModelFlag(question.getModelFlag());
 						questionPojo.setTrades(question.getTrades());
+						
 						String userlist="";
 						if(question.getUserList()!=null){
 							for(int s=0;s<question.getUserList().split(",").length;s++){
@@ -736,21 +746,20 @@ public class QuestionServiceImpl implements QuestionService {
 		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			User userInDB = userDao.getById(userInMemory.getId());
-			if (userInDB != null) {
 				Question question=null;
 				question=questionDao.getById(questionId);	
-				if(question!=null){
-					question.setState(state);
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
-				}
-				if(!questionDao.updateQuestion(question)){
-					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-				}
-			} else {
-				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);
-			}
+					if(question!=null){
+						if(question.getUserId().equals(userInMemory.getId())){
+							question.setState(state);
+							if(!questionDao.updateQuestion(question)){
+								dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+							}
+						}else{
+							dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+						}
+					}else{
+						dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+					}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -806,7 +815,7 @@ public class QuestionServiceImpl implements QuestionService {
     	}
     	return datawrapper;
 	}
-	public DataWrappern< PageInfo,List<QuestionPojo>,HashMap<String,String>> getQuestionHash(String content, Long projectId, String token,
+	public DataWrappern< PageInfo,List<QuestionPojo>,HashMap<String,String>> getQuestionHash(Integer searchType,String content, Long projectId, String token,
 			Integer pageIndex, Integer pageSize, Question question) {
 		DataWrappern<PageInfo,List<QuestionPojo>, HashMap<String, String>> datawrapper=new DataWrappern<PageInfo,List<QuestionPojo>,HashMap<String, String>>();
     	List<QuestionPojo> pojo = new ArrayList<QuestionPojo>();
@@ -832,34 +841,19 @@ public class QuestionServiceImpl implements QuestionService {
     			}
     			userLogDao.addUserLog(userLog);
     		}
-			if(content!=null && !content.equals("")){
-				
-				//////问题类型搜索
-				/////问题状态搜索
-				if("待解决".contains(content)){
-					question.setState(0);
-				}
-				if("已解决".contains(content)){
-					question.setState(1);
-				}
-				List<User> users=new ArrayList<User>();
-				users=userDao.findUserLikeRealName(content).getData();
-    			if(users!=null)
-    			{
-					if(users.size()>0)
-					{
-						userIdList=new Long[users.size()];
-						for(int i=0;i<users.size();i++)
-						{
-							userIdList[i]=users.get(i).getId();
-						}
-					}
-				}
-			}
+			
 			/////问题等级搜索
 			/////当用户是总经理级别的时候,问题搜索只能搜索重要和紧急，同时也只能看重要和紧急问题，不看一般问题 
-			String projectList=null;
-			dataWrappers= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question,userIdList,projectList);
+    		if(searchType!=null){
+    			if(searchType==0){
+    				User users = userDao.getByUserRealName(content);
+    				if(users!=null){
+    					content=users.getId().toString();
+    				}
+    			}
+    		}
+			dataWrappers= questionDao.getQuestionLists(searchType,content,projectId,pageIndex,pageSize,question,userIdList);
+			
 			for(int i=0;i<dataWrappers.getData().size();i++)
 	        {
 	        	QuestionPojo questionpojo=new QuestionPojo();
@@ -901,8 +895,19 @@ public class QuestionServiceImpl implements QuestionService {
 		        		questionpojo.setUserNameLists(null);
 		        	}
 	        	}
-	        	String username=userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName();
-	        	questionpojo.setUserId(username);
+	        	User users=userDao.getById(dataWrappers.getData().get(i).getUserId());
+	        	if(users!=null){
+	        		String username=users.getRealName();
+	        		questionpojo.setUserId(username);
+	        		if(users.getUserIcon()!=null){
+	        			Files files = fileService.getById(users.getUserIcon());
+	        			if(files!=null){
+	        				questionpojo.setCreateUserIcon(files.getUrl());
+	        			}
+	        		}else{
+	        			questionpojo.setCreateUserIcon(users.getUserIconUrl());
+	        		}
+	        	}
 	        	questionpojo.setModelFlag(dataWrappers.getData().get(i).getModelFlag());
 	        	questionpojo.setCodeInformation(dataWrappers.getData().get(i).getCodeInformation());
 	        	questionpojo.setPriority(dataWrappers.getData().get(i).getPriority());
@@ -915,7 +920,14 @@ public class QuestionServiceImpl implements QuestionService {
 	        	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 	        	questionpojo.setQuestionDate(sdf.format(dataWrappers.getData().get(i).getQuestionDate()));
 	        	questionpojo.setState(dataWrappers.getData().get(i).getState());
-	        	questionpojo.setTrades(dataWrappers.getData().get(i).getTrades());        	        	
+	        	questionpojo.setTrades(dataWrappers.getData().get(i).getTrades());  
+	        	int messageNum=0;
+	        	List<Message> mes = messageDao.getMessageListByQuestionId(dataWrappers.getData().get(i).getId()).getData();
+	        	if(mes!=null){
+	        		messageNum = mes.size();
+	        	}
+	        	
+	        	questionpojo.setMessageNum(messageNum);
 	        	pojo.add(i, questionpojo);
 	        }
 			if(pojo.size()>0){
@@ -975,7 +987,7 @@ public class QuestionServiceImpl implements QuestionService {
 		if(userInMemory!=null){
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType() || userInMemory.getUserType()==UserTypeEnum.User.getType()){
 				questionCopys=questionDao.getQuestionListByAdmin(userInMemory.getId(),pageIndex,pageSize);
-				resultList.setTotalNumber(questionCopys.get(0).getTotal());
+				resultList.setTotalNumber(questionCopys.size());
 			}else if(userInMemory.getUserType()==UserTypeEnum.Leader.getType()){
 				Role role = new Role();
 				role = roleDao.getById(userInMemory.getRoleId());
@@ -986,10 +998,10 @@ public class QuestionServiceImpl implements QuestionService {
 						if(role.getName().equals("项目负责人")){
 							/////获取当前角色所管项目的所有可读问题(已读)
 							questionCopys=questionDao.getQuestionListByLeader(userInMemory.getId(),pageIndex,pageSize);
-							resultList.setTotalNumber(questionCopys.get(0).getTotal());
+							resultList.setTotalNumber(questionCopys.size());
 						}else{
 							questionCopys=questionDao.getQuestionListByNorUser(userInMemory.getId(),pageIndex,pageSize);
-							resultList.setTotalNumber(questionCopys.get(0).getTotal());
+							resultList.setTotalNumber(questionCopys.size());
 						}
 					}
 				}

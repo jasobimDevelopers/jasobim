@@ -79,5 +79,22 @@ public class ProjectController {
             @RequestParam(value = "picFile", required = false) MultipartFile[] picFile){
         return projectService.addProject(project,token,modelFile,picFile,request);
     }
+    ////更新标准工时接口
+    @RequestMapping(value="/visitor/updateWorkHour", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> updateWorkHour(
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "workHour", required = true) Integer workHour){
+        return projectService.updateWorkHour(projectId,token,workHour);
+    }
+    /////获取项目标准工时接口
+    @RequestMapping(value="/admin/getProjectHour",method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<String> getProjectHour(
+    		@RequestParam(value="projectId",required=true) Long projectId,
+    		@RequestParam(value="token",required=true) String token){
+        return projectService.getProjectHour(projectId,token);
+    }
     
 }

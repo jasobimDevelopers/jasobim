@@ -62,7 +62,7 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
         }
     	criteria.add(Restrictions.or(Restrictions.like("approvalPeopleName", "%"+constructionTask.getApprovalPeopleName()+"%"),
                 Restrictions.eq("nextReceivePeopleId", s),
-                Restrictions.eq("createUserName", constructionTask.getCreateUserName())));
+                Restrictions.eq("createUserName", userName)));
         if(constructionTask.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", constructionTask.getProjectId()));
         }
@@ -143,7 +143,7 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
 		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
 		List<ConstructionTaskCopy> retDataWrapper = new ArrayList<ConstructionTaskCopy>();
 		String sql = "select a.id,a.company_name,a.work_people_name_list,a.create_date,a.user_id,a.detail_content,"
-				+"a.project_id,a.file_id_list,COUNT(1) as total from construction_task a,notice b where a.id=b.about_id and b.user_id="
+				+"a.project_id,a.file_id_list from construction_task a,notice b where a.id=b.about_id and b.user_id="
 				+id+" and b.notice_type=2 and b.read_state=0";
 		if(pageIndex!=-1){
 			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
@@ -159,7 +159,6 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
 					 .addScalar("detail_content", StandardBasicTypes.STRING)
 					 .addScalar("project_id",StandardBasicTypes.LONG)
 					 .addScalar("file_id_list", StandardBasicTypes.STRING)
-					 .addScalar("total", StandardBasicTypes.INTEGER)
 				 .setResultTransformer(Transformers.aliasToBean(ConstructionTaskCopy.class)); 
 		    retDataWrapper=query.list();
         }catch(Exception e){

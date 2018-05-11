@@ -1,8 +1,10 @@
 package com.my.spring.DAO;
 
+import java.util.Date;
 import java.util.List;
 
 import com.my.spring.model.MechanicPrice;
+import com.my.spring.model.MechanicPriceNum;
 import com.my.spring.utils.DataWrapper;
 
 public interface MechanicPriceDao {
@@ -12,4 +14,8 @@ public interface MechanicPriceDao {
 	 DataWrapper<List<MechanicPrice>> getMechanicPriceList(Integer pageIndex, Integer pageSize, MechanicPrice am);
 	 DataWrapper<Void> deleteMechanicPriceByMechanicId(Long id);
 	MechanicPrice getMechanicPriceById(Long id);
+	boolean addMechanicPriceList(List<MechanicPrice> am);
+	MechanicPrice getMechanicPriceLists(Integer pageIndex, Integer pageSize, MechanicPrice am);
+	List<MechanicPrice> getMechanicPriceListByMechanicId(Integer i, Integer j, Long id, Date date, Date date2);
+	List<MechanicPriceNum> getMechanicPriceNumByProjectId(String startday, String endday, Long projectId);
 }

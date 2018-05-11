@@ -5,6 +5,7 @@ import com.my.spring.DAO.MessageDao;
 import com.my.spring.DAO.MessageFileDao;
 import com.my.spring.DAO.NoticeDao;
 import com.my.spring.DAO.ProjectDao;
+import com.my.spring.DAO.QualityQuestionDao;
 import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
@@ -19,6 +20,7 @@ import com.my.spring.model.MessageFile;
 import com.my.spring.model.MessagePojo;
 import com.my.spring.model.Notice;
 import com.my.spring.model.Project;
+import com.my.spring.model.QualityQuestion;
 import com.my.spring.model.Question;
 import com.my.spring.model.User;
 import com.my.spring.parameters.Parameters;
@@ -59,6 +61,8 @@ public class MessageServiceImpl implements MessageService {
 	@Autowired
     QuestionDao questionDao;
 	@Autowired
+    QualityQuestionDao qualityDao;
+	@Autowired
     ProjectDao projectDao;
 	@Autowired
     UserDao userDao;
@@ -71,59 +75,115 @@ public class MessageServiceImpl implements MessageService {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         Question questions = new Question();
+        QualityQuestion quality = new QualityQuestion();
         if (userInMemory != null) {
 				if(message!=null){
 					message.setUserId(userInMemory.getId());
-					if(message.getQuestionId()!=null){
-						questions=questionDao.getById(message.getQuestionId());
-						message.setProjectId(questions.getProjectId());
-					}
-					if(message.getMessageDate()==null){
-						message.setMessageDate(new Date());
-					}
+					message.setMessageDate(new Date());
 					if(messageDao.addMessage(message)) 
 					{
+						String[] userList=null;
+						String userLists="";
+						List<String> aa = new ArrayList<String>();
 						//////新增留言未读记录
 						List<Notice> notices = new ArrayList<Notice>();
-						
-						
-						if(questions.getUserList()!=null){
-							String[] userList = questions.getUserList().split(",");
-							for(int i=0;i<userList.length;i++){
-								Notice noticess = new Notice();
-								noticess.setAboutId(message.getId());
-								noticess.setCreateDate(new Date());
-								noticess.setNoticeType(4);
-								noticess.setReadState(0);
-								noticess.setUserId(questions.getUserId());
-								if(!userInMemory.getId().equals(questions.getUserId())){
-									noticess.setUserId(questions.getUserId());
+						/////查找该留言所针对的问题
+						if(message.getQuestionType()!=null){
+							///1.查找质量问题
+							if(message.getQuestionType()==0){
+								if(message.getAboutId()!=null){
+									quality=qualityDao.getById(message.getAboutId());
+									if(quality!=null){
+										if(quality.getUserList()!=null){
+											userLists=quality.getUserList();
+											if(userInMemory.getId()!=quality.getUserId()){
+												userLists=quality.getUserId()+","+userLists;
+											}
+											userList = userLists.split(",");
+											if(userList!=null){
+												for(String bb:userList){
+													if(!bb.equals(userInMemory.getId())){
+														aa.add(bb);
+													}
+												}
+											}
+											for(int i=0;i<aa.size();i++){
+												Notice noticess = new Notice();
+												noticess.setAboutId(message.getId());
+												noticess.setCreateDate(new Date());
+												noticess.setNoticeType(4);
+												noticess.setReadState(0);
+												noticess.setUserId(Long.valueOf(aa.get(i)));
+												notices.add(noticess);
+											}
+										}else{
+											if(!quality.getUserId().equals(userInMemory.getId())){
+												Notice notice = new Notice();
+												notice.setAboutId(message.getId());
+												notice.setCreateDate(new Date());
+												notice.setNoticeType(4);
+												notice.setUserId(quality.getUserId());
+												notices.add(notice);
+											}
+										}
+									}
 								}
-								if(!Long.valueOf(userList[i]).equals(userInMemory.getId())){
-									noticess.setUserId(Long.valueOf(userList[i]));
-								}
-								notices.add(noticess);
 							}
-						}else{
-							if(!questions.getUserId().equals(userInMemory.getId())){
-								Notice notice = new Notice();
-								notice.setAboutId(message.getId());
-								notice.setCreateDate(new Date());
-								notice.setNoticeType(4);
-								notice.setUserId(questions.getUserId());
-								notices.add(notice);
+							///2.查找安全问题
+							if(message.getQuestionType()==1){
+								if(message.getAboutId()!=null){
+									questions=questionDao.getById(message.getAboutId());
+									if(questions.getUserList()!=null){
+										userLists=questions.getUserList();
+										if(userInMemory.getId()!=questions.getUserId()){
+											userLists=questions.getUserId()+","+userLists;
+										}
+										userList = userLists.split(",");
+										if(userList!=null){
+											for(String bb:userList){
+												if(!bb.equals(userInMemory.getId())){
+													aa.add(bb);
+												}
+											}
+										}
+										for(int i=0;i<aa.size();i++){
+											Notice noticess = new Notice();
+											noticess.setAboutId(message.getId());
+											noticess.setCreateDate(new Date());
+											noticess.setNoticeType(4);
+											noticess.setReadState(0);
+											noticess.setUserId(Long.valueOf(aa.get(i)));
+											notices.add(noticess);
+										}
+									}else{
+										if(!questions.getUserId().equals(userInMemory.getId())){
+											Notice notice = new Notice();
+											notice.setAboutId(message.getId());
+											notice.setCreateDate(new Date());
+											notice.setNoticeType(4);
+											notice.setUserId(questions.getUserId());
+											notices.add(notice);
+										}
+									}
+								}
 							}
 						}
-						
 						noticeDao.addNoticeList(notices);
 						//////
 						HashMap<String,String> hq = new HashMap<String,String>();
 						hq.put("content", message.getContent());
 						hq.put("createDate",Parameters.getSdfs().format(new Date()));
 						hq.put("createUserName", userInMemory.getRealName());
-						hq.put("aboutId", questions.getId().toString());
+						if(questions.getId()!=null){
+							hq.put("aboutId", questions.getId().toString());
+							
+						}
+						if(questions.getProjectId()!=null){
+							hq.put("projectName", "来自  "+projectDao.getById(questions.getProjectId()).getName());
+						}
+						
 						hq.put("title", "提交了一条留言请查看");
-						hq.put("projectName", "来自  "+projectDao.getById(questions.getProjectId()).getName());
+						
 						if(userInMemory.getUserIconUrl()!=null){
 							hq.put("userIconUrl", userInMemory.getUserIconUrl());
 						}else{
@@ -149,19 +209,11 @@ public class MessageServiceImpl implements MessageService {
 							}
 						}
 						///////////////////////////
-						List<User> userList = new ArrayList<User>();
-						String userLists = questions.getUserList();
-						if(userInMemory.getId()!=questions.getUserId()){
-							userLists=userInMemory.getId()+","+userLists;
-						}
-						if(userList.contains(userInMemory.getId())){
-							userList=userDao.findUserLikeProjct(userInMemory.getUserType(),userLists.replace(","+userInMemory.getId(), ""));
-						}else{
-							userList=userDao.findUserLikeProjct(userInMemory.getUserType(),userLists);
-						}
-						String[] userids= new String[userList.size()];
-						for(int b =0;b<userList.size();b++){
-							userids[b]=userList.get(b).getId().toString();
+						
+						List<User> users=userDao.findUserLikeProjct(aa);
+						String[] userids= new String[users.size()];
+						for(int b =0;b<users.size();b++){
+							userids[b]=users.get(b).getId().toString();
 						}
 						String content=userInMemory.getRealName()+"提交了一条留言，请您注意查看";
 						PushExample.testSendPushWithCustomConfig_ios(userids, content,4,hq);
@@ -249,11 +301,11 @@ public class MessageServiceImpl implements MessageService {
 						messagePojo.setContent(dataWrapper.getData().get(i).getContent());
 						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 						messagePojo.setMessageDate(sdf.format(dataWrapper.getData().get(i).getMessageDate()));
-						messagePojo.setQuestionId(dataWrapper.getData().get(i).getQuestionId());
+						messagePojo.setAboutId(dataWrapper.getData().get(i).getAboutId());
 						messagePojo.setProjectId(dataWrapper.getData().get(i).getProjectId());
 						Question questionss = new Question(); 
 						Project project = new Project(); 
-						questionss=questionDao.getById(dataWrapper.getData().get(i).getQuestionId());
+						questionss=questionDao.getById(dataWrapper.getData().get(i).getAboutId());
 						if(questionss!=null){
 							project =projectDao.getById(questionss.getProjectId());
 							messagePojo.setProjectName(project.getName());
@@ -348,7 +400,7 @@ public class MessageServiceImpl implements MessageService {
 							MessagePojo messagePojo =new MessagePojo();
 							messagePojo.setContent(message.getContent());
 							messagePojo.setMessageDate(sdf.format(message.getMessageDate()));
-							messagePojo.setQuestionId(message.getQuestionId());
+							messagePojo.setAboutId(message.getAboutId());
 							messagePojo.setRealName(userDao.getById(message.getUserId()).getRealName());
 							messagePojo.setId(message.getId());
 							List<MessageFile> messagefile = new ArrayList<MessageFile>();
@@ -428,7 +480,7 @@ public class MessageServiceImpl implements MessageService {
 						messagePojo.setContent(message.getContent());
 						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 						messagePojo.setMessageDate(sdf.format(message.getMessageDate()));
-						messagePojo.setQuestionId(message.getQuestionId());
+						messagePojo.setAboutId(message.getAboutId());
 						messagePojo.setRealName(userDao.getById(message.getUserId()).getRealName());
 						messagePojo.setId(message.getId());
 						List<MessageFile> messagefile = new ArrayList<MessageFile>();
@@ -459,7 +511,163 @@ public class MessageServiceImpl implements MessageService {
 							{
 								messagePojo.setUserName(user.getUserName());
 							}
-							
+						}
+						if(messagePojo!=null)
+						{
+							messagePojoList.add(messagePojo);
+						}
+						if(messagePojoList!=null && messagePojoList.size()>0)
+						{
+							dataWrapper.setData(messagePojoList);
+							dataWrapper.setTotalNumber(dataWrappers.getTotalNumber());
+							dataWrapper.setCurrentPage(dataWrappers.getCurrentPage());
+							dataWrapper.setTotalPage(dataWrappers.getTotalPage());
+							dataWrapper.setNumberPerPage(dataWrappers.getNumberPerPage());
+						}
+						else
+						{
+							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						}
+					}
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return dataWrapper;
+	}
+	@Override
+	public DataWrapper<List<MessagePojo>> getMessageListByQualityId(Long questionId,String token,String weixin) {
+		DataWrapper<List<MessagePojo>> dataWrapper = new DataWrapper<List<MessagePojo>>();
+		DataWrapper<List<Message>> dataWrappers = new DataWrapper<List<Message>>();
+		if(weixin!=null){
+			if(weixin.equals("weixin")){
+				if(questionId!=null)
+				{
+					dataWrappers=messageDao.getMessageListByQualityId(questionId);
+					if(dataWrappers.getData()==null || dataWrappers.getData().size()<=0) 
+			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					else{
+						List<MessagePojo> messagePojoList = new ArrayList<MessagePojo>();
+						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+						for(Message message : dataWrappers.getData())
+						{
+							MessagePojo messagePojo =new MessagePojo();
+							messagePojo.setContent(message.getContent());
+							messagePojo.setMessageDate(sdf.format(message.getMessageDate()));
+							messagePojo.setAboutId(message.getAboutId());
+							messagePojo.setRealName(userDao.getById(message.getUserId()).getRealName());
+							messagePojo.setId(message.getId());
+							List<MessageFile> messagefile = new ArrayList<MessageFile>();
+							messagefile = messageFileDao.getMessageFileListByMessageId(message.getId()).getData();
+							if(messagefile!=null && messagefile.size()>0){
+								String[] urllist = new String[messagefile.size()];
+								for(int i=0;i<messagefile.size();i++){
+									Files files = new Files();
+									files = fileDao.getById(messagefile.get(i).getFileId());
+									urllist[i]=files.getUrl();
+								}
+								messagePojo.setFileList(urllist);
+							}
+							if(message.getUserId()!=null)
+							{
+								messagePojo.setUserId(message.getUserId());
+								User user= new User();
+								user=userDao.getById(message.getUserId());
+								if(user.getUserIcon()!=null)
+								{
+									Files files=fileDao.getById(user.getUserIcon());
+									if(files.getUrl()!=null)
+									{
+										messagePojo.setUserIconUrl(files.getUrl());
+									}
+								}
+								if(user!=null)
+								{
+									messagePojo.setUserName(user.getUserName());
+								}
+								
+							}
+							if(messagePojo!=null)
+							{
+								messagePojoList.add(messagePojo);
+							}
+							if(messagePojoList!=null && messagePojoList.size()>0)
+							{
+								dataWrapper.setData(messagePojoList);
+								dataWrapper.setTotalNumber(dataWrappers.getTotalNumber());
+								dataWrapper.setCurrentPage(dataWrappers.getCurrentPage());
+								dataWrapper.setTotalPage(dataWrappers.getTotalPage());
+								dataWrapper.setNumberPerPage(dataWrappers.getNumberPerPage());
+							}
+							else
+							{
+								dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+							}
+						}
+					}
+				}else{
+					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+				}
+				return dataWrapper;
+			}
+		}
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+			if(questionId!=null)
+			{
+				dataWrappers=messageDao.getMessageListByQualityId(questionId);
+				if(dataWrappers.getData()==null || dataWrappers.getData().size()<=0) 
+		            return dataWrapper;
+				else{
+					List<MessagePojo> messagePojoList = new ArrayList<MessagePojo>();
+					for(Message message : dataWrappers.getData())
+					{
+						/////遍历更新留言的未读记录
+						Notice notice = new Notice();
+						notice = noticeDao.getByAdoutIdAndUserId(userInMemory.getId(), message.getId(), 4);
+						if(notice!=null){
+							notice.setUpdateDate(new Date());
+							notice.setReadState(1);
+							noticeDao.updateNotice(notice);
+						}
+						MessagePojo messagePojo =new MessagePojo();
+						messagePojo.setContent(message.getContent());
+						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+						messagePojo.setMessageDate(sdf.format(message.getMessageDate()));
+						messagePojo.setAboutId(message.getAboutId());
+						messagePojo.setRealName(userDao.getById(message.getUserId()).getRealName());
+						messagePojo.setId(message.getId());
+						List<MessageFile> messagefile = new ArrayList<MessageFile>();
+						messagefile = messageFileDao.getMessageFileListByMessageId(message.getId()).getData();
+						if(messagefile!=null && messagefile.size()>0){
+							String[] urllist = new String[messagefile.size()];
+							for(int i=0;i<messagefile.size();i++){
+								Files files = new Files();
+								files = fileDao.getById(messagefile.get(i).getFileId());
+								urllist[i]=files.getUrl();
+							}
+							messagePojo.setFileList(urllist);
+						}
+						if(message.getUserId()!=null)
+						{
+							messagePojo.setUserId(message.getUserId());
+							User user= new User();
+							user=userDao.getById(message.getUserId());
+							if(user.getUserIcon()!=null)
+							{
+								Files files=fileDao.getById(user.getUserIcon());
+								if(files.getUrl()!=null)
+								{
+									messagePojo.setUserIconUrl(files.getUrl());
+								}
+							}
+							if(user!=null)
+							{
+								messagePojo.setUserName(user.getUserName());
+							}
 						}
 						if(messagePojo!=null)
 						{
@@ -524,7 +732,6 @@ public class MessageServiceImpl implements MessageService {
 						mcp.setQuality_id(mc.getQuality_id());
 						mcp.setQuestion_id(mc.getQuestion_id());
 						mcp.setContent(mc.getContent());
-						mcp.setTotal(mc.getTotal());
 						if(mc.getProject_id()!=null){
 							Project project = projectDao.getById(mc.getProject_id());
 							if(project!=null){

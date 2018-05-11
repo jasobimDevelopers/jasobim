@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,12 +33,21 @@ public class MaterialLogServiceImpl implements MaterialLogService {
     @Autowired
     UserLogService userLogSerivce;
     @Override
-    public DataWrapper<Void> addMaterialLog(MaterialLog m,String token) {
+    public DataWrapper<Void> addMaterialLog(MaterialLog m,String token,String date) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(m!=null){
-				m.setLogDate(new Date());
+				if(date!=null){
+					try {
+						m.setLogDate(Parameters.getSdfs().parse(date));
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+					m.setLogDate(new Date());
+				}
 				m.setUserId(userInMemory.getId());
 				m.setSum(m.getIntro().split(",").length);
 				if(m.getMaterialId()!=null){
@@ -145,8 +155,6 @@ public class MaterialLogServiceImpl implements MaterialLogService {
 							mPojoList.add(mPojo);
 						}
 					}
-				}else{
-					dataWrappers.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 				}
 				if(mPojoList!=null && mPojoList.size()>0){
 					dataWrappers.setData(mPojoList);

@@ -15,10 +15,10 @@ public class Message {
 	private Long id;
 	private String content;
 	private Date messageDate;
-	private Long questionId;
+	private Long aboutId;
 	private Long userId;
 	private Long projectId;
-	private Long qualityId;///// 0 质量留言 1.安全留言
+	private Integer questionType;///// 0 质量留言 1.安全留言
 	
 	@Id
     @GeneratedValue
@@ -58,21 +58,21 @@ public class Message {
 	}
 	
 	@Basic
-    @Column(name = "question_id")
-	public Long getQuestionId() {
-		return questionId;
+    @Column(name = "about_id")
+	public Long getAboutId() {
+		return aboutId;
 	}
-	public void setQuestionId(Long questionId) {
-		this.questionId = questionId;
+	public void setAboutId(Long aboutId) {
+		this.aboutId = aboutId;
 	}
 	
 	@Basic
-    @Column(name = "quality_id")
-	public Long getQualityId() {
-		return qualityId;
+    @Column(name = "question_type")
+	public Integer getQuestionType() {
+		return questionType;
 	}
-	public void setQualityId(Long qualityId) {
-		this.qualityId = qualityId;
+	public void setQuestionType(Integer questionType) {
+		this.questionType = questionType;
 	}
 	
 	@Basic

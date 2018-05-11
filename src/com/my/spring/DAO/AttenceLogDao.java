@@ -1,5 +1,6 @@
 package com.my.spring.DAO;
 
+import java.util.Date;
 import java.util.List;
 
 import com.my.spring.model.AttenceLog;
@@ -17,4 +18,5 @@ public interface AttenceLogDao {
 			Integer month);
 	DataWrapper<List<AttenceLogs>> getAttenceLogsUserList(Integer pageIndex, Integer pageSize, AttenceLog am,
 			Integer year, Integer month);
+	AttenceLog getAttenceLogByInfos(Long id, Date nowDate, Long projectId);
 }

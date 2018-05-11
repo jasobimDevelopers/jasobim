@@ -1,6 +1,5 @@
 package com.my.spring.controller;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -11,12 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.my.spring.model.AttenceLog;
-import com.my.spring.model.AttenceLogPojo;
 import com.my.spring.model.MechanicPrice;
 import com.my.spring.model.MechanicPricePojo;
-import com.my.spring.service.AttenceLogService;
+import com.my.spring.model.MechanicPricePojos;
 import com.my.spring.service.MechanicPriceService;
 import com.my.spring.utils.DataWrapper;
 
@@ -25,10 +21,18 @@ import com.my.spring.utils.DataWrapper;
 public class MechanicPriceController {
 	@Autowired
 	MechanicPriceService amService;
+    @RequestMapping(value="/addMechanicPriceList", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> addMechanicPrice(
+    		@RequestParam(value = "am", required = false) String am,
+            @RequestParam(value = "token",required = true) String token){
+        return amService.addMechanicPriceList(am, token);
+    }
+    
     @RequestMapping(value="/addMechanicPrice", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addMechanicPrice(
-            @ModelAttribute MechanicPrice am,
+    		@ModelAttribute  MechanicPrice am,
             @RequestParam(value = "token",required = true) String token){
         return amService.addMechanicPrice(am, token);
     }
@@ -37,9 +41,9 @@ public class MechanicPriceController {
     @ResponseBody
     public DataWrapper<Void> updateMechanicPrice(
             @RequestParam(value = "token",required = true) String token,
-            @RequestParam(value = "info",required = true) String[] info,
-            @RequestParam(value = "dates",required = true) String dates){
-        return amService.updateMechanicPrice(info, token,dates);
+            @ModelAttribute  MechanicPrice am,
+            @RequestParam(value = "date",required = false) String date){
+        return amService.updateMechanicPrice(am,token,date);
     }
     @RequestMapping(value="/deleteAttenceLog",method=RequestMethod.GET)
     @ResponseBody
@@ -54,11 +58,41 @@ public class MechanicPriceController {
     @ResponseBody
     public DataWrapper<List<MechanicPricePojo>> getMechanicPriceList(
             @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "date",required = false) String date,
+            @RequestParam(value = "projectId",required = true) Long projectId,
             @RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute MechanicPrice ps){
-        return amService.getMechanicPriceList(token, ps, pageSize, pageIndex);
+        return amService.getMechanicPriceList(token, ps, pageSize, pageIndex,projectId,date);
     }
-   
-   
+    
+    
+    /**
+     * 用工统计列表数据获取接口
+     * 默认获取当月的用工统计信息
+     * 可以通过传时间查询某月信息
+     * 
+     * */
+    @RequestMapping(value="/getMechanicPriceNum", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<MechanicPricePojos>> getMechanicPriceNum(
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "date",required = false) String date,
+    		@ModelAttribute MechanicPrice ps){
+        return amService.getMechanicPriceNum(token,projectId,date);
+    }
+    /**
+     * 用工统计导出表
+     * 
+     * */
+    @RequestMapping(value="/exportMechanicNum", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<String> exportMechanicNum(
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "date",required = false) String date,
+    		@ModelAttribute MechanicPrice ps){
+        return amService.exportMechanicNum(token,projectId,date);
+    }
 }

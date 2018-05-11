@@ -21,7 +21,6 @@ public class Material {
 	private String unit;///单位
 	private Integer inNum;///入库数量
 	private Integer outNum;///出库数量
-	private String unicode;///物资编码
 	private Integer leaveNum;///库存数量
 	private Date createDate;///物资新建时间
 	private String remark;///备注
@@ -108,14 +107,6 @@ public class Material {
 		this.outNum = outNum;
 	}
 	
-	@Basic
-	@Column(name ="unicode")
-	public String getUnicode() {
-		return unicode;
-	}
-	public void setUnicode(String unicode) {
-		this.unicode = unicode;
-	}
 	
 	@Basic
 	@Column(name ="leave_num")

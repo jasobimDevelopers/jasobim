@@ -136,7 +136,7 @@ public class NoticeServiceImpl implements NoticeService {
 								commonNotice.setUserIconUrl(userQuality.getUserIconUrl());
 							}
 						}
-						commonNotice.setCreateDate(Parameters.getSdfs().format(cn.getQuestion_date()));
+						commonNotice.setCreateDate(Parameters.getSdf().format(cn.getQuestion_date()));
 						commonNotice.setTitle("提交了一个质量整改单");
 						commonNotice.setProjectName("来自  "+projectDao.getById(cn.getProject_id()).getName());
 						DataWrapper<List<QuestionFile>> images = questionFileDao.getQuestionFileByQualityId(cn.getId());
@@ -162,7 +162,7 @@ public class NoticeServiceImpl implements NoticeService {
 						commonNotice1.setNoticeType(1);
 						commonNotice1.setContent(cn1.getIntro());
 						commonNotice1.setAboutId(cn1.getId());
-						commonNotice1.setCreateDate(Parameters.getSdfs().format(cn1.getQuestion_date()));
+						commonNotice1.setCreateDate(Parameters.getSdf().format(cn1.getQuestion_date()));
 						commonNotice1.setTitle("提交了一个安全整改单");
 						User userQuestion=userDao.getById(cn1.getUser_id());
 						if(userQuestion!=null){
@@ -208,7 +208,7 @@ public class NoticeServiceImpl implements NoticeService {
 							}
 						}
 						commonNotice2.setContent(cn2.getQuantityDes());
-						commonNotice2.setCreateDate(Parameters.getSdfs().format(cn2.getCreateDate()));
+						commonNotice2.setCreateDate(Parameters.getSdf().format(cn2.getCreateDate()));
 						commonNotice2.setTitle("提交了一个预付单");
 						commonNotice2.setProjectName("来自  "+projectDao.getById(cn2.getProjectId()).getName());
 						if(cn2.getContentFilesId()!=null){
@@ -241,7 +241,7 @@ public class NoticeServiceImpl implements NoticeService {
 								commonNotice3.setUserIconUrl(userQuestion.getUserIconUrl());
 							}
 						}
-						commonNotice3.setCreateDate(Parameters.getSdfs().format(cn3.getCreateDate()));
+						commonNotice3.setCreateDate(Parameters.getSdf().format(cn3.getCreateDate()));
 						commonNotice3.setTitle("提交了一个施工任务单");
 						commonNotice3.setProjectName("来自  "+projectDao.getById(cn3.getProjectId()).getName());
 						if(cn3.getFileIdList()!=null){

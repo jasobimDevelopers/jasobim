@@ -25,9 +25,10 @@ public class MaterialLogController {
     @ResponseBody
     public DataWrapper<Void> addNews(
             @ModelAttribute MaterialLog news,
+            @RequestParam(value = "date",required = false) String date,
             @RequestParam(value = "token",required = true) String token){
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-		dataWrapper=materialLogService.addMaterialLog(news,token);
+		dataWrapper=materialLogService.addMaterialLog(news,token,date);
 		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
             	return dataWrapper;
     	}else{

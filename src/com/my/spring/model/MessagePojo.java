@@ -1,13 +1,12 @@
 package com.my.spring.model;
 
-import java.sql.Date;
 
 
 public class MessagePojo {
 	private Long id;
 	private String content;
 	private String messageDate;
-	private Long questionId;
+	private Long aboutId;
 	private Long userId;
 	private String userName;
 	private String userIconUrl;
@@ -16,6 +15,7 @@ public class MessagePojo {
 	private String realName;
 	private String projectName;
 	private Long projectId;
+	private Integer questionType;
 	
 	public Long getId() {
 		return id;
@@ -48,11 +48,11 @@ public class MessagePojo {
 	}
 	
 	
-	public Long getQuestionId() {
-		return questionId;
+	public Long getAboutId() {
+		return aboutId;
 	}
-	public void setQuestionId(Long questionId) {
-		this.questionId = questionId;
+	public void setAboutId(Long aboutId) {
+		this.aboutId = aboutId;
 	}
 	public String getUserName() {
 		return userName;
@@ -95,6 +95,12 @@ public class MessagePojo {
 	}
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
+	}
+	public Integer getQuestionType() {
+		return questionType;
+	}
+	public void setQuestionType(Integer questionType) {
+		this.questionType = questionType;
 	}
 	
 

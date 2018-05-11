@@ -120,13 +120,14 @@ public class QualityQuestionController {
     @ResponseBody
     public DataWrappern< PageInfo,List<QualityQuestionPojo>,HashMap<String,String>>  getQualityHash(
     		@RequestParam(value="content",required=false) String content,
+    		@RequestParam(value="searchType",required=false) Integer searchType,
     		@RequestParam(value="projectId",required=false) Long projectId,
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute QualityQuestion question,
     		@RequestParam(value = "token",required = true) String token)
     {
-        return questionService.getQualityQuestionHash(content,projectId,token,pageIndex,pageSize,question);
+        return questionService.getQualityQuestionHash(searchType,content,projectId,token,pageIndex,pageSize,question);
     }
     
     @RequestMapping(value="/getQualityListByUserId",method = RequestMethod.GET)

@@ -51,11 +51,14 @@ public class MaterialTypeDaoImpl extends BaseDao<MaterialType> implements Materi
 	        Session session = getSession();
 	        Criteria criteria = session.createCriteria(MaterialType.class);
 	        if(m!=null){
-	        	  if(m.getUserId()!=null){
+	        	if(m.getUserId()!=null){
 	  	        	criteria.add(Restrictions.eq("userId", m.getUserId()));
 	  	        }
 	  	        if(m.getId()!=null){
 	  	        	criteria.add(Restrictions.eq("id", m.getId()));
+	  	        }
+	  	        if(m.getProjectId()!=null){
+	  	        	criteria.add(Restrictions.eq("projectId", m.getProjectId()));
 	  	        }
 	        }
 	        if (pageSize == null) {

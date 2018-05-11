@@ -367,7 +367,7 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
 		}
 		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
 		List<QuestionCopy> retDataWrapper = new ArrayList<QuestionCopy>();
-		String sql = "select a.*,COUNT(1) as total from quality_question a,notice b where b.notice_type=0 "
+		String sql = "select a.* from quality_question a,notice b where b.notice_type=0 "
 		+"and b.read_state=0 and b.about_id=a.id and a.user_id!="+userId;
 		if(pageIndex!=-1){
 			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
@@ -389,7 +389,6 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
 					 .addScalar("user_list", StandardBasicTypes.STRING)
 					 .addScalar("voice_id_list", StandardBasicTypes.STRING)
 					 .addScalar("model_flag", StandardBasicTypes.STRING)
-					 .addScalar("total", StandardBasicTypes.INTEGER)
 				 .setResultTransformer(Transformers.aliasToBean(QuestionCopy.class)); 
 		    retDataWrapper=query.list();
             
@@ -486,5 +485,72 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
             //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
         }
 		return retDataWrapper;
+	}
+	public DataWrapper<List<QualityQuestion>> getQualityQuestionLists(Integer searchType,String content, Long projectId, Integer pageIndex, Integer pageSize, QualityQuestion question, Long[] userIdList) {
+	DataWrapper<List<QualityQuestion>> retDataWrapperPojo = new DataWrapper<List<QualityQuestion>>();
+    List<QualityQuestion> ret = new ArrayList<QualityQuestion>();
+    Session session = getSession();
+    Criteria criteria = session.createCriteria(QualityQuestion.class);
+    ///////
+    criteria.addOrder(Order.desc("questionDate"));
+    /////////
+    if(question.getProjectId()!=null){
+        criteria.add(Restrictions.eq("projectId", question.getProjectId()));
+    } 
+    if(question.getId()!=null){
+        criteria.add(Restrictions.eq("id", question.getId()));
+    } 
+    /////通过创建人搜索
+    if(searchType!=null){
+    	 if(searchType==0){
+    	    	if(content!=null && !content.equals("")){
+    	            criteria.add(Restrictions.eq("userId", Long.valueOf(content)));
+    	        } 
+    	    }
+    	    /////通过问题名称
+    	    if(searchType==1){
+    	    	if(content!=null && !content.equals("")){
+    	    		criteria.add(Restrictions.like("name", "%"+content+"%"));
+    	    	}
+    	    }
+    	    /////通过问题详情
+    	    if(searchType==2){
+    	    	if(content!=null && !content.equals("")){
+    	    		criteria.add(Restrictions.like("intro", "%"+content+"%"));
+    	    	}
+    	    }
+    }
+    if (pageSize == null){
+		pageSize = 10;
+	}
+    if (pageIndex == null){
+		pageIndex = 1;
+	}
+    
+    // 取总页数
+    criteria.setProjection(Projections.rowCount());
+    int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
+    int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
+   
+    criteria.setProjection(null);
+   
+    if (pageSize > 0 && pageIndex > 0) {
+        criteria.setMaxResults(pageSize);// 最大显示记录数
+        criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+        /////////////
+    }
+    try {
+        ret = criteria.list();
+    }catch (Exception e){
+        e.printStackTrace();
+    }
+    
+    retDataWrapperPojo.setData(ret);
+    retDataWrapperPojo.setTotalNumber(totalItemNum);
+    retDataWrapperPojo.setCurrentPage(pageIndex);
+    retDataWrapperPojo.setTotalPage(totalPageNum);
+    retDataWrapperPojo.setNumberPerPage(pageSize);
+    
+    return retDataWrapperPojo;
 	}
 }

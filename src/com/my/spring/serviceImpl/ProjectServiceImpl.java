@@ -1,5 +1,6 @@
 package com.my.spring.serviceImpl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.ItemDao;
@@ -38,9 +39,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Service("projectService")
 public class ProjectServiceImpl implements ProjectService {
     @Autowired
@@ -72,6 +70,7 @@ public class ProjectServiceImpl implements ProjectService {
     public DataWrapper<ProjectPojo> addProject(Project project,String token,MultipartFile modelfile[],MultipartFile picfile[],HttpServletRequest request) {
         DataWrapper<ProjectPojo> dataWrapper = new DataWrapper<ProjectPojo>();
         DataWrapper<Project> dataWrappers = new DataWrapper<Project>();
+        project.setWorkHour(10);
         ///班组信息存储
         if(project.getTeamList()!=null){
         	String[] temp=project.getTeamList().split(",");
@@ -752,6 +751,7 @@ public class ProjectServiceImpl implements ProjectService {
 						}
 					}
 					projectPojo.setModelPart(project.getModelPart().split(","));
+					projectPojo.setWorkHour(project.getWorkHour());
 					projectPojo.setBuildingUnit(project.getBuildingUnit());
 					projectPojo.setBuildingUnitUser(project.getBuildingUnitUser());
 					projectPojo.setConstructionUnit(project.getConstructionUnit());
@@ -779,6 +779,41 @@ public class ProjectServiceImpl implements ProjectService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<Void> updateWorkHour(Long projectId, String token, Integer workHour) {
+		DataWrapper<Void> result = new DataWrapper<Void>();
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null){
+			Project project = projectDao.getById(projectId);
+			if(project!=null){
+				project.setWorkHour(workHour);
+				if(!projectDao.updateProject(project)){
+					result.setErrorCode(ErrorCodeEnum.Error);
+				}
+			}else{
+				result.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+
+	@Override
+	public DataWrapper<String>   getProjectHour(Long projectId, String token) {
+		User userInMemory = SessionManager.getSession(token);
+		DataWrapper<String> result =new  DataWrapper<String>();
+        if (userInMemory != null) {
+			if(projectId!=null){
+				Project project=projectDao.getById(projectId);
+			    result.setData(project.getWorkHour().toString());
+			}
+		} else {
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return result;
 	}
 
 }

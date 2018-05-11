@@ -3,7 +3,6 @@
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Message;
-import com.my.spring.model.MessageCopy;
 import com.my.spring.model.MessageCopyPojo;
 import com.my.spring.model.MessagePojo;
 import com.my.spring.service.MessageService;
@@ -90,6 +89,16 @@ public class MessageController {
     		@RequestParam(value = "weixin",required = false) String weixin,
             @RequestParam(value = "token",required = false) String token){
         return messageService.getMessageListByQuestionId(questionId,token,weixin);
+    }
+    
+    ////通过问题id查找留言
+    @RequestMapping(value="/getMessageListByQualityId",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<MessagePojo>> getMessageListByQualityId(
+    		@RequestParam(value = "qualityId",required = true) Long qualityId,
+    		@RequestParam(value = "weixin",required = false) String weixin,
+            @RequestParam(value = "token",required = false) String token){
+        return messageService.getMessageListByQualityId(qualityId,token,weixin);
     }
     @RequestMapping(value="/app/getMessageListOfNotRead",method=RequestMethod.GET)
     @ResponseBody

@@ -10,6 +10,7 @@ public class MechanicPrice {
 	private Integer hour;
 	private Date editDate;
 	private Date createDate;
+	private Long projectId;
 	
 	@Id
 	@GeneratedValue
@@ -55,6 +56,14 @@ public class MechanicPrice {
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	@Basic
+	@Column(name="project_id")
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 	
 	

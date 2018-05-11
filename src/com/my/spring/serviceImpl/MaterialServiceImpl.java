@@ -90,6 +90,12 @@ public class MaterialServiceImpl implements MaterialService {
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
         	m.setUserId(userInMemory.getId());
+        	if(m!=null){
+        		Material ms = materialDao.getById(m.getId());
+        		if(ms!=null){
+        			m.setCreateDate(ms.getCreateDate());
+        		}
+        	}
 			if(!materialDao.updateMaterial(m)) {
 			    dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 			}
@@ -120,12 +126,15 @@ public class MaterialServiceImpl implements MaterialService {
 						mPojo.setId(dataWrapper.getData().get(i).getId());
 						mPojo.setRemark(dataWrapper.getData().get(i).getRemark());
 						mPojo.setSize(dataWrapper.getData().get(i).getSize());
-						mPojo.setUnicode(dataWrapper.getData().get(i).getUnicode());
 						mPojo.setUnit(dataWrapper.getData().get(i).getUnit());
 						mPojo.setInNum(dataWrapper.getData().get(i).getInNum());
 						mPojo.setOutNum(dataWrapper.getData().get(i).getOutNum());
 						mPojo.setLeaveNum(dataWrapper.getData().get(i).getLeaveNum());
-						mPojo.setMaterialType(materialTypeDao.getById(dataWrapper.getData().get(i).getMaterialType()).getName());
+						MaterialType mys = materialTypeDao.getById(dataWrapper.getData().get(i).getMaterialType());
+						if(mys!=null){
+							mPojo.setMaterialType(mys.getName());
+							mPojo.setMaterialTypeId(dataWrapper.getData().get(i).getMaterialType());
+						}
 						if(dataWrapper.getData().get(i).getUserId()!=null){
 							User user= new User();
 							user=userDao.getById(dataWrapper.getData().get(i).getUserId());
@@ -137,8 +146,6 @@ public class MaterialServiceImpl implements MaterialService {
 							mPojoList.add(mPojo);
 						}
 					}
-				}else{
-					dataWrappers.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 				}
 				if(mPojoList!=null && mPojoList.size()>0){
 					dataWrappers.setData(mPojoList);
@@ -147,6 +154,7 @@ public class MaterialServiceImpl implements MaterialService {
 					dataWrappers.setTotalPage(dataWrapper.getTotalPage());
 					dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
 				}
+				dataWrappers.setData(mPojoList);
 			}
 		}else{
 			dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
@@ -168,34 +176,36 @@ public class MaterialServiceImpl implements MaterialService {
 				ReadMaterialExcel rm = new ReadMaterialExcel();
 				String newFileName = MD5Util.getMD5String(file.getOriginalFilename() + new Date() + UUID.randomUUID().toString()).replace(".","")
 	                    + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+				
 				ms=rm.getExcelInfo(newFileName, file);
 				if(ms!=null){
 					Files files=fileService.uploadFile("fileUploads/materialFiles", file, 10, request,userInMemory.getId());
 					MaterialFile mf = new MaterialFile();
 					mf.setUploadDate(new Date());
-					mf.setFileId(mf.getId());
+					mf.setFileId(files.getId());
 					mf.setProjectId(material.getProjectId());
 					mf.setUserId(userInMemory.getId());
 					materialFileDao.addMaterialFile(mf);
 				}
-				Material m = new Material();
-				MaterialType mq = new MaterialType();
-				mq.setCreateDate(new Date());
-				mq.setUserId(userInMemory.getId());
-				m.setCreateDate(new Date());
-				m.setProjectId(material.getProjectId());
-				m.setUserId(userInMemory.getId());
+				
 				for(ImportMaterial im:ms){
+					Material m = new Material();
+					MaterialType mq = new MaterialType();
+					mq.setCreateDate(new Date());
+					mq.setUserId(userInMemory.getId());
+					mq.setProjectId(material.getProjectId());
+					m.setCreateDate(new Date());
+					m.setProjectId(material.getProjectId());
+					m.setUserId(userInMemory.getId());
 					m.setMaterialName(im.getMaterialName());
-					m.setUnicode(im.getUnicode());
 					m.setUnit(im.getUnit());
 					m.setSize(im.getSize());
 					m.setRemark(im.getRemark());
 					if(im.getMaterialType()!=null){
 						MaterialType sp = new MaterialType();
-						sp=materialTypeDao.getMaterialByName(im.getMaterialName());
-						if(sp==null){
-							mq.setName(im.getMaterialName());
+						sp=materialTypeDao.getMaterialByName(im.getMaterialType());
+						if(sp.getId()==null){
+							mq.setName(im.getMaterialType());
 							if(materialTypeDao.addMaterialType(mq)){
 								m.setMaterialType(mq.getId());
 							}

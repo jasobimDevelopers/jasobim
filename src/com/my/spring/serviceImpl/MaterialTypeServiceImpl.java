@@ -76,7 +76,7 @@ public class MaterialTypeServiceImpl implements MaterialTypeService {
 				mt=materialTypeDao.getById(m.getId());
 				m.setUserId(mt.getUserId());
 				m.setCreateDate(mt.getCreateDate());
-				if(mt.getUserId()==userInMemory.getId()){
+				if(mt.getUserId().equals(userInMemory.getId())){
 					m.setUpdateDate(new Date());
 					if(!materialTypeDao.updateMaterialType(m)){
 						result.setErrorCode(ErrorCodeEnum.Error);

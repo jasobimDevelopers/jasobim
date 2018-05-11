@@ -178,7 +178,15 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 				if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 || userInMemory.getUserType()==2){
         			adminFlag=-1;
         		}
-				userList=userDao.findUserLikeProjct(userInMemory.getUserType(),QualityQuestion.getUserList());
+				
+				if(QualityQuestion.getUserList()!=null){
+					List<String> aa = new ArrayList<String>();
+					for(String s:QualityQuestion.getUserList().split(",")){
+						aa.add(s);
+					}
+					userList=userDao.findUserLikeProjct(aa);
+				}
+				
 				Project po = projectDao.getById(QualityQuestion.getProjectId());
 				hq.put("projectName", "来自  "+po.getName());
 				hq.put("aboutId", QualityQuestion.getId().toString());
@@ -259,7 +267,7 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 										}
 									}
 								}
-								messageDao.deleteMessageByQualityId(messageList.getData().get(j).getQualityId());
+								messageDao.deleteMessageByQualityId(messageList.getData().get(j).getAboutId());
 							}
 							
 						}
@@ -330,7 +338,7 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 									}
 								}
 								////////无区别删除该问题对应的所有留言
-								messageDao.deleteMessageByQualityId(messageList.getData().get(j).getQualityId());
+								messageDao.deleteMessageByQualityId(messageList.getData().get(j).getAboutId());
 							}
 							
 						}
@@ -745,21 +753,23 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			User userInDB = userDao.getById(userInMemory.getId());
-			if (userInDB != null) {
 				QualityQuestion QualityQuestion=null;
 				QualityQuestion=QualityQuestionDao.getById(QualityQuestionId);	
+				
 				if(QualityQuestion!=null){
-					QualityQuestion.setState(state);
+					if(QualityQuestion.getUserId().equals(userInMemory.getId())){
+						QualityQuestion.setState(state);
+						if(!QualityQuestionDao.updateQualityQuestion(QualityQuestion)){
+							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						}
+					}else{
+						dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+					}
+					
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 				}
-				if(!QualityQuestionDao.updateQualityQuestion(QualityQuestion)){
-					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-				}
-			} else {
-				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);
-			}
+				
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -815,7 +825,7 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     	}
     	return datawrapper;
 	}
-	public DataWrappern< PageInfo,List<QualityQuestionPojo>,HashMap<String,String>> getQualityQuestionHash(String content, Long projectId, String token,
+	public DataWrappern< PageInfo,List<QualityQuestionPojo>,HashMap<String,String>> getQualityQuestionHash(Integer searchType,String content, Long projectId, String token,
 			Integer pageIndex, Integer pageSize, QualityQuestion QualityQuestion) {
 		DataWrappern<PageInfo,List<QualityQuestionPojo>, HashMap<String, String>> datawrapper=new DataWrappern<PageInfo,List<QualityQuestionPojo>,HashMap<String, String>>();
     	List<QualityQuestionPojo> pojo = new ArrayList<QualityQuestionPojo>();
@@ -840,33 +850,17 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     			}
     			userLogDao.addUserLog(userLog);
     		}
-			if(content!=null && !content.equals("")){
-				
-				/////问题状态搜索
-				if("待解决".contains(content)){
-					QualityQuestion.setState(0);
-				}
-				if("已解决".contains(content)){
-					QualityQuestion.setState(1);
-				}
-				List<User> users=new ArrayList<User>();
-				users=userDao.findUserLikeRealName(content).getData();
-    			if(users!=null)
-    			{
-					if(users.size()>0)
-					{
-						userIdList=new Long[users.size()];
-						for(int i=0;i<users.size();i++)
-						{
-							userIdList[i]=users.get(i).getId();
-						}
-					}
-				}
-			}
+    		if(searchType!=null){
+    			if(searchType==0){
+    				User users = userDao.getByUserRealName(content);
+    				if(users!=null){
+    					content=users.getId().toString();
+    				}
+    			}
+    		}
 			/////问题等级搜索
 			/////当用户是总经理级别的时候,问题搜索只能搜索重要和紧急，同时也只能看重要和紧急问题，不看一般问题 
-			String projectList=null;
-			dataWrappers= QualityQuestionDao.getQualityQuestionList(content,projectId,pageIndex,pageSize,QualityQuestion,userIdList,projectList);
+			dataWrappers= QualityQuestionDao.getQualityQuestionLists(searchType,content,projectId,pageIndex,pageSize,QualityQuestion,userIdList);
 			for(int i=0;i<dataWrappers.getData().size();i++)
 	        {
 	        	QualityQuestionPojo QualityQuestionpojo=new QualityQuestionPojo();
@@ -908,8 +902,19 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 		        		QualityQuestionpojo.setUserNameLists(null);
 		        	}
 	        	}
-	        	String username=userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName();
-	        	QualityQuestionpojo.setUserId(username);
+	        	User users=userDao.getById(dataWrappers.getData().get(i).getUserId());
+	        	if(users!=null){
+	        		String username=users.getRealName();
+	        		QualityQuestionpojo.setUserId(username);
+	        		if(users.getUserIcon()!=null){
+	        			Files files = fileService.getById(users.getUserIcon());
+	        			if(files!=null){
+	        				QualityQuestionpojo.setCreateUserIcon(files.getUrl());
+	        			}
+	        		}else{
+	        			QualityQuestionpojo.setCreateUserIcon(users.getUserIconUrl());
+	        		}
+	        	}
 	        	QualityQuestionpojo.setModelFlag(dataWrappers.getData().get(i).getModelFlag());
 	        	QualityQuestionpojo.setCodeInformation(dataWrappers.getData().get(i).getCodeInformation());
 	        	QualityQuestionpojo.setPriority(dataWrappers.getData().get(i).getPriority());
@@ -922,7 +927,13 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 	        	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 	        	QualityQuestionpojo.setQuestionDate(sdf.format(dataWrappers.getData().get(i).getQuestionDate()));
 	        	QualityQuestionpojo.setState(dataWrappers.getData().get(i).getState());
-	        	QualityQuestionpojo.setTrades(dataWrappers.getData().get(i).getTrades());        	        	
+	        	QualityQuestionpojo.setTrades(dataWrappers.getData().get(i).getTrades());     
+	        	int messageNum=0;
+	        	List<Message> mes = messageDao.getMessageListByQualityId(dataWrappers.getData().get(i).getId()).getData();
+	        	if(mes!=null){
+	        		messageNum = mes.size();
+	        	}
+	        	QualityQuestionpojo.setMessageNum(messageNum);
 	        	pojo.add(i, QualityQuestionpojo);
 	        }
 			if(pojo.size()>0){
@@ -980,7 +991,7 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 		if(userInMemory!=null){
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType() || userInMemory.getUserType()==UserTypeEnum.User.getType()){
 				questionCopys=QualityQuestionDao.getQuestionListByAdmin(userInMemory.getId(),pageIndex,pageSize);
-				resultList.setTotalNumber(questionCopys.get(0).getTotal());
+				resultList.setTotalNumber(questionCopys.size());
 			}else if(userInMemory.getUserType()==UserTypeEnum.Leader.getType()){
 				Role role = new Role();
 				role = roleDao.getById(userInMemory.getRoleId());
@@ -991,10 +1002,10 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 						if(role.getName().equals("项目负责人")){
 							/////获取当前角色所管项目的所有可读问题(已读)
 							questionCopys=QualityQuestionDao.getQuestionListByLeader(userInMemory.getId(),pageIndex,pageSize);
-							resultList.setTotalNumber(questionCopys.get(0).getTotal());
+							resultList.setTotalNumber(questionCopys.size());
 						}else{
 							questionCopys=QualityQuestionDao.getQuestionListByNorUser(userInMemory.getId(),pageIndex,pageSize);
-							resultList.setTotalNumber(questionCopys.get(0).getTotal());
+							resultList.setTotalNumber(questionCopys.size());
 						}
 					}
 				}

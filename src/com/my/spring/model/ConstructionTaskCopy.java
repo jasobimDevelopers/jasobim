@@ -13,7 +13,6 @@ public class ConstructionTaskCopy {
 	private Long project_id;////项目id
 	//////图片
 	private String file_id_list;
-	private Integer total;
 	
 	
 	public Long getId() {
@@ -65,12 +64,6 @@ public class ConstructionTaskCopy {
 		this.work_people_name_list = workPeopleNameList;
 	}
 	
-	public Integer getTotal() {
-		return total;
-	}
-	public void setTotal(Integer total) {
-		this.total = total;
-	}
 	public String getFileIdList() {
 		return file_id_list;
 	}

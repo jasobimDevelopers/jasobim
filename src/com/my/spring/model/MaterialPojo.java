@@ -3,6 +3,7 @@ public class MaterialPojo {
 	private Long id;
 	private String userName;//上传用户id
 	private String materialType;///物资分类
+	private Long materialTypeId;///物资分类
 	private String materialName;///物资名称
 	private String size;///规格尺寸
 	private String unit;///单位
@@ -96,6 +97,12 @@ public class MaterialPojo {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public Long getMaterialTypeId() {
+		return materialTypeId;
+	}
+	public void setMaterialTypeId(Long materialTypeId) {
+		this.materialTypeId = materialTypeId;
 	}
 	
 	

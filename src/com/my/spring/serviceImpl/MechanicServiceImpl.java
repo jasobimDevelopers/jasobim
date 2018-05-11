@@ -96,7 +96,7 @@ public class MechanicServiceImpl implements MechanicService{
 					if(file!=null){
 						Files files = fileService.uploadFile("/mechanic/"+am.getProjectId(), file, 5, request);
 						if(files!=null){
-							am.setIdCardImg(files.getId());
+							mechanice.setIdCardImg(files.getId());
 						}
 					}
 					if(!mechanicDao.updateMechanic(mechanice)){

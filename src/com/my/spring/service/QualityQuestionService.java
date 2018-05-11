@@ -26,7 +26,7 @@ public interface QualityQuestionService {
 	DataWrapper<List<QualityQuestion>> getQualityQuestionsByLike(String content, String token);
 	DataWrapper<Void> updateQualityQuestionState(Long questionId, String token, Integer state);
 	DataWrapper<List<QualityQuestionPojo>> getQualityQuestionListByUserId(String token, Integer pageIndex, Integer pageSize);
-	DataWrappern<PageInfo, List<QualityQuestionPojo>, HashMap<String, String>> getQualityQuestionHash(String content, Long projectId,
+	DataWrappern<PageInfo, List<QualityQuestionPojo>, HashMap<String, String>> getQualityQuestionHash(Integer searchType,String content, Long projectId,
 			String token, Integer pageIndex, Integer pageSize, QualityQuestion question);
 	DataWrapper<List<QuestionCopy>> getQuestionListOfNotRead(String token,Integer pageIndex, Integer pageSize);
 }

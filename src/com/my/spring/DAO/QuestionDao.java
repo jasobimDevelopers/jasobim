@@ -21,6 +21,7 @@ public interface QuestionDao {
 	boolean deleteQuestion(Long id);
 	DataWrapper<List<Question>> getQuestionListByLike(String content);
 	DataWrapper<List<Question>> getQuestionList(String content, Long projectId, Integer pageIndex, Integer pageSize, Question question, Long[] userIdList,String projectList);
+	DataWrapper<List<Question>> getQuestionLists(Integer searchType,String content, Long projectId, Integer pageIndex, Integer pageSize, Question question, Long[] userIdList);
 	DataWrapper<List<QuestionPojo>> getQuestionList(Integer pageIndex, Integer pageSize, Question question);
 	List<QuestionCopy> getQuestionListByLeader(Long id, Integer pageIndex, Integer pageSize);
 	List<QuestionCopy> getQuestionListByAdmin(Long long1, Integer pageIndex, Integer pageSize);

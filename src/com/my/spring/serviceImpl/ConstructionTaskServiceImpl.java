@@ -667,7 +667,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 		if(user!=null){
 			result = constructionTaskDao.getAdvancedOrdersListNotRead(user.getId(),pageSize,pageIndex);
 			if(result.size()>=0 && result!=null){
-				resultList.setTotalNumber(result.get(0).getTotal());
+				resultList.setTotalNumber(result.size());
 			}else{
 				resultList.setTotalNumber(0);
 			}

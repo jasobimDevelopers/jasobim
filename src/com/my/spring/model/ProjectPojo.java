@@ -34,6 +34,7 @@ public class ProjectPojo {
     private String[] modelPart;//all.整体	rf.顶层     standard.标准层     B1.地下一层     B2.地下二层      B3.地下三层
     private String[] teamList;
     private String[] teamId;
+    private Integer workHour;
     
 	public String getDesignUnitUser() {
 		return designUnitUser;
@@ -220,5 +221,11 @@ public class ProjectPojo {
 	}
 	public void setPrice(Integer price) {
 		this.price = price;
+	}
+	public Integer getWorkHour() {
+		return workHour;
+	}
+	public void setWorkHour(Integer workHour) {
+		this.workHour = workHour;
 	}
 }

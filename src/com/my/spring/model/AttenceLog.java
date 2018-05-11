@@ -11,7 +11,7 @@ public class AttenceLog {
 	private String endWorkTime;
 	private Integer late;
 	private Integer leaveEarly;
-	private Integer clockFlag;
+	private String clockFlag;
 	private Double lat;///经度
 	private Double lng;///纬度
 	private Long userId;
@@ -123,10 +123,10 @@ public class AttenceLog {
 	
 	@Basic
 	@Column(name="clock_flag")
-	public Integer getClockFlag() {
+	public String getClockFlag() {
 		return clockFlag;
 	}
-	public void setClockFlag(Integer clockFlag) {
+	public void setClockFlag(String clockFlag) {
 		this.clockFlag = clockFlag;
 	}
 	

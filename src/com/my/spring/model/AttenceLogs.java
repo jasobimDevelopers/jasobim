@@ -1,96 +1,57 @@
 package com.my.spring.model;
-import java.util.Date;
 
 
 public class AttenceLogs {
-	private Date month;
-	private Long id;
-	private String start_work_time;
-	private String end_work_time;
-	private Long project_id;
-	private Double lat;
-	private Double lng;
-	private Long attence_model_id;
-	private Integer clock_flag;
-	private Integer leave_early_num;
-	private Long userId;
-	private Date create_date;
-	
-	
-	
-	public Long getUserId() {
-		return userId;
+	private Long user_id;
+	private Integer forget_num;
+	private Integer fact_num;
+	private Integer late_nums_f;
+	private Integer leave_early_nums_f;
+	private Integer late_nums_s;
+	private Integer leave_early_nums_s;
+	public Long getUser_id() {
+		return user_id;
 	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUser_id(Long user_id) {
+		this.user_id = user_id;
 	}
-	public Date getMonth() {
-		return month;
+	public Integer getForget_num() {
+		return forget_num;
 	}
-	public void setMonth(Date month) {
-		this.month = month;
+	public void setForget_num(Integer forget_num) {
+		this.forget_num = forget_num;
 	}
-	public Long getId() {
-		return id;
+	public Integer getFact_num() {
+		return fact_num;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setFact_num(Integer fact_num) {
+		this.fact_num = fact_num;
 	}
-	public String getStart_work_time() {
-		return start_work_time;
+	public Integer getLate_nums_f() {
+		return late_nums_f;
 	}
-	public void setStart_work_time(String start_work_time) {
-		this.start_work_time = start_work_time;
+	public void setLate_nums_f(Integer late_nums_f) {
+		this.late_nums_f = late_nums_f;
 	}
-	public String getEnd_work_time() {
-		return end_work_time;
+	public Integer getLeave_early_nums_f() {
+		return leave_early_nums_f;
 	}
-	public void setEnd_work_time(String end_work_time) {
-		this.end_work_time = end_work_time;
+	public void setLeave_early_nums_f(Integer leave_early_nums_f) {
+		this.leave_early_nums_f = leave_early_nums_f;
 	}
-	public Long getProject_id() {
-		return project_id;
+	public Integer getLate_nums_s() {
+		return late_nums_s;
 	}
-	public void setProject_id(Long project_id) {
-		this.project_id = project_id;
+	public void setLate_nums_s(Integer late_nums_s) {
+		this.late_nums_s = late_nums_s;
 	}
-	public Double getLat() {
-		return lat;
+	public Integer getLeave_early_nums_s() {
+		return leave_early_nums_s;
 	}
-	public void setLat(Double lat) {
-		this.lat = lat;
+	public void setLeave_early_nums_s(Integer leave_early_nums_s) {
+		this.leave_early_nums_s = leave_early_nums_s;
 	}
-	public Double getLng() {
-		return lng;
-	}
-	public void setLng(Double lng) {
-		this.lng = lng;
-	}
-	public Long getAttence_model_id() {
-		return attence_model_id;
-	}
-	public void setAttence_model_id(Long attence_model_id) {
-		this.attence_model_id = attence_model_id;
-	}
-	public Integer getClock_flag() {
-		return clock_flag;
-	}
-	public void setClock_flag(Integer clock_flag) {
-		this.clock_flag = clock_flag;
-	}
-	public Integer getLeave_early_num() {
-		return leave_early_num;
-	}
-	public void setLeave_early_num(Integer leave_early_num) {
-		this.leave_early_num = leave_early_num;
-	}
-	public Date getCreate_date() {
-		return create_date;
-	}
-	public void setCreate_date(Date create_date) {
-		this.create_date = create_date;
-	}
-	
+
 	
 	
 }

@@ -6,15 +6,11 @@ import com.my.spring.model.AdvancedOrder;
 import com.my.spring.model.AdvancedOrderPojo;
 import com.my.spring.service.AdvancedOrderService;
 import com.my.spring.utils.DataWrapper;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import java.util.List;
 

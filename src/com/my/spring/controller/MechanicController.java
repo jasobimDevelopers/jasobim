@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.my.spring.model.Building;
 import com.my.spring.model.Mechanic;
 import com.my.spring.model.MechanicPojo;
 import com.my.spring.service.MechanicService;

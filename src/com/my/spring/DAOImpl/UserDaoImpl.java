@@ -46,6 +46,23 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 		return null;
 	}
 	@Override
+	public User getByUserRealName(String userName) {
+		// TODO Auto-generated method stub
+		List<User> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.eq("realName",userName));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+			return ret.get(0);
+		}
+		return null;
+	}
+	@Override
 	public User getByUserName(String userName) {
 		// TODO Auto-generated method stub
 		List<User> ret = null;
@@ -421,23 +438,16 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         return dataWrapper;
 	}
 	@Override
-	public List<User> findUserLikeProjct(Integer id,String userList) {
+	public List<User> findUserLikeProjct(List<String> userList) {
 		List<User> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
         Disjunction dis = Restrictions.disjunction();
-        Long userId=(long)426;
-        Long userId2=(long)33;
-        dis.add(Restrictions.eq("id", userId));
-        dis.add(Restrictions.eq("id", userId2));
-        //dis.add(Restrictions.eq("userType", 1));
-        //dis.add(Restrictions.or(Restrictions.eq("userType", 3),Restrictions.eq("roleId", 1)));
-        /*if(userList!=null){
-        	String[] ids = userList.split(",");
-        	for(int i=0;i<ids.length;i++){
-        		dis.add(Restrictions.eq("id", Long.valueOf(ids[i])));
+        if(userList!=null){
+        	for(int i=0;i<userList.size();i++){
+        		dis.add(Restrictions.eq("id", Long.valueOf(userList.get(i))));
         	}
-        }*/
+        }
         criteria.add(dis);
         try {
             ret = criteria.list();

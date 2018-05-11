@@ -15,7 +15,6 @@ public class AdvancedOrderCopy {
 	private Date create_date;///预付单创建时间
 	private Integer status;///预付单当前的进行状态
 	private String content_files_id;
-	private Integer total;
 	
 	public Long getId() {
 		return id;
@@ -94,12 +93,6 @@ public class AdvancedOrderCopy {
 	}
 	public void setProjectId(Long project_id) {
 		this.project_id = project_id;
-	}
-	public Integer getTotal() {
-		return total;
-	}
-	public void setTotal(Integer total) {
-		this.total = total;
 	}
 	public String getContentFilesId() {
 		return content_files_id;
