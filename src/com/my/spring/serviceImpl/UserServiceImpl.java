@@ -503,6 +503,7 @@ public class UserServiceImpl implements UserService {
 						UserPadPojo userpadpojo=new UserPadPojo();
 						userpadpojo.setRealName(userList.getData().get(i).getRealName());
 						userpadpojo.setTel(userList.getData().get(i).getTel());
+						userpadpojo.setId(userList.getData().get(i).getId());
 						if(userList.getData().get(i).getUserIconUrl()!=null){
 							userpadpojo.setUserIcon(userList.getData().get(i).getUserIconUrl());
 						}else{

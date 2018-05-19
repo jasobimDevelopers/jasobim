@@ -15,10 +15,7 @@ public class Video {
 	private Long id;
 	private Long fileId;
 	private Long projectId;
-	private Integer buildingNum;
-	private Integer professionType;//0、质量 1、安全 2、技术
 	private String originName;
-	private Integer videoType;////0(视频)、1(PDF文档)、2 文本文档（word） 3、其他
 	private String intro;
 	private Long size;
 	private Integer videoGrade;/////交底的等级（0、公司总交底 1、项目交底 2、留底资料 3、通用交底）
@@ -61,23 +58,7 @@ public class Video {
 		this.projectId = projectId;
 	}
 	
-	@Basic
-    @Column(name = "profession_type")
-	public Integer getProfessionType() {
-		return professionType;
-	}
-	public void setProfessionType(Integer professionType) {
-		this.professionType = professionType;
-	}
-	
-	@Basic
-    @Column(name = "building_num")
-	public Integer getBuildingNum() {
-		return buildingNum;
-	}
-	public void setBuildingNum(Integer buildingNum) {
-		this.buildingNum = buildingNum;
-	}
+
 	
 	@Basic
     @Column(name = "origin_name")
@@ -88,14 +69,7 @@ public class Video {
 		this.originName = originName;
 	}
 	
-	@Basic
-    @Column(name = "video_type")
-	public Integer getVideoType() {
-		return videoType;
-	}
-	public void setVideoType(Integer videoType) {
-		this.videoType = videoType;
-	}
+
 	
 	@Basic
     @Column(name = "intro")

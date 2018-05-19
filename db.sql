@@ -453,5 +453,23 @@ create table production(
     date date
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+create table safe_fine(
+	id serial primary key,
+	user_id bigint(20) unsigned not null,
+	project_id int(20) unsigned not null,
+	create_date datetime,
+	detail varchar(200),#违章或隐患现象
+	level int,#隐患级别
+	forfeit int #罚款金额
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+create table quality_fine(
+	id serial primary key,
+	user_id bigint(20) unsigned not null,
+	project_id int(20) unsigned not null,
+	create_date datetime,
+	detail varchar(200),#违章或隐患现象
+	level int,#隐患级别
+	forfeit int #罚款金额
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 				 

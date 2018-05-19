@@ -7,7 +7,11 @@ import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping(value="api/qualityFine")
 public class QualityFineController {
@@ -17,8 +21,10 @@ public class QualityFineController {
     @ResponseBody
     public DataWrapper<Void> addQualityFine(
             @ModelAttribute QualityFine fine,
+            @RequestParam(value = "files",required = false) MultipartFile[] files,
+            HttpServletRequest request,
             @RequestParam(value = "token",required = true) String token){
-        return fineService.addQualityFine(fine,token);
+        return fineService.addQualityFine(fine,token,files,request);
     }
     @RequestMapping(value="/deleteQualityFine",method=RequestMethod.POST)
     @ResponseBody

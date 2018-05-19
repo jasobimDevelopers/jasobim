@@ -43,5 +43,16 @@ public class Parameters {
 		         int maxDate = a.get(Calendar.DATE);
 		         return maxDate;
 	}
+	public static String getFileName(String name){
+		
+		String[] str=name.split("\\.");
+		String newNames="";
+		for(int i=0;i<str.length-1;i++){
+			newNames+=str[i];
+		}
+		return newNames;
+		
+	}
+	
 	
 }

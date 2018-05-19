@@ -30,6 +30,9 @@ public class NodeUtil {
 	   node.name = (String) dataRecord.get("name");  
 	   node.parentId = (String) dataRecord.get("parentId");  
 	   node.uploadDate = (String) dataRecord.get("uploadDate");
+	   node.remark= (String) dataRecord.get("remark");
+	   node.fileType = (String) dataRecord.get("fileType");
+	   node.url = (String) dataRecord.get("url");
 	   node.userName = (String) dataRecord.get("userName"); 
 	   nodeList.put(node.id, node);  
   }  
@@ -41,7 +44,12 @@ public class NodeUtil {
     // root = node; 
     pcList.add(node);
    } else {  
-    ((Node) nodeList.get(node.parentId)).addChild(node);  
+	   if(((Node)nodeList.get(node.parentId))!=null){
+		   ((Node) nodeList.get(node.parentId)).addChild(node);  
+	   }else{
+		   pcList.add(node);
+	   }
+   
    }  
   }  
   // 输出无序的树形菜单的JSON字符串  
@@ -76,6 +84,9 @@ class Node {
   */  
  public String parentId;  
  public String userName;
+ public String remark;
+ public String fileType;
+ public String url;
  public String uploadDate;
  /** 
   * 孩子节点列表 
@@ -86,8 +97,8 @@ class Node {
  public String toString() {    
   String result = "{"  
    + "id : '" + id + "'"  
-   + ", name : '" + name + "'"+ ", userName : '" 
-   + userName + "'"+ ", uploadDate : '" + uploadDate + "'";  
+   + ", name : '" + name + "'"+ ", fileType : '" + fileType + "'"+ ", url : '" + url + "'"+ ", userName : '" 
+   + userName + "'"+", remark : '" + remark + "'"+ ", uploadDate : '" + uploadDate + "'";  
     
   if (children != null && children.getSize() != 0) {  
    result += ", children : " + children.toString();  

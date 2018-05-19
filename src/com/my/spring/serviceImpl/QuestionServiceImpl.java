@@ -680,11 +680,11 @@ public class QuestionServiceImpl implements QuestionService {
 							questionPojo.setTrades(question.getTrades());
 							questionPojo.setUserId(userDao.getById(question.getUserId()).getRealName());
 							Long userIdis=userDao.getById(question.getUserId()).getId();
-							if(userIdis==userInMemory.getId()){
+							/*if(userIdis==userInMemory.getId()){
 								questionPojo.setUserid(1);
 							}else{
 								questionPojo.setUserid(0);
-							}
+							}*/
 							DataWrapper<List<QuestionFile>> file=new DataWrapper<List<QuestionFile>>();
 							file=questionFileDao.getQuestionFileByQuestionId(question.getId());
 							if(file.getData()!=null && file.getData().size()>0){
@@ -921,6 +921,7 @@ public class QuestionServiceImpl implements QuestionService {
 	        	questionpojo.setQuestionDate(sdf.format(dataWrappers.getData().get(i).getQuestionDate()));
 	        	questionpojo.setState(dataWrappers.getData().get(i).getState());
 	        	questionpojo.setTrades(dataWrappers.getData().get(i).getTrades());  
+	        	questionpojo.setUserid(dataWrappers.getData().get(i).getUserId());
 	        	int messageNum=0;
 	        	List<Message> mes = messageDao.getMessageListByQuestionId(dataWrappers.getData().get(i).getId()).getData();
 	        	if(mes!=null){

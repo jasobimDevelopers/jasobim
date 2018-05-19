@@ -91,11 +91,6 @@ public class QuestionController {
             ){
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
     	dataWrapper=questionService.updateQuestionState(questionId,token,state);
-    	if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
-            	return dataWrapper;
-        }else{
-            	dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-        }
         return dataWrapper;
     }
 

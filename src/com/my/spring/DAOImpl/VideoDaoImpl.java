@@ -72,14 +72,8 @@ public class VideoDaoImpl extends BaseDao<Video> implements VideoDao {
         Session session = getSession();
         Criteria criteria = session.createCriteria(Video.class);
         criteria.addOrder(Order.desc("id"));
-        if(video.getProfessionType()!=null){
-        	criteria.add(Restrictions.eq("professionType", video.getProfessionType()));
-        }
         if(video.getUploadUserId()!=null){
         	criteria.add(Restrictions.eq("uploadUserId", video.getUploadUserId()));
-        }
-        if(video.getBuildingNum()!=null){
-        	criteria.add(Restrictions.eq("buildingNum", video.getBuildingNum()));
         }
         if(beginDate!=null){
         	 criteria.add(Restrictions.ge("beginDate",beginDate)); 

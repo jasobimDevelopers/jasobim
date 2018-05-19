@@ -136,8 +136,6 @@ public class VideoServiceImpl implements VideoService {
     			for(int i=0;i<dataWrappers.getData().size();i++){
     				
     				VideoPojo videoPojo=new VideoPojo();
-    				Integer temp=dataWrappers.getData().get(i).getBuildingNum();
-    				Integer professiontype=dataWrappers.getData().get(i).getProfessionType();
     				if(dataWrappers.getData().get(i).getUploadDate()!=null){
     					videoPojo.setUploadDate(sdf.format(dataWrappers.getData().get(i).getUploadDate()));
     				}
@@ -148,10 +146,7 @@ public class VideoServiceImpl implements VideoService {
     				videoPojo.setId(dataWrappers.getData().get(i).getId());
     				videoPojo.setProjectId(projectId);
     				videoPojo.setFileId(dataWrappers.getData().get(i).getFileId());
-    				videoPojo.setBuildingNum(temp);
-    				videoPojo.setVideoType(dataWrappers.getData().get(i).getVideoType());
     				videoPojo.setOriginName(dataWrappers.getData().get(i).getOriginName());
-    				videoPojo.setProfessionType(professiontype);
     				videoPojo.setIntro(dataWrappers.getData().get(i).getIntro());
     				videoPojo.setSize(dataWrappers.getData().get(i).getSize());
     				Files file=fileDao.getById(dataWrappers.getData().get(i).getFileId());

@@ -208,9 +208,10 @@ create table mechanic(
 	work_name varchar(100),
 	day_salary int,
 	remark varchar(50),
-	project_id bigint(20) unsigned not null,
 	create_date datetime,
+	day_hours int,
 	id_card_img bigint(20) unsigned not null,
+	project_id bigint(20) unsigned not null,
 	create_user bigint(20) unsigned not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -221,4 +222,21 @@ create table mechanic_price(
 	hour int,
 	edit_date datetime,
 	create_date datetime,
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table material_plan(
+	id serial primary key,
+	name varchar(30),#材料名称
+	model varchar(30),#型号规格
+	standard varchar(30),#质量标准
+	unit varchar(30),#单位
+	num int,#数量
+	get_time varchar(50),#供货时间
+	out_place varchar(50),#卸货地点
+	use_place varchar(50),#用料地点
+	pid bigint,
+	create_date datetime,
+	update_date datetime,
+	user_id bigint(20) unsigned not null,
+	project_id bigint(20) unsigned not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

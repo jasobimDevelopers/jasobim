@@ -143,7 +143,7 @@ public class BaseDao<T>{
     		try{
                 session.beginTransaction();
                 for(int i=0;i<idList.length;i++){
-                	session.delete(Long.valueOf(idList[i]));
+                	session.delete(Long.parseLong(idList[i]));
                 	if(i%10==0){
                 		session.flush();
                 		session.clear();

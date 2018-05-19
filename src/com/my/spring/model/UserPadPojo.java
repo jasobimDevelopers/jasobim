@@ -1,15 +1,15 @@
 package com.my.spring.model;
 
 public class UserPadPojo {
-	private Integer id;
+	private Long id;
     private String realName;
     private String tel;
     private String workName;
     private String userIcon;
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

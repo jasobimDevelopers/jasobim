@@ -1,6 +1,5 @@
 package com.my.spring.model;
 
-import java.util.Date;
 public class FolderPojo {
 	private Long id;
 	private String name;
@@ -8,9 +7,10 @@ public class FolderPojo {
 	private Integer fileType;
 	private Long parrentId;
 	private Long fileId;
-	private Date createDate;
+	private String createDate;
 	private String size;
 	private Long userId;
+	private String url;
 	public Long getId() {
 		return id;
 	}
@@ -52,10 +52,10 @@ public class FolderPojo {
 		this.fileId = fileId;
 	}
 	
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 	
@@ -71,6 +71,12 @@ public class FolderPojo {
 	}
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 }

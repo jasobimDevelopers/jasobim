@@ -19,6 +19,7 @@ public class SafeFine {
 	private Integer level;
 	private Integer forfeit;
 	private String checkDate;
+	private String fileIds;
 	
 	
 	@Id
@@ -92,6 +93,15 @@ public class SafeFine {
 	}
 	public void setCheckDate(String checkDate) {
 		this.checkDate = checkDate;
+	}
+	
+	@Basic
+	@Column(name="file_ids")
+	public String getFileIds() {
+		return fileIds;
+	}
+	public void setFileIds(String fileIds) {
+		this.fileIds = fileIds;
 	}
 	
 }

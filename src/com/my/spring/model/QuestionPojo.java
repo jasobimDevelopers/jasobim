@@ -24,7 +24,7 @@ public class QuestionPojo {
 	private String createUserIcon;
 	private String[] userNameLists;
 	private String voiceUrlList;
-	private Integer userid;
+	private Long userid;
 	private String projectPicUrl;
 	private String userList;
 	private String modelFlag;
@@ -171,10 +171,10 @@ public class QuestionPojo {
 	public void setVoiceUrlList(String voiceUrlList) {
 		this.voiceUrlList = voiceUrlList;
 	}
-	public Integer getUserid() {
+	public Long getUserid() {
 		return userid;
 	}
-	public void setUserid(Integer userid) {
+	public void setUserid(Long userid) {
 		this.userid = userid;
 	}
 	public String getProjectName() {

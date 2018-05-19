@@ -688,11 +688,11 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 							QualityQuestionPojo.setTrades(QualityQuestion.getTrades());
 							QualityQuestionPojo.setUserId(userDao.getById(QualityQuestion.getUserId()).getRealName());
 							Long userIdis=userDao.getById(QualityQuestion.getUserId()).getId();
-							if(userIdis==userInMemory.getId()){
+							/*if(userIdis==userInMemory.getId()){
 								QualityQuestionPojo.setUserid(1);
 							}else{
 								QualityQuestionPojo.setUserid(0);
-							}
+							}*/
 							DataWrapper<List<QuestionFile>> file=new DataWrapper<List<QuestionFile>>();
 							file=QuestionFileDao.getQuestionFileByQualityId(QualityQuestion.getId());
 							if(file.getData()!=null && file.getData().size()>0){
@@ -927,7 +927,8 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 	        	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 	        	QualityQuestionpojo.setQuestionDate(sdf.format(dataWrappers.getData().get(i).getQuestionDate()));
 	        	QualityQuestionpojo.setState(dataWrappers.getData().get(i).getState());
-	        	QualityQuestionpojo.setTrades(dataWrappers.getData().get(i).getTrades());     
+	        	QualityQuestionpojo.setTrades(dataWrappers.getData().get(i).getTrades()); 
+	        	QualityQuestionpojo.setUserid(dataWrappers.getData().get(i).getUserId());
 	        	int messageNum=0;
 	        	List<Message> mes = messageDao.getMessageListByQualityId(dataWrappers.getData().get(i).getId()).getData();
 	        	if(mes!=null){

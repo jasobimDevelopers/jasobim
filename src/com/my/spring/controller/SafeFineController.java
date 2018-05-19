@@ -7,8 +7,12 @@ import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import javax.mail.Multipart;
+import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -19,9 +23,11 @@ public class SafeFineController {
     @RequestMapping(value="/addSafeFine", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addSafeFine(
-            @ModelAttribute SafeFine Duct,
+            @ModelAttribute SafeFine safeFine,
+            @RequestParam(value = "files",required = false) MultipartFile[] files,
+            HttpServletRequest request,
             @RequestParam(value = "token",required = true) String token){
-        return fineService.addSafeFine(Duct,token);
+        return fineService.addSafeFine(safeFine,token,files,request);
     }
     @RequestMapping(value="/deleteSafeFine",method=RequestMethod.POST)
     @ResponseBody

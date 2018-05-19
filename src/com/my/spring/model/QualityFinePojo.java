@@ -8,6 +8,7 @@ public class QualityFinePojo {
 	private Integer level;
 	private Integer forfeit;
 	private String checkDate;
+	private String[] fileUrls;
 	
 	public Long getId() {
 		return id;
@@ -62,6 +63,12 @@ public class QualityFinePojo {
 	}
 	public void setCheckDate(String checkDate) {
 		this.checkDate = checkDate;
+	}
+	public String[] getFileUrls() {
+		return fileUrls;
+	}
+	public void setFileUrls(String[] fileUrls) {
+		this.fileUrls = fileUrls;
 	}
 	
 	
