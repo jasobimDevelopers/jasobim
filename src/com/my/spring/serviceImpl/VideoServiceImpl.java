@@ -43,6 +43,7 @@ public class VideoServiceImpl implements VideoService {
     private String filePath="files";
     private Integer fileType=4;
     private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+  
     @Override
     public DataWrapper<Void> addVideo(Video video,String token,MultipartFile file,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();

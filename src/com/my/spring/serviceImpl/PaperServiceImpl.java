@@ -55,6 +55,7 @@ public class PaperServiceImpl implements PaperService {
     UserLogService userLogSerivce;
     private String filePath = "files";
     private Integer fileType=1;
+    private String[] professionTypes={"电气","暖通","给排水","消防","建筑","弱电","装饰"};
     /*
      * 图纸信息上传添加
      * 需要管理员身份
@@ -83,6 +84,11 @@ public class PaperServiceImpl implements PaperService {
 					paper.setOriginName(originName);
 					if(paper.getDiyProfessionType()!=null){
 						paper.setProfessionType(7);///其他
+						for(int i=0;i<professionTypes.length;i++){
+							if(professionTypes[i].equals(paper.getDiyProfessionType())){
+								paper.setProfessionType(i);///其他
+							}
+						}
 					}
 					if(!paperDao.addPaper(paper)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);

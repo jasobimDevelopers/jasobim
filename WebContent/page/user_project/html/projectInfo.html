@@ -232,9 +232,9 @@
                                             <option value="{{$index}}" ng-repeat="paperProfessionType in projectPhaseInfo">{{paperProfessionType.name}}</option>
                                         </select> -->
                                         <div class="search-select">
-                                          <input type="text" id="paper_profession_type" ng-value="projectPhaseInfo[0].name" />
+                                          <input type="text" id="paper_profession_type" ng-value="projectPhaseInfos[0].name" />
                                           <div class="select-wrapper">
-                                              <div class="select-item" data-value="{{$index}}" data-name="{{paperProfessionType.name}}" ng-repeat="paperProfessionType in projectPhaseInfo">{{paperProfessionType.name}}</div>
+                                              <div class="select-item" data-value="{{$index}}" data-name="{{paperProfessionType.name}}" ng-repeat="paperProfessionType in projectPhaseInfos">{{paperProfessionType.name}}</div>
                                           </div>
                                         </div>
                                     </div>
