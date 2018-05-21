@@ -76,6 +76,18 @@ public class MaterialPlanDaoImpl extends BaseDao<MaterialPlan> implements Materi
 				 djs.add(con1);
 				 djs.add(con2);
         		 criteria.add(djs);
+        		 CriteriaImpl criteriaImpl = (CriteriaImpl) criteria;//转型  
+        		    SessionImplementor sessions = criteriaImpl.getSession();//获取SESSION  
+        		    SessionFactoryImplementor factory = sessions.getFactory();//获取FACTORY  
+        		    CriteriaQueryTranslator translator = new CriteriaQueryTranslator(factory, criteriaImpl, criteriaImpl  
+        		        .getEntityOrClassName(), CriteriaQueryTranslator.ROOT_SQL_ALIAS);  
+        		    String[] implementors = factory.getImplementors(criteriaImpl.getEntityOrClassName());  
+        		    CriteriaJoinWalker walker = new CriteriaJoinWalker((OuterJoinLoadable) factory  
+        		        .getEntityPersister(implementors[0]), translator, factory, criteriaImpl, criteriaImpl  
+        		        .getEntityOrClassName(), sessions.getLoadQueryInfluencers());  
+        		    String sql = walker.getSQLString();  //转化成sql语句
+
+        		
         		 ///////
         		
 			} catch (ParseException e) {

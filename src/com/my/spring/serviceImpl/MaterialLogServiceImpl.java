@@ -68,10 +68,18 @@ public class MaterialLogServiceImpl implements MaterialLogService {
 							}
 						}
 						if(m.getLogType()==1){
-							if(m.getNum()!=null){
-								material.setOutNum(material.getOutNum()+m.getNum());
-								material.setLeaveNum(material.getLeaveNum()-m.getNum());
+							if(material.getLeaveNum()!=null){
+								if(m.getNum()!=null){
+									if(m.getNum()<=material.getLeaveNum()){
+										material.setOutNum(material.getOutNum()+m.getNum());
+										material.setLeaveNum(material.getLeaveNum()-m.getNum());
+									}else{
+										dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+										return dataWrapper;
+									}
+								}
 							}
+							
 						}
 						materialDao.updateMaterial(material);
 					}

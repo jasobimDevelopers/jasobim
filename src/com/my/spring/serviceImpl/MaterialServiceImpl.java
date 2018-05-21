@@ -54,6 +54,15 @@ public class MaterialServiceImpl implements MaterialService {
 			if(m!=null){
 				m.setCreateDate(new Date());
 				m.setUserId(userInMemory.getId());
+				if(m.getInNum()==null){
+					m.setInNum(0);
+				}
+				if(m.getLeaveNum()==null){
+					m.setLeaveNum(0);
+				}
+				if(m.getOutNum()==null){
+					m.setOutNum(0);
+				}
 				if(!materialDao.addMaterial(m)){
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}

@@ -124,6 +124,13 @@ public class MaterialPlanServiceImpl implements MaterialPlanService  {
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(floder!=null){
+				if(floder.getPid()!=null){
+					MaterialPlan pmp = mpDao.getById(floder.getPid());
+					if(pmp!=null){
+						floder.setStartTime(pmp.getStartTime());
+						floder.setEndTime(pmp.getEndTime());
+					}
+				}
 				if(start!=null){
 					floder.setStartTime(Parameters.getSdfs().parse(start));
 				}

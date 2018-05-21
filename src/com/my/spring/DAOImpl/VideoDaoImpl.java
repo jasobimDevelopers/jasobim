@@ -84,18 +84,11 @@ public class VideoDaoImpl extends BaseDao<Video> implements VideoDao {
         if(video.getOriginName()!=null){
         	criteria.add(Restrictions.like("originName", "%"+video.getOriginName()+"%"));
         }
-        if(video.getVideoGrade()!=null){
-        	 if(video.getVideoGrade()==3){
-        		 criteria.add(Restrictions.eq("videoGrade", video.getVideoGrade()));
-            }else{
-            	if(video.getProjectId()!=null){
-                	criteria.add(Restrictions.eq("projectId", projectId));
-                }
-            }
-        }else{
-        	if(video.getProjectId()!=null){
-            	criteria.add(Restrictions.eq("projectId", projectId));
-            }
+    	 if(video.getVideoGrade()!=null){
+    		 criteria.add(Restrictions.eq("videoGrade", video.getVideoGrade()));
+        }
+    	if(video.getProjectId()!=null){
+        	criteria.add(Restrictions.eq("projectId", projectId));
         }
         if (pageSize == null) {
 			pageSize = 10;
