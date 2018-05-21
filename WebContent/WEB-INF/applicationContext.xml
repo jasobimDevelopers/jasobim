@@ -46,7 +46,7 @@
                 <prop key="hiberante.connection.autocommit">true</prop>
                 <prop key="hibernate.connection.url">jdbc:mysql://10.3.103.20:3306/bimdatas</prop>
                <!--  <prop key="hibernate.connection.url">jdbc:mysql://192.168.2.57:3306/bimdatas</prop> -->
-               <!--  <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas</prop> -->
+                <!-- <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas</prop> -->
             </props>
         </property>
         <property name="annotatedClasses">
