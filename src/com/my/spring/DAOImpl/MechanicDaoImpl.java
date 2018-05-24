@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.my.spring.DAO.MechanicDao;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.AttenceLog;
 import com.my.spring.model.Mechanic;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -144,6 +145,24 @@ public class MechanicDaoImpl extends BaseDao<Mechanic> implements MechanicDao {
         result.setTotalPage(totalPageNum);
         result.setNumberPerPage(pageSize);
         return result;
+	}
+
+	@Override
+	public List<Mechanic> getMechanicListByProjectId(Mechanic ps) {
+		 List<Mechanic> ret = new ArrayList<Mechanic>();
+	        Session session = getSession();
+	        Criteria criteria = session.createCriteria(Mechanic.class);
+	        if(ps!=null){
+	        	if(ps.getProjectId()!=null){
+		        	criteria.add(Restrictions.eq("projectId", ps.getProjectId()));
+		        }
+		        try {
+		            ret = criteria.list();
+		        }catch (Exception e){
+		            e.printStackTrace();
+		        }
+	        }
+			return ret;
 	}
 
 }

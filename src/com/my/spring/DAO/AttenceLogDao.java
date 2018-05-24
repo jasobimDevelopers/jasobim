@@ -19,4 +19,5 @@ public interface AttenceLogDao {
 	DataWrapper<List<AttenceLogs>> getAttenceLogsUserList(Integer pageIndex, Integer pageSize, AttenceLog am,
 			Integer year, Integer month);
 	AttenceLog getAttenceLogByInfos(Long id, Date nowDate, Long projectId);
+	AttenceLog getAttenceLogListByIds(AttenceLog ps);
 }

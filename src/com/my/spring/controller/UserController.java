@@ -48,8 +48,9 @@ public class UserController {
     		@ModelAttribute User user,
     		HttpServletRequest request,
     		@RequestParam(value = "file", required = false) MultipartFile file,
-    		@RequestParam(value="token",required=true) String token) {
-         return userService.addUser(user,token,file,request);
+    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="projectList",required=true) String projectList) {
+         return userService.addUser(user,token,file,request,projectList);
     }
 	/////网页端忘记密码，重置密码接口
 	@RequestMapping(value="/findUserLike", method = RequestMethod.POST)
@@ -208,8 +209,9 @@ public class UserController {
     		@ModelAttribute User user,
     		HttpServletRequest request,
     		@RequestParam(value = "file", required = false) MultipartFile file,
-    		@RequestParam(value="token",required=true) String token) {
-		return userService.updateUserByAdmin(user, token,file,request);
+    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="projectList",required=true) String projectList) {
+		return userService.updateUserByAdmin(user, token,file,request,projectList);
     }
 	@RequestMapping(value="/common/getUserInfo", method = RequestMethod.GET)
 	@ResponseBody

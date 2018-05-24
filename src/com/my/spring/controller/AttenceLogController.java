@@ -50,6 +50,12 @@ public class AttenceLogController {
     		@ModelAttribute AttenceLog ps){
         return amService.getAttenceLogList(token, ps, pageSize, pageIndex,year,month);
     }
-   
+    @RequestMapping(value="/getAttenceLogById", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<AttenceLog> getAttenceLogById(
+            @RequestParam(value = "token",required = true) String token,
+    		@ModelAttribute AttenceLog ps){
+        return amService.getAttenceLogById(token, ps);
+    }
    
 }

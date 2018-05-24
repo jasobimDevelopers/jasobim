@@ -13,4 +13,5 @@ public interface MechanicDao {
 	 DataWrapper<List<Mechanic>> getMechanicList(Integer pageIndex, Integer pageSize, Mechanic am);
 	Mechanic getMechanicById(Long id);
 	DataWrapper<List<Mechanic>> getMechanicListByProjectId(Integer pageIndex, Integer pageSize, Long projectId);
+	List<Mechanic> getMechanicListByProjectId(Mechanic ps);
 }

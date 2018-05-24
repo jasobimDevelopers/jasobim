@@ -1,5 +1,6 @@
 package com.my.spring.serviceImpl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.DAO.MechanicDao;
+import com.my.spring.DAO.MechanicPriceDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserLogDao;
@@ -19,6 +21,8 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.Mechanic;
 import com.my.spring.model.MechanicPojo;
+import com.my.spring.model.MechanicPojos;
+import com.my.spring.model.MechanicPrice;
 import com.my.spring.model.Project;
 import com.my.spring.model.User;
 import com.my.spring.parameters.Parameters;
@@ -33,6 +37,8 @@ public class MechanicServiceImpl implements MechanicService{
     UserDao userDao;
     @Autowired
     MechanicDao mechanicDao;
+    @Autowired
+    MechanicPriceDao mechanicPriceDao;
     @Autowired
     UserLogDao userLogDao;
     @Autowired
@@ -93,6 +99,7 @@ public class MechanicServiceImpl implements MechanicService{
 					mechanice.setRemark(am.getRemark());
 					mechanice.setTel(am.getTel());
 					mechanice.setWorkName(am.getWorkName());
+					mechanice.setProjectId(am.getProjectId());
 					if(file!=null){
 						Files files = fileService.uploadFile("/mechanic/"+am.getProjectId(), file, 5, request);
 						if(files!=null){
@@ -162,6 +169,48 @@ public class MechanicServiceImpl implements MechanicService{
 				}
 			}else{
 				result.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+
+	@Override
+	public DataWrapper<List<MechanicPojos>> getMechanicInfos(String token, Mechanic ps) throws ParseException {
+		DataWrapper<List<MechanicPojos>> result = new DataWrapper<List<MechanicPojos>>();
+		List<MechanicPojos> results = new ArrayList<MechanicPojos>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			List<Mechanic> gets = new ArrayList<Mechanic>();
+			if(ps!=null){
+				if(ps.getProjectId()!=null){
+					Project project = projectDao.getById(ps.getProjectId());
+					result.setTotalPage(project.getWorkHour());
+				}
+			}
+			gets = mechanicDao.getMechanicListByProjectId(ps);
+			Date now = new Date();
+			if(!gets.isEmpty()){
+				for(Mechanic item:gets){
+					MechanicPojos mps = new MechanicPojos();
+					mps.setId(item.getId());
+					mps.setProjectId(item.getProjectId());
+					mps.setRealName(item.getRealName());
+					mps.setWorkName(item.getWorkName());
+					if(item.getIdCardImg()!=null){
+						Files file = fileService.getById(item.getIdCardImg());
+						if(file!=null){
+							mps.setUserIcon(file.getUrl());
+						}
+					}
+					MechanicPrice mp = mechanicPriceDao.getMechanicPriceListByInfos(item.getId(),item.getProjectId(),Parameters.getSdfs().parse(Parameters.getSdfs().format(now)));
+					if(mp!=null){
+						mps.setWorkHours(mp.getHour());
+					}
+					results.add(mps);
+				}
+				result.setData(results);
 			}
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);

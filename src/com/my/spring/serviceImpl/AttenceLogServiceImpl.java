@@ -266,4 +266,27 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 		return result;
 	}
 
+	@Override
+	public DataWrapper<AttenceLog> getAttenceLogById(String token, AttenceLog ps) {
+		DataWrapper<AttenceLog> alp = new DataWrapper<AttenceLog>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			AttenceLog gets = new AttenceLog();
+			Date nowDate = null;
+			try {
+				nowDate = Parameters.getSdfs().parse(Parameters.getSdfs().format(new Date()));
+				//nowDate = Parameters.getSdfs().parse("2018-05-10");
+				ps.setCreateDate(nowDate);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			gets = attenceLogDao.getAttenceLogListByIds(ps);
+			alp.setData(gets);
+		}else{
+			alp.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return alp;
+	}
+
 }

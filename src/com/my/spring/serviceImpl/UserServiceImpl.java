@@ -141,7 +141,6 @@ public class UserServiceImpl implements UserService {
 					users.setMenuItemList(user.getMenuItemList().split(","));
 				}
 				if(user.getUserType()==0 || user.getUserType()==1){
-					
 					Integer pageSize=10;
 					Integer pageIndex=-1;
 					Project projectsb = new Project();
@@ -211,7 +210,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public DataWrapper<String> updateUserByAdmin(User user, String token,MultipartFile file,HttpServletRequest request) {
+	public DataWrapper<String> updateUserByAdmin(User user, String token,MultipartFile file,HttpServletRequest request,String projectList) {
 		// TODO Auto-generated method stub
 		DataWrapper<String> dataWrapper = new DataWrapper<String>();
 		User adminInMemory = SessionManager.getSession(token);
@@ -221,6 +220,24 @@ public class UserServiceImpl implements UserService {
 			if((adminInMemory.getUserType() == 0) || (userId.equals(localUserID))){
 				User userInDB = userDao.getById(user.getId());
 				if (userInDB != null) {
+					if(projectList!=null){
+						if(!projectList.equals("") && projectList!=null){
+							String[] projectids = projectList.split(",");
+							for(int i=0;i<projectids.length;i++){
+								
+								UserProject up1 = new UserProject();
+								
+								up1 = userProjectDao.getUserProjectListByUserIdAndProjectId(user.getId(),Long.valueOf(projectids[i]));
+								if(up1==null){
+									UserProject up = new UserProject();
+									up.setProjectId(Long.valueOf(projectids[i]));
+									up.setUserId(user.getId());
+									userProjectDao.addUserProject(up);
+								}
+								
+							}
+						}
+					}
 					if(file !=null){
 							String path=filePath+"/"+"userIcons";
 							Files newfile=fileService.uploadFile(path, file,fileType,request);
@@ -394,6 +411,9 @@ public class UserServiceImpl implements UserService {
 					userpojo.setUserName(userList.getData().get(i).getUserName());
 					userpojo.setUserType(userList.getData().get(i).getUserType());
 					userpojo.setUserIcon(userList.getData().get(i).getUserIcon());
+					userpojo.setDepartmentId(userList.getData().get(i).getDepartmentId());
+					userpojo.setTeamId(userList.getData().get(i).getTeamId());
+					userpojo.setRoleId(userList.getData().get(i).getRoleId());
 					if(userList.getData().get(i).getMenuItemList()!=null){
 						userpojo.setMenuItemList(userList.getData().get(i).getMenuItemList().split(","));
 					}
@@ -402,6 +422,18 @@ public class UserServiceImpl implements UserService {
 						if(file!=null){
 							userpojo.setUserIconUrl(file.getUrl());
 						}
+					}
+					List<UserProject> ups = userProjectDao.getUserProjectListByUserId(userList.getData().get(i).getId());
+					if(!ups.isEmpty()){
+						String projectLists="";
+						for(int q=0;q<ups.size();q++){
+							if(projectLists.equals("")){
+								projectLists=ups.get(q).getProjectId()+"";
+							}else{
+								projectLists=projectLists+","+ups.get(q).getProjectId();
+							}
+						}
+						userpojo.setProjectList(projectLists);
 					}
 					if(userList.getData().get(i).getUserIconUrl()!=null){
 						userpojo.setUserIconUrl(userList.getData().get(i).getUserIconUrl());
@@ -604,7 +636,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataWrapper<Void> addUser(User user,String token,MultipartFile file, HttpServletRequest request) {
+	public DataWrapper<Void> addUser(User user,String token,MultipartFile file, HttpServletRequest request,String projectList) {
 		DataWrapper<Void> dataWrapper = new DataWrapper<>();
 		User userInMemory=SessionManager.getSession(token);
 		if(userInMemory!=null){
@@ -637,6 +669,16 @@ public class UserServiceImpl implements UserService {
 					user.setMenuItemList("0,1,2,3,4,5,6,7,8");
 					if(!userDao.addUser(user)) {
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}else{
+						if(!projectList.equals("") && projectList!=null){
+							String[] projectids = projectList.split(",");
+							for(int i=0;i<projectids.length;i++){
+								UserProject up = new UserProject();
+								up.setProjectId(Long.valueOf(projectids[i]));
+								up.setUserId(user.getId());
+								userProjectDao.addUserProject(up);
+							}
+						}
 					}
 					
 				}
@@ -805,5 +847,6 @@ public class UserServiceImpl implements UserService {
 		
 		return null;
 	}
+
 
 }

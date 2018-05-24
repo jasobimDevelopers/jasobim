@@ -29,6 +29,7 @@ public class MechanicPriceController {
         return amService.addMechanicPriceList(am, token);
     }
     
+    
     @RequestMapping(value="/addMechanicPrice", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> addMechanicPrice(

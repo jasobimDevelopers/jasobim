@@ -193,4 +193,33 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 		return null;
 	}
 
+	@Override
+	public AttenceLog getAttenceLogListByIds(AttenceLog ps) {
+		 List<AttenceLog> ret = new ArrayList<AttenceLog>();
+	        Session session = getSession();
+	        Criteria criteria = session.createCriteria(AttenceLog.class);
+	        if(ps!=null){
+	        	if(ps.getUserId()!=null){
+		        	criteria.add(Restrictions.eq("userId", ps.getUserId()));
+		        }
+	        	
+		        if(ps.getProjectId()!=null){
+		        	criteria.add(Restrictions.eq("projectId", ps.getProjectId()));
+		        }
+		        
+		        if(ps.getCreateDate()!=null){
+		        	criteria.add(Restrictions.eq("createDate", ps.getCreateDate()));
+		        }
+		        try {
+		            ret = criteria.list();
+		        }catch (Exception e){
+		            e.printStackTrace();
+		        }
+		        if (ret != null && ret.size() > 0) {
+					return ret.get(0);
+				}
+	        }
+			return null;
+	}
+
 }

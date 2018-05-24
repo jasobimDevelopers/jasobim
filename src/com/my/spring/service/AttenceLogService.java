@@ -12,4 +12,5 @@ public interface AttenceLogService {
 	 DataWrapper<Void> updateAttenceLog(AttenceLog duct,String token);
 	 DataWrapper<List<AttenceLogPojo>> getAttenceLogList(String token, AttenceLog duct, Integer pageSize,
 			Integer pageIndex, Integer year, Integer month);
+	DataWrapper<AttenceLog> getAttenceLogById(String token, AttenceLog ps);
 }

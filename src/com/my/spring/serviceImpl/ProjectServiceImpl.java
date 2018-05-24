@@ -94,6 +94,7 @@ public class ProjectServiceImpl implements ProjectService {
         Integer[] ioIos = new Integer[modelfile.length];
         Long[] modelidList=new Long[modelfile.length];
         if (userInMemory != null) {
+        	project.setCreateUser(userInMemory.getId());
         	if(userInMemory.getUserType()==UserTypeEnum.Visitor.getType()){
         		if(project!=null){
 					if(modelfile.length>=0)

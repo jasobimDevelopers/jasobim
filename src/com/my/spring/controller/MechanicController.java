@@ -1,5 +1,6 @@
 package com.my.spring.controller;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.model.Mechanic;
 import com.my.spring.model.MechanicPojo;
+import com.my.spring.model.MechanicPojos;
 import com.my.spring.service.MechanicService;
 import com.my.spring.utils.DataWrapper;
 
@@ -60,6 +62,12 @@ public class MechanicController {
     		@ModelAttribute Mechanic ps){
         return amService.getMechanicList(token, ps, pageSize, pageIndex);
     }
-   
+    @RequestMapping(value="/getMechanicInfos", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<MechanicPojos>> getMechanicInfos(
+            @RequestParam(value = "token",required = true) String token,
+    		@ModelAttribute Mechanic ps) throws ParseException{
+        return amService.getMechanicInfos(token, ps);
+    }
    
 }

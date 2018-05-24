@@ -7,4 +7,6 @@ public interface UserProjectDao {
     boolean deleteUserProject(Long id);
     UserProject getById(Long id);
 	boolean addUserProjectList(List<UserProject> paper);
+	List<UserProject> getUserProjectListByUserId(Long id);
+	UserProject getUserProjectListByUserIdAndProjectId(Long id, Long valueOf);
 }

@@ -18,4 +18,5 @@ public interface MechanicPriceDao {
 	MechanicPrice getMechanicPriceLists(Integer pageIndex, Integer pageSize, MechanicPrice am);
 	List<MechanicPrice> getMechanicPriceListByMechanicId(Integer i, Integer j, Long id, Date date, Date date2);
 	List<MechanicPriceNum> getMechanicPriceNumByProjectId(String startday, String endday, Long projectId);
+	MechanicPrice getMechanicPriceListByInfos(Long id, Long projectId, Date format);
 }

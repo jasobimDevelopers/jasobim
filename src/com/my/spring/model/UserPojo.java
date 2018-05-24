@@ -24,6 +24,9 @@ public class UserPojo {
     private String teamInformation;////班组信息
     private String projectList;
     private String[] projectLists;
+    private Long teamId;
+    private Long departmentId;
+    private Long roleId;
     private Object menuList;
     private Integer readState;///0 可读  1可写
     public String[] getProjectLists() {
@@ -157,6 +160,24 @@ public class UserPojo {
 	}
 	public void setReadState(Integer readState) {
 		this.readState = readState;
+	}
+	public Long getTeamId() {
+		return teamId;
+	}
+	public void setTeamId(Long teamId) {
+		this.teamId = teamId;
+	}
+	public Long getDepartmentId() {
+		return departmentId;
+	}
+	public void setDepartmentId(Long departmentId) {
+		this.departmentId = departmentId;
+	}
+	public Long getRoleId() {
+		return roleId;
+	}
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
 	}
     
 }

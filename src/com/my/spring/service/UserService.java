@@ -25,8 +25,7 @@ public interface UserService {
 	DataWrapper<List<UserPojo>> getUserList(Integer pageIndex, Integer pageSize,User user,String token);
 	DataWrapper<Void> changeUserTypeByAdmin(Long userId, Integer userType, String token);
 	DataWrapper<User> findUserLike(User user,String token);
-	DataWrapper<Void> addUser(User user,String token, MultipartFile file, HttpServletRequest request);
-	DataWrapper<String> updateUserByAdmin(User user,String token, MultipartFile file,HttpServletRequest request);
+	DataWrapper<String> updateUserByAdmin(User user,String token, MultipartFile file,HttpServletRequest request,String projectList);
 	DataWrapper<User> FindPs(User user);
 	DataWrapper<Void> updateUserBySelf(String oldPs,String newPs,String token);
 	DataWrapper<List<UserPadPojo>> getUserTeam(String token,Long projectId);
@@ -37,5 +36,7 @@ public interface UserService {
 	DataWrapper<Void> getIdentifyingInfo(String mobile, String code);
 	DataWrapper<Void> registerUserInfo(User user);
 	DataWrapper<Void> getUserInfoSql(User user);
+	DataWrapper<Void> addUser(User user, String token, MultipartFile file, HttpServletRequest request,
+			String projectList);
 	
 }

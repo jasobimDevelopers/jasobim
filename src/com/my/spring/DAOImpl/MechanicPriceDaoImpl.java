@@ -22,6 +22,7 @@ import com.my.spring.model.MechanicPrice;
 import com.my.spring.model.MechanicPriceNum;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuestionCopy;
+import com.my.spring.model.AttenceLog;
 import com.my.spring.model.Department;
 import com.my.spring.model.Duct;
 import com.my.spring.utils.DaoUtil;
@@ -198,6 +199,35 @@ public class MechanicPriceDaoImpl extends BaseDao<MechanicPrice> implements Mech
         }
 
 		return ret;
+	}
+
+	@Override
+	public MechanicPrice getMechanicPriceListByInfos(Long id, Long projectId, Date format) {
+		 List<MechanicPrice> ret = new ArrayList<MechanicPrice>();
+	        Session session = getSession();
+	        Criteria criteria = session.createCriteria(MechanicPrice.class);
+	        if(id!=null){
+	        	if(id!=null){
+		        	criteria.add(Restrictions.eq("mechanicId", id));
+		        }
+	        	
+		        if(projectId!=null){
+		        	criteria.add(Restrictions.eq("projectId", projectId));
+		        }
+		        
+		        if(format!=null){
+		        	criteria.add(Restrictions.eq("createDate", format));
+		        }
+		        try {
+		            ret = criteria.list();
+		        }catch (Exception e){
+		            e.printStackTrace();
+		        }
+		        if (ret != null && ret.size() > 0) {
+					return ret.get(0);
+				}
+	        }
+			return null;
 	}
 
 }

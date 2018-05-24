@@ -284,4 +284,5 @@ public class MechanicPriceServiceImpl implements MechanicPriceService{
 		return result;
 	}
 
+
 }
