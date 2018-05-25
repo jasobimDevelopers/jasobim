@@ -3,6 +3,7 @@ package com.my.spring.serviceImpl;
 import com.my.spring.DAO.ValueOutputDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.ValueOutput;
@@ -10,6 +11,7 @@ import com.my.spring.model.ValueOutputPojo;
 import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.model.Files;
 import com.my.spring.model.Project;
+import com.my.spring.model.SafeFinePojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.service.ValueOutputService;
@@ -347,6 +349,10 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     	}else{
     		dataWrapperspojo.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}
+    	if(dataWrapperspojo.getCallStatus()==CallStatusEnum.SUCCEED && dataWrapperspojo.getData()==null){
+	       	List<ValueOutputPojo> pas= new ArrayList<ValueOutputPojo>();
+	       	dataWrapperspojo.setData(pas);
+	    }
         return dataWrapperspojo;
 	}
 

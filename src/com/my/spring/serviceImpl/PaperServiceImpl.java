@@ -9,10 +9,12 @@ import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.PaperDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Building;
 import com.my.spring.model.Files;
+import com.my.spring.model.MessagePojo;
 import com.my.spring.model.Paper;
 import com.my.spring.model.PaperPojo;
 import com.my.spring.model.User;
@@ -320,6 +322,10 @@ public class PaperServiceImpl implements PaperService {
 			} else {
 				dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 			}
+	        if(dataWrappers.getCallStatus()==CallStatusEnum.SUCCEED && dataWrappers.getData()==null){
+		       	List<PaperPojo> pas= new ArrayList<PaperPojo>();
+		       	dataWrappers.setData(pas);
+		    }
         return dataWrappers;
 	}
 

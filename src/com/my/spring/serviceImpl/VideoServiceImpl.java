@@ -4,6 +4,7 @@ import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserLogDao;
 import com.my.spring.DAO.VideoDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Video;
 import com.my.spring.model.VideoPojo;
@@ -11,6 +12,7 @@ import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.model.Files;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
+import com.my.spring.model.ValueOutputPojo;
 import com.my.spring.service.FileService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.service.VideoService;
@@ -165,6 +167,10 @@ public class VideoServiceImpl implements VideoService {
     	}else{
     		dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}
+    	if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED && dataWrapper.getData()==null){
+	       	List<VideoPojo> pas= new ArrayList<VideoPojo>();
+	       	dataWrapper.setData(pas);
+	    }
        return dataWrapper;
     }
 

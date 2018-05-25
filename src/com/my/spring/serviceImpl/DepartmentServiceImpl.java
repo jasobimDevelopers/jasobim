@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.my.spring.DAO.DepartmentDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.ConstructionLogPojo;
 import com.my.spring.model.Department;
 import com.my.spring.model.DepartmentPojo;
 import com.my.spring.model.User;
@@ -101,6 +103,10 @@ public class DepartmentServiceImpl implements DepartmentService  {
 		}else{
 			dp.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+		  if(dp.getCallStatus()==CallStatusEnum.SUCCEED && dp.getData()==null){
+		       	List<DepartmentPojo> pas= new ArrayList<DepartmentPojo>();
+		       	dp.setData(pas);
+		       }
 		return dp;
 	}
 

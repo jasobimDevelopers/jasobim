@@ -11,11 +11,13 @@ import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserProjectDao;
 import com.my.spring.DAO.VideoDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.Item;
 import com.my.spring.model.Paper;
+import com.my.spring.model.PaperPojo;
 import com.my.spring.model.Project;
 import com.my.spring.model.ProjectPojo;
 import com.my.spring.model.Projectvs;
@@ -683,6 +685,10 @@ public class ProjectServiceImpl implements ProjectService {
         	}else{
         		dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
         	}
+    	if(dataWrappers.getCallStatus()==CallStatusEnum.SUCCEED && dataWrappers.getData()==null){
+	       	List<ProjectPojo> pas= new ArrayList<ProjectPojo>();
+	       	dataWrappers.setData(pas);
+	    }
         return dataWrappers;
     }
 

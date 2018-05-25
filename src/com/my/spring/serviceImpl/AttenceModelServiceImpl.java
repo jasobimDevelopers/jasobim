@@ -11,7 +11,9 @@ import com.my.spring.DAO.AttenceModelDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserLogDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.AttenceLogPojo;
 import com.my.spring.model.AttenceModel;
 import com.my.spring.model.AttenceModelPojo;
 import com.my.spring.model.Project;
@@ -70,6 +72,15 @@ public class AttenceModelServiceImpl implements AttenceModelService{
 		DataWrapper<Void> result = new DataWrapper<Void>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
+			if(am!=null){
+				if(am.getId()!=null){
+					AttenceModel ams = attenceModelDao.getAttenceModelById(am.getId());
+					if(ams!=null){
+						am.setCreateDate(new Date());
+						am.setUserId(user.getId());
+					}
+				}
+			}
 			if(!attenceModelDao.updateAttenceModel(am)){
 				result.setErrorCode(ErrorCodeEnum.Error);
 			}
@@ -128,6 +139,10 @@ public class AttenceModelServiceImpl implements AttenceModelService{
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+	   if(result.getCallStatus()==CallStatusEnum.SUCCEED && result.getData()==null){
+        	List<AttenceModelPojo> pas= new ArrayList<AttenceModelPojo>();
+        	result.setData(pas);
+        }
 		return result;
 	}
 

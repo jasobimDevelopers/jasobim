@@ -10,6 +10,7 @@ import com.my.spring.DAO.QuestionFileDao;
 import com.my.spring.DAO.RoleDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserLogDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.jpush.PushExample;
@@ -20,6 +21,7 @@ import com.my.spring.model.MessageFile;
 import com.my.spring.model.Notice;
 import com.my.spring.model.PageInfo;
 import com.my.spring.model.Project;
+import com.my.spring.model.QualityFinePojo;
 import com.my.spring.model.QualityQuestion;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.model.Role;
@@ -586,6 +588,10 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     	}else{
     		datawrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}
+    	if(datawrapper.getCallStatus()==CallStatusEnum.SUCCEED && datawrapper.getData()==null){
+	       	List<QualityQuestionPojo> pas= new ArrayList<QualityQuestionPojo>();
+	       	datawrapper.setData(pas);
+	    }
     	return datawrapper;
     }
 

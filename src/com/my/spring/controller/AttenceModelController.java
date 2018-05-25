@@ -28,6 +28,14 @@ public class AttenceModelController {
             @RequestParam(value = "token",required = true) String token){
         return amService.addAttenceModel(am, token);
     }
+    
+    @RequestMapping(value="/updateAttenceModel", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> updateAttenceModel(
+            @ModelAttribute AttenceModel am,
+            @RequestParam(value = "token",required = true) String token){
+        return amService.updateAttenceModel(am, token);
+    }
     @RequestMapping(value="/deleteAttenceModel",method=RequestMethod.GET)
     @ResponseBody
     

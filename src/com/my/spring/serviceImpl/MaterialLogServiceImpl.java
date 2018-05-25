@@ -3,10 +3,12 @@ package com.my.spring.serviceImpl;
 import com.my.spring.DAO.MaterialDao;
 import com.my.spring.DAO.MaterialLogDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Material;
 import com.my.spring.model.MaterialLog;
 import com.my.spring.model.MaterialLogPojo;
+import com.my.spring.model.MaterialPojo;
 import com.my.spring.model.User;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.MaterialLogService;
@@ -175,6 +177,10 @@ public class MaterialLogServiceImpl implements MaterialLogService {
 		}else{
 			dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+        if(dataWrappers.getCallStatus()==CallStatusEnum.SUCCEED && dataWrappers.getData()==null){
+	       	List<MaterialLogPojo> pas= new ArrayList<MaterialLogPojo>();
+	       	dataWrappers.setData(pas);
+	    }
         return dataWrappers;
     }
 

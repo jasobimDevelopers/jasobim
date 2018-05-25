@@ -2,7 +2,9 @@ package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.BudgetDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.AttenceModelPojo;
 import com.my.spring.model.Budget;
 import com.my.spring.model.BudgetPojo;
 import com.my.spring.model.User;
@@ -138,6 +140,10 @@ public class BudgetServiceImpl implements BudgetService {
 		}else{
 			dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+ 	   if(dataWrappers.getCallStatus()==CallStatusEnum.SUCCEED && dataWrappers.getData()==null){
+       	List<BudgetPojo> pas= new ArrayList<BudgetPojo>();
+       	dataWrappers.setData(pas);
+       }
         return dataWrappers;
     }
 

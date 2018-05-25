@@ -16,7 +16,9 @@ import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.RoleDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserLogDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.AdvancedOrderPojo;
 import com.my.spring.model.AttenceLog;
 import com.my.spring.model.AttenceLogPojo;
 import com.my.spring.model.AttenceLogs;
@@ -77,6 +79,7 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 							al.setEndWorkTime(Parameters.getSdf().format(new Date()));
 							AttenceModel aml =  attenceModelDao.getAttenceModelByProjectId(al.getProjectId());
 							if(aml!=null){
+								al.setAttenceModelId(aml.getId());
 								Double instanc = InstanceUtil.distanceSimplifyMore(lat, lng, aml.getPlaceLat(), aml.getPlaceLng());
 								if(instanc>aml.getAttenceRange()){
 									result.setErrorCode(ErrorCodeEnum.Instance_Not_Fit);
@@ -101,6 +104,8 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 										result.setErrorCode(ErrorCodeEnum.Error);
 									}
 								}
+							}else{
+								result.setErrorCode(ErrorCodeEnum.AttendModel_Not_Existed);
 							}
 						}else{
 							result.setErrorCode(ErrorCodeEnum.Already_Done);
@@ -110,6 +115,7 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 						am.setStartWorkTime(Parameters.getSdf().format(new Date()));
 						AttenceModel aml =  attenceModelDao.getAttenceModelByProjectId(am.getProjectId());
 						if(aml!=null){
+							am.setAttenceModelId(aml.getId());
 							Double instanc = InstanceUtil.distanceSimplifyMore(lat, lng, aml.getPlaceLat(), aml.getPlaceLng());
 							if(instanc>aml.getAttenceRange()){
 								result.setErrorCode(ErrorCodeEnum.Instance_Not_Fit);
@@ -136,6 +142,8 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 									result.setErrorCode(ErrorCodeEnum.Error);
 								}
 							}
+						}else{
+							result.setErrorCode(ErrorCodeEnum.AttendModel_Not_Existed);
 						}
 					}
 				}else{
@@ -263,6 +271,10 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+	   if(result.getCallStatus()==CallStatusEnum.SUCCEED && result.getData()==null){
+        	List<AttenceLogPojo> pas= new ArrayList<AttenceLogPojo>();
+        	result.setData(pas);
+        }
 		return result;
 	}
 
@@ -280,6 +292,9 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 			} catch (ParseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+			}
+			if(ps.getUserId()==null){
+				ps.setUserId(user.getId());
 			}
 			gets = attenceLogDao.getAttenceLogListByIds(ps);
 			alp.setData(gets);

@@ -4,7 +4,9 @@ import com.my.spring.DAO.MaterialDao;
 import com.my.spring.DAO.MaterialFileDao;
 import com.my.spring.DAO.MaterialTypeDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.DuctPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.ImportMaterial;
 import com.my.spring.model.Material;
@@ -168,6 +170,10 @@ public class MaterialServiceImpl implements MaterialService {
 		}else{
 			dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+        if(dataWrappers.getCallStatus()==CallStatusEnum.SUCCEED && dataWrappers.getData()==null){
+	       	List<MaterialPojo> pas= new ArrayList<MaterialPojo>();
+	       	dataWrappers.setData(pas);
+	    }
         return dataWrappers;
     }
 

@@ -283,7 +283,12 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 						if(dataWrapper.getData().get(i).getContentFilesId()!=null){
 							String[] contentFileUrl = dataWrapper.getData().get(i).getContentFilesId().split(",");
 							for(int j=0;j<contentFileUrl.length;j++){
-								contentFileUrl[j] = filesService.getById(Long.valueOf(contentFileUrl[j])).getUrl();
+								if(filesService.getById(Long.valueOf(contentFileUrl[j]))!=null){
+									contentFileUrl[j] =filesService.getById(Long.valueOf(contentFileUrl[j])).getUrl();
+								}else{
+									contentFileUrl[j]="";
+								}
+								
 							}
 							advancedOrderPojo.setContentFilesId(contentFileUrl);
 						}
@@ -322,6 +327,10 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
+        if(dataWrappers.getCallStatus()==CallStatusEnum.SUCCEED && dataWrappers.getData()==null){
+        	List<AdvancedOrderPojo> pas= new ArrayList<AdvancedOrderPojo>();
+        	dataWrappers.setData(pas);
+        }
         return dataWrappers;
     }
 

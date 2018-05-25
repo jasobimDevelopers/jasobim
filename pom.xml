@@ -441,6 +441,13 @@
 			<scope>compile</scope>
 		</dependency>
 		<!-- Log E -->
+		<!-- sso jar -->
+		<dependency>
+			<groupId>org.apache.oltu.oauth2</groupId>
+			<artifactId>org.apache.oltu.oauth2.client</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<!-- sso jar -->
 		<!-- c3p0 S -->
 		<dependency>
 			<groupId>com.mchange</groupId>

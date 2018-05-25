@@ -16,6 +16,7 @@ import com.my.spring.DAO.MechanicPriceDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserLogDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.MechanicPrice;
 import com.my.spring.model.MechanicPriceNum;
@@ -25,6 +26,7 @@ import com.my.spring.model.Project;
 import com.my.spring.model.AttenceModel;
 import com.my.spring.model.Files;
 import com.my.spring.model.Mechanic;
+import com.my.spring.model.MechanicPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.ValueOutput;
 import com.my.spring.parameters.Parameters;
@@ -173,6 +175,10 @@ public class MechanicPriceServiceImpl implements MechanicPriceService{
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+	  if(result.getCallStatus()==CallStatusEnum.SUCCEED && result.getData()==null){
+	       	List<MechanicPricePojo> pas= new ArrayList<MechanicPricePojo>();
+	       	result.setData(pas);
+	    }
 		return result;
 	}
 

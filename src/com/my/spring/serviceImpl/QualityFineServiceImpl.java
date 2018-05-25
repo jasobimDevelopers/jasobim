@@ -2,9 +2,11 @@ package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.QualityFineDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
+import com.my.spring.model.ProjectPojo;
 import com.my.spring.model.QualityFine;
 import com.my.spring.model.QualityFinePojo;
 import com.my.spring.model.User;
@@ -184,6 +186,10 @@ public class QualityFineServiceImpl implements QualityFineService {
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+		if(result.getCallStatus()==CallStatusEnum.SUCCEED && result.getData()==null){
+	       	List<QualityFinePojo> pas= new ArrayList<QualityFinePojo>();
+	       	result.setData(pas);
+	    }
 		return result;
 	}
 }

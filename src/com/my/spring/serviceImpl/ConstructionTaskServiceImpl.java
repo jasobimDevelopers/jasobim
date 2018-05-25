@@ -10,6 +10,7 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.jpush.PushExample;
 import com.my.spring.model.AdvancedOrderCopy;
+import com.my.spring.model.AdvancedOrderPojo;
 import com.my.spring.model.ConstructionTask;
 import com.my.spring.model.ConstructionTaskCopy;
 import com.my.spring.model.ConstructionTaskPojo;
@@ -346,6 +347,10 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 		}else{
 			dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+        if(dataWrappers.getCallStatus()==CallStatusEnum.SUCCEED && dataWrappers.getData()==null){
+        	List<ConstructionTaskPojo> pas= new ArrayList<ConstructionTaskPojo>();
+        	dataWrappers.setData(pas);
+        }
         return dataWrappers;
     }
 

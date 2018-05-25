@@ -8,11 +8,13 @@ import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QualityQuestionDao;
 import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.jpush.PushExample;
 import com.my.spring.jpush.PushExamples;
 import com.my.spring.model.Files;
+import com.my.spring.model.MechanicPricePojo;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageCopy;
 import com.my.spring.model.MessageCopyPojo;
@@ -360,6 +362,10 @@ public class MessageServiceImpl implements MessageService {
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
+        if(dataWrappers.getCallStatus()==CallStatusEnum.SUCCEED && dataWrappers.getData()==null){
+	       	List<MessagePojo> pas= new ArrayList<MessagePojo>();
+	       	dataWrappers.setData(pas);
+	    }
         return dataWrappers;
     }
 

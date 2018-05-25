@@ -17,8 +17,10 @@ import com.my.spring.DAO.MechanicPriceDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserLogDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
+import com.my.spring.model.MaterialLogPojo;
 import com.my.spring.model.Mechanic;
 import com.my.spring.model.MechanicPojo;
 import com.my.spring.model.MechanicPojos;
@@ -173,6 +175,10 @@ public class MechanicServiceImpl implements MechanicService{
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+	  if(result.getCallStatus()==CallStatusEnum.SUCCEED && result.getData()==null){
+	       	List<MechanicPojo> pas= new ArrayList<MechanicPojo>();
+	       	result.setData(pas);
+	    }
 		return result;
 	}
 

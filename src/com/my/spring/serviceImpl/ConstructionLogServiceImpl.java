@@ -14,8 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.my.spring.DAO.ConstructionLogDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.BudgetPojo;
 import com.my.spring.model.ConstructionLog;
 import com.my.spring.model.ConstructionLogPojo;
 import com.my.spring.model.Files;
@@ -100,6 +102,10 @@ public class ConstructionLogServiceImpl implements ConstructionLogService {
 		}else{
 			clp.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+		  if(clp.getCallStatus()==CallStatusEnum.SUCCEED && clp.getData()==null){
+		       	List<ConstructionLogPojo> pas= new ArrayList<ConstructionLogPojo>();
+		       	clp.setData(pas);
+		       }
 		return clp;
 	}
 

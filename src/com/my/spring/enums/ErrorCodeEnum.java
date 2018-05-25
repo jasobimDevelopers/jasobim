@@ -18,7 +18,8 @@ public enum ErrorCodeEnum implements Serializable {
     Phone_Code_Error("验证码不匹配!",13),
     Phone_Existed_Error("手机号码已注册！",14),
     Instance_Not_Fit("打卡距离不符合规定！",15),
-    Already_Done("已操作！",16)
+    Already_Done("已操作！",16),
+    AttendModel_Not_Existed("模板不存在！",17)
     ;
     private String label;
     private Integer code;

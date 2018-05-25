@@ -10,8 +10,10 @@ import com.my.spring.DAO.DuctLogDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserLogDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.DepartmentPojo;
 import com.my.spring.model.Duct;
 import com.my.spring.model.DuctLog;
 import com.my.spring.model.DuctPojo;
@@ -245,6 +247,10 @@ public class DuctServiceImpl implements DuctService {
     	}else{
     		ductLists.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}
+    	if(ductLists.getCallStatus()==CallStatusEnum.SUCCEED && ductLists.getData()==null){
+	       	List<DuctPojo> pas= new ArrayList<DuctPojo>();
+	       	ductLists.setData(pas);
+	       }
         return ductLists;
     }
 
