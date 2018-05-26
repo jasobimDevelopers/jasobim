@@ -282,7 +282,10 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 						constructionTaskPojo.setCreateUserName(user.getRealName());
 					}
 					if(dataWrapper.getData().get(i).getReceiveUserId()!=null){
-						constructionTaskPojo.setReceiveUserName(userDao.getById(dataWrapper.getData().get(i).getReceiveUserId()).getRealName());
+						if(userDao.getById(dataWrapper.getData().get(i).getReceiveUserId())!=null){
+							constructionTaskPojo.setReceiveUserName(userDao.getById(dataWrapper.getData().get(i).getReceiveUserId()).getRealName());
+						}
+						
 					}
 					
 					try {

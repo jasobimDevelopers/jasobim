@@ -52,8 +52,9 @@ public class AdvancedOrderController {
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@RequestParam(value="content",required=false) String content,
     		@ModelAttribute AdvancedOrder ps){
-        return AdvancedOrderService.getAdvancedOrderList(token,pageIndex,pageSize,ps);
+        return AdvancedOrderService.getAdvancedOrderList(token,pageIndex,pageSize,ps,content);
     }
     ////通过用户id查找留言
     @RequestMapping(value="/getAdvancedOrderListByUserId",method = RequestMethod.GET)

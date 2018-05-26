@@ -8,6 +8,7 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.ValueOutput;
 import com.my.spring.model.ValueOutputPojo;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.model.Files;
 import com.my.spring.model.Project;
@@ -143,7 +144,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 				DecimalFormat df=new DecimalFormat(".##");
     			String st=df.format(nums);
     			String st1=df.format(finisheds);
-				dataWrapperPojo.get(0).setNums(Double.valueOf(st));
+				dataWrapperPojo.get(0).setNum(Double.valueOf(st));
 				dataWrapperPojo.get(0).setFinisheds(Double.valueOf(st1));
     			dataWrappers.setData(dataWrapperPojo);
     		}else{
@@ -169,8 +170,8 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     			if(dataWrapperPojo.get(0).getProject_id()!=null){
     				Project projectss=projectDao.getById(Long.valueOf(dataWrapperPojo.get(0).getProject_id()));
     			}
-				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-	    		String str=sdf.format(dataWrapperPojo.get(0).getDates()); 
+				
+	    		String str=Parameters.getSdf().format(dataWrapperPojo.get(0).getDate()); 
 	    		dataWrapperPojo.get(0).setDates(str);
 	    		dataWrapperPojo.get(0).setProjectName(dataWrapperPojo.get(0).getOthers());
 	    		Project projectss=projectDao.getById(Long.valueOf(dataWrapperPojo.get(0).getProject_id()));
@@ -179,7 +180,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 				DecimalFormat df=new DecimalFormat(".##");
     			String st=df.format(nums);
     			String st1=df.format(finisheds);
-				dataWrapperPojo.get(0).setNums(Double.valueOf(st));
+				dataWrapperPojo.get(0).setNum(Double.valueOf(st));
 				dataWrapperPojo.get(0).setFinisheds(Double.valueOf(st1));
     			dataWrappers.setData(dataWrapperPojo.get(0));
     		}else{
@@ -236,7 +237,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 	    			DecimalFormat df=new DecimalFormat(".##");
 	    			String st=df.format(nums);
 	    			String st1=df.format(finisheds);
-					valueOutputs.get(0).setNums(Double.valueOf(st));
+					valueOutputs.get(0).setNum(Double.valueOf(st));
 					valueOutputs.get(0).setFinisheds(Double.valueOf(st1));
 	    			dataWrapper.setData(valueOutputs);
 	    		}else{
@@ -297,7 +298,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 	    			DecimalFormat df=new DecimalFormat(".##");
 	    			String st=df.format(nums);
 	    			String st1=df.format(finisheds);
-					valueOutputs.get(0).setNums(Double.valueOf(st));
+					valueOutputs.get(0).setNum(Double.valueOf(st));
 					valueOutputs.get(0).setFinisheds(Double.valueOf(st1));
 	    			dataWrapper.setData(valueOutputs);
 	    		}else{

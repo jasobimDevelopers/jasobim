@@ -11,7 +11,7 @@ public interface AdvancedOrderDao {
     boolean deleteAdvancedOrder(Long id);
     boolean updateAdvancedOrder(AdvancedOrder ps);
     AdvancedOrder getById(Long id);
-    DataWrapper<List<AdvancedOrder>> getAdvancedOrdersList(Integer pageIndex, Integer pageSize, AdvancedOrder advancedOrder, int adminFlag);
+    DataWrapper<List<AdvancedOrder>> getAdvancedOrdersList(Integer pageIndex, Integer pageSize, AdvancedOrder advancedOrder, int adminFlag, String content);
     DataWrapper<List<AdvancedOrder>> getAdvancedOrderByUserId(Long userId);
 	boolean updateConstructionTask(AdvancedOrder ct);
 	List<AdvancedOrderCopy> getAdvancedOrdersListNotRead(Long id, Integer pageSize, Integer pageIndex);

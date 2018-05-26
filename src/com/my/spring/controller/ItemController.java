@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.BuildingInfo;
+import com.my.spring.model.DuctPojo;
 import com.my.spring.model.Item;
 import com.my.spring.model.MinItem;
 import com.my.spring.model.MinItemPojo;
@@ -242,5 +243,12 @@ public class ItemController {
     		){
         return itemService.getCodeImg(item,request);
     }
-
+    @RequestMapping(value="/admin/getItemBySelfId",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<DuctPojo> getItemBySelfId(
+    		@RequestParam(value = "id",required = false) Long id,
+    		@RequestParam(value = "selfId",required = false) String selfId,
+    		@RequestParam(value = "projectId",required = false) Long projectId){
+        return itemService.getItemBySelfId(id,selfId,projectId);
+    }
 }

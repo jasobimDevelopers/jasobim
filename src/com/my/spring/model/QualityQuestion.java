@@ -17,8 +17,8 @@ public class QualityQuestion {
 	private Long projectId;////项目工程id
 	private Long userId;  ///问题提交人id
 	private String name;  ///问题名称
-	private String trades;///问题专业
-	private String intro; //////问题内容
+	private String trades;///整改措施
+	private String intro; //////存在隐患
 	private Date questionDate;/////问题的创建时间
 	private Integer priority;////问题等级 (0.一般 1.重要 2.紧急)
 	private Integer state;   ///问题的状态(0.待解决 1.已解决)

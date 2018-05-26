@@ -5,11 +5,12 @@ import java.util.Date;
 public class ValueOutputPojo {
 	private Long id;
 	private String others;
-	private Double nums;   ///当前项目的总产值
+	private Double num;   ///当前项目的总产值
 	private Double finisheds;///当前项目已完成
 	private Double finished;    //已完成
 	private Integer month;
 	private String dates;/////上传的时间
+	private Date date;
 	private String projectName;///项目名称
 	private Long project_id;////项目id
 	private Integer year;
@@ -63,12 +64,12 @@ public class ValueOutputPojo {
 		this.finisheds = finisheds;
 	}
 
-	public Double getNums() {
-		return nums;
+	public Double getNum() {
+		return num;
 	}
 
-	public void setNums(Double nums) {
-		this.nums = nums;
+	public void setNum(Double num) {
+		this.num = num;
 	}
 
 	public Long getProject_id() {
@@ -94,6 +95,14 @@ public class ValueOutputPojo {
 
 	public void setYear(Integer year) {
 		this.year = year;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	

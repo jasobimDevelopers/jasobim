@@ -2,6 +2,8 @@ package com.my.spring.parameters;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Parameters {
 	private static final String pan = "C";
@@ -53,6 +55,23 @@ public class Parameters {
 		return newNames;
 		
 	}
-	
+	//截取数字  
+		public static String getNumbers(String content) {  
+		    Pattern pattern = Pattern.compile("\\d+");  
+		    Matcher matcher = pattern.matcher(content);  
+		    while (matcher.find()) {  
+		       return matcher.group(0);  
+		    }  
+		    return "";  
+		}  
+		public static boolean HasDigit(String content) {
+		    boolean flag = false;
+		    Pattern p = Pattern.compile(".*\\d+.*");
+		    Matcher m = p.matcher(content);
+		    if (m.matches()) {
+		        flag = true;
+		    }
+		    return flag;
+		}
 	
 }

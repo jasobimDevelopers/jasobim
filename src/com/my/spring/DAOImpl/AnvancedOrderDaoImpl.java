@@ -4,11 +4,13 @@ import com.my.spring.DAO.AdvancedOrderDao;
 import com.my.spring.model.AdvancedOrder;
 import com.my.spring.model.AdvancedOrderCopy;
 import com.my.spring.model.QuestionCopy;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -39,7 +41,7 @@ public class AnvancedOrderDaoImpl extends BaseDao<AdvancedOrder> implements Adva
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<AdvancedOrder>> getAdvancedOrdersList( Integer pageIndex, Integer pageSize, AdvancedOrder AdvancedOrder,int adminFlag) {
+    public DataWrapper<List<AdvancedOrder>> getAdvancedOrdersList( Integer pageIndex, Integer pageSize, AdvancedOrder AdvancedOrder,int adminFlag,String content) {
         DataWrapper<List<AdvancedOrder>> retDataWrapper = new DataWrapper<List<AdvancedOrder>>();
         List<AdvancedOrder> ret = new ArrayList<AdvancedOrder>();
         Session session = getSession();
@@ -60,6 +62,18 @@ public class AnvancedOrderDaoImpl extends BaseDao<AdvancedOrder> implements Adva
         	criteria.add(Restrictions.or(Restrictions.like("approvalPeopleName", "%"+AdvancedOrder.getApprovalPeopleName()+"%"),
                     Restrictions.eq("nextReceivePeopleId", AdvancedOrder.getNextReceivePeopleId()),
 					 Restrictions.eq("createUserName", AdvancedOrder.getCreateUserName())));
+        }
+        if(content!=null){
+        	if(Parameters.HasDigit(content)){
+        		String nums=Parameters.getNumbers(content);
+        		
+        		criteria.add(Restrictions.eq("month", Integer.valueOf(nums)));
+        		criteria.add(Restrictions.like("projectName", "%"+content.replaceAll("\\d+","")+"%"));
+        	}else{
+        		criteria.add(Restrictions.like("projectName", "%"+content+"%"));
+        	}
+        	
+        	
         }
         if(AdvancedOrder.getId()!=null){
         	criteria.add(Restrictions.eq("id", AdvancedOrder.getId()));

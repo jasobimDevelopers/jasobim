@@ -15,6 +15,8 @@ import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Building;
+import com.my.spring.model.Duct;
+import com.my.spring.model.DuctPojo;
 import com.my.spring.model.Item;
 import com.my.spring.model.MinItem;
 import com.my.spring.model.MinItemPojo;
@@ -569,6 +571,42 @@ public class ItemServiceImpl implements ItemService {
 			e.printStackTrace();
 		}
 		return realPath;
+	}
+
+	@Override
+	public DataWrapper<DuctPojo> getItemBySelfId(Long id, String selfId, Long projectId) {
+		DataWrapper<DuctPojo> dataWrapper = new DataWrapper<DuctPojo>();
+		Item duct = new Item();
+    	duct=itemDao.getItemBySelfId(selfId,id,projectId).getData();
+    	String[] stateList=new String[]{"未定义","出库","安装","完成"};
+    	if(duct!=null){
+    		String projectName="";
+    		if(projectDao.getById(duct.getProjectId())!=null){
+    			projectName=projectDao.getById(duct.getProjectId()).getName();
+    		}
+    		
+			DuctPojo ductPojo=new DuctPojo();
+			ductPojo.setId(duct.getId().toString());
+    		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+    		ductPojo.setSize(duct.getSize());
+    		ductPojo.setName(duct.getName());
+    		ductPojo.setFamilyAndType(duct.getFamilyAndType());
+    		ductPojo.setLevel(duct.getLevel());
+    		ductPojo.setBuildingNum(duct.getBuildingNum().toString());
+    		ductPojo.setFloorNum(duct.getFloorNum().toString());
+    		ductPojo.setUnitNum(duct.getUnitNum().toString());
+    		ductPojo.setHouseholdNum(duct.getHouseholdNum().toString());
+    		ductPojo.setProjectId(duct.getProjectId().toString());
+    		ductPojo.setProjectName(projectName);
+    		ductPojo.setArea(duct.getArea()+"");
+    		ductPojo.setLength(duct.getLength()+"");
+    		ductPojo.setServiceType(duct.getServiceType());
+    		ductPojo.setSystemType(duct.getSystemType());
+        	dataWrapper.setData(ductPojo);
+    	}else{
+    		dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+    	}
+        return dataWrapper;
 	}
 
 }

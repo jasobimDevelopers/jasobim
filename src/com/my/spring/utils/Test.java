@@ -10,20 +10,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.my.spring.model.Folder;
 import com.my.spring.parameters.Parameters;
 
 public class Test {
 	public static void main(String[] args) {
-		System.out.println(UUID.randomUUID().toString());
-		HashMap nodeList = new HashMap();
-		nodeList.put("202", "value_202");
-		nodeList.put("203", "value_203");
-		nodeList.put("204", "value_204");
-		nodeList.put("205", "value_205");
-		Set entrySet = nodeList.entrySet();  
-		System.out.println(nodeList.get("202"));
+		String str = "abc123";   
+	
+		System.out.println(HasDigit(str));
+		System.out.println(getNumbers(str));
+	}
+	//截取数字  
+	public static String getNumbers(String content) {  
+	    Pattern pattern = Pattern.compile("\\d+");  
+	    Matcher matcher = pattern.matcher(content);  
+	    while (matcher.find()) {  
+	       return matcher.group(0);  
+	    }  
+	    return "";  
+	}  
+	public static boolean HasDigit(String content) {
+	    boolean flag = false;
+	    Pattern p = Pattern.compile(".*\\d+.*");
+	    Matcher m = p.matcher(content);
+	    if (m.matches()) {
+	        flag = true;
+	    }
+	    return flag;
 	}
 	public static void getFileList(String strPath) throws IOException{
 		File f=new File(strPath);

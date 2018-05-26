@@ -1,5 +1,6 @@
 package com.my.spring.service;
 
+import com.my.spring.model.DuctPojo;
 import com.my.spring.model.Item;
 import com.my.spring.model.MinItem;
 import com.my.spring.model.MinItemPojo;
@@ -30,4 +31,5 @@ public interface ItemService {
 	DataWrapper<MinItemPojo> getMinItemById(Long id);
 	//public boolean batchImportss(String name,MultipartFile file,String token,HttpServletRequest request, Long projectId);
 	DataWrapper<Item> getItemBySelfId(Long projectId);
+	DataWrapper<DuctPojo> getItemBySelfId(Long id, String selfId, Long projectId);
 }

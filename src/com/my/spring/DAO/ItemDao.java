@@ -23,5 +23,6 @@ public interface ItemDao {
 	Long getItemByBuidlingNum(Long projectId, Long buildingId);
 	boolean addItemList(List<Item> itemList);
 	Item getItemBySelfId(Long projectId);
+	DataWrapper<Item> getItemBySelfId(String selfId, Long id, Long projectId);
 	
 }

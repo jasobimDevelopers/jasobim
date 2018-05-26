@@ -193,7 +193,7 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
     
 
     @Override
-    public DataWrapper<List<AdvancedOrderPojo>> getAdvancedOrderList(String token , Integer pageIndex, Integer pageSize, AdvancedOrder advancedOrder) {
+    public DataWrapper<List<AdvancedOrderPojo>> getAdvancedOrderList(String token , Integer pageIndex, Integer pageSize, AdvancedOrder advancedOrder,String content) {
     	DataWrapper<List<AdvancedOrderPojo>> dataWrappers = new DataWrapper<List<AdvancedOrderPojo>>();
     	DataWrapper<List<AdvancedOrder>> dataWrapper = new DataWrapper<List<AdvancedOrder>>();
         User userInMemory = SessionManager.getSession(token);
@@ -226,7 +226,7 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
         		if(userInMemory.getUserType()==0 || userInMemory.getUserType()==1 || userInMemory.getUserType()==2){
         			adminFlag=-1;
         		}
-				dataWrapper=advancedOrderDao.getAdvancedOrdersList(pageIndex,pageSize,advancedOrder,adminFlag);
+				dataWrapper=advancedOrderDao.getAdvancedOrdersList(pageIndex,pageSize,advancedOrder,adminFlag,content);
 				if(dataWrapper.getData()!=null && dataWrapper.getData().size()>0){
 					if(advancedOrder.getId()!=null){
 						Notice notice = noticeDao.getByAdoutIdAndUserId(userInMemory.getId(), advancedOrder.getId(), 3);

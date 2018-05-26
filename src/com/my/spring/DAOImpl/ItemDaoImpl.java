@@ -306,4 +306,35 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		return false;
 	}
 
+	@Override
+	public DataWrapper<Item> getItemBySelfId(String selfId, Long id, Long projectId) {
+		DataWrapper<Item> dataWrapper=new DataWrapper<Item>();
+		List<Item> ret = new ArrayList<Item>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Item.class);
+        if(selfId==null && (id==null && projectId==null)){
+        	return dataWrapper;
+        }
+        if(id!=null){
+        	criteria.add(Restrictions.eq("id",id));
+        }
+        if(selfId!=null){
+        	criteria.add(Restrictions.eq("selfId",selfId));
+        }
+        if(projectId!=null){
+        	criteria.add(Restrictions.eq("projectId",projectId));
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+        	dataWrapper.setData(ret.get(0));
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+		}
+		return dataWrapper;
+	}
+
 }
