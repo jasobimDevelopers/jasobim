@@ -35,6 +35,7 @@ public class ProjectPojo {
     private String[] teamList;
     private String[] teamId;
     private Integer workHour;
+    private String fileId;
     
 	public String getDesignUnitUser() {
 		return designUnitUser;
@@ -227,5 +228,11 @@ public class ProjectPojo {
 	}
 	public void setWorkHour(Integer workHour) {
 		this.workHour = workHour;
+	}
+	public String getFileId() {
+		return fileId;
+	}
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
 	}
 }

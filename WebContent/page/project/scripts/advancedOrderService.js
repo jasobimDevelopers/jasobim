@@ -5,7 +5,7 @@ angular.module('AdvancedOrderApp',[])
   var transform = function(data){
         return $.param(data);
    }
-  var baseUrl="http://jasobim.com.cn";
+  var baseUrl="http://localhost:8080/jasobim";
   var self=this;
   this.getAdvancedOrderDetail=function(id){
 	  var deferred = $q.defer();

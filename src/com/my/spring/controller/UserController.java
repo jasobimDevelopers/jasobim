@@ -210,7 +210,7 @@ public class UserController {
     		HttpServletRequest request,
     		@RequestParam(value = "file", required = false) MultipartFile file,
     		@RequestParam(value="token",required=true) String token,
-    		@RequestParam(value="projectList",required=true) String projectList) {
+    		@RequestParam(value="projectList",required=false) String projectList) {
 		return userService.updateUserByAdmin(user, token,file,request,projectList);
     }
 	@RequestMapping(value="/common/getUserInfo", method = RequestMethod.GET)

@@ -4,6 +4,7 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Project;
+import com.my.spring.model.UserProject;
 import com.my.spring.model.Projectvs;
 import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
@@ -43,7 +44,7 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<Project>> getProjectList(Integer pageSize, Integer pageIndex, Project project,String content,Integer isIos) {
+    public DataWrapper<List<Project>> getProjectList(Integer pageSize, Integer pageIndex, Project project,String content,Integer isIos,List<UserProject> up) {
         DataWrapper<List<Project>> retDataWrapper = new DataWrapper<List<Project>>();
         List<Project> ret = new ArrayList<Project>();
         Session session = getSession();  
@@ -58,6 +59,15 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
         	criteria.add(Restrictions.ne("id", projectId2));
         	criteria.add(Restrictions.ne("id", projectId3));
         	criteria.add(Restrictions.ne("id", projectId4));
+        }
+        if(up!=null){
+        	if(!up.isEmpty()){
+        		Disjunction dj= Restrictions.disjunction();
+        		for(UserProject s:up){
+        			dj.add(Restrictions.eq("id", s.getProjectId()));
+        		}
+        		criteria.add(dj);
+        	}
         }
         ////////
         if(content!=null){

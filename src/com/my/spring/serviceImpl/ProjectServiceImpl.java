@@ -504,7 +504,7 @@ public class ProjectServiceImpl implements ProjectService {
     	isios=userInMemory.getSystemId();
     	if (userInMemory != null) {
     		if(userInMemory.getUserType()==UserTypeEnum.Admin.getType() || userInMemory.getUserType()==UserTypeEnum.User.getType()){
-    			dataWrapper=projectDao.getProjectList(pageSize, pageIndex, project,content, isios);
+    			dataWrapper=projectDao.getProjectList(pageSize, pageIndex, project,content, isios,null);
     			if(dataWrapper.getData()!=null){
     				for(int i=0;i<dataWrapper.getData().size();i++){
         				ProjectPojo projectpojo=new ProjectPojo();
@@ -707,6 +707,11 @@ public class ProjectServiceImpl implements ProjectService {
 				if(project==null) 
 		            dataWrapper.setErrorCode(ErrorCodeEnum.Project_Not_Existed);
 				else{
+					if(project.getModeFileId()!=null){
+						projectPojo.setFileId(project.getModeFileId());
+					}else{
+						projectPojo.setFileId("");
+					}
 					if(project.getPicId()!=null && !project.getPicId().equals(""))
 					{
 						Files files=new Files();

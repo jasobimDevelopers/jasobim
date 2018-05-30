@@ -39,6 +39,7 @@ public class Project {
     private Integer price;
     private Integer workHour;
     private Long createUser;
+    private String modeFileId;
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -346,6 +347,17 @@ public class Project {
 
 	public void setCreateUser(Long createUser) {
 		this.createUser = createUser;
+	}
+
+	
+	@Basic
+    @Column(name = "mode_file_id")
+	public String getModeFileId() {
+		return modeFileId;
+	}
+
+	public void setModeFileId(String modeFileId) {
+		this.modeFileId = modeFileId;
 	}
 
     

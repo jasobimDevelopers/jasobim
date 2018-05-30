@@ -17,7 +17,7 @@ import com.my.spring.model.MeasuredData;
 import com.my.spring.model.MeasuredDataPojo;
 import com.my.spring.service.MeasuredDataService;
 import com.my.spring.utils.DataWrapper;
-@CrossOrigin("http://jasobim.com")
+@CrossOrigin("http://jasobim.com:8080")
 @Controller
 @RequestMapping(value="api/measuredData")
 public class MeasuredDataController {

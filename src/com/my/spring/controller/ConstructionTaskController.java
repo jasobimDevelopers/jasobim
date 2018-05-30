@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
-@CrossOrigin
+@CrossOrigin("http://jasobim.com:8080")
 @RequestMapping(value="api/constructionTask")
 public class ConstructionTaskController {
     @Autowired

@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
 					Integer pageSize=10;
 					Integer pageIndex=-1;
 					Project projectsb = new Project();
-					DataWrapper<List<Project>> projects=projectDao.getProjectList(pageSize, pageIndex, projectsb,null,2);
+					DataWrapper<List<Project>> projects=projectDao.getProjectList(pageSize, pageIndex, projectsb,null,2,null);
 					String[] projectName = new String[projects.getData().size()];
 					String[] projectList = new String[projects.getData().size()];
 					for(int i=0;i<projects.getData().size();i++){
@@ -155,6 +155,19 @@ public class UserServiceImpl implements UserService {
 						projectList[i]=projects.getData().get(i).getId().toString();
 					}
 					users.setProjectLists(projectList);
+				}else{
+					Integer pageSize=10;
+					Integer pageIndex=-1;
+					List<UserProject> up = new ArrayList<UserProject>();
+					up=userProjectDao.getUserProjectListByUserId(user.getId());
+					Project projectsb = new Project();
+					DataWrapper<List<Project>> projects=projectDao.getProjectList(pageSize, pageIndex, projectsb,null,2,up);
+				}
+				if(user.getRoleId()!=null){
+					Role role = roleDao.getById(user.getRoleId());
+					if(role!=null){
+						users.setWorkName(role.getName());
+					}
 				}
 				users.setUserName(user.getUserName());
 				users.setRealName(user.getRealName());
@@ -219,7 +232,7 @@ public class UserServiceImpl implements UserService {
 			Long localUserID=adminInMemory.getId();
 			if((adminInMemory.getUserType() == 0) || (userId.equals(localUserID))){
 				User userInDB = userDao.getById(user.getId());
-				if (userInDB != null) {
+				if (userInDB != null){
 					if(projectList!=null){
 						if(!projectList.equals("") && projectList!=null){
 							String[] projectids = projectList.split(",");
@@ -234,7 +247,6 @@ public class UserServiceImpl implements UserService {
 									up.setUserId(user.getId());
 									userProjectDao.addUserProject(up);
 								}
-								
 							}
 						}
 					}
