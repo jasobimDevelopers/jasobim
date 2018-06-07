@@ -59,7 +59,7 @@ public class MechanicController {
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
-    		@ModelAttribute Mechanic ps){
+    		@ModelAttribute Mechanic ps) throws ParseException{
         return amService.getMechanicList(token, ps, pageSize, pageIndex);
     }
     @RequestMapping(value="/getMechanicInfos", method = RequestMethod.GET)

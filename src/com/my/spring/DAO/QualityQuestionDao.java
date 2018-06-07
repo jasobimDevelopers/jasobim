@@ -25,4 +25,5 @@ public interface QualityQuestionDao {
 	List<QuestionCopy> getQuestionListByAdmin(Long long1, Integer pageIndex, Integer pageSize);
 	List<QuestionCopy> getQuestionListByLeader(Long id, Integer pageIndex, Integer pageSize);
 	List<QuestionCopy> getQuestionListByNorUser(Long id, Integer pageIndex, Integer pageSize);
+	boolean deleteQualityQuestionByUserId(Long userId);
 }

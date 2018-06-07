@@ -175,7 +175,7 @@ public class AnvancedOrderDaoImpl extends BaseDao<AdvancedOrder> implements Adva
 		    Query query = session.createSQLQuery(sql)
 		    		.addScalar("id",StandardBasicTypes.LONG)
 					 .addScalar("project_name", StandardBasicTypes.STRING)
-					 .addScalar("create_date", StandardBasicTypes.DATE)
+					 .addScalar("create_date", StandardBasicTypes.TIMESTAMP)
 					 .addScalar("submit_user_id", StandardBasicTypes.LONG)
 					 .addScalar("create_user_name", StandardBasicTypes.STRING)
 					 .addScalar("construct_part", StandardBasicTypes.STRING)

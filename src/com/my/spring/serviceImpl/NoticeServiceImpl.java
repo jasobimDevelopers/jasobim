@@ -15,6 +15,7 @@ import com.my.spring.model.AdvancedOrderCopy;
 import com.my.spring.model.Building;
 import com.my.spring.model.CommonNotice;
 import com.my.spring.model.ConstructionTaskCopy;
+import com.my.spring.model.ConstructionTaskPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.Item;
 import com.my.spring.model.MinItem;
@@ -262,6 +263,10 @@ public class NoticeServiceImpl implements NoticeService {
 		}else{
 			resultList.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+		if(resultList.getCallStatus()==CallStatusEnum.SUCCEED && resultList.getData()==null){
+			List<CommonNotice> str = new ArrayList<CommonNotice>();
+			resultList.setData(str);
+        }
 		return resultList;
 	}
    

@@ -19,4 +19,5 @@ public interface MessageDao {
 	DataWrapper<List<Message>> getMessageListByQualityId(Long id);
 	boolean deleteMessageByQualityId(Long qualityId);
 	List<MessageCopy> getMessageListNotRead(Long id, Integer pageSize, Integer pageIndex);
+	boolean deleteMessageByUserId(Long userId);
 }

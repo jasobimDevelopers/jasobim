@@ -180,6 +180,24 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 		return test;
 	}
 	@Override
+	public boolean deleteMessageByUserId(Long userId) {
+		String sql = "delete from message where user_id="+userId;
+		Session session=getSession();
+		boolean test=false;
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 int temp=query.executeUpdate();
+			 if(temp!=0){
+				 test= true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return test;
+	}
+	@Override
 	public boolean deleteMessageByQualityId(Long qualityId) {
 		String sql = "delete from message where quality_id="+qualityId+" and question_type=0";
 		Session session=getSession();
@@ -224,11 +242,11 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 		    Query query = session.createSQLQuery(sql)
 				 .addScalar("id",StandardBasicTypes.LONG)
 				 .addScalar("content", StandardBasicTypes.STRING)
-				 .addScalar("message_date",StandardBasicTypes.DATE)
+				 .addScalar("message_date",StandardBasicTypes.TIMESTAMP)
 				 .addScalar("user_id",StandardBasicTypes.LONG)
-				 .addScalar("question_id", StandardBasicTypes.LONG)
+				 .addScalar("about_id", StandardBasicTypes.LONG)
 				 .addScalar("project_id", StandardBasicTypes.LONG)
-				 .addScalar("quality_id", StandardBasicTypes.LONG)
+				 .addScalar("question_type", StandardBasicTypes.INTEGER)
 				 .setResultTransformer(Transformers.aliasToBean(MessageCopy.class)); 
 		    retDataWrapper=query.list();
             

@@ -13,6 +13,7 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.jpush.PushExample;
 import com.my.spring.jpush.PushExamples;
+import com.my.spring.model.ConstructionTaskPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.MechanicPricePojo;
 import com.my.spring.model.Message;
@@ -343,6 +344,17 @@ public class MessageServiceImpl implements MessageService {
 								filenameList[j]=filename;
 							}
 							messagePojo.setFileNameList(filenameList);
+							List<String> imageList = new ArrayList<String>();
+		        			List<String> voiceList = new ArrayList<String>();
+		        			for(String items:fileUrlList){
+		        				if(Parameters.getFileType(items).equals("mp3") || Parameters.getFileType(items).equals("wav")){
+		        					voiceList.add(items);
+		        				}else if(!Parameters.getFileType(items).equals("dat")){
+		        					imageList.add(items);
+		        				}
+		        			}
+		        			messagePojo.setImageUrlList(imageList);
+		        			messagePojo.setVoiceUrlList(voiceList);
 							messagePojo.setFileList(fileUrlList);
 						}
 						if(messagePojo!=null){
@@ -498,6 +510,17 @@ public class MessageServiceImpl implements MessageService {
 								files = fileDao.getById(messagefile.get(i).getFileId());
 								urllist[i]=files.getUrl();
 							}
+							List<String> imageList = new ArrayList<String>();
+		        			List<String> voiceList = new ArrayList<String>();
+		        			for(String items:urllist){
+		        				if(Parameters.getFileType(items).equals("mp3") || Parameters.getFileType(items).equals("wav")){
+		        					voiceList.add(items);
+		        				}else if(!Parameters.getFileType(items).equals("dat")){
+		        					imageList.add(items);
+		        				}
+		        			}
+		        			messagePojo.setImageUrlList(imageList);
+		        			messagePojo.setVoiceUrlList(voiceList);
 							messagePojo.setFileList(urllist);
 						}
 						if(message.getUserId()!=null)
@@ -575,6 +598,17 @@ public class MessageServiceImpl implements MessageService {
 									files = fileDao.getById(messagefile.get(i).getFileId());
 									urllist[i]=files.getUrl();
 								}
+								List<String> imageList = new ArrayList<String>();
+								List<String> voiceList = new ArrayList<String>();
+								for(String items:urllist){
+			        				if(Parameters.getFileType(items).equals("mp3") || Parameters.getFileType(items).equals("wav")){
+			        					voiceList.add(items);
+			        				}else if(!Parameters.getFileType(items).equals("dat")){
+			        					imageList.add(items);
+			        				}
+			        			}
+			        			messagePojo.setImageUrlList(imageList);
+			        			messagePojo.setVoiceUrlList(voiceList);
 								messagePojo.setFileList(urllist);
 							}
 							if(message.getUserId()!=null)
@@ -734,9 +768,14 @@ public class MessageServiceImpl implements MessageService {
 					for(MessageCopy mc:result){
 						MessageCopyPojo mcp = new MessageCopyPojo();
 						mcp.setId(mc.getId());
-						mcp.setMessage_date(Parameters.getSdfs().format(mc.getMessage_date()));
-						mcp.setQuality_id(mc.getQuality_id());
-						mcp.setQuestion_id(mc.getQuestion_id());
+						mcp.setMessage_date(Parameters.getSdf().format(mc.getMessage_date()));
+						if(mc.getQuestion_type()==0){
+							mcp.setQuality_id(mc.getAbout_id());
+						}
+						if(mc.getQuestion_type()==1){
+							mcp.setQuestion_id(mc.getAbout_id());
+						}
+						mcp.setType(mc.getQuestion_type());
 						mcp.setContent(mc.getContent());
 						if(mc.getProject_id()!=null){
 							Project project = projectDao.getById(mc.getProject_id());
@@ -766,6 +805,10 @@ public class MessageServiceImpl implements MessageService {
 		}else{
 			resultList.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+		if(resultList.getCallStatus()==CallStatusEnum.SUCCEED && resultList.getData()==null){
+        	List<MessageCopyPojo> pas= new ArrayList<MessageCopyPojo>();
+        	resultList.setData(pas);
+        }
 		return resultList;
 	}
 }

@@ -1,6 +1,6 @@
 package com.my.spring.model;
 
-
+import java.util.List;
 
 public class QuestionPojo {
 	private Long id;       ////问题编号
@@ -22,8 +22,9 @@ public class QuestionPojo {
 	private int urgentPercent;//////紧急问题的百分比
 	private String position;//位置
 	private String createUserIcon;
-	private String[] userNameLists;
-	private String voiceUrlList;
+	private List<String> userNameLists;
+	private List<String> voiceUrlList;
+	private List<String> imageUrlList;
 	private Long userid;
 	private String projectPicUrl;
 	private String userList;
@@ -153,10 +154,10 @@ public class QuestionPojo {
 	public void setPosition(String position) {
 		this.position = position;
 	}
-	public String[] getUserNameLists() {
+	public List<String> getUserNameLists() {
 		return userNameLists;
 	}
-	public void setUserNameLists(String[] userNameLists) {
+	public void setUserNameLists(List<String> userNameLists) {
 		this.userNameLists = userNameLists;
 	}
 	public Integer getRoleFlag() {
@@ -165,10 +166,10 @@ public class QuestionPojo {
 	public void setRoleFlag(Integer roleFlag) {
 		this.roleFlag = roleFlag;
 	}
-	public String getVoiceUrlList() {
+	public List<String> getVoiceUrlList() {
 		return voiceUrlList;
 	}
-	public void setVoiceUrlList(String voiceUrlList) {
+	public void setVoiceUrlList(List<String> voiceUrlList) {
 		this.voiceUrlList = voiceUrlList;
 	}
 	public Long getUserid() {
@@ -212,6 +213,12 @@ public class QuestionPojo {
 	}
 	public void setMessageNum(Integer messageNum) {
 		this.messageNum = messageNum;
+	}
+	public List<String> getImageUrlList() {
+		return imageUrlList;
+	}
+	public void setImageUrlList(List<String> imageUrlList) {
+		this.imageUrlList = imageUrlList;
 	}
 	
 	

@@ -11,6 +11,7 @@ public class MessageCopyPojo {
 	private String projectInfo;
 	private Long quality_id;
 	private Integer total;
+	private Integer type;
 	public Long getId() {
 		return id;
 	}
@@ -65,6 +66,12 @@ public class MessageCopyPojo {
 	}
 	public void setUserIcon(String userIcon) {
 		this.userIcon = userIcon;
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
 	}
 	
 	

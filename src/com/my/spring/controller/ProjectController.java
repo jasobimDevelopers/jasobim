@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,9 +58,10 @@ public class ProjectController {
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@RequestParam(value="content",required=false) String content,
     		@ModelAttribute Project project,
-    		@RequestParam(value="token",required=true) String token)
+    		HttpServletRequest request,
+    		@RequestParam(value="token",required=true) String token) throws IOException
     {
-        return projectService.getProjectList(pageIndex,pageSize,project,token,content);
+        return projectService.getProjectList(pageIndex,pageSize,project,token,content,request);
     }
     @RequestMapping(value="/admin/getProjectDetails",method = RequestMethod.GET)
     @ResponseBody

@@ -418,7 +418,6 @@ public class QuestionServiceImpl implements QuestionService {
     	List<QuestionPojo> pojo = new ArrayList<QuestionPojo>();
     	DataWrapper<List<Question>> dataWrappers = new DataWrapper<List<Question>>();
     	DataWrapper<List<QuestionFile>> dataWrapperFiles = new DataWrapper<List<QuestionFile>>();
-    	List<QuestionCopy> questionCopys = new ArrayList<QuestionCopy>(); 
     	
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
@@ -484,25 +483,40 @@ public class QuestionServiceImpl implements QuestionService {
 		        			Files file=fileDao.getById(fileId);
 		        			if(file!=null)
 		        			{
-		        				String fileItem=file.getUrl();
-		        				fileLists[flag]=fileItem;
-		        				String nameList=dataWrapperFiles.getData().get(j).getOriginName();
-		            			if(nameList!=null)
-		            				fileNameLists[flag]=nameList;
-		        				flag++;
+		        					String fileItem=file.getUrl();
+			        				fileLists[flag]=fileItem;
+			        				String nameList=dataWrapperFiles.getData().get(j).getOriginName();
+			            			if(nameList!=null)
+			            				fileNameLists[flag]=nameList;
+			        				flag++;
 		        			}
 			        	}
 		        		if(fileLists!=null)
-		        		{
+		        		{	
+		        			List<String> imageList = new ArrayList<String>();
+		        			List<String> voiceList = new ArrayList<String>();
+		        			for(String items:fileLists){
+		        				if(Parameters.getFileType(items).equals("mp3") || Parameters.getFileType(items).equals("wav")){
+		        					voiceList.add(items);
+		        				}else if(!Parameters.getFileType(items).equals("dat")){
+		        					imageList.add(items);
+		        				}
+		        			}
 		        			questionpojo.setFileList(fileLists);
+		        			questionpojo.setImageUrlList(imageList);
+		        			questionpojo.setVoiceUrlList(voiceList);
 		        		}				
 			        }
-		        	if(dataWrappers.getData().get(i).getUserList()!=null){
+		        	if(dataWrappers.getData().get(i).getUserList()!=null && !dataWrappers.getData().get(i).getUserList().equals("")){
 		        		String[] nameList = dataWrappers.getData().get(i).getUserList().split(",");
 		        		if(nameList.length>0){
-		        			String[] nameLists =new String[nameList.length] ;
+		        			List<String> nameLists =new ArrayList<String>();
 		        			for(int k=0;k<nameList.length;k++){
-		        			   nameLists[k]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+		        				User users = userDao.getById(Long.valueOf(nameList[k]));
+		        				if(users!=null){
+		        					 nameLists.add(users.getRealName());
+		        				}
+		        			  
 		        			}
 		        			questionpojo.setUserNameLists(nameLists);
 			        	}else{
@@ -684,6 +698,14 @@ public class QuestionServiceImpl implements QuestionService {
 							questionPojo.setQuestionDate(sdf.format(question.getQuestionDate()));
 							questionPojo.setState(question.getState());
 							questionPojo.setTrades(question.getTrades());
+							if(userInDB.getUserIconUrl()!=null){
+								questionPojo.setCreateUserIcon(userInDB.getUserIconUrl());
+							}else if(userInDB.getUserIcon()!=null){
+								Files file = fileService.getById(userInDB.getUserIcon());
+								if(file!=null){
+									questionPojo.setCreateUserIcon(file.getUrl());
+								}
+							}
 							questionPojo.setUserId(userDao.getById(question.getUserId()).getRealName());
 							Long userIdis=userDao.getById(question.getUserId()).getId();
 							/*if(userIdis==userInMemory.getId()){
@@ -892,9 +914,12 @@ public class QuestionServiceImpl implements QuestionService {
 	        	if(dataWrappers.getData().get(i).getUserList()!=null){
 	        		String[] nameList = dataWrappers.getData().get(i).getUserList().split(",");
 	        		if(nameList.length>0){
-	        			String[] nameLists =new String[nameList.length] ;
+	        			List<String> nameLists =new ArrayList<String>();
 	        			for(int k=0;k<nameList.length;k++){
-	        			   nameLists[k]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+	        				User users = userDao.getById(Long.valueOf(nameList[k]));
+	        				if(users!=null){
+	        					nameLists.add(users.getRealName());
+	        				}
 	        			}
 	        			questionpojo.setUserNameLists(nameLists);
 		        	}else{

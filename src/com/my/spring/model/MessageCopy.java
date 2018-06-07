@@ -6,10 +6,10 @@ public class MessageCopy {
 	private Long id;
 	private String content;
 	private Date message_date;
-	private Long question_id;
+	private Long about_id;
 	private Long user_id;
 	private Long project_id;
-	private Long quality_id;
+	private Integer question_type;
 	public Long getId() {
 		return id;
 	}
@@ -28,11 +28,11 @@ public class MessageCopy {
 	public void setMessage_date(Date message_date) {
 		this.message_date = message_date;
 	}
-	public Long getQuestion_id() {
-		return question_id;
+	public Long getAbout_id() {
+		return about_id;
 	}
-	public void setQuestion_id(Long question_id) {
-		this.question_id = question_id;
+	public void setAbout_id(Long about_id) {
+		this.about_id = about_id;
 	}
 	public Long getUser_id() {
 		return user_id;
@@ -46,12 +46,13 @@ public class MessageCopy {
 	public void setProject_id(Long project_id) {
 		this.project_id = project_id;
 	}
-	public Long getQuality_id() {
-		return quality_id;
+	public Integer getQuestion_type() {
+		return question_type;
 	}
-	public void setQuality_id(Long quality_id) {
-		this.quality_id = quality_id;
+	public void setQuestion_type(Integer question_type) {
+		this.question_type = question_type;
 	}
+	
 	
 	
 

@@ -30,11 +30,13 @@ import com.my.spring.service.FileService;
 import com.my.spring.service.ProjectService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
+import com.my.spring.utils.fileUtils.ResizeImage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -494,7 +496,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @SuppressWarnings("unused")
 	@Override
-    public DataWrapper<List<ProjectPojo>> getProjectList(Integer pageIndex, Integer pageSize, Project project, String token,String content) {
+    public DataWrapper<List<ProjectPojo>> getProjectList(Integer pageIndex, Integer pageSize, Project project, String token,String content,HttpServletRequest request) throws IOException {
     	DataWrapper<List<ProjectPojo>> dataWrappers=new DataWrapper<List<ProjectPojo>>();
     	DataWrapper<List<Project>> dataWrapper=new DataWrapper<List<Project>>();
     	DataWrapper<List<Projectvs>> dataWrappervs=new DataWrapper<List<Projectvs>>();
@@ -578,6 +580,7 @@ public class ProjectServiceImpl implements ProjectService {
         				if(dataWrapper.getData().get(i).getPicId()!=null){
         					if(!dataWrapper.getData().get(i).getPicId().equals("")){
         						Files filess=fileDao.getById(Long.valueOf(dataWrapper.getData().get(i).getPicId()));
+          					    //String newPath=ResizeImage.ResizeImages(request,filess.getUrl(),filess.getName());
             					if(filess!=null){
             						projectpojo.setPicUrl(filess.getUrl());
             						projectpojo.setPicName(filess.getName());

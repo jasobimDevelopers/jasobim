@@ -1,6 +1,6 @@
 package com.my.spring.model;
 
-
+import java.util.List;
 
 public class MessagePojo {
 	private Long id;
@@ -16,7 +16,8 @@ public class MessagePojo {
 	private String projectName;
 	private Long projectId;
 	private Integer questionType;
-	
+	private List<String> imageUrlList;
+	private List<String> voiceUrlList;
 	public Long getId() {
 		return id;
 	}
@@ -101,6 +102,18 @@ public class MessagePojo {
 	}
 	public void setQuestionType(Integer questionType) {
 		this.questionType = questionType;
+	}
+	public List<String> getImageUrlList() {
+		return imageUrlList;
+	}
+	public void setImageUrlList(List<String> imageUrlList) {
+		this.imageUrlList = imageUrlList;
+	}
+	public List<String> getVoiceUrlList() {
+		return voiceUrlList;
+	}
+	public void setVoiceUrlList(List<String> voiceUrlList) {
+		this.voiceUrlList = voiceUrlList;
 	}
 	
 

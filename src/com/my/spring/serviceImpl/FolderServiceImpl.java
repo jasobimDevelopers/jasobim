@@ -76,12 +76,12 @@ public class FolderServiceImpl implements FolderService  {
 				Folder folderOld = new Folder();
 				folderOld=folderDao.getById(floder.getId());
 				if(folderOld!=null){
-					folders=folderDao.getAllFolderss();
+					folders=folderDao.getAllFolderss(floder.getProjectId());
 					MenuRecursion mr = new MenuRecursion();
 					List<Folder> childrens = mr.treeChildList(folders, floder.getId());
 					childrens.add(floder);
 					if(!childrens.isEmpty()){
-						getfolders = folderDao.getFolderLists(childrens);
+						getfolders = folderDao.getFolderLists(childrens,floder.getProjectId());
 						if(!getfolders.isEmpty())
 						{
 							List dataList = new ArrayList();  

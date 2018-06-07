@@ -154,7 +154,7 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
 		    		.addScalar("id",StandardBasicTypes.LONG)
 					 .addScalar("company_name", StandardBasicTypes.STRING)
 					 .addScalar("work_people_name_list", StandardBasicTypes.STRING)
-					 .addScalar("create_date", StandardBasicTypes.DATE)
+					 .addScalar("create_date", StandardBasicTypes.TIMESTAMP)
 					 .addScalar("user_id", StandardBasicTypes.LONG)
 					 .addScalar("detail_content", StandardBasicTypes.STRING)
 					 .addScalar("project_id",StandardBasicTypes.LONG)

@@ -11,6 +11,7 @@ import com.my.spring.model.QualityQuestionPojo;
 import com.my.spring.model.Question;
 import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.QuestionFile;
+import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
@@ -48,6 +49,23 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
 	@Override
     public boolean deleteQualityQuestion(Long id,Long projectId) {
     	String sql = "delete from quality_question where id="+id+" and project_id="+projectId;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+        
+    }
+	@Override
+    public boolean deleteQualityQuestionByUserId(Long id) {
+    	String sql = "delete from quality_question where user_id="+id;
 		Session session=getSession();
 		 try{
 			 Query query = session.createSQLQuery(sql);
@@ -298,10 +316,14 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
         	QualityQuestionPojo questionpojo=new QualityQuestionPojo();
         	if(ret.get(i).getUserList()!=null){
         		String[] nameList = new String[ret.get(i).getUserList().split(",").length];
+        		List<String> nameLists = new ArrayList<String>();
         		for(int k=0;k<nameList.length;k++){
-        			nameList[k]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+        			User user = userDao.getById(Long.valueOf(nameList[k]));
+        			if(user!=null){
+        				nameLists.add(user.getRealName());
+        			}
         		}
-        		questionpojo.setUserNameLists(nameList);
+        		questionpojo.setUserNameLists(nameLists);
         	}else{
         		questionpojo.setUserNameLists(null);
         	}
@@ -380,7 +402,7 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
 					 .addScalar("name",StandardBasicTypes.STRING)
 					 .addScalar("trades",StandardBasicTypes.STRING)
 					 .addScalar("intro", StandardBasicTypes.STRING)
-					 .addScalar("question_date", StandardBasicTypes.DATE)
+					 .addScalar("question_date", StandardBasicTypes.TIMESTAMP)
 					 .addScalar("priority", StandardBasicTypes.INTEGER)
 					 .addScalar("state", StandardBasicTypes.INTEGER)
 					 .addScalar("code_information", StandardBasicTypes.STRING)
@@ -424,7 +446,7 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
 				 .addScalar("name",StandardBasicTypes.STRING)
 				 .addScalar("trades",StandardBasicTypes.STRING)
 				 .addScalar("intro", StandardBasicTypes.STRING)
-				 .addScalar("question_date", StandardBasicTypes.DATE)
+				 .addScalar("question_date", StandardBasicTypes.TIMESTAMP)
 				 .addScalar("priority", StandardBasicTypes.INTEGER)
 				 .addScalar("state", StandardBasicTypes.INTEGER)
 				 .addScalar("code_information", StandardBasicTypes.STRING)
@@ -467,7 +489,7 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
 					 .addScalar("name",StandardBasicTypes.STRING)
 					 .addScalar("trades",StandardBasicTypes.STRING)
 					 .addScalar("intro", StandardBasicTypes.STRING)
-					 .addScalar("question_date", StandardBasicTypes.DATE)
+					 .addScalar("question_date", StandardBasicTypes.TIMESTAMP)
 					 .addScalar("priority", StandardBasicTypes.INTEGER)
 					 .addScalar("state", StandardBasicTypes.INTEGER)
 					 .addScalar("code_information", StandardBasicTypes.STRING)

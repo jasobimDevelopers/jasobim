@@ -1,6 +1,7 @@
 package com.my.spring.controller;
 
 import java.io.IOException;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,13 +17,45 @@ import com.my.spring.utils.Test;
 public class AccountController {
 	@RequestMapping(value="api/ssocallback", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Void> ssocallback(
+    public String ssocallback(
     		HttpServletRequest request) throws IOException{
         String id_token = request.getParameter("id_token");
         String access_token = request.getParameter("access_token");
         Test test = new Test();
-        test.test("http://192.168.2.53:8020/connect/userinfo", access_token);
+        String reponse=test.test("http://192.168.2.53:8020/connect/userinfo", access_token);
+        if(reponse!=null){
+        	return "login";
+        }
 		return null;
     }
-   
+	/*public static String CreateNo()
+	{
+	     Random random = new Random();
+	     //tring strRandom = random.; //生成编号 
+	     //String code = DateTime.Now.ToString("yyyyMMddHHmmss") + strRandom;//形如
+	     //return code;
+	}
+
+	//MD5加密
+	/// <summary>
+	        /// MD5加密
+	        /// </summary>
+	        /// <param name="str">加密字符</param>
+	        /// <param name="code">加密位数16/32</param>
+	        /// <returns></returns>
+    public static String MD5(String str, int code)
+    {
+    	String strEncrypt = String.Empty;
+        if (code == 16)
+        {
+            strEncrypt = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "MD5").Substring(8, 16);
+        }
+
+        if (code == 32)
+        {
+            strEncrypt = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "MD5");
+        }
+
+        return strEncrypt;
+    }      */
 }

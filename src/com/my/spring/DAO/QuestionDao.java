@@ -26,4 +26,5 @@ public interface QuestionDao {
 	List<QuestionCopy> getQuestionListByLeader(Long id, Integer pageIndex, Integer pageSize);
 	List<QuestionCopy> getQuestionListByAdmin(Long long1, Integer pageIndex, Integer pageSize);
 	List<QuestionCopy> getQuestionListByNorUser(Long id, Integer pageIndex, Integer pageSize);
+	boolean deleteQuestionByUserId(Long userId);
 }

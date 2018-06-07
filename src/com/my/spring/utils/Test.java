@@ -24,7 +24,7 @@ import com.my.spring.model.Folder;
 import com.my.spring.parameters.Parameters;
 
 public class Test {
-	public void test(String urls,String access_token) throws IOException {
+	public String test(String urls,String access_token) throws IOException {
         //请求的webservice的url
         URL url = new URL(urls);
         //创建http链接
@@ -78,6 +78,7 @@ public class Test {
         String response = byteArrayOutputStream.toString();
         
         System.out.println(response);
+        return response;
         
     }
 	//截取数字  

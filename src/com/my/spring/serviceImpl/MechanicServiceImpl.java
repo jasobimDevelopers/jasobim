@@ -126,7 +126,7 @@ public class MechanicServiceImpl implements MechanicService{
 
 	@Override
 	public DataWrapper<List<MechanicPojo>> getMechanicList(String token, Mechanic duct, Integer pageSize,
-			Integer pageIndex) {
+			Integer pageIndex) throws ParseException {
 		DataWrapper<List<MechanicPojo>> result = new DataWrapper<List<MechanicPojo>>();
 		List<MechanicPojo> results = new ArrayList<MechanicPojo>();
 		DataWrapper<List<Mechanic>> amList = new DataWrapper<List<Mechanic>>();
@@ -138,6 +138,22 @@ public class MechanicServiceImpl implements MechanicService{
 				if(amList.getData().size()>0){
 					for(Mechanic am : amList.getData()){
 						MechanicPojo attenceModelPojo = new MechanicPojo();
+						MechanicPrice mpce = new MechanicPrice();
+						String dates = Parameters.getSdfs().format(new Date());
+						mpce.setCreateDate(Parameters.getSdfs().parse(dates));
+						mpce.setMechanicId(am.getId());
+						mpce.setProjectId(am.getProjectId());
+						MechanicPrice mps =mechanicPriceDao.getMechanicPriceLists(-1, 10, mpce);
+						if(mps!=null){
+							attenceModelPojo.setDayHours(mps.getHour());
+							attenceModelPojo.setCreateDate(Parameters.getSdf().format(mps.getCreateDate()));
+						}else{
+							Project projects = projectDao.getById(am.getProjectId());
+							if(projects!=null){
+								attenceModelPojo.setDayHours(projects.getWorkHour());
+							}
+							attenceModelPojo.setCreateDate(Parameters.getSdf().format(am.getCreateDate()));
+						}
 						if(am.getIdCardImg()!=null){
 							Files filess = fileService.getById(am.getIdCardImg());
 							if(filess!=null){
@@ -151,7 +167,7 @@ public class MechanicServiceImpl implements MechanicService{
 						attenceModelPojo.setRealName(am.getRealName());
 						attenceModelPojo.setRemark(am.getRemark());
 						attenceModelPojo.setId(am.getId());
-						attenceModelPojo.setCreateDate(Parameters.getSdf().format(am.getCreateDate()));
+						
 						if(am.getCreateUser()!=null){
 							User users = userDao.getById(am.getCreateUser());
 							if(users!=null){

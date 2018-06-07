@@ -45,6 +45,7 @@ public class Parameters {
 		         int maxDate = a.get(Calendar.DATE);
 		         return maxDate;
 	}
+	
 	public static String getFileName(String name){
 		
 		String[] str=name.split("\\.");
@@ -54,6 +55,26 @@ public class Parameters {
 		}
 		return newNames;
 		
+	}
+	
+	public static String getFileType(String name){
+		
+		String[] str=name.split("\\.");
+		String newNames=str[str.length-1];
+		return newNames;
+		
+	}
+	public static String exchangePath(String input){
+		String[] re=input.split("\\/");
+		String newstr="b";
+		for(int i=0;i<re.length;i++){
+			if(newstr.equals("b")){
+				newstr=re[i];
+			}else{
+				newstr=newstr+"\\"+re[i];
+			}
+		}
+		return newstr;
 	}
 	//截取数字  
 		public static String getNumbers(String content) {  

@@ -17,6 +17,6 @@ public interface MechanicService {
 	 DataWrapper<Void> deleteMechanic(Long id,String token);
 	 DataWrapper<Void> updateMechanic(Mechanic duct,String token, MultipartFile file, HttpServletRequest request);
 	DataWrapper<List<MechanicPojo>> getMechanicList(String token, Mechanic ps, Integer pageSize,
-			Integer pageIndex);
+			Integer pageIndex) throws ParseException;
 	DataWrapper<List<MechanicPojos>> getMechanicInfos(String token, Mechanic ps) throws ParseException;
 }

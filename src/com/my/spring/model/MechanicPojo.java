@@ -12,6 +12,7 @@ public class MechanicPojo {
 	private String createDate;
 	private String createUser;
 	private String idCardImg;
+	private Integer dayHours;
 	
 	public Long getId() {
 		return id;
@@ -88,6 +89,12 @@ public class MechanicPojo {
 	}
 	public void setIdCardImg(String idCardImg) {
 		this.idCardImg = idCardImg;
+	}
+	public Integer getDayHours() {
+		return dayHours;
+	}
+	public void setDayHours(Integer dayHours) {
+		this.dayHours = dayHours;
 	}
 	
 }

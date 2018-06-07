@@ -16,7 +16,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.my.spring.DAO.DepartmentDao;
 import com.my.spring.DAO.MenuListDao;
+import com.my.spring.DAO.MessageDao;
 import com.my.spring.DAO.ProjectDao;
+import com.my.spring.DAO.QualityQuestionDao;
+import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.RoleDao;
 import com.my.spring.DAO.SignUserInfoDao;
 import com.my.spring.DAO.UserDao;
@@ -69,6 +72,12 @@ public class UserServiceImpl implements UserService {
 	DepartmentDao deparmentDao;
 	@Autowired
 	MenuListDao menuDao;
+	@Autowired
+	QuestionDao questionDao;
+	@Autowired
+	QualityQuestionDao qualityDao;
+	@Autowired
+	MessageDao messageDao;
 	@Autowired
 	MenuListService menuService;
 	@Autowired
@@ -632,11 +641,16 @@ public class UserServiceImpl implements UserService {
 						dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 					}
 				}else{
+ 				    messageDao.deleteMessageByUserId(userId);
+ 				    questionDao.deleteQuestionByUserId(userId);
+ 				    qualityDao.deleteQualityQuestionByUserId(userId);
 					if(userDao.deleteUser(userId)){
 						dataWrapper.setErrorCode(ErrorCodeEnum.No_Error);
 					}else{
 						dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 					}
+					
+					
 				}
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
@@ -816,7 +830,15 @@ public class UserServiceImpl implements UserService {
 		DataWrapper<Void> result = new DataWrapper<Void>();
 		UserPojo up = new UserPojo();
 		if(user!=null){
+			if(user.getTel()!=null){
+				User oldUser = userDao.getByUserTel(user.getTel());
+				if(oldUser!=null){
+					result.setErrorCode(ErrorCodeEnum.Phone_Existed_Error);
+					return result;
+				}
+			}
 			user.setUserType(UserTypeEnum.Visitor.getType());
+			
 			user.setRegisterDate(new Date());
 			user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
 			user.setMenuItemList("0,1,2,3,4,5,6,7,8");
@@ -827,6 +849,7 @@ public class UserServiceImpl implements UserService {
 					user.setUserIconUrl(url);
 				}
 			}
+			
 			if(!userDao.addUser(user)){
 				result.setErrorCode(ErrorCodeEnum.Error);
 			}else{

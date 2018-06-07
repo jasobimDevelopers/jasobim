@@ -12,6 +12,7 @@ import com.my.spring.model.Question;
 import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.model.QuestionPojo;
+import com.my.spring.model.User;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
@@ -49,6 +50,23 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 	@Override
     public boolean deleteQuestion(Long id,Long projectId) {
     	String sql = "delete from question where id="+id+" and project_id="+projectId;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+        
+    }
+	@Override
+    public boolean deleteQuestionByUserId(Long id) {
+    	String sql = "delete from question where user_id="+id;
 		Session session=getSession();
 		 try{
 			 Query query = session.createSQLQuery(sql);
@@ -368,9 +386,11 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
         {
         	QuestionPojo questionpojo=new QuestionPojo();
         	if(ret.get(i).getUserList()!=null){
-        		String[] nameList = new String[ret.get(i).getUserList().split(",").length];
-        		for(int k=0;k<nameList.length;k++){
-        			nameList[k]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+        		List<String> nameList = new ArrayList<String>();
+        		String[] nameLists = ret.get(i).getUserList().split(",");
+        		for(int k=0;k<nameLists.length;k++){
+        			User users = userDao.getById(Long.valueOf(nameLists[k]));
+        			nameList.add(users.getRealName());;
         		}
         		questionpojo.setUserNameLists(nameList);
         	}else{
@@ -453,7 +473,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 				 .addScalar("name",StandardBasicTypes.STRING)
 				 .addScalar("trades",StandardBasicTypes.STRING)
 				 .addScalar("intro", StandardBasicTypes.STRING)
-				 .addScalar("question_date", StandardBasicTypes.DATE)
+				 .addScalar("question_date", StandardBasicTypes.TIMESTAMP)
 				 .addScalar("priority", StandardBasicTypes.INTEGER)
 				 .addScalar("state", StandardBasicTypes.INTEGER)
 				 .addScalar("code_information", StandardBasicTypes.STRING)
@@ -538,7 +558,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 					 .addScalar("name",StandardBasicTypes.STRING)
 					 .addScalar("trades",StandardBasicTypes.STRING)
 					 .addScalar("intro", StandardBasicTypes.STRING)
-					 .addScalar("question_date", StandardBasicTypes.DATE)
+					 .addScalar("question_date", StandardBasicTypes.TIMESTAMP)
 					 .addScalar("priority", StandardBasicTypes.INTEGER)
 					 .addScalar("state", StandardBasicTypes.INTEGER)
 					 .addScalar("code_information", StandardBasicTypes.STRING)

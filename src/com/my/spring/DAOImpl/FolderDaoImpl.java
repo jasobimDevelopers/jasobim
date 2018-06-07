@@ -61,12 +61,15 @@ public class FolderDaoImpl extends BaseDao<Folder> implements FolderDao {
     }
     @SuppressWarnings("unchecked")
 	@Override
-    public List<Folder> getFolderLists(List<Folder> folder) {
+    public List<Folder> getFolderLists(List<Folder> folder,Long projectId) {
         DataWrapper<List<Folder>> retDataWrapper = new DataWrapper<List<Folder>>();
         List<Folder> ret = new ArrayList<Folder>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Folder.class);
         criteria.add(Restrictions.eq("fileType", 0));
+        if(projectId!=null){
+        	criteria.add(Restrictions.eq("projectId", projectId));
+        }
         if(!folder.isEmpty()){
         	for(Folder folders:folder){
         		if(folders.getId()!=null){
@@ -177,11 +180,14 @@ public class FolderDaoImpl extends BaseDao<Folder> implements FolderDao {
     }
 	@SuppressWarnings("unchecked")
 	@Override
-    public List<Folder> getAllFolderss() {
+    public List<Folder> getAllFolderss(Long projectId) {
         List<Folder> ret = new ArrayList<Folder>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Folder.class);
         criteria.add(Restrictions.eq("fileType", 0));
+        if(projectId!=null){
+        	criteria.add(Restrictions.eq("projectId", projectId));
+        }
         try {
             ret = criteria.list();
         }catch (Exception e){

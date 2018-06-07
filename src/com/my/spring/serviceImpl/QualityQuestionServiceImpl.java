@@ -463,14 +463,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 					}
 				}
 			}
-			/////问题等级搜索
-			/////当用户是总经理级别的时候,问题搜索只能搜索重要和紧急，同时也只能看重要和紧急问题，不看一般问题 
-				/*if(userInMemory.getWorkName().equals("总经理"))
-				{
-					if(QualityQuestion.getPriority()==null)
-						QualityQuestion.setPriority(-1);
-				}*/
-				/////当用户是投资方（甲方）的时候，问题搜索只能搜索一般问题，同时也只能看一般问题，不能重要和紧急问题
 			String projectList=null;
 			dataWrappers= QualityQuestionDao.getQualityQuestionList(content,projectId,pageIndex,pageSize,QualityQuestion,userIdList,projectList);
 			if(dataWrappers.getData()!=null && dataWrappers.getData().size()>0){
@@ -500,15 +492,29 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 			        	}
 		        		if(fileLists!=null)
 		        		{
+		        			List<String> imageList = new ArrayList<String>();
+		        			List<String> voiceList = new ArrayList<String>();
+		        			for(String items:fileLists){
+		        				if(Parameters.getFileType(items).equals("mp3") || Parameters.getFileType(items).equals("wav")){
+		        					voiceList.add(items);
+		        				}else if(!Parameters.getFileType(items).equals("dat")){
+		        					imageList.add(items);
+		        				}
+		        			}
+		        			QualityQuestionpojo.setImageUrlList(imageList);
+		        			QualityQuestionpojo.setVoiceUrlList(voiceList);
 		        			QualityQuestionpojo.setFileList(fileLists);
 		        		}				
 			        }
-		        	if(dataWrappers.getData().get(i).getUserList()!=null){
+		        	if(dataWrappers.getData().get(i).getUserList()!=null && !dataWrappers.getData().get(i).getUserList().equals("")){
 		        		String[] nameList = dataWrappers.getData().get(i).getUserList().split(",");
 		        		if(nameList.length>0){
-		        			String[] nameLists =new String[nameList.length] ;
+		        			List<String> nameLists =new ArrayList<String>();
 		        			for(int k=0;k<nameList.length;k++){
-		        			   nameLists[k]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+		        				User user =userDao.getById(Long.valueOf(nameList[k]));
+		        				if(user!=null){
+		        					nameLists.add(user.getRealName());
+		        				}
 		        			}
 		        			QualityQuestionpojo.setUserNameLists(nameLists);
 			        	}else{
@@ -899,9 +905,13 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 	        	if(dataWrappers.getData().get(i).getUserList()!=null){
 	        		String[] nameList = dataWrappers.getData().get(i).getUserList().split(",");
 	        		if(nameList.length>0){
-	        			String[] nameLists =new String[nameList.length] ;
+	        			List<String> nameLists =new ArrayList<String>() ;
 	        			for(int k=0;k<nameList.length;k++){
-	        			   nameLists[k]=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+	        				User users =userDao.getById(Long.valueOf(nameList[k]));
+	        				if(users!=null){
+	        					nameLists.add(users.getRealName());
+	        				}
+	        			  
 	        			}
 	        			QualityQuestionpojo.setUserNameLists(nameLists);
 		        	}else{

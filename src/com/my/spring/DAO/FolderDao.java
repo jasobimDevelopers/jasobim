@@ -7,7 +7,6 @@ public interface FolderDao {
 	DataWrapper<Folder> getByName(String name);
 	boolean deleteFloder(Long id);
 	boolean addFloder(Folder file);
-	List<Folder> getFolderLists(List<Folder> childrens);
 	List<Folder> getFolderList(Folder childrens);
 	boolean addFloderList(List<Folder> addList);
 	boolean updateFloder(Folder floder);
@@ -17,5 +16,6 @@ public interface FolderDao {
 	List<Folder> getFolderListLike(Long projectId, String name);
 	List<Folder> getFolderIndexList(Long projectId, Long pid);
 	List<Folder> getByIds(String ids);
-	List<Folder> getAllFolderss();
+	List<Folder> getAllFolderss(Long projectId);
+	List<Folder> getFolderLists(List<Folder> folder, Long projectId);
 }
