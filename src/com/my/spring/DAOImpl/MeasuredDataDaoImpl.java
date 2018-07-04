@@ -8,6 +8,7 @@ import com.my.spring.utils.DataWrapper;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -42,7 +43,15 @@ public class MeasuredDataDaoImpl extends BaseDao<MeasuredData> implements Measur
         List<MeasuredData> ret = new ArrayList<MeasuredData>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(MeasuredData.class);
-        
+        criteria.addOrder(Order.desc("createDate"));
+        if(item!=null){
+        	if(item.getExcelType()!=null){
+        		criteria.add(Restrictions.eq("excelType", item.getExcelType()));
+        	}
+        	if(item.getProjectId()!=null){
+        		criteria.add(Restrictions.eq("projectId", item.getProjectId()));
+        	}
+        }
         ///////////////////////////////
         //criteria.add(Restrictions.eq("projectId", projectId));
         

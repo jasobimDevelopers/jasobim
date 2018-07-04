@@ -2,6 +2,7 @@ package com.my.spring.DAO;
 
 import com.my.spring.model.User;
 import com.my.spring.model.UserCopy;
+import com.my.spring.model.UserSelect;
 import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
@@ -26,4 +27,5 @@ public interface UserDao {
 	boolean deleteUserList(String[] userList);
 	User getByUserTel(String mobile);
 	DataWrapper<List<User>> getUserListForSql(Integer pageSize, Integer pageIndex, User user);
+	List<UserSelect> getUserListByWorkName(String workName,Long projectId);
 }

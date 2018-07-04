@@ -92,6 +92,19 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
+        	if(userInMemory.getSystemId()!=null){
+				if(QualityQuestion.getProjectId()!=null){
+					UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(ProjectDatas.Quality_area.getCode());
+	    			userLog.setActionDate(new Date());
+	    			userLog.setActionType(1);
+	    			userLog.setProjectId(QualityQuestion.getProjectId());
+	    			userLog.setUserId(userInMemory.getId());
+	    			userLog.setSystemType(userInMemory.getSystemId());
+	    			userLog.setVersion("3.0");
+	    			userLogService.addUserLog(userLog, token);
+				}
+			}
         	QualityQuestion.setUserId(userInMemory.getId());
 			if(QualityQuestion!=null){
 				if(QualityQuestion.getQuestionDate()==null){
@@ -368,7 +381,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
         if (userInMemory != null) {
 			User userInDB = userDao.getById(userInMemory.getId());
 			if (userInDB != null) {
-				
 					if(QualityQuestion!=null){
 						QualityQuestion QualityQuestionOld=new QualityQuestion();
 						QualityQuestionOld=QualityQuestionDao.getById(QualityQuestion.getId());
@@ -425,21 +437,22 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		Long[] userIdList=null;
-    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
-    			UserLog userLog = new UserLog();
-    			userLog.setProjectPart(ProjectDatas.Quality_area.getCode());
-    			userLog.setActionDate(new Date());
-    			userLog.setUserId(userInMemory.getId());
-    			userLog.setSystemType(userInMemory.getSystemId());
-    			//userLog.setVersion("3.0");
-    			if(QualityQuestion.getProjectId()!=null){
-    				userLog.setProjectId(QualityQuestion.getProjectId());
-    			}
-    			if(QualityQuestion.getId()!=null){
-    				userLog.setFileId(QualityQuestion.getId());
-    			}
-    			userLogDao.addUserLog(userLog);
-    		}
+    		if(userInMemory.getSystemId()!=null){
+				if(QualityQuestion.getProjectId()!=null){
+					UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(ProjectDatas.Quality_area.getCode());
+	    			userLog.setActionDate(new Date());
+	    			userLog.setActionType(0);
+	    			if(QualityQuestion.getId()!=null){
+	    				userLog.setFileId(QualityQuestion.getId());
+	    			}
+	    			userLog.setProjectId(QualityQuestion.getProjectId());
+	    			userLog.setUserId(userInMemory.getId());
+	    			userLog.setSystemType(userInMemory.getSystemId());
+	    			userLog.setVersion("3.0");
+	    			userLogService.addUserLog(userLog, token);
+				}
+			}
 			if(content!=null){
 				
 				/////问题状态搜索
@@ -767,7 +780,19 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
         if (userInMemory != null) {
 				QualityQuestion QualityQuestion=null;
 				QualityQuestion=QualityQuestionDao.getById(QualityQuestionId);	
-				
+				if(userInMemory.getSystemId()!=null){
+					if(QualityQuestion.getProjectId()!=null){
+						UserLog userLog = new UserLog();
+		    			userLog.setProjectPart(ProjectDatas.Quality_area.getCode());
+		    			userLog.setActionDate(new Date());
+		    			userLog.setActionType(3);
+		    			userLog.setProjectId(QualityQuestion.getProjectId());
+		    			userLog.setUserId(userInMemory.getId());
+		    			userLog.setSystemType(userInMemory.getSystemId());
+		    			userLog.setVersion("3.0");
+		    			userLogService.addUserLog(userLog, token);
+					}
+				}
 				if(QualityQuestion!=null){
 					if(QualityQuestion.getUserId().equals(userInMemory.getId())){
 						QualityQuestion.setState(state);

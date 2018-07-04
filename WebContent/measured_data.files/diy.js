@@ -19,6 +19,17 @@ var submiteUser;
 var submiteUser;
 var	celiangUser;
 var	checkMoreUser;
+/////
+function getQueryStringByName(name){
+	 var result = location.search.match(new RegExp("[\?\&]" + name+ "=([^\&]+)","i"));
+	
+	 if(result == null || result.length < 1){
+		 return "";
+	 }
+	 return result[1];
+}
+var name="excelType";
+var excelType = getQueryStringByName(name);
 function submit(){
 	projectName=document.getElementById('project_name').value;
 	leaderUnit="上海嘉实（集团）有限公司";
@@ -488,6 +499,7 @@ function submit(){
 //var baseUrl="http://jasobim.com.cn/";
 var webToken="jasobim";
 var baseUrl="http://localhost:8080/jasobim/";
+
 function postData(){
 	$.ajax({
          type: "POST",
@@ -497,7 +509,7 @@ function postData(){
          	checkUser:checkUser,leaderName:leaderName,constructor:constructor,
          	quantiter:quantiter,submiteUser:submiteUser,celiangUser:celiangUser,
          	checkMoreUser:checkMoreUser,qualifiedDataSum:qualifiedDataSum,
-         	measuredDataSum:measuredDataSum,measuredData:measuredData,
+         	measuredDataSum:measuredDataSum,measuredData:measuredData,excelType:excelType,
          	designLevel:designLevel,checkType:checkType,checkContent:checkContent,
          	projectName:projectName,leaderUnit:leaderUnit,checkPart:checkPart,
          	designLevel:designLevel,locationSize:locationSize,webToken:webToken

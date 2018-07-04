@@ -472,4 +472,86 @@ create table quality_fine(
 	level int,#隐患级别
 	forfeit int #罚款金额
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-				 
+
+create table news_info(
+    id serial primary key,
+    create_user_id bigint(20) unsigned not null,
+    content text,
+    topic varchar(256),
+    remark varchar(128)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+########
+##流程引擎设计
+########
+create table process_data(
+	id serial primary key,
+    create_user bigint(20) unsigned not null,
+    project_id bigint(20) unsigned not null,
+    name varchar(256),
+    item_num int,
+    create_date datetime
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table item_data(
+	id serial primary key,
+    create_user bigint(20) unsigned not null,
+    name varchar(256),
+    create_date datetime,
+    approve_user bigint(20) unsigned not null,
+    update_date datetime,
+    work_name bigint(20) unsigned not null,
+    update_user bigint(20) unsigned not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table process_item(
+	id serial primary key,
+    process_id bigint(20) unsigned not null,
+    which int,
+    item_id bigint(20) unsigned not null,
+    foreign key(process_id) references process_data(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table process_log(
+	id serial primary key,
+    process_id bigint(20) unsigned not null,
+    item_id bigint(20) unsigned not null,
+    current_node int,
+    end_flag int,
+    note varchar(256),
+    item_state int,
+    create_date datetime,
+    foreign key(process_id) references process_data(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table material_import_log(
+	id serial primary key,
+    project_id bigint(20) unsigned not null,
+    user_id bigint(20) unsigned not null,
+    code_url varchar(256),
+    import_date date
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table construction_task_new(
+	id serial primary key,
+	name varchar(250),
+	create_user bigint(20) unsigned not null,
+	create_date datetime,
+	construction_task_date date,
+	process_data_id bigint(20) unsigned not null,
+	construction_content text,
+	constructType bigint(20) unsigned not null,
+	team_type int,
+	team_user_ids varchar(250),
+	day_work_hours int,
+	night_work_hours int,
+	tenders_id bigint(20) unsigned not null,
+	construct_part varchar(250),
+	imgs varchar(250),
+	project_id bigint(20) unsigned not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table work_type(
+	id serial primary key,
+	name varchar(250)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

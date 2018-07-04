@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.my.spring.DAO.DepartmentDao;
 import com.my.spring.DAO.MenuListDao;
 import com.my.spring.DAO.MessageDao;
@@ -23,7 +22,6 @@ import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.RoleDao;
 import com.my.spring.DAO.SignUserInfoDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.UserLogDao;
 import com.my.spring.DAO.UserProjectDao;
 import com.my.spring.controller.UserAvatar;
 import com.my.spring.enums.CallStatusEnum;
@@ -38,12 +36,14 @@ import com.my.spring.model.SignUserInfo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserCopy;
 import com.my.spring.model.UserProject;
+import com.my.spring.model.UserSelect;
 import com.my.spring.model.UserLog;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
 import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.MenuListService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.service.UserService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserProjectDao userProjectDao;
 	@Autowired
-	UserLogDao userLogDao;
+	UserLogService userLogService;
 	@Autowired
 	ProjectDao projectDao;
 	@Autowired
@@ -134,6 +134,7 @@ public class UserServiceImpl implements UserService {
 					userLog.setActionDate(new Date());
 					userLog.setSystemType(system);
 					userLog.setUserId(user.getId());
+					userLog.setActionType(2);//浏览、增加、登录、修改
 					userLog.setProjectPart(ProjectDatas.Login_area.getCode());
 				}
 				
@@ -326,6 +327,16 @@ public class UserServiceImpl implements UserService {
 		User adminInMemory = SessionManager.getSession(token);
 		int flag=-1;
 		if (adminInMemory != null) {
+			if(adminInMemory.getSystemId()!=null){
+				UserLog userLog = new UserLog();
+    			userLog.setProjectPart(ProjectDatas.UserTeam_area.getCode());
+    			userLog.setActionDate(new Date());
+    			userLog.setActionType(0);
+    			userLog.setUserId(adminInMemory.getId());
+    			userLog.setSystemType(adminInMemory.getSystemId());
+    			//userLog.setVersion("3.0");
+    			userLogService.addUserLog(userLog,token);
+    		}
 			if(oldPs!=null && newPs!=null)
 			{
 				String oldPsReal=MD5Util.getMD5String(MD5Util.getMD5String(oldPs) + salt);
@@ -354,6 +365,16 @@ public class UserServiceImpl implements UserService {
 		DataWrapper<User> dataWrapper = new DataWrapper<User>();
 		User userInMemory = SessionManager.getSession(token);
 		if (userInMemory != null) {
+			if(userInMemory.getSystemId()!=null){
+				UserLog userLog = new UserLog();
+    			userLog.setProjectPart(ProjectDatas.UserTeam_area.getCode());
+    			userLog.setActionDate(new Date());
+    			userLog.setActionType(0);
+    			userLog.setUserId(userInMemory.getId());
+    			userLog.setSystemType(userInMemory.getSystemId());
+    			//userLog.setVersion("3.0");
+    			userLogService.addUserLog(userLog,token);
+    		}
 			User userInDB = userDao.getById(userInMemory.getId());
 			userInDB.setPassword(null);
 			dataWrapper.setData(userInDB);
@@ -532,24 +553,7 @@ public class UserServiceImpl implements UserService {
 		List<UserPadPojo> userpojoList=new ArrayList<UserPadPojo>();
 		DataWrapper<List<UserCopy>> userList=new DataWrapper<List<UserCopy>>();
 		User adminInMemory = SessionManager.getSession(token);
-		String[] workNameList={"项目经理","常务经理","技术负责人","土建负责人","安装负责人","技术员","质量员","施工员",
-				"材料员","资料员","预算员","机管员","安全员","钢筋翻样员","木工翻样员","BIM工程师"};
 		if (adminInMemory != null) {
-				if(adminInMemory.getSystemId()==0 || adminInMemory.getSystemId()==1){
-	        		
-	    			UserLog userLog = new UserLog();
-	    			userLog.setProjectPart(8);
-	    			userLog.setActionDate(new Date());
-	    			userLog.setUserId(adminInMemory.getId());
-	    			userLog.setSystemType(adminInMemory.getSystemId());
-	    			userLog.setVersion("3.0");
-	    			if(projectId!=null){
-	    				userLog.setProjectId(projectId);
-	    			}
-	    			userLogDao.addUserLog(userLog);
-	    		}
-				UserProject userProject = new UserProject();
-				
 				userList=userDao.getUserTeam(projectId);
 				if(userList.getData().size()>0){
 					for(int i=0;i<userList.getData().size();i++){
@@ -881,6 +885,21 @@ public class UserServiceImpl implements UserService {
 		System.out.println("projectIdLength:"+projectIdList.size());
 		
 		return null;
+	}
+
+	@Override
+	public DataWrapper<List<UserSelect>> getUserByWorkName(String token, String workName,Long projectId) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<UserSelect>> result = new DataWrapper<List<UserSelect>>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			List<UserSelect> gets = userDao.getUserListByWorkName(workName,projectId);
+			result.setData(gets);
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+		
 	}
 
 

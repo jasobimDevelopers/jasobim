@@ -275,8 +275,10 @@ public class PaperServiceImpl implements PaperService {
 			        		if(paper.getId()!=null){
 			        			userLog.setFileId(paper.getId());
 			        		}
+			        		userLog.setActionType(0);
 			        		userLog.setProjectPart(ProjectDatas.Paper_area.getCode());
 			        		userLog.setUserId(userInMemory.getId());
+			        		userLog.setProjectId(projectId);
 			        		userLog.setSystemType(userInMemory.getSystemId());
 			        		userLogSerivce.addUserLog(userLog, token);
 			        	}

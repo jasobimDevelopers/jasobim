@@ -5,14 +5,12 @@ import com.my.spring.utils.DataWrapper;
 
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 public interface NewsDao {
 	boolean addNews(News news);
     boolean deleteNews(Long id);
     boolean updateNews(News news);
     News getById(Long id);
     DataWrapper<List<News>> getNewsList(Integer pageIndex, Integer pageSize, News news);
+    News getNewsEarly();
     DataWrapper<List<News>> getNewsListByUserId(Long userId);
 }

@@ -1,5 +1,8 @@
 package com.my.spring.service;
+import com.my.spring.model.ImportMaterial;
 import com.my.spring.model.Material;
+import com.my.spring.model.MaterialImportLog;
+import com.my.spring.model.MaterialImportLogPojo;
 import com.my.spring.model.MaterialPojo;
 import com.my.spring.utils.DataWrapper;
 
@@ -17,4 +20,6 @@ public interface MaterialService {
 	DataWrapper<Void> deleteMaterial(Long id, String token);
 	DataWrapper<Void> updateMaterial(Material m, String token);
 	DataWrapper<Void> importMaterial(MultipartFile file, HttpServletRequest request, String token, Material material);
+	DataWrapper<Void> importAppMaterial(String fileUrl, String fileUrl2, HttpServletRequest request, String token, Material news);
+	DataWrapper<List<MaterialImportLogPojo>> getImportMaterialLog(String token, Long projectId);
 }

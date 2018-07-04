@@ -18,6 +18,7 @@ public class News {
 	private Long userId;
 	private String title;
 	private Long projectId;
+	private String url;
 	
 	@Id
     @GeneratedValue
@@ -71,6 +72,15 @@ public class News {
 	}
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
+	}
+	
+	@Basic
+    @Column(name = "url")
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 

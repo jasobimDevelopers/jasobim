@@ -1,11 +1,11 @@
 package com.my.spring.bimface.sdk.service.impl;
 
 import com.bimface.sdk.bean.request.FileUploadRequest;
+import com.bimface.sdk.bean.response.CategoryBean;
 import com.bimface.sdk.bean.response.FileBean;
 import com.bimface.sdk.bean.response.TranslateBean;
 import com.my.spring.bimface.sdk.config.Config;
 import com.bimface.sdk.exception.BimfaceException;
-import com.bimface.sdk.service.UploadService;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.bimface.sdk.BimfaceClient;
 import com.my.spring.bimface.sdk.service.BimfaceService;
@@ -15,9 +15,11 @@ import com.my.spring.model.Project;
 import com.my.spring.service.FileService;
 import com.my.spring.utils.DataWrapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,8 +27,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class BimfaceServiceImpl implements BimfaceService {
-	BimfaceClient bimfaceClient;
+	
 	Config config;
+	BimfaceClient bimfaceClient;
 	@Autowired
 	FileService filesService;
 	@Autowired
@@ -34,7 +37,7 @@ public class BimfaceServiceImpl implements BimfaceService {
 	@Override
 	public DataWrapper<String> getViewTokenByFileId(Long fileId) {
 		DataWrapper<String> test = new DataWrapper<String>();
-		bimfaceClient = new BimfaceClient(config.APP_KEY,config.APP_SECRET);
+		bimfaceClient =new BimfaceClient(config.getAppKey(),config.getAppSecret());
 		String str="";
 		try {
 			str = bimfaceClient.getViewTokenByFileId(fileId);
@@ -48,13 +51,14 @@ public class BimfaceServiceImpl implements BimfaceService {
 	@Override
 	public DataWrapper<Long> uploadModelFile(MultipartFile file,HttpServletRequest requestion,String token,Long projectId) {
 		DataWrapper<Long> test = new DataWrapper<Long>();
+		
 		String filepath="bimface/file";
-		bimfaceClient = new BimfaceClient(config.APP_KEY,config.APP_SECRET);
 		Files files=filesService.uploadFile(filepath, file, 0, requestion);
 		FileUploadRequest fileUploadRequest = new FileUploadRequest();
 		fileUploadRequest.setUrl("http://jasobim.com:8080/"+files.getUrl());
 		fileUploadRequest.setName(files.getName());
 		FileBean fileBean=new FileBean();
+		bimfaceClient =new BimfaceClient(config.getAppKey(),config.getAppSecret());
 		try {
 			fileBean=bimfaceClient.upload(fileUploadRequest);
 		} catch (BimfaceException e1) {
@@ -86,9 +90,9 @@ public class BimfaceServiceImpl implements BimfaceService {
 	public DataWrapper<String> getModeViewTokenByIntegrateId(Long integrateId, HttpServletRequest request, String token,
 			Long projectId) {
 				DataWrapper<String> test = new DataWrapper<String>();
-				bimfaceClient = new BimfaceClient(config.APP_KEY,config.APP_SECRET);
 				String str="";
 				try {
+					bimfaceClient =new BimfaceClient(config.getAppKey(),config.getAppSecret());
 					str = bimfaceClient.getViewTokenByIntegrateId(integrateId);
 					test.setData(str);
 				} catch (BimfaceException e) {
@@ -97,6 +101,21 @@ public class BimfaceServiceImpl implements BimfaceService {
 					e.printStackTrace();
 				}
 				return test;
+	}
+	@Override
+	public DataWrapper<List<CategoryBean>> getCategory(Long fileId, String token, Long projectId) {
+		DataWrapper<List<CategoryBean>> result = new DataWrapper<List<CategoryBean>>();
+		List<CategoryBean> getResult = new ArrayList<CategoryBean>();
+		try {
+			bimfaceClient =new BimfaceClient(config.getAppKey(),config.getAppSecret());
+			getResult = bimfaceClient.getCategory(fileId);
+			result.setData(getResult);
+		} catch (BimfaceException e) {
+			result.setErrorCode(ErrorCodeEnum.Error);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 

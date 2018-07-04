@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-/**
- * Created by Administrator on 2016/6/22.
- */
+
 @Controller
 @RequestMapping(value="api/news")
 public class NewsController {
@@ -70,5 +68,22 @@ public class NewsController {
             @RequestParam(value = "token",required = true) String token){
         return NewsService.getNewsListByUserId(userId,token);
     }
-   
+    /**
+     *获取微信公众号文章链接 
+     **/
+    @RequestMapping(value="/getNewsListByWeixin",method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<String> getNewsListByWeixin(
+            @RequestParam(value = "token",required = true) String token){
+        return NewsService.getNewsListByWeixin(token);
+    }
+    /**
+     * 测试存储微信公众号连接地址
+     * */
+    @RequestMapping(value="/saveNewsOfWeixin",method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<Void> saveNewsOfWeixin(
+            @RequestParam(value = "token",required = true) String token){
+        return NewsService.saveWechatUrl(token);
+    }
 }

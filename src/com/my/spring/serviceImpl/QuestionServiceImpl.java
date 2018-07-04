@@ -15,14 +15,12 @@ import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.jpush.PushExample;
-import com.my.spring.jpush.PushExamples;
 import com.my.spring.model.Files;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageFile;
 import com.my.spring.model.Notice;
 import com.my.spring.model.PageInfo;
 import com.my.spring.model.Project;
-import com.my.spring.model.QualityQuestionPojo;
 import com.my.spring.model.Question;
 import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.QuestionFile;
@@ -30,7 +28,6 @@ import com.my.spring.model.QuestionPojo;
 import com.my.spring.model.Role;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
-import com.my.spring.model.UserProject;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
@@ -95,6 +92,19 @@ public class QuestionServiceImpl implements QuestionService {
         if (userInMemory != null) {
         	question.setUserId(userInMemory.getId());
         	if(question!=null){
+        		if(userInMemory.getSystemId()!=null){
+					if(question.getProjectId()!=null){
+						UserLog userLog = new UserLog();
+		    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
+		    			userLog.setActionDate(new Date());
+		    			userLog.setActionType(1);
+		    			userLog.setProjectId(question.getProjectId());
+		    			userLog.setUserId(userInMemory.getId());
+		    			userLog.setSystemType(userInMemory.getSystemId());
+		    			userLog.setVersion("3.0");
+		    			userLogService.addUserLog(userLog, token);
+					}
+				}
 				if(question.getQuestionDate()==null){
 					question.setQuestionDate(new Date());
 				}
@@ -198,10 +208,11 @@ public class QuestionServiceImpl implements QuestionService {
 					hq.put("aboutId", question.getId().toString());
 					hq.put("createDate", Parameters.getSdfs().format(new Date()));
 					String content="";
-					if(po!=null)
+					if(po!=null){
 						content=userInMemory.getRealName()+"在"+po.getName()+"项目里提交了一个标题为："+question.getName()+"的问题";
-					else
+					}else{
 						content=userInMemory.getRealName()+"提交了一个标题为："+question.getName()+"的问题";
+					}
 					///0、质量   1、安全   2、施工任务单  3、 预付单  4、留言
 					PushExample.testSendPushWithCustomConfig_ios(userids, content,1,hq);
 					PushExample.testSendPushWithCustomConfig_android(userids, content,1,hq);
@@ -421,24 +432,27 @@ public class QuestionServiceImpl implements QuestionService {
     	
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
-    		
     		Long[] userIdList=null;
-    		
-    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
-    			UserLog userLog = new UserLog();
-    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
-    			userLog.setActionDate(new Date());
-    			userLog.setUserId(userInMemory.getId());
-    			userLog.setSystemType(userInMemory.getSystemId());
-    			//userLog.setVersion("3.0");
-    			if(question.getProjectId()!=null){
-    				userLog.setProjectId(question.getProjectId());
-    			}
-    			if(question.getId()!=null){
-    				userLog.setFileId(question.getId());
-    			}
-    			userLogDao.addUserLog(userLog);
-    		}
+    		if(userInMemory.getSystemId()!=null){
+				if(question.getProjectId()!=null || projectId!=null){
+					UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
+	    			userLog.setActionDate(new Date());
+	    			userLog.setActionType(0);
+	    			if(projectId!=null){
+	    				userLog.setProjectId(projectId);
+	    			}else{
+	    				userLog.setProjectId(question.getProjectId());
+	    			}
+	    			if(question.getId()!=null){
+	    				userLog.setFileId(question.getId());
+	    			}
+	    			userLog.setUserId(userInMemory.getId());
+	    			userLog.setSystemType(userInMemory.getSystemId());
+	    			userLog.setVersion("3.0");
+	    			userLogService.addUserLog(userLog, token);
+				}
+			}
 			if(content!=null){
 				//////问题类型搜索
 				
@@ -736,13 +750,19 @@ public class QuestionServiceImpl implements QuestionService {
 								}
 							}
 							//////添加打点记录
-							UserLog userLog = new UserLog();
-							userLog.setActionDate(new Date());
-							userLog.setFileId(question.getId());
-							userLog.setProjectId(question.getProjectId());
-							userLog.setProjectPart(ProjectDatas.Question_area.getCode());
-							userLog.setUserId(userInDB.getId());
-							userLogDao.addUserLog(userLog);
+							if(userInMemory.getSystemId()!=null){
+								if(questionId!=null){
+									UserLog userLog = new UserLog();
+					    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
+					    			userLog.setActionDate(new Date());
+					    			userLog.setActionType(0);
+					    			userLog.setProjectId(questionId);
+					    			userLog.setUserId(userInMemory.getId());
+					    			userLog.setSystemType(userInMemory.getSystemId());
+					    			userLog.setVersion("3.0");
+					    			userLogService.addUserLog(userLog, token);
+								}
+							}
 							dataWrapper.setData(questionPojo);
 						}else{
 							dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
@@ -777,6 +797,19 @@ public class QuestionServiceImpl implements QuestionService {
 				Question question=null;
 				question=questionDao.getById(questionId);	
 					if(question!=null){
+						if(userInMemory.getSystemId()!=null){
+							if(question.getProjectId()!=null){
+								UserLog userLog = new UserLog();
+				    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
+				    			userLog.setActionDate(new Date());
+				    			userLog.setActionType(3);
+				    			userLog.setProjectId(question.getProjectId());
+				    			userLog.setUserId(userInMemory.getId());
+				    			userLog.setSystemType(userInMemory.getSystemId());
+				    			userLog.setVersion("3.0");
+				    			userLogService.addUserLog(userLog, token);
+							}
+						}
 						if(question.getUserId().equals(userInMemory.getId())){
 							question.setState(state);
 							if(!questionDao.updateQuestion(question)){
@@ -847,7 +880,6 @@ public class QuestionServiceImpl implements QuestionService {
 			Integer pageIndex, Integer pageSize, Question question) {
 		DataWrappern<PageInfo,List<QuestionPojo>, HashMap<String, String>> datawrapper=new DataWrappern<PageInfo,List<QuestionPojo>,HashMap<String, String>>();
     	List<QuestionPojo> pojo = new ArrayList<QuestionPojo>();
-    	HashMap<String, PageInfo> map = new HashMap<String, PageInfo>();
 		PageInfo pageInfos = new PageInfo(); 
     	DataWrapper<List<Question>> dataWrappers = new DataWrapper<List<Question>>();
     	DataWrapper<List<QuestionFile>> dataWrapperFiles = new DataWrapper<List<QuestionFile>>();

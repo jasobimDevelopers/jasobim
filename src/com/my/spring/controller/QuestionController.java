@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+@CrossOrigin("http://jasobim.com:8080")
 @Controller
 @RequestMapping(value="api/question")
 public class QuestionController {
@@ -139,8 +141,13 @@ public class QuestionController {
     @ResponseBody
     public DataWrapper<QuestionPojo> getQuestionDetails(
     		@RequestParam(value="questionId",required=true) Long questionId,
+    		 HttpServletResponse response,
     		@RequestParam(value="weixin",required=false) String weixin,
     		@RequestParam(value="token",required=false) String token){
+    	// 指定允许其他域名访问 
+    	response.setHeader("Access-Control-Allow-Origin", "*");
+    	// 响应头设置  
+    	response.setHeader("Access-Control-Allow-Headers:x-requested-with", "content-type");  
         return questionService.getQuestionDetailsByAdmin(questionId,token,weixin);
     }
     

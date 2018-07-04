@@ -2,19 +2,23 @@ package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.MaterialDao;
 import com.my.spring.DAO.MaterialFileDao;
+import com.my.spring.DAO.MaterialImportLogDao;
 import com.my.spring.DAO.MaterialTypeDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.DuctPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.ImportMaterial;
 import com.my.spring.model.Material;
 import com.my.spring.model.MaterialFile;
+import com.my.spring.model.MaterialImportLog;
+import com.my.spring.model.MaterialImportLogPojo;
 import com.my.spring.model.MaterialPojo;
 import com.my.spring.model.MaterialType;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.MaterialService;
 import com.my.spring.service.UserLogService;
@@ -22,12 +26,14 @@ import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.ReadMaterialExcel;
 import com.my.spring.utils.SessionManager;
+import com.my.spring.utils.WebFileUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -43,7 +49,9 @@ public class MaterialServiceImpl implements MaterialService {
     @Autowired
     UserDao userDao;
     @Autowired
-    UserLogService userLogSerivce;
+    MaterialImportLogDao materialImportLogDao;
+    @Autowired
+    UserLogService userLogService;
     @Autowired
     FileService fileService;
     @Autowired
@@ -242,6 +250,140 @@ public class MaterialServiceImpl implements MaterialService {
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return result;
+	}
+	@Override
+	public DataWrapper<Void> importAppMaterial(String htmlUrl,String fileUrl, HttpServletRequest request, String token,Material material) {
+		// TODO Auto-generated method stub
+		DataWrapper<Void> result = new DataWrapper<Void>();
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null){
+			if(userInMemory.getSystemId()!=null){
+				UserLog userLog = new UserLog();
+    			userLog.setProjectPart(ProjectDatas.MaterialManager_area.getCode());
+    			userLog.setActionDate(new Date());
+    			userLog.setActionType(1);
+    			userLog.setUserId(userInMemory.getId());
+    			userLog.setSystemType(userInMemory.getSystemId());
+    			//userLog.setVersion("3.0");
+    			userLog.setProjectId(material.getProjectId());
+    			userLogService.addUserLog(userLog,token);
+    		}
+			if(htmlUrl!=null){
+				MaterialImportLog mil = new MaterialImportLog();
+				mil.setCodeUrl(htmlUrl);
+				mil.setImportDate(new Date());
+				mil.setUserId(userInMemory.getId());
+				mil.setProjectId(material.getProjectId());
+				materialImportLogDao.addMaterialImportLog(mil);
+			}
+			if(fileUrl!=null){
+				//MultipartFile file = WebFileUtils.getMultipartFile(fileUrl);
+				InputStream fileIn=WebFileUtils.getInputStream(fileUrl);
+				material.setCreateDate(new Date());
+				material.setUserId(userInMemory.getId());
+				//List<Material> mst = new ArrayList<Material>();
+				List<ImportMaterial> ms = new ArrayList<ImportMaterial>();
+				ReadMaterialExcel rm = new ReadMaterialExcel();
+				String newFileName = MD5Util.getMD5String(new Date() + UUID.randomUUID().toString()).replace(".","")+".xls";
+				ms=rm.getExcelInfoByStream(newFileName, fileIn);
+				for(ImportMaterial im:ms){
+					Material m = new Material();
+					MaterialType mq = new MaterialType();
+					mq.setCreateDate(new Date());
+					mq.setUserId(userInMemory.getId());
+					mq.setProjectId(material.getProjectId());
+					m.setCreateDate(new Date());
+					m.setProjectId(material.getProjectId());
+					m.setUserId(userInMemory.getId());
+					m.setMaterialName(im.getMaterialName());
+					m.setUnit(im.getUnit());
+					m.setSize(im.getSize());
+					m.setRemark(im.getRemark());
+					m.setInNum(1);
+					m.setLeaveNum(1);
+					m.setOutNum(0);
+					if(im.getMaterialType()!=null){
+						MaterialType sp = new MaterialType();
+						sp=materialTypeDao.getMaterialByName(im.getMaterialType());
+						if(sp.getId()==null){
+							mq.setName(im.getMaterialType());
+							if(materialTypeDao.addMaterialType(mq)){
+								m.setMaterialType(mq.getId());
+							}
+						}else{
+							m.setMaterialType(sp.getId());
+						}
+					}
+					if(m!=null){
+						Material finds=materialDao.getFindMaterial(m);
+						if(finds!=null){
+							if(finds.getInNum()==null){
+								finds.setInNum(1);
+								finds.setLeaveNum(1);
+							}else{
+								finds.setInNum(finds.getInNum()+1);
+								finds.setLeaveNum(finds.getLeaveNum()+1);
+							}
+							materialDao.updateMaterial(finds);
+						}else{
+							materialDao.addMaterial(m);
+						}
+					}
+				}
+			}else{
+				result.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+
+	@Override
+	public DataWrapper<List<MaterialImportLogPojo>> getImportMaterialLog(String token, Long projectId) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<MaterialImportLogPojo>> result = new DataWrapper<List<MaterialImportLogPojo>>();
+		List<MaterialImportLogPojo> resultList = new ArrayList<MaterialImportLogPojo>();
+		DataWrapper<List<MaterialImportLog>> results = new DataWrapper<List<MaterialImportLog>>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(projectId!=null){
+				if(user.getSystemId()!=null){
+					UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(ProjectDatas.MaterialManager_area.getCode());
+	    			userLog.setActionDate(new Date());
+	    			userLog.setActionType(0);
+	    			userLog.setUserId(user.getId());
+	    			userLog.setSystemType(user.getSystemId());
+	    			//userLog.setVersion("3.0");
+	    			userLog.setProjectId(projectId);
+	    			userLogService.addUserLog(userLog,token);
+	    		}
+				results=materialImportLogDao.getMaterialImportLogList(projectId, 10, -1);
+				if(result.getData()!=null){
+					if(!result.getData().isEmpty()){
+						for(int i=0;i<results.getData().size();i++){
+							MaterialImportLogPojo mpo = new MaterialImportLogPojo();
+							mpo.setCodeUrl(results.getData().get(i).getCodeUrl());
+							mpo.setId(results.getData().get(i).getId());
+							mpo.setImportDate(Parameters.getSdfs().format(results.getData().get(i).getImportDate()));
+							resultList.add(mpo);
+						}
+						result.setData(resultList);
+						result.setTotalNumber(results.getTotalNumber());
+					}
+				}
+			}else{
+				result.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		if(result.getCallStatus()==CallStatusEnum.SUCCEED && result.getData()==null){
+	       	List<MaterialImportLogPojo> pas= new ArrayList<MaterialImportLogPojo>();
+	       	result.setData(pas);
+	    }
+        return result;
 	}
 
 	

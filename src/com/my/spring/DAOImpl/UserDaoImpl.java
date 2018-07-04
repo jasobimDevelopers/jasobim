@@ -1,5 +1,6 @@
 package com.my.spring.DAOImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -17,8 +18,10 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.MenuListCopy;
+import com.my.spring.model.Projectvs;
 import com.my.spring.model.User;
 import com.my.spring.model.UserCopy;
+import com.my.spring.model.UserSelect;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
@@ -458,6 +461,25 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 			return null;
 		}
 		return ret;
+	}
+	@Override
+	public List<UserSelect> getUserListByWorkName(String workName,Long projectId) {
+		List<UserSelect> retDataWrapper = new ArrayList<UserSelect>();
+		String sql = "select id,real_name from user where id in(select user_id from user_project where project_id="
+		+projectId+") and work_name='"+workName+"'";
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+				 .addScalar("id",StandardBasicTypes.LONG)
+				 .addScalar("real_name", StandardBasicTypes.STRING)
+				 .setResultTransformer(Transformers.aliasToBean(UserSelect.class)); 
+		    retDataWrapper=query.list();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+	    return retDataWrapper;
 	}
 
 }

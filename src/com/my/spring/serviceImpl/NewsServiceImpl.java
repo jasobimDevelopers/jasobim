@@ -3,6 +3,7 @@ package com.my.spring.serviceImpl;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.NewsDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.WechatUrlDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
@@ -10,11 +11,14 @@ import com.my.spring.model.News;
 import com.my.spring.model.NewsPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
+import com.my.spring.model.WechatUrl;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.service.FileService;
 import com.my.spring.service.NewsService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
+import com.my.spring.wechat.WechatSpider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,16 +26,10 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by Administrator on 2016/6/22.
- */
-@Service("NewsService")
+@Service("newsService")
 public class NewsServiceImpl implements NewsService {
     @Autowired
     NewsDao NewsDao;
-    /*@Autowired
-    NewsFileDao NewsFileDao;*/
     @Autowired
     FileDao fileDao;
     @Autowired
@@ -40,8 +38,8 @@ public class NewsServiceImpl implements NewsService {
     FileService fileService;
     @Autowired
     UserLogService userLogSerivce;
-    /*private String filePath = "/files";
-    private Integer fileType=3;*/
+    @Autowired
+    WechatUrlDao wechatDao;
     @Override
     public DataWrapper<Void> addNews(News News,String token) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -182,6 +180,36 @@ public class NewsServiceImpl implements NewsService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
         return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<String> getNewsListByWeixin(String token) {
+		DataWrapper<String> result = new DataWrapper<String>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			WechatSpider wechatSpider = new WechatSpider("gh_c886b7f1ee09");
+			String listUrl = wechatSpider.getListUrl();
+			if(listUrl!=null){
+				result.setData(listUrl);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		
+		return result;
+	}
+	@Override
+	public DataWrapper<Void> saveWechatUrl(String token) {
+		DataWrapper<Void> result = new DataWrapper<Void>();
+		WechatSpider wechatSpider = new WechatSpider("gh_c886b7f1ee09");
+		String listUrl = wechatSpider.getListUrl();
+		if(listUrl!=null && !listUrl.equals("")){
+			WechatUrl news = new WechatUrl();
+			news.setUrl(listUrl);
+			news.setCreateDate(new Date());
+			wechatDao.addWechatUrl(news);
+		}
+		return result;
 	}
 	
 

@@ -3,6 +3,7 @@
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Material;
+import com.my.spring.model.MaterialImportLogPojo;
 import com.my.spring.model.MaterialPojo;
 import com.my.spring.service.MaterialService;
 import com.my.spring.utils.DataWrapper;
@@ -73,5 +74,27 @@ public class MaterialController {
             HttpServletRequest request){
     	return materialService.importMaterial(file,request,token,News);
     }
-   
+   //手机端扫描录入
+    /////导入物资清单
+    @RequestMapping(value="/app/importMaterial", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> importMaterialFile(
+    		 @RequestParam(value = "fileUrl", required = false) String fileUrl,
+    		 @RequestParam(value = "htmlUrl", required = false) String htmlUrl,
+             @RequestParam(value = "token",required = true) String token,
+             @ModelAttribute Material News,
+            HttpServletRequest request){
+    	return materialService.importAppMaterial(htmlUrl,fileUrl,request,token,News);
+    }
+    /*
+     * 手机端获取扫描记录
+     * 
+     * */
+    @RequestMapping(value="/app/getImportMaterialLog", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<MaterialImportLogPojo>> getImportMaterialLog(
+    		 @RequestParam(value = "projectId", required = false) Long projectId,
+             @RequestParam(value = "token",required = true) String token){
+    	return materialService.getImportMaterialLog(token,projectId);
+    }
 }

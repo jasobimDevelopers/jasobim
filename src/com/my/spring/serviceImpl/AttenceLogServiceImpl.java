@@ -26,9 +26,12 @@ import com.my.spring.model.AttenceModel;
 import com.my.spring.model.Files;
 import com.my.spring.model.Role;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.AttenceLogService;
 import com.my.spring.service.FileService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.InstanceUtil;
 import com.my.spring.utils.SessionManager;
@@ -42,7 +45,7 @@ public class AttenceLogServiceImpl implements AttenceLogService{
     @Autowired
     AttenceModelDao attenceModelDao;
     @Autowired
-    UserLogDao userLogDao;
+    UserLogService userLogService;
     @Autowired
     FileService fileservice;
     @Autowired
@@ -58,6 +61,17 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 		if(user!=null){
 			if(am!=null){
 				if(am.getProjectId()!=null){
+					if(user.getSystemId()!=null){
+	    				UserLog userLog = new UserLog();
+	        			userLog.setProjectPart(ProjectDatas.AttenceLog_area.getCode());
+	        			userLog.setActionDate(new Date());
+	        			userLog.setActionType(1);
+	        			userLog.setProjectId(am.getProjectId());
+	        			userLog.setUserId(user.getId());
+	        			userLog.setSystemType(user.getSystemId());
+	        			userLog.setVersion("3.0");
+	        			userLogService.addUserLog(userLog, token);
+					}
 					am.setLat(lat);
 					am.setLng(lng);
 					am.setUserId(user.getId());
@@ -201,6 +215,19 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 		int days = Parameters.getDaysByYearMonth(year, month);
 		User user = SessionManager.getSession(token);
 		if(user!=null){
+			if(user.getSystemId()!=null){
+				if(duct.getProjectId()!=null){
+					UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(ProjectDatas.AttenceLog_area.getCode());
+	    			userLog.setActionDate(new Date());
+	    			userLog.setActionType(0);
+	    			userLog.setProjectId(duct.getProjectId());
+	    			userLog.setUserId(user.getId());
+	    			userLog.setSystemType(user.getSystemId());
+	    			userLog.setVersion("3.0");
+	    			userLogService.addUserLog(userLog, token);
+				}
+			}
 			int weekds=0;
 			if(duct.getProjectId()!=null){
 				AttenceModel aml = attenceModelDao.getAttenceModelByProjectId(duct.getProjectId());

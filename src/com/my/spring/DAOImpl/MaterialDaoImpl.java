@@ -101,6 +101,34 @@ public class MaterialDaoImpl extends BaseDao<Material> implements MaterialDao {
 		return saveList(mst);
 	}
 
+	@Override
+	public Material getFindMaterial(Material m) {
+		List<Material> ret = new ArrayList<Material>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Material.class);
+        if(m.getProjectId()!=null){
+        	criteria.add(Restrictions.eq("projectId", m.getProjectId()));
+        }
+        if(m.getMaterialType()!=null){
+        	criteria.add(Restrictions.eq("materialType", m.getMaterialType()));
+        }
+        if(m.getMaterialName()!=null){
+         	criteria.add(Restrictions.eq("materialName", m.getMaterialName()));
+        }
+        if(m.getSize()!=null){
+        	criteria.add(Restrictions.eq("size", m.getSize()));
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(!ret.isEmpty()){
+        	return ret.get(0);
+        }
+	    return null;
+	}
+
 
 	
 

@@ -14,6 +14,7 @@ import com.my.spring.model.MeasuredDatas;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.MeasuredDataService;
 import com.my.spring.service.UserLogService;
@@ -52,6 +53,17 @@ public class MeasuredDataServiceImpl implements MeasuredDataService {
     	 DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
          if(webToken.equals("jasobim")){
         	 if(measuredData!=null){
+  				if(measuredData.getProjectId()!=null){
+  					UserLog userLog = new UserLog();
+  	    			userLog.setProjectPart(ProjectDatas.MeasuredData_area.getCode());
+  	    			userLog.setActionDate(new Date());
+  	    			userLog.setActionType(1);
+  	    			userLog.setProjectId(measuredData.getProjectId());
+  	    			//userLog.setUserId(measuredData.getSubmiteUser());
+  	    			//userLog.setSystemType(user.getSystemId());
+  	    			userLog.setVersion("3.0");
+  	    			userLogSerivce.addUserLog(userLog, token);
+  				}
         		 measuredData.setCreateDate(new Date());
 					if(!measuredDataDao.addMeasuredData(measuredData)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);

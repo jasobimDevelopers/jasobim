@@ -25,6 +25,9 @@ import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.AttenceLog;
 import com.my.spring.model.Department;
 import com.my.spring.model.Duct;
+import com.my.spring.model.MechanicData;
+import com.my.spring.model.MechanicDataOfHour;
+import com.my.spring.model.MechanicDataPeople;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 @Repository
@@ -228,6 +231,47 @@ public class MechanicPriceDaoImpl extends BaseDao<MechanicPrice> implements Mech
 				}
 	        }
 			return null;
+	}
+
+	@Override
+	public List<MechanicDataOfHour> getMechanicHourByProjectId(String startday, String endday, Long projectId) {
+		List<MechanicDataOfHour> ret = new ArrayList<MechanicDataOfHour>();
+		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+		String sql = "select create_date,sum(hour) as hours from mechanic_price where project_id="+
+		projectId+" and create_date BETWEEN '"+startday+"' and '"+endday+"' GROUP BY create_date";
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+				 .addScalar("create_date",StandardBasicTypes.DATE)
+				 .addScalar("hours", StandardBasicTypes.INTEGER)
+				 .setResultTransformer(Transformers.aliasToBean(MechanicDataOfHour.class)); 
+		    ret=query.list();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+
+		return ret;
+	}
+	@Override
+	public List<MechanicDataPeople> getMechanicPeopleByProjectId(String startday, String endday, Long projectId) {
+		List<MechanicDataPeople> ret = new ArrayList<MechanicDataPeople>();
+		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+		String sql = "select create_date,count(*) as people_num from mechanic_price where project_id="+projectId
+				+" and create_date BETWEEN '"+startday+"' and '"+endday+"' GROUP BY create_date";
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+				 .addScalar("create_date",StandardBasicTypes.DATE)
+				 .addScalar("people_num", StandardBasicTypes.INTEGER)
+				 .setResultTransformer(Transformers.aliasToBean(MechanicDataPeople.class)); 
+		    	ret=query.list();
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+		return ret;
 	}
 
 }

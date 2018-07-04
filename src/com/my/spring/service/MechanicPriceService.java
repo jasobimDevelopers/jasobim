@@ -1,8 +1,8 @@
 package com.my.spring.service;
 
-import java.util.Date;
 import java.util.List;
 
+import com.my.spring.model.MechanicData;
 import com.my.spring.model.MechanicPrice;
 import com.my.spring.model.MechanicPricePojo;
 import com.my.spring.model.MechanicPricePojos;
@@ -17,4 +17,5 @@ public interface MechanicPriceService {
 	DataWrapper<Void> addMechanicPriceList(String am, String token);
 	DataWrapper<List<MechanicPricePojos>> getMechanicPriceNum(String token, Long projectId,String date);
 	DataWrapper<String> exportMechanicNum(String token, Long projectId, String date);
+	DataWrapper<List<MechanicData>> getMechanicDatas(String token, Long projectId, String date);
 }

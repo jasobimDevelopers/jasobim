@@ -26,6 +26,7 @@ public class User {
     private Long roleId;
     private Long departmentId;
     private String menuItemList;
+    private String workName;
     
     @Id
     @GeneratedValue
@@ -180,6 +181,15 @@ public class User {
 	}
 	public void setMenuItemList(String menuItemList) {
 		this.menuItemList = menuItemList;
+	}
+	
+	@Basic
+	@Column(name="work_name")
+	public String getWorkName() {
+		return workName;
+	}
+	public void setWorkName(String workName) {
+		this.workName = workName;
 	}
 	
     

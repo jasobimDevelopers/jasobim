@@ -34,6 +34,8 @@ import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.UserLog;
+import com.my.spring.model.UserLogMonth;
+import com.my.spring.model.UserLogPart;
 import com.my.spring.model.UserLogPojo;
 import com.my.spring.model.UserLogPojos;
 import com.my.spring.parameters.Parameters;
@@ -73,7 +75,8 @@ public class UserLogServiceImpl implements UserLogService {
 	AdvancedOrderDao advancedOrderDao;
 	
 	@Override
-	public DataWrapper<List<UserLogPojo>> getUserLogList(Integer pageIndex, Integer pageSize, UserLog UserLog, String token,String startDate,String finishedDate,String searchContent) {
+	public DataWrapper<List<UserLogPojo>> getUserLogList(Integer pageIndex, Integer pageSize, UserLog UserLog, String token,String startDate,
+			String finishedDate,String searchContent,String projectIds,String userIds) {
 		// TODO Auto-generated method stub
 		Date dateStarts=null;
     	Date dateFinisheds=null;
@@ -84,33 +87,34 @@ public class UserLogServiceImpl implements UserLogService {
 		DataWrapper<List<UserLogPojo>> dataWrapperpojo = new DataWrapper<List<UserLogPojo>>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
-			if(searchContent!=null && searchContent!=""){
-				User users=userDao.getByUserName(searchContent);
-				if(users!=null){
-					UserLog.setUserId(users.getId());
+				if(searchContent!=null && searchContent!=""){
+					User users=userDao.getByUserName(searchContent);
+					if(users!=null){
+						UserLog.setUserId(users.getId());
+					}
 				}
-			}
-			SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    		if(startDate!=null){
-    			try {
-    				dateStarts=sdfs.parse(startDate);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-    		}
-    		if(finishedDate!=null){
-    			try {
-					dateFinisheds=sdfs.parse(finishedDate);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-    		}
-				dataWrapper=userLogDao.getUserLogList(pageSize, pageIndex,UserLog,dateStarts,dateFinisheds);
+				SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    		if(startDate!=null){
+	    			try {
+	    				dateStarts=sdfs.parse(startDate);
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	    		}
+	    		if(finishedDate!=null){
+	    			try {
+						dateFinisheds=sdfs.parse(finishedDate);
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	    		}
+				dataWrapper=userLogDao.getUserLogList(pageSize, pageIndex,UserLog,dateStarts,dateFinisheds,projectIds,userIds);
 				if(dataWrapper.getData()!=null){
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						UserLogPojo UserLogpojos=new UserLogPojo();
+						UserLogpojos.setActionType(dataWrapper.getData().get(i).getActionType());
 						//{"模型区域","图纸查看","登录区域","交底区域","进度管理区域 ","质安管理区域","通知区域","产值区域","班组信息区域","施工任务单区域","预付单区域"};
 						//////图纸文件跟踪
 						if(dataWrapper.getData().get(i).getProjectPart()==1){
@@ -134,36 +138,6 @@ public class UserLogServiceImpl implements UserLogService {
 						if(dataWrapper.getData().get(i).getProjectPart()==5){
 							if(dataWrapper.getData().get(i).getFileId()!=null){
 								UserLogpojos.setFileName(questionDao.getById(dataWrapper.getData().get(i).getFileId()).getName());
-							}
-						}
-						///////公告公示信息区域
-						if(dataWrapper.getData().get(i).getProjectPart()==6){
-							if(dataWrapper.getData().get(i).getFileId()!=null){
-								UserLogpojos.setFileName(newsDao.getById(dataWrapper.getData().get(i).getFileId()).getTitle());
-							}
-						}
-						//////统计管理区域（各个项目产值）
-						if(dataWrapper.getData().get(i).getProjectPart()==7){
-							if(dataWrapper.getData().get(i).getFileId()!=null){
-								UserLogpojos.setFileName(valueOutputDao.getById(dataWrapper.getData().get(i).getFileId()).getOthers());
-							}
-						}
-						/////班组信息区域(班组消息)
-						if(dataWrapper.getData().get(i).getProjectPart()==8){
-							if(dataWrapper.getData().get(i).getFileId()!=null){
-								UserLogpojos.setFileName(valueOutputDao.getById(dataWrapper.getData().get(i).getFileId()).getOthers());
-							}
-						}
-						////施工任务单区域
-						if(dataWrapper.getData().get(i).getProjectPart()==9){
-							if(dataWrapper.getData().get(i).getFileId()!=null){
-								UserLogpojos.setFileName(constructionTaskDao.getById(dataWrapper.getData().get(i).getFileId()).getCompanyName());
-							}
-						}
-						////预付单区域
-						if(dataWrapper.getData().get(i).getProjectPart()==10){
-							if(dataWrapper.getData().get(i).getFileId()!=null){
-								UserLogpojos.setFileName(advancedOrderDao.getById(dataWrapper.getData().get(i).getFileId()).getProjectName());
 							}
 						}
 						UserLogpojos.setId(dataWrapper.getData().get(i).getId());
@@ -385,7 +359,6 @@ public class UserLogServiceImpl implements UserLogService {
                    infoBeans.add(infoBean);
                }
                //////////////////////批量存入insert into user_log infoBeans
-               ////////////////
                if(userLogDao.addUserLogList(infoBeans)){
             	   dataWrapper.setCallStatus(CallStatusEnum.SUCCEED);
                }else{
@@ -407,14 +380,6 @@ public class UserLogServiceImpl implements UserLogService {
                }
                inputStream.close();
                sc.close();
-              /* InputStreamReader read = new InputStreamReader(
-                       new FileInputStream(file), encoding);//考虑到编码格式
-               BufferedReader bufferedReader = new BufferedReader(read);
-               String lineTxt = null;*/
-               /*while ((lineTxt = bufferedReader.readLine()) != null) {
-            	  
-               }
-               read.close();*/
            } else {
                System.out.println("找不到指定的文件");
            }
@@ -422,11 +387,47 @@ public class UserLogServiceImpl implements UserLogService {
            System.out.println("读取文件内容出错");
            e.printStackTrace();
        } 
-       //Reader reader=new Reader(fileUrl);
-      // Writer writer=new Writer(fileUrl);
-       //new Thread(reader).start();
-       //new Thread(writer).start();
 	   dataWrapper.setData(infoBeans);    
 	   return dataWrapper;
+	}
+
+
+	@Override
+	public DataWrapper<List<UserLogPart>> countUserLogByPart(String token, String startTime, String finishedTime,
+			String projectIdList) {
+		DataWrapper<List<UserLogPart>> result = new DataWrapper<List<UserLogPart>>();
+		List<UserLogPart> gets = new ArrayList<UserLogPart>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(user.getUserType()==UserTypeEnum.Admin.getType()){
+				gets = userLogDao.getCountNumsByPart(startTime,finishedTime,projectIdList);
+				result.setData(gets);
+			}else{
+				result.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+
+
+	@Override
+	public DataWrapper<List<UserLogMonth>> countUserLogByMonth(String token, String projectIdList) {
+		
+		DataWrapper<List<UserLogMonth>> result = new DataWrapper<List<UserLogMonth>>();
+		List<UserLogMonth> gets = new ArrayList<UserLogMonth>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(user.getUserType()==UserTypeEnum.Admin.getType()){
+				gets = userLogDao.getCountNumsByMonth(projectIdList);
+				result.setData(gets);
+			}else{
+				result.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
 	}
 }

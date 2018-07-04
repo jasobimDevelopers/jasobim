@@ -4,7 +4,6 @@ import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.NormativefilesDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.Normativefiles;
 import com.my.spring.model.NormativefilesPojo;
@@ -44,7 +43,6 @@ public class NormativefilesServiceImpl implements NormativefilesService {
     @Autowired
     UserLogService userLogSerivce;
     private String filePath = "files";
-    private Integer fileType = 0;//默认word文档
     @Override
     public DataWrapper<Void> addNormativefiles(Normativefiles Normativefiles,String token,MultipartFile[] fileList,Integer fileType,HttpServletRequest request) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -198,63 +196,77 @@ public class NormativefilesServiceImpl implements NormativefilesService {
     }
     
     @Override
-    public DataWrapper<List<NormativefilesPojos>> getNormativefilesLists(String token , Integer pageIndex, Integer pageSize, Normativefiles Normativefiles) {
+    public DataWrapper<List<NormativefilesPojos>> getNormativefilesLists(String token , Integer pageIndex, Integer pageSize, Normativefiles Normativefiles,Long projectId) {
     	DataWrapper<List<NormativefilesPojos>> dataWrappers = new DataWrapper<List<NormativefilesPojos>>();
     	DataWrapper<List<Normativefiles>> dataWrapper = new DataWrapper<List<Normativefiles>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-        	
+        	if(userInMemory.getSystemId()!=null){
+        		if(projectId!=null){
+	        		UserLog userLog = new UserLog();
+	        		userLog.setActionDate(new Date());
+	        		if(Normativefiles.getId()!=null){
+	        			userLog.setFileId(Normativefiles.getId());
+	        		}
+	        		userLog.setActionType(0);
+	        		userLog.setProjectPart(ProjectDatas.NormativeFile_area.getCode());
+	        		userLog.setUserId(userInMemory.getId());
+	        		userLog.setProjectId(projectId);
+	        		userLog.setSystemType(userInMemory.getSystemId());
+	        		userLogSerivce.addUserLog(userLog, token);
+	        	}
+        	}
 			dataWrapper=normativefilesDao.getNormativefilessList(pageIndex,pageSize,Normativefiles);
 			if(dataWrapper.getData()!=null){
-				List<NormativefilesPojos> NormativefilesPojoList = new ArrayList<NormativefilesPojos>();
-				for(int i=0;i<dataWrapper.getData().size();i++){
-					if(dataWrapper.getData().get(i).getFileIdList()!=null){
-						String[] idlist = dataWrapper.getData().get(i).getFileIdList().split(",");
-						for(int s=0;s<idlist.length;s++){
-							NormativefilesPojos NormativefilesPojo =new NormativefilesPojos();
-							NormativefilesPojo.setContent(dataWrapper.getData().get(i).getContent());
-							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-							NormativefilesPojo.setSubmitDate(sdf.format(dataWrapper.getData().get(i).getSubmitDate()));
-							NormativefilesPojo.setId(dataWrapper.getData().get(i).getId());
-							NormativefilesPojo.setDescribe(dataWrapper.getData().get(i).getDescribes());
-							NormativefilesPojo.setSize(dataWrapper.getData().get(i).getSize());
-							NormativefilesPojo.setStudyType(dataWrapper.getData().get(i).getStudyType());
-							NormativefilesPojo.setTitle(dataWrapper.getData().get(i).getTitle());
-							if(dataWrapper.getData().get(i).getSubmitUserId()!=null){
-								NormativefilesPojo.setSubmitUserName(userDao.getById(dataWrapper.getData().get(i).getSubmitUserId()).getUserName());
-							}
-							Files files = fileService.getById(Long.valueOf(idlist[s]));
-							if(files!=null){
-								if(Normativefiles.getContent()!=null){
-									if(files.getRealName().contains(Normativefiles.getContent())){
+				if(!dataWrapper.getData().isEmpty()){
+					List<NormativefilesPojos> NormativefilesPojoList = new ArrayList<NormativefilesPojos>();
+					for(int i=0;i<dataWrapper.getData().size();i++){
+						if(dataWrapper.getData().get(i).getFileIdList()!=null){
+							String[] idlist = dataWrapper.getData().get(i).getFileIdList().split(",");
+							for(int s=0;s<idlist.length;s++){
+								NormativefilesPojos NormativefilesPojo =new NormativefilesPojos();
+								NormativefilesPojo.setContent(dataWrapper.getData().get(i).getContent());
+								SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+								NormativefilesPojo.setSubmitDate(sdf.format(dataWrapper.getData().get(i).getSubmitDate()));
+								NormativefilesPojo.setId(dataWrapper.getData().get(i).getId());
+								NormativefilesPojo.setDescribe(dataWrapper.getData().get(i).getDescribes());
+								NormativefilesPojo.setSize(dataWrapper.getData().get(i).getSize());
+								NormativefilesPojo.setStudyType(dataWrapper.getData().get(i).getStudyType());
+								NormativefilesPojo.setTitle(dataWrapper.getData().get(i).getTitle());
+								if(dataWrapper.getData().get(i).getSubmitUserId()!=null){
+									NormativefilesPojo.setSubmitUserName(userDao.getById(dataWrapper.getData().get(i).getSubmitUserId()).getUserName());
+								}
+								Files files = fileService.getById(Long.valueOf(idlist[s]));
+								if(files!=null){
+									if(Normativefiles.getContent()!=null){
+										if(files.getRealName().contains(Normativefiles.getContent())){
+											NormativefilesPojo.setFileUrlList(files.getUrl());
+											NormativefilesPojo.setFileNameList(files.getRealName());
+											NormativefilesPojo.setFileId(Long.valueOf(idlist[s]));
+											if(NormativefilesPojo!=null){
+												NormativefilesPojoList.add(NormativefilesPojo);
+											}
+										
+										}
+									}else{
 										NormativefilesPojo.setFileUrlList(files.getUrl());
 										NormativefilesPojo.setFileNameList(files.getRealName());
 										NormativefilesPojo.setFileId(Long.valueOf(idlist[s]));
 										if(NormativefilesPojo!=null){
 											NormativefilesPojoList.add(NormativefilesPojo);
 										}
-									
-									}
-								}else{
-									NormativefilesPojo.setFileUrlList(files.getUrl());
-									NormativefilesPojo.setFileNameList(files.getRealName());
-									NormativefilesPojo.setFileId(Long.valueOf(idlist[s]));
-									if(NormativefilesPojo!=null){
-										NormativefilesPojoList.add(NormativefilesPojo);
 									}
 								}
 							}
 						}
 					}
-				}
-				if(NormativefilesPojoList!=null && NormativefilesPojoList.size()>0){
-					dataWrappers.setData(NormativefilesPojoList);
-					dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
-					dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
-					dataWrappers.setTotalPage(dataWrapper.getTotalPage());
-					dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
-				}else{
-					dataWrappers.setErrorCode(ErrorCodeEnum.Error);
+					if(NormativefilesPojoList!=null && NormativefilesPojoList.size()>0 && !NormativefilesPojoList.isEmpty()){
+						dataWrappers.setData(NormativefilesPojoList);
+						dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
+						dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
+						dataWrappers.setTotalPage(dataWrapper.getTotalPage());
+						dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
+					}
 				}
 			}
 		}else{

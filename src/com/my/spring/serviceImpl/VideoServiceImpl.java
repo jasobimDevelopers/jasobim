@@ -124,6 +124,7 @@ public class VideoServiceImpl implements VideoService {
 	    			userLog.setProjectPart(ProjectDatas.Video_area.getCode());
 	    			userLog.setActionDate(new Date());
 	    			userLog.setUserId(userInMemory.getId());
+	    			userLog.setActionType(0);
 	    			userLog.setSystemType(userInMemory.getSystemId());
 	    			userLog.setVersion("3.0");
 	    			if(projectId!=null){

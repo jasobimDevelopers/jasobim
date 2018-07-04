@@ -61,10 +61,11 @@ public class NormativefilesController {
     @ResponseBody
     public DataWrapper<List<NormativefilesPojos>> getNormativefilesLists(
             @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "projectId",required = false) Long projectId,
             @RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute Normativefiles ps){
-        return NormativefilesService.getNormativefilesLists(token,pageIndex,pageSize,ps);
+        return NormativefilesService.getNormativefilesLists(token,pageIndex,pageSize,ps,projectId);
     }
     ////通过用户id查找留言
     @RequestMapping(value="/getNormativefilesListByUserId",method = RequestMethod.GET)

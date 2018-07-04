@@ -1,6 +1,6 @@
 package com.my.spring.serviceImpl;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,10 @@ import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.FeedBack;
 import com.my.spring.model.FeedBackPojo;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FeedBackService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
@@ -27,6 +30,8 @@ public class FeedBackServiceImpl implements FeedBackService {
 	FeedBackDao feedBackDao;
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	UserLogService userLogService;
 	@Override
 	public DataWrapper<List<FeedBackPojo>> getFeedBackList(Integer pageIndex, Integer pageSize, FeedBack feedBack, String token,String dates) {
 		// TODO Auto-generated method stub
@@ -107,6 +112,16 @@ public class FeedBackServiceImpl implements FeedBackService {
 		feedBack.setTel(tel);
 		User userInMemory=SessionManager.getSession(token);
 		if(userInMemory!=null){
+			if(userInMemory.getSystemId()!=null){
+				UserLog userLog = new UserLog();
+    			userLog.setProjectPart(ProjectDatas.UserTeam_area.getCode());
+    			userLog.setActionDate(new Date());
+    			userLog.setActionType(1);
+    			userLog.setUserId(userInMemory.getId());
+    			userLog.setSystemType(userInMemory.getSystemId());
+    			//userLog.setVersion("3.0");
+    			userLogService.addUserLog(userLog,token);
+    		}
 			feedBack.setDate(new Date(System.currentTimeMillis()));
 			feedBack.setUserName(userInMemory.getRealName());
 			if(!feedBackDao.addFeedBack(feedBack)) {

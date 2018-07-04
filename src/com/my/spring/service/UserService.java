@@ -1,17 +1,16 @@
 package com.my.spring.service;
 
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSONArray;
 import com.my.spring.model.User;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
+import com.my.spring.model.UserSelect;
 import com.my.spring.utils.DataWrapper;
 
 
@@ -38,5 +37,6 @@ public interface UserService {
 	DataWrapper<Void> getUserInfoSql(User user);
 	DataWrapper<Void> addUser(User user, String token, MultipartFile file, HttpServletRequest request,
 			String projectList);
+	DataWrapper<List<UserSelect>> getUserByWorkName(String token, String workName, Long projectId);
 	
 }

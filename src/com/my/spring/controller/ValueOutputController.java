@@ -38,7 +38,9 @@ public class ValueOutputController {
     		@RequestParam(value = "token",required = true) String token){
         return ValueOutputService.getValueOutputList(token);
     }
-    
+    /**
+     * app获取当前项目产值统计接口
+     * */
     @RequestMapping(value="/getValueOutputListnew",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<ValueOutputPojo> getValueOutputListnew(
@@ -46,7 +48,10 @@ public class ValueOutputController {
     		@RequestParam(value = "projectId",required = true) Long projectId){
         return ValueOutputService.getValueOutputListnew(token,projectId);
     }
-    
+    /**
+     * 
+     * app获取当前项目每个月的产值详情接口
+     * */
     @RequestMapping(value="/admin/getValueOutputByProjectId",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<ValueOutputPojo>> getValueOutputByProjectId(

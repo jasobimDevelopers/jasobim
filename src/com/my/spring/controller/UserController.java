@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSONArray;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.User;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
+import com.my.spring.model.UserSelect;
 import com.my.spring.service.UserService;
 import com.my.spring.utils.DataWrapper;
 
@@ -183,13 +183,13 @@ public class UserController {
         return userService.getUserLists(pageIndex,pageSize,user,token);
     }
 	//管理员获取用户列表
-		@RequestMapping(value="/getUserTeam", method = RequestMethod.GET)
-	    @ResponseBody
-	    public DataWrapper<List<UserPadPojo>> getUserTeam(
-	   	    		@RequestParam(value="token",required=true) String token,
-	   	    		@RequestParam(value="projectId",required=true) Long projectId) {
-	        return userService.getUserTeam(token,projectId);
-	    }
+	@RequestMapping(value="/getUserTeam", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<UserPadPojo>> getUserTeam(
+   	    		@RequestParam(value="token",required=true) String token,
+   	    		@RequestParam(value="projectId",required=true) Long projectId) {
+        return userService.getUserTeam(token,projectId);
+    }
 	
 	//修改用户权限
 	@RequestMapping(value="/admin/changeUser/{userId}/type/{userType}", method = RequestMethod.POST)
@@ -267,6 +267,17 @@ public class UserController {
 	public DataWrapper<Void> getUserInfoSql(
 			@ModelAttribute User user) {
 		return userService.getUserInfoSql(user);
+    }
+	/*
+	 * 通过用户的职位名称查找用户
+	 * */
+	@RequestMapping(value="/getUserByWorkName" , method = RequestMethod.GET)
+	@ResponseBody
+	public DataWrapper<List<UserSelect>> getUserByWorkName(
+			@RequestParam(value="workName",required=true) String workName,
+			@RequestParam(value="projectId",required=false) Long projectId,
+			@RequestParam(value="token",required=true) String token) {
+		return userService.getUserByWorkName(token,workName,projectId);
     }
 
 }

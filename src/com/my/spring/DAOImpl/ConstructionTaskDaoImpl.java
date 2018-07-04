@@ -9,6 +9,7 @@ import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -39,12 +40,13 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<ConstructionTask>> getConstructionTasksList( Integer pageIndex, Integer pageSize, ConstructionTask constructionTask,Integer state,String userName,String s) {
+    public DataWrapper<List<ConstructionTask>> getConstructionTasksList( Integer pageIndex, Integer pageSize, ConstructionTask constructionTask,Integer state,String userName,String s,Long id) {
         DataWrapper<List<ConstructionTask>> retDataWrapper = new DataWrapper<List<ConstructionTask>>();
         List<ConstructionTask> ret = new ArrayList<ConstructionTask>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(ConstructionTask.class);
         criteria.addOrder(Order.desc("createDate"));
+        Disjunction res = Restrictions.disjunction() ; 
         if(constructionTask.getId()!=null){
         	criteria.add(Restrictions.eq("id",constructionTask.getId()));
         }
@@ -54,15 +56,24 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
         if(constructionTask.getOthersAttention()!=null){
         	criteria.add(Restrictions.like("companyName", "%"+constructionTask.getOthersAttention()+"%"));
         }
+        res.add(Restrictions.like("workPeopleNameList", "%"+id+"%"));
         if(constructionTask.getCompanyName()!=null){
         	criteria.add(Restrictions.like("companyName", "%"+constructionTask.getCompanyName()+"%"));
         }
         if(constructionTask.getNextReceivePeopleId()!=null){
         	criteria.add(Restrictions.like("nextReceivePeopleId", "%"+constructionTask.getNextReceivePeopleId()+"%"));
         }
-    	criteria.add(Restrictions.or(Restrictions.like("approvalPeopleName", "%"+constructionTask.getApprovalPeopleName()+"%"),
-                Restrictions.eq("nextReceivePeopleId", s),
-                Restrictions.eq("createUserName", userName)));
+        if(constructionTask.getApprovalPeopleName()!=null){
+        	res.add(Restrictions.like("approvalPeopleName", "%"+constructionTask.getApprovalPeopleName()+"%"));
+        }
+        if(s!=null){
+        	res.add(Restrictions.eq("nextReceivePeopleId", s));	
+        }
+        if(userName!=null){
+        	res.add(Restrictions.eq("createUserName", userName));
+                   
+        }
+        criteria.add(res);
         if(constructionTask.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", constructionTask.getProjectId()));
         }

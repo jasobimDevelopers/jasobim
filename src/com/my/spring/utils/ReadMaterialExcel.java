@@ -106,6 +106,42 @@ public class ReadMaterialExcel {
    * @param fielName
    * @return
    */
+  public List<ImportMaterial> getExcelInfoByStream(String fileName,InputStream is){
+       //初始化客户信息的集合    
+       List<ImportMaterial> elementList=new ArrayList<ImportMaterial>();
+       try{
+          //验证文件名是否合格
+          if(!validateExcel(fileName)){
+              return null;
+          }
+          //根据文件名判断文件是2003版本还是2007版本
+          boolean isExcel2003 = true; 
+          if(WDWUtil.isExcel2007(fileName)){
+              isExcel2003 = false;  
+          }
+          //根据excel里面的内容读取客户信息
+          elementList = getExcelInfo(is, isExcel2003); 
+          is.close();
+      }catch(Exception e){
+          e.printStackTrace();
+      } finally{
+          if(is !=null)
+          {
+              try{
+                  is.close();
+              }catch(IOException e){
+                  is = null;    
+                  e.printStackTrace();  
+              }
+          }
+      }
+      return elementList;
+  }
+  /**
+   * 读EXCEL文件，获取客户信息集合
+   * @param fielName
+   * @return
+   */
   public List<ImportMaterial> getExcelInfo(MultipartFile Mfile){
       
       //把spring文件上传的MultipartFile转换成CommonsMultipartFile类型

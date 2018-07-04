@@ -26,12 +26,18 @@ import com.my.spring.model.Project;
 import com.my.spring.model.AttenceModel;
 import com.my.spring.model.Files;
 import com.my.spring.model.Mechanic;
+import com.my.spring.model.MechanicData;
+import com.my.spring.model.MechanicDataOfHour;
+import com.my.spring.model.MechanicDataPeople;
 import com.my.spring.model.MechanicPojo;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
 import com.my.spring.model.ValueOutput;
 import com.my.spring.parameters.Parameters;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.MechanicPriceService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.DateDemo;
 import com.my.spring.utils.InstanceUtil;
@@ -50,7 +56,7 @@ public class MechanicPriceServiceImpl implements MechanicPriceService{
     @Autowired
     AttenceModelDao attenceModelDao;
     @Autowired
-    UserLogDao userLogDao;
+    UserLogService userLogService;
     @Autowired
     FileService fileservice;
     @Autowired
@@ -63,6 +69,19 @@ public class MechanicPriceServiceImpl implements MechanicPriceService{
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(am.getMechanicId()!=null){
+				if(user.getSystemId()!=null){
+					if(am.getProjectId()!=null){
+						UserLog userLog = new UserLog();
+		    			userLog.setProjectPart(ProjectDatas.AttenceLog_area.getCode());
+		    			userLog.setActionDate(new Date());
+		    			userLog.setActionType(1);
+		    			userLog.setProjectId(am.getProjectId());
+		    			userLog.setUserId(user.getId());
+		    			userLog.setSystemType(user.getSystemId());
+		    			userLog.setVersion("3.0");
+		    			userLogService.addUserLog(userLog, token);
+					}
+				}
 				if(!mechanicPriceDao.addMechanicPrice(am)){
 					result.setErrorCode(ErrorCodeEnum.Error);
 				}
@@ -82,6 +101,19 @@ public class MechanicPriceServiceImpl implements MechanicPriceService{
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			List<MechanicPrice> list = JSONArray.parseArray(am, MechanicPrice.class);
+			if(user.getSystemId()!=null){
+				if(list.get(0).getProjectId()!=null){
+					UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(ProjectDatas.AttenceLog_area.getCode());
+	    			userLog.setActionDate(new Date());
+	    			userLog.setActionType(1);
+	    			userLog.setProjectId(list.get(0).getProjectId());
+	    			userLog.setUserId(user.getId());
+	    			userLog.setSystemType(user.getSystemId());
+	    			userLog.setVersion("3.0");
+	    			userLogService.addUserLog(userLog, token);
+				}
+			}
 			for( MechanicPrice mp:list){
 				MechanicPrice mps = mechanicPriceDao.getMechanicPriceLists(-1, 10, mp);
 				if(mps!=null){
@@ -220,6 +252,17 @@ public class MechanicPriceServiceImpl implements MechanicPriceService{
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(projectId!=null){
+				if(user.getSystemId()!=null){
+						UserLog userLog = new UserLog();
+		    			userLog.setProjectPart(ProjectDatas.AttenceLog_area.getCode());
+		    			userLog.setActionDate(new Date());
+		    			userLog.setActionType(0);
+		    			userLog.setProjectId(projectId);
+		    			userLog.setUserId(user.getId());
+		    			userLog.setSystemType(user.getSystemId());
+		    			userLog.setVersion("3.0");
+		    			userLogService.addUserLog(userLog, token);
+				}
 				Date now = new Date();
 		        String startday = null;
 		        String endday=null;
@@ -287,6 +330,78 @@ public class MechanicPriceServiceImpl implements MechanicPriceService{
     	}else{
     		result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
     	}
+		return result;
+	}
+
+	@Override
+	public DataWrapper<List<MechanicData>> getMechanicDatas(String token, Long projectId, String date) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<MechanicData>> result = new DataWrapper<List<MechanicData>>();
+		List<MechanicData> resultList = new ArrayList<MechanicData>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(user.getSystemId()!=null){
+				if(projectId!=null){
+					UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(ProjectDatas.MechanicPrice_area.getCode());
+	    			userLog.setActionDate(new Date());
+	    			userLog.setActionType(0);
+	    			userLog.setProjectId(projectId);
+	    			userLog.setUserId(user.getId());
+	    			userLog.setSystemType(user.getSystemId());
+	    			userLog.setVersion("3.0");
+	    			userLogService.addUserLog(userLog, token);
+				}
+			}
+			Date now = new Date();
+	        String startday = null;
+	        String endday=null;
+	        if(date!=null){
+				try {
+					startday = DateDemo.getMinMonthDate(date);
+					endday= DateDemo.getMaxMonthDate(date);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }else{
+	        	try {
+					startday = DateDemo.getMinMonthDate(Parameters.getSdfs().format(now));
+					endday= DateDemo.getMaxMonthDate(Parameters.getSdfs().format(now));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
+			List<MechanicDataOfHour> mechanicHourList = mechanicPriceDao.getMechanicHourByProjectId(startday,endday,projectId);
+			List<MechanicDataPeople> mechanicPeopleList = mechanicPriceDao.getMechanicPeopleByProjectId(startday, endday, projectId);
+			if(mechanicHourList!=null){
+				if(!mechanicHourList.isEmpty()){
+					for(MechanicDataOfHour mdh:mechanicHourList){
+						MechanicData md = new MechanicData();
+						md.setDate(Parameters.getSdfs().format(mdh.getCreate_date()));
+						md.setNum(mdh.getHours());
+						md.setType(1);
+						resultList.add(md);
+					}
+				}
+			}
+			if(mechanicPeopleList!=null){
+				if(!mechanicPeopleList.isEmpty()){
+					for(MechanicDataPeople mdh:mechanicPeopleList){
+						MechanicData md = new MechanicData();
+						md.setDate(Parameters.getSdfs().format(mdh.getCreate_date()));
+						md.setNum(mdh.getPeople_num());
+						md.setType(0);
+						resultList.add(md);
+					}
+				}
+			}
+			result.setData(resultList);
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		
 		return result;
 	}
 

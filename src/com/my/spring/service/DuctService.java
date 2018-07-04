@@ -1,6 +1,8 @@
 package com.my.spring.service;
 
 import com.my.spring.model.Duct;
+import com.my.spring.model.DuctAppPojo;
+import com.my.spring.model.DuctConfig;
 import com.my.spring.model.DuctPojo;
 import com.my.spring.model.DuctPojos;
 import com.my.spring.utils.DataWrapper;
@@ -24,4 +26,7 @@ public interface DuctService {
 	DataWrapper<DuctPojo> getDuctBySelfId(Long selfId,String id,Long projectId);
 	DataWrapper<List<DuctPojos>> getDuctStateSum(String dateStart, String dateFinished, Duct duct, String token,
 			String content);
+	DataWrapper<List<DuctAppPojo>> getDuctNums(Long projectId, String token, Integer floorNum, Integer state,
+			Integer professionType);
+	DataWrapper<List<DuctConfig>> getConfigDatas(Long projectId, String token);
 }

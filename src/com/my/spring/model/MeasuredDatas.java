@@ -15,6 +15,7 @@ public class MeasuredDatas {
 	private String inputData;
 	private Long measuredDataId;
 	
+	
 	@Id
     @GeneratedValue
     @Column(name = "id")
@@ -96,5 +97,7 @@ public class MeasuredDatas {
 	public void setMeasuredDataId(Long measuredDataId) {
 		this.measuredDataId = measuredDataId;
 	}
+	
+	
 	
 }

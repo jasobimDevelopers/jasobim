@@ -19,5 +19,5 @@ public interface NormativefilesService {
 	DataWrapper<Void> addNormativefiles(Normativefiles Normativefiles, String token, MultipartFile[] fileList,
 			Integer fileType, HttpServletRequest request);
 	DataWrapper<List<NormativefilesPojos>> getNormativefilesLists(String token, Integer pageIndex, Integer pageSize,
-			Normativefiles ps);
+			Normativefiles ps,Long projectId);
 }

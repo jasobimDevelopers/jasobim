@@ -7,6 +7,7 @@ public class UserLogPojo {
 	private String projectPart;//#0.模型区域 1.图纸区域 2.登录区域 3.交底区域 4.预制化区域 5.没有
 	private String version;
 	private String actionDate;
+	private Integer actionType;//0.浏览 1.新增 2.登录 3.更新
 	private String systemType;//0.苹果系统  1.安卓系统
 	private String fileName;
 	
@@ -62,6 +63,12 @@ public class UserLogPojo {
 	}
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+	public Integer getActionType() {
+		return actionType;
+	}
+	public void setActionType(Integer actionType) {
+		this.actionType = actionType;
 	}
 	
 

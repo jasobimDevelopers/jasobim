@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.my.spring.model.DuctPojos;
 import com.my.spring.model.UserLog;
+import com.my.spring.model.UserLogMonth;
+import com.my.spring.model.UserLogPart;
 import com.my.spring.model.UserLogPojo;
 import com.my.spring.model.UserLogPojos;
 import com.my.spring.service.UserLogService;
@@ -48,7 +49,7 @@ public class UserLogController {
     		@RequestParam(value="token",required=true) String token) {
 	        return userLogService.deleteUserLog(userLogId,token);
     }
-
+	
 	//管理员获取用户列表
 	@RequestMapping(value="/admin/getUserLogList", method = RequestMethod.GET)
     @ResponseBody
@@ -57,10 +58,12 @@ public class UserLogController {
             @RequestParam(value = "dateFinished",required = false) String dateFinished,
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@RequestParam(value="projectIds",required=false) String projectIds,
+    		@RequestParam(value="userIds",required=false) String userIds,
     		@ModelAttribute UserLog UserLog,
     		@RequestParam(value="token",required=true) String token,
     		@RequestParam(value="searchContent",required=false) String searchContent) {
-        return userLogService.getUserLogList(pageIndex,pageSize,UserLog,token,dateStart,dateFinished,searchContent);
+        return userLogService.getUserLogList(pageIndex,pageSize,UserLog,token,dateStart,dateFinished,searchContent,projectIds,userIds);
     }
 	  
     @RequestMapping(value="/getUserLogCountSum",method=RequestMethod.GET)
@@ -100,7 +103,32 @@ public class UserLogController {
     public DataWrapper<List<UserLog>> readUserLogFromFile(){
         return userLogService.readUserLogFromFile();
     }
-    
+    /**
+     * 
+     * 新版本的web打点页面接口
+     * 项目分析之各功能区域占比
+     * */
+    @RequestMapping(value="/admin/countUserLogByPart",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<UserLogPart>> countUserLogByMonth(
+    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="startTime",required=false) String startTime,
+    		@RequestParam(value="finishedTime",required=false) String finishedTime,
+    		@RequestParam(value="projectIdList",required=false) String projectIdList){
+        return userLogService.countUserLogByPart(token,startTime,finishedTime,projectIdList);
+    }
+    /**
+     * 
+     * 新版本的web打点页面接口
+     * 项目分析之各项目按月统计
+     * */
+    @RequestMapping(value="/admin/countUserLogByMonth",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<UserLogMonth>> countUserLogByMonth(
+    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="projectIdList",required=false) String projectIdList){
+        return userLogService.countUserLogByMonth(token,projectIdList);
+    }
     
 
 }

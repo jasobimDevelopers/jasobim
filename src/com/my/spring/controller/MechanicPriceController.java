@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.my.spring.model.MechanicData;
 import com.my.spring.model.MechanicPrice;
 import com.my.spring.model.MechanicPricePojo;
 import com.my.spring.model.MechanicPricePojos;
@@ -95,5 +97,18 @@ public class MechanicPriceController {
             @RequestParam(value = "date",required = false) String date,
     		@ModelAttribute MechanicPrice ps){
         return amService.exportMechanicNum(token,projectId,date);
+    }
+    /**
+     * app劳动力监测接口
+     * 
+     * */
+    @RequestMapping(value="/app/getMechanicDatas", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<MechanicData>> getMechanicDatas(
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "date",required = false) String date,
+    		@ModelAttribute MechanicPrice ps){
+        return amService.getMechanicDatas(token,projectId,date);
     }
 }

@@ -201,7 +201,7 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
         if (userInMemory != null) {
         		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
         			UserLog userLog = new UserLog();
-        			userLog.setProjectPart(ProjectDatas.AdvancedOrder_area.getCode());
+        			//userLog.setProjectPart(ProjectDatas.AdvancedOrder_area.getCode());
         			userLog.setActionDate(new Date());
         			userLog.setUserId(userInMemory.getId());
         			userLog.setSystemType(userInMemory.getSystemId());

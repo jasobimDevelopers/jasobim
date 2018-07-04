@@ -1,29 +1,16 @@
 package com.my.spring.serviceImpl;
 
-import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.FileDao;
-import com.my.spring.DAO.ItemDao;
-import com.my.spring.DAO.MinItemDao;
 import com.my.spring.DAO.ProjectDao;
-import com.my.spring.DAO.QuantityDao;
 import com.my.spring.DAO.QuestionFileDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.AdvancedOrderCopy;
-import com.my.spring.model.Building;
 import com.my.spring.model.CommonNotice;
 import com.my.spring.model.ConstructionTaskCopy;
-import com.my.spring.model.ConstructionTaskPojo;
 import com.my.spring.model.Files;
-import com.my.spring.model.Item;
-import com.my.spring.model.MinItem;
-import com.my.spring.model.MinItemPojo;
 import com.my.spring.model.Notice;
-import com.my.spring.model.Project;
-import com.my.spring.model.Quantity;
-import com.my.spring.model.QuantityPojo;
 import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.model.User;
@@ -32,31 +19,21 @@ import com.my.spring.parameters.Parameters;
 import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.AdvancedOrderService;
 import com.my.spring.service.ConstructionTaskService;
-import com.my.spring.service.FileService;
-import com.my.spring.service.ItemService;
 import com.my.spring.service.NoticeService;
 import com.my.spring.service.QualityQuestionService;
 import com.my.spring.service.QuestionService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
-import com.my.spring.utils.MD5Util;
-import com.my.spring.utils.QRCodeUtil2;
 import com.my.spring.utils.SessionManager;
 
 import net.sf.json.JSONArray;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Service("noticeService")
 public class NoticeServiceImpl implements NoticeService {
@@ -72,6 +49,8 @@ public class NoticeServiceImpl implements NoticeService {
 	ProjectDao projectDao;
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	UserLogService userLogService;
 	@Autowired
 	FileDao fileDao;
 	@Autowired
@@ -112,6 +91,16 @@ public class NoticeServiceImpl implements NoticeService {
 		List<CommonNotice> result = new ArrayList<CommonNotice>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
+			if(user.getSystemId()!=null){
+				UserLog userLog = new UserLog();
+    			userLog.setProjectPart(ProjectDatas.Notification_area.getCode());
+    			userLog.setActionDate(new Date());
+    			userLog.setActionType(0);
+    			userLog.setUserId(user.getId());
+    			userLog.setSystemType(user.getSystemId());
+    			//userLog.setVersion("3.0");
+    			userLogService.addUserLog(userLog,token);
+    		}
 			DataWrapper<List<QuestionCopy>> questionCopy1 = new DataWrapper<List<QuestionCopy>>();
 			DataWrapper<List<QuestionCopy>> questionCopy2 = new DataWrapper<List<QuestionCopy>>();
 			DataWrapper<List<AdvancedOrderCopy>> advancedOrderCopy = new DataWrapper<List<AdvancedOrderCopy>>();

@@ -46,7 +46,6 @@ public class MechanicController {
     }
     @RequestMapping(value="/deleteMechanic",method=RequestMethod.GET)
     @ResponseBody
-    
     public DataWrapper<Void> deleteMechanic(
             @RequestParam(value = "id",required = true) Long id,
             @RequestParam(value = "token",required = true) String token){

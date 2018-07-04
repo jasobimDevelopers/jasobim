@@ -14,6 +14,7 @@ public class ValueOutputPojo {
 	private String projectName;///项目名称
 	private Long project_id;////项目id
 	private Integer year;
+	private String leader;///项目负责人
 	
 
 	public Long getId(){
@@ -103,6 +104,14 @@ public class ValueOutputPojo {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public String getLeader() {
+		return leader;
+	}
+
+	public void setLeader(String leader) {
+		this.leader = leader;
 	}
 
 	

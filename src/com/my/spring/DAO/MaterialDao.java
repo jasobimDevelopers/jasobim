@@ -13,4 +13,5 @@ public interface MaterialDao {
 	boolean deleteMaterial(Long id);
 	boolean updateMaterial(Material m);
 	boolean addMaterialList(List<Material> mst);
+	Material getFindMaterial(Material m);
 }

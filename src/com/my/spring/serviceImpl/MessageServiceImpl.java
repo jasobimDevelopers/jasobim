@@ -12,10 +12,7 @@ import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.jpush.PushExample;
-import com.my.spring.jpush.PushExamples;
-import com.my.spring.model.ConstructionTaskPojo;
 import com.my.spring.model.Files;
-import com.my.spring.model.MechanicPricePojo;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageCopy;
 import com.my.spring.model.MessageCopyPojo;
@@ -26,23 +23,17 @@ import com.my.spring.model.Project;
 import com.my.spring.model.QualityQuestion;
 import com.my.spring.model.Question;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.MessageService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
-
-import cn.jiguang.common.resp.APIConnectionException;
-import cn.jiguang.common.resp.APIRequestException;
-import cn.jpush.api.JPushClient;
-import cn.jpush.api.push.PushResult;
-import cn.jpush.api.push.model.PushPayload;
-import scala.xml.PrettyPrinter.Para;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.text.SimpleDateFormat;
@@ -69,6 +60,8 @@ public class MessageServiceImpl implements MessageService {
     ProjectDao projectDao;
 	@Autowired
     UserDao userDao;
+	@Autowired
+	UserLogService userLogService;
     @Autowired
     FileService fileService;
     private String filePath = "/files";
@@ -81,6 +74,21 @@ public class MessageServiceImpl implements MessageService {
         QualityQuestion quality = new QualityQuestion();
         if (userInMemory != null) {
 				if(message!=null){
+					if(userInMemory.getSystemId()!=null){
+						UserLog userLog = new UserLog();
+						if(message.getQuestionType()==0){
+							userLog.setProjectPart(ProjectDatas.Quality_area.getCode());
+						}
+		    			if(message.getQuestionType()==1){
+		    				userLog.setProjectPart(ProjectDatas.Question_area.getCode());
+		    			}
+		    			userLog.setActionDate(new Date());
+		    			userLog.setActionType(1);
+		    			userLog.setUserId(userInMemory.getId());
+		    			userLog.setSystemType(userInMemory.getSystemId());
+		    			//userLog.setVersion("3.0");
+		    			userLogService.addUserLog(userLog,token);
+		    		}
 					message.setUserId(userInMemory.getId());
 					message.setMessageDate(new Date());
 					if(messageDao.addMessage(message)) 
@@ -762,6 +770,16 @@ public class MessageServiceImpl implements MessageService {
 		List<MessageCopyPojo> resultPojo = new ArrayList<MessageCopyPojo>();
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null){
+			if(userInMemory.getSystemId()!=null){
+				UserLog userLog = new UserLog();
+    			userLog.setProjectPart(ProjectDatas.Notification_area.getCode());
+    			userLog.setActionDate(new Date());
+    			userLog.setActionType(0);
+    			userLog.setUserId(userInMemory.getId());
+    			userLog.setSystemType(userInMemory.getSystemId());
+    			//userLog.setVersion("3.0");
+    			userLogService.addUserLog(userLog,token);
+    		}
 			result = messageDao.getMessageListNotRead(userInMemory.getId(),pageSize,pageIndex);
 			if(result.size()>0){
 				if(result.get(0).getId()!=null){

@@ -7,6 +7,8 @@ import com.my.spring.model.User;
 public class SessionManager {
     private static int KEY_COUNT = 0;
     private static HashMap<String, User> USER_SESSION_MAP = new HashMap<String, User>();
+    private static int KEY_WECHAT_COUNT = 0;
+    private static HashMap<String, String> WECHAT_SESSION_MAP = new HashMap<String, String>();
     public static String newSession(User user) {
         String sessionKey = UUIDGenerator.getCode("SK");
         ++KEY_COUNT;
@@ -16,8 +18,20 @@ public class SessionManager {
         USER_SESSION_MAP.put(sessionKey, user);       
         return sessionKey;
     }
+    public static String newWechatSession(String dates,String wechatUrl) {
+        String sessionKey = dates;
+        ++KEY_WECHAT_COUNT;
+        if (KEY_WECHAT_COUNT >= 10000000) {
+        	KEY_WECHAT_COUNT = 0;
+        }
+        WECHAT_SESSION_MAP.put(sessionKey, wechatUrl);       
+        return sessionKey;
+    }
     public static User getSession(String key) {
         return USER_SESSION_MAP.get(key);
+    }
+    public static String getWechatSession(String key) {
+        return WECHAT_SESSION_MAP.get(key);
     }
     public static String getSessionByUserID(Long userId){
         Set<String> set = USER_SESSION_MAP.keySet();
@@ -31,6 +45,12 @@ public class SessionManager {
         if (USER_SESSION_MAP.containsKey(key)) {
             //log.info("Session Destroyed! Key:" + key);
             USER_SESSION_MAP.remove(key);
+        }
+    }
+    public static void removeWechatSession(String key) {
+        if (WECHAT_SESSION_MAP.containsKey(key)) {
+            //log.info("Session Destroyed! Key:" + key);
+        	WECHAT_SESSION_MAP.remove(key);
         }
     }
     /**

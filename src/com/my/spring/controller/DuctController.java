@@ -2,6 +2,9 @@ package com.my.spring.controller;
 
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Duct;
+import com.my.spring.model.DuctApp;
+import com.my.spring.model.DuctAppPojo;
+import com.my.spring.model.DuctConfig;
 import com.my.spring.model.DuctPojo;
 import com.my.spring.model.DuctPojos;
 import com.my.spring.service.DuctService;
@@ -120,5 +123,29 @@ public class DuctController {
             @RequestParam(value = "dateFinished",required = false) String dateFinished,
             HttpServletRequest request){
         return ductService.exportDuct(projectId, token, request, dateStart, dateFinished);
+    }
+    
+    /**
+     * 新版本的进程管理数据统计页面
+     * */
+    @RequestMapping(value="/app/getDuctNums",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<DuctAppPojo>> getDuctNums(
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "floorNum",required = false) Integer floorNum,
+            @RequestParam(value = "state",required = false) Integer state,
+            @RequestParam(value = "professionType",required = false) Integer professionType){
+        return ductService.getDuctNums(projectId, token, floorNum, state, professionType);
+    }
+    /**
+     * app进程管理的筛选数据获取
+     * */
+    @RequestMapping(value="/app/getConfigDatas",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<DuctConfig>> getConfigDatas(
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "token",required = true) String token){
+        return ductService.getConfigDatas(projectId, token);
     }
 }

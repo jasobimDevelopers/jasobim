@@ -1,6 +1,8 @@
 package com.my.spring.bimface.sdk.myController;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bimface.sdk.bean.response.CategoryBean;
 import com.my.spring.bimface.sdk.service.BimfaceService;
 import com.my.spring.utils.DataWrapper;
 
@@ -59,5 +62,16 @@ public class BimfaceController {
     		@RequestParam(value="projectId",required=true) Long projectId,
     		HttpServletRequest request){
         return bimfaceService.getModeViewTokenByIntegrateId(integrateId,request,token,projectId);
+    }
+    /*
+     * 根据fileId获取模型的专业分类构件信息
+     * */
+    @RequestMapping(value="/getCategory",method= RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<CategoryBean>> getCategory(
+    		@RequestParam(value="fileId",required=true) Long fileId,
+    		@RequestParam(value="token",required=false) String token,
+    		@RequestParam(value="projectId",required=false) Long projectId){
+        return bimfaceService.getCategory(fileId,token,projectId);
     }
 }

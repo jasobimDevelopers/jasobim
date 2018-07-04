@@ -22,8 +22,8 @@ public class Config {
     private int                 connectTimeout      = BimfaceConstants.DEFAULT_CONNECT_TIMEOUT;
     private int                 readTimeout         = BimfaceConstants.DEFAULT_WRITE_TIMEOUT;
     private int                 writeTimeout        = BimfaceConstants.DEFAULT_RESPONSE_TIMEOUT;
-    public static final String APP_KEY="OWmpvu5oCSHliFJuOJGFBscAtPPZcsBW";
-    public static final String APP_SECRET="SAiqdPlw5AI72SvARjkG7TJHWzAUwkeB";
+    private static final String APP_KEY="OWmpvu5oCSHliFJuOJGFBscAtPPZcsBW";
+    private static final String APP_SECRET="SAiqdPlw5AI72SvARjkG7TJHWzAUwkeB";
 
     /**
      * 构造用户代理。
@@ -168,4 +168,12 @@ public class Config {
     public void setWriteTimeout(int writeTimeout) {
         this.writeTimeout = writeTimeout;
     }
+
+	public String getAppSecret() {
+		return APP_SECRET;
+	}
+
+	public String getAppKey() {
+		return APP_KEY;
+	}
 }

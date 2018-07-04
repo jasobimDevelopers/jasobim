@@ -4,6 +4,8 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.DuctDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Duct;
+import com.my.spring.model.DuctApp;
+import com.my.spring.model.DuctFloorInfo;
 import com.my.spring.model.DuctPojos;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -327,6 +329,63 @@ public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {
 	        }
 		 
 		return dataWrapper;
+	}
+
+	@Override
+	public List<DuctApp> getDuctNumsOfApp(Long projectId, Integer floorNum, Integer state, Integer professionType) {
+		List<DuctApp> ret=new ArrayList<DuctApp>();
+		String sql = "select id,name,size,service_type,profession_type,family_and_type,self_id,date,state,count(*) as nums,"
+		+"sum(area) as areas,sum(length) as lengths from duct where project_id="+projectId;
+		if(floorNum!=null){
+			sql=sql+" and floor_num="+floorNum;
+		}
+		if(state!=null){
+			sql=sql+" and state="+state;
+		}
+		if(professionType!=null){
+			sql=sql+" and profession_type="+professionType;
+		}
+		sql=sql+" GROUP BY state,name,service_type,family_and_type,size";
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("id", StandardBasicTypes.LONG)
+					 .addScalar("name", StandardBasicTypes.STRING)
+					 .addScalar("size", StandardBasicTypes.STRING)
+					 .addScalar("service_type", StandardBasicTypes.STRING)
+					 .addScalar("family_and_type", StandardBasicTypes.STRING)
+					 .addScalar("profession_type", StandardBasicTypes.INTEGER)
+					 .addScalar("self_id", StandardBasicTypes.STRING)
+					 .addScalar("date", StandardBasicTypes.DATE)
+					 .addScalar("state", StandardBasicTypes.INTEGER)
+					 .addScalar("nums", StandardBasicTypes.INTEGER)
+					 .addScalar("areas", StandardBasicTypes.DOUBLE)
+					 .addScalar("lengths", StandardBasicTypes.DOUBLE)
+					 .setResultTransformer(Transformers.aliasToBean(DuctApp.class));
+			  	ret=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return ret;
+	}
+
+	@Override
+	public List<DuctFloorInfo> getFloorNumInfo(Long projectId) {
+		List<DuctFloorInfo> ret=new ArrayList<DuctFloorInfo>();
+		String sql = "select floor_num,model_flag from duct where project_id="+projectId+" GROUP BY floor_num";
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("floor_num", StandardBasicTypes.INTEGER)
+					 .addScalar("model_flag", StandardBasicTypes.STRING)
+					 .setResultTransformer(Transformers.aliasToBean(DuctFloorInfo.class));
+			  	ret=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return ret;
 	}
 
 

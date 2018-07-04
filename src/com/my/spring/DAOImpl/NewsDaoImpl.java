@@ -6,6 +6,7 @@ import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -13,9 +14,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 @Repository
 public class NewsDaoImpl extends BaseDao<News> implements NewsDao {
 
@@ -107,6 +105,23 @@ public class NewsDaoImpl extends BaseDao<News> implements NewsDao {
 	public News getById(Long id) {
 		// TODO Auto-generated method stub
 		return get(id);
+	}
+
+	@Override
+	public News getNewsEarly() {
+	 List<News> ret = null;
+	 Session session = getSession();
+     Criteria criteria = session.createCriteria(News.class);
+     criteria.addOrder(Order.desc("newsDate"));
+     try {
+         ret = criteria.list();
+     }catch (Exception e){
+         e.printStackTrace();
+     }
+     if (ret != null && ret.size() > 0) {
+    	 return ret.get(0);
+	 }
+		return null;
 	}
 
 	

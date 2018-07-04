@@ -81,7 +81,6 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 							
 						}
 					}
-					
 				}
 				if(!filesUrlList.equals("")){
 					constructionTask.setFileIdList(filesUrlList);
@@ -134,11 +133,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 					PushExample.testSendPushWithCustomConfig_ios(userids, content,2,hq);
 					PushExample.testSendPushWithCustomConfig_android(userids, content,2,hq);
 				}
-		///////////////////////////
-				
-				
-					
-
+				///////////////////////////
 				///////////////////////////////
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -199,7 +194,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
         if (userInMemory != null) {
         	if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
     			UserLog userLog = new UserLog();
-    			userLog.setProjectPart(ProjectDatas.ConstructionTask_area.getCode());
+    			//userLog.setProjectPart(ProjectDatas.ConstructionTask_area.getCode());
     			userLog.setActionDate(new Date());
     			userLog.setUserId(userInMemory.getId());
     			userLog.setSystemType(userInMemory.getSystemId());
@@ -225,7 +220,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
     		if(ConstructionTask.getCreateUserName()==null && userInMemory.getUserType()==3){
     			ConstructionTask.setCreateUserName(userInMemory.getRealName());
     		}
-			dataWrapper=constructionTaskDao.getConstructionTasksList(pageIndex,pageSize,ConstructionTask,state,userInMemory.getRealName(),NextReceivePeopleId);
+			dataWrapper=constructionTaskDao.getConstructionTasksList(pageIndex,pageSize,ConstructionTask,state,userInMemory.getRealName(),NextReceivePeopleId,userInMemory.getId());
 			if(dataWrapper.getData()!=null && dataWrapper.getData().size()>0){
 				if(ConstructionTask.getId()!=null){
 					Notice notice = noticeDao.getByAdoutIdAndUserId(userInMemory.getId(), ConstructionTask.getId(), 2);

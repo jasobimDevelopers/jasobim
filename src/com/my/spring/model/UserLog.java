@@ -15,12 +15,14 @@ public class UserLog {
 	private Long id;
 	private Long userId;
 	private Long projectId;
-	private Integer projectPart; //0.Model(模型) 1.Paper,//图纸   2.Login,//登录  3.Disclose,//交底   4.Prefabricate,//预制化   
-								//5.Question,//紧急事项（问题）6.Notification,//通知 7.Production,//产值    8.Member,//班组信息 
+	private Integer projectPart;///针对手机端的功能区域 //0.Model(模型) 1.Paper,//图纸   2.首页//登录  3.Disclose,//项目交底   4.Prefabricate,//进度管理  
+								//5.Question,//安全问题 6.Notification,//消息通知 7.Production,//统计管理（产值）    8.UserInfo,//个人中心
+								//9.NewsInfo 新闻资讯 10.质量问题  11.实测实量 12.云盘协同  13.物资管理 14.劳动力监测 15.工程量变更 16.考勤管理 17.规范查阅 18.流程管理 
 	private String version;
 	private Date actionDate;
-	private Integer systemType;//0.苹果系统  1.安卓系统
+	private Integer systemType;//0.苹果系统  1.安卓系统 2.web
 	private Long fileId;//////模块区域下的文件id
+	private Integer actionType;//0.浏览  1.增加 2.登录 3.修改
 	
 	@Id
     @GeneratedValue
@@ -87,6 +89,15 @@ public class UserLog {
 	}
 	public void setSystemType(Integer systemType) {
 		this.systemType = systemType;
+	}
+	
+	@Basic
+	@Column(name="action_type")
+	public Integer getActionType() {
+		return actionType;
+	}
+	public void setActionType(Integer actionType) {
+		this.actionType = actionType;
 	}
 	
 

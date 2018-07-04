@@ -29,7 +29,8 @@ public class MeasuredData {
 	private String quantiter;
 	private Date createDate;
 	private String submiteUser;
-	
+	private Long projectId;
+	private Integer excelType;///0、预埋阶段  1、二结构阶段  2、装饰阶段
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
@@ -217,5 +218,21 @@ public class MeasuredData {
 	}
 	public void setCheckMoreUser(String checkMoreUser) {
 		this.checkMoreUser = checkMoreUser;
+	}
+	@Basic
+	@Column(name = "excel_type")
+	public Integer getExcelType() {
+		return excelType;
+	}
+	public void setExcelType(Integer excelType) {
+		this.excelType = excelType;
+	}
+	@Basic
+	@Column(name = "project_id")
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 }

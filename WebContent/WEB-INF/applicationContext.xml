@@ -115,6 +115,14 @@
                	<value>com.my.spring.model.SafeFine</value>
                	<value>com.my.spring.model.MaterialPlan</value>
                	<value>com.my.spring.model.Budget</value>
+               	<value>com.my.spring.model.WechatUrl</value>
+               	<value>com.my.spring.model.NewsInfo</value>
+               	<value>com.my.spring.model.MaterialImportLog</value>
+               	<value>com.my.spring.model.WorkType</value>
+               	<value>com.my.spring.model.ItemData</value>
+               	<value>com.my.spring.model.ProcessData</value>
+               	<value>com.my.spring.model.ProcessItem</value>
+               	<value>com.my.spring.model.ProcessLog</value>
             </list>
         </property>
     </bean>

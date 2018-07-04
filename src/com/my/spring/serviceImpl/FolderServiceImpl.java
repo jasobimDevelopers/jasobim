@@ -27,14 +27,19 @@ import org.springframework.web.multipart.MultipartFile;
 import com.alibaba.fastjson.JSONArray;
 import com.my.spring.DAO.FolderDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.Folder;
 import com.my.spring.model.FolderPojo;
+import com.my.spring.model.MaterialPojo;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.FolderService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.utils.CopyFilesExample;
 import com.my.spring.utils.CustomFileUtil;
 import com.my.spring.utils.DataWrapper;
@@ -49,6 +54,8 @@ public class FolderServiceImpl implements FolderService  {
 	FolderDao folderDao;
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	UserLogService userLogService;
 	@Autowired
 	FileService fileService;
 	private String filePaths="fileUploads/folderFiles/";
@@ -321,6 +328,17 @@ public class FolderServiceImpl implements FolderService  {
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(projectId!=null){
+				if(user.getSystemId()!=null){
+	    			UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(ProjectDatas.FileManager_area.getCode());
+	    			userLog.setActionDate(new Date());
+	    			userLog.setActionType(0);
+	    			userLog.setUserId(user.getId());
+	    			userLog.setSystemType(user.getSystemId());
+	    			//userLog.setVersion("3.0");
+	    			userLog.setProjectId(projectId);
+	    			userLogService.addUserLog(userLog,token);
+	    		}
 				resultGet=folderDao.getFolderListLike(projectId, name);
 				if(!resultGet.isEmpty()){
 					for(Folder floder:resultGet){
@@ -351,6 +369,10 @@ public class FolderServiceImpl implements FolderService  {
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+		if(result.getCallStatus()==CallStatusEnum.SUCCEED && result.getData()==null){
+	       	List<FolderPojo> pas= new ArrayList<FolderPojo>();
+	       	result.setData(pas);
+	    }
 		return result;
 	}
 
@@ -375,6 +397,17 @@ public class FolderServiceImpl implements FolderService  {
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(projectId!=null){
+				if(user.getSystemId()!=null){
+	    			UserLog userLog = new UserLog();
+	    			userLog.setProjectPart(ProjectDatas.FileManager_area.getCode());
+	    			userLog.setActionDate(new Date());
+	    			userLog.setActionType(0);
+	    			userLog.setUserId(user.getId());
+	    			userLog.setSystemType(user.getSystemId());
+	    			//userLog.setVersion("3.0");
+	    			userLog.setProjectId(projectId);
+	    			userLogService.addUserLog(userLog,token);
+	    		}
 				resultGet=folderDao.getFolderIndexList(projectId, pid);
 				if(!resultGet.isEmpty()){
 					for(Folder floder:resultGet){
@@ -405,6 +438,10 @@ public class FolderServiceImpl implements FolderService  {
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+	    if(result.getCallStatus()==CallStatusEnum.SUCCEED && result.getData()==null){
+		 	List<FolderPojo> pas= new ArrayList<FolderPojo>();
+	       	result.setData(pas);
+	    }
 		return result;
 	}
 

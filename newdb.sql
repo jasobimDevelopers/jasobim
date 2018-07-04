@@ -256,3 +256,10 @@ create table budget(
 	user_id bigint(20) unsigned not null,
 	project_id bigint(20) unsigned not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+create table wechat_url(
+	id serial primary key,
+	url text,
+	create_date datetime
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -1,5 +1,6 @@
 package com.my.spring.serviceImpl;
 
+import com.bimface.sdk.constants.CallbackStatus;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -13,11 +14,15 @@ import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
-import com.my.spring.model.DepartmentPojo;
 import com.my.spring.model.Duct;
+import com.my.spring.model.DuctApp;
+import com.my.spring.model.DuctAppPojo;
+import com.my.spring.model.DuctConfig;
+import com.my.spring.model.DuctFloorInfo;
 import com.my.spring.model.DuctLog;
 import com.my.spring.model.DuctPojo;
 import com.my.spring.model.DuctPojos;
+import com.my.spring.model.MaterialPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
@@ -58,7 +63,7 @@ public class DuctServiceImpl implements DuctService {
     @Autowired
     UserDao userDao;
     @Autowired
-    UserLogDao userLogDao;
+    UserLogService userLogService;
     @Autowired
     FileService fileSerivce;
     @Autowired
@@ -151,21 +156,6 @@ public class DuctServiceImpl implements DuctService {
     	DataWrapper<List<Duct>> ductListst=new  DataWrapper<List<Duct>>();
     	User userInMemory = SessionManager.getSession(token);
     	if(userInMemory!=null){
-    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
-    			UserLog userLog = new UserLog();
-    			userLog.setProjectPart(ProjectDatas.ProcessManager_area.getCode());
-    			userLog.setActionDate(new Date());
-    			userLog.setUserId(userInMemory.getId());
-    			userLog.setSystemType(userInMemory.getSystemId());
-    			//userLog.setVersion("3.0");
-    			if(duct.getProjectId()!=null){
-    				userLog.setProjectId(duct.getProjectId());
-    			}
-    			if(duct.getId()!=null){
-    				userLog.setFileId(duct.getId());
-    			}
-    			userLogDao.addUserLog(userLog);
-    		}
     		if(duct.getId()!=null && duct.getProjectId()!=null){
         		UserLog userLog = new UserLog();
         		userLog.setActionDate(new Date());
@@ -192,7 +182,6 @@ public class DuctServiceImpl implements DuctService {
 					e.printStackTrace();
 				}
     		}
-    		
     		ductListst=DuctDao.getDuctList(pageSize,pageIndex,duct,content,dateStarts, dateFinisheds);
     		ductList=ductListst.getData();
     		String projectName=null;
@@ -526,6 +515,114 @@ public class DuctServiceImpl implements DuctService {
 		}
 		// TODO Auto-generated method stub
 		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<DuctAppPojo>> getDuctNums(Long projectId, String token, Integer floorNum, Integer state,
+			Integer professionType) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<DuctAppPojo>> result = new DataWrapper<List<DuctAppPojo>>();
+		List<DuctApp> getList = new ArrayList<DuctApp>();
+		List<DuctAppPojo> resultList = new ArrayList<DuctAppPojo>();
+		User user = SessionManager.getSession(token);
+		String[] unitList={"个","平方米","毫米"};
+		if(user!=null){
+			if(user.getSystemId()!=null){
+    			UserLog userLog = new UserLog();
+    			userLog.setProjectPart(ProjectDatas.ValueOut_area.getCode());
+    			userLog.setActionDate(new Date());
+    			userLog.setActionType(0);
+    			userLog.setUserId(user.getId());
+    			userLog.setSystemType(user.getSystemId());
+    			//userLog.setVersion("3.0");
+    			userLog.setProjectId(projectId);
+    			userLogService.addUserLog(userLog,token);
+    		}
+			getList=DuctDao.getDuctNumsOfApp(projectId,floorNum,state,professionType);
+			if(getList!=null){
+				if(!getList.isEmpty()){
+					for(DuctApp da:getList){
+						DuctAppPojo dap = new DuctAppPojo();
+						dap.setId(da.getId());
+						dap.setDate(Parameters.getSdfs().format(da.getDate()));
+						if(da.getName().contains("配件") || da.getName().contains("管件")){
+							dap.setUnit(unitList[0]);
+							dap.setNums(da.getNums());
+						}
+						if(da.getName().contains("风管")){
+							dap.setUnit(unitList[1]);
+							dap.setArea(da.getAreas());
+						}
+						if((da.getName()).equals("电缆桥架")){
+							dap.setUnit(unitList[2]);
+							dap.setLengths(da.getLengths());
+						}
+						dap.setFamilyAndType(da.getFamily_and_type());
+						dap.setName(da.getName());
+						dap.setProfessionType(da.getProfession_type());
+						dap.setSelfId(da.getSelf_id());
+						dap.setServiceType(da.getService_type());
+						dap.setSize(da.getSize());
+						dap.setState(da.getState());
+						resultList.add(dap);
+					}
+					result.setData(resultList);
+				}
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		if(result.getCallStatus()==CallStatusEnum.SUCCEED && result.getData()==null){
+	       	List<DuctAppPojo> pas= new ArrayList<DuctAppPojo>();
+	       	result.setData(pas);
+	    }
+		return result;
+	}
+
+	@Override
+	public DataWrapper<List<DuctConfig>> getConfigDatas(Long projectId, String token) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<DuctConfig>> gets = new DataWrapper<List<DuctConfig>>();
+		List<DuctConfig> resultList = new ArrayList<DuctConfig>();
+		User user = SessionManager.getSession(token);
+		String[] professionList={"电气","暖通"};
+		String[] stateList={"未安装","已安装"};
+		if(user!=null){
+			for(int i=0;i<professionList.length;i++){
+				DuctConfig df = new DuctConfig();
+				df.setName(professionList[i]);
+				df.setAboutId(i);
+				df.setType(1);
+				resultList.add(df);
+			}
+			for(int i=0;i<stateList.length;i++){
+				DuctConfig dfs = new DuctConfig();
+				dfs.setName(stateList[i]);
+				dfs.setAboutId(i);
+				dfs.setType(0);
+				resultList.add(dfs);
+			}
+			List<DuctFloorInfo> get=DuctDao.getFloorNumInfo(projectId);
+			if(get!=null){
+				if(!get.isEmpty()){
+					for(DuctFloorInfo dfi:get){
+						DuctConfig dfs = new DuctConfig();
+						if(dfi.getFloor_num()<0){
+							dfs.setName("B"+(0-dfi.getFloor_num()));
+						}else{
+							dfs.setName("F"+dfi.getFloor_num());
+						}
+						dfs.setAboutId(dfi.getFloor_num());
+						dfs.setType(2);
+						resultList.add(dfs);
+					}
+				}
+			}
+			gets.setData(resultList);
+		}else{
+			gets.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return gets;
 	}
 
 		
