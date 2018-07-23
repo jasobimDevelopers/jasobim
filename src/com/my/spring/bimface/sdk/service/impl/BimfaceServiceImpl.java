@@ -58,7 +58,8 @@ public class BimfaceServiceImpl implements BimfaceService {
 		fileUploadRequest.setUrl("http://jasobim.com:8080/"+files.getUrl());
 		fileUploadRequest.setName(files.getName());
 		FileBean fileBean=new FileBean();
-		bimfaceClient =new BimfaceClient(config.getAppKey(),config.getAppSecret());
+		Config configs = new Config();
+		bimfaceClient =new BimfaceClient(configs.getAppKey(),configs.getAppSecret());
 		try {
 			fileBean=bimfaceClient.upload(fileUploadRequest);
 		} catch (BimfaceException e1) {
@@ -90,9 +91,10 @@ public class BimfaceServiceImpl implements BimfaceService {
 	public DataWrapper<String> getModeViewTokenByIntegrateId(Long integrateId, HttpServletRequest request, String token,
 			Long projectId) {
 				DataWrapper<String> test = new DataWrapper<String>();
+				Config configs = new Config();
 				String str="";
 				try {
-					bimfaceClient =new BimfaceClient(config.getAppKey(),config.getAppSecret());
+					bimfaceClient =new BimfaceClient(configs.getAppKey(),configs.getAppSecret());
 					str = bimfaceClient.getViewTokenByIntegrateId(integrateId);
 					test.setData(str);
 				} catch (BimfaceException e) {

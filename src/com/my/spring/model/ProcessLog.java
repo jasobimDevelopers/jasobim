@@ -13,6 +13,8 @@ public class ProcessLog {
 	private String note;
 	private Integer itemState;//节点的状态（同意、不同意）
 	private Date createDate;
+	private Long aboutId;//相关进程实体id
+	private Integer type;//0.施工任务单 1、预付单
 	
 	@Id
 	@GeneratedValue
@@ -86,6 +88,24 @@ public class ProcessLog {
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	
+	@Basic
+	@Column(name="about_id")
+	public Long getAboutId() {
+		return aboutId;
+	}
+	public void setAboutId(Long aboutId) {
+		this.aboutId = aboutId;
+	}
+	
+	@Basic
+	@Column(name="type")
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
 	}
 	
 	

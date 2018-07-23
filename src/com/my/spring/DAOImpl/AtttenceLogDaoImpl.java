@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import com.my.spring.DAO.AttenceLogDao;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.AttenceForgetFactLogs;
 import com.my.spring.model.AttenceLog;
 import com.my.spring.model.AttenceLogs;
 import com.my.spring.model.Department;
@@ -63,14 +64,15 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 			pageSize=10;
 		}*/
 		DataWrapper<List<AttenceLogs>> dataWrapper=new DataWrapper<List<AttenceLogs>>();
-	
-		String sql = "select forget_num, fact_num ,a.user_id,a.late_num as late_nums_f,a.leave_early_num as leave_early_nums_f,b.late_num as late_nums_s,b.leave_early_num as leave_early_nums_s from "
-		+"(select count(1) as forget_num,sum(late) as late_num,sum(leave_early) as leave_early_num, clock_flag,user_id from attence_log where (start_work_time is null or end_work_time is null) and project_id="+
-				+am.getProjectId()+" and create_date BETWEEN '"+String.valueOf(year)+"-"+String.valueOf(month)+"-01"+"' and '"
-		+String.valueOf(year)+"-"+String.valueOf(month+1)+"-01"+"' GROUP BY user_id) a "
-		+"left join (select count(1) as fact_num ,sum(late) as late_num,sum(leave_early) as leave_early_num,clock_flag,user_id from attence_log where (start_work_time is not null and end_work_time is not null) and project_id="
+		String sql = "select e.user_id,sum(e.late_num) as late_nums,sum(e.leave_early_num) as leave_early_nums from" 
+		+" (select sum(late) as late_num,sum(leave_early) as leave_early_num,1 as clock_flag,user_id from attence_log "
+		+"where (start_work_time is not null and end_work_time is not null) and project_id="+
+		+am.getProjectId()+" and create_date BETWEEN '"+String.valueOf(year)+"-"+String.valueOf(month)+"-01"+"' and '"
+		+String.valueOf(year)+"-"+String.valueOf(month+1)+"-01"+"' GROUP BY user_id UNION "
+		+"select sum(late) as late_num,sum(leave_early) as leave_early_num,2 as clock_flag,user_id from attence_log"
+		+" where (start_work_time is null or end_work_time is null) and project_id="
 		+am.getProjectId()+" and create_date BETWEEN '"+String.valueOf(year)+"-"+String.valueOf(month)+"-01"
-		+"' and '"+String.valueOf(year)+"-"+String.valueOf(month+1)+"-01"+"' GROUP BY user_id) b on a.user_id=b.user_id";
+		+"' and '"+String.valueOf(year)+"-"+String.valueOf(month+1)+"-01"+"' GROUP BY user_id) e GROUP BY e.user_id";
 		
 		/*if(pageIndex!=-1){
 			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
@@ -78,13 +80,9 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 		Session session=getSession();
 		 try{
 			 Query query = session.createSQLQuery(sql)
-					 .addScalar("forget_num", StandardBasicTypes.INTEGER)
-					 .addScalar("fact_num", StandardBasicTypes.INTEGER)
 					 .addScalar("user_id", StandardBasicTypes.LONG)
-					 .addScalar("late_nums_f", StandardBasicTypes.INTEGER)
-					 .addScalar("leave_early_nums_f", StandardBasicTypes.INTEGER)
-					 .addScalar("late_nums_s", StandardBasicTypes.INTEGER)
-					 .addScalar("leave_early_nums_s", StandardBasicTypes.INTEGER)
+					 .addScalar("late_nums", StandardBasicTypes.INTEGER)
+					 .addScalar("leave_early_nums", StandardBasicTypes.INTEGER)
 					 .setResultTransformer(Transformers.aliasToBean(AttenceLogs.class));
 			 dataWrapper.setData(query.list());
 	        }catch(Exception e){
@@ -220,6 +218,50 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 				}
 	        }
 			return null;
+	}
+	@Override
+	public DataWrapper<List<AttenceForgetFactLogs>> getForgetFactNumsList(Integer pageIndex, Integer pageSize,AttenceLog am,Integer year,Integer month) {
+		// TODO Auto-generated method stub
+		/*if(pageIndex==null){
+			pageIndex=1;
+		}
+		if(pageSize==null){
+			pageSize=10;
+		}*/
+		DataWrapper<List<AttenceForgetFactLogs>> dataWrapper=new DataWrapper<List<AttenceForgetFactLogs>>();
+		
+		String sql = "select e.user_id,sum(e.fact_num) as fact_nums,sum(e.forget_num) as forget_nums from "
+		+"(select count(1) as fact_num ,0 as forget_num,1 as clock_flag,user_id from attence_log" 
+	    +" where (start_work_time is not null and end_work_time is not null) and project_id="+
+		+am.getProjectId()+" and create_date BETWEEN '"+String.valueOf(year)+"-"+String.valueOf(month)+"-01"+"' and '"
+		+String.valueOf(year)+"-"+String.valueOf(month+1)+"-01"+"' GROUP BY user_id"
+		+" UNION select 0 as fact_num,count(1) as forget_num,2 as clock_flag,user_id from attence_log"
+		+" where (start_work_time is null or end_work_time is null) and project_id="
+		+am.getProjectId()+" and create_date BETWEEN '"+String.valueOf(year)+"-"+String.valueOf(month)+"-01"
+		+"' and '"+String.valueOf(year)+"-"+String.valueOf(month+1)+"-01"+"' GROUP BY user_id) e GROUP BY e.user_id";
+		
+		/*if(pageIndex!=-1){
+			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
+		}*/
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("forget_nums", StandardBasicTypes.INTEGER)
+					 .addScalar("fact_nums", StandardBasicTypes.INTEGER)
+					 .addScalar("user_id", StandardBasicTypes.LONG)
+					 .setResultTransformer(Transformers.aliasToBean(AttenceForgetFactLogs.class));
+			 dataWrapper.setData(query.list());
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+	    
+       /* result.setData(ret);
+        result.setTotalNumber(totalItemNum);
+        result.setCurrentPage(pageIndex);
+        result.setTotalPage(totalPageNum);
+        result.setNumberPerPage(pageSize);*/
+        return dataWrapper;
 	}
 
 }

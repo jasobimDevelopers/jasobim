@@ -10,6 +10,7 @@ import com.my.spring.model.ItemData;
 import com.my.spring.model.ItemDataPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ItemDataService;
 import com.my.spring.service.UserLogService;
@@ -95,29 +96,39 @@ public class ItemDataServiceImpl implements ItemDataService {
         	}
 				dataWrapper=ItemDataDao.getItemDataList(pageIndex,pageSize,ItemData);
 				if(dataWrapper.getData()!=null){
-					List<ItemDataPojo> ItemDataPojoList = new ArrayList<ItemDataPojo>();
-					for(int i=0;i<dataWrapper.getData().size();i++){
-						ItemDataPojo ItemDataPojo =new ItemDataPojo();
-						ItemDataPojo.setId(dataWrapper.getData().get(i).getId());
-						if(dataWrapper.getData().get(i).getCreateUser()!=null){
-							User user= new User();
-							user=userDao.getById(dataWrapper.getData().get(i).getCreateUser());
-							if(user!=null){
-								ItemDataPojo.setCreateUser(user.getUserName());
+					if(!dataWrapper.getData().isEmpty()){
+						List<ItemDataPojo> ItemDataPojoList = new ArrayList<ItemDataPojo>();
+						for(int i=0;i<dataWrapper.getData().size();i++){
+							ItemDataPojo ItemDataPojo =new ItemDataPojo();
+							ItemDataPojo.setApproveUser(userDao.getById(dataWrapper.getData().get(i).getApproveUser()).getRealName());
+							ItemDataPojo.setCreateDate(Parameters.getSdf().format(dataWrapper.getData().get(i).getCreateDate()));
+							ItemDataPojo.setName(dataWrapper.getData().get(i).getName());
+							ItemDataPojo.setId(dataWrapper.getData().get(i).getId());
+							if(dataWrapper.getData().get(i).getUpdateUser()!=null){
+								ItemDataPojo.setUpdateUser(userDao.getById(dataWrapper.getData().get(i).getUpdateUser()).getRealName());
+							}
+							if(dataWrapper.getData().get(i).getUpdateDate()!=null){
+								ItemDataPojo.setUpdateDate(Parameters.getSdf().format(dataWrapper.getData().get(i).getUpdateDate()));
+							}
+							ItemDataPojo.setWorkName(dataWrapper.getData().get(i).getWorkName().toString());
+							if(dataWrapper.getData().get(i).getCreateUser()!=null){
+								User user= new User();
+								user=userDao.getById(dataWrapper.getData().get(i).getCreateUser());
+								if(user!=null){
+									ItemDataPojo.setCreateUser(user.getRealName());
+								}
+							}
+							if(ItemDataPojo!=null){
+								ItemDataPojoList.add(ItemDataPojo);
 							}
 						}
-						if(ItemDataPojo!=null){
-							ItemDataPojoList.add(ItemDataPojo);
+						if(ItemDataPojoList!=null && ItemDataPojoList.size()>0){
+							dataWrappers.setData(ItemDataPojoList);
+							dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
+							dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
+							dataWrappers.setTotalPage(dataWrapper.getTotalPage());
+							dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
 						}
-					}
-					if(ItemDataPojoList!=null && ItemDataPojoList.size()>0){
-						dataWrappers.setData(ItemDataPojoList);
-						dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
-						dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
-						dataWrappers.setTotalPage(dataWrapper.getTotalPage());
-						dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
-					}else{
-						dataWrappers.setErrorCode(ErrorCodeEnum.Error);
 					}
 				}
 			}else{

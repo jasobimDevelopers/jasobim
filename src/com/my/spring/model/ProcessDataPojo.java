@@ -7,6 +7,9 @@ public class ProcessDataPojo {
 	private String createDate;
 	private String createUser;
 	private String projectId;
+	private Long currentApproveUser;
+	private Integer state;
+	private String currentItemName;
 	
 	public Long getId() {
 		return id;
@@ -48,6 +51,24 @@ public class ProcessDataPojo {
 	}
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+	public Long getCurrentApproveUser() {
+		return currentApproveUser;
+	}
+	public void setCurrentApproveUser(Long currentApproveUser) {
+		this.currentApproveUser = currentApproveUser;
+	}
+	public Integer getState() {
+		return state;
+	}
+	public void setState(Integer state) {
+		this.state = state;
+	}
+	public String getCurrentItemName() {
+		return currentItemName;
+	}
+	public void setCurrentItemName(String currentItemName) {
+		this.currentItemName = currentItemName;
 	}
 	
 	

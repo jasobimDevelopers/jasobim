@@ -23,7 +23,7 @@ public class AttenceLogController {
     AttenceLogService amService;
     @RequestMapping(value="/addAttenceLog", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Void> addAttenceLog(
+    public DataWrapper<String> addAttenceLog(
             @ModelAttribute AttenceLog am,
             @RequestParam(value = "lat",required = true) Double lat,/////打卡所在经度
             @RequestParam(value = "lng",required = true) Double lng,/////打卡所在纬度

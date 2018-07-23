@@ -166,7 +166,7 @@ public class AnvancedOrderDaoImpl extends BaseDao<AdvancedOrder> implements Adva
 		List<AdvancedOrderCopy> retDataWrapper = new ArrayList<AdvancedOrderCopy>();
 		String sql = "select a.id,a.project_name,a.create_date,a.submit_user_id,a.create_user_name,a.construct_part,a.quantity_des,a.month,"
 				+"a.project_id,a.status,a.content_files_id from advanced_order a,notice b where a.id=b.about_id and b.user_id="
-				+id+" and b.notice_type=3 and b.read_state=0";
+				+id+" and b.notice_type=3 and b.read_state=0 ORDER BY b.create_date DESC";
 		if(pageIndex!=-1){
 			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
 		}

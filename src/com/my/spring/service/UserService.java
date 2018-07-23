@@ -11,6 +11,7 @@ import com.my.spring.model.User;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
 import com.my.spring.model.UserSelect;
+import com.my.spring.model.UserSelectPojo;
 import com.my.spring.utils.DataWrapper;
 
 
@@ -37,6 +38,6 @@ public interface UserService {
 	DataWrapper<Void> getUserInfoSql(User user);
 	DataWrapper<Void> addUser(User user, String token, MultipartFile file, HttpServletRequest request,
 			String projectList);
-	DataWrapper<List<UserSelect>> getUserByWorkName(String token, String workName, Long projectId);
+	DataWrapper<List<UserSelectPojo>> getUserByWorkName(String token, String workName, Long projectId);
 	
 }

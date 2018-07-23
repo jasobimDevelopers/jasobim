@@ -1,6 +1,7 @@
 package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProcessDataDao;
+import com.my.spring.model.Notice;
 import com.my.spring.model.ProcessData;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -87,6 +88,25 @@ public class ProcessDataDaoImpl extends BaseDao<ProcessData> implements ProcessD
 	public ProcessData getById(Long id) {
 		// TODO Auto-generated method stub
 		return get(id);
+	}
+
+	@Override
+	public ProcessData getProcessDataByProjectId(Long projectId, Integer i) {
+		List<ProcessData> results= null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(ProcessData.class);
+        criteria.add(Restrictions.eq("projectId", projectId));
+        criteria.add(Restrictions.eq("type", i));
+        try {
+        	results = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(results.size()==0){
+        	return null;
+        }else{
+        	return results.get(0);
+        }
 	}	
 
 }

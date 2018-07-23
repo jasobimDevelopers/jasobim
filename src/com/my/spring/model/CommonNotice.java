@@ -1,5 +1,7 @@
 package com.my.spring.model;
 
+import java.util.Date;
+
 public class CommonNotice {
 	private Integer noticeType;
 	private String title;

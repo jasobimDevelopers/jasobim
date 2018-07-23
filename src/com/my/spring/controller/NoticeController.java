@@ -23,7 +23,7 @@ public class NoticeController {
 	    public DataWrapper<List<CommonNotice>> addBuilding(
 	            @RequestParam(value = "token",required = false) String token,
 	            @RequestParam(value = "pageSize",required = false) Integer pageSize,
-	            @RequestParam(value = "pageIndex",required = true) Integer pageIndex){
+	            @RequestParam(value = "pageIndex",required = false) Integer pageIndex){
 	        return noticeService.getCommonNotices(token, pageSize, pageIndex);
 	    }
 }

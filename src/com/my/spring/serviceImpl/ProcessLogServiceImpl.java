@@ -1,9 +1,13 @@
 package com.my.spring.serviceImpl;
 
+import com.my.spring.DAO.ItemDataDao;
+import com.my.spring.DAO.ProcessItemDao;
 import com.my.spring.DAO.ProcessLogDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.ItemData;
+import com.my.spring.model.ProcessItem;
 import com.my.spring.model.ProcessLog;
 import com.my.spring.model.ProcessLogPojo;
 import com.my.spring.model.User;
@@ -24,6 +28,10 @@ public class ProcessLogServiceImpl implements ProcessLogService {
     @Autowired
     ProcessLogDao ProcessLogDao;
     @Autowired
+    ProcessItemDao processItemDao;
+    @Autowired
+    ItemDataDao itemDataDao;
+    @Autowired
     UserDao userDao;
     @Autowired
     UserLogService userLogSerivce;
@@ -34,9 +42,22 @@ public class ProcessLogServiceImpl implements ProcessLogService {
         if (userInMemory != null) {
 			if(ProcessLog!=null){
 				ProcessLog.setCreateDate(new Date(System.currentTimeMillis()));
-				if(!ProcessLogDao.addProcessLog(ProcessLog)) 
-				{
-					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				if(ProcessLog!=null){
+					if(ProcessLog.getItemId()!=null){
+						ItemData itemData=itemDataDao.getById(ProcessLog.getItemId());
+						if(itemData!=null){
+							if(itemData.getApproveUser().equals(userInMemory.getId())){
+								if(!ProcessLogDao.addProcessLog(ProcessLog)) 
+								{
+									dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+								}
+							}else{
+								dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+							}
+						}
+					}else{
+						dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+					}
 				}
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);

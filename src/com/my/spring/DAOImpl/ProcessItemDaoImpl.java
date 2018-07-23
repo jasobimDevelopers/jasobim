@@ -1,13 +1,20 @@
 package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProcessItemDao;
+import com.my.spring.model.ItemIdMode;
+import com.my.spring.model.MessageCopy;
+import com.my.spring.model.News;
 import com.my.spring.model.ProcessItem;
+import com.my.spring.model.ProcessLog;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -82,7 +89,61 @@ public class ProcessItemDaoImpl extends BaseDao<ProcessItem> implements ProcessI
 		// TODO Auto-generated method stub
 		return get(id);
 	}
+	@Override
+	public ProcessItem findProcessItem(ProcessLog pl) {
+		ProcessItem retDataWrapper = new ProcessItem();
+	        
+	        //ret=find("select * from User where userId=?"+userId);
+		List<ProcessItem> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(ProcessItem.class);
+        if(pl.getCurrentNode()!=null){
+        	 criteria.add(Restrictions.eq("which", pl.getCurrentNode()));
+        }
+        if(pl.getProcessId()!=null){
+        	criteria.add(Restrictions.eq("processId", pl.getProcessId()));
+        }
+       
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (ret != null && ret.size() > 0) {
+			retDataWrapper=ret.get(0);
+		}
+		return retDataWrapper;
+	}
 
+	@Override
+	public ItemIdMode getProcessItemByNode(Integer currentNode, Long processDataId) {
+		List<ItemIdMode> ret =null;
+		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+		String sql = "select item_id from process_item where process_id="
+		+processDataId+" and which="
+		+currentNode
+		+" and id=(select MAX(id) as id from process_item where process_id="
+		+processDataId
+		+" and which="
+		+currentNode
+		+") ";
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+				 .addScalar("item_id",StandardBasicTypes.LONG)
+				 .setResultTransformer(Transformers.aliasToBean(ItemIdMode.class)); 
+		    ret=query.list();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+	    if(!ret.isEmpty()){
+	    	return ret.get(0);
+	    }
+		return null;
+	}
+		
 	
 
 	

@@ -10,6 +10,7 @@ import com.my.spring.model.ValueOutput;
 import com.my.spring.model.ValueOutputPojo;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.parameters.ProjectDatas;
+import com.my.spring.model.Files;
 import com.my.spring.model.Project;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
@@ -138,7 +139,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 				DecimalFormat df=new DecimalFormat(".##");
     			String st=df.format(nums);
     			String st1=df.format(finisheds);
-				dataWrapperPojo.get(0).setNum(Double.valueOf(st));
+				dataWrapperPojo.get(0).setNums(Double.valueOf(st));
 				dataWrapperPojo.get(0).setFinisheds(Double.valueOf(st1));
     			dataWrappers.setData(dataWrapperPojo);
     		}else{
@@ -171,14 +172,29 @@ public class ValueOutputServiceImpl implements ValueOutputService {
         			userLog.setProjectId(projectId);
         			userLogSerivce.addUserLog(userLog, token);
     			}
-    			
     		}
     		dataWrapperPojo=ValueOutputDao.getValueOutputListnew(projectId).getData();
+    		String leader=null;
+			User user = new User();
     		if(dataWrapperPojo!=null){
     			if(dataWrapperPojo.get(0).getProject_id()!=null){
     				Project projectss=projectDao.getById(Long.valueOf(dataWrapperPojo.get(0).getProject_id()));
+    				if(projectss!=null){
+    					leader = projectss.getLeader();
+    				}
+    				 user= userDao.getByUserRealName(leader);
+    				 if(user!=null){
+     	    			if(user.getUserIconUrl()!=null){
+     	    				dataWrapperPojo.get(0).setUserIcon(user.getUserIconUrl());
+     	    			}else if(user.getUserIcon()!=null){
+     	    				Files file = fileSerivce.getById(user.getUserIcon());
+     	    				if(file!=null){
+     	    					dataWrapperPojo.get(0).setUserIcon(file.getUrl());
+     	    				}
+     	    			}
+     	    			
+     	    		}
     			}
-				
 	    		String str=Parameters.getSdf().format(dataWrapperPojo.get(0).getDate()); 
 	    		dataWrapperPojo.get(0).setDates(str);
 	    		dataWrapperPojo.get(0).setProjectName(dataWrapperPojo.get(0).getOthers());
@@ -188,7 +204,8 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 				DecimalFormat df=new DecimalFormat(".##");
     			String st=df.format(nums);
     			String st1=df.format(finisheds);
-				dataWrapperPojo.get(0).setNum(Double.valueOf(st));
+    			dataWrapperPojo.get(0).setLeader(leader);
+				dataWrapperPojo.get(0).setNums(Double.valueOf(st));
 				dataWrapperPojo.get(0).setFinisheds(Double.valueOf(st1));
     			dataWrappers.setData(dataWrapperPojo.get(0));
     		}else{
@@ -228,7 +245,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 	    			DecimalFormat df=new DecimalFormat(".##");
 	    			String st=df.format(nums);
 	    			String st1=df.format(finisheds);
-					valueOutputs.get(0).setNum(Double.valueOf(st));
+					valueOutputs.get(0).setNums(Double.valueOf(st));
 					valueOutputs.get(0).setFinisheds(Double.valueOf(st1));
 	    			dataWrapper.setData(valueOutputs);
 	    		}else{
@@ -293,7 +310,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 	    			DecimalFormat df=new DecimalFormat(".##");
 	    			String st=df.format(nums);
 	    			String st1=df.format(finisheds);
-					valueOutputs.get(0).setNum(Double.valueOf(st));
+					valueOutputs.get(0).setNums(Double.valueOf(st));
 					valueOutputs.get(0).setFinisheds(Double.valueOf(st1));
 	    			dataWrapper.setData(valueOutputs);
 	    		}else{
@@ -318,6 +335,8 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 				ValueOutput.setProjectId((long) -1);
 			}
 			dataWrappers=ValueOutputDao.getValueOutputLists(pageSize,pageIndex,ValueOutput,dates);
+			
+			
     		if(dataWrappers.getData()!=null){
     			for(int i=0;i<dataWrappers.getData().size();i++){
     				ValueOutputPojo valueOutputPojo = new ValueOutputPojo();
@@ -329,6 +348,7 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     	    		valueOutputPojo.setFinished(dataWrappers.getData().get(i).getFinished());
     	    		valueOutputPojo.setYear(dataWrappers.getData().get(i).getYear());
     	    		valueOutputPojo.setId(dataWrappers.getData().get(i).getId());
+    	    		
     	    		dataWrapperPojo.add(valueOutputPojo);
     			}
     			dataWrapperspojo.setData(dataWrapperPojo);

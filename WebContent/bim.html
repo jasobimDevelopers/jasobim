@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>your page title</title>
+<!-- 引用BIMFACE的JavaScript显示组件库 -->
+<script src="https://static.bimface.com/api/BimfaceSDKLoader/BimfaceSDKLoader@latest-release.js" charset="utf-8"></script>
+<script src="jquery-3.3.1.min.js" charset="utf-8"></script>
+</head>
+
+<body>
+
+<!-- 定义DOM元素，用于在该DOM元素中显示模型或图纸 -->
+<div id="domId" style="width:1500px; height:1700px;"></div>
+
+<script type="text/javascript">
+	var baseUrl="http://localhost:8080/jasobim/";
+	var viewToken = '8e3e428e5f52469da9993ab51ace7d92';
+	$.ajax({
+         type: "get",
+         url: baseUrl+"api/bimface/getModeViewTokenByIntegrateId",
+         data: 
+         {
+         	integrateId:1395920688058176,
+         	projectId:205
+         },
+         dataType: "json",
+         success: function(data){
+         	viewToken=data.data;
+        	
+         }
+     });
+	// 指定待显示的模型或图纸（viewToken从服务端获取）
+	
+	
+	// 初始化显示组件
+	var options = new BimfaceSDKLoaderConfig();
+	options.viewToken = viewToken;
+	BimfaceSDKLoader.load(options, successCallback, failureCallback);
+	
+	function successCallback(viewMetaData) {
+		// 创建WebApplication，直接显示模型或图纸
+		var dom4Show = document.getElementById('domId');
+		new Glodon.Bimface.Application.WebApplicationDemo(viewMetaData, dom4Show); 
+	}
+	
+	function failureCallback(error) {
+		console.log(error);
+	};
+
+</script>
+<!--需要ajax调这个接口获取viewToken,这个模型是集成模型，所以不能通过fileId获取，bimface平台给的链接有logo，不用-->
+
+
+</body>
+</html>

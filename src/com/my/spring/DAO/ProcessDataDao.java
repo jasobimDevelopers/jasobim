@@ -11,4 +11,5 @@ public interface ProcessDataDao {
     boolean updateProcessData(ProcessData ProcessData);
     ProcessData getById(Long id);
     DataWrapper<List<ProcessData>> getProcessDataList(Integer pageIndex, Integer pageSize, ProcessData ProcessData);
+	ProcessData getProcessDataByProjectId(Long projectId, Integer i);
 }

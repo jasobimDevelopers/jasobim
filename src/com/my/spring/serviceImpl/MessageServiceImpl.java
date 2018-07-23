@@ -185,12 +185,23 @@ public class MessageServiceImpl implements MessageService {
 						hq.put("content", message.getContent());
 						hq.put("createDate",Parameters.getSdfs().format(new Date()));
 						hq.put("createUserName", userInMemory.getRealName());
+						
+						Integer type=0;
+						
 						if(questions.getId()!=null){
 							hq.put("aboutId", questions.getId().toString());
-							
+							hq.put("messageFlag","question");
+							type=1;
 						}
 						if(questions.getProjectId()!=null){
 							hq.put("projectName", "来自  "+projectDao.getById(questions.getProjectId()).getName());
+						}
+						if(quality.getId()!=null){
+							hq.put("messageFlag","quality");
+							hq.put("aboutId", quality.getId().toString());
+						}
+						if(quality.getProjectId()!=null){
+							hq.put("projectName", "来自  "+projectDao.getById(quality.getProjectId()).getName());
 						}
 						
 						hq.put("title", "提交了一条留言请查看");
@@ -227,8 +238,9 @@ public class MessageServiceImpl implements MessageService {
 							userids[b]=users.get(b).getId().toString();
 						}
 						String content=userInMemory.getRealName()+"提交了一条留言，请您注意查看";
-						PushExample.testSendPushWithCustomConfig_ios(userids, content,4,hq);
-						PushExample.testSendPushWithCustomConfig_android(userids, content,4,hq);
+						
+						PushExample.testSendPushWithCustomConfig_ios(userids, content,type,hq);
+						PushExample.testSendPushWithCustomConfig_android(userids, content,type,hq);
 						//testSendPushWithCustomConfig_android(userids, content);
 				///////////////////////////////
 						}
@@ -433,10 +445,14 @@ public class MessageServiceImpl implements MessageService {
 							messagefile = messageFileDao.getMessageFileListByMessageId(message.getId()).getData();
 							if(messagefile!=null && messagefile.size()>0){
 								String[] urllist = new String[messagefile.size()];
+								int j=0;
 								for(int i=0;i<messagefile.size();i++){
 									Files files = new Files();
 									files = fileDao.getById(messagefile.get(i).getFileId());
-									urllist[i]=files.getUrl();
+									if(files!=null){
+										urllist[i]=files.getUrl();
+										j++;
+									}
 								}
 								messagePojo.setFileList(urllist);
 							}
@@ -539,10 +555,13 @@ public class MessageServiceImpl implements MessageService {
 							if(user.getUserIcon()!=null)
 							{
 								Files files=fileDao.getById(user.getUserIcon());
-								if(files.getUrl()!=null)
-								{
-									messagePojo.setUserIconUrl(files.getUrl());
+								if(files!=null){
+									if(files.getUrl()!=null)
+									{
+										messagePojo.setUserIconUrl(files.getUrl());
+									}
 								}
+								
 							}
 							if(user!=null)
 							{
@@ -601,10 +620,14 @@ public class MessageServiceImpl implements MessageService {
 							messagefile = messageFileDao.getMessageFileListByMessageId(message.getId()).getData();
 							if(messagefile!=null && messagefile.size()>0){
 								String[] urllist = new String[messagefile.size()];
+								int j=0;
 								for(int i=0;i<messagefile.size();i++){
 									Files files = new Files();
 									files = fileDao.getById(messagefile.get(i).getFileId());
-									urllist[i]=files.getUrl();
+									if(files!=null){
+										urllist[j]=files.getUrl();
+										j++;
+									}
 								}
 								List<String> imageList = new ArrayList<String>();
 								List<String> voiceList = new ArrayList<String>();
@@ -627,9 +650,11 @@ public class MessageServiceImpl implements MessageService {
 								if(user.getUserIcon()!=null)
 								{
 									Files files=fileDao.getById(user.getUserIcon());
-									if(files.getUrl()!=null)
-									{
-										messagePojo.setUserIconUrl(files.getUrl());
+									if(files!=null){
+										if(files.getUrl()!=null)
+										{
+											messagePojo.setUserIconUrl(files.getUrl());
+										}
 									}
 								}
 								if(user!=null)
@@ -697,6 +722,17 @@ public class MessageServiceImpl implements MessageService {
 								files = fileDao.getById(messagefile.get(i).getFileId());
 								urllist[i]=files.getUrl();
 							}
+							List<String> imageList = new ArrayList<String>();
+		        			List<String> voiceList = new ArrayList<String>();
+		        			for(String items:urllist){
+		        				if(Parameters.getFileType(items).equals("mp3") || Parameters.getFileType(items).equals("wav")){
+		        					voiceList.add(items);
+		        				}else if(!Parameters.getFileType(items).equals("dat")){
+		        					imageList.add(items);
+		        				}
+		        			}
+		        			messagePojo.setImageUrlList(imageList);
+		        			messagePojo.setVoiceUrlList(voiceList);
 							messagePojo.setFileList(urllist);
 						}
 						if(message.getUserId()!=null)
@@ -707,9 +743,11 @@ public class MessageServiceImpl implements MessageService {
 							if(user.getUserIcon()!=null)
 							{
 								Files files=fileDao.getById(user.getUserIcon());
-								if(files.getUrl()!=null)
-								{
-									messagePojo.setUserIconUrl(files.getUrl());
+								if(files!=null){
+									if(files.getUrl()!=null)
+									{
+										messagePojo.setUserIconUrl(files.getUrl());
+									}
 								}
 							}
 							if(user!=null)

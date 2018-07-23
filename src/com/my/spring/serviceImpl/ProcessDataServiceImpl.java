@@ -2,13 +2,16 @@ package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.ProcessDataDao;
+import com.my.spring.DAO.ProcessItemDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.ProcessData;
 import com.my.spring.model.ProcessDataPojo;
+import com.my.spring.model.ProcessItem;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.service.ProcessDataService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
@@ -25,14 +28,16 @@ public class ProcessDataServiceImpl implements ProcessDataService {
     @Autowired
     ProcessDataDao ProcessDataDao;
     @Autowired
+    ProcessItemDao processItemDao;
+    @Autowired
     FileDao fileDao;
     @Autowired
     UserDao userDao;
     @Autowired
     UserLogService userLogSerivce;
     @Override
-    public DataWrapper<Void> addProcessData(ProcessData ProcessData,String token) {
-    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    public DataWrapper<ProcessData> addProcessData(ProcessData ProcessData,String token) {
+    	DataWrapper<ProcessData> dataWrapper = new DataWrapper<ProcessData>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(ProcessData!=null){
@@ -41,6 +46,35 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 				if(!ProcessDataDao.addProcessData(ProcessData)) 
 				{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}else{
+					dataWrapper.setData(ProcessData);
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return dataWrapper;
+    }
+    @Override
+    public DataWrapper<Void> addProcessItem(ProcessItem processItem,String token) {
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+			if(processItem!=null){
+				if(processItem.getProcessId()!=null){
+					ProcessData pd = ProcessDataDao.getById(processItem.getProcessId());
+					if(pd!=null){
+						if(processItem.getWhich()<=pd.getItemNum()){
+							if(!processItemDao.addProcessItem(processItem)) 
+							{
+								dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+							}
+						}else{
+							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						}
+					}
 				}
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -120,6 +154,9 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 					List<ProcessDataPojo> ProcessDataPojoList = new ArrayList<ProcessDataPojo>();
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						ProcessDataPojo ProcessDataPojo =new ProcessDataPojo();
+						ProcessDataPojo.setItemNum(dataWrapper.getData().get(i).getItemNum());
+						ProcessDataPojo.setProjectId(dataWrapper.getData().get(i).getProjectId().toString());
+						ProcessDataPojo.setName(dataWrapper.getData().get(i).getName());
 						ProcessDataPojo.setId(dataWrapper.getData().get(i).getId());
 						if(dataWrapper.getData().get(i).getCreateUser()!=null){
 							User user= new User();
@@ -127,8 +164,8 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 							if(user!=null){
 								ProcessDataPojo.setCreateUser(user.getUserName());
 							}
-							
 						}
+						ProcessDataPojo.setCreateDate(Parameters.getSdf().format(dataWrapper.getData().get(i).getCreateDate()));
 						if(ProcessDataPojo!=null){
 							ProcessDataPojoList.add(ProcessDataPojo);
 						}

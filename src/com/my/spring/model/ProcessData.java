@@ -11,6 +11,7 @@ public class ProcessData {
 	private Date createDate;
 	private Long createUser;
 	private Long projectId;
+	private Integer type;//0.施工任务单 1.预付单
 	
 	@Id
 	@GeneratedValue
@@ -65,6 +66,15 @@ public class ProcessData {
 	}
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
+	}
+	
+	@Basic
+	@Column(name="type")
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
 	}
 	
 	

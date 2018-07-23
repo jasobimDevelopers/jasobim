@@ -207,6 +207,7 @@ public class QuestionServiceImpl implements QuestionService {
 					hq.put("projectName", "来自  "+po.getName());
 					hq.put("aboutId", question.getId().toString());
 					hq.put("createDate", Parameters.getSdfs().format(new Date()));
+					hq.put("projectId", po.getId().toString());
 					String content="";
 					if(po!=null){
 						content=userInMemory.getRealName()+"在"+po.getName()+"项目里提交了一个标题为："+question.getName()+"的问题";
@@ -537,8 +538,14 @@ public class QuestionServiceImpl implements QuestionService {
 			        		questionpojo.setUserNameLists(null);
 			        	}
 		        	}
-		        	String username=userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName();
-		        	questionpojo.setUserId(username);
+		        	String username=null;
+		        	if(userDao.getById(dataWrappers.getData().get(i).getUserId())!=null){
+		        		username=userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName();
+		        		
+		        	}
+		        	if(username!=null){
+		        		questionpojo.setUserId(username);
+		        	}
 		        	questionpojo.setModelFlag(dataWrappers.getData().get(i).getModelFlag());
 		        	questionpojo.setCodeInformation(dataWrappers.getData().get(i).getCodeInformation());
 		        	questionpojo.setPriority(dataWrappers.getData().get(i).getPriority());
@@ -770,9 +777,7 @@ public class QuestionServiceImpl implements QuestionService {
 						
 					}
 				}
-			} else {
-				dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
-			}
+			} 
 		} 
 		return dataWrapper;
 	}

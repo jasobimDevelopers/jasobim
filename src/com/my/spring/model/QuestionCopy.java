@@ -19,6 +19,7 @@ public class QuestionCopy {
 	//////
 	private String voice_id_list;//语音idList
 	private String user_list;///接收到人
+	private Integer total;
 	//private String readState;///接收人的已读和未读情况
 	public Long getId() {
 		return id;
@@ -104,5 +105,12 @@ public class QuestionCopy {
 	public void setUser_list(String user_list) {
 		this.user_list = user_list;
 	}
+	public Integer getTotal() {
+		return total;
+	}
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
+	
 	
 }

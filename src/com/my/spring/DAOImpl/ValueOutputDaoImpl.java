@@ -186,7 +186,7 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
 				}
         	    
         	}
-        	if(valueOutput.getProjectId()!=-1){
+        	if(valueOutput.getProjectId()!=null){
         		criteria.add(Restrictions.eq("projectId", valueOutput.getProjectId()));
         	}
         	if(valueOutput.getOthers()!=null){
@@ -256,8 +256,8 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
 
     	String sql="";
     	if(projectId!=null){
-    		sql = "select id,others,num,sum(finished) as finished,date,project_id "
-        			+ "from value_output where project_id="+projectId+" GROUP BY project_id ORDER BY date DESC";
+    		sql = "select id,others,num as nums,sum(finished) as finished,MAX(date) as date,project_id "
+        			+ "from value_output where project_id="+projectId+" GROUP BY project_id";
     	}
 		DataWrapper<List<ValueOutputPojo>> dataWrapper=new DataWrapper<List<ValueOutputPojo>>();
 		Session session=getSession();
@@ -265,7 +265,7 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
 			 Query query = session.createSQLQuery(sql)
 					 .addScalar("id",StandardBasicTypes.LONG)
 					 .addScalar("others", StandardBasicTypes.STRING)
-					 .addScalar("num",StandardBasicTypes.DOUBLE)
+					 .addScalar("nums",StandardBasicTypes.DOUBLE)
 					 .addScalar("project_id",StandardBasicTypes.LONG)
 					 .addScalar("finished", StandardBasicTypes.DOUBLE)
 					 .addScalar("date", StandardBasicTypes.DATE)

@@ -240,12 +240,12 @@ public class NoticeServiceImpl implements NoticeService {
 								commonNotice3.setImagUrl(files.getUrl());
 							}
 						}
-						
 						result.add(commonNotice3);
 					}
 				}
 			}
 			if(result.size()>0){
+				Parameters.ListSort(result);
 				resultList.setData(result);
 			}
 			resultList.setTotalNumber(totalNum);

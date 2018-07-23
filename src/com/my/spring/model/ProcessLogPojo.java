@@ -5,10 +5,12 @@ public class ProcessLogPojo {
 	private Long processId;
 	private Integer currentNode;
 	private Integer endFlag;//0、未结束 1、结束
-	private String itemId;
+	private String itemName;
 	private String note;
 	private Integer itemState;//节点的状态（同意、不同意）
-	private String createDate;
+	private String approveUser;
+	private String nextApproveUser;
+	private String approveDate;
 	
 	public Long getId() {
 		return id;
@@ -39,11 +41,11 @@ public class ProcessLogPojo {
 		this.endFlag = endFlag;
 	}
 	
-	public String getItemId() {
-		return itemId;
+	public String getItemName() {
+		return itemName;
 	}
-	public void setItemId(String itemId) {
-		this.itemId = itemId;
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
 	}
 	
 	public String getNote() {
@@ -60,11 +62,23 @@ public class ProcessLogPojo {
 		this.itemState = itemState;
 	}
 	
-	public String getCreateDate() {
-		return createDate;
+	public String getApproveUser() {
+		return approveUser;
 	}
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
+	public void setApproveUser(String approveUser) {
+		this.approveUser = approveUser;
+	}
+	public String getNextApproveUser() {
+		return nextApproveUser;
+	}
+	public void setNextApproveUser(String nextApproveUser) {
+		this.nextApproveUser = nextApproveUser;
+	}
+	public String getApproveDate() {
+		return approveDate;
+	}
+	public void setApproveDate(String approveDate) {
+		this.approveDate = approveDate;
 	}
 	
 	

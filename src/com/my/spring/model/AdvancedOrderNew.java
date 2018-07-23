@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.*;
 @Entity
 @Table(name="advanced_order_new")
+/////预付单流程：创建人(项目负责人)-->施工员-->预算员-->项目经理
 public class AdvancedOrderNew {
 	private Long id;
 	private Long submitUserId;////预付单提交人

@@ -4,8 +4,10 @@ import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.NewsDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.WechatUrlDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.AttenceLogPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.News;
 import com.my.spring.model.NewsPojo;
@@ -160,6 +162,10 @@ public class NewsServiceImpl implements NewsService {
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
+        if(dataWrappers.getCallStatus()==CallStatusEnum.SUCCEED && dataWrappers.getData()==null){
+        	List<NewsPojo> pas= new ArrayList<NewsPojo>();
+        	dataWrappers.setData(pas);
+        }
         return dataWrappers;
     }
 

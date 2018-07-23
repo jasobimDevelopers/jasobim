@@ -465,8 +465,18 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 	@Override
 	public List<UserSelect> getUserListByWorkName(String workName,Long projectId) {
 		List<UserSelect> retDataWrapper = new ArrayList<UserSelect>();
-		String sql = "select id,real_name from user where id in(select user_id from user_project where project_id="
-		+projectId+") and work_name='"+workName+"'";
+		String sql="";
+		if(workName.equals("经理") || workName.equals("预算员") || workName.equals("质量员") || workName.equals("安全员")){
+			sql = "select id,real_name from user where work_name like '%"+workName+"%'";
+		}
+		if(workName.equals("班组长") || workName.equals("施工员")){
+			sql = "select id,real_name from user where id in(select user_id from user_project where project_id="
+					+projectId+") and work_name='"+workName+"'";
+		}
+		if(workName.equals("其他")){
+			sql = "select id,real_name from user where work_name not like '%经理%' and work_name!='质量员' "
+					+"and work_name !='预算员' and work_name!='安全员' and work_name!='班组长' and work_name!='施工员'";
+		}
 		Session session=getSession();
 	    try{
 		    Query query = session.createSQLQuery(sql)

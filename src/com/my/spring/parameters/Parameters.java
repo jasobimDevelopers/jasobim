@@ -2,6 +2,12 @@ package com.my.spring.parameters;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+
+import com.my.spring.model.CommonNotice;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,6 +62,9 @@ public class Parameters {
 		return newNames;
 		
 	}
+	public static void main(String[] arg){
+		System.out.println(getFileType("asadad.mp3"));
+	}
 	
 	public static String getFileType(String name){
 		
@@ -94,5 +103,27 @@ public class Parameters {
 		    }
 		    return flag;
 		}
+		public static void ListSort(List<CommonNotice> list) {
+		        Collections.sort(list, new Comparator<CommonNotice>() {
+		            @Override
+		            public int compare(CommonNotice o1, CommonNotice o2) {
+		                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		                try {
+		                    Date dt1 = format.parse(o1.getCreateDate());
+		                    Date dt2 = format.parse(o2.getCreateDate());
+		                    if (dt1.getTime() < dt2.getTime()) {
+		                        return 1;
+		                    } else if (dt1.getTime() > dt2.getTime()) {
+		                        return -1;
+		                    } else {
+		                        return 0;
+		                    }
+		                } catch (Exception e) {
+		                    e.printStackTrace();
+		                }
+		                return 0;
+		            }
+		        });
+		    }
 	
 }

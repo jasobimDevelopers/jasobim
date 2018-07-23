@@ -105,6 +105,7 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 					hq.put("content", advancedOrder.getQuantityDes());
 					hq.put("projectName","来自  "+ advancedOrder.getProjectName());
 					hq.put("aboutId", advancedOrder.getId().toString());
+					hq.put("projectId", advancedOrder.getProjectId().toString());
 					hq.put("title", "提交了一个预付单需要您审批");
 					hq.put("imagUrl",null);
 					AdvancedOrderCollect aoc = new AdvancedOrderCollect();

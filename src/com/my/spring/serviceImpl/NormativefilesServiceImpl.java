@@ -3,8 +3,10 @@ package com.my.spring.serviceImpl;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.NormativefilesDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
+import com.my.spring.model.NewsPojo;
 import com.my.spring.model.Normativefiles;
 import com.my.spring.model.NormativefilesPojo;
 import com.my.spring.model.NormativefilesPojos;
@@ -138,7 +140,7 @@ public class NormativefilesServiceImpl implements NormativefilesService {
         		userLogSerivce.addUserLog(userLog, token);
         	}
 				dataWrapper=normativefilesDao.getNormativefilessList(pageIndex,pageSize,Normativefiles);
-				if(dataWrapper.getData()!=null){
+				if(!dataWrapper.getData().isEmpty()){
 					List<NormativefilesPojo> NormativefilesPojoList = new ArrayList<NormativefilesPojo>();
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						NormativefilesPojo NormativefilesPojo =new NormativefilesPojo();
@@ -185,13 +187,15 @@ public class NormativefilesServiceImpl implements NormativefilesService {
 						dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
 						dataWrappers.setTotalPage(dataWrapper.getTotalPage());
 						dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
-					}else{
-						dataWrappers.setErrorCode(ErrorCodeEnum.Error);
 					}
 				}
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 			}
+        if(dataWrappers.getCallStatus()==CallStatusEnum.SUCCEED && dataWrappers.getData()==null){
+        	List<NormativefilesPojo> pas= new ArrayList<NormativefilesPojo>();
+        	dataWrappers.setData(pas);
+        }
         return dataWrappers;
     }
     
@@ -272,6 +276,10 @@ public class NormativefilesServiceImpl implements NormativefilesService {
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+        if(dataWrappers.getCallStatus()==CallStatusEnum.SUCCEED && dataWrappers.getData()==null){
+        	List<NormativefilesPojos> pas= new ArrayList<NormativefilesPojos>();
+        	dataWrappers.setData(pas);
+        }
         return dataWrappers;
     }
 

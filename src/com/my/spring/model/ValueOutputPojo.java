@@ -5,7 +5,7 @@ import java.util.Date;
 public class ValueOutputPojo {
 	private Long id;
 	private String others;
-	private Double num;   ///当前项目的总产值
+	private Double nums;   ///当前项目的总产值
 	private Double finisheds;///当前项目已完成
 	private Double finished;    //已完成
 	private Integer month;
@@ -15,6 +15,7 @@ public class ValueOutputPojo {
 	private Long project_id;////项目id
 	private Integer year;
 	private String leader;///项目负责人
+	private String userIcon;
 	
 
 	public Long getId(){
@@ -65,12 +66,12 @@ public class ValueOutputPojo {
 		this.finisheds = finisheds;
 	}
 
-	public Double getNum() {
-		return num;
+	public Double getNums() {
+		return nums;
 	}
 
-	public void setNum(Double num) {
-		this.num = num;
+	public void setNums(Double num) {
+		this.nums = num;
 	}
 
 	public Long getProject_id() {
@@ -112,6 +113,14 @@ public class ValueOutputPojo {
 
 	public void setLeader(String leader) {
 		this.leader = leader;
+	}
+
+	public String getUserIcon() {
+		return userIcon;
+	}
+
+	public void setUserIcon(String userIcon) {
+		this.userIcon = userIcon;
 	}
 
 	

@@ -117,6 +117,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 					hq.put("createUserName", userInMemory.getRealName());
 					hq.put("aboutId", constructionTask.getId().toString());
 					hq.put("content", constructionTask.getDetailContent());
+					hq.put("projectId", constructionTask.getProjectId().toString());
 					hq.put("projectName","来自  "+ constructionTask.getCompanyName());
 					hq.put("title", "提交了一个施工任务单需要您审批");
 					List<User> userList = new ArrayList<User>();
@@ -255,8 +256,11 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 					if(dataWrapper.getData().get(i).getWorkPeopleNameList()!=null){
 						String[] nameList = dataWrapper.getData().get(i).getWorkPeopleNameList().split(",");
 						String workPeopleName="";
+						String names="";
 						for(int k=0;k<nameList.length;k++){
-							String names=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+							if(userDao.getById(Long.valueOf(nameList[k]))!=null){
+								names=userDao.getById(Long.valueOf(nameList[k])).getRealName();
+							}
 							if(k==0){
 								workPeopleName=workPeopleName+names;
 							}else{

@@ -47,47 +47,51 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
         Criteria criteria = session.createCriteria(ConstructionTask.class);
         criteria.addOrder(Order.desc("createDate"));
         Disjunction res = Restrictions.disjunction() ; 
+        
         if(constructionTask.getId()!=null){
         	criteria.add(Restrictions.eq("id",constructionTask.getId()));
+        }else{
+        	if(userName!=null){
+            	res.add(Restrictions.eq("createUserName", userName));
+                       
+            }
+        	if(constructionTask.getTaskFlag()!=null){
+            	criteria.add(Restrictions.eq("taskFlag", constructionTask.getTaskFlag()));
+            }
+            if(constructionTask.getOthersAttention()!=null){
+            	criteria.add(Restrictions.like("companyName", "%"+constructionTask.getOthersAttention()+"%"));
+            }
+            res.add(Restrictions.like("workPeopleNameList", "%"+id+"%"));
+            if(constructionTask.getCompanyName()!=null){
+            	criteria.add(Restrictions.like("companyName", "%"+constructionTask.getCompanyName()+"%"));
+            }
+            if(constructionTask.getNextReceivePeopleId()!=null){
+            	criteria.add(Restrictions.like("nextReceivePeopleId", "%"+constructionTask.getNextReceivePeopleId()+"%"));
+            }
+            if(constructionTask.getApprovalPeopleName()!=null){
+            	res.add(Restrictions.like("approvalPeopleName", "%"+constructionTask.getApprovalPeopleName()+"%"));
+            }
+            if(s!=null){
+            	res.add(Restrictions.eq("nextReceivePeopleId", s));	
+            }
+            
+            criteria.add(res);
+            if(constructionTask.getProjectId()!=null){
+            	criteria.add(Restrictions.eq("projectId", constructionTask.getProjectId()));
+            }
+            if(constructionTask.getTaskContent()!=null){
+            	criteria.add(Restrictions.like("taskContent", "%"+constructionTask.getTaskContent()+"%"));
+            }
+            if(state!=null){
+            	if(state==0){
+            		criteria.add(Restrictions.eq("nextReceivePeopleId", userName));///未审批
+            	}
+            	if(state==1){
+            		criteria.add(Restrictions.like("approvalPeopleName","%"+userName+"%"));///已审批
+            	}
+            }
         }
-        if(constructionTask.getTaskFlag()!=null){
-        	criteria.add(Restrictions.eq("taskFlag", constructionTask.getTaskFlag()));
-        }
-        if(constructionTask.getOthersAttention()!=null){
-        	criteria.add(Restrictions.like("companyName", "%"+constructionTask.getOthersAttention()+"%"));
-        }
-        res.add(Restrictions.like("workPeopleNameList", "%"+id+"%"));
-        if(constructionTask.getCompanyName()!=null){
-        	criteria.add(Restrictions.like("companyName", "%"+constructionTask.getCompanyName()+"%"));
-        }
-        if(constructionTask.getNextReceivePeopleId()!=null){
-        	criteria.add(Restrictions.like("nextReceivePeopleId", "%"+constructionTask.getNextReceivePeopleId()+"%"));
-        }
-        if(constructionTask.getApprovalPeopleName()!=null){
-        	res.add(Restrictions.like("approvalPeopleName", "%"+constructionTask.getApprovalPeopleName()+"%"));
-        }
-        if(s!=null){
-        	res.add(Restrictions.eq("nextReceivePeopleId", s));	
-        }
-        if(userName!=null){
-        	res.add(Restrictions.eq("createUserName", userName));
-                   
-        }
-        criteria.add(res);
-        if(constructionTask.getProjectId()!=null){
-        	criteria.add(Restrictions.eq("projectId", constructionTask.getProjectId()));
-        }
-        if(constructionTask.getTaskContent()!=null){
-        	criteria.add(Restrictions.like("taskContent", "%"+constructionTask.getTaskContent()+"%"));
-        }
-        if(state!=null){
-        	if(state==0){
-        		criteria.add(Restrictions.eq("nextReceivePeopleId", userName));///未审批
-        	}
-        	if(state==1){
-        		criteria.add(Restrictions.like("approvalPeopleName","%"+userName+"%"));///已审批
-        	}
-        }
+        
         if (pageSize == null) {
 			pageSize = 10;
 		}
@@ -155,7 +159,7 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
 		List<ConstructionTaskCopy> retDataWrapper = new ArrayList<ConstructionTaskCopy>();
 		String sql = "select a.id,a.company_name,a.work_people_name_list,a.create_date,a.user_id,a.detail_content,"
 				+"a.project_id,a.file_id_list from construction_task a,notice b where a.id=b.about_id and b.user_id="
-				+id+" and b.notice_type=2 and b.read_state=0";
+				+id+" and b.notice_type=2 and b.read_state=0  ORDER BY b.create_date DESC";
 		if(pageIndex!=-1){
 			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
 		}

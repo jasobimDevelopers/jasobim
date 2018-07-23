@@ -116,7 +116,7 @@ public class NewsInfoServiceImpl implements NewsInfoService {
             			userLogSerivce.addUserLog(userLog, token);
         		}
 				dataWrapper=NewsInfoDao.getNewsInfoList(pageIndex,pageSize,NewsInfo);
-				if(dataWrapper.getData()!=null){
+				if(!dataWrapper.getData().isEmpty()){
 					List<NewsInfoPojo> NewsInfoPojoList = new ArrayList<NewsInfoPojo>();
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						NewsInfoPojo NewsInfoPojo =new NewsInfoPojo();
@@ -132,6 +132,11 @@ public class NewsInfoServiceImpl implements NewsInfoService {
 						NewsInfoPojo.setId(dataWrapper.getData().get(i).getId());
 						NewsInfoPojo.setRemark(dataWrapper.getData().get(i).getRemark());
 						NewsInfoPojo.setTopic(dataWrapper.getData().get(i).getTopic());
+						if(dataWrapper.getData().get(i).getRemark()!=null){
+							if(dataWrapper.getData().get(i).getRemark().equals("from-url")){
+								NewsInfoPojo.setContent(dataWrapper.getData().get(i).getContent());
+							}
+						}
 						if(dataWrapper.getData().get(i).getCreateUserId()!=null){
 							User user= new User();
 							user=userDao.getById(dataWrapper.getData().get(i).getCreateUserId());
@@ -149,8 +154,6 @@ public class NewsInfoServiceImpl implements NewsInfoService {
 						dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
 						dataWrappers.setTotalPage(dataWrapper.getTotalPage());
 						dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
-					}else{
-						dataWrappers.setErrorCode(ErrorCodeEnum.Error);
 					}
 				}
 			}else{

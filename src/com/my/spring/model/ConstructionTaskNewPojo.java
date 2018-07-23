@@ -7,7 +7,7 @@ public class ConstructionTaskNewPojo {
 	private String constructionTaskDate;///施工任务单日期
 	private Long processDataId;
 	private String constructContent;//施工内容
-	private Long constructType;//施工类型
+	private String constructType;//施工类型
 	private Integer teamType;//0、自有技工(自有技工)  1、班组技工（班组信息里面的成员）
 	private String teamUserIds;//班组技工人员（12,15,16）
 	private Integer dayWorkHours;//白天工作时间
@@ -15,8 +15,12 @@ public class ConstructionTaskNewPojo {
 	private Long tendersId;///标段id
 	private String constructionName;
 	private String constructPart;//施工部位
-	private String imgs;//(url,url)
-	private Long projectId;
+	private String[] imgs;//(url,url)
+	private Integer endFlag;
+	private Long approvalUser;
+	private String currentNodeName;
+	private Long currentNodeId;
+	private Long pid;
 	
 	public Long getId() {
 		return id;
@@ -67,10 +71,10 @@ public class ConstructionTaskNewPojo {
 		this.constructContent = constructContent;
 	}
 	
-	public Long getConstructType() {
+	public String getConstructType() {
 		return constructType;
 	}
-	public void setConstructType(Long constructType) {
+	public void setConstructType(String constructType) {
 		this.constructType = constructType;
 	}
 	
@@ -116,10 +120,10 @@ public class ConstructionTaskNewPojo {
 		this.constructionName = constructionName;
 	}
 	
-	public String getImgs() {
+	public String[] getImgs() {
 		return imgs;
 	}
-	public void setImgs(String imgs) {
+	public void setImgs(String[] imgs) {
 		this.imgs = imgs;
 	}
 
@@ -130,11 +134,35 @@ public class ConstructionTaskNewPojo {
 		this.createDate = createDate;
 	}
 	
-	public Long getProjectId() {
-		return projectId;
+	public Integer getEndFlag() {
+		return endFlag;
 	}
-	public void setProjectId(Long projectId) {
-		this.projectId = projectId;
+	public void setEndFlag(Integer endFlag) {
+		this.endFlag = endFlag;
+	}
+	public Long getApprovalUser() {
+		return approvalUser;
+	}
+	public void setApprovalUser(Long approvalUser) {
+		this.approvalUser = approvalUser;
+	}
+	public String getCurrentNodeName() {
+		return currentNodeName;
+	}
+	public void setCurrentNodeName(String currentNodeName) {
+		this.currentNodeName = currentNodeName;
+	}
+	public Long getCurrentNodeId() {
+		return currentNodeId;
+	}
+	public void setCurrentNodeId(Long currentNodeId) {
+		this.currentNodeId = currentNodeId;
+	}
+	public Long getPid() {
+		return pid;
+	}
+	public void setPid(Long pid) {
+		this.pid = pid;
 	}
 	
 	

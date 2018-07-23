@@ -19,6 +19,7 @@ import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.AdvancedOrderPojo;
+import com.my.spring.model.AttenceForgetFactLogs;
 import com.my.spring.model.AttenceLog;
 import com.my.spring.model.AttenceLogPojo;
 import com.my.spring.model.AttenceLogs;
@@ -53,9 +54,9 @@ public class AttenceLogServiceImpl implements AttenceLogService{
     @Autowired
     RoleDao roleDao;
 	@Override
-	public DataWrapper<Void> addAttenceLog(AttenceLog am, String token,Double lat,Double lng) {
+	public DataWrapper<String> addAttenceLog(AttenceLog am, String token,Double lat,Double lng) {
 		// TODO Auto-generated method stub
-		DataWrapper<Void> result = new DataWrapper<Void>();
+		DataWrapper<String> result = new DataWrapper<String>();
 		User user = SessionManager.getSession(token);
 		System.out.println();  
 		if(user!=null){
@@ -78,10 +79,8 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 					Date nowDate = null;
 					try {
 						nowDate = Parameters.getSdfs().parse(Parameters.getSdfs().format(new Date()));
-						//nowDate = Parameters.getSdfs().parse("2018-05-10");
 						am.setCreateDate(nowDate);
 					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					//////判断当前是否已有打卡记录
@@ -116,6 +115,8 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 									}
 									if(!attenceLogDao.updateAttenceLog(al)){
 										result.setErrorCode(ErrorCodeEnum.Error);
+									}else{
+										result.setData(al.getEndWorkTime());
 									}
 								}
 							}else{
@@ -154,6 +155,8 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 								}
 								if(!attenceLogDao.addAttenceLog(am)){
 									result.setErrorCode(ErrorCodeEnum.Error);
+								}else{
+									result.setData(am.getStartWorkTime());
 								}
 							}
 						}else{
@@ -204,6 +207,7 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 		DataWrapper<List<AttenceLogPojo>> result = new DataWrapper<List<AttenceLogPojo>>();
 		List<AttenceLogPojo> results = new ArrayList<AttenceLogPojo>();
 		DataWrapper<List<AttenceLogs>> amList = new DataWrapper<List<AttenceLogs>>();
+		DataWrapper<List<AttenceForgetFactLogs>> forgetFactNums = new DataWrapper<List<AttenceForgetFactLogs>>();
 		if(year==null){
 			 Date date = new Date();
 		     year = Integer.valueOf(Parameters.getSdfs().format(date).split("-")[0]);
@@ -236,9 +240,10 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 				}
 			}
 			amList = attenceLogDao.getAttenceLogsList(pageIndex, pageSize, duct,year,month);
+			forgetFactNums =  attenceLogDao.getForgetFactNumsList(pageIndex, pageSize, duct,year,month);
 			if(amList.getData()!=null)
 			{
-				if(amList.getData().size()>0){
+				if(!amList.getData().isEmpty()){
 					for(AttenceLogs am : amList.getData()){
 						AttenceLogPojo attenceModelPojo = new AttenceLogPojo();
 						if(am.getUser_id()!=null){
@@ -259,34 +264,31 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 								}
 							}
 						}
-						if(am.getLate_nums_f()==null){
-							am.setLate_nums_f(0);
-						}
-						if(am.getLate_nums_s()==null){
-							am.setLate_nums_s(0);
+						if(forgetFactNums.getData()!=null){
+							if(!forgetFactNums.getData().isEmpty()){
+								for(int i=0;i<forgetFactNums.getData().size();i++){
+									if(am.getUser_id().equals(forgetFactNums.getData().get(i).getUser_id())){
+										attenceModelPojo.setForgetClockNum(forgetFactNums.getData().get(i).getForget_nums());
+										attenceModelPojo.setWorkDays(forgetFactNums.getData().get(i).getForget_nums()+forgetFactNums.getData().get(i).getFact_nums());
+										int flag = days-(days/weekds)*(7-weekds);
+										attenceModelPojo.setNotWorkNum(flag-forgetFactNums.getData().get(i).getForget_nums()-forgetFactNums.getData().get(i).getFact_nums());
+									}
+								}
+							}
 						}
 						/////迟到次数
-						attenceModelPojo.setLateNum(am.getLate_nums_f()+am.getLate_nums_s());
-						if(am.getLeave_early_nums_f()==null){
-							am.setLeave_early_nums_f(0);
-						}
-						if(am.getLeave_early_nums_s()==null){
-							am.setLeave_early_nums_s(0);
-						}
+						attenceModelPojo.setLateNum(am.getLate_nums());
 						///早退次数
-						attenceModelPojo.setLeaveEarlyNum(am.getLeave_early_nums_f()+am.getLeave_early_nums_s());
+						attenceModelPojo.setLeaveEarlyNum(am.getLeave_early_nums());
 						////忘打卡次数
-						attenceModelPojo.setForgetClockNum(am.getForget_num());
+						
 						///出勤次数
-						if(am.getFact_num()==null){
-							am.setFact_num(0);
+						if(attenceModelPojo.getForgetClockNum()==null){
+							attenceModelPojo.setForgetClockNum(0);
 						}
-						if(am.getForget_num()==null){
-							am.setForget_num(0);
+						if(attenceModelPojo.getWorkDays()==null){
+							attenceModelPojo.setWorkDays(0);
 						}
-						int flag = days-(days/weekds)*(7-weekds);
-						attenceModelPojo.setWorkDays(am.getFact_num()+am.getForget_num());
-						attenceModelPojo.setNotWorkNum(flag-am.getFact_num()-am.getForget_num());
 						//attenceModelPojo.setWorkDays(days-am.ge);
 						results.add(attenceModelPojo);
 					}
@@ -324,7 +326,13 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 				ps.setUserId(user.getId());
 			}
 			gets = attenceLogDao.getAttenceLogListByIds(ps);
-			alp.setData(gets);
+			if(gets==null){
+				AttenceLog logs = new AttenceLog();
+				alp.setData(logs);
+			}else{
+				alp.setData(gets);
+			}
+			
 		}else{
 			alp.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

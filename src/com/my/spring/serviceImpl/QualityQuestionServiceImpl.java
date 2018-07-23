@@ -143,13 +143,12 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 					}
 					if(voices.length>0){
 						for(int s=0;s<voices.length;s++){
-							
 							String path=filePath+"/"+"QualityQuestions";
-						 	Files newfile=fileService.uploadFile(path, fileList[s],fileType,request);
+						 	Files newfile=fileService.uploadFile(path, voices[s],fileType,request);
 						 	QuestionFile QualityQuestionFiles=new QuestionFile();
 						 	QualityQuestionFiles.setQualityId(QualityQuestion.getId());
 						 	QualityQuestionFiles.setFileId(newfile.getId());
-						 	String originName = fileList[s].getOriginalFilename();
+						 	String originName = voices[s].getOriginalFilename();
 							if (originName.contains(".")) {
 								originName = originName.substring(0, originName.lastIndexOf("."));
 							}
@@ -204,6 +203,7 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 				
 				Project po = projectDao.getById(QualityQuestion.getProjectId());
 				hq.put("projectName", "来自  "+po.getName());
+				hq.put("projectId", po.getId().toString());
 				hq.put("aboutId", QualityQuestion.getId().toString());
 				hq.put("createDate", Parameters.getSdfs().format(new Date()));
 				String content="";
@@ -534,8 +534,11 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 			        		QualityQuestionpojo.setUserNameLists(null);
 			        	}
 		        	}
-		        	String username=userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName();
-		        	QualityQuestionpojo.setUserId(username);
+		        	User user = userDao.getById(dataWrappers.getData().get(i).getUserId());
+		        	if(user!=null){
+		        		String username=userDao.getById(dataWrappers.getData().get(i).getUserId()).getRealName();
+			        	QualityQuestionpojo.setUserId(username);
+		        	}
 		        	QualityQuestionpojo.setModelFlag(dataWrappers.getData().get(i).getModelFlag());
 		        	QualityQuestionpojo.setCodeInformation(dataWrappers.getData().get(i).getCodeInformation());
 		        	QualityQuestionpojo.setPriority(dataWrappers.getData().get(i).getPriority());
@@ -601,8 +604,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 	    	    	datawrapper.getData().get(0).setUrgentPercent(100-(int)sortPercent-(int)importantPercent);
 		    		datawrapper.getData().get(0).setSortPercent((int)sortPercent);
 		    	}
-			}else{
-				datawrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
 			}
     	}else{
     		datawrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);

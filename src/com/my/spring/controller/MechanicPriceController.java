@@ -27,7 +27,7 @@ public class MechanicPriceController {
     @ResponseBody
     public DataWrapper<Void> addMechanicPrice(
     		@RequestParam(value = "am", required = false) String am,
-            @RequestParam(value = "token",required = true) String token){
+            @RequestParam(value = "token",required = false) String token){
         return amService.addMechanicPriceList(am, token);
     }
     

@@ -3,6 +3,7 @@ package com.my.spring.DAO;
 import java.util.Date;
 import java.util.List;
 
+import com.my.spring.model.AttenceForgetFactLogs;
 import com.my.spring.model.AttenceLog;
 import com.my.spring.model.AttenceLogs;
 import com.my.spring.utils.DataWrapper;
@@ -20,4 +21,6 @@ public interface AttenceLogDao {
 			Integer year, Integer month);
 	AttenceLog getAttenceLogByInfos(Long id, Date nowDate, Long projectId);
 	AttenceLog getAttenceLogListByIds(AttenceLog ps);
+	DataWrapper<List<AttenceForgetFactLogs>> getForgetFactNumsList(Integer pageIndex, Integer pageSize, AttenceLog duct,
+			Integer year, Integer month);
 }

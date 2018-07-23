@@ -19,6 +19,7 @@ import com.my.spring.model.User;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
 import com.my.spring.model.UserSelect;
+import com.my.spring.model.UserSelectPojo;
 import com.my.spring.service.UserService;
 import com.my.spring.utils.DataWrapper;
 
@@ -273,7 +274,7 @@ public class UserController {
 	 * */
 	@RequestMapping(value="/getUserByWorkName" , method = RequestMethod.GET)
 	@ResponseBody
-	public DataWrapper<List<UserSelect>> getUserByWorkName(
+	public DataWrapper<List<UserSelectPojo>> getUserByWorkName(
 			@RequestParam(value="workName",required=true) String workName,
 			@RequestParam(value="projectId",required=false) Long projectId,
 			@RequestParam(value="token",required=true) String token) {

@@ -31,12 +31,14 @@ import com.my.spring.example.jsms.api.JSMSExample;
 import com.my.spring.model.Files;
 import com.my.spring.model.MenuListCopy;
 import com.my.spring.model.Project;
+import com.my.spring.model.ProjectPojo;
 import com.my.spring.model.Role;
 import com.my.spring.model.SignUserInfo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserCopy;
 import com.my.spring.model.UserProject;
 import com.my.spring.model.UserSelect;
+import com.my.spring.model.UserSelectPojo;
 import com.my.spring.model.UserLog;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
@@ -406,6 +408,7 @@ public class UserServiceImpl implements UserService {
 					userpojo.setTel(dataWrapper.getData().getTel());
 					userpojo.setUserName(dataWrapper.getData().getUserName());
 					userpojo.setUserType(dataWrapper.getData().getUserType());
+					userpojo.setWorkName(dataWrapper.getData().getWorkName());
 					userpojo.setUserIcon(dataWrapper.getData().getUserIcon());
 					if(dataWrapper.getData().getUserIcon()!=null){
 						Files file=new Files();
@@ -888,16 +891,31 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataWrapper<List<UserSelect>> getUserByWorkName(String token, String workName,Long projectId) {
+	public DataWrapper<List<UserSelectPojo>> getUserByWorkName(String token, String workName,Long projectId) {
 		// TODO Auto-generated method stub
-		DataWrapper<List<UserSelect>> result = new DataWrapper<List<UserSelect>>();
+		DataWrapper<List<UserSelectPojo>> result = new DataWrapper<List<UserSelectPojo>>();
+		List<UserSelectPojo> results = new ArrayList<UserSelectPojo>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			List<UserSelect> gets = userDao.getUserListByWorkName(workName,projectId);
-			result.setData(gets);
+			if(!gets.isEmpty()){
+				for(UserSelect us:gets){
+					UserSelectPojo usp = new UserSelectPojo();
+					usp.setId(us.getId());
+					usp.setRealName(us.getReal_name());
+					if(usp!=null){
+						results.add(usp);
+					}
+				}
+				result.setData(results);
+			}
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+		if(result.getCallStatus()==CallStatusEnum.SUCCEED && result.getData()==null){
+	       	List<UserSelectPojo> pas= new ArrayList<UserSelectPojo>();
+	       	result.setData(pas);
+	    }
 		return result;
 		
 	}

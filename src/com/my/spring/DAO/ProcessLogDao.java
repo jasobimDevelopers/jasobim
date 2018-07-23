@@ -10,4 +10,6 @@ public interface ProcessLogDao {
     boolean deleteProcessLog(Long id);
     ProcessLog getById(Long id);
     DataWrapper<List<ProcessLog>> getProcessLogList(Integer pageIndex, Integer pageSize, ProcessLog ProcessLog);
+	ProcessLog getProcessLogByItemDataId(Long id, Long id2);
+	List<ProcessLog> getProcessLogByAboutId(Long id, Long id2);
 }

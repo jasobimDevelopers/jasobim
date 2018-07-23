@@ -1,9 +1,8 @@
  package com.my.spring.controller;
 
-import com.my.spring.enums.CallStatusEnum;
-import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.ProcessData;
 import com.my.spring.model.ProcessDataPojo;
+import com.my.spring.model.ProcessItem;
 import com.my.spring.service.ProcessDataService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +20,21 @@ public class ProcessDataController {
     ProcessDataService ProcessDataService;
     @RequestMapping(value="/admin/addProcessData", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Void> addProcessData(
+    public DataWrapper<ProcessData> addProcessData(
             @ModelAttribute ProcessData ProcessData,
             @RequestParam(value = "token",required = true) String token){
-    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    	DataWrapper<ProcessData> dataWrapper = new DataWrapper<ProcessData>();
 		dataWrapper=ProcessDataService.addProcessData(ProcessData,token);
-		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
-            	return dataWrapper;
-    	}else{
-    		dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-    	}
-        return dataWrapper;
+		return dataWrapper;
+    }
+    @RequestMapping(value="/admin/addProcessItem", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> addProcessItem(
+            @ModelAttribute ProcessItem processItem,
+            @RequestParam(value = "token",required = true) String token){
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+		dataWrapper=ProcessDataService.addProcessItem(processItem,token);
+		return dataWrapper;
     }
     @RequestMapping(value="/deleteProcessData",method=RequestMethod.GET)
     @ResponseBody

@@ -58,7 +58,7 @@ public class BimfaceController {
     @ResponseBody
     public DataWrapper<String> getModeViewTokenByIntegrateId(
     		@RequestParam(value="integrateId",required=true) Long integrateId,
-    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="token",required=false) String token,
     		@RequestParam(value="projectId",required=true) Long projectId,
     		HttpServletRequest request){
         return bimfaceService.getModeViewTokenByIntegrateId(integrateId,request,token,projectId);

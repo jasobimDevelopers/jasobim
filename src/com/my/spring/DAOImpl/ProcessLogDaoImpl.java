@@ -1,6 +1,7 @@
 package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProcessLogDao;
+import com.my.spring.model.Folder;
 import com.my.spring.model.ProcessLog;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -9,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -51,6 +53,7 @@ public class ProcessLogDaoImpl extends BaseDao<ProcessLog> implements ProcessLog
         if(ProcessLog.getItemState()!=null){
         	criteria.add(Restrictions.eq("item_state", ProcessLog.getItemState()));
         }
+       
         /////////////////////////////////////
    
         if (pageSize == null) {
@@ -88,5 +91,44 @@ public class ProcessLogDaoImpl extends BaseDao<ProcessLog> implements ProcessLog
 	public ProcessLog getById(Long id) {
 		// TODO Auto-generated method stub
 		return get(id);
+	}
+
+	@Override
+	public ProcessLog getProcessLogByItemDataId(Long id, Long id2) {
+		 List<ProcessLog> ret = new ArrayList<ProcessLog>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(ProcessLog.class);
+        criteria.add(Restrictions.eq("type",0));
+        criteria.add(Restrictions.eq("aboutId",id2));
+        criteria.add(Restrictions.eq("itemId",id));
+        
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(!ret.isEmpty()){
+        	return ret.get(0);
+        }
+        return null;
+	}
+	@Override
+	public List<ProcessLog> getProcessLogByAboutId(Long id, Long id2) {
+		 List<ProcessLog> ret = new ArrayList<ProcessLog>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(ProcessLog.class);
+        criteria.add(Restrictions.eq("type",0));
+        criteria.add(Restrictions.eq("aboutId",id2));
+        criteria.add(Restrictions.eq("processId",id));
+        
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(!ret.isEmpty()){
+        	return ret;
+        }
+        return null;
 	}
 }
