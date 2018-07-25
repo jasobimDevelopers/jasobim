@@ -6,7 +6,6 @@ import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
-import com.my.spring.model.NewsPojo;
 import com.my.spring.model.Normativefiles;
 import com.my.spring.model.NormativefilesPojo;
 import com.my.spring.model.NormativefilesPojos;

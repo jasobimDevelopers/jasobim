@@ -16,7 +16,7 @@
 <div id="domId" style="width:1500px; height:1700px;"></div>
 
 <script type="text/javascript">
-	var baseUrl="http://localhost:8080/jasobim/";
+	var baseUrl="http://jasobim.com:8080/";
 	var viewToken = '8e3e428e5f52469da9993ab51ace7d92';
 	$.ajax({
          type: "get",
@@ -29,23 +29,22 @@
          dataType: "json",
          success: function(data){
          	viewToken=data.data;
-        	
+        	runViewToken();
          }
      });
 	// 指定待显示的模型或图纸（viewToken从服务端获取）
-	
-	
-	// 初始化显示组件
-	var options = new BimfaceSDKLoaderConfig();
-	options.viewToken = viewToken;
-	BimfaceSDKLoader.load(options, successCallback, failureCallback);
-	
+	function runViewToken(){
+		// 初始化显示组件
+		var options = new BimfaceSDKLoaderConfig();
+		options.viewToken = viewToken;
+		BimfaceSDKLoader.load(options, successCallback, failureCallback);
+	}
+
 	function successCallback(viewMetaData) {
 		// 创建WebApplication，直接显示模型或图纸
 		var dom4Show = document.getElementById('domId');
 		new Glodon.Bimface.Application.WebApplicationDemo(viewMetaData, dom4Show); 
 	}
-	
 	function failureCallback(error) {
 		console.log(error);
 	};

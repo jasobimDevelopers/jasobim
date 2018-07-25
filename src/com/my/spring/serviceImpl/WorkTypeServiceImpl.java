@@ -101,14 +101,6 @@ public class WorkTypeServiceImpl implements WorkTypeService {
 	        		userLog.setVersion("-1");
 	        		userLogSerivce.addUserLog(userLog, token);
 	        	}
-        		if(type!=null){
-        			if(type==0){
-        				WorkType.setName("施工任务单");
-        			}
-        			if(type==1){
-        				WorkType.setName("预付单");
-        			}
-        		}
 				dataWrappers=WorkTypeDao.getWorkTypeList(pageIndex,pageSize,WorkType);
 			}else{
 				dataWrappers.setErrorCode(ErrorCodeEnum.AUTH_Error);

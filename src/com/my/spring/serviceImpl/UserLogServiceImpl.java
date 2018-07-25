@@ -25,7 +25,6 @@ import com.my.spring.DAO.AdvancedOrderDao;
 import com.my.spring.DAO.ConstructionTaskDao;
 import com.my.spring.DAO.DuctDao;
 import com.my.spring.DAO.ItemDao;
-import com.my.spring.DAO.NewsDao;
 import com.my.spring.DAO.PaperDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QuestionDao;
@@ -63,8 +62,7 @@ public class UserLogServiceImpl implements UserLogService {
 	DuctDao ductDao;
 	@Autowired
 	ValueOutputDao valueOutputDao;
-	@Autowired
-	NewsDao newsDao;
+
 	@Autowired
 	QuestionDao questionDao;
 	@Autowired

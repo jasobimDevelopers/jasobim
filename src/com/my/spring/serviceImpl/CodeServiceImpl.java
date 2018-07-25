@@ -36,13 +36,10 @@ public class CodeServiceImpl implements CodeService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<String>> batchImport(String name, MultipartFile[] file,String token,HttpServletRequest request) {
+	public DataWrapper<List<String>> batchImport(String name, MultipartFile[] file,HttpServletRequest request) {
 		DataWrapper<List<String>> urllist= new DataWrapper<List<String>>();
 		List<String> temp = new ArrayList<String>();
-		User userInMemory = SessionManager.getSession(token);
-		if(userInMemory!=null){
 			if (file != null && file.length>0) {
-				name=name+"/"+userInMemory.getId();
 				for(int i=0;i<file.length;i++){
 					Files files=fileSerivce.uploadFile(name, file[i], 8, request);
 					if(files!=null){
@@ -57,10 +54,9 @@ public class CodeServiceImpl implements CodeService {
         					Map hints = new HashMap();  
         			        //内容所使用编码  
         			        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
-        			        BitMatrix bitMatrix = multiFormatWriter.encode("jasobim.com/"+files.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
+        			        BitMatrix bitMatrix = multiFormatWriter.encode("jasobim.com:8080/"+files.getUrl(),BarcodeFormat.QR_CODE, 200, 200, hints);  
         			        //生成二维码  
-        			     
-        			        File outputFile = new File("D:/jasobim/tomcat_3001/webapps/ROOT/files/code",str+".png"); 
+        			        File outputFile = new File("D:/jasobim/tomcat_8080/webapps/ROOT/files/code",str+".png"); 
         			        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile);  
         			   		/*MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         			        @SuppressWarnings("rawtypes")
@@ -83,40 +79,31 @@ public class CodeServiceImpl implements CodeService {
 				}
 				urllist.setData(temp);
 			}
-		}else{
-			urllist.setErrorCode(ErrorCodeEnum.User_Not_Logined);
-		}
         return urllist;
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<String> batchImportText(String name, String content,String token,HttpServletRequest request) {
+	public DataWrapper<String> batchImportText(String name, String content,HttpServletRequest request) {
 		DataWrapper<String> url= new DataWrapper<String>();
-		User userInMemory = SessionManager.getSession(token);
-		if(userInMemory!=null){
-			if (content != null && !content.equals("")) {
-				name=name+"/"+userInMemory.getId();
-				SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
-			   	Date d=new Date();
-			   	String str=sdf.format(d);
-			   	try{
-			        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-			        @SuppressWarnings("rawtypes")
-					Map hints = new HashMap();  
-			        //内容所使用编码  
-			        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
-			        BitMatrix bitMatrix = multiFormatWriter.encode("http://jasobim.com.cn/"+content,BarcodeFormat.QR_CODE, 200, 200, hints);  
-			        //生成二维码  
-			        File outputFile = new File("D:/jasobim/tomcat_3001/webapps/ROOT/files/code",str+".png"); 
-			        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile);  
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			   	String urlReal="files/code/"+str+".png";
-				url.setData(urlReal);;
+		if (content != null && !content.equals("")) {
+			SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmssSSS" );
+		   	Date d=new Date();
+		   	String str=sdf.format(d);
+		   	try{
+		        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+		        @SuppressWarnings("rawtypes")
+				Map hints = new HashMap();  
+		        //内容所使用编码  
+		        hints.put(EncodeHintType.CHARACTER_SET, "utf8");  
+		        BitMatrix bitMatrix = multiFormatWriter.encode("http://jasobim.com:8080/"+content,BarcodeFormat.QR_CODE, 200, 200, hints);  
+		        //生成二维码  
+		        File outputFile = new File("D:/jasobim/tomcat_8080/webapps/ROOT/files/code",str+".png"); 
+		        MatrixToImageWriter.writeToFile(bitMatrix, "png", outputFile);  
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		}else{
-			url.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		   	String urlReal="files/code/"+str+".png";
+			url.setData(urlReal);;
 		}
         return url;
 	}

@@ -3,7 +3,6 @@ package com.my.spring.serviceImpl;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.ItemDataDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.WechatUrlDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.ItemData;
@@ -35,8 +34,6 @@ public class ItemDataServiceImpl implements ItemDataService {
     FileService fileService;
     @Autowired
     UserLogService userLogSerivce;
-    @Autowired
-    WechatUrlDao wechatDao;
     @Override
     public DataWrapper<Void> addItemData(ItemData ItemData,String token) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();

@@ -2,8 +2,6 @@ package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProcessItemDao;
 import com.my.spring.model.ItemIdMode;
-import com.my.spring.model.MessageCopy;
-import com.my.spring.model.News;
 import com.my.spring.model.ProcessItem;
 import com.my.spring.model.ProcessLog;
 import com.my.spring.utils.DaoUtil;

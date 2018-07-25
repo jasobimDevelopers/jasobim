@@ -1,6 +1,5 @@
 package com.my.spring.serviceImpl;
 
-import com.bimface.sdk.constants.CallbackStatus;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -10,7 +9,6 @@ import com.my.spring.DAO.DuctDao;
 import com.my.spring.DAO.DuctLogDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
@@ -22,7 +20,6 @@ import com.my.spring.model.DuctFloorInfo;
 import com.my.spring.model.DuctLog;
 import com.my.spring.model.DuctPojo;
 import com.my.spring.model.DuctPojos;
-import com.my.spring.model.MaterialPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;

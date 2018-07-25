@@ -219,8 +219,8 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 					userids[b]=userList.get(b).getId().toString();
 				}
 				///0、质量   1、安全   2、施工任务单  3、 预付单  4、留言
-				PushExample.testSendPushWithCustomConfig_ios(userids, content,0,hq);
-				PushExample.testSendPushWithCustomConfig_android(userids, content,0,hq);
+	//			PushExample.testSendPushWithCustomConfig_ios(userids, content,0,hq);
+		//		PushExample.testSendPushWithCustomConfig_android(userids, content,0,hq);
 				}
 
 			}

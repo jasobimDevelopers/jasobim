@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.my.spring.model.WechatUrl;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.utils.SessionManager;
 import com.my.spring.wechat.WechatSpider;

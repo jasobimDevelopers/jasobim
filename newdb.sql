@@ -257,9 +257,21 @@ create table budget(
 	project_id bigint(20) unsigned not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-create table wechat_url(
+####班组成员
+create table department_user(
 	id serial primary key,
-	url text,
-	create_date datetime
+	department_id bigint(20) unsigned not null,
+	name varchar(50),
+	sex int,
+	work_type_id bigint(20) unsigned not null,
+	id_card varchar(100),
+	tel varchar(50),
+	salary int,
+	id_card_img_z bigint(20) unsigned not null,
+	id_card_img_f bigint(20) unsigned not null,
+	create_date datetime,
+	update_date datetime,
+	create_user bigint(20) unsigned not null,
+	update_user bigint(20) unsigned not null,
+	project_id bigint(20) unsigned not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
