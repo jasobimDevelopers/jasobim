@@ -139,7 +139,6 @@ public class UserServiceImpl implements UserService {
 					userLog.setActionType(2);//浏览、增加、登录、修改
 					userLog.setProjectPart(ProjectDatas.Login_area.getCode());
 				}
-				
 				SessionManager.removeSessionByUserId(user.getId());
 				if(system!=null){
 					user.setSystemId(system);

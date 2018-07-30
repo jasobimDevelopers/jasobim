@@ -7,6 +7,7 @@ public class ImportMaterial {
 	private String size;///规格尺寸
 	private String unit;///单位
 	private String unicode;///物资编码
+	private String nums;//数量
 	private String remark;///备注
 	public String getMaterialType() {
 		return materialType;
@@ -43,6 +44,12 @@ public class ImportMaterial {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public String getNums() {
+		return nums;
+	}
+	public void setNums(String nums) {
+		this.nums = nums;
 	}
 	
 

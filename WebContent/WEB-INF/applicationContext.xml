@@ -56,9 +56,9 @@
                 <prop key="hiberante.format_sql">true</prop>
                 <prop key="hiberante.connection.autocommit">true</prop>
                 <!-- <prop key="hibernate.connection.url">jdbc:mysql://10.3.103.20:3306/bimdatas</prop> -->
-                <!-- <prop key="hibernate.connection.url">jdbc:mysql://10.3.103.20:3306/bimdatas_test</prop> -->
+                <prop key="hibernate.connection.url">jdbc:mysql://10.3.103.20:3306/bimdatas_test</prop>
                 <!-- <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas_new</prop> -->
-                <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas_test</prop>
+               <!--  <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas_test</prop> -->
             </props>
         </property>
         <property name="annotatedClasses">
@@ -78,7 +78,6 @@
                 <value>com.my.spring.model.MinItem</value>
                 <value>com.my.spring.model.FeedBack</value>
                 <value>com.my.spring.model.Duct</value>
-               	<value>com.my.spring.model.News</value>
                	<value>com.my.spring.model.DuctLog</value>
                	<value>com.my.spring.model.ValueOutput</value>
                	<value>com.my.spring.model.UserLog</value>
@@ -115,7 +114,6 @@
                	<value>com.my.spring.model.SafeFine</value>
                	<value>com.my.spring.model.MaterialPlan</value>
                	<value>com.my.spring.model.Budget</value>
-               	<value>com.my.spring.model.WechatUrl</value>
                	<value>com.my.spring.model.NewsInfo</value>
                	<value>com.my.spring.model.MaterialImportLog</value>
                	<value>com.my.spring.model.WorkType</value>
@@ -123,6 +121,8 @@
                	<value>com.my.spring.model.ProcessData</value>
                	<value>com.my.spring.model.ProcessItem</value>
                	<value>com.my.spring.model.ProcessLog</value>
+               	<value>com.my.spring.model.ConstructionTaskNew</value>
+               	<value>com.my.spring.model.DepartmentUser</value>
             </list>
         </property>
     </bean>
@@ -130,9 +130,9 @@
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <!-- <property name="url" value="jdbc:mysql://10.3.103.20:3306/bimdatas?characterEncoding=utf-8" /> -->
-        <!-- <property name="url" value="jdbc:mysql://10.3.103.20:3306/bimdatas_test?characterEncoding=utf-8" /> -->
+        <property name="url" value="jdbc:mysql://10.3.103.20:3306/bimdatas_test?characterEncoding=utf-8" />
        <!--  <property name="url" value="jdbc:mysql://localhost:3306/bimdatas_new?characterEncoding=utf-8" /> -->
-        <property name="url" value="jdbc:mysql://localhost:3306/bimdatas_test?characterEncoding=utf-8" />
+        <!-- <property name="url" value="jdbc:mysql://localhost:3306/bimdatas_test?characterEncoding=utf-8" /> -->
         <property name="username" value="root" />
         <property name="password" value="108158" />
     </bean>

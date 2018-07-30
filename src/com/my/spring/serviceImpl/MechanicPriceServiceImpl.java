@@ -1,7 +1,9 @@
 package com.my.spring.serviceImpl;
 
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +42,7 @@ import com.my.spring.service.MechanicPriceService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.DateDemo;
+import com.my.spring.utils.ExportExcelOfMenchainc;
 import com.my.spring.utils.InstanceUtil;
 import com.my.spring.utils.SessionManager;
 import com.my.spring.utils.WriteDataToExcel;
@@ -320,11 +323,25 @@ public class MechanicPriceServiceImpl implements MechanicPriceService{
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		mvs=this.getMechanicPriceNum(token,projectId,date);
+    		Project project = projectDao.getById(projectId);
     		if(mvs.getData()!=null){
     			if(mvs.getData().size()>0){
-    				WriteMechanicDataToExcel wd = new WriteMechanicDataToExcel();
-    	    		String url=wd.WriteData(mvs.getData());
-    	    		result.setData(url);
+    				try  
+    		        {  
+    					Calendar cal = Calendar.getInstance();
+    					cal.setTime(Parameters.getSdfs().parse(date));
+    		            FileOutputStream fout = new FileOutputStream("D://jasobim/tomcat_8080/webapps/mechanicFiles/mechanicPrice.xls");
+    		            ExportExcelOfMenchainc aa = new ExportExcelOfMenchainc();
+    		            aa.getValue(mvs.getData(), fout,project.getName(),cal.get(Calendar.MONTH) + 1);
+    		            fout.close();  
+    		            result.setData("/mechanicFiles/mechanicPrice.xls");
+    		        }  
+    		        catch (Exception e)  
+    		        {  
+    		            e.printStackTrace();  
+    		        }  
+    				/*WriteMechanicDataToExcel wd = new WriteMechanicDataToExcel();
+    	    		String url=wd.WriteData(mvs.getData());*/
     			}
     		}
     	}else{

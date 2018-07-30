@@ -14,24 +14,12 @@
        http://www.springframework.org/schema/task/spring-task-3.1.xsd ">
        
 	   <context:annotation-config/>  
-	  <!--  <mvc:cors>
-		    <mvc:mapping path="/api/**"
-		        allowed-origins="http://www.jasobim.com, http://localhost:80/jasobim"
-		        allowed-methods="GET, PUT"
-		        allowed-headers="header1, header2, header3"
-		        exposed-headers="header1, header2" allow-credentials="false"
-		        max-age="3600" />
-	   </mvc:cors> -->
-	<!--    <mvc:cors>  
-    		<mvc:mapping path="/cross/*"/>  
-	   </mvc:cors>  -->
-       <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>  
+       <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/> 
        <context:component-scan base-package="com.my.spring"/>
        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
               <property name="prefix" value="/page/"/>
               <property name="suffix" value=".html"/>
        </bean>
-
        <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
               <property name="messageConverters">
                      <list>
@@ -41,6 +29,7 @@
               </property>
        </bean>
        <bean class="com.my.spring.utils.SwaggerConfig" />
+      <!--  <bean id="NewsService" class="com.my.spring.serviceImpl.NewsServiceImpl"></bean> -->
       <!--  <mvc:resources mapping="/api/**" location="/api/" />   -->
        <!-- <mvc:default-servlet-handler/> -->
        <bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />

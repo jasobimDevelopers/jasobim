@@ -253,35 +253,39 @@ public class ReadMaterialExcel {
                     	   String str=cell.getStringCellValue();
                     	   if(str==null || str.equals("")){
                     	   }
-                    	   item.setMaterialType(str);
+                    	   item.setMaterialType(str);//物资分类
                        }else if(c==1){
                     	   cell.setCellType(Cell.CELL_TYPE_STRING);
                     	   String str=cell.getStringCellValue();
                     	   if(str==null || str.equals("")){
                     	   }
-                    	   item.setUnicode(str);
+                    	   item.setUnicode(str);//物资编码
                        }else if(c==2){
                     	   cell.setCellType(Cell.CELL_TYPE_STRING);
                     	   String str=cell.getStringCellValue();
                     	   if(str==null || str.equals("")){
                     	   }
-                    	   item.setMaterialName(str);
+                    	   item.setMaterialName(str);///物资名称
                        }else if(c==3){
                     	   cell.setCellType(Cell.CELL_TYPE_STRING);
                     	   String str=cell.getStringCellValue();
                     	   if(str==null || str.equals("")){
                     	   }
-                    	   item.setSize(str);
+                    	   item.setSize(str);//规格型号
                        }else if(c==4){
                     	   cell.setCellType(Cell.CELL_TYPE_STRING);
                     	   String str=cell.getStringCellValue();
                     	   if(str==null || str.equals("")){
                     	   }
-                    	   item.setUnit(str);
+                    	   item.setUnit(str);//单位
                        }else if(c==5){
                     	   cell.setCellType(Cell.CELL_TYPE_STRING);
                     	   String str=cell.getStringCellValue();
-                    	   item.setRemark(str);
+                    	   item.setNums(str);///数量
+                       }else if(c==6){
+                    	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                    	   String str=cell.getStringCellValue();
+                    	   item.setRemark(str);//备注
                        }
                    }
                }

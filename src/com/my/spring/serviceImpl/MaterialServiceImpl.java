@@ -3,6 +3,7 @@ package com.my.spring.serviceImpl;
 import com.my.spring.DAO.MaterialDao;
 import com.my.spring.DAO.MaterialFileDao;
 import com.my.spring.DAO.MaterialImportLogDao;
+import com.my.spring.DAO.MaterialLogDao;
 import com.my.spring.DAO.MaterialTypeDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.CallStatusEnum;
@@ -13,6 +14,7 @@ import com.my.spring.model.Material;
 import com.my.spring.model.MaterialFile;
 import com.my.spring.model.MaterialImportLog;
 import com.my.spring.model.MaterialImportLogPojo;
+import com.my.spring.model.MaterialLog;
 import com.my.spring.model.MaterialPojo;
 import com.my.spring.model.MaterialType;
 import com.my.spring.model.User;
@@ -56,6 +58,8 @@ public class MaterialServiceImpl implements MaterialService {
     FileService fileService;
     @Autowired
     MaterialFileDao materialFileDao;
+    @Autowired
+    MaterialLogDao materialLogDao;
     @Override
     public DataWrapper<Void> addMaterial(Material m,String token) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -210,7 +214,6 @@ public class MaterialServiceImpl implements MaterialService {
 					mf.setUserId(userInMemory.getId());
 					materialFileDao.addMaterialFile(mf);
 				}
-				
 				for(ImportMaterial im:ms){
 					Material m = new Material();
 					MaterialType mq = new MaterialType();
@@ -224,6 +227,7 @@ public class MaterialServiceImpl implements MaterialService {
 					m.setUnit(im.getUnit());
 					m.setSize(im.getSize());
 					m.setRemark(im.getRemark());
+					m.setInNum(Integer.parseInt(im.getNums()));
 					if(im.getMaterialType()!=null){
 						MaterialType sp = new MaterialType();
 						sp=materialTypeDao.getMaterialByName(im.getMaterialType());
@@ -236,11 +240,43 @@ public class MaterialServiceImpl implements MaterialService {
 							m.setMaterialType(sp.getId());
 						}
 					}
-					mst.add(m);
-				}
-				if(mst.size()>0){
-					if(!materialDao.addMaterialList(mst)){
-						result.setErrorCode(ErrorCodeEnum.Error);
+					if(m!=null){
+						Material finds = new Material();
+						finds=materialDao.getFindMaterial(m);
+						if(finds!=null){
+							if(finds.getInNum()==null){
+								finds.setInNum(0);
+								finds.setLeaveNum(0);
+							}else{
+								finds.setInNum(finds.getInNum()+Integer.parseInt(im.getNums()));
+								finds.setLeaveNum(finds.getLeaveNum()+Integer.parseInt(im.getNums()));
+							}
+							if(materialDao.updateMaterial(finds)){
+								MaterialLog ml = new MaterialLog();
+								ml.setLogType(0);
+								ml.setLogDate(new Date());
+								ml.setMaterialId(finds.getId());
+								ml.setNum(Integer.parseInt(im.getNums()));
+								ml.setUserId(userInMemory.getId());
+								ml.setIntro(finds.getMaterialName());
+								materialLogDao.addMaterialLog(ml);
+							}
+							
+						}else{
+							m.setOutNum(0);
+							m.setInNum(Integer.parseInt(im.getNums()));
+							m.setLeaveNum(Integer.parseInt(im.getNums()));
+							if(materialDao.addMaterial(m)){
+								MaterialLog ml = new MaterialLog();
+								ml.setLogType(0);
+								ml.setLogDate(new Date());
+								ml.setMaterialId(m.getId());
+								ml.setNum(Integer.parseInt(im.getNums()));
+								ml.setUserId(userInMemory.getId());
+								ml.setIntro(m.getMaterialName());
+								materialLogDao.addMaterialLog(ml);
+							}
+						}
 					}
 				}
 			}else{
@@ -315,18 +351,40 @@ public class MaterialServiceImpl implements MaterialService {
 						}
 					}
 					if(m!=null){
-						Material finds=materialDao.getFindMaterial(m);
+						Material finds = new Material();
+						finds=materialDao.getFindMaterial(m);
 						if(finds!=null){
 							if(finds.getInNum()==null){
-								finds.setInNum(1);
-								finds.setLeaveNum(1);
+								finds.setInNum(0);
+								finds.setLeaveNum(0);
 							}else{
-								finds.setInNum(finds.getInNum()+1);
-								finds.setLeaveNum(finds.getLeaveNum()+1);
+								finds.setInNum(finds.getInNum()+Integer.parseInt(im.getNums()));
+								finds.setLeaveNum(finds.getLeaveNum()+Integer.parseInt(im.getNums()));
 							}
-							materialDao.updateMaterial(finds);
+							if(materialDao.updateMaterial(finds)){
+								MaterialLog ml = new MaterialLog();
+								ml.setLogType(0);
+								ml.setLogDate(new Date());
+								ml.setMaterialId(finds.getId());
+								ml.setNum(Integer.parseInt(im.getNums()));
+								ml.setUserId(userInMemory.getId());
+								ml.setIntro(finds.getMaterialName());
+								materialLogDao.addMaterialLog(ml);
+							}
+							
 						}else{
-							materialDao.addMaterial(m);
+							m.setInNum(Integer.parseInt(im.getNums()));
+							m.setLeaveNum(Integer.parseInt(im.getNums()));
+							if(materialDao.addMaterial(m)){
+								MaterialLog ml = new MaterialLog();
+								ml.setLogType(0);
+								ml.setLogDate(new Date());
+								ml.setMaterialId(m.getId());
+								ml.setNum(Integer.parseInt(im.getNums()));
+								ml.setUserId(userInMemory.getId());
+								ml.setIntro(m.getMaterialName());
+								materialLogDao.addMaterialLog(ml);
+							}
 						}
 					}
 				}
