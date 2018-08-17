@@ -1,6 +1,7 @@
 package com.my.spring.controller;
 
 import com.my.spring.model.Project;
+import com.my.spring.model.ProjectIds;
 import com.my.spring.model.ProjectPojo;
 import com.my.spring.service.ProjectService;
 import com.my.spring.utils.DataWrapper;
@@ -98,5 +99,11 @@ public class ProjectController {
     		@RequestParam(value="token",required=true) String token){
         return projectService.getProjectHour(projectId,token);
     }
-    
+/////获取项目标准工时接口
+    @RequestMapping(value="/admin/getAllProjectId",method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<ProjectIds>> getAllProjectId(
+    		@RequestParam(value="token",required=true) String token){
+        return projectService.getAllProjectId(token);
+    }
 }

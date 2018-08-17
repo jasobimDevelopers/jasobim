@@ -458,7 +458,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 		}
 		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
 		List<QuestionCopy> retDataWrapper = new ArrayList<QuestionCopy>();
-		String sql = "select *,COUNT(1) as total from question where id in(select e.about_id "
+		String sql = "select * from question where id in(select e.about_id "
 		+"from notice e where e.notice_type=1 and e.user_id="+id+" and e.read_state=0 "
 		+"and (e.about_id in (select a.id from question a where a.project_id "
 		+"in (select c.project_id from user_project c where c.user_id="+id+"))) order by e.create_date DESC)";
@@ -482,7 +482,6 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 				 .addScalar("user_list", StandardBasicTypes.STRING)
 				 .addScalar("voice_id_list", StandardBasicTypes.STRING)
 				 .addScalar("model_flag", StandardBasicTypes.STRING)
-				 .addScalar("total", StandardBasicTypes.INTEGER)
 				 .setResultTransformer(Transformers.aliasToBean(QuestionCopy.class)); 
 		    retDataWrapper=query.list();
             
@@ -545,7 +544,7 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 		}
 		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
 		List<QuestionCopy> retDataWrapper = new ArrayList<QuestionCopy>();
-		String sql = "select b.*,COUNT(1) as total from notice a,question b where a.user_id="+id
+		String sql = "select b.* from notice a,question b where a.user_id="+id
 		+" and a.read_state=0 and a.notice_type=1 and a.about_id=b.id ORDER BY a.create_date DESC";
 		if(pageIndex!=-1){
 			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
@@ -567,7 +566,6 @@ public class QuestionDaoImpl extends BaseDao<Question> implements QuestionDao {
 					 .addScalar("user_list", StandardBasicTypes.STRING)
 					 .addScalar("voice_id_list", StandardBasicTypes.STRING)
 					 .addScalar("model_flag", StandardBasicTypes.STRING)
-					 .addScalar("total",StandardBasicTypes.INTEGER)
 				 .setResultTransformer(Transformers.aliasToBean(QuestionCopy.class)); 
 		    retDataWrapper=query.list();
             

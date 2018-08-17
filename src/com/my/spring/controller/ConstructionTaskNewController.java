@@ -66,11 +66,10 @@ public class ConstructionTaskNewController {
     @ResponseBody
     public DataWrapper<List<ConstructionTaskNewPojo>> getConstructionTaskNewList(
             @RequestParam(value = "token",required = true) String token,
-            @RequestParam(value = "type",required = true) Integer type,
             @RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute ConstructionTaskNew ConstructionTaskNew){
-        return ConstructionTaskNewService.getConstructionTaskNewList(token,pageIndex,pageSize,ConstructionTaskNew,type);
+        return ConstructionTaskNewService.getConstructionTaskNewList(token,pageIndex,pageSize,ConstructionTaskNew);
     }
     /**
      * 审批接口

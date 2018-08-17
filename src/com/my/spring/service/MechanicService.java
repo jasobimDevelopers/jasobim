@@ -13,10 +13,12 @@ import com.my.spring.model.MechanicPojos;
 import com.my.spring.utils.DataWrapper;
 
 public interface MechanicService {
-	 DataWrapper<Void> addMechanic(Mechanic duct, String token, MultipartFile file, HttpServletRequest request);
 	 DataWrapper<Void> deleteMechanic(Long id,String token);
-	 DataWrapper<Void> updateMechanic(Mechanic duct,String token, MultipartFile file, HttpServletRequest request);
 	DataWrapper<List<MechanicPojo>> getMechanicList(String token, Mechanic ps, Integer pageSize,
 			Integer pageIndex) throws ParseException;
 	DataWrapper<List<MechanicPojos>> getMechanicInfos(String token, Mechanic ps) throws ParseException;
+	DataWrapper<Void> addMechanic(Mechanic am, String token, MultipartFile file, MultipartFile file2,
+			HttpServletRequest request);
+	DataWrapper<Void> updateMechanic(Mechanic am, String token, MultipartFile file, MultipartFile file2,
+			HttpServletRequest request);
 }

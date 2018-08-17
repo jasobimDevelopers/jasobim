@@ -45,6 +45,7 @@ public class MechanicPriceDaoImpl extends BaseDao<MechanicPrice> implements Mech
 		return delete(get(id));
 	}
 
+	
 	@Override
 	public boolean updateMechanicPrice(MechanicPrice am) {
 		// TODO Auto-generated method stub

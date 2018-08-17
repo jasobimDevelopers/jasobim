@@ -61,7 +61,7 @@ function UserLogController($scope,UserLogService) {
   $scope.startTime="";
   $scope.finishedTime="";
   $scope.projectLists="";
-  $scope.projectPartList=["模型区域","图纸区域","登录区域","交底区域","预制化区域","紧急事项区域","通知区域","产值区域","班组信息区域","施工任务单","预付单区域"];
+  $scope.projectPartList=["模型","图纸","首页","交底","进度管理 ","安全问题","消息通知","统计管理","个人中心","规范查阅","模型构建信息","质量问题","新闻资讯","实测实量","云盘管理","物资管理","劳动力监测","考勤管理","工程量变更","进程管理","预付单","施工任务单"];
   $scope.phoneSystem=["苹果系统","安卓系统"];
   $scope.userLogTitles=["序号","用户名","项目名称","功能区域","操作时间","系统类型","文件内容","版本","操作"];
   	//////搜索

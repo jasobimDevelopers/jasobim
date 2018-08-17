@@ -10,16 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.my.spring.DAO.DepartmentDao;
 import com.my.spring.DAO.DepartmentUserDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.UserTeamDao;
 import com.my.spring.DAO.WorkTypeDao;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.Department;
 import com.my.spring.model.DepartmentUser;
 import com.my.spring.model.DepartmentUserPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.User;
+import com.my.spring.model.UserTeam;
 import com.my.spring.model.WorkType;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.DepartmentUserService;
@@ -31,7 +31,7 @@ public class DepartmentUserServiceImpl implements DepartmentUserService {
 	@Autowired
 	DepartmentUserDao departmentUserDao;
 	@Autowired
-	DepartmentDao departmentDao;
+	UserTeamDao userTeamDao;
 	@Autowired
 	WorkTypeDao workTypeDao;
 	@Autowired
@@ -73,7 +73,7 @@ public class DepartmentUserServiceImpl implements DepartmentUserService {
 				if(idCardImgF!=null){
 					Files file2 = fileService.uploadFile(filePath, idCardImgF, 5, request);
 					if(file2!=null){
-						dt.setIdCardImgZ(file2.getId());
+						dt.setIdCardImgF(file2.getId());
 					}
 				}
 				dt.setCreateDate(new Date());
@@ -111,18 +111,21 @@ public class DepartmentUserServiceImpl implements DepartmentUserService {
 		// TODO Auto-generated method stub
 		DataWrapper<List<DepartmentUserPojo>> result = new DataWrapper<List<DepartmentUserPojo>>();
 		List<DepartmentUserPojo> outputs = new ArrayList<DepartmentUserPojo>();
+		DataWrapper<List<DepartmentUser>> getsDataWrapper = new DataWrapper<List<DepartmentUser>>();
 		List<DepartmentUser> gets = new ArrayList<DepartmentUser>();
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null){
-			gets=departmentUserDao.getDepartmentUserList(pageSize, pageIndex, departmentUser);
+			getsDataWrapper=departmentUserDao.getDepartmentUserList(pageSize, pageIndex, departmentUser);
+			gets=getsDataWrapper.getData();
 			if(!gets.isEmpty()){
 				for(DepartmentUser du : gets){
 					DepartmentUserPojo dup = new DepartmentUserPojo();
+					dup.setUserTeamType(du.getUserTeamType());
 					dup.setName(du.getName());
 					dup.setId(du.getId());
-					Department de=departmentDao.getById(du.getDepartmentId());
+					UserTeam de=userTeamDao.getById(du.getTeamId());
 					if(de!=null){
-						dup.setDepartment(de.getName());
+						dup.setTeam(de.getName());
 					}
 					WorkType wt = workTypeDao.getById(du.getWorkTypeId());
 					if(wt!=null){
@@ -181,9 +184,9 @@ public class DepartmentUserServiceImpl implements DepartmentUserService {
 					DepartmentUserPojo dup = new DepartmentUserPojo();
 					dup.setName(du.getName());
 					dup.setId(du.getId());
-					Department de=departmentDao.getById(du.getDepartmentId());
+					UserTeam de=userTeamDao.getById(du.getTeamId());
 					if(de!=null){
-						dup.setDepartment(de.getName());
+						dup.setTeam(de.getName());
 					}
 					WorkType wt = workTypeDao.getById(du.getWorkTypeId());
 					if(wt!=null){
@@ -213,6 +216,9 @@ public class DepartmentUserServiceImpl implements DepartmentUserService {
 						if(updateUser!=null){
 							dup.setUpdateUser(updateUser.getRealName());
 						}
+					}
+					if(du.getTeamId()!=null){
+						
 					}
 					dup.setCreateDate(Parameters.getSdf().format(du.getCreateDate()));
 					dup.setIdCard(du.getIdCard());
@@ -261,8 +267,8 @@ public class DepartmentUserServiceImpl implements DepartmentUserService {
 						if(departmentUser.getSex()!=null){
 							get.setSex(departmentUser.getSex());
 						}
-						if(departmentUser.getDepartmentId()!=null){
-							get.setDepartmentId(departmentUser.getDepartmentId());
+						if(departmentUser.getTeamId()!=null){
+							get.setTeamId(departmentUser.getTeamId());
 						}
 						if(idCardImgZ!=null){
 							Files file1 = fileService.uploadFile(filePath, idCardImgZ, 5, request);
@@ -273,7 +279,7 @@ public class DepartmentUserServiceImpl implements DepartmentUserService {
 						if(idCardImgF!=null){
 							Files file2 = fileService.uploadFile(filePath, idCardImgF, 5, request);
 							if(file2!=null){
-								get.setIdCardImgZ(file2.getId());
+								get.setIdCardImgF(file2.getId());
 							}
 						}
 						if(!departmentUserDao.updateDepartmentUser(get)){

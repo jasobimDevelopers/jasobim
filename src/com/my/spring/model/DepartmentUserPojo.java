@@ -1,10 +1,11 @@
 package com.my.spring.model;
 public class DepartmentUserPojo {
 	private Long id;
-	private String department;///所属班组id
+	private String team;///所属班组id
 	private String name;
 	private String sex;///0、男  1、女
 	private String workTypeName;///工种/岗位
+	private Integer userTeamType;
 	private String idCard;//身份证号码
 	private String tel;
 	private Integer salary;//日工资
@@ -21,11 +22,11 @@ public class DepartmentUserPojo {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getDepartment() {
-		return department;
+	public String getTeam() {
+		return team;
 	}
-	public void setDepartment(String department) {
-		this.department = department;
+	public void setTeam(String team) {
+		this.team = team;
 	}
 	public String getName() {
 		return name;
@@ -104,6 +105,12 @@ public class DepartmentUserPojo {
 	}
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
+	}
+	public Integer getUserTeamType() {
+		return userTeamType;
+	}
+	public void setUserTeamType(Integer userTeamType) {
+		this.userTeamType = userTeamType;
 	}
 	
 	

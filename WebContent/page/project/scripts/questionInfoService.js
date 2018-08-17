@@ -5,13 +5,50 @@ angular.module('QuestionInfoApp',[])
   var transform = function(data){
         return $.param(data);
    }
-  var baseUrl="http://jasobim.com.cn/";
+  var baseUrl="http://jasobim.com:8080/";
   var self=this;
   this.getQuestionInfoDetail=function(id){
 	  var deferred = $q.defer();
       console.log("读取任务单详细数据");
-      var api =baseUrl + '/api/question/getQuestionDetails?questionId='+id+"&weixin=weixin";
+      var api =baseUrl + 'api/quality/getQualityDetails?questionId='+id+"&weixin=weixin";
      
+      $http.get(encodeURI(api))
+          .success(function(data, status, headers, config){
+              if(data.callStatus == "SUCCEED"){
+                  deferred.resolve(data);
+                  self.questionInfo = data;
+              }else{
+                 // alert("数据读取失败");
+              }
+          })
+          .error(function(data, status, headers, config){
+              deferred.reject(data);
+          });
+      return deferred.promise;
+  };
+  this.getQuestionInfoDetail=function(id){
+	  var deferred = $q.defer();
+      console.log("读取任务单详细数据");
+      var api =baseUrl + 'api/question/getQuestionDetails?questionId='+id+"&weixin=weixin";
+     
+      $http.get(encodeURI(api))
+          .success(function(data, status, headers, config){
+              if(data.callStatus == "SUCCEED"){
+                  deferred.resolve(data);
+                  self.questionInfo = data;
+              }else{
+                 // alert("数据读取失败");
+              }
+          })
+          .error(function(data, status, headers, config){
+              deferred.reject(data);
+          });
+      return deferred.promise;
+  };
+  this.getMessageByqualityId=function(id){
+	  var deferred = $q.defer();
+      console.log("读取任务单详细数据");
+      var api =baseUrl + '/api/message/getMessageListByQualityId?qualityId='+id+"&weixin=weixin";
       $http.get(encodeURI(api))
           .success(function(data, status, headers, config){
               if(data.callStatus == "SUCCEED"){
@@ -30,7 +67,6 @@ angular.module('QuestionInfoApp',[])
 	  var deferred = $q.defer();
       console.log("读取任务单详细数据");
       var api =baseUrl + '/api/message/getMessageListByQuestionId?questionId='+id+"&weixin=weixin";
-     
       $http.get(encodeURI(api))
           .success(function(data, status, headers, config){
               if(data.callStatus == "SUCCEED"){

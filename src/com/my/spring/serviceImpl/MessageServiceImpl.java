@@ -23,6 +23,7 @@ import com.my.spring.model.Project;
 import com.my.spring.model.QualityQuestion;
 import com.my.spring.model.Question;
 import com.my.spring.model.User;
+import com.my.spring.model.UserId;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.parameters.ProjectDatas;
@@ -105,37 +106,19 @@ public class MessageServiceImpl implements MessageService {
 								if(message.getAboutId()!=null){
 									quality=qualityDao.getById(message.getAboutId());
 									if(quality!=null){
-										if(quality.getUserList()!=null){
-											userLists=quality.getUserList();
-											if(userInMemory.getId()!=quality.getUserId()){
-												userLists=quality.getUserId()+","+userLists;
+										List<UserId> userIdList = userDao.getAllUserIdList(quality.getUserList());
+										if(!userIdList.isEmpty()){
+											for(UserId s:userIdList){
+												Notice nl2 = new Notice();
+												nl2.setAboutId(message.getId());
+												nl2.setCreateDate(new Date());
+												nl2.setUserId(s.getId());
+												nl2.setNoticeType(4);
+												nl2.setProjectId(quality.getProjectId());
+												nl2.setReadState(0);
+												notices.add(nl2);
 											}
-											userList = userLists.split(",");
-											if(userList!=null){
-												for(String bb:userList){
-													if(!bb.equals(userInMemory.getId())){
-														aa.add(bb);
-													}
-												}
-											}
-											for(int i=0;i<aa.size();i++){
-												Notice noticess = new Notice();
-												noticess.setAboutId(message.getId());
-												noticess.setCreateDate(new Date());
-												noticess.setNoticeType(4);
-												noticess.setReadState(0);
-												noticess.setUserId(Long.valueOf(aa.get(i)));
-												notices.add(noticess);
-											}
-										}else{
-											if(!quality.getUserId().equals(userInMemory.getId())){
-												Notice notice = new Notice();
-												notice.setAboutId(message.getId());
-												notice.setCreateDate(new Date());
-												notice.setNoticeType(4);
-												notice.setUserId(quality.getUserId());
-												notices.add(notice);
-											}
+											noticeDao.addNoticeList(notices);
 										}
 									}
 								}
@@ -144,42 +127,25 @@ public class MessageServiceImpl implements MessageService {
 							if(message.getQuestionType()==1){
 								if(message.getAboutId()!=null){
 									questions=questionDao.getById(message.getAboutId());
-									if(questions.getUserList()!=null){
-										userLists=questions.getUserList();
-										if(userInMemory.getId()!=questions.getUserId()){
-											userLists=questions.getUserId()+","+userLists;
-										}
-										userList = userLists.split(",");
-										if(userList!=null){
-											for(String bb:userList){
-												if(!bb.equals(userInMemory.getId())){
-													aa.add(bb);
-												}
+									if(questions!=null){
+										List<UserId> userIdList = userDao.getAllUserIdList(questions.getUserList());
+										if(!userIdList.isEmpty()){
+											for(UserId s:userIdList){
+												Notice nl2 = new Notice();
+												nl2.setAboutId(message.getId());
+												nl2.setCreateDate(new Date());
+												nl2.setUserId(s.getId());
+												nl2.setNoticeType(4);
+												nl2.setProjectId(questions.getProjectId());
+												nl2.setReadState(0);
+												notices.add(nl2);
 											}
-										}
-										for(int i=0;i<aa.size();i++){
-											Notice noticess = new Notice();
-											noticess.setAboutId(message.getId());
-											noticess.setCreateDate(new Date());
-											noticess.setNoticeType(4);
-											noticess.setReadState(0);
-											noticess.setUserId(Long.valueOf(aa.get(i)));
-											notices.add(noticess);
-										}
-									}else{
-										if(!questions.getUserId().equals(userInMemory.getId())){
-											Notice notice = new Notice();
-											notice.setAboutId(message.getId());
-											notice.setCreateDate(new Date());
-											notice.setNoticeType(4);
-											notice.setUserId(questions.getUserId());
-											notices.add(notice);
+											noticeDao.addNoticeList(notices);
 										}
 									}
 								}
 							}
 						}
-						noticeDao.addNoticeList(notices);
 						//////
 						HashMap<String,String> hq = new HashMap<String,String>();
 						hq.put("content", message.getContent());
@@ -194,17 +160,17 @@ public class MessageServiceImpl implements MessageService {
 							type=1;
 						}
 						if(questions.getProjectId()!=null){
-							hq.put("projectName", "来自  "+projectDao.getById(questions.getProjectId()).getName());
+							hq.put("projectName", projectDao.getById(questions.getProjectId()).getName());
 						}
 						if(quality.getId()!=null){
 							hq.put("messageFlag","quality");
 							hq.put("aboutId", quality.getId().toString());
 						}
 						if(quality.getProjectId()!=null){
-							hq.put("projectName", "来自  "+projectDao.getById(quality.getProjectId()).getName());
+							hq.put("projectName", projectDao.getById(quality.getProjectId()).getName());
 						}
 						
-						hq.put("title", "提交了一条留言请查看");
+						hq.put("title", userInMemory.getRealName()+"提交了一条留言请查看");
 						
 						if(userInMemory.getUserIconUrl()!=null){
 							hq.put("userIconUrl", userInMemory.getUserIconUrl());

@@ -390,7 +390,7 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
 		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
 		List<QuestionCopy> retDataWrapper = new ArrayList<QuestionCopy>();
 		String sql = "select a.* from quality_question a,notice b where b.notice_type=0 "
-		+"and b.read_state=0 and b.about_id=a.id and a.user_id!="+userId;
+		+"and b.read_state=0 and b.about_id=a.id and a.user_id="+userId;
 		if(pageIndex!=-1){
 			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
 		}
@@ -431,7 +431,7 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
 		}
 		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
 		List<QuestionCopy> retDataWrapper = new ArrayList<QuestionCopy>();
-		String sql = "select *,COUNT(1) as total from quality_question where id in(select e.about_id "
+		String sql = "select * from quality_question where id in(select e.about_id "
 		+"from notice e where e.notice_type=0 and e.user_id="+id+" and e.read_state=0 "
 		+"and (e.about_id in (select a.id from quality_question a where a.project_id "
 		+"in (select c.project_id from user_project c where c.user_id="+id+"))) order by e.create_date DESC)";
@@ -455,7 +455,6 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
 				 .addScalar("user_list", StandardBasicTypes.STRING)
 				 .addScalar("voice_id_list", StandardBasicTypes.STRING)
 				 .addScalar("model_flag", StandardBasicTypes.STRING)
-				 .addScalar("total", StandardBasicTypes.INTEGER)
 				 .setResultTransformer(Transformers.aliasToBean(QuestionCopy.class)); 
 		    retDataWrapper=query.list();
             
@@ -476,12 +475,13 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
 		}
 		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
 		List<QuestionCopy> retDataWrapper = new ArrayList<QuestionCopy>();
-		String sql = "select b.*,COUNT(1) as total from notice a,quality_question b where a.user_id="+id
+		String sql = "select b.* from notice a,quality_question b where a.user_id="+id
 		+" and a.read_state=0 and a.notice_type=0 and a.about_id=b.id ORDER BY a.create_date DESC";
 		if(pageIndex!=-1){
 			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
 		}
 		Session session=getSession();
+		
 	    try{
 		    Query query = session.createSQLQuery(sql)
 		    		.addScalar("id",StandardBasicTypes.LONG)
@@ -498,10 +498,8 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
 					 .addScalar("user_list", StandardBasicTypes.STRING)
 					 .addScalar("voice_id_list", StandardBasicTypes.STRING)
 					 .addScalar("model_flag", StandardBasicTypes.STRING)
-					 .addScalar("total",StandardBasicTypes.INTEGER)
 				 .setResultTransformer(Transformers.aliasToBean(QuestionCopy.class)); 
 		    retDataWrapper=query.list();
-            
         }catch(Exception e){
             e.printStackTrace();
             //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);

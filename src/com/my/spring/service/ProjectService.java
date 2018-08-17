@@ -1,6 +1,7 @@
 package com.my.spring.service;
 
 import com.my.spring.model.Project;
+import com.my.spring.model.ProjectIds;
 import com.my.spring.model.ProjectPojo;
 import com.my.spring.utils.DataWrapper;
 
@@ -11,9 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 public interface ProjectService {
     DataWrapper<ProjectPojo> addProject(Project project, String token, MultipartFile[] file,MultipartFile[] picfile, HttpServletRequest request);
     //DataWrapper<List<Project>> findProjectLike(Project project,String token);
@@ -25,4 +23,5 @@ public interface ProjectService {
 	DataWrapper<String> getProjectHour(Long projectId, String token);
 	DataWrapper<List<ProjectPojo>> getProjectList(Integer pageIndex, Integer pageSize, Project project, String token,
 			String content, HttpServletRequest request) throws IOException;
+	DataWrapper<List<ProjectIds>> getAllProjectId(String token);
 }

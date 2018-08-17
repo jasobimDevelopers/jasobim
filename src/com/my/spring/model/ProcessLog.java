@@ -8,7 +8,7 @@ public class ProcessLog {
 	private Long id;
 	private Long processId;
 	private Integer currentNode;
-	private Integer endFlag;//0、未结束 1、结束
+	private Integer endFlag;//0、未结束  1、结束 2、待修改（不同意）
 	private Long itemId;
 	private String note;
 	private Integer itemState;//节点的状态（同意、不同意）

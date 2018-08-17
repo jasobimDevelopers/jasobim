@@ -122,6 +122,7 @@ public class ConstructionTaskNewDaoImpl extends BaseDao<ConstructionTaskNew> imp
 	@Override
 	public List<AllItemData> getAllItemData(Long id) {
 		List<AllItemData> dataWrapper=new ArrayList<AllItemData>();
+		////查询该任务单所对应的流程的所有节点信息
 		String sql = "select c.id,a.which,c.name,c.approve_user from process_item a,process_log b,item_data c "
 		+"where b.create_date=(select MAX(create_date) from process_log where about_id="+
 				id+" and type=0) and a.process_id=b.process_id and a.item_id=c.id ORDER BY which ASC"; 
@@ -144,13 +145,14 @@ public class ConstructionTaskNewDaoImpl extends BaseDao<ConstructionTaskNew> imp
 	@Override
 	public List<ItemNodeList> getAllItemLog(Long id) {
 		List<ItemNodeList> dataWrapper=new ArrayList<ItemNodeList>();
-		String sql = "select item_state,current_node from process_log where about_id="
+		String sql = "select item_state,current_node,end_flag from process_log where about_id="
 		+id+" and type=0 ORDER BY current_node asc";
 		Session session=getSession();
 		 try{
 			 Query query = session.createSQLQuery(sql)
 					 .addScalar("item_state", StandardBasicTypes.INTEGER)
 					 .addScalar("current_node", StandardBasicTypes.INTEGER)
+					 .addScalar("end_flag",StandardBasicTypes.INTEGER)
 					 .setResultTransformer(Transformers.aliasToBean(ItemNodeList.class));
 			 dataWrapper=query.list();
 	        }catch(Exception e){

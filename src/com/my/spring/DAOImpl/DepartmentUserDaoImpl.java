@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -12,8 +13,11 @@ import org.springframework.stereotype.Repository;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.DepartmentUserDao;
+import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.DepartmentUser;
+import com.my.spring.model.Duct;
 import com.my.spring.utils.DaoUtil;
+import com.my.spring.utils.DataWrapper;
 @Repository
 public class DepartmentUserDaoImpl extends BaseDao<DepartmentUser> implements DepartmentUserDao {
 
@@ -42,14 +46,15 @@ public class DepartmentUserDaoImpl extends BaseDao<DepartmentUser> implements De
 	}
 
 	@Override
-	public List<DepartmentUser> getDepartmentUserList(Integer pageSize, Integer pageIndex,
+	public DataWrapper<List<DepartmentUser>> getDepartmentUserList(Integer pageSize, Integer pageIndex,
 			DepartmentUser departmentUser) {
+		DataWrapper<List<DepartmentUser>> retDataWrapper = new DataWrapper<List<DepartmentUser>>();
         List<DepartmentUser> ret = new ArrayList<DepartmentUser>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(DepartmentUser.class);
        
-        if(departmentUser.getDepartmentId()!=null){
-        	criteria.add(Restrictions.eq("departmentId", departmentUser.getDepartmentId()));
+        if(departmentUser.getTeamId()!=null){
+        	criteria.add(Restrictions.eq("teamId", departmentUser.getTeamId()));
         }
         if(departmentUser.getName()!=null){
         	criteria.add(Restrictions.like("name", "%"+departmentUser.getName()+"%"));
@@ -85,14 +90,37 @@ public class DepartmentUserDaoImpl extends BaseDao<DepartmentUser> implements De
         }catch (Exception e){
             e.printStackTrace();
         }
-      
-        return ret;
+        retDataWrapper.setData(ret);
+        retDataWrapper.setTotalNumber(totalItemNum);
+        retDataWrapper.setCurrentPage(pageIndex);
+        retDataWrapper.setTotalPage(totalPageNum);
+        retDataWrapper.setNumberPerPage(pageSize);
+        return retDataWrapper;
 	}
 
 	@Override
 	public boolean deleteDepartmentUserList(String[] ids) {
 		// TODO Auto-generated method stub
 		return deleteList(ids);
+	}
+
+	@Override
+	public List<DepartmentUser> getByIds(String teamUserIds) {
+		List<DepartmentUser> ret = new ArrayList<DepartmentUser>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(DepartmentUser.class);
+    	String[] ids = teamUserIds.split(",");
+    	Disjunction dju = Restrictions.disjunction();
+    	for(String id:ids){
+    		dju.add(Restrictions.eq("id", Long.valueOf(id)));
+    	}
+    	criteria.add(dju);
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		return ret;
 	}
 
 	

@@ -1,0 +1,290 @@
+﻿<!DOCTYPE html>
+<html lang="en" ng-app="QuestionInfoApp">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+	<title>质量安全详情</title>
+	<!--jquery && bootstrap-->
+	 <script src="common/jquery/jquery.js"></script>
+	<!--angular-->
+    <script src="common/angular/angular.js"></script>
+    <script src="common/angular/angular-route.js"></script>
+    <script src="common/angular/angular-file-upload.min.js"></script>
+	<!-- css -->
+    <link rel="stylesheet" href="../css/commonstyle.css">
+    <link rel="stylesheet" href="../css/questionInfo.css">
+	<link rel="stylesheet" href="project/css/question.css">
+	
+<!-- js -->
+	<script src="project/scripts/questionInfoController.js"></script>
+	<script src="project/scripts/questionInfoService.js"></script>
+	<script src="common/layer/layer.js"></script>
+	<style type="text/css">
+		
+
+		.db {
+			display: block;
+		}
+
+		.weixinAudio {
+			line-height: 1.5;
+		}
+
+		.audio_area {
+			display: inline-block;
+			vertical-align: top;
+			margin: 0px 1px 0px 0;
+			font-size: 0;
+			position: relative;
+			font-weight: 400;
+			text-decoration: none;
+			-ms-text-size-adjust: none;
+			-webkit-text-size-adjust: none;
+			text-size-adjust: none;
+		}
+
+		.audio_wrp {
+			border: 1px solid #ebebeb;
+			background-color: #fcfcfc;
+			overflow: hidden;
+			cursor:pointer;
+		}
+		.audio_wrp:hover{
+			background-color: #efefef;
+		}
+		.audio_play_area {
+			float: left;
+			margin: 9px 22px 10px 5px;
+			font-size: 0;
+			width: 18px;
+			height: 25px;
+		}
+
+		.playing .audio_play_area .icon_audio_default {
+			display: block;
+		}
+
+		.audio_play_area .icon_audio_default {
+			background: transparent url(../images/iconloop.png) no-repeat 0 0;
+			width: 18px;
+			height: 25px;
+			vertical-align: middle;
+			display: inline-block;
+			-webkit-background-size: 54px 25px;
+			background-size: 54px 25px;
+			background-position: -36px center;
+		}
+
+		.audio_play_area .icon_audio_playing {
+			background: transparent url(../images/iconloop.png) no-repeat 0 0;
+			width: 18px;
+			height: 25px;
+			vertical-align: middle;
+			display: inline-block;
+			-webkit-background-size: 54px 25px;
+			background-size: 54px 25px;
+			-webkit-animation: audio_playing 1s infinite;
+			background-position: 0px center;
+			display: none;
+		}
+
+		.audio_area .pic_audio_default {
+			display: none;
+			width: 18px;
+		}
+
+		.tips_global {
+			color: #8c8c8c;
+		}
+
+		.audio_area .audio_length {
+			float: right;
+			font-size: 14px;
+			margin-top: 3px;
+			margin-left: 1em;
+		}
+
+		.audio_info_area {
+			overflow: hidden;
+		}
+
+		.audio_area .audio_title {
+			font-weight: 400;
+			font-size: 17px;
+			margin-top: -2px;
+			margin-bottom: -3px;
+			width: auto;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			word-wrap: normal;
+		}
+
+		.audio_area .audio_source {
+			font-size: 14px;
+		}
+
+		.audio_area .progress_bar {
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			background-color: #0cbb08;
+			height: 2px;
+		}
+
+		.playing .audio_play_area .icon_audio_default {
+			display: none;
+		}
+
+		.playing .audio_play_area .icon_audio_playing {
+			display: inline-block;
+		}
+
+		@-webkit-keyframes audio_playing {
+			30% {
+				background-position: 0px center;
+			}
+			31% {
+				background-position: -18px center;
+			}
+			61% {
+				background-position: -18px center;
+			}
+			61.5% {
+				background-position: -36px center;
+			}
+			100% {
+				background-position: -36px center;
+			}
+		}
+	</style>
+
+</head>
+<body>
+<div ng-controller="qualityInfoController">
+<div class="wrap">
+  
+    <!--内容部分-->
+    <div class="mainJob">
+        <!--title-->
+        <div class="duty">
+            <div class="dutyTitle"><i></i><span>整改单</span></div>
+            <div class="writer"></div>
+        </div>
+        <!--内容-->
+        <div class="mainCon">
+            <ul>
+                <li class="projectName">标题：{{questionInfo.name}}</li>
+                <li class="projectTime">内容：{{questionInfo.intro}}</li>
+				<li class="questionFile">
+					<div class="img">
+						<ul class="clear">
+							<li ng-repeat="img in questionImgList">
+								<img height="85" width="85" ng-src="http://jasobim.com:8080/{{img}}" alt="" onclick="showOneBig(this)">
+							</li>
+							<li>
+								<div ng-repeat="qfile in questionVoiceList" class="question-wrap" style="margin-top:10px;">
+									<p class="weixinAudio">
+										<audio id="media" width="1" height="1" preload>
+										</audio>
+										<span id="audio_area" class="db audio_area" ng-click="play($index)">
+											<span class="audio_wrp db">
+												<span class="audio_play_area">
+													<i class="icon_audio_default"></i>
+													<i class="icon_audio_playing"></i>
+												</span>
+												<span id="audio_length" class="audio_length tips_global"></span>
+												<span id="audio_progress" class="progress_bar" style="width: 0%;"></span>
+											</span>
+										</span>
+									</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</li>
+                <li class="projectPerson">指派人员：{{questionInfo.userList}}</li>
+            </ul>
+            
+        </div>
+        <div class="person">
+            <div class="bg">{{name}}</div>
+            <div class="finishPer"><span class="personName">{{questionInfo.userId}}</span><span class="finishTime">{{questionInfo.questionDate}}</span></div>
+        </div>
+    </div>
+    <!--流转历程-->
+    <div class="history">
+        <div class="historyTitle"><i></i><span>回复记录</span><i style="float:right;margin-bottom:15px;margin-right:35px;"><img width="75px" height="31.5px" src="../images/backidea.png" alt=""/></i></div>
+        <div class="historyCon">
+            <ul>
+            	<div ng-repeat="message in messageListInfo" class="reply-wrap">
+	                <li>
+	                    <p><span>{{message.realName}}</span><span style="float:right;margin-right:10px;">{{message.messageDate}}</span></p>
+	                    <p>{{message.content}}</p>
+						<p>
+							<ul class="clear">
+								<div ng-repeat="ss in messageLists">
+									<div ng-if="ss[2]==message.id">
+										<div ng-repeat="mimg in ss[0]">
+											<li style="margin-left: 0px;border-bottom:none;">
+												<img width="85" height="85" ng-src="http://jasobim.com:8080/{{mimg}}" onclick="showOneBig(this)" alt="">
+											</li>
+										</div>
+										<div ng-repeat="mvoice in ss[1]">
+											<li style="margin-left: 0px;border-bottom:none;">
+												<div style="margin-top:10px;">
+													<p class="weixinAudio">
+														<audio id="media" width="1" height="1" preload>
+														</audio>
+														<span id="audio_area" class="db audio_area" ng-click="plays($index,$parent.$index)">
+															<span class="audio_wrp db">
+																<span class="audio_play_area">
+																	<i class="icon_audio_default"></i>
+																	<i class="icon_audio_playing"></i>
+																</span>
+																<span id="audio_length" class="audio_length tips_global"></span>
+																<span id="audio_progress" class="progress_bar" style="width: 0%;"></span>
+															</span>
+														</span>
+													</p>
+												</div>
+											</li>
+										</div>
+									</div>
+								</div>
+							</ul>
+						</p>
+	                </li>
+                </div>
+            </ul>
+
+        </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script src="../js/weixinAudio.js" type="text/javascript"></script>
+<script>
+
+function showOneBig(scope){
+	
+	layer.ready(function(){ 
+	  layer.open({
+  		type: 1,
+  		title: false,
+  		area: ['360px', '360px'],
+  		shadeClose: true, //点击遮罩关闭
+  		content: '<div style="background-size: 100% 100%;width:360px;height:360px;background-image: url(' +scope.src+')"/></div>'
+  	  });
+	});
+
+
+
+
+}
+		
+</script>
+</body>
+</html>

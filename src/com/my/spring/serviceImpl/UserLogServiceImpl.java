@@ -80,7 +80,7 @@ public class UserLogServiceImpl implements UserLogService {
     	Date dateFinisheds=null;
 		DataWrapper<List<UserLog>> dataWrapper = new DataWrapper<List<UserLog>>();
 		List<UserLogPojo> UserLogpojo = new ArrayList<UserLogPojo>();
-		String[] projectPart={"模型区域","图纸区域","登录区域","交底区域","预制化区域 ","紧急事项区域","通知区域","产值区域","班组信息区域","施工任务单区域","预付单区域"};
+		String[] projectPart={"模型","图纸","首页","交底","进度管理 ","安全问题","消息通知","统计管理","个人中心","规范查阅","模型构建信息","质量问题","新闻资讯","实测实量","云盘管理","物资管理","劳动力监测","考勤管理","工程量变更","进程管理","预付单","施工任务单"};
 		String[] systemName={"苹果系统","安卓系统","电脑端"};
 		DataWrapper<List<UserLogPojo>> dataWrapperpojo = new DataWrapper<List<UserLogPojo>>();
 		User adminInMemory = SessionManager.getSession(token);
@@ -149,14 +149,17 @@ public class UserLogServiceImpl implements UserLogService {
 							UserLogpojos.setProjectName("");
 						}
 						DateFormat df2 = DateFormat.getDateTimeInstance();//可以精确到时分秒 
-	    	    		UserLogpojos.setActionDate(df2.format(dataWrapper.getData().get(i).getActionDate()));
-	    	    		UserLogpojos.setProjectPart(projectPart[dataWrapper.getData().get(i).getProjectPart()]);
+						if(dataWrapper.getData().get(i).getActionDate()!=null){
+							UserLogpojos.setActionDate(df2.format(dataWrapper.getData().get(i).getActionDate()));
+						}
+	    	    		if(dataWrapper.getData().get(i).getProjectPart()!=null){
+	    	    			UserLogpojos.setProjectPart(projectPart[dataWrapper.getData().get(i).getProjectPart()]);
+	    	    		}
 	    	    		if(dataWrapper.getData().get(i).getSystemType()!=null){
 	    	    			UserLogpojos.setSystemType(systemName[dataWrapper.getData().get(i).getSystemType()]);
 		    	    		UserLogpojos.setVersion(dataWrapper.getData().get(i).getVersion());
 		    	    		UserLogpojo.add(UserLogpojos);
 	    	    		}
-	    	    		
 					}
 					dataWrapperpojo.setData(UserLogpojo);
 					dataWrapperpojo.setCallStatus(dataWrapper.getCallStatus());

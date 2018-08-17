@@ -300,14 +300,12 @@ public class FolderServiceImpl implements FolderService  {
 								}
 							}else{
 								if(!folderDao.deleteFloder(Long.valueOf(s))){
-									result.setErrorCode(ErrorCodeEnum.Error);
+									//result.setErrorCode(ErrorCodeEnum.Error);
 								}
 							}
 						}
 					}
-					
 				}
-				
 			}
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);

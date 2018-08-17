@@ -555,3 +555,20 @@ create table work_type(
 	id serial primary key,
 	name varchar(250)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table notice_relation(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	user_id bigint(20) unsigned not null,
+	type int
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table project_tender(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	create_user_id bigint(20) unsigned not null,
+	update_user_id bigint(20) unsigned not null,
+	create_date datetime,
+	update_date datetime,
+	name varchar(255)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

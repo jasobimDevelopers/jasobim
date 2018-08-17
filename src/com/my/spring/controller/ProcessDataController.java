@@ -3,6 +3,7 @@
 import com.my.spring.model.ProcessData;
 import com.my.spring.model.ProcessDataPojo;
 import com.my.spring.model.ProcessItem;
+import com.my.spring.model.ProcessItemPojo;
 import com.my.spring.service.ProcessDataService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +59,18 @@ public class ProcessDataController {
     @ResponseBody
     public DataWrapper<List<ProcessDataPojo>> getProcessDataList(
             @RequestParam(value = "token",required = true) String token,
-            @RequestParam(value = "type",required = true) Integer type,
+            @RequestParam(value = "type",required = false) Integer type,
             @RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute ProcessData ProcessData){
         return ProcessDataService.getProcessDataList(token,pageIndex,pageSize,ProcessData,type);
     }
-   
+
+    @RequestMapping(value="/admin/getProcessItemListById", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<ProcessItemPojo>> getProcessItemListById(
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value="id",required=true) Long id){
+        return ProcessDataService.getProcessItemListById(token,id);
+    }
 }

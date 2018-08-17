@@ -19,7 +19,7 @@ public interface ConstructionTaskNewService {
 	DataWrapper<Void> deleteConstructionTaskNew(Long id, String token);
 	DataWrapper<Void> updateConstructionTaskNew(ConstructionTaskNew ConstructionTaskNew, String token);
 	DataWrapper<List<ConstructionTaskNewPojo>> getConstructionTaskNewList(String token, Integer pageIndex, Integer pageSize,
-			ConstructionTaskNew ConstructionTaskNew, Integer type);
+			ConstructionTaskNew ConstructionTaskNew);
 	DataWrapper<Void> addConstructionTaskNew(ConstructionTaskNew ConstructionTaskNew, String token,
 			MultipartFile[] imgs, HttpServletRequest request);
 	DataWrapper<ProcessLogPojo> approveConstructionTaskNew(String token,Long id,String note,Integer idea,Long processDataId,Integer currentNode);

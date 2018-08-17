@@ -13,9 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
+
 @Repository
 public class MessageFileDaoImpl extends BaseDao<MessageFile> implements MessageFileDao {
 
@@ -120,5 +118,22 @@ public class MessageFileDaoImpl extends BaseDao<MessageFile> implements MessageF
 	        }
 		 
 		return bool;
+	}
+
+	@Override
+	public MessageFile getMessageFileByMessageId(Long id) {
+		List<MessageFile> ret = null;
+	    Session session = getSession();
+	    Criteria criteria = session.createCriteria(MessageFile.class);
+	    criteria.add(Restrictions.eq("messageId",id));
+	    try {
+	        ret = criteria.list();
+	    }catch (Exception e){
+	        e.printStackTrace();
+	    }
+	    if (ret != null && ret.size() > 0) {
+			return ret.get(0);
+		}
+		return null;
 	}
 }

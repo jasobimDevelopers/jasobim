@@ -22,7 +22,7 @@ public class ConstructionTaskNew {
 	private Long pid;
 	private String imgs;//(12,13)
 	private Long projectId;
-	
+	private Long teamId;
 	@Id
 	@GeneratedValue
 	@Column(name="id")
@@ -176,6 +176,16 @@ public class ConstructionTaskNew {
 	public void setPid(Long pid) {
 		this.pid = pid;
 	}
+	
+	@Basic
+	@Column(name="team_id")
+	public Long getTeamId() {
+		return teamId;
+	}
+	public void setTeamId(Long teamId) {
+		this.teamId = teamId;
+	}
+	
 	
 	
 }

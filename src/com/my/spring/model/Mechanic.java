@@ -10,14 +10,15 @@ public class Mechanic {
 	private String realName;
 	private String idCard;
 	private String tel;
+	private Integer sex;//0、男  1、女
 	private String workName;////工种
 	private int daySalary;
 	private String remark;
 	private Date createDate;
 	private Integer dayHours;
 	private Long createUser;
-	private Long idCardImg;
-	
+	private Long idCardImgZ;
+	private Long idCardImgF;
 	@Id
 	@GeneratedValue
 	@Column(name="id")
@@ -110,12 +111,12 @@ public class Mechanic {
 	}
 	
 	@Basic
-	@Column(name="id_card_img")
-	public Long getIdCardImg() {
-		return idCardImg;
+	@Column(name="id_card_img_z")
+	public Long getIdCardImgZ() {
+		return idCardImgZ;
 	}
-	public void setIdCardImg(Long idCardImg) {
-		this.idCardImg = idCardImg;
+	public void setIdCardImgZ(Long idCardImgZ) {
+		this.idCardImgZ = idCardImgZ;
 	}
 	
 	@Basic
@@ -125,6 +126,24 @@ public class Mechanic {
 	}
 	public void setDayHours(Integer dayHours) {
 		this.dayHours = dayHours;
+	}
+	
+	@Basic
+	@Column(name="sex")
+	public Integer getSex() {
+		return sex;
+	}
+	public void setSex(Integer sex) {
+		this.sex = sex;
+	}
+	
+	@Basic
+	@Column(name="id_card_img_f")
+	public Long getIdCardImgF() {
+		return idCardImgF;
+	}
+	public void setIdCardImgF(Long idCardImgF) {
+		this.idCardImgF = idCardImgF;
 	}
 	
 	

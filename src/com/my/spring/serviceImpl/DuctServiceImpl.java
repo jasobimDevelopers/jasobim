@@ -157,7 +157,7 @@ public class DuctServiceImpl implements DuctService {
         		UserLog userLog = new UserLog();
         		userLog.setActionDate(new Date());
         		userLog.setFileId(duct.getId());
-        		userLog.setProjectPart(4);
+        		userLog.setProjectPart(ProjectDatas.ProcessManager_area.getCode());
         		userLog.setUserId(userInMemory.getId());
         		userLog.setVersion("3.0");
         		userLogSerivce.addUserLog(userLog, token);
@@ -526,7 +526,7 @@ public class DuctServiceImpl implements DuctService {
 		if(user!=null){
 			if(user.getSystemId()!=null){
     			UserLog userLog = new UserLog();
-    			userLog.setProjectPart(ProjectDatas.ValueOut_area.getCode());
+    			userLog.setProjectPart(ProjectDatas.ProcessManager_area.getCode());
     			userLog.setActionDate(new Date());
     			userLog.setActionType(0);
     			userLog.setUserId(user.getId());

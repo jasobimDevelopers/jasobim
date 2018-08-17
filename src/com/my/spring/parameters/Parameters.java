@@ -10,10 +10,9 @@ import java.util.List;
 import com.my.spring.model.CommonNotice;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 public class Parameters {
-	private static final String pan = "C";
-	private static final String baseFilePath = pan + ":/jasobim/tomcat80/webapps/own/";
+	private static final String pan = "D";
+	private static final String baseFilePath = pan + ":/jasobim/tomcat_8080/webapps/own/";
 	public static final String userLogFilePath = baseFilePath  + "userLog/";
 	public static final String ductfilePath = baseFilePath + "duct/";
 	public static final String quantityPath = baseFilePath + "quantity/";

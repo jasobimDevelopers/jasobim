@@ -28,6 +28,7 @@ import com.my.spring.model.Role;
 import com.my.spring.model.QualityQuestionPojo;
 import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.User;
+import com.my.spring.model.UserId;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.parameters.ProjectDatas;
@@ -159,17 +160,19 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 					/////////////////////////
 				///////////////////////////
 				List<Notice> nl = new ArrayList<Notice>();
-				if(QualityQuestion.getUserList()!=null){
-					String[] ul = QualityQuestion.getUserList().split(",");
-					for(String s:ul){
+				List<UserId> userIdList = userDao.getAllUserIdList(QualityQuestion.getUserList());
+				if(!userIdList.isEmpty()){
+					for(UserId s:userIdList){
 						Notice nl2 = new Notice();
 						nl2.setAboutId(QualityQuestion.getId());
 						nl2.setCreateDate(new Date());
-						nl2.setUserId(Long.valueOf(s));
+						nl2.setUserId(s.getId());
 						nl2.setNoticeType(0);
+						nl2.setProjectId(QualityQuestion.getProjectId());
 						nl2.setReadState(0);
 						nl.add(nl2);
 					}
+					
 				}
 				noticeDao.addNoticeList(nl);
 				/////////////
@@ -202,8 +205,7 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 				}
 				
 				Project po = projectDao.getById(QualityQuestion.getProjectId());
-				hq.put("projectName", "来自  "+po.getName());
-				hq.put("projectId", po.getId().toString());
+				hq.put("projectName",po.getName());
 				hq.put("aboutId", QualityQuestion.getId().toString());
 				hq.put("createDate", Parameters.getSdfs().format(new Date()));
 				String content="";
@@ -213,14 +215,15 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 					content=userInMemory.getRealName()+"提交了一个标题为："+QualityQuestion.getName()+"的问题";
 				}
 				
-				 
-				 String[] userids=new String[userList.size()];
+				////推送人包括自己
+				String[] userids=new String[userList.size()+1];
 				for(int b =0;b<userList.size();b++){
 					userids[b]=userList.get(b).getId().toString();
 				}
+				userids[userids.length-1]=userInMemory.getId().toString();
 				///0、质量   1、安全   2、施工任务单  3、 预付单  4、留言
-	//			PushExample.testSendPushWithCustomConfig_ios(userids, content,0,hq);
-		//		PushExample.testSendPushWithCustomConfig_android(userids, content,0,hq);
+				PushExample.testSendPushWithCustomConfig_ios(userids, content,0,hq);
+				PushExample.testSendPushWithCustomConfig_android(userids, content,0,hq);
 				}
 
 			}
@@ -477,6 +480,18 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 				}
 			}
 			String projectList=null;
+			if(QualityQuestion.getId()!=null){
+				////////////更新消息为已读
+				Notice notice = new Notice();
+				notice=noticeDao.getByAdoutIdAndUserId(userInMemory.getId(),QualityQuestion.getId(),0);
+				if(notice!=null){
+					if(notice.getReadState()!=1){
+						notice.setReadState(1);
+						notice.setUpdateDate(new Date());
+						noticeDao.updateNotice(notice);
+					}
+				}
+			}
 			dataWrappers= QualityQuestionDao.getQualityQuestionList(content,projectId,pageIndex,pageSize,QualityQuestion,userIdList,projectList);
 			if(dataWrappers.getData()!=null && dataWrappers.getData().size()>0){
 				for(int i=0;i<dataWrappers.getData().size();i++)
@@ -714,11 +729,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 							QualityQuestionPojo.setTrades(QualityQuestion.getTrades());
 							QualityQuestionPojo.setUserId(userDao.getById(QualityQuestion.getUserId()).getRealName());
 							Long userIdis=userDao.getById(QualityQuestion.getUserId()).getId();
-							/*if(userIdis==userInMemory.getId()){
-								QualityQuestionPojo.setUserid(1);
-							}else{
-								QualityQuestionPojo.setUserid(0);
-							}*/
 							DataWrapper<List<QuestionFile>> file=new DataWrapper<List<QuestionFile>>();
 							file=QuestionFileDao.getQuestionFileByQualityId(QualityQuestion.getId());
 							if(file.getData()!=null && file.getData().size()>0){
@@ -730,15 +740,31 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 										fileList[i]=files.getUrl();
 									}
 								}
+								if(fileList!=null)
+				        		{
+				        			List<String> imageList = new ArrayList<String>();
+				        			List<String> voiceList = new ArrayList<String>();
+				        			for(String items:fileList){
+				        				if(Parameters.getFileType(items).equals("mp3") || Parameters.getFileType(items).equals("wav")){
+				        					voiceList.add(items);
+				        				}else if(!Parameters.getFileType(items).equals("dat")){
+				        					imageList.add(items);
+				        				}
+				        			}
+				        			QualityQuestionPojo.setImageUrlList(imageList);
+				        			QualityQuestionPojo.setVoiceUrlList(voiceList);
+				        		}			
 								QualityQuestionPojo.setFileList(fileList);
 							}
 							////////////更新消息为已读
 							Notice notice = new Notice();
 							notice=noticeDao.getByAdoutIdAndUserId(userInDB.getId(),QualityQuestion.getId(),0);
 							if(notice!=null){
-								notice.setReadState(1);
-								notice.setUpdateDate(new Date());
-								noticeDao.updateNotice(notice);
+								if(notice.getReadState()!=1){
+									notice.setReadState(1);
+									notice.setUpdateDate(new Date());
+									noticeDao.updateNotice(notice);
+								}
 							}
 							//////添加打点记录
 							UserLog userLog = new UserLog();
@@ -795,6 +821,17 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 					}
 				}
 				if(QualityQuestion!=null){
+				/////安全问题状态更新，消息提醒存储
+					Notice notice = new Notice();
+					notice.setAboutId(QualityQuestion.getId());
+					notice.setNoticeType(1);
+					notice.setCreateDate(new Date());
+					notice.setRemark("finished");
+					notice.setUserId(QualityQuestion.getUserId());
+					notice.setProjectId(QualityQuestion.getProjectId());
+					Integer statse=0;
+					notice.setReadState(statse);
+					noticeDao.addNotice(notice);
 					if(QualityQuestion.getUserId().equals(userInMemory.getId())){
 						QualityQuestion.setState(state);
 						if(!QualityQuestionDao.updateQualityQuestion(QualityQuestion)){
@@ -896,6 +933,18 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     				}
     			}
     		}
+    		if(QualityQuestion.getId()!=null){
+				////////////更新消息为已读
+				Notice notice = new Notice();
+				notice=noticeDao.getByAdoutIdAndUserId(userInMemory.getId(),QualityQuestion.getId(),0);
+				if(notice!=null){
+					if(notice.getReadState()!=1){
+						notice.setReadState(1);
+						notice.setUpdateDate(new Date());
+						noticeDao.updateNotice(notice);
+					}
+				}
+			}
 			/////问题等级搜索
 			/////当用户是总经理级别的时候,问题搜索只能搜索重要和紧急，同时也只能看重要和紧急问题，不看一般问题 
 			dataWrappers= QualityQuestionDao.getQualityQuestionLists(searchType,content,projectId,pageIndex,pageSize,QualityQuestion,userIdList);

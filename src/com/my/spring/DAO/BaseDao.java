@@ -10,10 +10,12 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 @Transactional
-public class BaseDao<T>{
+public class BaseDao<T> extends Thread{
     @Autowired
     private SessionFactory sessionFactory;
     private Class<T> entityClass;
+    
+   
     /**
      * 通过反射获取子类确定的泛型类
      */
@@ -96,7 +98,7 @@ public class BaseDao<T>{
             session.beginTransaction();
             for(int i=0;i<entityList.size();i++){
             	session.save(entityList.get(i));
-            	if(i%100==0){
+            	if(i%500==0){
             		session.flush();
             		session.clear();
             	}

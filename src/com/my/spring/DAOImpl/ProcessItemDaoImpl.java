@@ -141,6 +141,26 @@ public class ProcessItemDaoImpl extends BaseDao<ProcessItem> implements ProcessI
 	    }
 		return null;
 	}
+
+	@Override
+	public List<ProcessItem> getProcessItemByProcessId(Long id) {
+		ProcessItem retDataWrapper = new ProcessItem();
+        
+        //ret=find("select * from User where userId=?"+userId);
+		List<ProcessItem> ret = null;
+	    Session session = getSession();
+	    Criteria criteria = session.createCriteria(ProcessItem.class);
+	    if(id!=null){
+	    	criteria.add(Restrictions.eq("processId", id));
+	    }
+	   
+	    try {
+	        ret = criteria.list();
+	    }catch (Exception e){
+	        e.printStackTrace();
+	    }
+		return ret;
+	}
 		
 	
 

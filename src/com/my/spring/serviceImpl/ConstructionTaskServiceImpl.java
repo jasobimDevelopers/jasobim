@@ -117,8 +117,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
 					hq.put("createUserName", userInMemory.getRealName());
 					hq.put("aboutId", constructionTask.getId().toString());
 					hq.put("content", constructionTask.getDetailContent());
-					hq.put("projectId", constructionTask.getProjectId().toString());
-					hq.put("projectName","来自  "+ constructionTask.getCompanyName());
+					hq.put("projectName",constructionTask.getCompanyName());
 					hq.put("title", "提交了一个施工任务单需要您审批");
 					List<User> userList = new ArrayList<User>();
 					int adminFlag=0;
@@ -195,7 +194,7 @@ public class ConstructionTaskServiceImpl implements ConstructionTaskService {
         if (userInMemory != null) {
         	if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
     			UserLog userLog = new UserLog();
-    			//userLog.setProjectPart(ProjectDatas.ConstructionTask_area.getCode());
+    			userLog.setProjectPart(ProjectDatas.ConstructionTask_area.getCode());
     			userLog.setActionDate(new Date());
     			userLog.setUserId(userInMemory.getId());
     			userLog.setSystemType(userInMemory.getSystemId());

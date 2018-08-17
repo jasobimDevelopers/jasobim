@@ -103,9 +103,8 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
 					hq.put("createDate", Parameters.getSdfs().format(new Date()));
 					hq.put("createUserName", userInMemory.getRealName());
 					hq.put("content", advancedOrder.getQuantityDes());
-					hq.put("projectName","来自  "+ advancedOrder.getProjectName());
+					hq.put("projectName",advancedOrder.getProjectName());
 					hq.put("aboutId", advancedOrder.getId().toString());
-					hq.put("projectId", advancedOrder.getProjectId().toString());
 					hq.put("title", "提交了一个预付单需要您审批");
 					hq.put("imagUrl",null);
 					AdvancedOrderCollect aoc = new AdvancedOrderCollect();
@@ -202,7 +201,7 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
         if (userInMemory != null) {
         		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1){
         			UserLog userLog = new UserLog();
-        			//userLog.setProjectPart(ProjectDatas.AdvancedOrder_area.getCode());
+        			userLog.setProjectPart(ProjectDatas.AdvancedOrder_area.getCode());
         			userLog.setActionDate(new Date());
         			userLog.setUserId(userInMemory.getId());
         			userLog.setSystemType(userInMemory.getSystemId());

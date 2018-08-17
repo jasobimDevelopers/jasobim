@@ -2,10 +2,14 @@ package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.ItemDataDao;
+import com.my.spring.DAO.MechanicDao;
+import com.my.spring.DAO.MechanicPriceDao;
 import com.my.spring.DAO.ProcessDataDao;
 import com.my.spring.DAO.ProcessItemDao;
 import com.my.spring.DAO.ProcessLogDao;
+import com.my.spring.DAO.ProjectTenderDao;
 import com.my.spring.DAO.ConstructionTaskNewDao;
+import com.my.spring.DAO.DepartmentUserDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
@@ -14,15 +18,19 @@ import com.my.spring.model.AllItemData;
 import com.my.spring.model.ConstructionTaskNew;
 import com.my.spring.model.ConstructionTaskNewPojo;
 import com.my.spring.model.ConstructionTaskNewUser;
+import com.my.spring.model.DepartmentUser;
 import com.my.spring.model.Files;
 import com.my.spring.model.ItemDataPojo;
 import com.my.spring.model.ItemIdMode;
 import com.my.spring.model.ItemNodeList;
+import com.my.spring.model.Mechanic;
+import com.my.spring.model.MechanicPrice;
 import com.my.spring.model.NewsInfoPojo;
 import com.my.spring.model.ProcessData;
 import com.my.spring.model.ProcessItem;
 import com.my.spring.model.ProcessLog;
 import com.my.spring.model.ProcessLogPojo;
+import com.my.spring.model.ProjectTender;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
@@ -50,7 +58,17 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
     @Autowired
     UserDao userDao;
     @Autowired
+    MechanicDao mechanicDao;
+    @Autowired
+    MechanicPriceDao mechanicPriceDao;
+    @Autowired
+    ConstructionTaskNewDao constructionTasknewDao;
+    @Autowired
+    DepartmentUserDao departmentUserDao;
+    @Autowired
     ProcessDataDao processDataDao;
+    @Autowired
+    ProjectTenderDao projectTenderDao;
     @Autowired
     ProcessLogDao processLogDao;
     @Autowired
@@ -140,7 +158,7 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
     }
 
     @Override
-    public DataWrapper<List<ConstructionTaskNewPojo>> getConstructionTaskNewList(String token , Integer pageIndex, Integer pageSize, ConstructionTaskNew ConstructionTaskNew,Integer type) {
+    public DataWrapper<List<ConstructionTaskNewPojo>> getConstructionTaskNewList(String token , Integer pageIndex, Integer pageSize, ConstructionTaskNew ConstructionTaskNew) {
     	DataWrapper<List<ConstructionTaskNewPojo>> dataWrappers = new DataWrapper<List<ConstructionTaskNewPojo>>();
     	DataWrapper<List<ConstructionTaskNew>> dataWrapper = new DataWrapper<List<ConstructionTaskNew>>();
         User userInMemory = SessionManager.getSession(token);
@@ -156,12 +174,16 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 	        	}
 				dataWrapper=ConstructionTaskNewDao.getConstructionTaskNewList(pageIndex,pageSize,ConstructionTaskNew);
 				//List<Long> users = new ArrayList<Long>();
-				if(dataWrapper.getData()!=null){
+				if(dataWrapper.getData()!=null && !dataWrapper.getData().isEmpty()){
 					/////任务单下面的流程节点的所有信息
 					List<AllItemData> itemDataList = ConstructionTaskNewDao.getAllItemData(dataWrapper.getData().get(0).getId());	
 					List<ConstructionTaskNewPojo> ConstructionTaskNewPojoList = new ArrayList<ConstructionTaskNewPojo>();
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						ConstructionTaskNewPojo ConstructionTaskNewPojo =new ConstructionTaskNewPojo();
+						ProjectTender tender = projectTenderDao.getProjectTenderById(dataWrapper.getData().get(i).getTendersId());
+						if(tender!=null){
+							ConstructionTaskNewPojo.setTenders(tender.getName());
+						}
 						ConstructionTaskNewPojo.setId(dataWrapper.getData().get(i).getId());
 						ConstructionTaskNewPojo.setConstructContent(dataWrapper.getData().get(i).getConstructContent());
 						ConstructionTaskNewPojo.setConstructionName(dataWrapper.getData().get(i).getName());
@@ -176,7 +198,6 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 						ConstructionTaskNewPojo.setProcessDataId(dataWrapper.getData().get(i).getProcessDataId());
 						ConstructionTaskNewPojo.setTeamType(dataWrapper.getData().get(i).getTeamType());
 						ConstructionTaskNewPojo.setTeamUserIds(dataWrapper.getData().get(i).getTeamUserIds());
-						ConstructionTaskNewPojo.setTendersId(dataWrapper.getData().get(i).getTendersId());
 						if(dataWrapper.getData().get(i).getImgs()!=null){
 							ConstructionTaskNewPojo.setImgs(dataWrapper.getData().get(i).getImgs().split(","));
 						}
@@ -189,21 +210,33 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 						}
 						if(ConstructionTaskNewPojo!=null){
 							if(!itemDataList.isEmpty()){
-							/////查询已有记录的节点用户信息
+							/////查询任务单已有记录的所有节点信息
 								List<ItemNodeList> gets = ConstructionTaskNewDao.getAllItemLog(dataWrapper.getData().get(i).getId());
 								if(!gets.isEmpty()){
 								////当前节点名称
-									ConstructionTaskNewPojo.setCurrentNodeName(itemDataList.get(gets.size()-1).getName());
-									///当前节点id
-									ConstructionTaskNewPojo.setCurrentNodeId(itemDataList.get(gets.size()-1).getId());
-									if(gets.get(gets.size()-1).getItem_state()==1){
-										ConstructionTaskNewPojo.setEndFlag(1);////已结束，查询已有审批记录用户id与当前用户是否匹配
-										ConstructionTaskNewPojoList.add(ConstructionTaskNewPojo);
-									}else{
-										ConstructionTaskNewPojo.setEndFlag(0);///未结束，查询已有审批记录用户id和下一审批节点人的id与当前用户是否匹配
-										ConstructionTaskNewPojo.setApprovalUser(itemDataList.get(gets.size()).getApprove_user());
-										ConstructionTaskNewPojoList.add(ConstructionTaskNewPojo);
+									Integer currentNode=gets.get(gets.size()-1).getCurrent_node();
+									ConstructionTaskNewPojo.setCurrentNodeName(itemDataList.get(currentNode-1).getName());
+									
+									///当前节点
+									ConstructionTaskNewPojo.setCurrentNodeId(itemDataList.get(currentNode-1).getId());
+									/////0、同意  1、不同意
+									if(gets.get(gets.size()-1).getEnd_flag()==2){
+										ConstructionTaskNewPojo.setStatus(2);////不同意，即待修改
+										User user = userDao.getById(itemDataList.get(0).getApprove_user());///修改人为节点第一个人，即创建人
+										if(user!=null){
+											ConstructionTaskNewPojo.setApprovalUser(user.getRealName());///当前审批人的姓名
+										}
+									}else if(gets.get(gets.size()-1).getEnd_flag()==1){
+										ConstructionTaskNewPojo.setStatus(1);///已完成，下一审批人为空
+									}else if(gets.get(gets.size()-1).getEnd_flag()==0){
+										ConstructionTaskNewPojo.setStatus(0);////不同意，即待修改
+										User user = userDao.getById(itemDataList.get(currentNode-1).getApprove_user());///修改人为节点第一个人，即创建人
+										if(user!=null){
+											ConstructionTaskNewPojo.setApprovalUser(user.getRealName());///当前审批人的姓名
+										}
 									}
+									ConstructionTaskNewPojo.setApprovalUserId(itemDataList.get(currentNode-1).getApprove_user());
+									ConstructionTaskNewPojoList.add(ConstructionTaskNewPojo);
 								}
 							}
 							
@@ -235,6 +268,42 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 		DataWrapper<ProcessLogPojo> result = new DataWrapper<ProcessLogPojo>();
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null){
+			ProcessData pd = new ProcessData();
+			//////当当前节点和流程节点相同，并且当前审批人已同意的时候，流程结束，存入施工任务单工单记录（mechanicPrice）
+			///夜班工时
+			if(processDataId!=null){
+				pd = processDataDao.getById(processDataId);
+				if(pd!=null){
+					if(pd.getItemNum()!=null){
+						if(pd.getItemNum()==currentNode && idea==0){
+							if(id!=null){
+								List<ConstructionTaskNew> gets=ConstructionTaskNewDao.getConstructionTaskNewByIds(id);
+								if(!gets.isEmpty()){
+									List<MechanicPrice> idps = new ArrayList<MechanicPrice>();
+									for(ConstructionTaskNew ctn:gets){
+											MechanicPrice mp = new MechanicPrice();
+											mp.setMechanicType(ctn.getTeamType());
+											mp.setCreateDate(new Date());
+											mp.setHour(ctn.getDayWorkHours());
+											mp.setNightHour(ctn.getNightWorkHours());
+											mp.setProjectId(ctn.getProjectId());
+											if(ctn.getTeamUserIds()!=null){
+												String[] ids=ctn.getTeamUserIds().split(",");
+												for(String s:ids){
+													mp.setMechanicId(Long.valueOf(s));
+													idps.add(mp);
+												}
+												
+											}
+									}
+									mechanicPriceDao.addMechanicPriceList(idps);
+								}
+							}
+						}
+					}
+				}
+			}
+			/////////
 			ProcessLog pl = new ProcessLog();
 			pl.setCreateDate(new Date());
 			pl.setNote(note);
@@ -249,10 +318,15 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 			if(itemId!=null){
 				pl.setItemId(itemId.getItem_id());
 			}
+			////当审批人不同意时，设置待修改和未完成
 			if(idea==1){
-				pl.setEndFlag(1);
+				pl.setEndFlag(2);
 			}else{
-				pl.setEndFlag(0);
+				if(pd.getItemNum()==currentNode){///当前节点和流程节点相等时，并且审批人同意是设置为已完成
+					pl.setEndFlag(1);
+				}else{
+					pl.setEndFlag(0);///当前节点和流程节点不想相等时，并且审批人同意是设置为未完成
+				}
 			}
 			if(!processLogDao.addProcessLog(pl)){
 				result.setErrorCode(ErrorCodeEnum.Error);
@@ -296,15 +370,29 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 							for(int i=0;i<gets.size();i++){
 							ConstructionTaskNewPojo ConstructionTaskNewPojo =new ConstructionTaskNewPojo();
 							if(i==0){
-								ConstructionTaskNewPojo.setCurrentNodeName(itemDataList.get(getNodes.size()-1).getName());
-								///当前节点id
-								ConstructionTaskNewPojo.setCurrentNodeId(itemDataList.get(getNodes.size()-1).getId());
-								if(getNodes.get(getNodes.size()-1).getItem_state()==1){
-									ConstructionTaskNewPojo.setEndFlag(1);////已结束，查询已有审批记录用户id与当前用户是否匹配
-								}else{
-									ConstructionTaskNewPojo.setEndFlag(0);///未结束，查询已有审批记录用户id和下一审批节点人的id与当前用户是否匹配
-									ConstructionTaskNewPojo.setApprovalUser(itemDataList.get(gets.size()).getApprove_user());
+							////当前节点名称
+								Integer currentNode=getNodes.get(getNodes.size()-1).getCurrent_node();
+								ConstructionTaskNewPojo.setCurrentNodeName(itemDataList.get(currentNode-1).getName());
+								
+								///当前节点
+								ConstructionTaskNewPojo.setCurrentNodeId(itemDataList.get(currentNode-1).getId());
+								/////0、同意  1、不同意
+								if(getNodes.get(getNodes.size()-1).getEnd_flag()==2){
+									ConstructionTaskNewPojo.setStatus(2);////不同意，即待修改
+									User user = userDao.getById(itemDataList.get(0).getApprove_user());///修改人为节点第一个人，即创建人
+									if(user!=null){
+										ConstructionTaskNewPojo.setApprovalUser(user.getRealName());///当前审批人的姓名
+									}
+								}else if(getNodes.get(getNodes.size()-1).getEnd_flag()==1){
+									ConstructionTaskNewPojo.setStatus(1);///已完成，下一审批人为空
+								}else if(getNodes.get(getNodes.size()-1).getEnd_flag()==0){
+									ConstructionTaskNewPojo.setStatus(0);////不同意，即待修改
+									User user = userDao.getById(itemDataList.get(currentNode-1).getApprove_user());///修改人为节点第一个人，即创建人
+									if(user!=null){
+										ConstructionTaskNewPojo.setApprovalUser(user.getRealName());///当前审批人的姓名
+									}
 								}
+								ConstructionTaskNewPojo.setApprovalUserId(itemDataList.get(currentNode-1).getApprove_user());
 							}
 							
 							ConstructionTaskNewPojo.setId(gets.get(i).getId());
@@ -323,7 +411,10 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 							ConstructionTaskNewPojo.setProcessDataId(gets.get(i).getProcessDataId());
 							ConstructionTaskNewPojo.setTeamType(gets.get(i).getTeamType());
 							ConstructionTaskNewPojo.setTeamUserIds(gets.get(i).getTeamUserIds());
-							ConstructionTaskNewPojo.setTendersId(gets.get(i).getTendersId());
+							ProjectTender tender = projectTenderDao.getProjectTenderById(gets.get(i).getTendersId());
+							if(tender!=null){
+								ConstructionTaskNewPojo.setTenders(tender.getName());
+							}
 							if(gets.get(i).getImgs()!=null){
 								ConstructionTaskNewPojo.setImgs(gets.get(i).getImgs().split(","));
 							}
@@ -378,10 +469,12 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 						plp.setApproveDate(Parameters.getSdf().format(processLog.getCreateDate()));
 						if(processLog.getItemState()==1){
 							plp.setNextApproveUser(itemDataList.get(0).getName());
-							plp.setEndFlag(1);
-						}else if(i!=(itemDataList.size()-1)){
+							plp.setEndFlag(2);
+						}else if(i<(itemDataList.size()-1)){
 							plp.setNextApproveUser(itemDataList.get(i+1).getName());
 							plp.setEndFlag(0);
+						}else if(i==(itemDataList.size()-1)){
+							plp.setEndFlag(1);
 						}
 						plp.setProcessId(processDataId);
 					}
@@ -424,10 +517,12 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 						plp.setApproveDate(Parameters.getSdf().format(processLogList.get(i).getCreateDate()));
 						if(processLogList.get(i).getItemState()==1){
 							plp.setNextApproveUser(itemDataList.get(0).getName());
-							plp.setEndFlag(1);
-						}else if(i!=(itemDataList.size()-1)){
+							plp.setEndFlag(2);
+						}else if(i<(itemDataList.size()-1)){
 							plp.setNextApproveUser(itemDataList.get(i+1).getName());
 							plp.setEndFlag(0);
+						}else if(i<(itemDataList.size()-1)){
+							plp.setEndFlag(1);
 						}
 						plp.setProcessId(processDataId);
 						if(plp!=null){

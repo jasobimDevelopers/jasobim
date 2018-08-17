@@ -48,6 +48,9 @@ public class ProcessDataDaoImpl extends BaseDao<ProcessData> implements ProcessD
         if(ProcessData.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", ProcessData.getProjectId()));
         }
+        if(ProcessData.getType()!=null){
+        	criteria.add(Restrictions.eq("type", ProcessData.getType()));
+        }
         if(ProcessData.getName()!=null){
         	criteria.add(Restrictions.eq("name", ProcessData.getName()));
         }

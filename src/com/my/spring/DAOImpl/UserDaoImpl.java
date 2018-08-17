@@ -21,6 +21,7 @@ import com.my.spring.model.MenuListCopy;
 import com.my.spring.model.Projectvs;
 import com.my.spring.model.User;
 import com.my.spring.model.UserCopy;
+import com.my.spring.model.UserId;
 import com.my.spring.model.UserSelect;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -179,24 +180,25 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         List<User> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
-        	if(user.getUserName() != null && !user.getUserName().equals("")) {
-            	criteria.add(Restrictions.like("userName", "%" + user.getUserName() + "%"));
-            }
-            
-            if(user.getRealName() != null && !user.getRealName().equals("")) {
-            	criteria.add(Restrictions.like("realName", "%" + user.getRealName() + "%"));
-            }
-            if(user.getEmail() != null && !user.getEmail().equals("")) {
-            	criteria.add(Restrictions.like("email", "%" + user.getEmail() + "%"));
-            }
-            if(user.getTel() != null && !user.getTel().equals("")) {
-            	criteria.add(Restrictions.like("tel", "%" + user.getTel() + "%"));
-            }
-             
-            
-            if(user.getTeamId()!=null){
-            	criteria.add(Restrictions.eq("teamId", user.getTeamId()));
-            }
+    	if(user.getUserName() != null && !user.getUserName().equals("")) {
+        	criteria.add(Restrictions.like("userName", "%" + user.getUserName() + "%"));
+        }
+        
+        if(user.getRealName() != null && !user.getRealName().equals("")) {
+        	criteria.add(Restrictions.like("realName", "%" + user.getRealName() + "%"));
+        }
+        if(user.getEmail() != null && !user.getEmail().equals("")) {
+        	criteria.add(Restrictions.like("email", "%" + user.getEmail() + "%"));
+        }
+        if(user.getTel() != null && !user.getTel().equals("")) {
+        	criteria.add(Restrictions.like("tel", "%" + user.getTel() + "%"));
+        }
+        if(user.getWorkName()!=null){
+        	criteria.add(Restrictions.like("workName", user.getWorkName()));
+        } 
+        if(user.getTeamId()!=null){
+        	criteria.add(Restrictions.eq("teamId", user.getTeamId()));
+        }
         
         if (pageSize == null) {
 			pageSize = 10;
@@ -282,6 +284,9 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         
         if(user.getTeamId()!=null){
         	criteria.add(Restrictions.eq("teamId", user.getTeamId()));
+        }
+        if(user.getWorkName()!=null){
+        	criteria.add(Restrictions.like("workName", user.getWorkName()));
         }
         if (pageSize == null) {
 			pageSize = 10;
@@ -490,6 +495,30 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
             //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
         }
 	    return retDataWrapper;
+	}
+	@Override
+	public List<UserId> getAllUserIdList(String ids) {
+		List<UserId> ret = new ArrayList<UserId>();
+        String sql="select id from user where user_type=0 or user_type=1 or user_type=3";
+        String sqlor="";
+        if(ids!=null){
+        	String[] idsb = ids.split(",");
+        	for(String str:idsb){
+            	sqlor=sqlor+ " or id="+str;
+        	}
+        	sql=sql+sqlor;
+        }
+        Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+				 .addScalar("id",StandardBasicTypes.LONG)
+				 .setResultTransformer(Transformers.aliasToBean(UserId.class)); 
+		    ret=query.list();
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+	    return ret;
 	}
 
 }

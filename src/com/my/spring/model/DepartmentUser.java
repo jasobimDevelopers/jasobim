@@ -6,10 +6,11 @@ import javax.persistence.*;
 @Table(name = "department_user")
 public class DepartmentUser {
 	private Long id;
-	private Long departmentId;///所属班组id
+	private Long teamId;///所属班组id
 	private String name;
 	private Integer sex;///0、男  1、女
 	private Long workTypeId;///工种/岗位
+	private Integer userTeamType;//0、班组长 1、班组成员
 	private String idCard;//身份证号码
 	private String tel;
 	private Integer salary;//日工资
@@ -31,12 +32,12 @@ public class DepartmentUser {
 	}
 	
 	@Basic
-	@Column(name="department_id")
-	public Long getDepartmentId() {
-		return departmentId;
+	@Column(name="team_id")
+	public Long getTeamId() {
+		return teamId;
 	}
-	public void setDepartmentId(Long departmentId) {
-		this.departmentId = departmentId;
+	public void setTeamId(Long teamId) {
+		this.teamId = teamId;
 	}
 	
 	@Basic
@@ -154,6 +155,15 @@ public class DepartmentUser {
 	}
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
+	}
+	
+	@Basic
+	@Column(name="user_team_type")
+	public Integer getUserTeamType() {
+		return userTeamType;
+	}
+	public void setUserTeamType(Integer userTeamType) {
+		this.userTeamType = userTeamType;
 	}
 	
 	

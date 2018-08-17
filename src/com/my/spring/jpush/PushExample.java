@@ -102,6 +102,7 @@ public class PushExample {
                 .setNotification(Notification.newBuilder()
                         .addPlatformNotification(IosNotification.newBuilder()
                                 .setAlert(content)
+                                .setContentAvailable(true)
                                 .setBadge(1)
                                 .setSound("happy")
                                 .addExtra("noticeType", type)///0、质量   1、安全   2、施工任务单  3、 预付单  4、留言

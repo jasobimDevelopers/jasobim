@@ -183,6 +183,12 @@ public class ConstructionTaskDaoImpl extends BaseDao<ConstructionTask> implement
 		return retDataWrapper;
 	}
 
+	@Override
+	public ConstructionTask getConstructionTaskById(Long aboutId) {
+		// TODO Auto-generated method stub
+		return get(aboutId);
+	}
+
 	
 
 	

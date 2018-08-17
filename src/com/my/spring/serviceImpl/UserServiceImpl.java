@@ -303,6 +303,21 @@ public class UserServiceImpl implements UserService {
 							userInDB.setUserType(user.getUserType());
 						}
 					}
+					if(user.getTeamId()!=null && !user.getTeamId().equals("")){
+						if(!user.getTeamId().equals(userInDB.getTeamId())){
+							userInDB.setTeamId(user.getTeamId());
+						}
+					}
+					if(user.getWorkName()!=null && !user.getWorkName().equals("")){
+						if(!user.getWorkName().equals(userInDB.getWorkName())){
+							userInDB.setWorkName(user.getWorkName());
+						}
+					}
+					if(user.getDepartmentId()!=null && !user.getDepartmentId().equals("")){
+						if(!user.getDepartmentId().equals(userInDB.getDepartmentId())){
+							userInDB.setDepartmentId(user.getDepartmentId());
+						}
+					}
 					if (!userDao.updateUser(userInDB)) {
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					}else{
@@ -458,6 +473,7 @@ public class UserServiceImpl implements UserService {
 					userpojo.setDepartmentId(userList.getData().get(i).getDepartmentId());
 					userpojo.setTeamId(userList.getData().get(i).getTeamId());
 					userpojo.setRoleId(userList.getData().get(i).getRoleId());
+					userpojo.setWorkName(userList.getData().get(i).getWorkName());
 					if(userList.getData().get(i).getMenuItemList()!=null){
 						userpojo.setMenuItemList(userList.getData().get(i).getMenuItemList().split(","));
 					}
@@ -917,6 +933,12 @@ public class UserServiceImpl implements UserService {
 	    }
 		return result;
 		
+	}
+
+	@Override
+	public List<Long> getAllUserIdList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

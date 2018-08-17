@@ -19,6 +19,7 @@ import com.my.spring.model.Item;
 import com.my.spring.model.Paper;
 import com.my.spring.model.PaperPojo;
 import com.my.spring.model.Project;
+import com.my.spring.model.ProjectIds;
 import com.my.spring.model.ProjectPojo;
 import com.my.spring.model.Projectvs;
 import com.my.spring.model.Quantity;
@@ -779,6 +780,7 @@ public class ProjectServiceImpl implements ProjectService {
 					projectPojo.setId(project.getId());
 					projectPojo.setLeader(project.getLeader());
 					projectPojo.setName(project.getName());
+					projectPojo.setShortName(project.getShortName());
 					projectPojo.setNum(project.getNum());
 					projectPojo.setPrice(project.getPrice());
 					projectPojo.setPhase(project.getPhase());
@@ -825,6 +827,32 @@ public class ProjectServiceImpl implements ProjectService {
 				Project project=projectDao.getById(projectId);
 			    result.setData(project.getWorkHour().toString());
 			}
+		} else {
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return result;
+	}
+
+	@Override
+	public DataWrapper<List<ProjectIds>> getAllProjectId(String token) {
+		User userInMemory = SessionManager.getSession(token);
+		DataWrapper<List<ProjectIds>> result =new DataWrapper<List<ProjectIds>>();
+		List<ProjectIds> resultList = new ArrayList<ProjectIds>();
+        if (userInMemory != null) {
+        	if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
+        		List<Project> projects=projectDao.getAllProjects();
+        		if(!projects.isEmpty()){
+        			for(Project p:projects){
+        				ProjectIds pids = new ProjectIds();
+        				pids.setProjectId(p.getId());
+        				pids.setProjectName(p.getName());
+        				resultList.add(pids);
+        			}
+        			result.setData(resultList);
+        		}
+        	}else{
+        		result.setErrorCode(ErrorCodeEnum.AUTH_Error);
+        	}
 		} else {
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

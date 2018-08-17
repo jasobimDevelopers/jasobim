@@ -27,6 +27,7 @@ import com.my.spring.model.QuestionFile;
 import com.my.spring.model.QuestionPojo;
 import com.my.spring.model.Role;
 import com.my.spring.model.User;
+import com.my.spring.model.UserId;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.parameters.ProjectDatas;
@@ -135,22 +136,25 @@ public class QuestionServiceImpl implements QuestionService {
 								}
 							}
 						}
-						for(String s:aa){
+					}
+					List<UserId> userIdList = userDao.getAllUserIdList(question.getUserList());
+					if(!userIdList.isEmpty()){
+						for(UserId s:userIdList){
 							Notice nl2 = new Notice();
 							nl2.setAboutId(question.getId());
 							nl2.setCreateDate(new Date());
-							nl2.setUserId(Long.valueOf(s));
+							nl2.setUserId(s.getId());
 							nl2.setNoticeType(1);
+							nl2.setProjectId(question.getProjectId());
 							nl2.setReadState(0);
 							nl.add(nl2);
 						}
+						noticeDao.addNoticeList(nl);
 					}
-					noticeDao.addNoticeList(nl);
 					/////////////
 					HashMap<String,String> hq = new HashMap<String,String>();
 					hq.put("title", question.getName());
 					hq.put("content", question.getIntro());
-					
 					if(fileList.length>0)
 					{
 						for(int k=0;k<fileList.length;k++){
@@ -207,7 +211,6 @@ public class QuestionServiceImpl implements QuestionService {
 					hq.put("projectName", "来自  "+po.getName());
 					hq.put("aboutId", question.getId().toString());
 					hq.put("createDate", Parameters.getSdfs().format(new Date()));
-					hq.put("projectId", po.getId().toString());
 					String content="";
 					if(po!=null){
 						content=userInMemory.getRealName()+"在"+po.getName()+"项目里提交了一个标题为："+question.getName()+"的问题";
@@ -481,6 +484,19 @@ public class QuestionServiceImpl implements QuestionService {
 			/////问题等级搜索
 			/////当用户是总经理级别的时候,问题搜索只能搜索重要和紧急，同时也只能看重要和紧急问题，不看一般问题 
 			String projectList=null;
+			if(question.getId()!=null){
+			////////////更新消息为已读
+				Notice notice = new Notice();
+				notice=noticeDao.getByAdoutIdAndUserId(userInMemory.getId(),question.getId(),1);
+				if(notice!=null){
+					if(notice.getReadState()!=1){
+						notice.setReadState(1);
+						notice.setUpdateDate(new Date());
+						noticeDao.updateNotice(notice);
+					}
+				}
+			}
+			/////////
 			dataWrappers= questionDao.getQuestionList(content,projectId,pageIndex,pageSize,question,userIdList,projectList);
 			if(dataWrappers.getData()!=null && dataWrappers.getData().size()>0){
 				for(int i=0;i<dataWrappers.getData().size();i++)
@@ -745,15 +761,31 @@ public class QuestionServiceImpl implements QuestionService {
 										fileList[i]=files.getUrl();
 									}
 								}
+								if(fileList!=null)
+				        		{
+				        			List<String> imageList = new ArrayList<String>();
+				        			List<String> voiceList = new ArrayList<String>();
+				        			for(String items:fileList){
+				        				if(Parameters.getFileType(items).equals("mp3") || Parameters.getFileType(items).equals("wav")){
+				        					voiceList.add(items);
+				        				}else if(!Parameters.getFileType(items).equals("dat")){
+				        					imageList.add(items);
+				        				}
+				        			}
+				        			questionPojo.setImageUrlList(imageList);
+				        			questionPojo.setVoiceUrlList(voiceList);
+				        		}			
 								questionPojo.setFileList(fileList);
 							}
 							if(questionPojo!=null){
 								Notice notice = new Notice();
 								notice=noticeDao.getByAdoutIdAndUserId(userInDB.getId(),questionId,1);
 								if(notice!=null){
-									notice.setReadState(1);
-									notice.setUpdateDate(new Date());
-									noticeDao.updateNotice(notice);
+									if(notice.getReadState()!=1){
+										notice.setReadState(1);
+										notice.setUpdateDate(new Date());
+										noticeDao.updateNotice(notice);
+									}
 								}
 							}
 							//////添加打点记录
@@ -802,6 +834,18 @@ public class QuestionServiceImpl implements QuestionService {
 				Question question=null;
 				question=questionDao.getById(questionId);	
 					if(question!=null){
+						
+						/////安全问题状态更新，消息提醒存储
+						Notice notice = new Notice();
+						notice.setAboutId(question.getId());
+						notice.setNoticeType(1);
+						notice.setCreateDate(new Date());
+						notice.setRemark("finished");
+						notice.setUserId(question.getUserId());
+						notice.setProjectId(question.getProjectId());
+						Integer statse=0;
+						notice.setReadState(statse);
+						noticeDao.addNotice(notice);
 						if(userInMemory.getSystemId()!=null){
 							if(question.getProjectId()!=null){
 								UserLog userLog = new UserLog();
@@ -917,6 +961,18 @@ public class QuestionServiceImpl implements QuestionService {
     				}
     			}
     		}
+    		if(question.getId()!=null){
+				////////////更新消息为已读
+				Notice notice = new Notice();
+				notice=noticeDao.getByAdoutIdAndUserId(userInMemory.getId(),question.getId(),1);
+				if(notice!=null){
+					if(notice.getReadState()!=1){
+						notice.setReadState(1);
+						notice.setUpdateDate(new Date());
+						noticeDao.updateNotice(notice);
+					}
+				}
+			}
 			dataWrappers= questionDao.getQuestionLists(searchType,content,projectId,pageIndex,pageSize,question,userIdList);
 			
 			for(int i=0;i<dataWrappers.getData().size();i++)

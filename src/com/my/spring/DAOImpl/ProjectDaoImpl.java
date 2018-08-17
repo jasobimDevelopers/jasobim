@@ -259,4 +259,18 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 	    return retDataWrapper;
 	}
 
+	@Override
+	public List<Project> getAllProjects() {
+		List<Project> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Project.class);
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		return ret;
+	
+	}
+
 }

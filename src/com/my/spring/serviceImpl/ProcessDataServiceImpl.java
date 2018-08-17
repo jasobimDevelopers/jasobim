@@ -1,14 +1,17 @@
 package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.FileDao;
+import com.my.spring.DAO.ItemDataDao;
 import com.my.spring.DAO.ProcessDataDao;
 import com.my.spring.DAO.ProcessItemDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.ItemData;
 import com.my.spring.model.ProcessData;
 import com.my.spring.model.ProcessDataPojo;
 import com.my.spring.model.ProcessItem;
+import com.my.spring.model.ProcessItemPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
@@ -29,6 +32,8 @@ public class ProcessDataServiceImpl implements ProcessDataService {
     ProcessDataDao ProcessDataDao;
     @Autowired
     ProcessItemDao processItemDao;
+    @Autowired
+    ItemDataDao itemDataDao;
     @Autowired
     FileDao fileDao;
     @Autowired
@@ -141,14 +146,6 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 	        		userLog.setVersion("-1");
 	        		userLogSerivce.addUserLog(userLog, token);
 	        	}
-        		if(type!=null){
-        			if(type==0){
-        				ProcessData.setName("施工任务单");
-        			}
-        			if(type==1){
-        				ProcessData.setName("预付单");
-        			}
-        		}
 				dataWrapper=ProcessDataDao.getProcessDataList(pageIndex,pageSize,ProcessData);
 				if(dataWrapper.getData()!=null){
 					List<ProcessDataPojo> ProcessDataPojoList = new ArrayList<ProcessDataPojo>();
@@ -185,6 +182,31 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 			}
         return dataWrappers;
     }
+	@Override
+	public DataWrapper<List<ProcessItemPojo>> getProcessItemListById(String token, Long id) {
+		DataWrapper<List<ProcessItemPojo>> result = new DataWrapper<List<ProcessItemPojo>>();
+		List<ProcessItemPojo> results = new ArrayList<ProcessItemPojo>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			List<ProcessItem> gets = processItemDao.getProcessItemByProcessId(id);
+			if(!gets.isEmpty()){
+				for(ProcessItem pitem:gets){
+					ProcessItemPojo pip = new ProcessItemPojo();
+					ItemData itemdata = itemDataDao.getById(pitem.getItemId());
+					if(itemdata!=null){
+						pip.setId(itemdata.getId());
+						pip.setItemName(itemdata.getName());
+						pip.setWhich(pitem.getWhich());
+					}
+					results.add(pip);
+				}
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		result.setData(results);
+		return result;
+	}
 
 
 }

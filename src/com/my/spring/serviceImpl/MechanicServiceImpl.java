@@ -49,7 +49,7 @@ public class MechanicServiceImpl implements MechanicService{
     ProjectDao projectDao;
 
 	@Override
-	public DataWrapper<Void> addMechanic(Mechanic am, String token,MultipartFile file,HttpServletRequest request) {
+	public DataWrapper<Void> addMechanic(Mechanic am, String token,MultipartFile file,MultipartFile file2,HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		DataWrapper<Void> result = new DataWrapper<Void>();
 		User user = SessionManager.getSession(token);
@@ -61,7 +61,13 @@ public class MechanicServiceImpl implements MechanicService{
 			if(file!=null){
 				Files files = fileService.uploadFile("/mechanic/"+am.getProjectId(),file, 5,request);
 				if(files!=null){
-					am.setIdCardImg(files.getId());
+					am.setIdCardImgZ(files.getId());
+				}
+			}
+			if(file2!=null){
+				Files files2 = fileService.uploadFile("/mechanic/"+am.getProjectId(),file2, 5,request);
+				if(files2!=null){
+					am.setIdCardImgF(files2.getId());
 				}
 			}
 			if(!mechanicDao.addMechanic(am)){
@@ -88,7 +94,7 @@ public class MechanicServiceImpl implements MechanicService{
 	}
 
 	@Override
-	public DataWrapper<Void> updateMechanic(Mechanic am, String token,MultipartFile file,HttpServletRequest request) {
+	public DataWrapper<Void> updateMechanic(Mechanic am, String token,MultipartFile file,MultipartFile file2,HttpServletRequest request) {
 		DataWrapper<Void> result = new DataWrapper<Void>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
@@ -102,10 +108,17 @@ public class MechanicServiceImpl implements MechanicService{
 					mechanice.setTel(am.getTel());
 					mechanice.setWorkName(am.getWorkName());
 					mechanice.setProjectId(am.getProjectId());
+					mechanice.setSex(am.getSex());
 					if(file!=null){
 						Files files = fileService.uploadFile("/mechanic/"+am.getProjectId(), file, 5, request);
 						if(files!=null){
-							mechanice.setIdCardImg(files.getId());
+							mechanice.setIdCardImgZ(files.getId());
+						}
+					}
+					if(file2!=null){
+						Files files2 = fileService.uploadFile("/mechanic/"+am.getProjectId(), file2, 5, request);
+						if(files2!=null){
+							mechanice.setIdCardImgF(files2.getId());
 						}
 					}
 					if(!mechanicDao.updateMechanic(mechanice)){
@@ -143,6 +156,7 @@ public class MechanicServiceImpl implements MechanicService{
 						mpce.setCreateDate(Parameters.getSdfs().parse(dates));
 						mpce.setMechanicId(am.getId());
 						mpce.setProjectId(am.getProjectId());
+						
 						MechanicPrice mps =mechanicPriceDao.getMechanicPriceLists(-1, 10, mpce);
 						if(mps!=null){
 							attenceModelPojo.setDayHours(mps.getHour());
@@ -154,10 +168,16 @@ public class MechanicServiceImpl implements MechanicService{
 							}
 							attenceModelPojo.setCreateDate(Parameters.getSdf().format(am.getCreateDate()));
 						}
-						if(am.getIdCardImg()!=null){
-							Files filess = fileService.getById(am.getIdCardImg());
+						if(am.getIdCardImgZ()!=null){
+							Files filess = fileService.getById(am.getIdCardImgZ());
 							if(filess!=null){
-								attenceModelPojo.setIdCardImg(filess.getUrl());
+								attenceModelPojo.setIdCardImgZ(filess.getUrl());
+							}
+						}
+						if(am.getIdCardImgF()!=null){
+							Files filesss = fileService.getById(am.getIdCardImgF());
+							if(filesss!=null){
+								attenceModelPojo.setIdCardImgF(filesss.getUrl());
 							}
 						}
 						attenceModelPojo.setTel(am.getTel());
@@ -175,6 +195,7 @@ public class MechanicServiceImpl implements MechanicService{
 							}
 						}
 						attenceModelPojo.setProjectId(am.getProjectId());
+						attenceModelPojo.setSex(am.getSex());
 						results.add(attenceModelPojo);
 					}
 					result.setData(results);
@@ -220,8 +241,8 @@ public class MechanicServiceImpl implements MechanicService{
 					mps.setProjectId(item.getProjectId());
 					mps.setRealName(item.getRealName());
 					mps.setWorkName(item.getWorkName());
-					if(item.getIdCardImg()!=null){
-						Files file = fileService.getById(item.getIdCardImg());
+					if(item.getIdCardImgZ()!=null){
+						Files file = fileService.getById(item.getIdCardImgZ());
 						if(file!=null){
 							mps.setUserIcon(file.getUrl());
 						}

@@ -12,12 +12,13 @@ public class ConstructionTaskNewPojo {
 	private String teamUserIds;//班组技工人员（12,15,16）
 	private Integer dayWorkHours;//白天工作时间
 	private Integer nightWorkHours;//夜班时间
-	private Long tendersId;///标段id
+	private String tenders;///标段id
 	private String constructionName;
 	private String constructPart;//施工部位
 	private String[] imgs;//(url,url)
-	private Integer endFlag;
-	private Long approvalUser;
+	private Integer status;////0、未完成 1、已完成 2、待修改
+	private String approvalUser;
+	private Long approvalUserId;
 	private String currentNodeName;
 	private Long currentNodeId;
 	private Long pid;
@@ -106,11 +107,11 @@ public class ConstructionTaskNewPojo {
 		this.nightWorkHours = nightWorkHours;
 	}
 	
-	public Long getTendersId() {
-		return tendersId;
+	public String getTenders() {
+		return tenders;
 	}
-	public void setTendersId(Long tendersId) {
-		this.tendersId = tendersId;
+	public void setTenders(String tenders) {
+		this.tenders = tenders;
 	}
 	
 	public String getConstructionName() {
@@ -134,16 +135,10 @@ public class ConstructionTaskNewPojo {
 		this.createDate = createDate;
 	}
 	
-	public Integer getEndFlag() {
-		return endFlag;
-	}
-	public void setEndFlag(Integer endFlag) {
-		this.endFlag = endFlag;
-	}
-	public Long getApprovalUser() {
+	public String getApprovalUser() {
 		return approvalUser;
 	}
-	public void setApprovalUser(Long approvalUser) {
+	public void setApprovalUser(String approvalUser) {
 		this.approvalUser = approvalUser;
 	}
 	public String getCurrentNodeName() {
@@ -163,6 +158,18 @@ public class ConstructionTaskNewPojo {
 	}
 	public void setPid(Long pid) {
 		this.pid = pid;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	public Long getApprovalUserId() {
+		return approvalUserId;
+	}
+	public void setApprovalUserId(Long approvalUserId) {
+		this.approvalUserId = approvalUserId;
 	}
 	
 	

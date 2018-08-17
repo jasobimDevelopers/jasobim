@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -15,6 +16,7 @@ import com.my.spring.DAO.MechanicDao;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.AttenceLog;
+import com.my.spring.model.DepartmentUser;
 import com.my.spring.model.Mechanic;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -163,6 +165,25 @@ public class MechanicDaoImpl extends BaseDao<Mechanic> implements MechanicDao {
 		        }
 	        }
 			return ret;
+	}
+
+	@Override
+	public List<Mechanic> getMechanicByIds(String teamUserIds) {
+		List<Mechanic> ret = new ArrayList<Mechanic>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Mechanic.class);
+    	String[] ids = teamUserIds.split(",");
+    	Disjunction dju = Restrictions.disjunction();
+    	for(String id:ids){
+    		dju.add(Restrictions.eq("id", Long.valueOf(id)));
+    	}
+    	criteria.add(dju);
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		return ret;
 	}
 
 }

@@ -7,10 +7,12 @@ import javax.persistence.*;
 public class MechanicPrice {
 	private Long id;
 	private Long mechanicId;
-	private Integer hour;
+	private Integer hour;/// 白班 （10个小时一个工日）、夜班（6个小时一个工日） 
+	private Integer nightHour;///夜班时长
 	private Date editDate;
 	private Date createDate;
 	private Long projectId;
+	private Integer mechanicType;//0 、人员花名册  1、班组人员
 	
 	@Id
 	@GeneratedValue
@@ -65,6 +67,25 @@ public class MechanicPrice {
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
 	}
+	@Basic
+	@Column(name="mechanic_type")
+	public Integer getMechanicType() {
+		return mechanicType;
+	}
+	public void setMechanicType(Integer mechanicType) {
+		this.mechanicType = mechanicType;
+	}
+	
+	@Basic
+	@Column(name="night_hour")
+	public Integer getNightHour() {
+		return nightHour;
+	}
+	public void setNightHour(Integer nightHour) {
+		this.nightHour = nightHour;
+	}
+	
+	
 	
 	
 }

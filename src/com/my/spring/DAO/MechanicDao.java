@@ -3,6 +3,7 @@ package com.my.spring.DAO;
 import java.util.List;
 
 import com.my.spring.model.Mechanic;
+import com.my.spring.model.MechanicPrice;
 import com.my.spring.utils.DataWrapper;
 
 public interface MechanicDao {
@@ -14,4 +15,6 @@ public interface MechanicDao {
 	Mechanic getMechanicById(Long id);
 	DataWrapper<List<Mechanic>> getMechanicListByProjectId(Integer pageIndex, Integer pageSize, Long projectId);
 	List<Mechanic> getMechanicListByProjectId(Mechanic ps);
+	List<Mechanic> getMechanicByIds(String teamUserIds);
+	
 }

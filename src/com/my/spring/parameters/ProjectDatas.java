@@ -22,7 +22,9 @@ public enum ProjectDatas implements Serializable {
     MechanicPrice_area("mechanicPrice",16),///劳动力监测
     AttenceLog_area("attenceLog",17),///考勤管理
     QuanlityChange_area("quanlity",18),//工程量变更
-    ProcessData_area("processData",19)//进程管理
+    ProcessData_area("processData",19),//进程管理
+    AdvancedOrder_area("advancedOrder",20),//施工任务单
+    ConstructionTask_area("constructionTask",21)//预付单
     ;
     private String label;
     private Integer code;

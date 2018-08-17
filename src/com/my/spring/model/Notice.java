@@ -9,6 +9,7 @@ import javax.persistence.*;
 public class Notice {
 	private Long id;
 	private Long userId;
+	private Long projectId;
 	private Long aboutId;
 	private Integer noticeType;///通知关联表：0 质量问题、 1 安全问题、 2 施工任务单、 3 预付单 、4 留言
 	private Integer readState;////0 未读 1已读
@@ -87,6 +88,15 @@ public class Notice {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	
+	@Basic
+	@Column(name="project_id")
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 	
 	

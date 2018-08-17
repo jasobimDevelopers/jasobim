@@ -11,8 +11,10 @@ public class MechanicPojo {
 	private String remark;
 	private String createDate;
 	private String createUser;
-	private String idCardImg;
+	private String idCardImgZ;
+	private String idCardImgF;
 	private Integer dayHours;
+	private Integer sex;
 	
 	public Long getId() {
 		return id;
@@ -84,17 +86,29 @@ public class MechanicPojo {
 		this.createUser = createUser;
 	}
 	
-	public String getIdCardImg() {
-		return idCardImg;
-	}
-	public void setIdCardImg(String idCardImg) {
-		this.idCardImg = idCardImg;
-	}
 	public Integer getDayHours() {
 		return dayHours;
 	}
 	public void setDayHours(Integer dayHours) {
 		this.dayHours = dayHours;
+	}
+	public Integer getSex() {
+		return sex;
+	}
+	public void setSex(Integer sex) {
+		this.sex = sex;
+	}
+	public String getIdCardImgZ() {
+		return idCardImgZ;
+	}
+	public void setIdCardImgZ(String idCardImgZ) {
+		this.idCardImgZ = idCardImgZ;
+	}
+	public String getIdCardImgF() {
+		return idCardImgF;
+	}
+	public void setIdCardImgF(String idCardImgF) {
+		this.idCardImgF = idCardImgF;
 	}
 	
 }

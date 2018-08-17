@@ -36,6 +36,7 @@ public interface UserService {
 	DataWrapper<Void> getIdentifyingInfo(String mobile, String code);
 	DataWrapper<Void> registerUserInfo(User user);
 	DataWrapper<Void> getUserInfoSql(User user);
+	List<Long> getAllUserIdList();
 	DataWrapper<Void> addUser(User user, String token, MultipartFile file, HttpServletRequest request,
 			String projectList);
 	DataWrapper<List<UserSelectPojo>> getUserByWorkName(String token, String workName, Long projectId);

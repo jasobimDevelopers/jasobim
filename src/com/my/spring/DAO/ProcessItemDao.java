@@ -14,4 +14,5 @@ public interface ProcessItemDao {
     DataWrapper<List<ProcessItem>> getProcessItemList(Integer pageIndex, Integer pageSize, ProcessItem ProcessItem);
 	ProcessItem findProcessItem(ProcessLog processLog);
 	ItemIdMode getProcessItemByNode(Integer currentNode, Long processDataId);
+	List<ProcessItem> getProcessItemByProcessId(Long id);
 }

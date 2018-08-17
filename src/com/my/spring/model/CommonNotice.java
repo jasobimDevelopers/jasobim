@@ -1,17 +1,22 @@
 package com.my.spring.model;
 
-import java.util.Date;
+import java.util.List;
 
 public class CommonNotice {
 	private Integer noticeType;
 	private String title;
 	private String createUserName;
 	private Long aboutId;
+	private Long aboutCreateUserId;
 	private String createDate;/////精确到天
 	private String userIconUrl;
 	private String content;
 	private String projectName;
 	private String imagUrl;
+	private String name;
+	private List<String> sendUserList;
+	private Integer messageType;//0.质量留言 1.安全留言
+	private Integer readState;//0、未读  1、已读
 	public Integer getNoticeType() {
 		return noticeType;
 	}
@@ -65,6 +70,36 @@ public class CommonNotice {
 	}
 	public void setAboutId(Long aboutId) {
 		this.aboutId = aboutId;
+	}
+	public Integer getMessageType() {
+		return messageType;
+	}
+	public void setMessageType(Integer messageType) {
+		this.messageType = messageType;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public List<String> getSendUserList() {
+		return sendUserList;
+	}
+	public void setSendUserList(List<String> sendUserList) {
+		this.sendUserList = sendUserList;
+	}
+	public Long getAboutCreateUserId() {
+		return aboutCreateUserId;
+	}
+	public void setAboutCreateUserId(Long aboutCreateUserId) {
+		this.aboutCreateUserId = aboutCreateUserId;
+	}
+	public Integer getReadState() {
+		return readState;
+	}
+	public void setReadState(Integer readState) {
+		this.readState = readState;
 	}
 	
 }

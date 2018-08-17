@@ -182,7 +182,7 @@
 					<div class="img">
 						<ul class="clear">
 							<li ng-repeat="img in questionImgList">
-								<img height="85" width="85" ng-src="http://jasobim.com.cn/{{img}}" alt="" onclick="showOneBig(this)">
+								<img height="85" width="85" ng-src="http://jasobim.com:8080/{{img}}" alt="" onclick="showOneBig(this)">
 							</li>
 							<li>
 								<div ng-repeat="qfile in questionVoiceList" class="question-wrap" style="margin-top:10px;">
@@ -229,7 +229,7 @@
 									<div ng-if="ss[2]==message.id">
 										<div ng-repeat="mimg in ss[0]">
 											<li style="margin-left: 0px;border-bottom:none;">
-												<img width="85" height="85" ng-src="http://jasobim.com.cn/{{mimg}}" onclick="showOneBig(this)" alt="">
+												<img width="85" height="85" ng-src="http://jasobim.com:8080/{{mimg}}" onclick="showOneBig(this)" alt="">
 											</li>
 										</div>
 										<div ng-repeat="mvoice in ss[1]">

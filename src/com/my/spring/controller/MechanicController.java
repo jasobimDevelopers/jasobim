@@ -30,19 +30,21 @@ public class MechanicController {
     public DataWrapper<Void> addMechanic(
     		@ModelAttribute Mechanic mechanic,
     		HttpServletRequest request,
-    		@RequestParam(value = "file", required = false) MultipartFile file,
+    		@RequestParam(value = "idCardImgZs", required = false) MultipartFile idCardImgZs,
+    		@RequestParam(value = "idCardImgFs", required = false) MultipartFile idCardImgFs,
             @RequestParam(value = "token",required = true) String token){
-        return amService.addMechanic(mechanic, token,file,request);
+        return amService.addMechanic(mechanic, token,idCardImgZs,idCardImgFs,request);
     }
     
     @RequestMapping(value="/updateMechanic", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateMechanic(
-            @ModelAttribute Mechanic am,
-            HttpServletRequest request,
-    		@RequestParam(value = "file", required = false) MultipartFile file,
+    		@ModelAttribute Mechanic mechanic,
+    		HttpServletRequest request,
+    		@RequestParam(value = "idCardImgZs", required = false) MultipartFile idCardImgZs,
+    		@RequestParam(value = "idCardImgFs", required = false) MultipartFile idCardImgFs,
             @RequestParam(value = "token",required = true) String token){
-        return amService.updateMechanic(am, token,file,request);
+        return amService.updateMechanic(mechanic, token,idCardImgZs,idCardImgFs,request);
     }
     @RequestMapping(value="/deleteMechanic",method=RequestMethod.GET)
     @ResponseBody
