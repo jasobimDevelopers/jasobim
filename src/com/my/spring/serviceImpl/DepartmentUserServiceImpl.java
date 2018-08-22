@@ -156,6 +156,7 @@ public class DepartmentUserServiceImpl implements DepartmentUserService {
 							dup.setUpdateUser(updateUser.getRealName());
 						}
 					}
+					dup.setUserTeamId(du.getUserTeamId());
 					dup.setCreateDate(Parameters.getSdf().format(du.getCreateDate()));
 					dup.setIdCard(du.getIdCard());
 					dup.setTel(du.getTel());
@@ -164,6 +165,10 @@ public class DepartmentUserServiceImpl implements DepartmentUserService {
 					dup.setProjectId(du.getProjectId());
 					outputs.add(dup);
 				}
+				result.setCurrentPage(getsDataWrapper.getCurrentPage());
+				result.setNumberPerPage(getsDataWrapper.getNumberPerPage());
+				result.setTotalNumber(getsDataWrapper.getTotalNumber());
+				result.setTotalPage(getsDataWrapper.getTotalPage());
 				result.setData(outputs);
 			}
 		}else{
@@ -211,6 +216,7 @@ public class DepartmentUserServiceImpl implements DepartmentUserService {
 					if(du.getUpdateDate()!=null){
 						dup.setUpdateDate(Parameters.getSdf().format(du.getUpdateDate()));
 					}
+					dup.setUserTeamId(du.getUserTeamId());
 					if(du.getUpdateUser()!=null){
 						User updateUser = userDao.getById(du.getUpdateUser());
 						if(updateUser!=null){
@@ -254,6 +260,9 @@ public class DepartmentUserServiceImpl implements DepartmentUserService {
 						}
 						if(departmentUser.getTel()!=null){
 							get.setTel(departmentUser.getTel());
+						}
+						if(departmentUser.getUserTeamId()!=null){
+							get.setUserTeamId(departmentUser.getUserTeamId());
 						}
 						if(departmentUser.getWorkTypeId()!=null){
 							get.setWorkTypeId(departmentUser.getWorkTypeId());

@@ -446,6 +446,50 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         return dataWrapper;
 	}
 	@Override
+	public DataWrapper<List<UserCopy>> getUserByProjectIds(String projectId) {
+        Session session = getSession();
+        String sql="select * from user where user_type=3 and id in (select user_id from user_project where project_id=";
+        String sqlor="";
+        if(projectId!=null){
+        	String[] ids=projectId.split(",");
+        	for(int k=0;k<ids.length;k++){
+        		if(k==0){
+        			sqlor=ids[k];
+        		}else{
+        			sqlor=sqlor+" or project_id="+ids[k];
+        		}
+        	}
+        }
+        sql=sql+sqlor+")";
+        DataWrapper<List<UserCopy>> dataWrapper=new DataWrapper<List<UserCopy>>();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("id",StandardBasicTypes.LONG)
+					 .addScalar("user_name", StandardBasicTypes.STRING)
+					 .addScalar("password",StandardBasicTypes.STRING)
+					 .addScalar("real_name",StandardBasicTypes.STRING)
+					 .addScalar("user_type", StandardBasicTypes.INTEGER)
+					 .addScalar("email", StandardBasicTypes.STRING)
+					 .addScalar("tel", StandardBasicTypes.STRING)
+					 .addScalar("user_icon", StandardBasicTypes.LONG)
+					 .addScalar("user_icon_url", StandardBasicTypes.STRING)
+					 .addScalar("register_date", StandardBasicTypes.DATE)
+					 .addScalar("update_date", StandardBasicTypes.DATE)
+					 .addScalar("team_id", StandardBasicTypes.LONG)
+					 .addScalar("system_id", StandardBasicTypes.INTEGER)
+					 .addScalar("system_type", StandardBasicTypes.INTEGER)
+					 .addScalar("role_id", StandardBasicTypes.LONG)
+					 .addScalar("department_id", StandardBasicTypes.LONG)
+					 .addScalar("menu_item_list", StandardBasicTypes.STRING)
+					 .setResultTransformer(Transformers.aliasToBean(UserCopy.class)); 
+			 dataWrapper.setData(query.list());
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	        }
+        return dataWrapper;
+	}
+	@Override
 	public List<User> findUserLikeProjct(List<String> userList) {
 		List<User> ret = null;
         Session session = getSession();
@@ -508,6 +552,24 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         	}
         	sql=sql+sqlor;
         }
+        Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+				 .addScalar("id",StandardBasicTypes.LONG)
+				 .setResultTransformer(Transformers.aliasToBean(UserId.class)); 
+		    ret=query.list();
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+	    return ret;
+	}
+	@Override
+	public List<UserId> getAllUserIdListByProjectId(Long projectId) {
+		List<UserId> ret = new ArrayList<UserId>();
+        String sql="select id from user where user_type=0 or user_type=1"
+		+" or id in(select user_id as id from user_project where project_id="
+        +projectId+")";
         Session session=getSession();
 	    try{
 		    Query query = session.createSQLQuery(sql)

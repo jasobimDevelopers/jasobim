@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.my.spring.model.AdvancedOrderPojo;
-import com.my.spring.model.ConstructionTask;
+import com.my.spring.model.ConstructionTaskNew;
 import com.my.spring.model.ConstructionTaskPojo;
 
 import freemarker.cache.FileTemplateLoader;  

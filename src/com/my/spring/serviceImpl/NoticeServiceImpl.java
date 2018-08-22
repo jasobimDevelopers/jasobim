@@ -1,7 +1,6 @@
 package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.AdvancedOrderDao;
-import com.my.spring.DAO.ConstructionTaskDao;
 import com.my.spring.DAO.ConstructionTaskNewDao;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.MessageDao;
@@ -17,9 +16,10 @@ import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.AdvancedOrder;
 import com.my.spring.model.AdvancedOrderCopy;
+import com.my.spring.model.AllItemData;
 import com.my.spring.model.CommonNotice;
-import com.my.spring.model.ConstructionTask;
 import com.my.spring.model.ConstructionTaskCopy;
+import com.my.spring.model.ConstructionTaskNew;
 import com.my.spring.model.Files;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageFile;
@@ -36,7 +36,6 @@ import com.my.spring.model.UserProject;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.AdvancedOrderService;
-import com.my.spring.service.ConstructionTaskService;
 import com.my.spring.service.NoticeService;
 import com.my.spring.service.QualityQuestionService;
 import com.my.spring.service.QuestionService;
@@ -83,10 +82,7 @@ public class NoticeServiceImpl implements NoticeService {
 	UserLogService userLogService;
 	@Autowired
 	FileDao fileDao;
-	@Autowired
-	ConstructionTaskService constructionTaskService;
-	@Autowired
-	ConstructionTaskDao constructionTaskDao;
+
 	@Autowired
 	MessageDao messageDao;
 	@Autowired
@@ -250,38 +246,7 @@ public class NoticeServiceImpl implements NoticeService {
 				}
 			}
 			////////未读施工任务单列表获取
-			constructionTaskCopy = constructionTaskService.getConstructionTaskListNotRead(token, pageSize, pageIndex);
-			totalNum+=constructionTaskCopy.getTotalNumber();
-			if(constructionTaskCopy.getData().size()>0){
-				if(constructionTaskCopy.getData().get(0).getId()!=null){
-					for(ConstructionTaskCopy cn3:constructionTaskCopy.getData()){
-						CommonNotice commonNotice3 = new CommonNotice();
-						commonNotice3.setAboutId(cn3.getId());
-						commonNotice3.setNoticeType(2);
-						commonNotice3.setContent(cn3.getDetailContent());
-						User userQuestion=userDao.getById(cn3.getUserId());
-						if(userQuestion!=null){
-							commonNotice3.setCreateUserName(userQuestion.getRealName());
-							if(userQuestion.getUserIcon()!=null){
-								Files urlfiles = fileDao.getById(userQuestion.getUserIcon());
-								commonNotice3.setUserIconUrl(urlfiles.getUrl());
-							}else if(userQuestion.getUserIconUrl()!=null){
-								commonNotice3.setUserIconUrl(userQuestion.getUserIconUrl());
-							}
-						}
-						commonNotice3.setCreateDate(Parameters.getSdf().format(cn3.getCreateDate()));
-						commonNotice3.setTitle("提交了一个施工任务单");
-						commonNotice3.setProjectName("来自  "+projectDao.getById(cn3.getProjectId()).getName());
-						if(cn3.getFileIdList()!=null){
-							Files files = fileDao.getById(Long.valueOf(cn3.getFileIdList().split(",")[0]));
-							if(files!=null){
-								commonNotice3.setImagUrl(files.getUrl());
-							}
-						}
-						result.add(commonNotice3);
-					}
-				}
-			}
+			
 			if(result.size()>0){
 				Parameters.ListSort(result);
 				resultList.setData(result);
@@ -469,21 +434,21 @@ public class NoticeServiceImpl implements NoticeService {
 							commonNotice.setNoticeType(no.getNoticeType());
 							commonNotice.setAboutId(no.getAboutId());
 							commonNotice.setReadState(no.getReadState());
-							ConstructionTask ct = constructionTaskDao.getConstructionTaskById(no.getAboutId());
+							ConstructionTaskNew ct = constructionTaskNewDao.getById(no.getAboutId());
 							if(ct!=null){
-								commonNotice.setAboutCreateUserId(ct.getUserId());
-								commonNotice.setContent(ct.getDetailContent());
+								commonNotice.setAboutCreateUserId(ct.getCreateUser());
+								commonNotice.setContent(ct.getConstructContent());
 								Project project = projectDao.getById(ct.getProjectId());
 								if(project!=null){
 									commonNotice.setProjectName(project.getName());
 								}
-								if(ct.getFileIdList()!=null){
-									Files files = fileDao.getById(Long.valueOf(ct.getFileIdList().split(",")[0]));
+								if(ct.getImgs()!=null){
+									Files files = fileDao.getById(Long.valueOf(ct.getImgs().split(",")[0]));
 									if(files!=null){
 										commonNotice.setImagUrl(files.getUrl());
 									}
 								}
-								User createUser=userDao.getById(ct.getUserId());
+								User createUser=userDao.getById(ct.getCreateUser());
 								if(createUser!=null){
 									commonNotice.setCreateUserName(createUser.getRealName());
 									if(createUser.getUserIcon()!=null){
@@ -498,12 +463,15 @@ public class NoticeServiceImpl implements NoticeService {
 								if(createUser!=null){
 									commonNotice.setTitle(createUser.getRealName()+"提交了一个施工任务单");
 								}
-								if(ct.getNextReceivePeopleId()!=null){
+								/////任务单下面的流程节点的所有信息
+								List<AllItemData> itemDataList = constructionTaskNewDao.getAllItemData(ct.getId());	
+								if(!itemDataList.isEmpty()){
 									List<String> nameList = new ArrayList<String>();
-									nameList.add(ct.getNextReceivePeopleId());
+									User senduser = userDao.getById(itemDataList.get(0).getApprove_user());
+									nameList.add(senduser.getRealName());
 									commonNotice.setSendUserList(nameList);
 								}
-								commonNotice.setName(ct.getTaskContent());
+								commonNotice.setName(ct.getName());
 								resultList.add(commonNotice);
 							}
 							break;

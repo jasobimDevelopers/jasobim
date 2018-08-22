@@ -28,6 +28,7 @@ public class Parameters {
 	public static final String[][] projectDatas={{"",},{}};
 	private static final SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private static final SimpleDateFormat sdfS=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	//private static final 
 	public static SimpleDateFormat getSdf() {
 		return sdf;
 	} 

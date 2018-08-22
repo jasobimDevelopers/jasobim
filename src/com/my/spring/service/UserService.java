@@ -12,6 +12,7 @@ import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
 import com.my.spring.model.UserSelect;
 import com.my.spring.model.UserSelectPojo;
+import com.my.spring.model.UserWebPojo;
 import com.my.spring.utils.DataWrapper;
 
 
@@ -40,5 +41,7 @@ public interface UserService {
 	DataWrapper<Void> addUser(User user, String token, MultipartFile file, HttpServletRequest request,
 			String projectList);
 	DataWrapper<List<UserSelectPojo>> getUserByWorkName(String token, String workName, Long projectId);
+	DataWrapper<Void> loginOut(Long id, String token, Integer systemId);
+	DataWrapper<List<UserWebPojo>> getUserByProjectIds(String token, String projectIds);
 	
 }

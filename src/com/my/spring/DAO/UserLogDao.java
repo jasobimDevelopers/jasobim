@@ -1,6 +1,7 @@
 package com.my.spring.DAO;
 
 import com.my.spring.model.UserLog;
+import com.my.spring.model.UserLogCount;
 import com.my.spring.model.UserLogMonth;
 import com.my.spring.model.UserLogPart;
 import com.my.spring.model.UserLogPojos;
@@ -29,5 +30,16 @@ public interface UserLogDao {
 
 	List<UserLogPart> getCountNumsByPart(String startTime, String finishedTime, String projectIdList);
 
-	List<UserLogMonth> getCountNumsByMonth(String projectIdList);
+
+	List<UserLogMonth> getCountNumsByMonth(String projectIdList, Integer year);
+
+	List<UserLogMonth> getCountNumsByUserId(Long userId, Integer year);
+
+	List<UserLogMonth> getCountRealNumsByMonth(String projectIdList, Integer year);
+
+	List<UserLogMonth> getCountRealNumsByUserId(Long userId, Integer year);
+
+	List<UserLogPart> getCountPersonNumsByPart(String startTime, String finishedTime, Long userId);
+
+	List<UserLogCount> countUserLogNum(String dateStarts, String dateFinisheds, String projectIds, String userIds);
 }

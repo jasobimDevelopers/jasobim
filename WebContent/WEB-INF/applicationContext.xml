@@ -58,7 +58,7 @@
                 <!-- <prop key="hibernate.connection.url">jdbc:mysql://10.3.103.20:3306/bimdatas</prop> -->
                 <prop key="hibernate.connection.url">jdbc:mysql://10.3.103.20:3306/bimdatas_test</prop>
                 <!-- <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas_new</prop> -->
-               <!--  <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas_test</prop> -->
+                <!-- <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas_test</prop> -->
             </props>
         </property>
         <property name="annotatedClasses">
@@ -84,7 +84,6 @@
                	<value>com.my.spring.model.Production</value>
                	<value>com.my.spring.model.ProductionPercent</value>
                	<value>com.my.spring.model.ProjectStudy</value>
-               	<value>com.my.spring.model.ConstructionTask</value>
                	<value>com.my.spring.model.AdvancedOrder</value>
                	<value>com.my.spring.model.AdvancedOrderCollect</value>
                	<value>com.my.spring.model.Normativefiles</value>
@@ -95,7 +94,6 @@
                	<value>com.my.spring.model.Folder</value>
                	<value>com.my.spring.model.SignUserInfo</value>
                	<value>com.my.spring.model.UserProject</value>
-               	<value>com.my.spring.model.ConstructionLog</value>
                	<value>com.my.spring.model.QualityQuestion</value>
                	<value>com.my.spring.model.Material</value>
                	<value>com.my.spring.model.MaterialLog</value>
@@ -123,6 +121,8 @@
                	<value>com.my.spring.model.ProcessLog</value>
                	<value>com.my.spring.model.ConstructionTaskNew</value>
                	<value>com.my.spring.model.DepartmentUser</value>
+               	<value>com.my.spring.model.NoticeRelation</value>
+               	<value>com.my.spring.model.ProjectTender</value>
             </list>
         </property>
     </bean>

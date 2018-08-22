@@ -4,16 +4,20 @@ import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.ItemDataDao;
 import com.my.spring.DAO.MechanicDao;
 import com.my.spring.DAO.MechanicPriceDao;
+import com.my.spring.DAO.NoticeDao;
 import com.my.spring.DAO.ProcessDataDao;
 import com.my.spring.DAO.ProcessItemDao;
 import com.my.spring.DAO.ProcessLogDao;
+import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.ProjectTenderDao;
 import com.my.spring.DAO.ConstructionTaskNewDao;
 import com.my.spring.DAO.DepartmentUserDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.jpush.PushExample;
 import com.my.spring.model.AllItemData;
 import com.my.spring.model.ConstructionTaskNew;
 import com.my.spring.model.ConstructionTaskNewPojo;
@@ -26,14 +30,19 @@ import com.my.spring.model.ItemNodeList;
 import com.my.spring.model.Mechanic;
 import com.my.spring.model.MechanicPrice;
 import com.my.spring.model.NewsInfoPojo;
+import com.my.spring.model.Notice;
 import com.my.spring.model.ProcessData;
 import com.my.spring.model.ProcessItem;
 import com.my.spring.model.ProcessLog;
 import com.my.spring.model.ProcessLogPojo;
+import com.my.spring.model.Project;
 import com.my.spring.model.ProjectTender;
+import com.my.spring.model.QuestionFile;
 import com.my.spring.model.User;
+import com.my.spring.model.UserId;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.ConstructionTaskNewService;
 import com.my.spring.service.FileService;
 import com.my.spring.service.UserLogService;
@@ -45,6 +54,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +67,10 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
     FileDao fileDao;
     @Autowired
     UserDao userDao;
+    @Autowired
+    UserLogDao userLogDao;
+    @Autowired
+    ProjectDao projectDao;
     @Autowired
     MechanicDao mechanicDao;
     @Autowired
@@ -74,6 +88,8 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
     @Autowired
     ItemDataDao itemDataDao;
     @Autowired
+    NoticeDao noticeDao;
+    @Autowired
     ProcessItemDao processItemDao;
     @Autowired
     ProcessLogDao processDataLogDao;
@@ -81,14 +97,16 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
     UserLogService userLogSerivce;
     @Autowired
     FileService fileService;
+    private String filePath = "files";
+    private Integer fileType=5;
     @Override
     public DataWrapper<Void> addConstructionTaskNew(ConstructionTaskNew ConstructionTaskNew,String token,MultipartFile[] imgs,HttpServletRequest request) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(ConstructionTaskNew!=null){
+				String imgsList="";
 				if(imgs!=null){
-					String imgsList="";
 					for(MultipartFile s:imgs){
 						Files file = fileService.uploadFile("constructionFiles/"+ConstructionTaskNew.getProjectId(), s, 5, request);
 						if(file!=null){
@@ -106,6 +124,80 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 				if(!ConstructionTaskNewDao.addConstructionTaskNew(ConstructionTaskNew)) 
 				{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}else{
+					//////打点记录添加
+					UserLog userLog = new UserLog();
+					userLog.setActionDate(ConstructionTaskNew.getCreateDate());
+					userLog.setActionType(1);
+					userLog.setUserId(userInMemory.getId());
+					userLog.setProjectId(ConstructionTaskNew.getProjectId());
+					userLog.setSystemType(userInMemory.getSystemId());
+					userLog.setProjectPart(ProjectDatas.ConstructionTask_area.getCode());
+					userLog.setVersion("3.0");
+					userLogDao.addUserLog(userLog);
+					//////通知栏
+					List<Notice> noticeList = new ArrayList<Notice>();
+					List<UserId> userIdList = userDao.getAllUserIdListByProjectId(ConstructionTaskNew.getProjectId());
+					if(!userIdList.isEmpty()){
+						for(UserId s:userIdList){
+							Notice nl2 = new Notice();
+							nl2.setAboutId(ConstructionTaskNew.getId());
+							nl2.setCreateDate(new Date());
+							nl2.setUserId(s.getId());
+							nl2.setNoticeType(2);
+							nl2.setProjectId(ConstructionTaskNew.getProjectId());
+							nl2.setReadState(0);
+							noticeList.add(nl2);
+						}
+						
+					}
+					noticeDao.addNoticeList(noticeList);
+					/////////////////推送
+					HashMap<String,String> hq = new HashMap<String,String>();
+					hq.put("title", ConstructionTaskNew.getName());
+					hq.put("content", ConstructionTaskNew.getConstructContent());
+					
+					if(!imgsList.equals(""))
+					{
+						String[] imgLists = imgsList.split(",");
+						for(int k=0;k<imgLists.length;k++){
+							hq.put("imagUrl", imgLists[k]);
+						}
+							
+					}
+					
+					/////////////////////////
+					///////////////////////////
+					Project po = projectDao.getById(ConstructionTaskNew.getProjectId());
+					hq.put("createUserName", userInMemory.getRealName());
+					if(userInMemory.getUserIconUrl()!=null){
+						hq.put("userIconUrl", userInMemory.getUserIconUrl());
+					}else{
+						if(userInMemory.getUserIcon()!=null){
+							Files files = fileService.getById(userInMemory.getUserIcon());
+							hq.put("userIconUrl", files.getUrl());
+						}
+					}
+					hq.put("projectName", "来自  "+po.getName());
+					hq.put("aboutId", ConstructionTaskNew.getId().toString());
+					hq.put("createDate", Parameters.getSdfs().format(new Date()));
+					String content="";
+					if(po!=null){
+						content=userInMemory.getRealName()+"在"+po.getName()+"项目里提交了一个名称为："+ConstructionTaskNew.getName()+"的任务单";
+					}else{
+						content=userInMemory.getRealName()+"提交了一个名称为："+ConstructionTaskNew.getName()+"的任务单";
+					}
+					String[] userIds = new String[userIdList.size()];
+					if(!userIdList.isEmpty()){
+						for(int k=0;k<userIdList.size();k++){
+							userIds[k]=String.valueOf(userIdList.get(k));
+						}
+					}
+				
+					///0、质量   1、安全   2、施工任务单  3、 预付单  4、留言
+					PushExample.testSendPushWithCustomConfig_ios(userIds, content,1,hq);
+					PushExample.testSendPushWithCustomConfig_android(userIds, content,1,hq);
+					//notice.setRemark(remark);
 				}
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -163,15 +255,16 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
     	DataWrapper<List<ConstructionTaskNew>> dataWrapper = new DataWrapper<List<ConstructionTaskNew>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-	        	if(ConstructionTaskNew.getId()!=null){
-	        		UserLog userLog = new UserLog();
-	        		userLog.setActionDate(new Date());
-	        		userLog.setFileId(ConstructionTaskNew.getId());
-	        		userLog.setProjectPart(6);
-	        		userLog.setUserId(userInMemory.getId());
-	        		userLog.setVersion("-1");
-	        		userLogSerivce.addUserLog(userLog, token);
-	        	}
+	        	//////打点记录添加
+				UserLog userLog = new UserLog();
+				userLog.setActionDate(new Date());
+				userLog.setActionType(0);
+				userLog.setUserId(userInMemory.getId());
+				userLog.setProjectId(ConstructionTaskNew.getProjectId());
+				userLog.setSystemType(userInMemory.getSystemId());
+				userLog.setProjectPart(ProjectDatas.ConstructionTask_area.getCode());
+				userLog.setVersion("3.0");
+				userLogDao.addUserLog(userLog);
 				dataWrapper=ConstructionTaskNewDao.getConstructionTaskNewList(pageIndex,pageSize,ConstructionTaskNew);
 				//List<Long> users = new ArrayList<Long>();
 				if(dataWrapper.getData()!=null && !dataWrapper.getData().isEmpty()){
@@ -359,6 +452,16 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 		if(userInMemory!=null){
 			if(constructionTaskNew!=null){
 				if(constructionTaskNew.getId()!=null){
+				//////打点记录添加
+					UserLog userLog = new UserLog();
+					userLog.setActionDate(constructionTaskNew.getCreateDate());
+					userLog.setActionType(0);
+					userLog.setUserId(userInMemory.getId());
+					userLog.setProjectId(constructionTaskNew.getProjectId());
+					userLog.setSystemType(userInMemory.getSystemId());
+					userLog.setProjectPart(ProjectDatas.ConstructionTask_area.getCode());
+					userLog.setVersion("3.0");
+					userLogDao.addUserLog(userLog);
 					gets=ConstructionTaskNewDao.getConstructionTaskNewByIds(constructionTaskNew.getId());
 					if(!gets.isEmpty()){
 						/////查询已有记录的节点用户信息

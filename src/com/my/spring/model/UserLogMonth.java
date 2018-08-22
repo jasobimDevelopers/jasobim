@@ -1,10 +1,10 @@
 package com.my.spring.model;
 
-import java.util.Date;
 
 public class UserLogMonth {
 	private String date;
 	private Integer num;
+	private Integer realNum;
 	public String getDate() {
 		return date;
 	}
@@ -16,6 +16,12 @@ public class UserLogMonth {
 	}
 	public void setNum(Integer num) {
 		this.num = num;
+	}
+	public Integer getRealNum() {
+		return realNum;
+	}
+	public void setRealNum(Integer realNum) {
+		this.realNum = realNum;
 	}
 	
 	

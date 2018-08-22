@@ -34,7 +34,28 @@ public interface UserLogService {
 			String projectIdList);
 
 
-	DataWrapper<List<UserLogMonth>> countUserLogByMonth(String token,String projectIdList);
+
+	DataWrapper<List<UserLogMonth>> countUserLogByMonth(String token, String projectIdList, Integer year);
+
+
+	DataWrapper<List<UserLogMonth>> countUserLogByUserId(String token, Long userId, Integer year);
+
+
+
+
+	DataWrapper<List<UserLogPart>> countPersonLogByPart(String token, String startTime, String finishedTime,
+			Long userId);
+
+
+	DataWrapper<String> exportUserLogList(String token,
+			String dateStart, String dateFinished, String searchContent, String projectIds);
+
+
+	DataWrapper<String> exportPersonLogList(String token, Long userId, Integer year, String startTime, String finishedTime);
+
+
+	DataWrapper<String> exportUserLogEcharts(String token, String dateStart, String dateFinished, String projectIds,
+			String userIds, Integer year);
 
 
 }

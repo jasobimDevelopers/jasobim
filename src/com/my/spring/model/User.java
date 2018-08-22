@@ -21,7 +21,7 @@ public class User {
     private Date registerDate;
     private Date updateDate;
     private Long teamId;
-    private Integer systemId;//0.IOS  1.android -1.web
+    private Integer systemId;//0.IOS  1.android 2.web
     private Integer systemType;//0.安装人员 1.土建人员
     private Long roleId;
     private Long departmentId;

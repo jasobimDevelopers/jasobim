@@ -2,6 +2,7 @@ package com.my.spring.model;
 
 public class UserLogPojo {
 	private Long id;
+	private Long userId;
 	private String userName;
 	private String projectName;
 	private String projectPart;//#0.模型区域 1.图纸区域 2.登录区域 3.交底区域 4.预制化区域 5.没有
@@ -69,6 +70,12 @@ public class UserLogPojo {
 	}
 	public void setActionType(Integer actionType) {
 		this.actionType = actionType;
+	}
+	public Long getUserId() {
+		return userId;
+	}
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 	
 

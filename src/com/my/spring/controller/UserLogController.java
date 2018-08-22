@@ -126,9 +126,78 @@ public class UserLogController {
     @ResponseBody
     public DataWrapper<List<UserLogMonth>> countUserLogByMonth(
     		@RequestParam(value="token",required=true) String token,
-    		@RequestParam(value="projectIdList",required=false) String projectIdList){
-        return userLogService.countUserLogByMonth(token,projectIdList);
+    		@RequestParam(value="projectIdList",required=false) String projectIdList,
+    		@RequestParam(value="year",required=true) Integer year){
+        return userLogService.countUserLogByMonth(token,projectIdList,year);
+    }
+    /**
+     * 新版本用户个人信息统计
+     * 通过按月份查询统计
+     * */
+    @RequestMapping(value="/admin/countUserLogByUserId",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<UserLogMonth>> countUserLogByUserId(
+    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="userId",required=true) Long userId,
+    		@RequestParam(value="year",required=true) Integer year){
+        return userLogService.countUserLogByUserId(token,userId,year);
+    }
+    /**
+     * 
+     * 新版本的web打点页面接口
+     * 个人分析之各功能区域占比
+     * */
+    @RequestMapping(value="/admin/countPersonLogByPart",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<UserLogPart>> countPersonLogByPart(
+    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="startTime",required=false) String startTime,
+    		@RequestParam(value="finishedTime",required=false) String finishedTime,
+    		@RequestParam(value="userId",required=true) Long userId){
+        return userLogService.countPersonLogByPart(token,startTime,finishedTime,userId);
+    }
+    /**
+     * 
+     * 新版本打点记录项目、个人筛选分析表格导出
+     * */
+    @RequestMapping(value="/admin/exportUserLogList", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<String> exportUserLogList(
+    		@RequestParam(value = "dateStart",required = false) String dateStart,
+            @RequestParam(value = "dateFinished",required = false) String dateFinished,
+    		@RequestParam(value="projectIds",required=false) String projectIds,
+    		@RequestParam(value="userIds",required=false) String userIds,
+    		@RequestParam(value="token",required=true) String token) {
+        return userLogService.exportUserLogList(token,dateStart,dateFinished,projectIds,userIds);
+    }
+    /**
+     * 
+     * 新版本打点记录项目条形图、饼图分析表格导出
+     * */
+    @RequestMapping(value="/admin/exportUserLogEcharts", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<String> exportUserLogEcharts(
+    		@RequestParam(value = "startTime",required = false) String startTime,
+            @RequestParam(value = "finishedTime",required = false) String finishedTime,
+    		@RequestParam(value="projectIds",required=false) String projectIds,
+    		@RequestParam(value="userIds",required=false) String userIds,
+    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="year",required=true) Integer year) {
+        return userLogService.exportUserLogEcharts(token,startTime,finishedTime,projectIds,userIds,year);
     }
     
-
+    /**
+     * 
+     * 新版本个人打点记录项目分析表格导出
+     * */
+    @RequestMapping(value="/admin/exportPersonLogList", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<String> exportPersonLogList(
+    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="startTime",required=false) String startTime,
+    		@RequestParam(value="finishedTime",required=false) String finishedTime,
+    		@RequestParam(value="userId",required=true) Long userId,
+    		@RequestParam(value="year",required=true) Integer year) {
+        return userLogService.exportPersonLogList(token,userId,year,startTime,finishedTime);
+    }
 }

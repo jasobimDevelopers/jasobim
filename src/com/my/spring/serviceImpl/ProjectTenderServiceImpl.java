@@ -94,7 +94,7 @@ public class ProjectTenderServiceImpl implements ProjectTenderService {
  	 						if(projectTender.getProjectId()!=null){
  	 							updateItem.setProjectId(projectTender.getProjectId());
  	 						}
- 	 						if(!projectTenderDao.updateProjectTender(projectTender)){
+ 	 						if(!projectTenderDao.updateProjectTender(updateItem)){
  	 							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
  	 						}
  	 					}

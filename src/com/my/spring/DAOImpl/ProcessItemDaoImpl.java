@@ -9,6 +9,7 @@ import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
@@ -150,6 +151,7 @@ public class ProcessItemDaoImpl extends BaseDao<ProcessItem> implements ProcessI
 		List<ProcessItem> ret = null;
 	    Session session = getSession();
 	    Criteria criteria = session.createCriteria(ProcessItem.class);
+	    criteria.addOrder(Order.asc("which"));
 	    if(id!=null){
 	    	criteria.add(Restrictions.eq("processId", id));
 	    }

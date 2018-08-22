@@ -9,6 +9,7 @@ import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.PaperDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
@@ -47,6 +48,8 @@ public class PaperServiceImpl implements PaperService {
     PaperDao paperDao;
     @Autowired
     UserDao userDao;
+    @Autowired
+    UserLogDao userLogDao;
     @Autowired
     BuildingDao buildingDao;
     @Autowired
@@ -88,8 +91,21 @@ public class PaperServiceImpl implements PaperService {
 					}
 					if(!paperDao.addPaper(paper)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-					else
+					else{
+						//////打点记录添加
+					
+						UserLog userLog = new UserLog();
+						userLog.setActionDate(new Date());
+						userLog.setActionType(1);
+						userLog.setUserId(userInMemory.getId());
+						userLog.setProjectId(paper.getProjectId());
+						userLog.setSystemType(userInMemory.getSystemId());
+						userLog.setProjectPart(ProjectDatas.Paper_area.getCode());
+						userLog.setVersion("3.0");
+						userLogDao.addUserLog(userLog);
 						return dataWrapper;
+					}
+						
 			        
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -196,6 +212,16 @@ public class PaperServiceImpl implements PaperService {
 	        			}
 	        			
 	        		}
+
+					UserLog userLog = new UserLog();
+					userLog.setActionDate(new Date());
+					userLog.setActionType(0);
+					userLog.setUserId(userInMemory.getId());
+					userLog.setProjectId(paper.getProjectId());
+					userLog.setSystemType(userInMemory.getSystemId());
+					userLog.setProjectPart(ProjectDatas.Paper_area.getCode());
+					userLog.setVersion("3.0");
+					userLogDao.addUserLog(userLog);
 	        		dataWrappers.setData(papers);
 	        		dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
 	    			dataWrappers.setCallStatus(dataWrapper.getCallStatus());

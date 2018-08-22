@@ -20,6 +20,7 @@ import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
 import com.my.spring.model.UserSelect;
 import com.my.spring.model.UserSelectPojo;
+import com.my.spring.model.UserWebPojo;
 import com.my.spring.service.UserService;
 import com.my.spring.utils.DataWrapper;
 
@@ -69,6 +70,15 @@ public class UserController {
     		@RequestParam(value="password",required=true) String password,
     		@RequestParam(value="systemId",required=false) Integer systemId) {
 		DataWrapper<UserPojo> test=userService.login(username, password,systemId);
+		return test;
+    }
+	@RequestMapping(value="/loginOut", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> LoginOut(
+    		@RequestParam(value="id",required=true) Long id,
+    		@RequestParam(value="token",required=true) String token,
+    		@RequestParam(value="systemId",required=false) Integer systemId) {
+		DataWrapper<Void> test=userService.loginOut(id, token,systemId);
 		return test;
     }
 	@RequestMapping(value="/findPass", method = RequestMethod.GET)
@@ -280,5 +290,12 @@ public class UserController {
 			@RequestParam(value="token",required=true) String token) {
 		return userService.getUserByWorkName(token,workName,projectId);
     }
-
+	//管理员获取用户列表
+	@RequestMapping(value="/admin/getUserByProjectIds", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<UserWebPojo>> getUserByProjectIds(
+   	    		@RequestParam(value="token",required=true) String token,
+   	    		@RequestParam(value="projectIds",required=true) String projectIds) {
+        return userService.getUserByProjectIds(token,projectIds);
+    }
 }

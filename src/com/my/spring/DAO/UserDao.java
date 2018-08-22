@@ -30,4 +30,6 @@ public interface UserDao {
 	DataWrapper<List<User>> getUserListForSql(Integer pageSize, Integer pageIndex, User user);
 	List<UserSelect> getUserListByWorkName(String workName,Long projectId);
 	List<UserId> getAllUserIdList(String xx);
+	List<UserId> getAllUserIdListByProjectId(Long projectId);
+	DataWrapper<List<UserCopy>> getUserByProjectIds(String projectId);
 }

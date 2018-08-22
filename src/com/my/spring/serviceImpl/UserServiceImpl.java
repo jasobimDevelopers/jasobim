@@ -39,6 +39,7 @@ import com.my.spring.model.UserCopy;
 import com.my.spring.model.UserProject;
 import com.my.spring.model.UserSelect;
 import com.my.spring.model.UserSelectPojo;
+import com.my.spring.model.UserWebPojo;
 import com.my.spring.model.UserLog;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
@@ -117,6 +118,10 @@ public class UserServiceImpl implements UserService {
 		return dataWrapper;
 	}
 
+	/**
+	 * 需求:多端独立登录、登出，互不影响
+	 * 方案：1、
+	 * */
 	@Override
 	public DataWrapper<UserPojo> login(String userName, String password,Integer system) {
 		// TODO Auto-generated method stub
@@ -138,14 +143,17 @@ public class UserServiceImpl implements UserService {
 					userLog.setUserId(user.getId());
 					userLog.setActionType(2);//浏览、增加、登录、修改
 					userLog.setProjectPart(ProjectDatas.Login_area.getCode());
-				}
-				SessionManager.removeSessionByUserId(user.getId());
-				if(system!=null){
 					user.setSystemId(system);
 				}else{
 					user.setSystemId(2);
 				}
+				SessionManager.removeSessionByUserIdAndSystemId(user.getId(),system);
 				String token = SessionManager.newSession(user);
+				//String token = SessionManager.getSessionByUserID(user.getId());
+				//String token = SessionManager.getSessionByUserIDAndSystem(user.getId(),user.getSystemId());
+				/*if(token==null){
+					token = SessionManager.newSession(user);
+				}*/
 				dataWrapper.setToken(token);
 				UserPojo users=new UserPojo();
 				if(user.getMenuItemList()!=null){
@@ -939,6 +947,53 @@ public class UserServiceImpl implements UserService {
 	public List<Long> getAllUserIdList() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public DataWrapper<Void> loginOut(Long id, String token, Integer systemId) {
+		DataWrapper<Void> result = new DataWrapper<Void>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(user.getId().equals(id)){
+				SessionManager.removeSession(token);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+
+	@Override
+	public DataWrapper<List<UserWebPojo>> getUserByProjectIds(String token, String projectIds) {
+		DataWrapper<List<UserWebPojo>> dataWrapper = new DataWrapper<List<UserWebPojo>>();
+		List<UserWebPojo> userpojoList=new ArrayList<UserWebPojo>();
+		DataWrapper<List<UserCopy>> userList=new DataWrapper<List<UserCopy>>();
+		User adminInMemory = SessionManager.getSession(token);
+		if (adminInMemory != null) {
+			if(adminInMemory.getUserType()==UserTypeEnum.Admin.getType()){
+				userList=userDao.getUserByProjectIds(projectIds);
+				if(!userList.getData().isEmpty()){
+					for(int i=0;i<userList.getData().size();i++){
+						UserWebPojo userpadpojo=new UserWebPojo();
+						userpadpojo.setRealName(userList.getData().get(i).getRealName());
+						userpadpojo.setId(userList.getData().get(i).getId());
+						userpojoList.add(userpadpojo);
+					}
+					dataWrapper.setData(userpojoList);
+					dataWrapper.setCallStatus(userList.getCallStatus());
+					dataWrapper.setCurrentPage(userList.getCurrentPage());
+					dataWrapper.setErrorCode(userList.getErrorCode());
+					dataWrapper.setNumberPerPage(userList.getNumberPerPage());
+					dataWrapper.setTotalNumber(userList.getTotalNumber());
+					dataWrapper.setTotalPage(userList.getTotalPage());
+				}
+			}else{
+				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		} else {
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return dataWrapper;
 	}
 
 

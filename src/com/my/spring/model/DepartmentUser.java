@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class DepartmentUser {
 	private Long id;
 	private Long teamId;///所属班组id
+	private Long userTeamId;
 	private String name;
 	private Integer sex;///0、男  1、女
 	private Long workTypeId;///工种/岗位
@@ -164,6 +165,15 @@ public class DepartmentUser {
 	}
 	public void setUserTeamType(Integer userTeamType) {
 		this.userTeamType = userTeamType;
+	}
+	
+	@Basic
+	@Column(name="user_team_Id")
+	public Long getUserTeamId() {
+		return userTeamId;
+	}
+	public void setUserTeamId(Long userTeamId) {
+		this.userTeamId = userTeamId;
 	}
 	
 	

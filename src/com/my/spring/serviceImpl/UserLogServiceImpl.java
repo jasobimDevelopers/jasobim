@@ -22,7 +22,6 @@ import com.my.spring.DAO.UserLogDao;
 import com.my.spring.DAO.ValueOutputDao;
 import com.my.spring.DAO.VideoDao;
 import com.my.spring.DAO.AdvancedOrderDao;
-import com.my.spring.DAO.ConstructionTaskDao;
 import com.my.spring.DAO.DuctDao;
 import com.my.spring.DAO.ItemDao;
 import com.my.spring.DAO.PaperDao;
@@ -33,17 +32,21 @@ import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.UserLog;
+import com.my.spring.model.UserLogCount;
 import com.my.spring.model.UserLogMonth;
 import com.my.spring.model.UserLogPart;
 import com.my.spring.model.UserLogPojo;
 import com.my.spring.model.UserLogPojos;
 import com.my.spring.parameters.Parameters;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.model.User;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.FileOperationsUtil;
 import com.my.spring.utils.ReflectTest;
 import com.my.spring.utils.SessionManager;
+import com.my.spring.utils.UserLogAllToExcel;
+import com.my.spring.utils.UserLogEchartsToExcel;
 
 
 @Service("userLogService")
@@ -67,8 +70,7 @@ public class UserLogServiceImpl implements UserLogService {
 	QuestionDao questionDao;
 	@Autowired
 	VideoDao videoDao;
-	@Autowired
-	ConstructionTaskDao constructionTaskDao;
+
 	@Autowired
 	AdvancedOrderDao advancedOrderDao;
 	
@@ -112,6 +114,7 @@ public class UserLogServiceImpl implements UserLogService {
 				if(dataWrapper.getData()!=null){
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						UserLogPojo UserLogpojos=new UserLogPojo();
+						UserLogpojos.setUserId(dataWrapper.getData().get(i).getUserId());
 						UserLogpojos.setActionType(dataWrapper.getData().get(i).getActionType());
 						//{"模型区域","图纸查看","登录区域","交底区域","进度管理区域 ","质安管理区域","通知区域","产值区域","班组信息区域","施工任务单区域","预付单区域"};
 						//////图纸文件跟踪
@@ -398,10 +401,55 @@ public class UserLogServiceImpl implements UserLogService {
 			String projectIdList) {
 		DataWrapper<List<UserLogPart>> result = new DataWrapper<List<UserLogPart>>();
 		List<UserLogPart> gets = new ArrayList<UserLogPart>();
+		List<UserLogPart> gets2 = new ArrayList<UserLogPart>();
 		User user = SessionManager.getSession(token);
+		for(int i=0;i<22;i++){
+			UserLogPart userLogPart = new UserLogPart();
+			userLogPart.setProjectPart(i);
+			userLogPart.setNums(0);
+			gets.add(userLogPart);
+		}
 		if(user!=null){
 			if(user.getUserType()==UserTypeEnum.Admin.getType()){
-				gets = userLogDao.getCountNumsByPart(startTime,finishedTime,projectIdList);
+				gets2 = userLogDao.getCountNumsByPart(startTime,finishedTime,projectIdList);
+				for(int j=0;j<gets2.size();j++){
+					for(int k=0;k<22;k++){
+						if(gets2.get(j).getProjectPart()==gets.get(k).getProjectPart()){
+							gets.get(k).setNums(gets2.get(j).getNums());
+						}
+					}
+				}
+				result.setData(gets);
+			}else{
+				result.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+	@Override
+	public DataWrapper<List<UserLogPart>> countPersonLogByPart(String token, String startTime, String finishedTime,Long userId) {
+		DataWrapper<List<UserLogPart>> result = new DataWrapper<List<UserLogPart>>();
+		List<UserLogPart> gets = new ArrayList<UserLogPart>();
+		List<UserLogPart> gets2 = new ArrayList<UserLogPart>();
+		User user = SessionManager.getSession(token);
+		for(int i=0;i<22;i++){
+			UserLogPart userLogPart = new UserLogPart();
+			userLogPart.setProjectPart(i);
+			userLogPart.setNums(0);
+			gets.add(userLogPart);
+		}
+		if(user!=null){
+			if(user.getUserType()==UserTypeEnum.Admin.getType()){
+				gets2 = userLogDao.getCountPersonNumsByPart(startTime,finishedTime,userId);
+				for(int j=0;j<gets2.size();j++){
+					for(int k=0;k<22;k++){
+						if(gets2.get(j).getProjectPart()==gets.get(k).getProjectPart()){
+							gets.get(k).setNums(gets2.get(j).getNums());
+						}
+					}
+				}
 				result.setData(gets);
 			}else{
 				result.setErrorCode(ErrorCodeEnum.AUTH_Error);
@@ -414,15 +462,38 @@ public class UserLogServiceImpl implements UserLogService {
 
 
 	@Override
-	public DataWrapper<List<UserLogMonth>> countUserLogByMonth(String token, String projectIdList) {
+	public DataWrapper<List<UserLogMonth>> countUserLogByMonth(String token, String projectIdList,Integer year) {
 		
 		DataWrapper<List<UserLogMonth>> result = new DataWrapper<List<UserLogMonth>>();
 		List<UserLogMonth> gets = new ArrayList<UserLogMonth>();
+		List<UserLogMonth> realDatagets = new ArrayList<UserLogMonth>();
+		List<UserLogMonth> boxs = new ArrayList<UserLogMonth>();
+		String[] monthsDate = {year+"-01",year+"-02",year+"-03",year+"-04",year+"-05",year+"-06",year+"-07",year+"-08",year+"-09",year+"-10",year+"-11",year+"-12"};
+		for(int i=0;i<12;i++){
+			UserLogMonth item = new UserLogMonth();
+			item.setDate(monthsDate[i]);
+			item.setRealNum(0);
+			item.setNum(0);
+			boxs.add(item);
+		}
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(user.getUserType()==UserTypeEnum.Admin.getType()){
-				gets = userLogDao.getCountNumsByMonth(projectIdList);
-				result.setData(gets);
+				gets = userLogDao.getCountNumsByMonth(projectIdList,year);
+				realDatagets = userLogDao.getCountRealNumsByMonth(projectIdList,year);
+				if(!gets.isEmpty()){
+					for(int i=0;i<12;i++){
+						for(int j=0;j<gets.size();j++){
+							if(monthsDate[i].equals(gets.get(j).getDate())){
+								boxs.get(i).setNum(gets.get(j).getNum());
+								if(j<realDatagets.size()){
+									boxs.get(i).setRealNum(realDatagets.get(j).getNum());
+								}
+							}
+						}
+					}
+				}
+				result.setData(boxs);
 			}else{
 				result.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
@@ -431,4 +502,227 @@ public class UserLogServiceImpl implements UserLogService {
 		}
 		return result;
 	}
+
+
+	@Override
+	public DataWrapper<List<UserLogMonth>> countUserLogByUserId(String token, Long userId, Integer year) {
+		DataWrapper<List<UserLogMonth>> result = new DataWrapper<List<UserLogMonth>>();
+		List<UserLogMonth> gets = new ArrayList<UserLogMonth>();
+		List<UserLogMonth> realDatagets = new ArrayList<UserLogMonth>();
+		List<UserLogMonth> boxs = new ArrayList<UserLogMonth>();
+		String[] monthsDate = {year+"-01",year+"-02",year+"-03",year+"-04",year+"-05",year+"-06",year+"-07",year+"-08",year+"-09",year+"-10",year+"-11",year+"-12"};
+		User user = SessionManager.getSession(token);
+		for(int i=0;i<12;i++){
+			UserLogMonth item = new UserLogMonth();
+			item.setDate(monthsDate[i]);
+			item.setRealNum(0);
+			item.setNum(0);
+			boxs.add(item);
+		}
+		if(user!=null){
+			if(user.getUserType()==UserTypeEnum.Admin.getType()){
+				gets = userLogDao.getCountNumsByUserId(userId,year);
+				realDatagets = userLogDao.getCountRealNumsByUserId(userId,year);
+				if(!gets.isEmpty()){
+					for(int i=0;i<12;i++){
+						for(int j=0;j<gets.size();j++){
+							if(monthsDate[i].equals(gets.get(j).getDate())){
+								boxs.get(i).setNum(gets.get(j).getNum());
+								if(j<realDatagets.size()){
+									boxs.get(i).setRealNum(realDatagets.get(j).getNum());
+								}
+							}
+						}
+					}
+				}
+				result.setData(boxs);
+			}else{
+				result.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+
+
+	@SuppressWarnings("static-access")
+	@Override
+	public DataWrapper<String> exportUserLogList(String token,String dateStart, String dateFinished,String projectIds, String userIds) {
+		// TODO Auto-generated method stub
+	    	DataWrapper<String> result = new DataWrapper<String>();
+			List<UserLogCount> userLogCounts = new ArrayList<UserLogCount>();
+			User adminInMemory = SessionManager.getSession(token);
+			if (adminInMemory != null) {
+		    		userLogCounts=userLogDao.countUserLogNum(dateStart,dateFinished,projectIds,userIds);
+		             try {
+		            	 FileOutputStream fout = new FileOutputStream("D://jasobim/tomcat_8080/webapps/userLog/userLog.xls");
+			    		 UserLogAllToExcel userLogExcel = new UserLogAllToExcel();
+			    		 userLogExcel.getValue(userLogCounts,fout,dateStart,dateFinished);
+						 fout.close();
+						 result.setData("/userLog/userLog.xls");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			} else {
+				result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+			}
+			return result;
+	}
+
+
+	@SuppressWarnings("static-access")
+	@Override
+	public DataWrapper<String> exportPersonLogList(String token, Long userId, Integer year, String startTime,
+			String finishedTime) {
+		DataWrapper<String> result = new DataWrapper<String>();
+		//////////按月统计用户的所有数据和真实数据
+		List<UserLogMonth> monthGets = new ArrayList<UserLogMonth>();
+		List<UserLogMonth> realDatagets = new ArrayList<UserLogMonth>();
+		List<UserLogMonth> boxs = new ArrayList<UserLogMonth>();
+		String[] monthsDate = {year+"-01",year+"-02",year+"-03",year+"-04",year+"-05",year+"-06",year+"-07",year+"-08",year+"-09",year+"-10",year+"-11",year+"-12"};
+		for(int i=0;i<12;i++){
+			UserLogMonth item = new UserLogMonth();
+			item.setDate(monthsDate[i]);
+			item.setRealNum(0);
+			item.setNum(0);
+			boxs.add(item);
+		}
+		////////////////////
+		
+		///////////按功能区域统计用户各区域的所有数据数量
+		List<UserLogPart> gets = new ArrayList<UserLogPart>();
+		List<UserLogPart> gets2 = new ArrayList<UserLogPart>();
+		User user = SessionManager.getSession(token);
+		for(int i=0;i<22;i++){
+			UserLogPart userLogPart = new UserLogPart();
+			userLogPart.setProjectPart(i);
+			userLogPart.setNums(0);
+			gets.add(userLogPart);
+		}
+		////////////
+		if(user!=null){
+			if(user.getUserType()==UserTypeEnum.Admin.getType()){
+				//////按月统计用户的所有数据和真实数据
+				monthGets = userLogDao.getCountNumsByUserId(userId,year);
+				realDatagets = userLogDao.getCountRealNumsByUserId(userId,year);
+				if(!monthGets.isEmpty()){
+					for(int i=0;i<12;i++){
+						for(int j=0;j<monthGets.size();j++){
+							if(monthsDate[i].equals(monthGets.get(j).getDate())){
+								boxs.get(i).setNum(monthGets.get(j).getNum());
+								if(j<realDatagets.size()){
+									boxs.get(i).setRealNum(realDatagets.get(j).getNum());
+								}
+							}
+						}
+					}
+				}
+				///////////////
+				gets2 = userLogDao.getCountPersonNumsByPart(startTime,finishedTime,userId);
+				for(int j=0;j<gets2.size();j++){
+					for(int k=0;k<22;k++){
+						if(gets2.get(j).getProjectPart()==gets.get(k).getProjectPart()){
+							gets.get(k).setNums(gets2.get(j).getNums());
+						}
+					}
+				}
+			}else{
+				result.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		User logUser = userDao.getById(userId);
+		UserLogEchartsToExcel util = new UserLogEchartsToExcel();
+		try {
+     	 	 FileOutputStream fout = new FileOutputStream("D://jasobim/tomcat_8080/webapps/userLog/userPersonalLog.xls");
+     	 	 util.getValue(gets, boxs, fout, logUser.getRealName()+"的个人数据分析表", year, startTime, finishedTime);				
+     	 	 fout.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		result.setData("/userLog/personalLog.xls");	
+		return result;
+	}
+
+
+	@SuppressWarnings("static-access")
+	@Override
+	public DataWrapper<String> exportUserLogEcharts(String token, String dateStart, String dateFinished,
+			String projectIds, String userIds, Integer year) {
+		DataWrapper<String> result = new DataWrapper<String>();
+		//////////////////////////////////////////////////////////////
+		List<UserLogPart> partGets = new ArrayList<UserLogPart>();
+		List<UserLogPart> partGets2 = new ArrayList<UserLogPart>();
+		for(int i=0;i<22;i++){
+			UserLogPart userLogPart = new UserLogPart();
+			userLogPart.setProjectPart(i);
+			userLogPart.setNums(0);
+			partGets.add(userLogPart);
+		}
+		/////////////////////////////////////////////
+		List<UserLogMonth> gets = new ArrayList<UserLogMonth>();
+		List<UserLogMonth> realDatagets = new ArrayList<UserLogMonth>();
+		List<UserLogMonth> boxs = new ArrayList<UserLogMonth>();
+		String[] monthsDate = {year+"-01",year+"-02",year+"-03",year+"-04",year+"-05",year+"-06",year+"-07",year+"-08",year+"-09",year+"-10",year+"-11",year+"-12"};
+		for(int i=0;i<12;i++){
+			UserLogMonth item = new UserLogMonth();
+			item.setDate(monthsDate[i]);
+			item.setRealNum(0);
+			item.setNum(0);
+			boxs.add(item);
+		}
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(user.getUserType()==UserTypeEnum.Admin.getType()){
+				/////////////////////////////////////////////
+				partGets2 = userLogDao.getCountNumsByPart(dateStart,dateFinished,projectIds);
+				for(int j=0;j<partGets2.size();j++){
+					for(int k=0;k<22;k++){
+						if(partGets2.get(j).getProjectPart()==partGets.get(k).getProjectPart()){
+							partGets.get(k).setNums(partGets2.get(j).getNums());
+						}
+					}
+				}
+				//////////////////////////////////////////
+				gets = userLogDao.getCountNumsByMonth(projectIds,year);
+				realDatagets = userLogDao.getCountRealNumsByMonth(projectIds,year);
+				if(!gets.isEmpty()){
+					for(int i=0;i<12;i++){
+						for(int j=0;j<gets.size();j++){
+							if(monthsDate[i].equals(gets.get(j).getDate())){
+								boxs.get(i).setNum(gets.get(j).getNum());
+								if(j<realDatagets.size()){
+									boxs.get(i).setRealNum(realDatagets.get(j).getNum());
+								}
+							}
+						}
+					}
+				}
+			}else{
+				result.setErrorCode(ErrorCodeEnum.AUTH_Error);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		UserLogEchartsToExcel util = new UserLogEchartsToExcel();
+		  try {
+       	 	 FileOutputStream fout = new FileOutputStream("C://jasobim/tomcat_8080/webapps/userLog/projectLog.xls");
+       	 	 util.getValue(partGets, boxs, fout, "项目操作数据分析表", year, dateStart, dateFinished);				
+       	 	 fout.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		result.setData("/userLog/projectLog.xls");
+		return result;
+	}
+
+
+	
 }

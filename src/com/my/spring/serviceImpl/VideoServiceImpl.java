@@ -70,8 +70,19 @@ public class VideoServiceImpl implements VideoService {
 					video.setOriginName(originName);
 					if(!videoDao.addVideo(video)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-					else
+					else{
+						UserLog userLog = new UserLog();
+						userLog.setActionDate(new Date());
+						userLog.setActionType(1);
+						userLog.setUserId(userInMemory.getId());
+						userLog.setProjectId(video.getProjectId());
+						userLog.setSystemType(userInMemory.getSystemId());
+						userLog.setProjectPart(ProjectDatas.Video_area.getCode());
+						userLog.setVersion("3.0");
+						userLogDao.addUserLog(userLog);
 						return dataWrapper;
+					}
+						
 			        
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -159,6 +170,15 @@ public class VideoServiceImpl implements VideoService {
     				}
     				videopojo.add(i,videoPojo);
     			}
+    			UserLog userLog = new UserLog();
+				userLog.setActionDate(new Date());
+				userLog.setActionType(0);
+				userLog.setUserId(userInMemory.getId());
+				userLog.setProjectId(video.getProjectId());
+				userLog.setSystemType(userInMemory.getSystemId());
+				userLog.setProjectPart(ProjectDatas.Video_area.getCode());
+				userLog.setVersion("3.0");
+				userLogDao.addUserLog(userLog);
     			dataWrapper.setData(videopojo);
     			dataWrapper.setCurrentPage(dataWrappers.getCurrentPage());
     			dataWrapper.setCallStatus(dataWrappers.getCallStatus());

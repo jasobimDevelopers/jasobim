@@ -12,6 +12,13 @@ import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.engine.spi.LoadQueryInfluencers;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.internal.CriteriaImpl;
+import org.hibernate.loader.criteria.CriteriaJoinWalker;
+import org.hibernate.loader.criteria.CriteriaQueryTranslator;
+import org.hibernate.persister.entity.OuterJoinLoadable;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
@@ -19,6 +26,7 @@ import org.springframework.stereotype.Repository;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.UserLogDao;
 import com.my.spring.model.UserLog;
+import com.my.spring.model.UserLogCount;
 import com.my.spring.model.UserLogMonth;
 import com.my.spring.model.UserLogPart;
 import com.my.spring.model.UserLogPojos;
@@ -57,9 +65,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
         List<UserLog> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(UserLog.class);
-        criteria.addOrder(Order.desc("actionDate"));
         criteria.add(Restrictions.ne("systemType", -1));
-        //criteria.add(Restrictions.ne("systemType", null));
         if(projectIds!=null){
         	String[] projectIdList = projectIds.split(",");
         	Disjunction dis = Restrictions.disjunction();
@@ -70,22 +76,21 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
         }
         if(userIds!=null){
         	String[] userIdList = userIds.split(",");
-        	Disjunction dis = Restrictions.disjunction();
+        	Disjunction disstr = Restrictions.disjunction();
         	for(String s:userIdList){
-        		dis.add(Restrictions.eq("userId", Long.valueOf(s)));
+        		disstr.add(Restrictions.eq("userId", Long.valueOf(s)));
         	}
-        	criteria.add(dis);
+        	criteria.add(disstr);
         }
         if(UserLog!=null){
         	if(UserLog.getUserId()!=null){
         		criteria.add(Restrictions.eq("userId", UserLog.getUserId()));
         	}
-        	
         	if(UserLog.getActionDate()!=null)    
             	//查询制定时间之后的记录  
                 criteria.add(Restrictions.ge("actionDate",UserLog.getActionDate()));  
-    	    /*if(UserLog.getActionDate()!=null)                          //查询指定时间之前的记录  
-    	        criteria.add(Restrictions.le("actionDate",UserLog.getActionDate()));*/  
+    	    if(UserLog.getActionDate()!=null)                          //查询指定时间之前的记录  
+    	        criteria.add(Restrictions.le("actionDate",UserLog.getActionDate()));  
         	if(UserLog.getProjectId()!=null){
         		criteria.add(Restrictions.eq("projectId",UserLog.getProjectId()));
         	}
@@ -101,6 +106,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
             criteria.add(Restrictions.ge("actionDate",startDate));  
 	    if(finishedDate!=null)                          //查询指定时间之前的记录  
 	        criteria.add(Restrictions.le("actionDate",finishedDate));  
+        criteria.addOrder(Order.desc("actionDate"));
         if (pageSize == null) {
 			pageSize = 10;
 		}
@@ -120,6 +126,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
             criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
         }
         try {
+        	//getCriteriaSql(criteria);
             ret = criteria.list();
         }catch (Exception e){
             e.printStackTrace();
@@ -131,6 +138,18 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
         dataWrapper.setNumberPerPage(pageSize);
 
         return dataWrapper;
+	}
+	public static String getCriteriaSql(Criteria criteria) {
+		CriteriaImpl criteriaImpl = (CriteriaImpl) criteria;//转型
+		SessionImplementor session = criteriaImpl.getSession();//获取SESSION
+		SessionFactoryImplementor factory = session.getFactory();//获取FACTORY
+		CriteriaQueryTranslator translator = new CriteriaQueryTranslator(factory, criteriaImpl, criteriaImpl
+			.getEntityOrClassName(), CriteriaQueryTranslator.ROOT_SQL_ALIAS);
+		String[] implementors = factory.getImplementors(criteriaImpl.getEntityOrClassName());
+		CriteriaJoinWalker walker = new CriteriaJoinWalker((OuterJoinLoadable) factory
+			.getEntityPersister(implementors[0]), translator, factory, criteriaImpl, criteriaImpl
+			.getEntityOrClassName(), (LoadQueryInfluencers) session.getEnabledFilters());
+		return walker.getSQLString();
 	}
 
 
@@ -269,20 +288,27 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 		+"where a.user_id=b.id and b.user_type=3";
 		if(projectIdList!=null){
 			String[] pids = projectIdList.split(",");
-			String projectIdsqls=" and (a.project_id=";
-			for(int i=0;i<pids.length;i++){
-				if(i==0){
-					projectIdsqls=projectIdsqls+pids[i];
-				}else{
-					 if(i==(pids.length-1)){
-						 projectIdsqls=projectIdsqls+" or a.project_id="+pids[i]+")";
-					 }else{
-						 projectIdsqls=projectIdsqls+" or a.project_id="+pids[i];
-					 }
-					
+			if(pids.length>1){
+				String projectIdsqls=" and (a.project_id=";
+				for(int i=0;i<pids.length;i++){
+					if(i==0){
+						projectIdsqls=projectIdsqls+pids[i];
+					}else{
+						 if(i==(pids.length-1)){
+							 projectIdsqls=projectIdsqls+" or a.project_id="+pids[i]+")";
+						 }else{
+							 projectIdsqls=projectIdsqls+" or a.project_id="+pids[i];
+						 }
+						
+					}
 				}
+				sql=sql+projectIdsqls;
+			}else{
+				String projectIdsqls=" and a.project_id="+pids[0];
+				sql=sql+projectIdsqls;
 			}
-			sql=sql+projectIdsqls;
+			
+			
 		}
 		if(startTime!=null){
 			sql+=" and action_date >'"+startTime+"'";
@@ -306,17 +332,21 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 	}
 
 	@Override
-	public List<UserLogMonth> getCountNumsByMonth(String projectIdList) {
+	public List<UserLogMonth> getCountNumsByMonth(String projectIdList,Integer year) {
 		List<UserLogMonth> dataWrapper=new ArrayList<UserLogMonth>();
 		String sql = "select c.*,count(*) as num from(select "
 		+"DATE_FORMAT(a.action_date,'%Y-%m') as date from user_log a,user b "
-		+"where a.user_id=b.id and b.user_type=3";
+		+"where a.user_id=b.id and b.user_type=3 and action_date BETWEEN '"+year+"-01-01' and '"+year+"-12-31'";
 		if(projectIdList!=null){
 			String[] pids = projectIdList.split(",");
 			String projectIdsqls=" and (a.project_id=";
 			for(int i=0;i<pids.length;i++){
 				if(i==0){
-					projectIdsqls=projectIdsqls+pids[i];
+					if(pids.length==1){
+						projectIdsqls=projectIdsqls+pids[i]+")";
+					}else{
+						projectIdsqls=projectIdsqls+pids[i];
+					}
 				}else{
 					 if(i==(pids.length-1)){
 						 projectIdsqls=projectIdsqls+" or a.project_id="+pids[i]+")";
@@ -342,5 +372,176 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 		 
 		return dataWrapper;
 	}
+
+	@Override
+	public List<UserLogMonth> getCountNumsByUserId(Long userId, Integer year) {
+		List<UserLogMonth> dataWrapper=new ArrayList<UserLogMonth>();
+		String sql = "select c.*,count(*) as num from(select "
+		+"DATE_FORMAT(a.action_date,'%Y-%m') as date from user_log a,user b "
+		+"where a.user_id=b.id and b.user_type=3 and action_date BETWEEN '"+year+"-01-01' and '"+year+"-12-31'";
+		if(userId!=null){
+			sql=sql+" and user_id="+userId;
+		}
+		sql+=") c GROUP BY c.date ";
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("date", StandardBasicTypes.STRING)
+					 .addScalar("num", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(UserLogMonth.class));
+			 dataWrapper=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return dataWrapper;
+	}
+
+	@Override
+	public List<UserLogMonth> getCountRealNumsByMonth(String projectIdList, Integer year) {
+		List<UserLogMonth> dataWrapper=new ArrayList<UserLogMonth>();
+		String sql = "select c.*,count(*) as num from(select "
+		+"DATE_FORMAT(a.action_date,'%Y-%m') as date from user_log a,user b "
+		+"where a.user_id=b.id and b.user_type=3 and action_type=1 and action_date BETWEEN '"+year+"-01-01' and '"+year+"-12-31'";
+		if(projectIdList!=null){
+			String[] pids = projectIdList.split(",");
+			String projectIdsqls=" and (a.project_id=";
+			for(int i=0;i<pids.length;i++){
+				if(i==0){
+					if(pids.length==1){
+						projectIdsqls=projectIdsqls+pids[i]+")";
+					}else{
+						projectIdsqls=projectIdsqls+pids[i];
+					}
+					
+				}else{
+					 if(i==(pids.length-1)){
+						 projectIdsqls=projectIdsqls+" or a.project_id="+pids[i]+")";
+					 }else{
+						 projectIdsqls=projectIdsqls+" or a.project_id="+pids[i];
+					 }
+					
+				}
+			}
+			sql=sql+projectIdsqls;
+		}
+		sql+=") c GROUP BY c.date ";
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("date", StandardBasicTypes.STRING)
+					 .addScalar("num", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(UserLogMonth.class));
+			 dataWrapper=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return dataWrapper;
+	}
+	@Override
+	public List<UserLogMonth> getCountRealNumsByUserId(Long userId, Integer year) {
+		List<UserLogMonth> dataWrapper=new ArrayList<UserLogMonth>();
+		String sql = "select c.*,count(*) as num from(select "
+		+"DATE_FORMAT(a.action_date,'%Y-%m') as date from user_log a,user b "
+		+"where a.user_id=b.id and b.user_type=3 and action_type=1  and action_date BETWEEN '"+year+"-01-01' and '"+year+"-12-31'";
+		if(userId!=null){
+			sql=sql+" and user_id="+userId;
+		}
+		sql+=") c GROUP BY c.date ";
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("date", StandardBasicTypes.STRING)
+					 .addScalar("num", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(UserLogMonth.class));
+			 dataWrapper=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return dataWrapper;
+	}
+
+	@Override
+	public List<UserLogPart> getCountPersonNumsByPart(String startTime, String finishedTime, Long userId) {
+		List<UserLogPart> dataWrapper=new ArrayList<UserLogPart>();
+		String sql = "select count(c.actionDate) as nums,c.projectPart from "+
+		"(select a.project_part as projectPart,"
+		+"b.real_name as userName,a.action_date as actionDate,"
+		+"a.project_id as projectName from user_log a,user b "
+		+"where a.user_id=b.id and b.user_type=3 and a.user_id="
+		+userId;
+		
+		if(startTime!=null){
+			sql+=" and action_date >'"+startTime+"'";
+		}
+		if(finishedTime!=null){
+			sql+=" and action_date <'"+finishedTime+"'";
+		}
+		sql+=")c GROUP BY c.projectPart";
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("projectPart", StandardBasicTypes.INTEGER)
+					 .addScalar("nums", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(UserLogPart.class));
+			 dataWrapper=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return dataWrapper;
+	}
+
+	@Override
+	public List<UserLogCount> countUserLogNum(String dateStarts, String dateFinisheds, String projectIds,
+			String userIds) {
+		List<UserLogCount> get=new ArrayList<UserLogCount>();
+		String sql = "select b.real_name,c.name,a.num from (select user_id,project_id,count(*) as num from user_log where 1=1";
+		if(projectIds!=null){
+			String[] projectIdList = projectIds.split(",");
+			for(int i=0;i<projectIdList.length;i++){
+				if(i==0){
+					sql=sql+" and (project_id="+projectIdList[i];
+				}else{
+					sql=sql+" or project_id="+projectIdList[i];
+				}
+			}
+			sql=sql+")";
+		}
+		if(userIds!=null){
+			String[] userIdList = userIds.split(",");
+			for(int i=0;i<userIdList.length;i++){
+				if(i==0){
+					sql=sql+" and (user_id="+userIdList[i];
+				}else{
+					sql=sql+" or user_id="+userIdList[i];
+				}
+			}
+			sql=sql+")";
+		}
+		if(dateStarts!=null){
+			sql=sql+" and action_date>'"+dateStarts+"'";
+		}
+		if(dateFinisheds!=null){
+			sql=sql+" and action_date<'"+dateFinisheds+"'";
+		}
+		sql=sql+" GROUP BY user_id,project_id) a,user b,project c where a.user_id=b.id and a.project_id=c.id";
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("real_name", StandardBasicTypes.STRING)
+					 .addScalar("name", StandardBasicTypes.STRING)
+					 .addScalar("num", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(UserLogCount.class));
+			 get=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return get;
+	}
+
 
 }
