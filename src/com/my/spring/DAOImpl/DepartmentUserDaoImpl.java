@@ -56,8 +56,11 @@ public class DepartmentUserDaoImpl extends BaseDao<DepartmentUser> implements De
         if(departmentUser.getTeamId()!=null){
         	criteria.add(Restrictions.eq("teamId", departmentUser.getTeamId()));
         }
-        if(departmentUser.getUserTeamId()!=null){
-        	criteria.add(Restrictions.eq("userTeamId", departmentUser.getUserTeamId()));
+        if(departmentUser.getUserTeamName()!=null){
+        	criteria.add(Restrictions.eq("userTeamId", departmentUser.getUserTeamName()));
+        }
+        if(departmentUser.getUserTeamType()!=null){
+        	criteria.add(Restrictions.eq("userTeamType", departmentUser.getUserTeamType()));
         }
         if(departmentUser.getName()!=null){
         	criteria.add(Restrictions.like("name", "%"+departmentUser.getName()+"%"));

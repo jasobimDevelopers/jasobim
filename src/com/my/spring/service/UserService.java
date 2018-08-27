@@ -19,7 +19,6 @@ import com.my.spring.utils.DataWrapper;
 public interface UserService {
 	
 	DataWrapper<Void> register(User user, HttpServletRequest request);
-	DataWrapper<UserPojo> login(String userName,String password, Integer systemId);
 	DataWrapper<Void> updateUser(User user,String token);
 	DataWrapper<User> getUserDetails(String token);
 	DataWrapper<UserPojo> getUserDetailsByAdmin(Long userId,String token);
@@ -42,6 +41,7 @@ public interface UserService {
 			String projectList);
 	DataWrapper<List<UserSelectPojo>> getUserByWorkName(String token, String workName, Long projectId);
 	DataWrapper<Void> loginOut(Long id, String token, Integer systemId);
-	DataWrapper<List<UserWebPojo>> getUserByProjectIds(String token, String projectIds);
+	DataWrapper<List<UserWebPojo>> getUserByProjectIds(String token, String projectIds, String flag);
+	DataWrapper<UserPojo> login(String userName, String password, Integer system);
 	
 }

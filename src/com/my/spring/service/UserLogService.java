@@ -26,9 +26,6 @@ public interface UserLogService {
 
 	DataWrapper<List<UserLog>> readUserLogFromFile();
 
-	DataWrapper<List<UserLogPojo>> getUserLogList(Integer pageIndex, Integer pageSize, UserLog userLog, String token,
-			String dateStart, String dateFinished, String searchContent, String projectIds, String userIds);
-
 
 	DataWrapper<List<UserLogPart>> countUserLogByPart(String token, String startTime, String finishedTime,
 			String projectIdList);
@@ -56,6 +53,12 @@ public interface UserLogService {
 
 	DataWrapper<String> exportUserLogEcharts(String token, String dateStart, String dateFinished, String projectIds,
 			String userIds, Integer year);
+
+
+
+	DataWrapper<List<UserLogPojo>> getUserLogList(Integer pageIndex, Integer pageSize, UserLog UserLog, String token,
+			String startDate, String finishedDate, String searchContent, String projectIds, String userIds,
+			String userType);
 
 
 }

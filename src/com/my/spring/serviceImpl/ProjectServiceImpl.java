@@ -1,6 +1,5 @@
 package com.my.spring.serviceImpl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.ItemDao;
@@ -17,7 +16,6 @@ import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.Item;
 import com.my.spring.model.Paper;
-import com.my.spring.model.PaperPojo;
 import com.my.spring.model.Project;
 import com.my.spring.model.ProjectIds;
 import com.my.spring.model.ProjectPojo;
@@ -31,8 +29,6 @@ import com.my.spring.service.FileService;
 import com.my.spring.service.ProjectService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
-import com.my.spring.utils.fileUtils.ResizeImage;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

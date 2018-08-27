@@ -31,5 +31,5 @@ public interface UserDao {
 	List<UserSelect> getUserListByWorkName(String workName,Long projectId);
 	List<UserId> getAllUserIdList(String xx);
 	List<UserId> getAllUserIdListByProjectId(Long projectId);
-	DataWrapper<List<UserCopy>> getUserByProjectIds(String projectId);
+	DataWrapper<List<UserCopy>> getUserByProjectIds(String projectId,String flag);
 }

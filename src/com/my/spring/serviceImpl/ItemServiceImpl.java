@@ -1,10 +1,5 @@
 package com.my.spring.serviceImpl;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
 import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.ItemDao;
 import com.my.spring.DAO.MinItemDao;
@@ -15,7 +10,6 @@ import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Building;
-import com.my.spring.model.Duct;
 import com.my.spring.model.DuctPojo;
 import com.my.spring.model.Item;
 import com.my.spring.model.MinItem;
@@ -24,11 +18,8 @@ import com.my.spring.model.Project;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.model.User;
-import com.my.spring.model.UserLog;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ItemService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.QRCodeUtil2;
@@ -42,9 +33,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,8 +54,6 @@ public class ItemServiceImpl implements ItemService {
     BuildingDao buildingDao;
     @Autowired
     FileService fileSerivce;
-    @Autowired
-    UserLogService userLogSerivce;
     @Override
     public DataWrapper<Void> addItem(Item item,String token) {
     	 DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -144,18 +131,6 @@ public class ItemServiceImpl implements ItemService {
     	DataWrapper<List<Item>> dataWrapper = new DataWrapper<List<Item>>();
         User adminInMemory = SessionManager.getSession(token);
         if (adminInMemory != null) {
-        	if(item.getId()!=null && projectId!=null){
-        		UserLog userLog = new UserLog();
-        		userLog.setActionDate(new Date());
-        		userLog.setFileId(item.getId());
-        		userLog.setProjectPart(ProjectDatas.Item_area.getCode());
-        		if(adminInMemory.getSystemId()!=null){
-        			userLog.setSystemType(adminInMemory.getSystemId());
-        		}
-        		userLog.setUserId(adminInMemory.getId());
-        		//userLog.setVersion("-1");
-        		userLogSerivce.addUserLog(userLog, token);
-        	}
         	dataWrapper =itemDao.getItemList(projectId,pageSize, pageIndex,item);
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
@@ -536,7 +511,6 @@ public class ItemServiceImpl implements ItemService {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public String getCodeImg(Item item,HttpServletRequest request) {
 		MinItem test=minItemDao.getMinItemBySelfId(item.getSelfId());
@@ -578,7 +552,6 @@ public class ItemServiceImpl implements ItemService {
 		DataWrapper<DuctPojo> dataWrapper = new DataWrapper<DuctPojo>();
 		Item duct = new Item();
     	duct=itemDao.getItemBySelfId(selfId,id,projectId).getData();
-    	String[] stateList=new String[]{"未定义","出库","安装","完成"};
     	if(duct!=null){
     		String projectName="";
     		if(projectDao.getById(duct.getProjectId())!=null){
@@ -587,7 +560,6 @@ public class ItemServiceImpl implements ItemService {
     		
 			DuctPojo ductPojo=new DuctPojo();
 			ductPojo.setId(duct.getId().toString());
-    		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
     		ductPojo.setSize(duct.getSize());
     		ductPojo.setName(duct.getName());
     		ductPojo.setFamilyAndType(duct.getFamilyAndType());

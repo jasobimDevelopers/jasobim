@@ -60,10 +60,11 @@ public class UserLogController {
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@RequestParam(value="projectIds",required=false) String projectIds,
     		@RequestParam(value="userIds",required=false) String userIds,
+    		@RequestParam(value="userType",required=false) String userTypes,
     		@ModelAttribute UserLog UserLog,
     		@RequestParam(value="token",required=true) String token,
     		@RequestParam(value="searchContent",required=false) String searchContent) {
-        return userLogService.getUserLogList(pageIndex,pageSize,UserLog,token,dateStart,dateFinished,searchContent,projectIds,userIds);
+        return userLogService.getUserLogList(pageIndex,pageSize,UserLog,token,dateStart,dateFinished,searchContent,projectIds,userIds,userTypes);
     }
 	  
     @RequestMapping(value="/getUserLogCountSum",method=RequestMethod.GET)

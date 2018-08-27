@@ -446,9 +446,10 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         return dataWrapper;
 	}
 	@Override
-	public DataWrapper<List<UserCopy>> getUserByProjectIds(String projectId) {
+	public DataWrapper<List<UserCopy>> getUserByProjectIds(String projectId,String flag) {
         Session session = getSession();
-        String sql="select * from user where user_type=3 and id in (select user_id from user_project where project_id=";
+        String sql="";
+        sql="select * from user where user_type=3 and id in (select user_id from user_project where project_id=";
         String sqlor="";
         if(projectId!=null){
         	String[] ids=projectId.split(",");
@@ -461,6 +462,24 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         	}
         }
         sql=sql+sqlor+")";
+        String sqlor2="";
+        if(flag!=null){
+        	sql="select * from user where";	
+        	String[] userTypes = flag.split(",");
+        	for(int i=0;i<userTypes.length;i++){
+        		if(i==0){
+        			if(userTypes[i].equals("0")){
+        				sqlor2=" user_type=0";
+        			}else{
+        				sqlor2=" user_type="+userTypes[i];
+        			}
+        			
+        		}else{
+        			sqlor2=sqlor2+" or user_type="+userTypes[i];
+        		}
+        	}
+        	sql=sql+sqlor2;
+        }
         DataWrapper<List<UserCopy>> dataWrapper=new DataWrapper<List<UserCopy>>();
 		 try{
 			 Query query = session.createSQLQuery(sql)

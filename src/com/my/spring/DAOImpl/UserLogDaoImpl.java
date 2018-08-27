@@ -8,6 +8,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -25,11 +26,13 @@ import org.springframework.stereotype.Repository;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.UserLogDao;
+import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.model.UserLogCount;
 import com.my.spring.model.UserLogMonth;
 import com.my.spring.model.UserLogPart;
 import com.my.spring.model.UserLogPojos;
+import com.my.spring.model.ValueOutputPojo;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 
@@ -59,54 +62,54 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<UserLog>> getUserLogList(Integer pageSize, Integer pageIndex,UserLog UserLog,Date startDate,Date finishedDate,String projectIds,String userIds) {
+	public DataWrapper<List<UserLog>> getUserLogList(Integer pageSize, Integer pageIndex,UserLog UserLog,Date startDate,
+			Date finishedDate,String projectIds,String userIds,String userType) {
 		// TODO Auto-generated method stub
+		DataWrapper<List<UserLog>> get = new DataWrapper<List<UserLog>>();
 		DataWrapper<List<UserLog>> dataWrapper = new DataWrapper<List<UserLog>>();
         List<UserLog> ret = null;
         Session session = getSession();
+        
         Criteria criteria = session.createCriteria(UserLog.class);
-        criteria.add(Restrictions.ne("systemType", -1));
+        criteria.addOrder(Order.desc("actionDate"));
+        if(startDate!=null) {
+        	   //查询制定时间之后的记录  
+            criteria.add(Restrictions.ge("actionDate",startDate));  
+        }                    
+        if(finishedDate!=null){
+        	//查询指定时间之前的记录  
+            criteria.add(Restrictions.le("actionDate",finishedDate)); 
+        }    
         if(projectIds!=null){
-        	String[] projectIdList = projectIds.split(",");
-        	Disjunction dis = Restrictions.disjunction();
-        	for(String s:projectIdList){
-        		dis.add(Restrictions.eq("projectId", Long.valueOf(s)));
+        	if(!projectIds.equals("")){
+        		Disjunction dis = Restrictions.disjunction();
+        		String[] projectIdList = projectIds.split(",");
+        		for(int i=0;i<projectIdList.length;i++){
+        			dis.add(Restrictions.eq("projectId", Long.valueOf(projectIdList[i])));
+        		}
+        		criteria.add(dis);
         	}
-        	criteria.add(dis);
         }
         if(userIds!=null){
-        	String[] userIdList = userIds.split(",");
-        	Disjunction disstr = Restrictions.disjunction();
-        	for(String s:userIdList){
-        		disstr.add(Restrictions.eq("userId", Long.valueOf(s)));
-        	}
-        	criteria.add(disstr);
-        }
-        if(UserLog!=null){
-        	if(UserLog.getUserId()!=null){
-        		criteria.add(Restrictions.eq("userId", UserLog.getUserId()));
-        	}
-        	if(UserLog.getActionDate()!=null)    
-            	//查询制定时间之后的记录  
-                criteria.add(Restrictions.ge("actionDate",UserLog.getActionDate()));  
-    	    if(UserLog.getActionDate()!=null)                          //查询指定时间之前的记录  
-    	        criteria.add(Restrictions.le("actionDate",UserLog.getActionDate()));  
-        	if(UserLog.getProjectId()!=null){
-        		criteria.add(Restrictions.eq("projectId",UserLog.getProjectId()));
-        	}
-        	if(UserLog.getProjectPart()!=null){
-        		criteria.add(Restrictions.eq("projectPart", UserLog.getProjectPart()));
-        	}
-        	if(UserLog.getSystemType()!=null){
-        		criteria.add(Restrictions.eq("systemType", UserLog.getSystemType()));
+        	if(!userIds.equals("")){
+        		Disjunction dis = Restrictions.disjunction();
+        		String[] userIdList = userIds.split(",");
+        		for(int i=0;i<userIdList.length;i++){
+        			dis.add(Restrictions.eq("projectId", Long.valueOf(userIdList[i])));
+        		}
+        		criteria.add(dis);
         	}
         }
-        if(startDate!=null)    
-        	//查询制定时间之后的记录  
-            criteria.add(Restrictions.ge("actionDate",startDate));  
-	    if(finishedDate!=null)                          //查询指定时间之前的记录  
-	        criteria.add(Restrictions.le("actionDate",finishedDate));  
-        criteria.addOrder(Order.desc("actionDate"));
+        if(userType!=null){
+        	if(!userType.equals("")){
+        		Disjunction dis = Restrictions.disjunction();
+        		String[] userTypeList = userType.split(",");
+        		for(int i=0;i<userTypeList.length;i++){
+        			dis.add(Restrictions.eq("userType", Integer.valueOf(userTypeList[i])));
+        		}
+        		criteria.add(dis);
+        	}
+        }
         if (pageSize == null) {
 			pageSize = 10;
 		}
@@ -126,7 +129,6 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
             criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
         }
         try {
-        	//getCriteriaSql(criteria);
             ret = criteria.list();
         }catch (Exception e){
             e.printStackTrace();
@@ -181,7 +183,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 			}
 			sql +=	" GROUP BY user_id,project_id,system_type,version,project_part,project_id) a,"
 					+"user b,project_part_name d,phone_system e where a.user_id=b.id and a.project_part=d.project_part"
-					+" and b.user_type=3 and a.system_type=e.system_type) A left join  project B on A.project_id=B.id";
+					+" and a.system_type=e.system_type) A left join  project B on A.project_id=B.id";
 			Query query = session.createSQLQuery(sql);
 			List<Object[]> list = query.list();
 			for(Object[] o : list) {
@@ -285,7 +287,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 		"(select a.project_part as projectPart,"
 		+"b.real_name as userName,a.action_date as actionDate,"
 		+"a.project_id as projectName from user_log a,user b "
-		+"where a.user_id=b.id and b.user_type=3";
+		+"where a.user_id=b.id";
 		if(projectIdList!=null){
 			String[] pids = projectIdList.split(",");
 			if(pids.length>1){
@@ -336,7 +338,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 		List<UserLogMonth> dataWrapper=new ArrayList<UserLogMonth>();
 		String sql = "select c.*,count(*) as num from(select "
 		+"DATE_FORMAT(a.action_date,'%Y-%m') as date from user_log a,user b "
-		+"where a.user_id=b.id and b.user_type=3 and action_date BETWEEN '"+year+"-01-01' and '"+year+"-12-31'";
+		+"where a.user_id=b.id and action_date BETWEEN '"+year+"-01-01' and '"+year+"-12-31'";
 		if(projectIdList!=null){
 			String[] pids = projectIdList.split(",");
 			String projectIdsqls=" and (a.project_id=";
@@ -378,7 +380,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 		List<UserLogMonth> dataWrapper=new ArrayList<UserLogMonth>();
 		String sql = "select c.*,count(*) as num from(select "
 		+"DATE_FORMAT(a.action_date,'%Y-%m') as date from user_log a,user b "
-		+"where a.user_id=b.id and b.user_type=3 and action_date BETWEEN '"+year+"-01-01' and '"+year+"-12-31'";
+		+"where a.user_id=b.id and action_date BETWEEN '"+year+"-01-01' and '"+year+"-12-31'";
 		if(userId!=null){
 			sql=sql+" and user_id="+userId;
 		}
@@ -402,7 +404,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 		List<UserLogMonth> dataWrapper=new ArrayList<UserLogMonth>();
 		String sql = "select c.*,count(*) as num from(select "
 		+"DATE_FORMAT(a.action_date,'%Y-%m') as date from user_log a,user b "
-		+"where a.user_id=b.id and b.user_type=3 and action_type=1 and action_date BETWEEN '"+year+"-01-01' and '"+year+"-12-31'";
+		+"where a.user_id=b.id and action_type=1 and action_date BETWEEN '"+year+"-01-01' and '"+year+"-12-31'";
 		if(projectIdList!=null){
 			String[] pids = projectIdList.split(",");
 			String projectIdsqls=" and (a.project_id=";
@@ -444,7 +446,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 		List<UserLogMonth> dataWrapper=new ArrayList<UserLogMonth>();
 		String sql = "select c.*,count(*) as num from(select "
 		+"DATE_FORMAT(a.action_date,'%Y-%m') as date from user_log a,user b "
-		+"where a.user_id=b.id and b.user_type=3 and action_type=1  and action_date BETWEEN '"+year+"-01-01' and '"+year+"-12-31'";
+		+"where a.user_id=b.id and action_type=1  and action_date BETWEEN '"+year+"-01-01' and '"+year+"-12-31'";
 		if(userId!=null){
 			sql=sql+" and user_id="+userId;
 		}
@@ -470,7 +472,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
 		"(select a.project_part as projectPart,"
 		+"b.real_name as userName,a.action_date as actionDate,"
 		+"a.project_id as projectName from user_log a,user b "
-		+"where a.user_id=b.id and b.user_type=3 and a.user_id="
+		+"where a.user_id=b.id and a.user_id="
 		+userId;
 		
 		if(startTime!=null){

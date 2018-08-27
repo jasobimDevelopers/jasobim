@@ -9,7 +9,6 @@ import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.QuestionFileDao;
 import com.my.spring.DAO.RoleDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.UserLogDao;
 import com.my.spring.DAO.UserProjectDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
@@ -22,18 +21,13 @@ import com.my.spring.model.Notice;
 import com.my.spring.model.PageInfo;
 import com.my.spring.model.Project;
 import com.my.spring.model.Question;
-import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.model.QuestionPojo;
-import com.my.spring.model.Role;
 import com.my.spring.model.User;
 import com.my.spring.model.UserId;
-import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.QuestionService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.DataWrappern;
 import com.my.spring.utils.SessionManager;
@@ -61,8 +55,6 @@ public class QuestionServiceImpl implements QuestionService {
     @Autowired
     UserDao userDao;
     @Autowired
-    UserLogDao userLogDao;
-    @Autowired
     NoticeDao noticeDao;
     @Autowired
     MessageDao messageDao;
@@ -76,8 +68,6 @@ public class QuestionServiceImpl implements QuestionService {
     ProjectDao projectDao;
     @Autowired
     FileService fileService;
-    @Autowired
-    UserLogService userLogService;
     @Autowired
     UserProjectDao upDao;
     private String filePath = "files";
@@ -93,19 +83,6 @@ public class QuestionServiceImpl implements QuestionService {
         if (userInMemory != null) {
         	question.setUserId(userInMemory.getId());
         	if(question!=null){
-        		if(userInMemory.getSystemId()!=null){
-					if(question.getProjectId()!=null){
-						UserLog userLog = new UserLog();
-		    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
-		    			userLog.setActionDate(new Date());
-		    			userLog.setActionType(1);
-		    			userLog.setProjectId(question.getProjectId());
-		    			userLog.setUserId(userInMemory.getId());
-		    			userLog.setSystemType(userInMemory.getSystemId());
-		    			userLog.setVersion("3.0");
-		    			userLogService.addUserLog(userLog, token);
-					}
-				}
 				if(question.getQuestionDate()==null){
 					question.setQuestionDate(new Date());
 				}
@@ -437,26 +414,6 @@ public class QuestionServiceImpl implements QuestionService {
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		Long[] userIdList=null;
-    		if(userInMemory.getSystemId()!=null){
-				if(question.getProjectId()!=null || projectId!=null){
-					UserLog userLog = new UserLog();
-	    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
-	    			userLog.setActionDate(new Date());
-	    			userLog.setActionType(0);
-	    			if(projectId!=null){
-	    				userLog.setProjectId(projectId);
-	    			}else{
-	    				userLog.setProjectId(question.getProjectId());
-	    			}
-	    			if(question.getId()!=null){
-	    				userLog.setFileId(question.getId());
-	    			}
-	    			userLog.setUserId(userInMemory.getId());
-	    			userLog.setSystemType(userInMemory.getSystemId());
-	    			userLog.setVersion("3.0");
-	    			userLogService.addUserLog(userLog, token);
-				}
-			}
 			if(content!=null){
 				//////问题类型搜索
 				
@@ -744,7 +701,6 @@ public class QuestionServiceImpl implements QuestionService {
 								}
 							}
 							questionPojo.setUserId(userDao.getById(question.getUserId()).getRealName());
-							Long userIdis=userDao.getById(question.getUserId()).getId();
 							/*if(userIdis==userInMemory.getId()){
 								questionPojo.setUserid(1);
 							}else{
@@ -786,20 +742,6 @@ public class QuestionServiceImpl implements QuestionService {
 										notice.setUpdateDate(new Date());
 										noticeDao.updateNotice(notice);
 									}
-								}
-							}
-							//////添加打点记录
-							if(userInMemory.getSystemId()!=null){
-								if(questionId!=null){
-									UserLog userLog = new UserLog();
-					    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
-					    			userLog.setActionDate(new Date());
-					    			userLog.setActionType(0);
-					    			userLog.setProjectId(questionId);
-					    			userLog.setUserId(userInMemory.getId());
-					    			userLog.setSystemType(userInMemory.getSystemId());
-					    			userLog.setVersion("3.0");
-					    			userLogService.addUserLog(userLog, token);
 								}
 							}
 							dataWrapper.setData(questionPojo);
@@ -846,19 +788,6 @@ public class QuestionServiceImpl implements QuestionService {
 						Integer statse=0;
 						notice.setReadState(statse);
 						noticeDao.addNotice(notice);
-						if(userInMemory.getSystemId()!=null){
-							if(question.getProjectId()!=null){
-								UserLog userLog = new UserLog();
-				    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
-				    			userLog.setActionDate(new Date());
-				    			userLog.setActionType(3);
-				    			userLog.setProjectId(question.getProjectId());
-				    			userLog.setUserId(userInMemory.getId());
-				    			userLog.setSystemType(userInMemory.getSystemId());
-				    			userLog.setVersion("3.0");
-				    			userLogService.addUserLog(userLog, token);
-							}
-						}
 						if(question.getUserId().equals(userInMemory.getId())){
 							question.setState(state);
 							if(!questionDao.updateQuestion(question)){
@@ -935,21 +864,6 @@ public class QuestionServiceImpl implements QuestionService {
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		Long[] userIdList=null;
-    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1 || userInMemory.getSystemId()==-1){
-    			UserLog userLog = new UserLog();
-    			userLog.setProjectPart(ProjectDatas.Question_area.getCode());
-    			userLog.setActionDate(new Date());
-    			userLog.setUserId(userInMemory.getId());
-    			userLog.setSystemType(userInMemory.getSystemId());
-    			//userLog.setVersion("3.0");
-    			if(question.getProjectId()!=null){
-    				userLog.setProjectId(question.getProjectId());
-    			}
-    			if(question.getId()!=null){
-    				userLog.setFileId(question.getId());
-    			}
-    			userLogDao.addUserLog(userLog);
-    		}
 			
 			/////问题等级搜索
 			/////当用户是总经理级别的时候,问题搜索只能搜索重要和紧急，同时也只能看重要和紧急问题，不看一般问题 
@@ -1103,38 +1017,5 @@ public class QuestionServiceImpl implements QuestionService {
     	}
     	return datawrapper;
 	}
-	////////////////根据权限的不同，获取相应的未读问题接口
-	@Override
-	public DataWrapper<List<QuestionCopy>> getQuestionListOfNotRead(String token, Integer pageIndex, Integer pageSize) {
-		DataWrapper<List<QuestionCopy>> resultList = new DataWrapper<List<QuestionCopy>>();
-		List<QuestionCopy> questionCopys = new ArrayList<QuestionCopy>();
-		User userInMemory = SessionManager.getSession(token);
-		if(userInMemory!=null){
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType() || userInMemory.getUserType()==UserTypeEnum.User.getType()){
-				questionCopys=questionDao.getQuestionListByAdmin(userInMemory.getId(),pageIndex,pageSize);
-				resultList.setTotalNumber(questionCopys.size());
-			}else if(userInMemory.getUserType()==UserTypeEnum.Leader.getType()){
-				Role role = new Role();
-				role = roleDao.getById(userInMemory.getRoleId());
-				////////////
-				/////////////当前用户是该项目的项目负责人能看所有问题
-				if(role!=null){
-					if(role.getName()!=null){
-						if(role.getName().equals("项目负责人")){
-							/////获取当前角色所管项目的所有可读问题(已读)
-							questionCopys=questionDao.getQuestionListByLeader(userInMemory.getId(),pageIndex,pageSize);
-							resultList.setTotalNumber(questionCopys.size());
-						}else{
-							questionCopys=questionDao.getQuestionListByNorUser(userInMemory.getId(),pageIndex,pageSize);
-							resultList.setTotalNumber(questionCopys.size());
-						}
-					}
-				}
-			}
-			resultList.setData(questionCopys);
-		}else{
-			resultList.setErrorCode(ErrorCodeEnum.User_Not_Logined);
-		}
-		return resultList;
-	}
+	
 }

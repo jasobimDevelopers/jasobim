@@ -13,7 +13,6 @@ import com.my.spring.DAO.ProjectTenderDao;
 import com.my.spring.DAO.ConstructionTaskNewDao;
 import com.my.spring.DAO.DepartmentUserDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
@@ -21,40 +20,31 @@ import com.my.spring.jpush.PushExample;
 import com.my.spring.model.AllItemData;
 import com.my.spring.model.ConstructionTaskNew;
 import com.my.spring.model.ConstructionTaskNewPojo;
-import com.my.spring.model.ConstructionTaskNewUser;
 import com.my.spring.model.DepartmentUser;
 import com.my.spring.model.Files;
-import com.my.spring.model.ItemDataPojo;
 import com.my.spring.model.ItemIdMode;
 import com.my.spring.model.ItemNodeList;
 import com.my.spring.model.Mechanic;
 import com.my.spring.model.MechanicPrice;
-import com.my.spring.model.NewsInfoPojo;
 import com.my.spring.model.Notice;
 import com.my.spring.model.ProcessData;
-import com.my.spring.model.ProcessItem;
 import com.my.spring.model.ProcessLog;
 import com.my.spring.model.ProcessLogPojo;
 import com.my.spring.model.Project;
 import com.my.spring.model.ProjectTender;
-import com.my.spring.model.QuestionFile;
 import com.my.spring.model.User;
 import com.my.spring.model.UserId;
-import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.ConstructionTaskNewService;
 import com.my.spring.service.FileService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.Date;
 import java.util.HashMap;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,8 +57,6 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
     FileDao fileDao;
     @Autowired
     UserDao userDao;
-    @Autowired
-    UserLogDao userLogDao;
     @Autowired
     ProjectDao projectDao;
     @Autowired
@@ -94,11 +82,7 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
     @Autowired
     ProcessLogDao processDataLogDao;
     @Autowired
-    UserLogService userLogSerivce;
-    @Autowired
     FileService fileService;
-    private String filePath = "files";
-    private Integer fileType=5;
     @Override
     public DataWrapper<Void> addConstructionTaskNew(ConstructionTaskNew ConstructionTaskNew,String token,MultipartFile[] imgs,HttpServletRequest request) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -125,16 +109,6 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 				{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 				}else{
-					//////打点记录添加
-					UserLog userLog = new UserLog();
-					userLog.setActionDate(ConstructionTaskNew.getCreateDate());
-					userLog.setActionType(1);
-					userLog.setUserId(userInMemory.getId());
-					userLog.setProjectId(ConstructionTaskNew.getProjectId());
-					userLog.setSystemType(userInMemory.getSystemId());
-					userLog.setProjectPart(ProjectDatas.ConstructionTask_area.getCode());
-					userLog.setVersion("3.0");
-					userLogDao.addUserLog(userLog);
 					//////通知栏
 					List<Notice> noticeList = new ArrayList<Notice>();
 					List<UserId> userIdList = userDao.getAllUserIdListByProjectId(ConstructionTaskNew.getProjectId());
@@ -255,16 +229,7 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
     	DataWrapper<List<ConstructionTaskNew>> dataWrapper = new DataWrapper<List<ConstructionTaskNew>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-	        	//////打点记录添加
-				UserLog userLog = new UserLog();
-				userLog.setActionDate(new Date());
-				userLog.setActionType(0);
-				userLog.setUserId(userInMemory.getId());
-				userLog.setProjectId(ConstructionTaskNew.getProjectId());
-				userLog.setSystemType(userInMemory.getSystemId());
-				userLog.setProjectPart(ProjectDatas.ConstructionTask_area.getCode());
-				userLog.setVersion("3.0");
-				userLogDao.addUserLog(userLog);
+	        	
 				dataWrapper=ConstructionTaskNewDao.getConstructionTaskNewList(pageIndex,pageSize,ConstructionTaskNew);
 				//List<Long> users = new ArrayList<Long>();
 				if(dataWrapper.getData()!=null && !dataWrapper.getData().isEmpty()){
@@ -452,16 +417,7 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 		if(userInMemory!=null){
 			if(constructionTaskNew!=null){
 				if(constructionTaskNew.getId()!=null){
-				//////打点记录添加
-					UserLog userLog = new UserLog();
-					userLog.setActionDate(constructionTaskNew.getCreateDate());
-					userLog.setActionType(0);
-					userLog.setUserId(userInMemory.getId());
-					userLog.setProjectId(constructionTaskNew.getProjectId());
-					userLog.setSystemType(userInMemory.getSystemId());
-					userLog.setProjectPart(ProjectDatas.ConstructionTask_area.getCode());
-					userLog.setVersion("3.0");
-					userLogDao.addUserLog(userLog);
+				
 					gets=ConstructionTaskNewDao.getConstructionTaskNewByIds(constructionTaskNew.getId());
 					if(!gets.isEmpty()){
 						/////查询已有记录的节点用户信息
@@ -510,10 +466,57 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 							ConstructionTaskNewPojo.setConstructType(gets.get(i).getConstructType());
 							ConstructionTaskNewPojo.setCreateDate(Parameters.getSdf().format(gets.get(i).getCreateDate()));
 							ConstructionTaskNewPojo.setDayWorkHours(gets.get(i).getDayWorkHours());
+							double dayHour=gets.get(i).getDayWorkHours();
+							double nightHour=gets.get(i).getNightWorkHours();
+							Double day = dayHour/10+nightHour/6;
 							ConstructionTaskNewPojo.setNightWorkHours(gets.get(i).getNightWorkHours());
 							ConstructionTaskNewPojo.setProcessDataId(gets.get(i).getProcessDataId());
 							ConstructionTaskNewPojo.setTeamType(gets.get(i).getTeamType());
-							ConstructionTaskNewPojo.setTeamUserIds(gets.get(i).getTeamUserIds());
+							//ConstructionTaskNewPojo.setTeamUserIds(gets.get(i).getTeamUserIds());
+							if(gets.get(i).getTeamType()==0){
+								if(gets.get(i).getTeamUserIds()!=null){
+									String usernames="";
+									Double salary=0.0;
+									String[] mechanicids = gets.get(i).getTeamUserIds().split(",");
+									for(int q=0;q<mechanicids.length;q++){
+										Mechanic mechanic = mechanicDao.getMechanicById(Long.valueOf(mechanicids[q]));
+										if(mechanic!=null){
+											salary=(mechanic.getDaySalary())*day;
+											if(usernames.equals("")){
+												usernames=mechanic.getRealName();
+											}else{
+												usernames=usernames+","+mechanic.getRealName();
+											}
+											ConstructionTaskNewPojo.setSalary(salary);
+										}
+										
+									}
+									ConstructionTaskNewPojo.setTeamUserIds(usernames);
+								}
+							}
+							if(gets.get(i).getTeamType()==1){
+								if(gets.get(i).getTeamUserIds()!=null){
+									String usernames="";
+									Double salary=0.0;
+									String[] departmentUserIds = gets.get(i).getTeamUserIds().split(",");
+									for(int q=0;q<departmentUserIds.length;q++){
+										DepartmentUser duser = departmentUserDao.getById(Long.valueOf(departmentUserIds[q]));
+										if(duser!=null){
+											salary=(duser.getSalary())*day;
+											if(usernames.equals("")){
+												usernames=duser.getName();
+											}else{
+												usernames=usernames+","+duser.getName();
+											}
+											double value =new BigDecimal(salary).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+
+											ConstructionTaskNewPojo.setSalary(value);
+										}
+										
+									}
+									ConstructionTaskNewPojo.setTeamUserIds(usernames);
+								}
+							}
 							ProjectTender tender = projectTenderDao.getProjectTenderById(gets.get(i).getTendersId());
 							if(tender!=null){
 								ConstructionTaskNewPojo.setTenders(tender.getName());

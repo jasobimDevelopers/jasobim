@@ -23,6 +23,7 @@ public class UserLog {
 	private Integer systemType;//0.苹果系统  1.安卓系统 2.web
 	private Long fileId;//////模块区域下的文件id
 	private Integer actionType;//0.浏览  1.增加 2.登录 3.修改
+	private Integer userType;
 	
 	@Id
     @GeneratedValue
@@ -98,6 +99,15 @@ public class UserLog {
 	}
 	public void setActionType(Integer actionType) {
 		this.actionType = actionType;
+	}
+	
+	@Basic
+	@Column(name="user_type")
+	public Integer getUserType() {
+		return userType;
+	}
+	public void setUserType(Integer userType) {
+		this.userType = userType;
 	}
 	
 

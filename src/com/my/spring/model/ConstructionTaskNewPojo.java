@@ -10,8 +10,8 @@ public class ConstructionTaskNewPojo {
 	private String constructType;//施工类型
 	private Integer teamType;//0、自有技工(自有技工)  1、班组技工（班组信息里面的成员）
 	private String teamUserIds;//班组技工人员（12,15,16）
-	private Integer dayWorkHours;//白天工作时间
-	private Integer nightWorkHours;//夜班时间
+	private Integer dayWorkHours;//白天工作时间 10小时等于一个工日
+	private Integer nightWorkHours;//夜班时间  6小时等于一个工日
 	private String tenders;///标段id
 	private String constructionName;
 	private String constructPart;//施工部位
@@ -21,6 +21,7 @@ public class ConstructionTaskNewPojo {
 	private Long approvalUserId;
 	private String currentNodeName;
 	private Long currentNodeId;
+	private Double salary;
 	private Long pid;
 	
 	public Long getId() {
@@ -170,6 +171,12 @@ public class ConstructionTaskNewPojo {
 	}
 	public void setApprovalUserId(Long approvalUserId) {
 		this.approvalUserId = approvalUserId;
+	}
+	public Double getSalary() {
+		return salary;
+	}
+	public void setSalary(Double salary) {
+		this.salary = salary;
 	}
 	
 	

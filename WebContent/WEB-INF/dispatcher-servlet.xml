@@ -12,15 +12,14 @@
        http://www.springframework.org/schema/mvc/spring-mvc.xsd
        http://www.springframework.org/schema/task
        http://www.springframework.org/schema/task/spring-task-3.1.xsd ">
-       
 	   <context:annotation-config/>  
-	  <!--  <mvc:interceptors>
+	   <mvc:interceptors>
 	        <mvc:interceptor>
 	            <mvc:mapping path="/**"/>
-	            <mvc:exclude-mapping path="/user/index"/>
-	            <bean class="com.springmvc.intercepter.MyInterceptor"/>
+	            <mvc:exclude-mapping path="/api/user/login"/>
+	            <bean class="com.my.spring.controller.FirstController"/>
 	        </mvc:interceptor>
-    	</mvc:interceptors> -->
+    	</mvc:interceptors>
        <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/> 
        <context:component-scan base-package="com.my.spring"/>
        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

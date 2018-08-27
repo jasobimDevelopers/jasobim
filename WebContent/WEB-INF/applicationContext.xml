@@ -58,7 +58,7 @@
                 <!-- <prop key="hibernate.connection.url">jdbc:mysql://10.3.103.20:3306/bimdatas</prop> -->
                 <prop key="hibernate.connection.url">jdbc:mysql://10.3.103.20:3306/bimdatas_test</prop>
                 <!-- <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas_new</prop> -->
-                <!-- <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas_test</prop> -->
+               <!--  <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas_test</prop> -->
             </props>
         </property>
         <property name="annotatedClasses">
@@ -119,6 +119,7 @@
                	<value>com.my.spring.model.ProcessData</value>
                	<value>com.my.spring.model.ProcessItem</value>
                	<value>com.my.spring.model.ProcessLog</value>
+               	<value>com.my.spring.model.ConstructionLog</value>
                	<value>com.my.spring.model.ConstructionTaskNew</value>
                	<value>com.my.spring.model.DepartmentUser</value>
                	<value>com.my.spring.model.NoticeRelation</value>

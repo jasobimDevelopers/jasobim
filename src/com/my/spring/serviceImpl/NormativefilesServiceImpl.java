@@ -10,11 +10,8 @@ import com.my.spring.model.Normativefiles;
 import com.my.spring.model.NormativefilesPojo;
 import com.my.spring.model.NormativefilesPojos;
 import com.my.spring.model.User;
-import com.my.spring.model.UserLog;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.NormativefilesService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
@@ -41,8 +38,6 @@ public class NormativefilesServiceImpl implements NormativefilesService {
     UserDao userDao;
     @Autowired
     FileService fileService;
-    @Autowired
-    UserLogService userLogSerivce;
     private String filePath = "files";
     @Override
     public DataWrapper<Void> addNormativefiles(Normativefiles Normativefiles,String token,MultipartFile[] fileList,Integer fileType,HttpServletRequest request) {
@@ -122,22 +117,6 @@ public class NormativefilesServiceImpl implements NormativefilesService {
     	DataWrapper<List<Normativefiles>> dataWrapper = new DataWrapper<List<Normativefiles>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-        	if(Normativefiles.getId()!=null){
-        		UserLog userLog = new UserLog();
-        		userLog.setActionDate(new Date());
-        		//userLog.setFileId(Normativefiles.getId());
-        		if(Normativefiles.getFileIdList()!=null){
-        			String[] fileids=Normativefiles.getFileIdList().split(",");
-        			userLog.setFileId(Long.valueOf(fileids[0]));
-        		}
-        		if(userInMemory.getSystemId()!=null){
-        			userLog.setSystemType(userInMemory.getSystemId());
-        		}
-        		userLog.setProjectPart(ProjectDatas.NormativeFile_area.getCode());
-        		userLog.setUserId(userInMemory.getId());
-        		//userLog.setVersion("-1");
-        		userLogSerivce.addUserLog(userLog, token);
-        	}
 				dataWrapper=normativefilesDao.getNormativefilessList(pageIndex,pageSize,Normativefiles);
 				if(!dataWrapper.getData().isEmpty()){
 					List<NormativefilesPojo> NormativefilesPojoList = new ArrayList<NormativefilesPojo>();
@@ -204,21 +183,6 @@ public class NormativefilesServiceImpl implements NormativefilesService {
     	DataWrapper<List<Normativefiles>> dataWrapper = new DataWrapper<List<Normativefiles>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-        	if(userInMemory.getSystemId()!=null){
-        		if(projectId!=null){
-	        		UserLog userLog = new UserLog();
-	        		userLog.setActionDate(new Date());
-	        		if(Normativefiles.getId()!=null){
-	        			userLog.setFileId(Normativefiles.getId());
-	        		}
-	        		userLog.setActionType(0);
-	        		userLog.setProjectPart(ProjectDatas.NormativeFile_area.getCode());
-	        		userLog.setUserId(userInMemory.getId());
-	        		userLog.setProjectId(projectId);
-	        		userLog.setSystemType(userInMemory.getSystemId());
-	        		userLogSerivce.addUserLog(userLog, token);
-	        	}
-        	}
 			dataWrapper=normativefilesDao.getNormativefilessList(pageIndex,pageSize,Normativefiles);
 			if(dataWrapper.getData()!=null){
 				if(!dataWrapper.getData().isEmpty()){

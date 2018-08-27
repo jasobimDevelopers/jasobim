@@ -53,6 +53,9 @@ public class ConstructionTaskNewDaoImpl extends BaseDao<ConstructionTaskNew> imp
         if(ConstructionTaskNew.getCreateUser()!=null){
         	criteria.add(Restrictions.eq("createUser", ConstructionTaskNew.getCreateUser()));
         }
+        if(ConstructionTaskNew.getConstructionTaskDate()!=null){
+        	criteria.add(Restrictions.eq("constructionTaskDate", ConstructionTaskNew.getConstructionTaskDate()));
+        }
         if(ConstructionTaskNew.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", ConstructionTaskNew.getProjectId()));
         }

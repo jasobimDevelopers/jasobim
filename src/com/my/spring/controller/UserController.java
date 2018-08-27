@@ -295,7 +295,8 @@ public class UserController {
     @ResponseBody
     public DataWrapper<List<UserWebPojo>> getUserByProjectIds(
    	    		@RequestParam(value="token",required=true) String token,
-   	    		@RequestParam(value="projectIds",required=true) String projectIds) {
-        return userService.getUserByProjectIds(token,projectIds);
+   	    		@RequestParam(value="projectIds",required=false) String projectIds,
+   	    		@RequestParam(value="flag",required=false) String flag) {
+        return userService.getUserByProjectIds(token,projectIds,flag);
     }
 }

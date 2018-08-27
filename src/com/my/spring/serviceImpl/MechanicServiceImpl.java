@@ -9,18 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.DAO.MechanicDao;
 import com.my.spring.DAO.MechanicPriceDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
-import com.my.spring.model.MaterialLogPojo;
 import com.my.spring.model.Mechanic;
 import com.my.spring.model.MechanicPojo;
 import com.my.spring.model.MechanicPojos;
@@ -41,8 +38,6 @@ public class MechanicServiceImpl implements MechanicService{
     MechanicDao mechanicDao;
     @Autowired
     MechanicPriceDao mechanicPriceDao;
-    @Autowired
-    UserLogDao userLogDao;
     @Autowired
     FileService fileService;
     @Autowired

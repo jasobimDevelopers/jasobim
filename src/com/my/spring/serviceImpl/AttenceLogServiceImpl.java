@@ -2,11 +2,8 @@ package com.my.spring.serviceImpl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +12,8 @@ import com.my.spring.DAO.AttenceModelDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.RoleDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.AdvancedOrderPojo;
 import com.my.spring.model.AttenceForgetFactLogs;
 import com.my.spring.model.AttenceLog;
 import com.my.spring.model.AttenceLogPojo;
@@ -27,12 +22,9 @@ import com.my.spring.model.AttenceModel;
 import com.my.spring.model.Files;
 import com.my.spring.model.Role;
 import com.my.spring.model.User;
-import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.AttenceLogService;
 import com.my.spring.service.FileService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.InstanceUtil;
 import com.my.spring.utils.SessionManager;
@@ -45,8 +37,6 @@ public class AttenceLogServiceImpl implements AttenceLogService{
     AttenceLogDao attenceLogDao;
     @Autowired
     AttenceModelDao attenceModelDao;
-    @Autowired
-    UserLogService userLogService;
     @Autowired
     FileService fileservice;
     @Autowired
@@ -62,17 +52,7 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 		if(user!=null){
 			if(am!=null){
 				if(am.getProjectId()!=null){
-					if(user.getSystemId()!=null){
-	    				UserLog userLog = new UserLog();
-	        			userLog.setProjectPart(ProjectDatas.AttenceLog_area.getCode());
-	        			userLog.setActionDate(new Date());
-	        			userLog.setActionType(1);
-	        			userLog.setProjectId(am.getProjectId());
-	        			userLog.setUserId(user.getId());
-	        			userLog.setSystemType(user.getSystemId());
-	        			userLog.setVersion("3.0");
-	        			userLogService.addUserLog(userLog, token);
-					}
+					
 					am.setLat(lat);
 					am.setLng(lng);
 					am.setUserId(user.getId());
@@ -219,19 +199,7 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 		int days = Parameters.getDaysByYearMonth(year, month);
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			if(user.getSystemId()!=null){
-				if(duct.getProjectId()!=null){
-					UserLog userLog = new UserLog();
-	    			userLog.setProjectPart(ProjectDatas.AttenceLog_area.getCode());
-	    			userLog.setActionDate(new Date());
-	    			userLog.setActionType(0);
-	    			userLog.setProjectId(duct.getProjectId());
-	    			userLog.setUserId(user.getId());
-	    			userLog.setSystemType(user.getSystemId());
-	    			userLog.setVersion("3.0");
-	    			userLogService.addUserLog(userLog, token);
-				}
-			}
+			
 			int weekds=0;
 			if(duct.getProjectId()!=null){
 				AttenceModel aml = attenceModelDao.getAttenceModelByProjectId(duct.getProjectId());

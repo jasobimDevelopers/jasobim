@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class DepartmentUser {
 	private Long id;
 	private Long teamId;///所属班组id
-	private Long userTeamId;
+	private String userTeamName;//班组长姓名(当班组长不存在时，就是当前添加人员姓名，存在时，就是班组下面的班组长姓名)
 	private String name;
 	private Integer sex;///0、男  1、女
 	private Long workTypeId;///工种/岗位
@@ -168,12 +168,12 @@ public class DepartmentUser {
 	}
 	
 	@Basic
-	@Column(name="user_team_Id")
-	public Long getUserTeamId() {
-		return userTeamId;
+	@Column(name="user_team_name")
+	public String getUserTeamName() {
+		return userTeamName;
 	}
-	public void setUserTeamId(Long userTeamId) {
-		this.userTeamId = userTeamId;
+	public void setUserTeamName(String userTeamName) {
+		this.userTeamName = userTeamName;
 	}
 	
 	

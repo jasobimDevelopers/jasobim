@@ -9,14 +9,11 @@ import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.ValueOutput;
 import com.my.spring.model.ValueOutputPojo;
 import com.my.spring.parameters.Parameters;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.model.Files;
 import com.my.spring.model.Project;
 import com.my.spring.model.User;
-import com.my.spring.model.UserLog;
 import com.my.spring.service.ValueOutputService;
 import com.my.spring.service.FileService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 import com.my.spring.utils.WriteDataToExcel;
@@ -41,8 +38,6 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     ProjectDao projectDao;
     @Autowired
     FileService fileSerivce;
-    @Autowired
-    UserLogService userLogSerivce;
     @Override
     public DataWrapper<Void> addValueOutput(ValueOutput ValueOutput,String token) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -160,19 +155,6 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     	Double nums=0.0;
     	Double finisheds=0.0;
     	if(userInMemory!=null){
-    		if(userInMemory.getSystemId()!=null){
-    			if(projectId!=null){
-    				UserLog userLog = new UserLog();
-        			userLog.setProjectPart(ProjectDatas.ValueOut_area.getCode());
-        			userLog.setActionDate(new Date());
-        			userLog.setActionType(0);
-        			userLog.setUserId(userInMemory.getId());
-        			userLog.setSystemType(userInMemory.getSystemId());
-        			userLog.setVersion("3.0");
-        			userLog.setProjectId(projectId);
-        			userLogSerivce.addUserLog(userLog, token);
-    			}
-    		}
     		dataWrapperPojo=ValueOutputDao.getValueOutputListnew(projectId).getData();
     		String leader=null;
 			User user = new User();
@@ -267,19 +249,6 @@ public class ValueOutputServiceImpl implements ValueOutputService {
         Double nums=0.0;
     	Double finisheds=0.0;
         if(userInMemory != null) {
-        	if(userInMemory.getSystemId()!=null){
-    			if(projectId!=null){
-    				UserLog userLog = new UserLog();
-        			userLog.setProjectPart(ProjectDatas.ValueOut_area.getCode());
-        			userLog.setActionDate(new Date());
-        			userLog.setActionType(0);
-        			userLog.setUserId(userInMemory.getId());
-        			userLog.setSystemType(userInMemory.getSystemId());
-        			userLog.setVersion("3.0");
-        			userLog.setProjectId(projectId);
-        			userLogSerivce.addUserLog(userLog, token);
-    			}
-    		}
         	String[] projectLists=null;
 		    	valueOutputss=ValueOutputDao.getValueOutputByProjectId(projectId,projectName,projectLists).getData();
 				if(valueOutputss!=null && valueOutputss.size()>0){
@@ -298,10 +267,8 @@ public class ValueOutputServiceImpl implements ValueOutputService {
 	    				
 	    				strone.setId(valueOutputss.get(i).getId());
 	    				
-	    				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 	    				SimpleDateFormat sdfs=new SimpleDateFormat("yyyy-MM-dd"); 
 	    	    		String str=sdfs.format(valueOutputss.get(i).getDate()); 
-	    	    		String strs=sdf.format(valueOutputss.get(i).getDate());
 	    	    		strone.setDates(str);
 	    	    		valueOutputs.add(i, strone);
 	    				nums=Double.valueOf(projects.getPrice());

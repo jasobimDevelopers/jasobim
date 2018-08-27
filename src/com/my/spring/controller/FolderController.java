@@ -1,14 +1,6 @@
 package com.my.spring.controller;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipOutputStream;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.my.spring.model.Folder;
 import com.my.spring.model.FolderPojo;
 import com.my.spring.service.FolderService;
-import com.my.spring.utils.CustomFileUtil;
 import com.my.spring.utils.DataWrapper;
 
 @Controller

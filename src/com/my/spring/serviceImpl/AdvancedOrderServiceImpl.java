@@ -10,7 +10,6 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.jpush.PushExample;
 import com.my.spring.model.AdvancedOrder;
 import com.my.spring.model.AdvancedOrderCollect;
-import com.my.spring.model.AdvancedOrderCopy;
 import com.my.spring.model.AdvancedOrderPojo;
 import com.my.spring.model.Files;
 import com.my.spring.model.Notice;
@@ -644,25 +643,6 @@ public class AdvancedOrderServiceImpl implements AdvancedOrderService {
         return dataWrapper;
 	}
 
-	@Override
-	public DataWrapper<List<AdvancedOrderCopy>> getAdvancedOrderListOfNotRead(String token, Integer pageSize,
-			Integer pageIndex) {
-		DataWrapper<List<AdvancedOrderCopy>> resultList = new DataWrapper<List<AdvancedOrderCopy>>();
-		List<AdvancedOrderCopy> result = new ArrayList<AdvancedOrderCopy>();
-		User user = SessionManager.getSession(token);
-		if(user!=null){
-			result = advancedOrderDao.getAdvancedOrdersListNotRead(user.getId(),pageSize,pageIndex);
-			if(result!=null && result.size()>=0){
-				resultList.setTotalNumber(result.size());
-			}else{
-				resultList.setTotalNumber(0);
-			}
-			resultList.setData(result);
-		}else{
-			resultList.setErrorCode(ErrorCodeEnum.User_Not_Logined);
-		}
-		return resultList;
-	}
 
 	
 }

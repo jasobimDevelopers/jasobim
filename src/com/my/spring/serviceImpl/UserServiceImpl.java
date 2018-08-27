@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -964,14 +965,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataWrapper<List<UserWebPojo>> getUserByProjectIds(String token, String projectIds) {
+	public DataWrapper<List<UserWebPojo>> getUserByProjectIds(String token, String projectIds,String flag) {
 		DataWrapper<List<UserWebPojo>> dataWrapper = new DataWrapper<List<UserWebPojo>>();
 		List<UserWebPojo> userpojoList=new ArrayList<UserWebPojo>();
 		DataWrapper<List<UserCopy>> userList=new DataWrapper<List<UserCopy>>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
 			if(adminInMemory.getUserType()==UserTypeEnum.Admin.getType()){
-				userList=userDao.getUserByProjectIds(projectIds);
+				userList=userDao.getUserByProjectIds(projectIds,flag);
 				if(!userList.getData().isEmpty()){
 					for(int i=0;i<userList.getData().size();i++){
 						UserWebPojo userpadpojo=new UserWebPojo();

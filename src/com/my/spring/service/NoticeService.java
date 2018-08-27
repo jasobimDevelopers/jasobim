@@ -16,7 +16,6 @@ public interface NoticeService {
 	DataWrapper<Void> deleteNoticeByIdList(String token,String[] id);
 	DataWrapper<Void> addNotice(String token, Notice file);
 	DataWrapper<JSONArray> getMenuListMapByIdList(List<Notice> menu);
-	DataWrapper<List<CommonNotice>> getCommonNotices(String token ,Integer pageSize,Integer pageIndex);
 	DataWrapperDiy<List<CommonNotice>> getAllNoticeList(String token, Integer pageSize, Integer pageIndex);
 	DataWrapperDiy<Integer> getNotReadNum(String token);
 }

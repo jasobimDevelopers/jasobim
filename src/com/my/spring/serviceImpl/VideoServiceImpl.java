@@ -2,19 +2,14 @@ package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.UserLogDao;
 import com.my.spring.DAO.VideoDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Video;
 import com.my.spring.model.VideoPojo;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.model.Files;
 import com.my.spring.model.User;
-import com.my.spring.model.UserLog;
-import com.my.spring.model.ValueOutputPojo;
 import com.my.spring.service.FileService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.service.VideoService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
@@ -35,13 +30,9 @@ public class VideoServiceImpl implements VideoService {
     @Autowired
     UserDao userDao;
     @Autowired
-    UserLogDao userLogDao;
-    @Autowired
     FileDao fileDao;
     @Autowired
     FileService fileService;
-    @Autowired
-    UserLogService userLogService;
     private String filePath="files";
     private Integer fileType=4;
     private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
@@ -71,15 +62,6 @@ public class VideoServiceImpl implements VideoService {
 					if(!videoDao.addVideo(video)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else{
-						UserLog userLog = new UserLog();
-						userLog.setActionDate(new Date());
-						userLog.setActionType(1);
-						userLog.setUserId(userInMemory.getId());
-						userLog.setProjectId(video.getProjectId());
-						userLog.setSystemType(userInMemory.getSystemId());
-						userLog.setProjectPart(ProjectDatas.Video_area.getCode());
-						userLog.setVersion("3.0");
-						userLogDao.addUserLog(userLog);
 						return dataWrapper;
 					}
 						
@@ -130,22 +112,6 @@ public class VideoServiceImpl implements VideoService {
     	DataWrapper<List<Video>> dataWrappers=new DataWrapper<List<Video>>();
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
-	    		if(userInMemory.getSystemId()!=null){
-	    			UserLog userLog = new UserLog();
-	    			userLog.setProjectPart(ProjectDatas.Video_area.getCode());
-	    			userLog.setActionDate(new Date());
-	    			userLog.setUserId(userInMemory.getId());
-	    			userLog.setActionType(0);
-	    			userLog.setSystemType(userInMemory.getSystemId());
-	    			userLog.setVersion("3.0");
-	    			if(projectId!=null){
-	    				userLog.setProjectId(projectId);
-	    			}
-	    			if(video.getId()!=null){
-	    				userLog.setFileId(video.getId());
-	    			}
-	    			userLogDao.addUserLog(userLog);
-	    		}
     			dataWrappers=videoDao.getVideoList(projectId, pageIndex, pageSize, video,beginDate,endDate);
     			for(int i=0;i<dataWrappers.getData().size();i++){
     				
@@ -170,15 +136,6 @@ public class VideoServiceImpl implements VideoService {
     				}
     				videopojo.add(i,videoPojo);
     			}
-    			UserLog userLog = new UserLog();
-				userLog.setActionDate(new Date());
-				userLog.setActionType(0);
-				userLog.setUserId(userInMemory.getId());
-				userLog.setProjectId(video.getProjectId());
-				userLog.setSystemType(userInMemory.getSystemId());
-				userLog.setProjectPart(ProjectDatas.Video_area.getCode());
-				userLog.setVersion("3.0");
-				userLogDao.addUserLog(userLog);
     			dataWrapper.setData(videopojo);
     			dataWrapper.setCurrentPage(dataWrappers.getCurrentPage());
     			dataWrapper.setCallStatus(dataWrappers.getCallStatus());

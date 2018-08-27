@@ -47,6 +47,28 @@ public class QuestionController {
     	}
         return dataWrappers;
     }
+    @RequestMapping(value="/addQuestionReal", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Question> addQuestionReal(
+            @ModelAttribute Question question,
+            @RequestParam(value = "token",required = true) String token,
+            HttpServletRequest request,
+            @RequestParam(value = "file", required = false) MultipartFile[] file,
+            @RequestParam(value = "fileCode", required = false) MultipartFile fileCode,
+            @RequestParam(value = "voiceFile", required = false) MultipartFile[] voiceFile
+            ){
+    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+    	DataWrapper<Question> dataWrappers = new DataWrapper<Question>();
+		dataWrapper=questionService.addQuestion(question,token,file,request,fileCode,voiceFile);
+		if(dataWrapper.getCallStatus()==CallStatusEnum.SUCCEED){
+			dataWrappers.setCallStatus(CallStatusEnum.SUCCEED);
+			dataWrappers.setData(question);
+            return dataWrappers;
+    	}else{
+    		dataWrappers.setErrorCode(ErrorCodeEnum.Error);
+    	}
+        return dataWrappers;
+    }
     //////根据项目id和问题id删除问题
     @RequestMapping(value="/admin/deleteQuestion",method = RequestMethod.GET)
     @ResponseBody
@@ -99,6 +121,18 @@ public class QuestionController {
     @RequestMapping(value="/admin/getQuestionList",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<QuestionPojo>> getQuestionList(
+    		@RequestParam(value="content",required=false) String content,
+    		@RequestParam(value="projectId",required=false) Long projectId,
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@ModelAttribute Question question,
+    		@RequestParam(value = "token",required = true) String token)
+    {
+        return questionService.getQuestionList(content,projectId,token,pageIndex,pageSize,question);
+    }
+    @RequestMapping(value="/admin/getQuestionLists",method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<QuestionPojo>> getQuestionLists(
     		@RequestParam(value="content",required=false) String content,
     		@RequestParam(value="projectId",required=false) Long projectId,
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,

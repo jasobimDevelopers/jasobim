@@ -10,8 +10,8 @@ public class MessagePojo {
 	private Long userId;
 	private String userName;
 	private String userIconUrl;
-	private String[] fileList;
-	private String[] fileNameList;
+	private List<String> fileList;
+	private List<String> fileNameList;
 	private String realName;
 	private String projectName;
 	private Long projectId;
@@ -61,16 +61,16 @@ public class MessagePojo {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String[] getFileList() {
+	public List<String> getFileList() {
 		return fileList;
 	}
-	public void setFileList(String[] fileList) {
+	public void setFileList(List<String> fileList) {
 		this.fileList = fileList;
 	}
-	public String[] getFileNameList() {
+	public List<String> getFileNameList() {
 		return fileNameList;
 	}
-	public void setFileNameList(String[] fileNameList) {
+	public void setFileNameList(List<String> fileNameList) {
 		this.fileNameList = fileNameList;
 	}
 	public String getUserIconUrl() {

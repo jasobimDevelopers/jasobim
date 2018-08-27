@@ -2,7 +2,6 @@ package com.my.spring.service;
 
 import com.my.spring.model.PageInfo;
 import com.my.spring.model.Question;
-import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.QuestionPojo;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.DataWrappern;
@@ -26,5 +25,4 @@ public interface QuestionService {
 	DataWrapper<List<QuestionPojo>> getQuestionListByUserId(String token, Integer pageIndex, Integer pageSize);
 	DataWrappern<PageInfo, List<QuestionPojo>, HashMap<String, String>> getQuestionHash(Integer searchType,String content, Long projectId,
 			String token, Integer pageIndex, Integer pageSize, Question question);
-	DataWrapper<List<QuestionCopy>> getQuestionListOfNotRead(String token,Integer pageIndex, Integer pageSize);
 }

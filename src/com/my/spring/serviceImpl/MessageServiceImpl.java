@@ -24,12 +24,9 @@ import com.my.spring.model.QualityQuestion;
 import com.my.spring.model.Question;
 import com.my.spring.model.User;
 import com.my.spring.model.UserId;
-import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.MessageService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +58,6 @@ public class MessageServiceImpl implements MessageService {
     ProjectDao projectDao;
 	@Autowired
     UserDao userDao;
-	@Autowired
-	UserLogService userLogService;
     @Autowired
     FileService fileService;
     private String filePath = "/files";
@@ -75,27 +70,11 @@ public class MessageServiceImpl implements MessageService {
         QualityQuestion quality = new QualityQuestion();
         if (userInMemory != null) {
 				if(message!=null){
-					if(userInMemory.getSystemId()!=null){
-						UserLog userLog = new UserLog();
-						if(message.getQuestionType()==0){
-							userLog.setProjectPart(ProjectDatas.Quality_area.getCode());
-						}
-		    			if(message.getQuestionType()==1){
-		    				userLog.setProjectPart(ProjectDatas.Question_area.getCode());
-		    			}
-		    			userLog.setActionDate(new Date());
-		    			userLog.setActionType(1);
-		    			userLog.setUserId(userInMemory.getId());
-		    			userLog.setSystemType(userInMemory.getSystemId());
-		    			//userLog.setVersion("3.0");
-		    			userLogService.addUserLog(userLog,token);
-		    		}
+					
 					message.setUserId(userInMemory.getId());
 					message.setMessageDate(new Date());
 					if(messageDao.addMessage(message)) 
 					{
-						String[] userList=null;
-						String userLists="";
 						List<String> aa = new ArrayList<String>();
 						//////新增留言未读记录
 						List<Notice> notices = new ArrayList<Notice>();
@@ -318,16 +297,15 @@ public class MessageServiceImpl implements MessageService {
 						}
 						dataWrapperfile=messageFileDao.getMessageFileListByMessageId(dataWrapper.getData().get(i).getId());
 						if(dataWrapperfile.getData()!=null && dataWrapperfile.getData().size()>0){
-							int length=dataWrapperfile.getData().size();
-							String[] filenameList =new String[length];
-							String[] fileUrlList =new String[length];
+							List<String> filenameList =new ArrayList<String>();
+							List<String> fileUrlList =new ArrayList<String>();
 							for(int j=0;j<dataWrapperfile.getData().size();j++){
 								String filename=dataWrapperfile.getData().get(j).getOriginName();
 								if(dataWrapperfile.getData().get(j).getFileId()!=null){
 									String fileUrl=fileService.getById(dataWrapperfile.getData().get(j).getFileId()).getUrl();
-									fileUrlList[j]=fileUrl;
+									fileUrlList.add(fileUrl);
 								}
-								filenameList[j]=filename;
+								filenameList.add(filename);
 							}
 							messagePojo.setFileNameList(filenameList);
 							List<String> imageList = new ArrayList<String>();
@@ -410,14 +388,12 @@ public class MessageServiceImpl implements MessageService {
 							List<MessageFile> messagefile = new ArrayList<MessageFile>();
 							messagefile = messageFileDao.getMessageFileListByMessageId(message.getId()).getData();
 							if(messagefile!=null && messagefile.size()>0){
-								String[] urllist = new String[messagefile.size()];
-								int j=0;
+								List<String> urllist = new ArrayList<String>();
 								for(int i=0;i<messagefile.size();i++){
 									Files files = new Files();
 									files = fileDao.getById(messagefile.get(i).getFileId());
 									if(files!=null){
-										urllist[i]=files.getUrl();
-										j++;
+										urllist.add(files.getUrl());
 									}
 								}
 								messagePojo.setFileList(urllist);
@@ -494,11 +470,11 @@ public class MessageServiceImpl implements MessageService {
 						List<MessageFile> messagefile = new ArrayList<MessageFile>();
 						messagefile = messageFileDao.getMessageFileListByMessageId(message.getId()).getData();
 						if(messagefile!=null && messagefile.size()>0){
-							String[] urllist = new String[messagefile.size()];
+							List<String> urllist = new ArrayList<String>();
 							for(int i=0;i<messagefile.size();i++){
 								Files files = new Files();
 								files = fileDao.getById(messagefile.get(i).getFileId());
-								urllist[i]=files.getUrl();
+								urllist.add(files.getUrl());
 							}
 							List<String> imageList = new ArrayList<String>();
 		        			List<String> voiceList = new ArrayList<String>();
@@ -585,14 +561,12 @@ public class MessageServiceImpl implements MessageService {
 							List<MessageFile> messagefile = new ArrayList<MessageFile>();
 							messagefile = messageFileDao.getMessageFileListByMessageId(message.getId()).getData();
 							if(messagefile!=null && messagefile.size()>0){
-								String[] urllist = new String[messagefile.size()];
-								int j=0;
+								List<String> urllist = new ArrayList<String>();
 								for(int i=0;i<messagefile.size();i++){
 									Files files = new Files();
 									files = fileDao.getById(messagefile.get(i).getFileId());
 									if(files!=null){
-										urllist[j]=files.getUrl();
-										j++;
+										urllist.add(files.getUrl());
 									}
 								}
 								List<String> imageList = new ArrayList<String>();
@@ -682,11 +656,11 @@ public class MessageServiceImpl implements MessageService {
 						List<MessageFile> messagefile = new ArrayList<MessageFile>();
 						messagefile = messageFileDao.getMessageFileListByMessageId(message.getId()).getData();
 						if(messagefile!=null && messagefile.size()>0){
-							String[] urllist = new String[messagefile.size()];
+							List<String> urllist = new ArrayList<String>();
 							for(int i=0;i<messagefile.size();i++){
 								Files files = new Files();
 								files = fileDao.getById(messagefile.get(i).getFileId());
-								urllist[i]=files.getUrl();
+								urllist.add(files.getUrl());
 							}
 							List<String> imageList = new ArrayList<String>();
 		        			List<String> voiceList = new ArrayList<String>();
@@ -774,16 +748,6 @@ public class MessageServiceImpl implements MessageService {
 		List<MessageCopyPojo> resultPojo = new ArrayList<MessageCopyPojo>();
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null){
-			if(userInMemory.getSystemId()!=null){
-				UserLog userLog = new UserLog();
-    			userLog.setProjectPart(ProjectDatas.Notification_area.getCode());
-    			userLog.setActionDate(new Date());
-    			userLog.setActionType(0);
-    			userLog.setUserId(userInMemory.getId());
-    			userLog.setSystemType(userInMemory.getSystemId());
-    			//userLog.setVersion("3.0");
-    			userLogService.addUserLog(userLog,token);
-    		}
 			result = messageDao.getMessageListNotRead(userInMemory.getId(),pageSize,pageIndex);
 			if(result.size()>0){
 				if(result.get(0).getId()!=null){

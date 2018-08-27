@@ -9,21 +9,15 @@ import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.PaperDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
-import com.my.spring.model.Building;
 import com.my.spring.model.Files;
-import com.my.spring.model.MessagePojo;
 import com.my.spring.model.Paper;
 import com.my.spring.model.PaperPojo;
 import com.my.spring.model.User;
-import com.my.spring.model.UserLog;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.PaperService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
@@ -49,15 +43,11 @@ public class PaperServiceImpl implements PaperService {
     @Autowired
     UserDao userDao;
     @Autowired
-    UserLogDao userLogDao;
-    @Autowired
     BuildingDao buildingDao;
     @Autowired
     FileDao fileDao;
     @Autowired
     FileService fileService;
-    @Autowired
-    UserLogService userLogSerivce;
     private String filePath = "files";
     private Integer fileType=1;
     /*
@@ -69,7 +59,6 @@ public class PaperServiceImpl implements PaperService {
     public DataWrapper<Void> addPaper(Paper paper,String token,MultipartFile file,HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);////验证登录时的session
-        Building buliding = new Building(); 
         if (userInMemory != null) {
 			/*if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){*/
 				///////验证是不是管理员身份
@@ -92,27 +81,11 @@ public class PaperServiceImpl implements PaperService {
 					if(!paperDao.addPaper(paper)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else{
-						//////打点记录添加
-					
-						UserLog userLog = new UserLog();
-						userLog.setActionDate(new Date());
-						userLog.setActionType(1);
-						userLog.setUserId(userInMemory.getId());
-						userLog.setProjectId(paper.getProjectId());
-						userLog.setSystemType(userInMemory.getSystemId());
-						userLog.setProjectPart(ProjectDatas.Paper_area.getCode());
-						userLog.setVersion("3.0");
-						userLogDao.addUserLog(userLog);
 						return dataWrapper;
 					}
-						
-			        
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}
-			/*}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}*/
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -212,16 +185,6 @@ public class PaperServiceImpl implements PaperService {
 	        			}
 	        			
 	        		}
-
-					UserLog userLog = new UserLog();
-					userLog.setActionDate(new Date());
-					userLog.setActionType(0);
-					userLog.setUserId(userInMemory.getId());
-					userLog.setProjectId(paper.getProjectId());
-					userLog.setSystemType(userInMemory.getSystemId());
-					userLog.setProjectPart(ProjectDatas.Paper_area.getCode());
-					userLog.setVersion("3.0");
-					userLogDao.addUserLog(userLog);
 	        		dataWrappers.setData(papers);
 	        		dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
 	    			dataWrappers.setCallStatus(dataWrapper.getCallStatus());
@@ -294,21 +257,6 @@ public class PaperServiceImpl implements PaperService {
     	DataWrapper<List<Paper>> dataWrapper = new DataWrapper<List<Paper>>();
 		 User userInMemory = SessionManager.getSession(token);
 	        if (userInMemory != null) {
-		        	if(userInMemory.getSystemId()!=null){
-		        		if(projectId!=null){
-			        		UserLog userLog = new UserLog();
-			        		userLog.setActionDate(new Date());
-			        		if(paper.getId()!=null){
-			        			userLog.setFileId(paper.getId());
-			        		}
-			        		userLog.setActionType(0);
-			        		userLog.setProjectPart(ProjectDatas.Paper_area.getCode());
-			        		userLog.setUserId(userInMemory.getId());
-			        		userLog.setProjectId(projectId);
-			        		userLog.setSystemType(userInMemory.getSystemId());
-			        		userLogSerivce.addUserLog(userLog, token);
-			        	}
-		        	}
 	        		dataWrapper= paperDao.getPaperList(projectId,pageSize, pageIndex,paper,content);
 	        		for(int i=0;i<dataWrapper.getData().size();i++){
 	        			PaperPojo papernew=new PaperPojo();

@@ -9,6 +9,8 @@ import javax.persistence.Table;
 public class DepartmentPojo {
 	private Long id;
 	private String name;
+	private String teamUserName;
+	private Long projectId;
 	private String createUser;
 	private String createDate;
 	private String remark;
@@ -46,6 +48,18 @@ public class DepartmentPojo {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
+	}
+	public String getTeamUserName() {
+		return teamUserName;
+	}
+	public void setTeamUserName(String teamUserName) {
+		this.teamUserName = teamUserName;
 	}
 	
 }

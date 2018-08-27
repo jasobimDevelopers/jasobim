@@ -1,22 +1,12 @@
 package com.my.spring.serviceImpl;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.zip.ZipOutputStream;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,14 +22,10 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.Folder;
 import com.my.spring.model.FolderPojo;
-import com.my.spring.model.MaterialPojo;
 import com.my.spring.model.User;
-import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.FolderService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.utils.CopyFilesExample;
 import com.my.spring.utils.CustomFileUtil;
 import com.my.spring.utils.DataWrapper;
@@ -54,8 +40,6 @@ public class FolderServiceImpl implements FolderService  {
 	FolderDao folderDao;
 	@Autowired
 	UserDao userDao;
-	@Autowired
-	UserLogService userLogService;
 	@Autowired
 	FileService fileService;
 	private String filePaths="fileUploads/folderFiles/";
@@ -326,17 +310,6 @@ public class FolderServiceImpl implements FolderService  {
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(projectId!=null){
-				if(user.getSystemId()!=null){
-	    			UserLog userLog = new UserLog();
-	    			userLog.setProjectPart(ProjectDatas.FileManager_area.getCode());
-	    			userLog.setActionDate(new Date());
-	    			userLog.setActionType(0);
-	    			userLog.setUserId(user.getId());
-	    			userLog.setSystemType(user.getSystemId());
-	    			//userLog.setVersion("3.0");
-	    			userLog.setProjectId(projectId);
-	    			userLogService.addUserLog(userLog,token);
-	    		}
 				resultGet=folderDao.getFolderListLike(projectId, name);
 				if(!resultGet.isEmpty()){
 					for(Folder floder:resultGet){
@@ -395,17 +368,6 @@ public class FolderServiceImpl implements FolderService  {
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(projectId!=null){
-				if(user.getSystemId()!=null){
-	    			UserLog userLog = new UserLog();
-	    			userLog.setProjectPart(ProjectDatas.FileManager_area.getCode());
-	    			userLog.setActionDate(new Date());
-	    			userLog.setActionType(0);
-	    			userLog.setUserId(user.getId());
-	    			userLog.setSystemType(user.getSystemId());
-	    			//userLog.setVersion("3.0");
-	    			userLog.setProjectId(projectId);
-	    			userLogService.addUserLog(userLog,token);
-	    		}
 				resultGet=folderDao.getFolderIndexList(projectId, pid);
 				if(!resultGet.isEmpty()){
 					for(Folder floder:resultGet){
@@ -623,7 +585,6 @@ public class FolderServiceImpl implements FolderService  {
 				}else{
 					/////获取单个文件夹的所有子
 					//Folder father = MenuRecursion.treeParrentList(alllists, folder.getParrentId());
-					MenuRecursion mr = new MenuRecursion(folder.getName());
 					List<Folder> childrens=MenuRecursion.treeChildList(alllists, folder.getId(),folder.getName());
 					childrens.add(folder);
 					for(int i=0;i<childrens.size();i++){

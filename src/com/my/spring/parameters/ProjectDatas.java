@@ -19,12 +19,13 @@ public enum ProjectDatas implements Serializable {
     MeasuredData_area("measuredData",13),///实测实量
     FileManager_area("fileManager",14),///云盘管理
     MaterialManager_area("material",15),///物资管理
-    MechanicPrice_area("mechanicPrice",16),///劳动力监测
+    MechanicPrice_area("mechanicPrice",16),///劳动力监测、劳务管理
     AttenceLog_area("attenceLog",17),///考勤管理
     QuanlityChange_area("quanlity",18),//工程量变更
     ProcessData_area("processData",19),//进程管理
     AdvancedOrder_area("advancedOrder",20),//施工任务单
-    ConstructionTask_area("constructionTask",21)//预付单
+    ConstructionTask_area("constructionTask",21),//预付单
+    ProductionManager_projectDetail("projectDetail",22)//生产管理
     ;
     private String label;
     private Integer code;

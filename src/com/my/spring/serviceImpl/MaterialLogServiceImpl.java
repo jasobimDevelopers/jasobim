@@ -8,11 +8,9 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Material;
 import com.my.spring.model.MaterialLog;
 import com.my.spring.model.MaterialLogPojo;
-import com.my.spring.model.MaterialPojo;
 import com.my.spring.model.User;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.MaterialLogService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
@@ -32,8 +30,6 @@ public class MaterialLogServiceImpl implements MaterialLogService {
     MaterialDao materialDao;
     @Autowired
     UserDao userDao;
-    @Autowired
-    UserLogService userLogSerivce;
     @Override
     public DataWrapper<Void> addMaterialLog(MaterialLog m,String token,String date) {
     	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();

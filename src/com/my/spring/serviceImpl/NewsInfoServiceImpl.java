@@ -7,13 +7,10 @@ import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
-import com.my.spring.model.MechanicPojo;
 import com.my.spring.model.NewsInfo;
 import com.my.spring.model.NewsInfoPojo;
 import com.my.spring.model.User;
-import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.NewsInfoService;
 import com.my.spring.service.UserLogService;
@@ -47,16 +44,6 @@ public class NewsInfoServiceImpl implements NewsInfoService {
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			if(NewsInfo!=null){
-				if(userInMemory.getSystemId()!=null){
-	    				UserLog userLog = new UserLog();
-	        			userLog.setProjectPart(ProjectDatas.NewsInfo_area.getCode());
-	        			userLog.setActionDate(new Date());
-	        			userLog.setActionType(1);
-	        			userLog.setUserId(userInMemory.getId());
-	        			userLog.setSystemType(userInMemory.getSystemId());
-	        			userLog.setVersion("3.0");
-	        			userLogSerivce.addUserLog(userLog, token);
-	    		}
 				NewsInfo.setCreateUserId(userInMemory.getId());
 				NewsInfo.setCreateDate(new Date(System.currentTimeMillis()));
 				if(!NewsInfoDao.addNewsInfo(NewsInfo)) 
@@ -102,19 +89,6 @@ public class NewsInfoServiceImpl implements NewsInfoService {
     	DataWrapper<List<NewsInfo>> dataWrapper = new DataWrapper<List<NewsInfo>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-        		if(userInMemory.getSystemId()!=null){
-        				UserLog userLog = new UserLog();
-            			userLog.setProjectPart(ProjectDatas.NewsInfo_area.getCode());
-            			userLog.setActionDate(new Date());
-            			userLog.setActionType(0);
-            			if(NewsInfo.getId()!=null){
-            				userLog.setFileId(NewsInfo.getId());
-            			}
-            			userLog.setUserId(userInMemory.getId());
-            			userLog.setSystemType(userInMemory.getSystemId());
-            			userLog.setVersion("3.0");
-            			userLogSerivce.addUserLog(userLog, token);
-        		}
 				dataWrapper=NewsInfoDao.getNewsInfoList(pageIndex,pageSize,NewsInfo);
 				if(!dataWrapper.getData().isEmpty()){
 					List<NewsInfoPojo> NewsInfoPojoList = new ArrayList<NewsInfoPojo>();
@@ -208,16 +182,7 @@ public class NewsInfoServiceImpl implements NewsInfoService {
 		if(user!=null){
 			if(newsInfo!=null){
 				if(newsInfo.getId()!=null){
-					if(user.getSystemId()!=null){
-		    				UserLog userLog = new UserLog();
-		        			userLog.setProjectPart(ProjectDatas.NewsInfo_area.getCode());
-		        			userLog.setActionDate(new Date());
-		        			userLog.setActionType(3);
-		        			userLog.setUserId(user.getId());
-		        			userLog.setSystemType(user.getSystemId());
-		        			userLog.setVersion("3.0");
-		        			userLogSerivce.addUserLog(userLog, token);
-		    		}
+					
 					NewsInfo newsInfoNew = NewsInfoDao.getById(newsInfo.getId());
 					if(newsInfoNew!=null){
 						newsInfoNew.setContent(newsInfo.getContent());

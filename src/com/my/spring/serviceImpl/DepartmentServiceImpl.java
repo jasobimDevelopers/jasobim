@@ -10,7 +10,6 @@ import com.my.spring.DAO.DepartmentDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.ConstructionLogPojo;
 import com.my.spring.model.Department;
 import com.my.spring.model.DepartmentPojo;
 import com.my.spring.model.User;
@@ -88,6 +87,8 @@ public class DepartmentServiceImpl implements DepartmentService  {
 						dps.setName(dpss.getName());
 						dps.setId(dpss.getId());
 						dps.setRemark(dpss.getRemark());
+						dps.setTeamUserName(dpss.getTeamUserName());
+						dps.setProjectId(dpss.getProjectId());
 						dps.setCreateDate(Parameters.getSdf().format(dpss.getCreateDate()));
 						if(dpss.getCreateUser()!=null){
 							User users = userDao.getById(dpss.getCreateUser());
@@ -120,6 +121,8 @@ public class DepartmentServiceImpl implements DepartmentService  {
 			if(dt!=null){
 				dps.setName(dt.getName());
 				dps.setRemark(dt.getRemark());
+				dps.setTeamUserName(dt.getTeamUserName());
+				dps.setProjectId(dt.getProjectId());
 				dps.setCreateDate(Parameters.getSdf().format(dt.getCreateDate()));
 				if(dt.getCreateUser()!=null){
 					User users = userDao.getById(dt.getCreateUser());

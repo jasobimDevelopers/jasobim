@@ -16,7 +16,8 @@ public class DepartmentUserPojo {
 	private String createUser;
 	private String updateUser;
 	private Long projectId;
-	private Long userTeamId;
+	private String userTeamName;
+	
 	public Long getId() {
 		return id;
 	}
@@ -113,11 +114,11 @@ public class DepartmentUserPojo {
 	public void setUserTeamType(Integer userTeamType) {
 		this.userTeamType = userTeamType;
 	}
-	public Long getUserTeamId() {
-		return userTeamId;
+	public String getUserTeamName() {
+		return userTeamName;
 	}
-	public void setUserTeamId(Long userTeamId) {
-		this.userTeamId = userTeamId;
+	public void setUserTeamName(String string) {
+		this.userTeamName = string;
 	}
 	
 	

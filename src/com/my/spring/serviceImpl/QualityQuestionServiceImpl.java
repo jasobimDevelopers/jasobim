@@ -9,48 +9,30 @@ import com.my.spring.DAO.QualityQuestionDao;
 import com.my.spring.DAO.QuestionFileDao;
 import com.my.spring.DAO.RoleDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.jpush.PushExample;
-import com.my.spring.jpush.PushExamples;
 import com.my.spring.model.Files;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageFile;
 import com.my.spring.model.Notice;
 import com.my.spring.model.PageInfo;
 import com.my.spring.model.Project;
-import com.my.spring.model.QualityFinePojo;
 import com.my.spring.model.QualityQuestion;
 import com.my.spring.model.QuestionFile;
-import com.my.spring.model.Role;
 import com.my.spring.model.QualityQuestionPojo;
-import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.User;
 import com.my.spring.model.UserId;
-import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
-import com.my.spring.service.ProjectService;
 import com.my.spring.service.QualityQuestionService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.DataWrappern;
 import com.my.spring.utils.SessionManager;
-
-import cn.jiguang.common.ClientConfig;
-import cn.jiguang.common.resp.APIConnectionException;
-import cn.jiguang.common.resp.APIRequestException;
-import cn.jpush.api.JPushClient;
-import cn.jpush.api.push.PushResult;
-import cn.jpush.api.push.model.PushPayload;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.text.NumberFormat;
@@ -69,8 +51,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     @Autowired
     UserDao userDao;
     @Autowired
-    UserLogDao userLogDao;
-    @Autowired
     MessageDao messageDao;
     @Autowired
     MessageFileDao messageFileDao;
@@ -84,8 +64,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     ProjectDao projectDao;
     @Autowired
     FileService fileService;
-    @Autowired
-    UserLogService userLogService;
     private String filePath = "files";
     private Integer fileType=2;
     @Override
@@ -93,19 +71,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-        	if(userInMemory.getSystemId()!=null){
-				if(QualityQuestion.getProjectId()!=null){
-					UserLog userLog = new UserLog();
-	    			userLog.setProjectPart(ProjectDatas.Quality_area.getCode());
-	    			userLog.setActionDate(new Date());
-	    			userLog.setActionType(1);
-	    			userLog.setProjectId(QualityQuestion.getProjectId());
-	    			userLog.setUserId(userInMemory.getId());
-	    			userLog.setSystemType(userInMemory.getSystemId());
-	    			userLog.setVersion("3.0");
-	    			userLogService.addUserLog(userLog, token);
-				}
-			}
         	QualityQuestion.setUserId(userInMemory.getId());
 			if(QualityQuestion!=null){
 				if(QualityQuestion.getQuestionDate()==null){
@@ -440,22 +405,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		Long[] userIdList=null;
-    		if(userInMemory.getSystemId()!=null){
-				if(QualityQuestion.getProjectId()!=null){
-					UserLog userLog = new UserLog();
-	    			userLog.setProjectPart(ProjectDatas.Quality_area.getCode());
-	    			userLog.setActionDate(new Date());
-	    			userLog.setActionType(0);
-	    			if(QualityQuestion.getId()!=null){
-	    				userLog.setFileId(QualityQuestion.getId());
-	    			}
-	    			userLog.setProjectId(QualityQuestion.getProjectId());
-	    			userLog.setUserId(userInMemory.getId());
-	    			userLog.setSystemType(userInMemory.getSystemId());
-	    			userLog.setVersion("3.0");
-	    			userLogService.addUserLog(userLog, token);
-				}
-			}
 			if(content!=null){
 				
 				/////问题状态搜索
@@ -728,7 +677,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 							QualityQuestionPojo.setState(QualityQuestion.getState());
 							QualityQuestionPojo.setTrades(QualityQuestion.getTrades());
 							QualityQuestionPojo.setUserId(userDao.getById(QualityQuestion.getUserId()).getRealName());
-							Long userIdis=userDao.getById(QualityQuestion.getUserId()).getId();
 							DataWrapper<List<QuestionFile>> file=new DataWrapper<List<QuestionFile>>();
 							file=QuestionFileDao.getQuestionFileByQualityId(QualityQuestion.getId());
 							if(file.getData()!=null && file.getData().size()>0){
@@ -766,14 +714,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 									noticeDao.updateNotice(notice);
 								}
 							}
-							//////添加打点记录
-							UserLog userLog = new UserLog();
-							userLog.setActionDate(new Date());
-							userLog.setFileId(QualityQuestion.getId());
-							userLog.setProjectId(QualityQuestion.getProjectId());
-							userLog.setProjectPart(ProjectDatas.Quality_area.getCode());
-							userLog.setUserId(userInDB.getId());
-							userLogDao.addUserLog(userLog);
 							dataWrapper.setData(QualityQuestionPojo);
 						}else{
 							dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
@@ -807,19 +747,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
         if (userInMemory != null) {
 				QualityQuestion QualityQuestion=null;
 				QualityQuestion=QualityQuestionDao.getById(QualityQuestionId);	
-				if(userInMemory.getSystemId()!=null){
-					if(QualityQuestion.getProjectId()!=null){
-						UserLog userLog = new UserLog();
-		    			userLog.setProjectPart(ProjectDatas.Quality_area.getCode());
-		    			userLog.setActionDate(new Date());
-		    			userLog.setActionType(3);
-		    			userLog.setProjectId(QualityQuestion.getProjectId());
-		    			userLog.setUserId(userInMemory.getId());
-		    			userLog.setSystemType(userInMemory.getSystemId());
-		    			userLog.setVersion("3.0");
-		    			userLogService.addUserLog(userLog, token);
-					}
-				}
 				if(QualityQuestion!=null){
 				/////安全问题状态更新，消息提醒存储
 					Notice notice = new Notice();
@@ -910,21 +837,6 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     	User userInMemory=SessionManager.getSession(token);
     	if(userInMemory!=null){
     		Long[] userIdList=null;
-    		if(userInMemory.getSystemId()==0 || userInMemory.getSystemId()==1 || userInMemory.getSystemId()==-1){
-    			UserLog userLog = new UserLog();
-    			userLog.setProjectPart(ProjectDatas.Quality_area.getCode());
-    			userLog.setActionDate(new Date());
-    			userLog.setUserId(userInMemory.getId());
-    			userLog.setSystemType(userInMemory.getSystemId());
-    			//userLog.setVersion("3.0");
-    			if(QualityQuestion.getProjectId()!=null){
-    				userLog.setProjectId(QualityQuestion.getProjectId());
-    			}
-    			if(QualityQuestion.getId()!=null){
-    				userLog.setFileId(QualityQuestion.getId());
-    			}
-    			userLogDao.addUserLog(userLog);
-    		}
     		if(searchType!=null){
     			if(searchType==0){
     				User users = userDao.getByUserRealName(content);
@@ -1075,37 +987,5 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     	return datawrapper;
 	}
 
-	@Override
-	public DataWrapper<List<QuestionCopy>> getQuestionListOfNotRead(String token, Integer pageIndex, Integer pageSize) {
-		DataWrapper<List<QuestionCopy>> resultList = new DataWrapper<List<QuestionCopy>>();
-		List<QuestionCopy> questionCopys = new ArrayList<QuestionCopy>();
-		User userInMemory = SessionManager.getSession(token);
-		if(userInMemory!=null){
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType() || userInMemory.getUserType()==UserTypeEnum.User.getType()){
-				questionCopys=QualityQuestionDao.getQuestionListByAdmin(userInMemory.getId(),pageIndex,pageSize);
-				resultList.setTotalNumber(questionCopys.size());
-			}else if(userInMemory.getUserType()==UserTypeEnum.Leader.getType()){
-				Role role = new Role();
-				role = roleDao.getById(userInMemory.getRoleId());
-				////////////
-				/////////////当前用户是该项目的项目负责人能看所有问题
-				if(role!=null){
-					if(role.getName()!=null){
-						if(role.getName().equals("项目负责人")){
-							/////获取当前角色所管项目的所有可读问题(已读)
-							questionCopys=QualityQuestionDao.getQuestionListByLeader(userInMemory.getId(),pageIndex,pageSize);
-							resultList.setTotalNumber(questionCopys.size());
-						}else{
-							questionCopys=QualityQuestionDao.getQuestionListByNorUser(userInMemory.getId(),pageIndex,pageSize);
-							resultList.setTotalNumber(questionCopys.size());
-						}
-					}
-				}
-			}
-			resultList.setData(questionCopys);
-		}else{
-			resultList.setErrorCode(ErrorCodeEnum.User_Not_Logined);
-		}
-		return resultList;
-	}
+	
 }

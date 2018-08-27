@@ -18,12 +18,9 @@ import com.my.spring.model.MaterialLog;
 import com.my.spring.model.MaterialPojo;
 import com.my.spring.model.MaterialType;
 import com.my.spring.model.User;
-import com.my.spring.model.UserLog;
 import com.my.spring.parameters.Parameters;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.MaterialService;
-import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.ReadMaterialExcel;
@@ -52,8 +49,6 @@ public class MaterialServiceImpl implements MaterialService {
     UserDao userDao;
     @Autowired
     MaterialImportLogDao materialImportLogDao;
-    @Autowired
-    UserLogService userLogService;
     @Autowired
     FileService fileService;
     @Autowired
@@ -198,7 +193,6 @@ public class MaterialServiceImpl implements MaterialService {
 			if(file!=null){
 				material.setCreateDate(new Date());
 				material.setUserId(userInMemory.getId());
-				List<Material> mst = new ArrayList<Material>();
 				List<ImportMaterial> ms = new ArrayList<ImportMaterial>();
 				ReadMaterialExcel rm = new ReadMaterialExcel();
 				String newFileName = MD5Util.getMD5String(file.getOriginalFilename() + new Date() + UUID.randomUUID().toString()).replace(".","")
@@ -293,17 +287,7 @@ public class MaterialServiceImpl implements MaterialService {
 		DataWrapper<Void> result = new DataWrapper<Void>();
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null){
-			if(userInMemory.getSystemId()!=null){
-				UserLog userLog = new UserLog();
-    			userLog.setProjectPart(ProjectDatas.MaterialManager_area.getCode());
-    			userLog.setActionDate(new Date());
-    			userLog.setActionType(1);
-    			userLog.setUserId(userInMemory.getId());
-    			userLog.setSystemType(userInMemory.getSystemId());
-    			//userLog.setVersion("3.0");
-    			userLog.setProjectId(material.getProjectId());
-    			userLogService.addUserLog(userLog,token);
-    		}
+			
 			if(htmlUrl!=null){
 				MaterialImportLog mil = new MaterialImportLog();
 				mil.setCodeUrl(htmlUrl);
@@ -406,17 +390,6 @@ public class MaterialServiceImpl implements MaterialService {
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(projectId!=null){
-				if(user.getSystemId()!=null){
-					UserLog userLog = new UserLog();
-	    			userLog.setProjectPart(ProjectDatas.MaterialManager_area.getCode());
-	    			userLog.setActionDate(new Date());
-	    			userLog.setActionType(0);
-	    			userLog.setUserId(user.getId());
-	    			userLog.setSystemType(user.getSystemId());
-	    			//userLog.setVersion("3.0");
-	    			userLog.setProjectId(projectId);
-	    			userLogService.addUserLog(userLog,token);
-	    		}
 				results=materialImportLogDao.getMaterialImportLogList(projectId, 10, -1);
 				if(result.getData()!=null){
 					if(!result.getData().isEmpty()){

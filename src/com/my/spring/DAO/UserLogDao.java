@@ -12,7 +12,6 @@ import java.util.List;
 
 
 public interface UserLogDao {
-	DataWrapper<List<UserLog>> getUserLogList(Integer pageSize, Integer pageIndex, UserLog userLog,Date s,Date f,String projectIds,String userIds);
 
 	boolean addUserLog(UserLog userLog);
 	
@@ -42,4 +41,8 @@ public interface UserLogDao {
 	List<UserLogPart> getCountPersonNumsByPart(String startTime, String finishedTime, Long userId);
 
 	List<UserLogCount> countUserLogNum(String dateStarts, String dateFinisheds, String projectIds, String userIds);
+
+
+	DataWrapper<List<UserLog>> getUserLogList(Integer pageSize, Integer pageIndex, UserLog UserLog, Date startDate,
+			Date finishedDate, String projectIds, String userIds, String userType);
 }

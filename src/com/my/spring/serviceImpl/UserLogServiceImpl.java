@@ -76,7 +76,7 @@ public class UserLogServiceImpl implements UserLogService {
 	
 	@Override
 	public DataWrapper<List<UserLogPojo>> getUserLogList(Integer pageIndex, Integer pageSize, UserLog UserLog, String token,String startDate,
-			String finishedDate,String searchContent,String projectIds,String userIds) {
+			String finishedDate,String searchContent,String projectIds,String userIds,String userType) {
 		// TODO Auto-generated method stub
 		Date dateStarts=null;
     	Date dateFinisheds=null;
@@ -110,7 +110,7 @@ public class UserLogServiceImpl implements UserLogService {
 						e.printStackTrace();
 					}
 	    		}
-				dataWrapper=userLogDao.getUserLogList(pageSize, pageIndex,UserLog,dateStarts,dateFinisheds,projectIds,userIds);
+				dataWrapper=userLogDao.getUserLogList(pageSize, pageIndex,UserLog,dateStarts,dateFinisheds,projectIds,userIds,userType);
 				if(dataWrapper.getData()!=null){
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						UserLogPojo UserLogpojos=new UserLogPojo();
@@ -142,7 +142,10 @@ public class UserLogServiceImpl implements UserLogService {
 							}
 						}
 						UserLogpojos.setId(dataWrapper.getData().get(i).getId());
-						UserLogpojos.setUserName(userDao.getById(dataWrapper.getData().get(i).getUserId()).getRealName());
+						User users = userDao.getById(dataWrapper.getData().get(i).getUserId());
+						if(users!=null){
+							UserLogpojos.setUserName(users.getRealName());
+						}
 						if(dataWrapper.getData().get(i).getProjectId()!=null){
 							if(projectDao.getById(dataWrapper.getData().get(i).getProjectId())!=null){
 								UserLogpojos.setProjectName(projectDao.getById(dataWrapper.getData().get(i).getProjectId()).getName());
@@ -486,9 +489,13 @@ public class UserLogServiceImpl implements UserLogService {
 						for(int j=0;j<gets.size();j++){
 							if(monthsDate[i].equals(gets.get(j).getDate())){
 								boxs.get(i).setNum(gets.get(j).getNum());
-								if(j<realDatagets.size()){
-									boxs.get(i).setRealNum(realDatagets.get(j).getNum());
-								}
+							}
+						}
+					}
+					for(int i=0;i<12;i++){
+						for(int j=0;j<realDatagets.size();j++){
+							if(monthsDate[i].equals(realDatagets.get(j).getDate())){
+								boxs.get(i).setRealNum(realDatagets.get(j).getNum());
 							}
 						}
 					}
@@ -528,9 +535,13 @@ public class UserLogServiceImpl implements UserLogService {
 						for(int j=0;j<gets.size();j++){
 							if(monthsDate[i].equals(gets.get(j).getDate())){
 								boxs.get(i).setNum(gets.get(j).getNum());
-								if(j<realDatagets.size()){
-									boxs.get(i).setRealNum(realDatagets.get(j).getNum());
-								}
+							}
+						}
+					}
+					for(int i=0;i<12;i++){
+						for(int j=0;j<realDatagets.size();j++){
+							if(monthsDate[i].equals(realDatagets.get(j).getDate())){
+								boxs.get(i).setRealNum(realDatagets.get(j).getNum());
 							}
 						}
 					}
@@ -612,9 +623,13 @@ public class UserLogServiceImpl implements UserLogService {
 						for(int j=0;j<monthGets.size();j++){
 							if(monthsDate[i].equals(monthGets.get(j).getDate())){
 								boxs.get(i).setNum(monthGets.get(j).getNum());
-								if(j<realDatagets.size()){
-									boxs.get(i).setRealNum(realDatagets.get(j).getNum());
-								}
+							}
+						}
+					}
+					for(int i=0;i<12;i++){
+						for(int j=0;j<realDatagets.size();j++){
+							if(monthsDate[i].equals(realDatagets.get(j).getDate())){
+								boxs.get(i).setRealNum(realDatagets.get(j).getNum());
 							}
 						}
 					}
@@ -645,7 +660,7 @@ public class UserLogServiceImpl implements UserLogService {
 			e.printStackTrace();
 		}
 		
-		result.setData("/userLog/personalLog.xls");	
+		result.setData("/userLog/userPersonalLog.xls");	
 		return result;
 	}
 
@@ -696,9 +711,13 @@ public class UserLogServiceImpl implements UserLogService {
 						for(int j=0;j<gets.size();j++){
 							if(monthsDate[i].equals(gets.get(j).getDate())){
 								boxs.get(i).setNum(gets.get(j).getNum());
-								if(j<realDatagets.size()){
-									boxs.get(i).setRealNum(realDatagets.get(j).getNum());
-								}
+							}
+						}
+					}
+					for(int i=0;i<12;i++){
+						for(int j=0;j<realDatagets.size();j++){
+							if(monthsDate[i].equals(realDatagets.get(j).getDate())){
+								boxs.get(i).setRealNum(realDatagets.get(j).getNum());
 							}
 						}
 					}
@@ -711,7 +730,7 @@ public class UserLogServiceImpl implements UserLogService {
 		}
 		UserLogEchartsToExcel util = new UserLogEchartsToExcel();
 		  try {
-       	 	 FileOutputStream fout = new FileOutputStream("C://jasobim/tomcat_8080/webapps/userLog/projectLog.xls");
+       	 	 FileOutputStream fout = new FileOutputStream("D://jasobim/tomcat_8080/webapps/userLog/projectLog.xls");
        	 	 util.getValue(partGets, boxs, fout, "项目操作数据分析表", year, dateStart, dateFinished);				
        	 	 fout.close();
 			} catch (IOException e) {
