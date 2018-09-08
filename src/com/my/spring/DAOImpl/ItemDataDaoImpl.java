@@ -1,14 +1,20 @@
 package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ItemDataDao;
+import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.ItemData;
+import com.my.spring.model.ItemDataGet;
+import com.my.spring.model.MenuListCopy;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -76,6 +82,31 @@ public class ItemDataDaoImpl extends BaseDao<ItemData> implements ItemDataDao {
 	public ItemData getById(Long id) {
 		// TODO Auto-generated method stub
 		return get(id);
+	}
+
+
+	@Override
+	public ItemDataGet getFirstItemByProcessDataId(Long processDataId) {
+		List<ItemDataGet> dataWrapper = new ArrayList<ItemDataGet>();
+		String sql="select a.id,a.name,a.approve_user as approveUser,a.work_name as workName from item_data a,process_item b where a.id=b.item_id and b.process_id="
+		+processDataId+" and b.which=1";
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("id",StandardBasicTypes.LONG)
+					 .addScalar("approveUser", StandardBasicTypes.LONG)
+					 .addScalar("workName",StandardBasicTypes.INTEGER)
+					 .addScalar("name",StandardBasicTypes.STRING)
+					 .setResultTransformer(Transformers.aliasToBean(ItemDataGet.class)); 
+			 dataWrapper= query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	        }
+		 if(!dataWrapper.isEmpty()){
+			 return dataWrapper.get(0);
+		 }
+		return null;
 	}
 
 

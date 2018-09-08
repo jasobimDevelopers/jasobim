@@ -26,7 +26,7 @@ public class UserTeamController {
      */
     @RequestMapping(value="/admin/addUserTeam", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Void> addUserTeam(
+    public DataWrapper<UserTeam> addUserTeam(
     		@ModelAttribute UserTeam userTeam,
             @RequestParam(value = "token",required = true) String token){
         return userTeamService.addUserTeam(token, userTeam);

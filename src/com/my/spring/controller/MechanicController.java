@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.model.Mechanic;
-import com.my.spring.model.MechanicPojo;
 import com.my.spring.model.MechanicPojos;
+import com.my.spring.model.MechanicPojo;
 import com.my.spring.service.MechanicService;
 import com.my.spring.utils.DataWrapper;
 

@@ -3,13 +3,17 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProcessLogDao;
 import com.my.spring.model.Folder;
 import com.my.spring.model.ProcessLog;
+import com.my.spring.model.ProcessLogSql;
+import com.my.spring.model.UserLogPojos;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
@@ -87,6 +91,58 @@ public class ProcessLogDaoImpl extends BaseDao<ProcessLog> implements ProcessLog
         return retDataWrapper;
     }
 
+    @SuppressWarnings("unchecked")
+   	@Override
+       public List<ProcessLog> getProcessLogListByInfos(Long aboutId,Long id) {
+           List<ProcessLog> ret = new ArrayList<ProcessLog>();
+           Session session = getSession();
+           Criteria criteria = session.createCriteria(ProcessLog.class);
+//         criteria.add(Restrictions.eq("projectId", projectId));
+           criteria.addOrder(Order.desc("createDate"));
+           if(aboutId!=null){
+           	criteria.add(Restrictions.eq("aboutId", aboutId));
+           }
+           if(id!=null){
+        	   criteria.add(Restrictions.gt("id", id));
+           }
+          
+          
+           /////////////////////////////////////
+      
+           try {
+               ret = criteria.list();
+           }catch (Exception e){
+               e.printStackTrace();
+           }
+           return ret;
+       }
+	@Override
+    public ProcessLog getProcessLogListByInfo(Long aboutId,Long id) {
+        List<ProcessLog> ret = new ArrayList<ProcessLog>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(ProcessLog.class);
+//      criteria.add(Restrictions.eq("projectId", projectId));
+        criteria.addOrder(Order.desc("createDate"));
+        if(aboutId!=null){
+        	criteria.add(Restrictions.eq("aboutId", aboutId));
+        }
+        if(id!=null){
+     	   criteria.add(Restrictions.eq("processId", id));
+        }
+       
+       
+        /////////////////////////////////////
+   
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(!ret.isEmpty()){
+        	return ret.get(0);
+        }
+        return null;
+    }
 	@Override
 	public ProcessLog getById(Long id) {
 		// TODO Auto-generated method stub
@@ -98,6 +154,7 @@ public class ProcessLogDaoImpl extends BaseDao<ProcessLog> implements ProcessLog
 		 List<ProcessLog> ret = new ArrayList<ProcessLog>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(ProcessLog.class);
+        criteria.addOrder(Order.desc("createDate"));
         criteria.add(Restrictions.eq("type",0));
         criteria.add(Restrictions.eq("aboutId",id2));
         criteria.add(Restrictions.eq("itemId",id));
@@ -117,6 +174,7 @@ public class ProcessLogDaoImpl extends BaseDao<ProcessLog> implements ProcessLog
 		 List<ProcessLog> ret = new ArrayList<ProcessLog>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(ProcessLog.class);
+        criteria.addOrder(Order.asc("createDate"));
         criteria.add(Restrictions.eq("type",0));
         criteria.add(Restrictions.eq("aboutId",id2));
         criteria.add(Restrictions.eq("processId",id));
@@ -130,5 +188,45 @@ public class ProcessLogDaoImpl extends BaseDao<ProcessLog> implements ProcessLog
         	return ret;
         }
         return null;
+	}
+
+	@Override
+	public List<ProcessLog> getProcessLogByAboutIds(Long id, Long id2) {
+		 List<ProcessLog> ret = new ArrayList<ProcessLog>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(ProcessLog.class);
+        criteria.addOrder(Order.desc("createDate"));
+        criteria.add(Restrictions.eq("type",0));
+        criteria.add(Restrictions.eq("endFlag", 2));
+        criteria.add(Restrictions.eq("aboutId",id2));
+        criteria.add(Restrictions.eq("processId",id));
+        
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ret;
+	}
+
+	@Override
+	public List<ProcessLogSql> getProcessLogByStatus(Integer status) {
+		List<ProcessLogSql> result = new ArrayList<ProcessLogSql>();
+		String sql="select MAX(create_date) as createDate,id,about_id as aboutId,end_flag as endFlag from process_log where type=0 and end_flag="
+				+status+" GROUP BY about_id";
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("id", StandardBasicTypes.LONG)
+					 .addScalar("aboutId", StandardBasicTypes.LONG)
+					 .addScalar("createDate", StandardBasicTypes.TIMESTAMP)
+					 .addScalar("endFlag", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(ProcessLogSql.class));
+			 	result=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+        return result;
 	}
 }

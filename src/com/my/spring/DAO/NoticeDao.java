@@ -14,7 +14,7 @@ public interface NoticeDao {
     boolean deleteNotice(Long id);
 	Notice getByAdoutIdAndUserId(Long id, Long questionId, int noticeType);
 	boolean updateNotice(Notice notice);
-	DataWrapper<List<Notice>> getListByUserId(Integer pageSize, Integer pageIndex, Long id, List<UserProject> ups);
 	DataWrapper<List<NoticePojo>> getListByProjectId(Integer pageSize, Integer pageIndex,List<UserProject> projectList);
 	Integer getListNotRead(Long userId);
+	DataWrapper<List<Notice>> getListByUserId(Integer pageSize, Integer pageIndex, Long id);
 }

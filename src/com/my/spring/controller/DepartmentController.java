@@ -24,7 +24,7 @@ public class DepartmentController {
    
     @RequestMapping(value="/admin/addDepartment", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Void> addDepartment(
+    public DataWrapper<Department> addDepartment(
             @ModelAttribute Department department,
             @RequestParam(value = "token",required = true) String token){
         return departmentService.addDepartment(token,department);

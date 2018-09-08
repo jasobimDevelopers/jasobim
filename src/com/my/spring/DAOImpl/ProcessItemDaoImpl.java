@@ -1,6 +1,7 @@
 package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProcessItemDao;
+import com.my.spring.model.AllItemData;
 import com.my.spring.model.ItemIdMode;
 import com.my.spring.model.ProcessItem;
 import com.my.spring.model.ProcessLog;
@@ -161,6 +162,29 @@ public class ProcessItemDaoImpl extends BaseDao<ProcessItem> implements ProcessI
 	    }catch (Exception e){
 	        e.printStackTrace();
 	    }
+		return ret;
+	}
+
+	@Override
+	public List<AllItemData> getProcessItemListByProcessId(Long processDataId) {
+		List<AllItemData> ret =null;
+		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+		String sql = "select a.id,a.name,a.approve_user,b.which from item_data a,(select item_id,which from process_item where process_id="
+		+processDataId+") b where a.id=b.item_id ORDER BY b.which asc";
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+		    		 .addScalar("id", StandardBasicTypes.LONG)
+					 .addScalar("which", StandardBasicTypes.INTEGER)
+					 .addScalar("name", StandardBasicTypes.STRING)
+					 .addScalar("approve_user",StandardBasicTypes.LONG)
+					 .setResultTransformer(Transformers.aliasToBean(AllItemData.class));
+		    ret=query.list();
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+	   
 		return ret;
 	}
 		

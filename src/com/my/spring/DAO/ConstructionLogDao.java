@@ -1,5 +1,6 @@
 package com.my.spring.DAO;
 
+import java.util.Date;
 import java.util.List;
 
 import com.my.spring.model.ConstructionLog;
@@ -12,7 +13,7 @@ public interface ConstructionLogDao {
     ConstructionLog getById(Long id);
     DataWrapper<List<ConstructionLog>> getConstructionTasksListByUserId(Long userId);
 	DataWrapper<List<ConstructionLog>> getConstructionLogsList(Integer pageIndex, Integer pageSize,
-			ConstructionLog constructionLog);
+			ConstructionLog constructionLog, String userRealName, Date dateStarts, Date dateFinisheds);
 	boolean deleteConstructionLogList(String[] id);
 
 }

@@ -7,11 +7,14 @@ import com.my.spring.model.ConstructionTaskNewUser;
 import com.my.spring.model.DuctPojos;
 import com.my.spring.model.Folder;
 import com.my.spring.model.ItemNodeList;
+import com.my.spring.model.ProcessLog;
+import com.my.spring.model.ProcessLogSql;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -21,6 +24,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -43,7 +47,7 @@ public class ConstructionTaskNewDaoImpl extends BaseDao<ConstructionTaskNew> imp
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<ConstructionTaskNew>> getConstructionTaskNewList( Integer pageIndex, Integer pageSize, ConstructionTaskNew ConstructionTaskNew) {
+    public DataWrapper<List<ConstructionTaskNew>> getConstructionTaskNewList( Integer pageIndex, Integer pageSize, ConstructionTaskNew ConstructionTaskNew,List<ProcessLogSql> processLogs,Date start,Date end,Integer status) {
         DataWrapper<List<ConstructionTaskNew>> retDataWrapper = new DataWrapper<List<ConstructionTaskNew>>();
         List<ConstructionTaskNew> ret = new ArrayList<ConstructionTaskNew>();
         Session session = getSession();
@@ -63,6 +67,34 @@ public class ConstructionTaskNewDaoImpl extends BaseDao<ConstructionTaskNew> imp
         if(ConstructionTaskNew.getName()!=null){
         	criteria.add(Restrictions.like("name", "%"+ConstructionTaskNew.getName()+"%"));
         }
+        if(status!=null){
+        	if(status!=0){
+	    		if(!processLogs.isEmpty()){
+	             	Disjunction dis=Restrictions.disjunction();
+	             	for(ProcessLogSql log:processLogs){
+	             		dis.add(Restrictions.eq("id", log.getAboutId()));
+	             	}
+	             	criteria.add(dis);
+	             }else{
+	            	 return retDataWrapper;
+	             }
+        	}
+        	 
+        }
+       
+        if(start!=null && end!=null) {
+     	   //查询制定时间之后的记录  
+        	Disjunction dis2=Restrictions.disjunction();
+        	Conjunction conjunction = Restrictions.conjunction();  
+        	Conjunction conjunction2 = Restrictions.conjunction();  
+        	conjunction.add(Restrictions.ge("constructionTaskDate",start));
+        	conjunction.add(Restrictions.le("constructionTaskDate",end));
+        	conjunction2.add(Restrictions.ge("createDate",start));
+        	conjunction2.add(Restrictions.le("createDate", end));
+        	dis2.add(conjunction);
+        	dis2.add(conjunction2);
+        	criteria.add(dis2);
+	     }                    
         /////////////////////////////////////
    
         if (pageSize == null) {

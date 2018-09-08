@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.my.spring.model.ConstructionTaskNew;
+import com.my.spring.model.ConstructionTaskNewPojo;
+import com.my.spring.model.ProcessLogPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
@@ -43,5 +46,8 @@ public interface UserService {
 	DataWrapper<Void> loginOut(Long id, String token, Integer systemId);
 	DataWrapper<List<UserWebPojo>> getUserByProjectIds(String token, String projectIds, String flag);
 	DataWrapper<UserPojo> login(String userName, String password, Integer system);
+	DataWrapper<List<ConstructionTaskNewPojo>> getConstructionTaskNewDetail(String token,
+			ConstructionTaskNew constructionTaskNew);
+	DataWrapper<List<ProcessLogPojo>> getProcessLogByConstructionId(String token, Long id, Long processDataId);
 	
 }

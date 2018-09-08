@@ -38,7 +38,6 @@ import com.my.spring.model.UserLogPart;
 import com.my.spring.model.UserLogPojo;
 import com.my.spring.model.UserLogPojos;
 import com.my.spring.parameters.Parameters;
-import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.model.User;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
@@ -82,7 +81,7 @@ public class UserLogServiceImpl implements UserLogService {
     	Date dateFinisheds=null;
 		DataWrapper<List<UserLog>> dataWrapper = new DataWrapper<List<UserLog>>();
 		List<UserLogPojo> UserLogpojo = new ArrayList<UserLogPojo>();
-		String[] projectPart={"模型","图纸","首页","交底","进度管理 ","安全问题","消息通知","统计管理","个人中心","规范查阅","模型构建信息","质量问题","新闻资讯","实测实量","云盘管理","物资管理","劳动力监测","考勤管理","工程量变更","进程管理","预付单","施工任务单"};
+		String[] projectPart={"模型","图纸","首页","交底","进度管理 ","安全问题","消息通知","统计管理","个人中心","规范查阅","模型构建信息","质量问题","新闻资讯","实测实量","云盘管理","物资管理","劳动力监测","考勤管理","工程量变更","进程管理","预付单","施工任务单","生产管理","施工日志","质量罚款单","安全罚款单","成本管理"};
 		String[] systemName={"苹果系统","安卓系统","电脑端"};
 		DataWrapper<List<UserLogPojo>> dataWrapperpojo = new DataWrapper<List<UserLogPojo>>();
 		User adminInMemory = SessionManager.getSession(token);

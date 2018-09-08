@@ -73,5 +73,10 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/rt.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jsoup-1.8.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spket-1.6.23.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/com.lowagie.text-2.1.7.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/core-renderer.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/iText-2.0.8.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/iTextAsian.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/iTextAsianCmaps.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

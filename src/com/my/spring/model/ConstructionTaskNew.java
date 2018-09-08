@@ -9,7 +9,8 @@ public class ConstructionTaskNew {
 	private String name;
 	private Long createUser;
 	private Date createDate;
-	private String constructionTaskDate;///施工任务单日期
+	private String updateDate;
+	private Date constructionTaskDate;///施工任务单日期
 	private Long processDataId;//审批流程：创建人-->班组长-->质量员-->安全员或其他-->施工员-->预算员-->经理
 	private String constructContent;//施工内容
 	private String constructType;//施工类型
@@ -71,10 +72,10 @@ public class ConstructionTaskNew {
 	
 	@Basic
 	@Column(name="construct_task_date")
-	public String getConstructionTaskDate() {
+	public Date getConstructionTaskDate() {
 		return constructionTaskDate;
 	}
-	public void setConstructionTaskDate(String constructionTaskDate) {
+	public void setConstructionTaskDate(Date constructionTaskDate) {
 		this.constructionTaskDate = constructionTaskDate;
 	}
 	
@@ -185,6 +186,16 @@ public class ConstructionTaskNew {
 	public void setTeamId(Long teamId) {
 		this.teamId = teamId;
 	}
+	
+	@Basic
+	@Column(name="update_date")
+	public String getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
+	}
+	
 	
 	
 	

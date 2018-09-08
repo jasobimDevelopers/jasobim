@@ -26,7 +26,6 @@ import com.my.spring.model.QualityQuestion;
 import com.my.spring.model.Question;
 import com.my.spring.model.QuestionFile;
 import com.my.spring.model.User;
-import com.my.spring.model.UserProject;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.AdvancedOrderService;
 import com.my.spring.service.NoticeService;
@@ -113,13 +112,9 @@ public class NoticeServiceImpl implements NoticeService {
 		// TODO Auto-generated method stub
 		DataWrapperDiy<List<CommonNotice>> result = new DataWrapperDiy<List<CommonNotice>>();
 		List<CommonNotice> resultList = new ArrayList<CommonNotice>();
-		List<UserProject> ups = new ArrayList<UserProject>();
 		User user = SessionManager.getSession(token); 
 		if(user!=null){
-			if(user.getUserType()==3){
-				ups = userProjectDao.getUserProjectListByUserId(user.getId());
-			}
-			DataWrapper<List<Notice>> gets = noticeDao.getListByUserId(pageSize,pageIndex,user.getId(),ups);
+			DataWrapper<List<Notice>> gets = noticeDao.getListByUserId(pageSize,pageIndex,user.getId());
 			Integer totalNotRead=0;
 			totalNotRead= noticeDao.getListNotRead(user.getId());
 			if(gets.getData()!=null){
@@ -279,10 +274,7 @@ public class NoticeServiceImpl implements NoticeService {
 									commonNotice.setProjectName(project.getName());
 								}
 								if(ct.getImgs()!=null){
-									Files files = fileDao.getById(Long.valueOf(ct.getImgs().split(",")[0]));
-									if(files!=null){
-										commonNotice.setImagUrl(files.getUrl());
-									}
+									commonNotice.setImagUrl(ct.getImgs().split(",")[0]);
 								}
 								User createUser=userDao.getById(ct.getCreateUser());
 								if(createUser!=null){

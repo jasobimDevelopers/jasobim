@@ -4,8 +4,11 @@ import com.my.spring.model.AllItemData;
 import com.my.spring.model.ConstructionTaskNew;
 import com.my.spring.model.ConstructionTaskNewUser;
 import com.my.spring.model.ItemNodeList;
+import com.my.spring.model.ProcessLog;
+import com.my.spring.model.ProcessLogSql;
 import com.my.spring.utils.DataWrapper;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ConstructionTaskNewDao {
@@ -13,7 +16,7 @@ public interface ConstructionTaskNewDao {
     boolean deleteConstructionTaskNew(Long id);
     boolean updateConstructionTaskNew(ConstructionTaskNew ConstructionTaskNew);
     ConstructionTaskNew getById(Long id);
-    DataWrapper<List<ConstructionTaskNew>> getConstructionTaskNewList(Integer pageIndex, Integer pageSize, ConstructionTaskNew ConstructionTaskNew);
+    DataWrapper<List<ConstructionTaskNew>> getConstructionTaskNewList(Integer pageIndex, Integer pageSize, ConstructionTaskNew ConstructionTaskNew, List<ProcessLogSql> processLogs,Date start,Date end, Integer status);
 	List<ConstructionTaskNewUser> getAboutUsers(Long projectId);
 	List<AllItemData> getAllItemData(Long id);
 	List<ItemNodeList> getAllItemLog(Long id);

@@ -13,6 +13,8 @@ import javax.persistence.Table;
 public class UserTeam {
 	private Long id;
 	private String name;
+	private String teamUserName;
+	private Long projectId;
 	private Long createUser;
 	private Date createDate;
 	private String remark;
@@ -71,6 +73,24 @@ public class UserTeam {
 	}
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	@Basic
+	@Column(name="team_user_name")
+	public String getTeamUserName() {
+		return teamUserName;
+	}
+	public void setTeamUserName(String teamUserName) {
+		this.teamUserName = teamUserName;
+	}
+	
+	@Basic
+	@Column(name="project_id")
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 	
 	

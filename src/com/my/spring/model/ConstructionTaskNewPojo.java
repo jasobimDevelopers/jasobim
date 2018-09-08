@@ -1,8 +1,12 @@
 package com.my.spring.model;
+
+import java.util.List;
+
 public class ConstructionTaskNewPojo {
 	private Long id;
 	private String name;
 	private String createUser;
+	private Long createUserId;
 	private String createDate;
 	private String constructionTaskDate;///施工任务单日期
 	private Long processDataId;
@@ -10,6 +14,7 @@ public class ConstructionTaskNewPojo {
 	private String constructType;//施工类型
 	private Integer teamType;//0、自有技工(自有技工)  1、班组技工（班组信息里面的成员）
 	private String teamUserIds;//班组技工人员（12,15,16）
+	private List<Long> teamUserIdList;
 	private Integer dayWorkHours;//白天工作时间 10小时等于一个工日
 	private Integer nightWorkHours;//夜班时间  6小时等于一个工日
 	private String tenders;///标段id
@@ -23,7 +28,9 @@ public class ConstructionTaskNewPojo {
 	private Long currentNodeId;
 	private Double salary;
 	private Long pid;
-	
+	private Long teamId;
+	private String teamName;
+	private Double dayNums;
 	public Long getId() {
 		return id;
 	}
@@ -178,6 +185,35 @@ public class ConstructionTaskNewPojo {
 	public void setSalary(Double salary) {
 		this.salary = salary;
 	}
-	
+	public Long getCreateUserId() {
+		return createUserId;
+	}
+	public void setCreateUserId(Long createUserId) {
+		this.createUserId = createUserId;
+	}
+	public List<Long> getTeamUserIdList() {
+		return teamUserIdList;
+	}
+	public void setTeamUserIdList(List<Long> teamUserIdList) {
+		this.teamUserIdList = teamUserIdList;
+	}
+	public Long getTeamId() {
+		return teamId;
+	}
+	public void setTeamId(Long teamId) {
+		this.teamId = teamId;
+	}
+	public String getTeamName() {
+		return teamName;
+	}
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
+	public Double getDayNums() {
+		return dayNums;
+	}
+	public void setDayNums(Double dayNums) {
+		this.dayNums = dayNums;
+	}
 	
 }

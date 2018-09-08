@@ -16,7 +16,8 @@
 	   <mvc:interceptors>
 	        <mvc:interceptor>
 	            <mvc:mapping path="/**"/>
-	            <mvc:exclude-mapping path="/api/user/login"/>
+	            <!-- <mvc:exclude-mapping path="/login"/> -->
+	            <mvc:exclude-mapping path="api/user/login"/>
 	            <bean class="com.my.spring.controller.FirstController"/>
 	        </mvc:interceptor>
     	</mvc:interceptors>

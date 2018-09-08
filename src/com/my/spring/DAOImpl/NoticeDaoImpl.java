@@ -76,7 +76,7 @@ public class NoticeDaoImpl extends BaseDao<Notice> implements NoticeDao {
 	}
 
 	@Override
-	public DataWrapper<List<Notice>> getListByUserId(Integer pageSize, Integer pageIndex, Long id,List<UserProject> ups) {
+	public DataWrapper<List<Notice>> getListByUserId(Integer pageSize, Integer pageIndex, Long id) {
 		DataWrapper<List<Notice>> get = new DataWrapper<List<Notice>>();
         List<Notice> ret = new ArrayList<Notice>();
         Session session = getSession();
@@ -84,13 +84,6 @@ public class NoticeDaoImpl extends BaseDao<Notice> implements NoticeDao {
         ///////////////////////////////
         criteria.addOrder(Order.desc("createDate"));
         criteria.add(Restrictions.eq("userId", id));
-        if(!ups.isEmpty()){
-        	Disjunction disjunction = Restrictions.disjunction();
-        	for(UserProject up:ups){
-        		disjunction.add(Restrictions.eq("projectId", up.getProjectId()));
-        	}
-        	criteria.add(disjunction);
-        }
         /////////////////////////////////////
         if (pageSize == null) {
 			pageSize = 10;

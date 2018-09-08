@@ -39,8 +39,8 @@ public class DepartmentServiceImpl implements DepartmentService  {
 	}
 
 	@Override
-	public DataWrapper<Void> addDepartment(String token,Department role) {
-		DataWrapper<Void> result = new DataWrapper<Void>();
+	public DataWrapper<Department> addDepartment(String token,Department role) {
+		DataWrapper<Department> result = new DataWrapper<Department>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(role!=null){
@@ -48,6 +48,8 @@ public class DepartmentServiceImpl implements DepartmentService  {
 				role.setCreateDate(new Date());
 				if(!departmentDao.addDepartment(role)){
 					result.setErrorCode(ErrorCodeEnum.Error);
+				}else{
+					result.setData(role);
 				}
 			}
 			
@@ -87,8 +89,6 @@ public class DepartmentServiceImpl implements DepartmentService  {
 						dps.setName(dpss.getName());
 						dps.setId(dpss.getId());
 						dps.setRemark(dpss.getRemark());
-						dps.setTeamUserName(dpss.getTeamUserName());
-						dps.setProjectId(dpss.getProjectId());
 						dps.setCreateDate(Parameters.getSdf().format(dpss.getCreateDate()));
 						if(dpss.getCreateUser()!=null){
 							User users = userDao.getById(dpss.getCreateUser());
@@ -121,8 +121,6 @@ public class DepartmentServiceImpl implements DepartmentService  {
 			if(dt!=null){
 				dps.setName(dt.getName());
 				dps.setRemark(dt.getRemark());
-				dps.setTeamUserName(dt.getTeamUserName());
-				dps.setProjectId(dt.getProjectId());
 				dps.setCreateDate(Parameters.getSdf().format(dt.getCreateDate()));
 				if(dt.getCreateUser()!=null){
 					User users = userDao.getById(dt.getCreateUser());

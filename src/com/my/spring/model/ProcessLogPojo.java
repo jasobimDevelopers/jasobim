@@ -8,8 +8,10 @@ public class ProcessLogPojo {
 	private String itemName;
 	private String note;
 	private Integer itemState;//节点的状态（同意、不同意）
-	private String approveUser;
-	private String nextApproveUser;
+	private String approveUser;//待审批人的姓名
+	private Long approveUserId;//待审批人的id
+	private String nextApproveUser;//下一审批岗位
+	private Long itemId;
 	private String approveDate;
 	
 	public Long getId() {
@@ -79,6 +81,18 @@ public class ProcessLogPojo {
 	}
 	public void setApproveDate(String approveDate) {
 		this.approveDate = approveDate;
+	}
+	public Long getApproveUserId() {
+		return approveUserId;
+	}
+	public void setApproveUserId(Long approveUserId) {
+		this.approveUserId = approveUserId;
+	}
+	public Long getItemId() {
+		return itemId;
+	}
+	public void setItemId(Long itemId) {
+		this.itemId = itemId;
 	}
 	
 	

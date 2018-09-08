@@ -40,6 +40,7 @@ public class Project {
     private Integer workHour;
     private Long createUser;
     private String modeFileId;
+    private String cityCode;//城市编号
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -358,6 +359,16 @@ public class Project {
 
 	public void setModeFileId(String modeFileId) {
 		this.modeFileId = modeFileId;
+	}
+
+	@Basic
+	@Column(name="city_code")
+	public String getCityCode() {
+		return cityCode;
+	}
+
+	public void setCityCode(String cityCode) {
+		this.cityCode = cityCode;
 	}
 
     

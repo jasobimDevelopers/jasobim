@@ -30,7 +30,7 @@ public class UserAvatar {
 	private static FileDao fileDao;
 	public static void main(String[] arg){
 		try {
-			createImage("王峰", new Font("黑体", Font.PLAIN, 43), new File("C:/Users/Han/Desktop/sss/" +"ceshi.png"));
+			createImage("雨祥", new Font("黑体", Font.PLAIN, 43), new File("C:/Users/Han/Desktop/" +"ceshi.png"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

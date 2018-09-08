@@ -10,6 +10,7 @@ import com.my.spring.DAO.QuestionFileDao;
 import com.my.spring.DAO.RoleDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserProjectDao;
+import com.my.spring.controller.UserAvatar;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
@@ -39,6 +40,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.awt.Font;
+import java.io.File;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -539,7 +542,21 @@ public class QuestionServiceImpl implements QuestionService {
 		        				questionpojo.setCreateUserIcon(users.getUserIconUrl());
 		        			}else{
 		        				Files files = fileService.getById(users.getUserIcon());
-		        				questionpojo.setCreateUserIcon(files.getUrl());
+		        				if(files==null){
+		        					UserAvatar userAvatar = new UserAvatar();
+		        					try {
+		        						String newUserIcon=userAvatar.CreateUserIcon(users.getRealName().substring(users.getRealName().length() -2,users.getRealName().length()));
+		        						users.setUserIconUrl(newUserIcon);
+		        						userDao.updateUser(users);
+		        						questionpojo.setCreateUserIcon(newUserIcon);
+		        					} catch (Exception e) {
+		        						// TODO Auto-generated catch block
+		        						e.printStackTrace();
+		        					}
+		        				}else{
+		        					questionpojo.setCreateUserIcon(files.getUrl());
+		        				}
+		        				
 		        			}
 		        			
 		        		}
@@ -939,9 +956,20 @@ public class QuestionServiceImpl implements QuestionService {
 	        		questionpojo.setUserId(username);
 	        		if(users.getUserIcon()!=null){
 	        			Files files = fileService.getById(users.getUserIcon());
-	        			if(files!=null){
-	        				questionpojo.setCreateUserIcon(files.getUrl());
-	        			}
+	        			if(files==null){
+        					UserAvatar userAvatar = new UserAvatar();
+        					try {
+        						String newUserIcon=userAvatar.CreateUserIcon(users.getRealName().substring(users.getRealName().length() -2,users.getRealName().length()));
+        						users.setUserIconUrl(newUserIcon);
+        						userDao.updateUser(users);
+        						questionpojo.setCreateUserIcon(newUserIcon);
+        					} catch (Exception e) {
+        						// TODO Auto-generated catch block
+        						e.printStackTrace();
+        					}
+        				}else{
+        					questionpojo.setCreateUserIcon(files.getUrl());
+        				}
 	        		}else{
 	        			questionpojo.setCreateUserIcon(users.getUserIconUrl());
 	        		}

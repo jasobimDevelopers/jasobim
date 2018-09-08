@@ -1,5 +1,6 @@
 package com.my.spring.parameters;
 import java.io.Serializable;
+
 public enum ProjectDatas implements Serializable {
 	//public static final Integer[] projectPart = {//0.Model(模型) 1.Paper,//图纸   2.Login,//登录  3.Disclose,//交底   4.Prefabricate,//预制化   
 			//5.Question,//紧急事项（问题）6.Notification,//通知 7.Production,//产值    8.Member,//班组信息 };
@@ -23,9 +24,13 @@ public enum ProjectDatas implements Serializable {
     AttenceLog_area("attenceLog",17),///考勤管理
     QuanlityChange_area("quanlity",18),//工程量变更
     ProcessData_area("processData",19),//进程管理
-    AdvancedOrder_area("advancedOrder",20),//施工任务单
-    ConstructionTask_area("constructionTask",21),//预付单
-    ProductionManager_projectDetail("projectDetail",22)//生产管理
+    ConstructionTask_area("advancedOrder",20),//施工任务单
+    AdvancedOrder_area("constructionTask",21),//预付单
+    ProductionManager_projectDetail("projectDetail",22),//生产管理
+    ConstructLog_area("construct",23),//施工日志
+    QualityFine_area("qualityFine",24),//质量罚款单
+    QuestionFine_area("questionFine",25),//安全罚款单
+    CostManager_area("costManager",26)//成本管理
     ;
     private String label;
     private Integer code;

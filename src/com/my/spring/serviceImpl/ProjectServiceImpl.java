@@ -513,6 +513,7 @@ public class ProjectServiceImpl implements ProjectService {
         				projectpojo.setDescription(dataWrapper.getData().get(i).getDescription());
         				projectpojo.setDesignUnit(dataWrapper.getData().get(i).getDesignUnit());
         				projectpojo.setLeader(dataWrapper.getData().get(i).getLeader());
+        				projectpojo.setCityCode(dataWrapper.getData().get(i).getCityCode());
         				projectpojo.setBuildingUnitUser(dataWrapper.getData().get(i).getBuildingUnitUser());
         				projectpojo.setConstructionControlUser(dataWrapper.getData().get(i).getConstructionControlUser());
         				projectpojo.setConstructionControlUnit(dataWrapper.getData().get(i).getConstructionControlUnit());

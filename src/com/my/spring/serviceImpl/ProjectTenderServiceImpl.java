@@ -124,7 +124,6 @@ public class ProjectTenderServiceImpl implements ProjectTenderService {
 		DataWrapper<List<ProjectTender>> getList = new DataWrapper<List<ProjectTender>>();
         User userInMemory = SessionManager.getSession(token);
         if(userInMemory != null) {
-        	if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
         		getList=projectTenderDao.getProjectTenderByProjectId(projectId,pageSize,pageIndex);
         		if(getList.getData()!=null){
         			dataWrapper.setCurrentPage(getList.getCurrentPage());
@@ -142,10 +141,6 @@ public class ProjectTenderServiceImpl implements ProjectTenderService {
         			}
         		}
     			
-        	}else{
-        		dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-        	}
-        	
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

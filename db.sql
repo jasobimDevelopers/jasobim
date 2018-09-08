@@ -572,3 +572,46 @@ create table project_tender(
 	update_date datetime,
 	name varchar(255)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table construct_part(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	name varchar(250)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+###施工日志
+create table construction_log(
+	id serial primary key,
+	construction_date datetime,
+	create_date datetime,
+	create_user_id bigint(20) unsigned not null,
+	project_id bigint(20) unsigned not null,
+	weather varchar(250),
+	construction_date_str varchar(255),
+	material_disclose_content varchar(255),
+	material_disclose_state int,
+	safety_disclose_content varchar(255),
+	safety_disclose_state int,
+	quality_disclose_content varchar(255),
+	quality_disclose_state int,
+	technology_disclose_content varchar(255),
+	technology_disclose_state int,
+	wind_force varchar(255),
+	temperature varchar(255),
+	emergency_state int
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+###生产记录表
+create table production_records(
+	id serial primary key,
+	construction_log_id bigint(20) unsigned not null,
+	construct_content varchar(250),
+	construct_part_id bigint(20) unsigned not null,
+	construct_part_name varchar(250),
+	create_date datetime,
+	create_user_id bigint(20) unsigned not null,
+	user_name_list varchar(255),
+	user_id_list varchar(255)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

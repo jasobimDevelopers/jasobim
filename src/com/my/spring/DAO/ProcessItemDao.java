@@ -1,5 +1,6 @@
 package com.my.spring.DAO;
 
+import com.my.spring.model.AllItemData;
 import com.my.spring.model.ItemIdMode;
 import com.my.spring.model.ProcessItem;
 import com.my.spring.model.ProcessLog;
@@ -15,4 +16,5 @@ public interface ProcessItemDao {
 	ProcessItem findProcessItem(ProcessLog processLog);
 	ItemIdMode getProcessItemByNode(Integer currentNode, Long processDataId);
 	List<ProcessItem> getProcessItemByProcessId(Long id);
+	List<AllItemData> getProcessItemListByProcessId(Long processDataId);
 }

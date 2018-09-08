@@ -95,7 +95,7 @@ public class UserLogDaoImpl extends BaseDao<UserLog> implements UserLogDao {
         		Disjunction dis = Restrictions.disjunction();
         		String[] userIdList = userIds.split(",");
         		for(int i=0;i<userIdList.length;i++){
-        			dis.add(Restrictions.eq("projectId", Long.valueOf(userIdList[i])));
+        			dis.add(Restrictions.eq("userId", Long.valueOf(userIdList[i])));
         		}
         		criteria.add(dis);
         	}

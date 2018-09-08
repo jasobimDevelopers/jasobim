@@ -1,6 +1,7 @@
 package com.my.spring.DAOImpl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -51,7 +52,7 @@ public class ConstructionLogDaoImpl extends BaseDao<ConstructionLog> implements 
 	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<ConstructionLog>> getConstructionLogsList(Integer pageIndex, Integer pageSize,
-			ConstructionLog constructionLog) {
+			ConstructionLog constructionLog,String realName,Date start,Date end) {
 		// TODO Auto-generated method stub
 		DataWrapper<List<ConstructionLog>> cls = new DataWrapper<List<ConstructionLog>>();
 		List<ConstructionLog> csl = new ArrayList<ConstructionLog>();
@@ -64,9 +65,18 @@ public class ConstructionLogDaoImpl extends BaseDao<ConstructionLog> implements 
         if(constructionLog.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", constructionLog.getProjectId()));
         }
-        if(constructionLog.getUserId()!=null){
-        	criteria.add(Restrictions.eq("userId", constructionLog.getUserId()));
+        if(realName!=null){
+        	criteria.add(Restrictions.like("projectId", constructionLog.getProjectId()));
         }
+        if(start!=null) {
+     	   //查询制定时间之后的记录  
+         criteria.add(Restrictions.ge("constructionDate",start));  
+	     }                    
+	     if(end!=null){
+	     	//查询指定时间之前的记录  
+	         criteria.add(Restrictions.le("constructionDate",end)); 
+	     }   
+        //if()
         if (pageSize == null) {
 			pageSize = 10;
 		}

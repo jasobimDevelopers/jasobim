@@ -7,11 +7,7 @@ import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 
@@ -23,14 +19,12 @@ public class ConstructionLogController {
     ConstructionLogService constructionLogService;
     @RequestMapping(value="/web/addConstructionLog", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Void> addConstructionLog(
+    public DataWrapper<ConstructionLog> addConstructionLog(
             @ModelAttribute ConstructionLog ps,
             @RequestParam(value = "token",required = true) String token,
-            HttpServletRequest request,
-            @RequestParam(value = "files",required = false) MultipartFile[] files){
-    	DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-		dataWrapper=constructionLogService.addConstructionLog(ps,token,files,request);
-        return dataWrapper;
+            @RequestParam(value = "cityNode",required = true) String cityNode,
+            @RequestParam(value = "constructDates",required = true) String constructDates){
+        return constructionLogService.addConstructionLog(ps,token,constructDates,cityNode);
     }
     
     @RequestMapping(value="/deleteConstructionLog",method=RequestMethod.GET)
@@ -40,15 +34,6 @@ public class ConstructionLogController {
             @RequestParam(value = "token",required = true) String token){
         return constructionLogService.deleteConstructionLog(id,token);
     }
-    @RequestMapping(value="/updateConstructionLog",method=RequestMethod.POST)
-    @ResponseBody
-    public DataWrapper<Void> updateConstructionLog(
-    		@ModelAttribute ConstructionLog ps,
-            @RequestParam(value = "token",required = true) String token,
-            @RequestParam(value = "files",required = false) MultipartFile[] files,
-            HttpServletRequest request){
-        return constructionLogService.updateConstructionLog(ps,token,files,request);
-    }
     
     @RequestMapping(value="/web/getConstructionLogList", method = RequestMethod.GET)
     @ResponseBody
@@ -56,8 +41,19 @@ public class ConstructionLogController {
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@RequestParam(value="start",required=false) String start,
+    		@RequestParam(value="end",required=false) String end,
+    		@RequestParam(value="userRealName",required=false) String userRealName,
     		@ModelAttribute ConstructionLog ps){
-        return constructionLogService.getConstructionLogList(token,pageIndex,pageSize,ps);
+        return constructionLogService.getConstructionLogList(token,pageIndex,pageSize,ps,start,end,userRealName);
+    }
+    @RequestMapping(value="/web/exportConstructionLog", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<String> exportConstructionLog(
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value="id",required=true) Long id,
+    		@ModelAttribute ConstructionLog ps){
+        return constructionLogService.exportConstructionLog(token,id);
     }
     
    

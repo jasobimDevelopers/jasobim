@@ -39,8 +39,8 @@ public class UserTeamServiceImpl implements UserTeamService  {
 	}
 
 	@Override
-	public DataWrapper<Void> addUserTeam(String token,UserTeam role) {
-		DataWrapper<Void> result = new DataWrapper<Void>();
+	public DataWrapper<UserTeam> addUserTeam(String token,UserTeam role) {
+		DataWrapper<UserTeam> result = new DataWrapper<UserTeam>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(role!=null){
@@ -48,6 +48,8 @@ public class UserTeamServiceImpl implements UserTeamService  {
 				role.setCreateUser(user.getId());
 				if(!userTeamDao.addUserTeam(role)){
 					result.setErrorCode(ErrorCodeEnum.Error);
+				}else{
+					result.setData(role);
 				}
 			}else{
 				result.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -89,6 +91,8 @@ public class UserTeamServiceImpl implements UserTeamService  {
 						UserTeamPojo up = new UserTeamPojo();
 						up.setId(ut.getId());
 						up.setRemark(ut.getRemark());
+						up.setTeamUserName(ut.getTeamUserName());
+						up.setProjectId(ut.getProjectId());
 						up.setName(ut.getName());
 						up.setCreateDate(Parameters.getSdf().format(ut.getCreateDate()));
 						if(ut.getCreateUser()!=null){
@@ -117,6 +121,9 @@ public class UserTeamServiceImpl implements UserTeamService  {
 				if(userTeam.getName()!=null){
 					ut.setName(userTeam.getName());
 					ut.setUpdateDate(new Date());
+				}
+				if(userTeam.getTeamUserName()!=null){
+					ut.setTeamUserName(userTeam.getTeamUserName());
 				}
 				if(!userTeamDao.updateUserTeamList(ut)){
 					result.setErrorCode(ErrorCodeEnum.Error);
