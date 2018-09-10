@@ -12,6 +12,7 @@ public class ConstructionTaskNewPojo {
 	private Long processDataId;
 	private String constructContent;//施工内容
 	private String constructType;//施工类型
+	private String createUserIcon;
 	private Integer teamType;//0、自有技工(自有技工)  1、班组技工（班组信息里面的成员）
 	private String teamUserIds;//班组技工人员（12,15,16）
 	private List<Long> teamUserIdList;
@@ -214,6 +215,12 @@ public class ConstructionTaskNewPojo {
 	}
 	public void setDayNums(Double dayNums) {
 		this.dayNums = dayNums;
+	}
+	public String getCreateUserIcon() {
+		return createUserIcon;
+	}
+	public void setCreateUserIcon(String createUserIcon) {
+		this.createUserIcon = createUserIcon;
 	}
 	
 }

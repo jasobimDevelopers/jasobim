@@ -173,8 +173,6 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 						dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
 						dataWrappers.setTotalPage(dataWrapper.getTotalPage());
 						dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
-					}else{
-						dataWrappers.setErrorCode(ErrorCodeEnum.Error);
 					}
 				}
 			}else{

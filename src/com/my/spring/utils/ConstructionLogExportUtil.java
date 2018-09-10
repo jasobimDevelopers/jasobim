@@ -19,6 +19,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import com.my.spring.model.ConstructionLogPojo;
 import com.my.spring.model.ConstructionTaskNewPojo;
 import com.my.spring.model.ProcessLogPojo;
+import com.my.spring.model.ProductionRecords;
 
 /**
 * @author 徐雨祥
@@ -28,127 +29,320 @@ import com.my.spring.model.ProcessLogPojo;
 public class ConstructionLogExportUtil {
 	public static void main(String[] arg){
         try {
-        	 List<ProcessLogPojo> logList = new ArrayList<ProcessLogPojo>();
-        	 List<ConstructionTaskNewPojo> taskList = new ArrayList<ConstructionTaskNewPojo>();
-        	 for(int i=0;i<3;i++){
-        		 ProcessLogPojo processLogPojo = new ProcessLogPojo();
-        		 processLogPojo.setApproveDate("2018-08-01 15:33:25");
-        		 processLogPojo.setApproveUser("张三");
-        		 processLogPojo.setItemName("班组长");
-        		 processLogPojo.setItemState(0);
-        		 processLogPojo.setNote("审批意见");
-        		 logList.add(processLogPojo);
-        		 ConstructionTaskNewPojo constructionTaskNewPojo = new ConstructionTaskNewPojo();
-        		 constructionTaskNewPojo.setConstructionTaskDate("2018-08-30");
-        		 constructionTaskNewPojo.setId((long)54);
-        		 constructionTaskNewPojo.setCreateDate("2018-08-25 15:30:30");
-        		 constructionTaskNewPojo.setCreateUser("xyx");
-        		 constructionTaskNewPojo.setConstructContent("小食堂主橱，办公室保洁");
-        		 constructionTaskNewPojo.setConstructPart("8井楼车库");
-        		 constructionTaskNewPojo.setName("施工任务单测试");
-        		 constructionTaskNewPojo.setConstructType("电焊工");
-        		 constructionTaskNewPojo.setTenders("标段一");
-        		 constructionTaskNewPojo.setTeamUserIds("张其华,朱小根");
-        		 constructionTaskNewPojo.setDayWorkHours(10);
-        		 constructionTaskNewPojo.setNightWorkHours(3);
-        		 constructionTaskNewPojo.setDayNums(1.5);
-        		 constructionTaskNewPojo.setSalary(320.5);
-        		 taskList.add(constructionTaskNewPojo);
-        	 }
-        	 //FileOutputStream fout = new FileOutputStream("C://Users/Han/Desktop/taskLog.xls");
-        	 FileOutputStream fout1 = new FileOutputStream("D://jasobim/tomcat_8080/webapps/ROOT/files/constructionLog");
-             //getValue(logList,taskList,"歌林小镇",fout);
-             fout1.close();
+        	ConstructionLogPojo log = new ConstructionLogPojo();
+   		 	log.setConstructionDate("2018-09-01");
+   		 	log.setEmergencyState(0);
+   		 	log.setMaterialDiscloseContent("材料进场测试");
+   		 	log.setMaterialDiscloseState(1);
+   		 	log.setQualityDiscloseContent("质量交底记录测试");
+   		 	log.setQualityDiscloseState(1);
+   		 	log.setSafetyDiscloseContent("安全交底记录测试");
+   		 	log.setSafetyDiscloseState(1);
+   		 	log.setTechnologyDiscloseContent("技术交底记录测试");
+   		 	log.setTechnologyDiscloseState(1);
+   		 	log.setDayTemperature("25-29°");
+   		 	log.setDayWeather("大雨");
+   		 	log.setDayWindForce("3级");
+        	List<ProductionRecords> productList = new  ArrayList<ProductionRecords>();
+        	for(int i=0;i<3;i++){
+        		 ProductionRecords record = new ProductionRecords();
+        		 record.setConstructContent("施工内容测试"+i);
+        		 record.setConstructPartName("施工部位测试"+i);
+        		 record.setUserNameList("张三、李四"+i);
+        		 productList.add(record);
+        	}
+        	log.setProductionRecordsList(new  ArrayList<ProductionRecords>());
+        	 FileOutputStream fout = new FileOutputStream("C://Users/Han/Desktop/constructionLog.xls");
+        	//FileOutputStream fout1 = new FileOutputStream("D://jasobim/tomcat_8080/webapps/ROOT/files/constructionLog");
+             getValue(log,"歌林小镇","黄卫国",fout);
+             fout.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
 	}
-	public static void getValue(ConstructionLogPojo log,String projectName,FileOutputStream fout){
+	public static void getValue(ConstructionLogPojo log,String projectName,String leader,FileOutputStream fout){
 		 
 		try{
 	            //1.创建工作簿
 	            HSSFWorkbook workbook = new HSSFWorkbook();
 	            //1.1创建合并单元格对象
-	            CellRangeAddress callRangeAddress1 = new CellRangeAddress(0,0,0,8);//起始行,结束行,起始列,结束列
-	            CellRangeAddress callRangeAddress2 = new CellRangeAddress(1,1,0,8);//起始行,结束行,起始列,结束列
+	            CellRangeAddress callRangeAddress1 = new CellRangeAddress(0,0,0,5);//起始行,结束行,起始列,结束列
+	            CellRangeAddress callRangeAddress2 = new CellRangeAddress(1,1,3,5);//起始行,结束行,起始列,结束列
 	            //标题
-	            CellRangeAddress callRangeAddress31 = new CellRangeAddress(2,2,0,3);//起始行,结束行,起始列,结束列
-	            CellRangeAddress callRangeAddress32 = new CellRangeAddress(2,2,4,8);//起始行,结束行,起始列,结束列
-	            CellRangeAddress callRangeAddress41 = new CellRangeAddress(3,3,0,2);//起始行,结束行,起始列,结束列
-	            CellRangeAddress callRangeAddress42 = new CellRangeAddress(3,3,3,8);//起始行,结束行,起始列,结束列
-	            CellRangeAddress callRangeAddress51 = new CellRangeAddress(4,4,0,2);//起始行,结束行,起始列,结束列
-	            CellRangeAddress callRangeAddress52 = new CellRangeAddress(4,4,3,8);//起始行,结束行,起始列,结束列
-	            CellRangeAddress callRangeAddress61 = new CellRangeAddress(5,5,0,2);//起始行,结束行,起始列,结束列
-	            CellRangeAddress callRangeAddress62 = new CellRangeAddress(5,5,3,8);//起始行,结束行,起始列,结束列
-	            CellRangeAddress callRangeAddress72 = new CellRangeAddress(6,6,1,2);//起始行,结束行,起始列,结束列
-	            
+	            CellRangeAddress callRangeAddress3 = new CellRangeAddress(3,3,1,5);//起始行,结束行,起始列,结束列
+	            CellRangeAddress callRangeAddress4 = new CellRangeAddress(4,4,0,5);//起始行,结束行,起始列,结束列
+	            ////生产情况记录表
+	            CellRangeAddress callRangeAddress5 = new CellRangeAddress(5,5,2,5);//起始行,结束行,起始列,结束列
 	            //公司名称
 	            HSSFCellStyle erStyle = createCellStyle(workbook,(short)18,true,true);
 	            erStyle.setWrapText(true);
-	            HSSFCellStyle headErStyle = createHeadCellStyle(workbook,(short)18,true,true);
-	            HSSFCellStyle noBorder=createCellStyleNoBorder(workbook,(short)11,true,true);
+	            HSSFCellStyle erStyle1 = createCellStyle(workbook,(short)12,false,true);
+	            erStyle1.setWrapText(true);
+	            HSSFCellStyle noBorder=createCellStyleNoBorder(workbook,(short)18,true,true);
+	            HSSFCellStyle leftStyle=createCellStyleLeft(workbook,(short)14,false,true);
 	            //2.创建工作表
 	            HSSFSheet sheet = workbook.createSheet("施工日志表");
 	            
 	            //2.1加载合并单元格对象
 	            sheet.addMergedRegion(callRangeAddress1);
 	            sheet.addMergedRegion(callRangeAddress2);
-	            sheet.addMergedRegion(callRangeAddress31);
-	            sheet.addMergedRegion(callRangeAddress32);
-	            sheet.addMergedRegion(callRangeAddress41);
-	            sheet.addMergedRegion(callRangeAddress42);
-	            sheet.addMergedRegion(callRangeAddress51);
-	            sheet.addMergedRegion(callRangeAddress52);
-	            sheet.addMergedRegion(callRangeAddress61);
-	            sheet.addMergedRegion(callRangeAddress62);
-	            sheet.addMergedRegion(callRangeAddress72);
-	           /* for(int i=0;i<taskList.size();i++){
-	            	sheet.addMergedRegion(new CellRangeAddress(7+i,7+i,1,2));
+	            sheet.addMergedRegion(callRangeAddress3);
+	            sheet.addMergedRegion(callRangeAddress4);
+	            sheet.addMergedRegion(callRangeAddress5);
+	            List<ProductionRecords> productList = log.getProductionRecordsList();
+	            int size=0;
+	            if(!productList.isEmpty()){
+	            	 for(int i=0;i<productList.size();i++){
+	 	            	sheet.addMergedRegion(new CellRangeAddress(6+i,6+i,2,5));
+	 	            }
+	            	 size= productList.size();
 	            }
-	            sheet.addMergedRegion(new CellRangeAddress(7+taskList.size(),7+taskList.size(),0,7));
-	            sheet.addMergedRegion(new CellRangeAddress(9+taskList.size(),9+taskList.size(),0,8));
-	            sheet.addMergedRegion(new CellRangeAddress(10+taskList.size(),10+taskList.size(),3,4));
-	            sheet.addMergedRegion(new CellRangeAddress(10+taskList.size(),10+taskList.size(),5,6));
-	            sheet.addMergedRegion(new CellRangeAddress(10+taskList.size(),10+taskList.size(),7,8));
-	            sheet.addMergedRegion(new CellRangeAddress(11+taskList.size()+logList.size(),11+taskList.size()+logList.size(),0,8));
-	            */
-	           
-	            //设置默认列宽
-	            //sheet.setDefaultColumnWidth(10);
-	           // sheet.autoSizeColumn(i); 
-	            sheet.setColumnWidth(0, 256*6);
-	            sheet.setColumnWidth(1, 256*22);
-	            sheet.setColumnWidth(5, 256*16);
+            	sheet.addMergedRegion(new CellRangeAddress(6+size,6+size,0,5));
+            	///
+            	sheet.addMergedRegion(new CellRangeAddress(7+size,7+size,0,1));
+            	sheet.addMergedRegion(new CellRangeAddress(7+size,7+size,2,5));
+            	///
+            	sheet.addMergedRegion(new CellRangeAddress(8+size,8+size,0,1));
+            	sheet.addMergedRegion(new CellRangeAddress(8+size,8+size,2,5));
+            	//
+            	sheet.addMergedRegion(new CellRangeAddress(9+size,9+size,0,1));
+            	sheet.addMergedRegion(new CellRangeAddress(9+size,9+size,2,5));
+            	//
+            	sheet.addMergedRegion(new CellRangeAddress(10+size,10+size,0,1));
+            	sheet.addMergedRegion(new CellRangeAddress(10+size,10+size,2,5));
+            	///
+            	sheet.addMergedRegion(new CellRangeAddress(11+size,11+size,1,2));
+            	sheet.addMergedRegion(new CellRangeAddress(11+size,11+size,4,5));
+	            
+	            sheet.setDefaultColumnWidth(18);
+	           // sheet.setColumnWidth(0, 256*6);
+	            //sheet.setColumnWidth(1, 256*22);
+	            //sheet.setColumnWidth(5, 256*16);
 	            //3.创建行
 	            //////////////////////////////////////////////////////////////
 	            //3.1创建头标题行;并且设置头标题
 	            HSSFRow row = sheet.createRow(0);
-	            row.setHeightInPoints(35);
+	            row.setHeightInPoints(30);
 	            HSSFCell cell = row.createCell(0);
 	    
 	            //加载单元格样式
-	            cell.setCellStyle(headErStyle);
+	            cell.setCellStyle(noBorder);
 	            
-	            cell.setCellValue("上海嘉实（集团）有限公司");
+	            cell.setCellValue(projectName+"施工日志");
 	            ///////第二行
 	            HSSFRow row1 = sheet.createRow(1);
+	            for(int j=0;j<6;j++){
+            		HSSFCell cells = row1.createCell(j);
+            		cells.setCellStyle(erStyle1);
+            	}
 	            row1.setHeightInPoints(25);
+	            //////////
 	            HSSFCell cell1 = row1.createCell(0);
-	            //加载单元格样式
-	            cell1.setCellStyle(noBorder);
+	            cell1.setCellStyle(erStyle1);
+	            cell1.setCellValue("日期");
+	            HSSFCell cell2 = row1.createCell(1);
+	            cell2.setCellStyle(erStyle1);
+	            cell2.setCellValue(log.getConstructionDate());
+	            HSSFCell cell3 = row1.createCell(2);
+	            cell3.setCellStyle(erStyle1);
+	            cell3.setCellValue("施工部位");
+	            HSSFCell cell4 = row1.createCell(3);
+	            cell4.setCellStyle(erStyle1);
+	            if(!productList.isEmpty()){
+	            	cell4.setCellValue(productList.get(0).getConstructPartName());
+	            }
+	            /////第三行
+	            HSSFRow row2 = sheet.createRow(2);
+                row2.setHeightInPoints(25);
+	            HSSFCell cell31 = row2.createCell(0);
+	            cell31.setCellStyle(erStyle1);
+	            cell31.setCellValue("天气状况");
+	            HSSFCell cell32 = row2.createCell(1);
+	            cell32.setCellStyle(erStyle1);
+	            cell32.setCellValue(log.getDayWeather());
+	            HSSFCell cell33 = row2.createCell(2);
+	            cell33.setCellStyle(erStyle1);
+	            cell33.setCellValue("风力");
+	            HSSFCell cell34 = row2.createCell(3);
+	            cell34.setCellStyle(erStyle1);
+	            cell34.setCellValue(log.getDayWindForce());
+	            HSSFCell cell35 = row2.createCell(4);
+	            cell35.setCellStyle(erStyle1);
+	            cell35.setCellValue("温度");
+	            HSSFCell cell36 = row2.createCell(5);
+	            cell36.setCellStyle(erStyle1);
+	            cell36.setCellValue(log.getDayTemperature());
+	            //////第四行
+	            HSSFRow row3 = sheet.createRow(3);
+	            for(int j=0;j<6;j++){
+            		HSSFCell cells = row3.createCell(j);
+            		cells.setCellStyle(erStyle1);
+            	}
+                row3.setHeightInPoints(25);
+	            HSSFCell cell41 = row3.createCell(0);
+	            cell41.setCellStyle(erStyle1);
+	            cell41.setCellValue("突发事件");
+	            HSSFCell cell42 = row3.createCell(1);
+	            cell42.setCellStyle(erStyle1);
+	            if(log.getEmergencyState()==0){
+	            	 cell42.setCellValue("√无/有");
+	            }
+	            if(log.getEmergencyState()==1){
+	            	cell42.setCellValue("无/有√");
+	            }
+	            ///////第五行
+	            HSSFRow row4 = sheet.createRow(4);
+	            for(int j=0;j<6;j++){
+            		HSSFCell cells = row4.createCell(j);
+            		cells.setCellStyle(erStyle1);
+            	}
+                row4.setHeightInPoints(25);
+	            HSSFCell cell51 = row4.createCell(0);
+	            cell51.setCellStyle(leftStyle);
+	            cell51.setCellValue("生产情况记录表：");
+	            ////////第六行
+	            HSSFRow row5 = sheet.createRow(5);
+	            for(int j=0;j<6;j++){
+            		HSSFCell cells = row5.createCell(j);
+            		cells.setCellStyle(erStyle1);
+            	}
+                row5.setHeightInPoints(25);
+	            HSSFCell cell61 = row5.createCell(0);
+	            cell61.setCellStyle(erStyle1);
+	            cell61.setCellValue("作业人员");
+	            HSSFCell cell62 = row5.createCell(1);
+	            cell62.setCellStyle(erStyle1);
+	            cell62.setCellValue("施工部位");
+	            HSSFCell cell63 = row5.createCell(2);
+	            cell63.setCellStyle(erStyle1);
+	            cell63.setCellValue("主要施工内容");
+	            //////第七行循环遍历内容
+	            if(!productList.isEmpty()){
+	            	for(int i=0;i<productList.size();i++){
+	            		HSSFRow row6 = sheet.createRow(6+i);
+	            		 for(int j=0;j<6;j++){
+	                 		HSSFCell cells = row6.createCell(j);
+	                 		cells.setCellStyle(erStyle1);
+	                 	}
+	                    row6.setHeightInPoints(20);
+	    	            HSSFCell cell71 = row6.createCell(0);
+	    	            cell71.setCellStyle(erStyle1);
+	    	            cell71.setCellValue(productList.get(i).getUserNameList());
+	    	            HSSFCell cell72 = row6.createCell(1);
+	    	            cell72.setCellStyle(erStyle1);
+	    	            cell72.setCellValue(productList.get(i).getConstructPartName());
+	    	            HSSFCell cell73 = row6.createCell(2);
+	    	            cell73.setCellStyle(erStyle1);
+	    	            cell73.setCellValue(productList.get(i).getConstructContent());
+	            	}
+	            }
+	            /////第七+size行
+                HSSFRow row7 = sheet.createRow(6+productList.size());
+                for(int j=0;j<6;j++){
+            		HSSFCell cells = row7.createCell(j);
+            		cells.setCellStyle(erStyle1);
+            	}
+                row7.setHeightInPoints(20);
+	            HSSFCell cell71 = row7.createCell(0);
+	            cell71.setCellStyle(leftStyle);
+	            cell71.setCellValue("技术质量安全工作记录（材料进出场记录）：");
+	            ///第八行
+	            HSSFRow row8 = sheet.createRow(7+productList.size());
+	            for(int j=0;j<6;j++){
+            		HSSFCell cells = row8.createCell(j);
+            		cells.setCellStyle(erStyle1);
+            	}
+                row8.setHeightInPoints(20);
+	            HSSFCell cell81 = row8.createCell(0);
+	            cell81.setCellStyle(erStyle1);
+	            if(log.getTechnologyDiscloseState()==0){
+	            	cell81.setCellValue("技术工作记录：          "+"√无/有");
+	            }
+	            if(log.getTechnologyDiscloseState()==1){
+	            	cell81.setCellValue("技术工作记录：          "+"无/有√");
+	            }
+	            HSSFCell cell82 = row8.createCell(2);
+	            cell82.setCellStyle(erStyle1);
+	            cell82.setCellValue(log.getTechnologyDiscloseContent());
 	            
-	            cell1.setCellValue(projectName+"项目部零星派工任务单");
-	           
-	           
-       
-                HSSFRow row10 = sheet.createRow(9);
+	            //第九行
+	            HSSFRow row9 = sheet.createRow(8+productList.size());
+	            for(int j=0;j<6;j++){
+            		HSSFCell cells = row9.createCell(j);
+            		cells.setCellStyle(erStyle1);
+            	}
+                row9.setHeightInPoints(20);
+	            HSSFCell cell91 = row9.createCell(0);
+	            cell91.setCellStyle(erStyle1);
+	            if(log.getQualityDiscloseState()==0){
+	            	cell91.setCellValue("质量工作记录：          "+"√无/有");
+	            }
+	            if(log.getQualityDiscloseState()==1){
+	            	cell91.setCellValue("质量工作记录：          "+"无/有√");
+	            }
+	            HSSFCell cell92 = row9.createCell(2);
+	            cell92.setCellStyle(erStyle1);
+	            cell92.setCellValue(log.getQualityDiscloseContent());
+	            
+	            /////第十行
+	            HSSFRow row10 = sheet.createRow(9+productList.size());
+	            for(int j=0;j<6;j++){
+            		HSSFCell cells = row10.createCell(j);
+            		cells.setCellStyle(erStyle1);
+            	}
                 row10.setHeightInPoints(20);
 	            HSSFCell cell101 = row10.createCell(0);
-	            cell101.setCellValue("审批流程：");
-	            String[] approveTitle ={"序号","审核时间","审核人","审核岗位","是否同意","审核意见"};
-	            String[] itemStateStr={"同意","不同意"};
+	            cell101.setCellStyle(erStyle1);
+	            if(log.getSafetyDiscloseState()==0){
+	            	cell101.setCellValue("安全工作记录：          "+"√无/有");
+	            }
+	            if(log.getSafetyDiscloseState()==1){
+	            	cell101.setCellValue("安全工作记录：          "+"无/有√");
+	            }
+	            HSSFCell cell102 = row10.createCell(2);
+	            cell102.setCellStyle(erStyle1);
+	            cell102.setCellValue(log.getSafetyDiscloseContent());
+	            
+	            
+	            /////第十一行
+	            HSSFRow row11 = sheet.createRow(10+productList.size());
+	            for(int j=0;j<6;j++){
+            		HSSFCell cells = row11.createCell(j);
+            		cells.setCellStyle(erStyle1);
+            	}
+                row11.setHeightInPoints(20);
+	            HSSFCell cell111 = row11.createCell(0);
+	            cell111.setCellStyle(erStyle1);
+	            if(log.getMaterialDiscloseState()==0){
+	            	cell111.setCellValue("材料进出场记录：          "+"√无/有");
+	            }
+	            if(log.getMaterialDiscloseState()==1){
+	            	cell111.setCellValue("材料进出场记录：          "+"无/有√");
+	            }
+	            HSSFCell cell112 = row11.createCell(2);
+	            cell112.setCellStyle(erStyle1);
+	            cell112.setCellValue(log.getMaterialDiscloseContent());
 	           
+	            //////第十二行
+	            HSSFRow row12 = sheet.createRow(11+productList.size());
+	            for(int j=0;j<6;j++){
+            		HSSFCell cells = row12.createCell(j);
+            		cells.setCellStyle(erStyle1);
+            	}
+                row12.setHeightInPoints(20);
+	            HSSFCell cell121 = row12.createCell(0);
+	            cell121.setCellStyle(erStyle1);
+	            cell121.setCellValue("项目负责人");
+	            HSSFCell cell122 = row12.createCell(1);
+	            cell122.setCellStyle(erStyle1);
+	            cell122.setCellValue(leader);
+	            HSSFCell cell123 = row12.createCell(3);
+	            cell123.setCellStyle(erStyle1);
+	            cell123.setCellValue("记录人");
+	            HSSFCell cell124 = row12.createCell(4);
+	            cell124.setCellStyle(erStyle1);
+	            cell124.setCellValue(log.getCreateUserName());
 	            //5.输出
 	            workbook.write(fout);
 //	            workbook.close();

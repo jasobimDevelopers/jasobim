@@ -20,9 +20,12 @@ public class ConstructionLog {
 	private String constructionDateStr;//施工日志日期
 	private Date constructionDate;
 	private Integer emergencyState;//0、无 1、有(突发事件)
-	private String weather;//天气
-	private String temperature;//温度
-	private String windForce;//风力
+	private String dayWeather;//白天天气
+	private String dayTemperature;//白天温度
+	private String dayWindForce;//白天风力
+	private String nightWeather;//夜间天气
+	private String nightTemperature;//夜间温度
+	private String nightWindForce;//夜间风力
 	private Integer technologyDiscloseState;//0、无  1、有
 	private String technologyDiscloseContent;//交底内容
 	private Integer qualityDiscloseState;// 0、无  1、有
@@ -31,7 +34,8 @@ public class ConstructionLog {
 	private String safetyDiscloseContent;//安全交底内容
 	private Integer materialDiscloseState;//0、无  1、有
 	private String materialDiscloseContent;//材料出、进场记录
-
+	private String cityCode;
+	private String projectTender;//项目标段
 	
 	@Id
 	@GeneratedValue
@@ -43,14 +47,6 @@ public class ConstructionLog {
 		this.id = id;
 	}
 	
-	@Basic 
-	@Column(name = "weather")
-	public String getWeather() {
-		return weather;
-	}
-	public void setWeather(String weather) {
-		this.weather = weather;
-	}
 	
 	@Basic 
 	@Column(name = "create_user_id")
@@ -97,23 +93,6 @@ public class ConstructionLog {
 		this.emergencyState = emergencyState;
 	}
 	
-	@Basic 
-	@Column(name = "temperature")
-	public String getTemperature() {
-		return temperature;
-	}
-	public void setTemperature(String temperature) {
-		this.temperature = temperature;
-	}
-	
-	@Basic 
-	@Column(name = "wind_force")
-	public String getWindForce() {
-		return windForce;
-	}
-	public void setWindForce(String windForce) {
-		this.windForce = windForce;
-	}
 	
 	@Basic 
 	@Column(name = "technology_disclose_state")
@@ -204,6 +183,77 @@ public class ConstructionLog {
 		this.createUserName = createUserName;
 	}
 	
+	@Basic
+	@Column(name="day_weather")
+	public String getDayWeather() {
+		return dayWeather;
+	}
+	public void setDayWeather(String dayWeather) {
+		this.dayWeather = dayWeather;
+	}
+	
+	@Basic
+	@Column(name="day_temperature")
+	public String getDayTemperature() {
+		return dayTemperature;
+	}
+	public void setDayTemperature(String dayTemperature) {
+		this.dayTemperature = dayTemperature;
+	}
+	
+	@Basic
+	@Column(name="day_wind_force")
+	public String getDayWindForce() {
+		return dayWindForce;
+	}
+	public void setDayWindForce(String dayWindForce) {
+		this.dayWindForce = dayWindForce;
+	}
+	
+	@Basic
+	@Column(name="night_weather")
+	public String getNightWeather() {
+		return nightWeather;
+	}
+	public void setNightWeather(String nightWeather) {
+		this.nightWeather = nightWeather;
+	}
+	
+	@Basic
+	@Column(name="night_temperature")
+	public String getNightTemperature() {
+		return nightTemperature;
+	}
+	public void setNightTemperature(String nightTemperature) {
+		this.nightTemperature = nightTemperature;
+	}
+	
+	@Basic
+	@Column(name="night_wind_force")
+	public String getNightWindForce() {
+		return nightWindForce;
+	}
+	public void setNightWindForce(String nightWindForce) {
+		this.nightWindForce = nightWindForce;
+	}
+	
+	@Basic
+	@Column(name="project_tender")
+	public String getProjectTender() {
+		return projectTender;
+	}
+	public void setProjectTender(String projectTender) {
+		this.projectTender = projectTender;
+	}
+	
+	@Basic
+	@Column(name="city_code")
+	public String getCityCode() {
+		return cityCode;
+	}
+	public void setCityCode(String cityCode) {
+		this.cityCode = cityCode;
+	}
 	
 	
 }

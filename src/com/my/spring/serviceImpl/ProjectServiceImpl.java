@@ -675,8 +675,6 @@ public class ProjectServiceImpl implements ProjectService {
         			}
     			}
     		}
-    			
-        		
     			dataWrappers.setData(pojoproject);
     			dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
     			dataWrappers.setCallStatus(dataWrapper.getCallStatus());

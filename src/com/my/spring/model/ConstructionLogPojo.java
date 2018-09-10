@@ -8,9 +8,12 @@ public class ConstructionLogPojo {
 	private String createDate;
 	private String constructionDate;//施工日志日期
 	private Integer emergencyState;//0、无 1、有(突发事件)
-	private String weather;//天气
-	private String temperature;//温度
-	private String windForce;//风力
+	private String dayWeather;//白天天气
+	private String dayTemperature;//白天温度
+	private String dayWindForce;//白天风力
+	private String nightWeather;//夜间天气
+	private String nightTemperature;//夜间温度
+	private String nightWindForce;//夜间风力
 	private Integer technologyDiscloseState;//0、无  1、有
 	private String technologyDiscloseContent;//交底内容
 	private Integer qualityDiscloseState;// 0、无  1、有
@@ -20,7 +23,9 @@ public class ConstructionLogPojo {
 	private Integer materialDiscloseState;//0、无  1、有
 	private String materialDiscloseContent;//材料出、进场记录
 	private String createUserName;
+	private String projectTender;//项目标段
 	private Long projectId;
+	private String cityCode;
 	private List<ProductionRecords> productionRecordsList;
 	
 	public Long getId() {
@@ -46,12 +51,6 @@ public class ConstructionLogPojo {
 		this.createUserName = createUserName;
 	}
 	
-	public String getWeather() {
-		return weather;
-	}
-	public void setWeather(String weather) {
-		this.weather = weather;
-	}
 	public Long getCreateUserId() {
 		return createUserId;
 	}
@@ -76,18 +75,7 @@ public class ConstructionLogPojo {
 	public void setEmergencyState(Integer emergencyState) {
 		this.emergencyState = emergencyState;
 	}
-	public String getTemperature() {
-		return temperature;
-	}
-	public void setTemperature(String temperature) {
-		this.temperature = temperature;
-	}
-	public String getWindForce() {
-		return windForce;
-	}
-	public void setWindForce(String windForce) {
-		this.windForce = windForce;
-	}
+	
 	public Integer getTechnologyDiscloseState() {
 		return technologyDiscloseState;
 	}
@@ -141,6 +129,54 @@ public class ConstructionLogPojo {
 	}
 	public void setProductionRecordsList(List<ProductionRecords> productionRecordsList) {
 		this.productionRecordsList = productionRecordsList;
+	}
+	public String getDayWeather() {
+		return dayWeather;
+	}
+	public void setDayWeather(String dayWeather) {
+		this.dayWeather = dayWeather;
+	}
+	public String getDayTemperature() {
+		return dayTemperature;
+	}
+	public void setDayTemperature(String dayTemperature) {
+		this.dayTemperature = dayTemperature;
+	}
+	public String getDayWindForce() {
+		return dayWindForce;
+	}
+	public void setDayWindForce(String dayWindForce) {
+		this.dayWindForce = dayWindForce;
+	}
+	public String getNightWeather() {
+		return nightWeather;
+	}
+	public void setNightWeather(String nightWeather) {
+		this.nightWeather = nightWeather;
+	}
+	public String getNightTemperature() {
+		return nightTemperature;
+	}
+	public void setNightTemperature(String nightTemperature) {
+		this.nightTemperature = nightTemperature;
+	}
+	public String getNightWindForce() {
+		return nightWindForce;
+	}
+	public void setNightWindForce(String nightWindForce) {
+		this.nightWindForce = nightWindForce;
+	}
+	public String getProjectTender() {
+		return projectTender;
+	}
+	public void setProjectTender(String projectTender) {
+		this.projectTender = projectTender;
+	}
+	public String getCityCode() {
+		return cityCode;
+	}
+	public void setCityCode(String cityCode) {
+		this.cityCode = cityCode;
 	}
 	
 	

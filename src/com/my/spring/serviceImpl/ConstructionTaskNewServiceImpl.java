@@ -14,6 +14,7 @@ import com.my.spring.DAO.ConstructionTaskNewDao;
 import com.my.spring.DAO.DepartmentUserDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserTeamDao;
+import com.my.spring.controller.UserAvatar;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
@@ -346,6 +347,35 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 							ConstructionTaskNewPojo.setTenders(tender.getName());
 						}
 						ConstructionTaskNewPojo.setCreateUserId(dataWrapper.getData().get(i).getCreateUser());
+						if(dataWrapper.getData().get(i).getCreateUser()!=null){
+							User user = userDao.getById(dataWrapper.getData().get(i).getCreateUser());
+							if(user!=null){
+								String realName = user.getRealName().substring(user.getRealName().length()-2);
+								if(user.getUserIconUrl()!=null){
+									ConstructionTaskNewPojo.setCreateUserIcon(user.getUserIconUrl());
+								}else{
+									if(user.getUserIcon()!=null){
+										Files file = fileService.getById(user.getUserIcon());
+										if(file!=null){
+											ConstructionTaskNewPojo.setCreateUserIcon(file.getUrl());
+										}else{
+											UserAvatar avatar= new UserAvatar();
+											String url=avatar.CreateUserIcon(realName);
+											ConstructionTaskNewPojo.setCreateUserIcon(url);
+											user.setUserIconUrl(url);
+											userDao.updateUser(user);
+										}
+									}else{
+										UserAvatar avatar= new UserAvatar();
+										String url=avatar.CreateUserIcon(realName);
+										ConstructionTaskNewPojo.setCreateUserIcon(url);
+										user.setUserIconUrl(url);
+										userDao.updateUser(user);
+									}
+								}
+							} 
+							
+						}
 						ConstructionTaskNewPojo.setId(dataWrapper.getData().get(i).getId());
 						ConstructionTaskNewPojo.setConstructContent(dataWrapper.getData().get(i).getConstructContent());
 						ConstructionTaskNewPojo.setConstructionName(dataWrapper.getData().get(i).getName());
@@ -431,7 +461,9 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 									List<ProcessLog> getsNot = processLogDao.getProcessLogByAboutIds(dataWrapper.getData().get(i).getProcessDataId(),dataWrapper.getData().get(i).getId());//获取待修改的节点审批记录
 									List<ProcessLog> afterGets = new ArrayList<ProcessLog>();
 									if(!gets.isEmpty()){
-										afterGets=processLogDao.getProcessLogListByInfos(dataWrapper.getData().get(i).getId(), getsNot.get(0).getId());//获取最新的待修改节点审批记录后面的审批记录
+										if(!getsNot.isEmpty()){
+											afterGets=processLogDao.getProcessLogListByInfos(dataWrapper.getData().get(i).getId(), getsNot.get(0).getId());//获取最新的待修改节点审批记录后面的审批记录
+										}
 									}
 									if(dataWrapper.getData().get(i).getUpdateDate()!=null){
 										if(dataWrapper.getData().get(i).getUpdateDate().split(",").length==getsNot.size()){

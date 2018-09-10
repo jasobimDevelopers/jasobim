@@ -1,5 +1,7 @@
 package com.my.spring.serviceImpl;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import com.my.spring.model.User;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.ConstructionLogService;
 import com.my.spring.service.FileService;
+import com.my.spring.utils.ConstructionLogExportUtil;
+import com.my.spring.utils.DataExportWordTest;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 @Service("constructionLogService")
@@ -78,16 +82,22 @@ public class ConstructionLogServiceImpl implements ConstructionLogService {
 						constructionLogPojo.setId(cl.getId());
 						constructionLogPojo.setProjectId(cl.getProjectId());
 						constructionLogPojo.setCreateUserId(cl.getCreateUserId());
-						constructionLogPojo.setWeather(cl.getWeather());
+						constructionLogPojo.setDayWeather(cl.getDayWeather());
+						constructionLogPojo.setNightWeather(cl.getNightWeather());
+						constructionLogPojo.setCityCode(cl.getCityCode());
 						constructionLogPojo.setTechnologyDiscloseContent(cl.getTechnologyDiscloseContent());
 						constructionLogPojo.setTechnologyDiscloseState(cl.getTechnologyDiscloseState());
 						constructionLogPojo.setQualityDiscloseContent(cl.getQualityDiscloseContent());
 						constructionLogPojo.setQualityDiscloseState(cl.getQualityDiscloseState());
+						constructionLogPojo.setProjectTender(cl.getProjectTender());
+						constructionLogPojo.setSafetyDiscloseState(cl.getSafetyDiscloseState());
 						constructionLogPojo.setSafetyDiscloseContent(cl.getSafetyDiscloseContent());
 						constructionLogPojo.setMaterialDiscloseContent(cl.getMaterialDiscloseContent());
 						constructionLogPojo.setMaterialDiscloseState(cl.getMaterialDiscloseState());
-						constructionLogPojo.setTemperature(cl.getTemperature());
-						constructionLogPojo.setWindForce(cl.getWindForce());
+						constructionLogPojo.setDayTemperature(cl.getDayTemperature());
+						constructionLogPojo.setNightTemperature(cl.getNightTemperature());
+						constructionLogPojo.setDayWindForce(cl.getDayWindForce());
+						constructionLogPojo.setNightWindForce(cl.getNightWindForce());
 						constructionLogPojo.setEmergencyState(cl.getEmergencyState());
 					    constructionLogPojo.setCreateUserName(cl.getCreateUserName());
 						List<ProductionRecords> productionRecordsList = new ArrayList<ProductionRecords>();
@@ -175,6 +185,17 @@ public class ConstructionLogServiceImpl implements ConstructionLogService {
 		DataWrapper<String> result = new DataWrapper<String>();
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null){
+			ConstructionLog constructionLog = new ConstructionLog();
+			constructionLog.setId(id);
+			List<ConstructionLogPojo> clpsss = new ArrayList<ConstructionLogPojo>(); 
+			clpsss=getConstructionLogList(token,null, null, constructionLog,null,null,null).getData();
+			if(!clpsss.isEmpty()){
+				ConstructionLogPojo clp = clpsss.get(0);
+				Project project = projectDao.getById(clp.getProjectId());
+				DataExportWordTest exportUtil = new DataExportWordTest();
+				String url=exportUtil.exportConstructionLogToWord(clp, project.getLeader());
+				result.setData(url);
+			}
 			
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);

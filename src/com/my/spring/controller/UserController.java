@@ -18,7 +18,6 @@ import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.User;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
-import com.my.spring.model.UserSelect;
 import com.my.spring.model.UserSelectPojo;
 import com.my.spring.model.UserWebPojo;
 import com.my.spring.service.UserService;
