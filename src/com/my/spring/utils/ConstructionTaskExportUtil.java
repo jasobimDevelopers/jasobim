@@ -87,20 +87,20 @@ public class ConstructionTaskExportUtil {
 	            CellRangeAddress callRangeAddress72 = new CellRangeAddress(6,6,1,2);//起始行,结束行,起始列,结束列
 	            
 	            //公司名称
-	            HSSFCellStyle erStyle = createCellStyle(workbook,(short)18,true,true);
+	            HSSFCellStyle erStyle = createCellStyle(workbook,(short)14,true,true);
 	            erStyle.setWrapText(true);
-	            HSSFCellStyle headErStyle = createHeadCellStyle(workbook,(short)18,true,true);
+	            HSSFCellStyle headErStyle = createHeadCellStyle(workbook,(short)14,true,true);
 	            HSSFCellStyle noBorder=createCellStyleNoBorder(workbook,(short)11,true,true);
 	            //标题样式
-	            HSSFCellStyle colStyle = createCellStyle(workbook,(short)10,false,true);
+	            HSSFCellStyle colStyle = createCellStyle(workbook,(short)9,false,true);
 	            colStyle.setWrapText(true);
-	            HSSFCellStyle colStyle1 = createCellStyle(workbook,(short)11,true,true);
+	            HSSFCellStyle colStyle1 = createCellStyle(workbook,(short)9,true,true);
 	            colStyle1.setWrapText(true);
-	            HSSFCellStyle colStyle2 = createCellStyleLeft(workbook,(short)11,true,true);
+	            HSSFCellStyle colStyle2 = createCellStyleLeft(workbook,(short)9,true,true);
 	            colStyle2.setWrapText(true);
-	            HSSFCellStyle colStyle3 = createCellStyleRight(workbook,(short)11,true,true);
+	            HSSFCellStyle colStyle3 = createCellStyleRight(workbook,(short)9,true,true);
 	            colStyle3.setWrapText(true);
-	            HSSFCellStyle colStyle4 = createCellStyleLeftNoBorder(workbook,(short)11,true,true);
+	            HSSFCellStyle colStyle4 = createCellStyleLeftNoBorder(workbook,(short)9,true,true);
 	            colStyle3.setWrapText(true);
 	            //2.创建工作表
 	            HSSFSheet sheet = workbook.createSheet("施工单表");
@@ -135,14 +135,21 @@ public class ConstructionTaskExportUtil {
 	            //设置默认列宽
 	            //sheet.setDefaultColumnWidth(10);
 	           // sheet.autoSizeColumn(i); 
-	            sheet.setColumnWidth(0, 256*6);
-	            sheet.setColumnWidth(1, 256*22);
-	            sheet.setColumnWidth(5, 256*16);
+	            sheet.setColumnWidth(0, 256*4);
+	            sheet.setColumnWidth(1, 256*11);
+	            sheet.setColumnWidth(5, 256*7);
+	            sheet.setColumnWidth(5, 256*8);
+	            sheet.setColumnWidth(5, 256*9);
+	            sheet.setColumnWidth(5, 256*15);
+	            sheet.setColumnWidth(5, 256*11);
+	            sheet.setColumnWidth(5, 256*9);
+	            sheet.setColumnWidth(5, 256*9);
+	           
 	            //3.创建行
 	            //////////////////////////////////////////////////////////////
 	            //3.1创建头标题行;并且设置头标题
 	            HSSFRow row = sheet.createRow(0);
-	            row.setHeightInPoints(35);
+	            row.setHeightInPoints(36);
 	            HSSFCell cell = row.createCell(0);
 	    
 	            //加载单元格样式
@@ -151,7 +158,7 @@ public class ConstructionTaskExportUtil {
 	            cell.setCellValue("上海嘉实（集团）有限公司");
 	            ///////第二行
 	            HSSFRow row1 = sheet.createRow(1);
-	            row1.setHeightInPoints(25);
+	            row1.setHeightInPoints(27);
 	            HSSFCell cell1 = row1.createCell(0);
 	            //加载单元格样式
 	            cell1.setCellStyle(noBorder);
@@ -164,7 +171,7 @@ public class ConstructionTaskExportUtil {
 	            String[] strNow = code.split("-");
 				code=strNow[0]+strNow[1]+strNow[2]+String.valueOf(taskList.get(0).getId());
 	            HSSFRow row2 = sheet.createRow(2);
-	            row2.setHeightInPoints(25);
+	            row2.setHeightInPoints(27);
 	            HSSFCell cell21 = row2.createCell(0);
 	            cell21.setCellStyle(colStyle4);
                 cell21.setCellValue("任务单编号："+code);
@@ -178,7 +185,7 @@ public class ConstructionTaskExportUtil {
             		HSSFCell cells = row3.createCell(j);
             		cells.setCellStyle(colStyle1);
             	}
-	            row2.setHeightInPoints(25);
+	            row2.setHeightInPoints(27);
 	            HSSFCell cell31 = row3.createCell(0);
 	            cell31.setCellStyle(colStyle1);
                 cell31.setCellValue("任务单名称");
@@ -191,7 +198,7 @@ public class ConstructionTaskExportUtil {
             		HSSFCell cells = row4.createCell(j);
             		cells.setCellStyle(colStyle1);
             	}
-	            row2.setHeightInPoints(25);
+	            row2.setHeightInPoints(27);
 	            HSSFCell cell41 = row4.createCell(0);
 	            cell41.setCellStyle(colStyle1);
                 cell41.setCellValue("项目标段");
@@ -204,7 +211,7 @@ public class ConstructionTaskExportUtil {
             		HSSFCell cells = row5.createCell(j);
             		cells.setCellStyle(colStyle1);
             	}
-	            row2.setHeightInPoints(25);
+	            row2.setHeightInPoints(27);
 	            HSSFCell cell51 = row5.createCell(0);
 	            cell51.setCellStyle(colStyle1);
                 cell51.setCellValue("任务单日期");
@@ -218,7 +225,7 @@ public class ConstructionTaskExportUtil {
             		HSSFCell cells = row6.createCell(j);
             		cells.setCellStyle(colStyle1);
             	}
-                row2.setHeightInPoints(24);
+                row2.setHeightInPoints(27);
 	            HSSFCell cell61 = row6.createCell(0);
 	            cell61.setCellStyle(colStyle1);
                 cell61.setCellValue(titleList1[0]);
@@ -238,7 +245,7 @@ public class ConstructionTaskExportUtil {
                  		HSSFCell cells = row7.createCell(j);
                  		cells.setCellStyle(colStyle1);
                  	 }
-                     row7.setHeightInPoints(20);
+                     row7.setHeightInPoints(27);
                 	for(int j=0;j<=titleList1.length;j++){
                 		if(j==0){
                 			HSSFCell cell71 = row7.createCell(j);
@@ -292,7 +299,7 @@ public class ConstructionTaskExportUtil {
              		HSSFCell cells = row8.createCell(j);
              		cells.setCellStyle(colStyle1);
              	}
-                row8.setHeightInPoints(20);
+                row8.setHeightInPoints(27);
 	            HSSFCell cell81 = row8.createCell(0);
 	            cell81.setCellStyle(colStyle);
                 cell81.setCellValue("合计");
@@ -315,7 +322,7 @@ public class ConstructionTaskExportUtil {
              		HSSFCell cells = row11.createCell(j);
              		cells.setCellStyle(colStyle1);
              	}
-                row11.setHeightInPoints(24);
+                row11.setHeightInPoints(27);
                 ///////////////////////////////
            	    HSSFCell cell111 = row11.createCell(0);
            	    cell111.setCellStyle(colStyle1);
@@ -347,7 +354,7 @@ public class ConstructionTaskExportUtil {
                   		HSSFCell cells = row12.createCell(j);
                   		cells.setCellStyle(colStyle1);
                   	}
-        	    	 row12.setHeightInPoints(20);
+        	    	 row12.setHeightInPoints(27);
                 	for(int j=0;j<=approveTitle.length;j++){
                 		if(j==0){
                 			HSSFCell cell121 = row12.createCell(j);
@@ -391,7 +398,7 @@ public class ConstructionTaskExportUtil {
               		HSSFCell cells = row13.createCell(j);
               		cells.setCellStyle(colStyle1);
               	}
-                row13.setHeightInPoints(20);
+                row13.setHeightInPoints(27);
                 HSSFCell cell131 = row13.createCell(0);
                 cell131.setCellStyle(colStyle2);
                 cell131.setCellValue("填单时间："+taskList.get(0).getCreateDate());

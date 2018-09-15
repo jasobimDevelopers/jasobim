@@ -954,24 +954,24 @@ public class QuestionServiceImpl implements QuestionService {
 	        	if(users!=null){
 	        		String username=users.getRealName();
 	        		questionpojo.setUserId(username);
-	        		if(users.getUserIcon()!=null){
-	        			Files files = fileService.getById(users.getUserIcon());
-	        			if(files==null){
-        					UserAvatar userAvatar = new UserAvatar();
-        					try {
-        						String newUserIcon=userAvatar.CreateUserIcon(users.getRealName().substring(users.getRealName().length() -2,users.getRealName().length()));
-        						users.setUserIconUrl(newUserIcon);
-        						userDao.updateUser(users);
-        						questionpojo.setCreateUserIcon(newUserIcon);
-        					} catch (Exception e) {
-        						// TODO Auto-generated catch block
-        						e.printStackTrace();
-        					}
-        				}else{
-        					questionpojo.setCreateUserIcon(files.getUrl());
-        				}
-	        		}else{
+	        		if(users.getUserIconUrl()!=null){
 	        			questionpojo.setCreateUserIcon(users.getUserIconUrl());
+	        			
+	        		}else if(users.getUserIcon()!=null){
+	        			Files files = fileService.getById(users.getUserIcon());
+	        			if(files!=null){
+	        				questionpojo.setCreateUserIcon(files.getUrl());
+	        			}
+	        		}else{
+	        			UserAvatar useravatar = new UserAvatar();
+	        			String realName=users.getRealName();
+	        			String name=realName.substring(realName.length()-2,realName.length());
+	        			String url=useravatar.CreateUserIcon(name);
+	        			questionpojo.setCreateUserIcon(url);
+	        			if(url!=null){
+	        				users.setUserIconUrl(url);
+	        				userDao.updateUser(users);
+	        			}
 	        		}
 	        	}
 	        	questionpojo.setModelFlag(dataWrappers.getData().get(i).getModelFlag());

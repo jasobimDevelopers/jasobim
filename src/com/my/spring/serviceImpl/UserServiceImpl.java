@@ -147,7 +147,9 @@ public class UserServiceImpl implements UserService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Existed);
 		} else {
 			user.setId(null);
+			user.setRoleId((long)4);
 			user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
+			user.setUserName(user.getTel());
 			//user.setUserType(UserTypeEnum.User.getType());
 			//user.setUserType(user.getUserType());
 			if(user.getRealName()!=null){
@@ -815,6 +817,9 @@ public class UserServiceImpl implements UserService {
 			}else if(userInMeMory.getUserIcon()!=null){
 				Files file = fileService.getById(userInMeMory.getUserIcon());
 				userpo.setUserIconUrl(file.getUrl());
+			}else{
+				UserAvatar avatar = new UserAvatar();
+				userpo.setUserIconUrl(avatar.CreateUserIcon("游客"));
 			}
 			userpo.setId(userInMeMory.getId());
 			userpo.setRealName(userInMeMory.getRealName());

@@ -246,15 +246,23 @@ create table budget(
 	self_id varchar(30),#序号
 	project_code varchar(30),#项目编码
 	project_name varchar(30),#项目名称
-	project_description varchar(500),#项目特征描述
 	unit varchar(30),#单位
 	quantity double,#数量
-	onePrice double,#综合单价
-	priceNum double,#合价
-	maybe_price double,#暂估价
+	quota_one double,#综合单价
+	quota_num double,#合价
+	sum_of_money_one double,#暂估价
+	sum_of_money_num double,
+	artificial_cost_one double,
+	artificial_cost_num double,
+	materials_expenses_one double,
+	materials_expenses_num double,
+	mechanical_fee_one double,
+	mechanical_fee_num double,
+	indexs int,
 	upload_date datetime,
 	user_id bigint(20) unsigned not null,
-	project_id bigint(20) unsigned not null
+	project_id bigint(20) unsigned not null,
+	budget_building_id bigint(20) unsigned not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ####班组成员

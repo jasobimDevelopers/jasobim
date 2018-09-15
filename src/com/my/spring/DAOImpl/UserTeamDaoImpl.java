@@ -9,6 +9,7 @@ import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -40,13 +41,15 @@ public class UserTeamDaoImpl extends BaseDao<UserTeam> implements UserTeamDao {
         List<UserTeam> ret = new ArrayList<UserTeam>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(UserTeam.class);
+        if(userTeam.getProjectId()!=null){
+        	criteria.add(Restrictions.eq("projectId", userTeam.getProjectId()));
+        }
         if (pageSize == null) {
 			pageSize = 1000;
 		}
         if (pageIndex == null) {
 			pageIndex = 1;
 		}
-        
         // 取总页数
         
         criteria.setProjection(Projections.rowCount());

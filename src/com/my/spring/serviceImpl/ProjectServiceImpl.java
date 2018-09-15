@@ -5,6 +5,7 @@ import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.ItemDao;
 import com.my.spring.DAO.PaperDao;
 import com.my.spring.DAO.ProjectDao;
+import com.my.spring.DAO.ProjectTenderDao;
 import com.my.spring.DAO.QuantityDao;
 import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.UserDao;
@@ -19,6 +20,7 @@ import com.my.spring.model.Paper;
 import com.my.spring.model.Project;
 import com.my.spring.model.ProjectIds;
 import com.my.spring.model.ProjectPojo;
+import com.my.spring.model.ProjectTender;
 import com.my.spring.model.Projectvs;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.Question;
@@ -62,6 +64,8 @@ public class ProjectServiceImpl implements ProjectService {
     UserDao userDao;
     @Autowired
     UserProjectDao userProjectDao;
+    @Autowired
+    ProjectTenderDao projectTenderDao;
     @Autowired
     FileService fileService;
     private String filePath1="files";
@@ -439,11 +443,29 @@ public class ProjectServiceImpl implements ProjectService {
 						if(project.getConstructionControlUser()!=null){
 							projects.setConstructionControlUser(project.getConstructionControlUser());
 						}
+						if(project.getWorkHour()!=null){
+							projects.setWorkHour(project.getWorkHour());
+						}
+						if(project.getNightWorkHour()!=null){
+							projects.setNightWorkHour(project.getNightWorkHour());
+						}
 						if(project.getConstructionControlUnit()!=null){
 							projects.setConstructionControlUnit(project.getConstructionControlUnit());
 						}
 						if(project.getDesignUnitUser()!=null){
 							projects.setDesignUnitUser(project.getDesignUnitUser());
+						}
+						if(project.getBuildingUnitUserTel()!=null){
+							projects.setBuildingUnitUserTel(project.getBuildingUnitUserTel());
+						}
+						if(project.getConstructionControlUserTel()!=null){
+							projects.setConstructionControlUserTel(project.getConstructionControlUserTel());
+						}
+						if(project.getConstructionUnitUserTel()!=null){
+							projects.setConstructionUnitUserTel(project.getConstructionUnitUserTel());
+						}
+						if(project.getDesignUnitUserTel()!=null){
+							projects.setDesignUnitUserTel(project.getDesignUnitUserTel());
 						}
 						if(project.getConstructionUnitUser()!=null){
 							projects.setConstructionUnitUser(project.getConstructionUnitUser());
@@ -472,6 +494,9 @@ public class ProjectServiceImpl implements ProjectService {
 						}
 						if(project.getVersion()!=null){
 							projects.setVersion(project.getVersion());
+						}
+						if(project.getShortName()!=null){
+							projects.setShortName(project.getShortName());
 						}
 						if(project.getPlace()!=null){
 							projects.setPlace(project.getPlace());
@@ -511,6 +536,7 @@ public class ProjectServiceImpl implements ProjectService {
         				projectpojo.setBuildingUnit(dataWrapper.getData().get(i).getBuildingUnit());
         				projectpojo.setConstructionUnit(dataWrapper.getData().get(i).getConstructionUnit());
         				projectpojo.setDescription(dataWrapper.getData().get(i).getDescription());
+        				projectpojo.setNightWorkHour(dataWrapper.getData().get(i).getNightWorkHour());
         				projectpojo.setDesignUnit(dataWrapper.getData().get(i).getDesignUnit());
         				projectpojo.setLeader(dataWrapper.getData().get(i).getLeader());
         				projectpojo.setCityCode(dataWrapper.getData().get(i).getCityCode());
@@ -521,6 +547,10 @@ public class ProjectServiceImpl implements ProjectService {
         				projectpojo.setDesignUnitUser(dataWrapper.getData().get(i).getDesignUnitUser());
         				projectpojo.setName(dataWrapper.getData().get(i).getName());
         				projectpojo.setNum(dataWrapper.getData().get(i).getNum());
+        				projectpojo.setBuildingUnitUserTel(dataWrapper.getData().get(i).getBuildingUnitUserTel());
+        				projectpojo.setConstructionControlUserTel(dataWrapper.getData().get(i).getConstructionControlUserTel());
+        				projectpojo.setConstructionUnitUserTel(dataWrapper.getData().get(i).getConstructionUnitUserTel());
+        				projectpojo.setDesignUnitUserTel(dataWrapper.getData().get(i).getDesignUnitUserTel());
         				projectpojo.setPhase(dataWrapper.getData().get(i).getPhase());
         				projectpojo.setPlace(dataWrapper.getData().get(i).getPlace());
         				projectpojo.setShortName(dataWrapper.getData().get(i).getShortName());
@@ -590,7 +620,12 @@ public class ProjectServiceImpl implements ProjectService {
         			}
     			}
     		}else{
-    			dataWrappervs=projectDao.getProjectList(pageSize, pageIndex,project,userInMemory);
+    			if(userInMemory.getUserType()==UserTypeEnum.Visitor.getType()){
+    				project.setId((long) 266);
+    				dataWrappervs=projectDao.getProjectList(pageSize, pageIndex,project,userInMemory);
+    			}else{
+    				dataWrappervs=projectDao.getProjectList(pageSize, pageIndex,project,userInMemory);
+    			}
     			if(dataWrappervs.getData()!=null){
     				for(int i=0;i<dataWrappervs.getData().size();i++){
         				ProjectPojo projectpojo=new ProjectPojo();
@@ -761,8 +796,17 @@ public class ProjectServiceImpl implements ProjectService {
 							}
 						}
 					}
+					List<ProjectTender> list = new ArrayList<ProjectTender>();
+					list=projectTenderDao.getProjectTenderByProjectId(project.getId(), 10, -1).getData();
+					projectPojo.setProjectTender(list);
+					projectPojo.setBuildingUnitUserTel(project.getBuildingUnitUserTel());
+					projectPojo.setConstructionControlUserTel(project.getConstructionControlUserTel());
+					projectPojo.setConstructionUnitUserTel(project.getConstructionUnitUserTel());
+					projectPojo.setDesignUnitUserTel(project.getDesignUnitUserTel());
+					projectPojo.setCityCode(project.getCityCode());
 					projectPojo.setModelPart(project.getModelPart().split(","));
 					projectPojo.setWorkHour(project.getWorkHour());
+					projectPojo.setNightWorkHour(project.getNightWorkHour());
 					projectPojo.setBuildingUnit(project.getBuildingUnit());
 					projectPojo.setBuildingUnitUser(project.getBuildingUnitUser());
 					projectPojo.setConstructionUnit(project.getConstructionUnit());
@@ -841,6 +885,8 @@ public class ProjectServiceImpl implements ProjectService {
         				ProjectIds pids = new ProjectIds();
         				pids.setProjectId(p.getId());
         				pids.setProjectName(p.getName());
+        				pids.setNightWorkHour(p.getNightWorkHour());
+        				pids.setWorkHour(p.getWorkHour());
         				resultList.add(pids);
         			}
         			result.setData(resultList);

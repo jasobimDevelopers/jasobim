@@ -24,10 +24,14 @@ public class Project {
     private String startDate;//施工开始時間
     private String finishedDate;///结束时间
     private String buildingUnitUser;//建设单位联系人
+    private String buildingUnitUserTel;
     private String constructionUnitUser;//施工单位联系人
+    private String constructionUnitUserTel;
     private String designUnitUser;//设计单位联系人
+    private String designUnitUserTel;
     private String constructionControlUnit;///监理单位
     private String constructionControlUser;//监理单位联系人
+    private String constructionControlUserTel;
     private String phase;//施工周期
     private String state;//上线不上线的标志0.未上线 1.已上线
     private String isIos;//1.安卓	 0.ios   2.pad模型
@@ -36,8 +40,9 @@ public class Project {
     private String teamId;
     private Date updateDate;
     private Date createDate;
-    private Integer price;
+    private Integer price;///合同价
     private Integer workHour;
+    private Integer nightWorkHour;//夜班工时
     private Long createUser;
     private String modeFileId;
     private String cityCode;//城市编号
@@ -371,6 +376,56 @@ public class Project {
 		this.cityCode = cityCode;
 	}
 
+	@Basic
+	@Column(name="night_work_hour")
+	public Integer getNightWorkHour() {
+		return nightWorkHour;
+	}
+
+	public void setNightWorkHour(Integer nightWorkHour) {
+		this.nightWorkHour = nightWorkHour;
+	}
+	
+	@Basic
+	@Column(name="building_unit_user_tel")
+	public String getBuildingUnitUserTel() {
+		return buildingUnitUserTel;
+	}
+
+	public void setBuildingUnitUserTel(String buildingUnitUserTel) {
+		this.buildingUnitUserTel = buildingUnitUserTel;
+	}
+
+	@Basic
+	@Column(name="construction_unit_user_tel")
+	public String getConstructionUnitUserTel() {
+		return constructionUnitUserTel;
+	}
+
+	public void setConstructionUnitUserTel(String constructionUnitUserTel) {
+		this.constructionUnitUserTel = constructionUnitUserTel;
+	}
+
+	@Basic
+	@Column(name="design_unit_user_tel")
+	public String getDesignUnitUserTel() {
+		return designUnitUserTel;
+	}
+
+	public void setDesignUnitUserTel(String designUnitUserTel) {
+		this.designUnitUserTel = designUnitUserTel;
+	}
+
+	@Basic
+	@Column(name="construction_control_user_tel")
+	public String getConstructionControlUserTel() {
+		return constructionControlUserTel;
+	}
+
+	public void setConstructionControlUserTel(String constructionControlUserTel) {
+		this.constructionControlUserTel = constructionControlUserTel;
+	}
+	
     
     
 }

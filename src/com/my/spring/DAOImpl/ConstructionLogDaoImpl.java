@@ -66,7 +66,7 @@ public class ConstructionLogDaoImpl extends BaseDao<ConstructionLog> implements 
         	criteria.add(Restrictions.eq("projectId", constructionLog.getProjectId()));
         }
         if(realName!=null){
-        	criteria.add(Restrictions.like("projectId", constructionLog.getProjectId()));
+        	criteria.add(Restrictions.like("createUserName", "%"+realName+"%"));
         }
         if(start!=null) {
      	   //查询制定时间之后的记录  

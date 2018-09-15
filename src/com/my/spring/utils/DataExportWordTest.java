@@ -17,6 +17,7 @@ import com.my.spring.model.AdvancedOrderPojo;
 import com.my.spring.model.ConstructionLogPojo;
 import com.my.spring.model.ConstructionTaskNewPojo;
 import com.my.spring.model.ProductionRecords;
+import com.my.spring.parameters.Parameters;
 
 import freemarker.cache.FileTemplateLoader;  
 import freemarker.cache.TemplateLoader;  
@@ -92,6 +93,7 @@ public class DataExportWordTest {
         	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         	try {
 				c.setTime(sdf.parse(constructionLog.getConstructionDate()));
+				cont.put("weekDay", Parameters.dateToWeek(constructionLog.getConstructionDate()));
 				cont.put("year", c.get(Calendar.YEAR));  
 	            cont.put("month", c.get(Calendar.MONTH)+1);  
 	            cont.put("day", c.get(Calendar.DATE));  
@@ -100,6 +102,7 @@ public class DataExportWordTest {
 				e.printStackTrace();
 			}
         }
+        
         cont.put("dayWeather", constructionLog.getDayWeather());
         cont.put("dayWindForce", constructionLog.getDayWindForce());
         cont.put("dayTemperature", constructionLog.getDayTemperature());
@@ -163,7 +166,7 @@ public class DataExportWordTest {
         } catch (Exception e) {  
             e.printStackTrace();  
         }  
-		return "files/constructionLog/施工日志.doc";
+		return "/files/constructionLog/施工日志.doc";
 	}
 	/////////预付单
 	public String exportAdvancedOrderToWord( AdvancedOrderPojo aop){

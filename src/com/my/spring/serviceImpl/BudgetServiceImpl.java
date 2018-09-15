@@ -1,11 +1,13 @@
 package com.my.spring.serviceImpl;
 
+import com.my.spring.DAO.BudgetBuildingDao;
 import com.my.spring.DAO.BudgetDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.AttenceModelPojo;
 import com.my.spring.model.Budget;
+import com.my.spring.model.BudgetBuilding;
 import com.my.spring.model.BudgetPojo;
 import com.my.spring.model.User;
 import com.my.spring.parameters.Parameters;
@@ -31,6 +33,8 @@ import javax.servlet.http.HttpServletRequest;
 public class BudgetServiceImpl implements BudgetService {
     @Autowired
     BudgetDao BudgetDao;
+    @Autowired
+    BudgetBuildingDao budgetBuildingDao;
     @Autowired
     UserDao userDao;
     @Autowired
@@ -111,17 +115,27 @@ public class BudgetServiceImpl implements BudgetService {
 					{
 						BudgetPojo mPojo =new BudgetPojo();
 						mPojo.setId(dataWrapper.getData().get(i).getId());
-						mPojo.setMaybePrice(dataWrapper.getData().get(i).getMaybePrice());
-						mPojo.setOnePrice(dataWrapper.getData().get(i).getOnePrice());
-						mPojo.setPriceNum(dataWrapper.getData().get(i).getPriceNum());
 						mPojo.setProjectCode(dataWrapper.getData().get(i).getProjectCode());
-						mPojo.setProjectDescription(dataWrapper.getData().get(i).getProjectDescription());
 						mPojo.setProjectId(dataWrapper.getData().get(i).getProjectId());
 						mPojo.setProjectName(dataWrapper.getData().get(i).getProjectName());
 						mPojo.setQuantity(dataWrapper.getData().get(i).getQuantity());
 						mPojo.setSelfId(dataWrapper.getData().get(i).getSelfId());
 						mPojo.setUnit(dataWrapper.getData().get(i).getUnit());
-						mPojo.setUserId(dataWrapper.getData().get(i).getUserId());
+						mPojo.setArtificialCostNum(dataWrapper.getData().get(i).getArtificialCostNum());
+						mPojo.setArtificialCostOne(dataWrapper.getData().get(i).getArtificialCostOne());
+						mPojo.setMaterialsExpensesNum(dataWrapper.getData().get(i).getMaterialsExpensesNum());
+						mPojo.setMaterialsExpensesOne(dataWrapper.getData().get(i).getMaterialsExpensesOne());
+						mPojo.setMechanicalFeeNum(dataWrapper.getData().get(i).getMechanicalFeeNum());
+						mPojo.setMechanicalFeeOne(dataWrapper.getData().get(i).getMechanicalFeeOne());
+						mPojo.setSumOfMoneyNum(dataWrapper.getData().get(i).getSumOfMoneyNum());
+						mPojo.setSumOfMoneyOne(dataWrapper.getData().get(i).getSumOfMoneyOne());
+						mPojo.setQuotaNum(dataWrapper.getData().get(i).getQuotaNum());
+						mPojo.setQuotaOne(dataWrapper.getData().get(i).getQuotaOne());
+						if(dataWrapper.getData().get(i).getBudgetBuildingId()!=null){
+							BudgetBuilding building = new BudgetBuilding();
+							building=budgetBuildingDao.getById(dataWrapper.getData().get(i).getBudgetBuildingId());
+							mPojo.setBuildingInfo(building.getName());
+						}
 						mPojo.setUploadDate(Parameters.getSdf().format(dataWrapper.getData().get(i).getUploadDate()));
 						if(mPojo!=null){
 							mPojoList.add(mPojo);
@@ -148,24 +162,23 @@ public class BudgetServiceImpl implements BudgetService {
     }
 
 	@Override
-	public DataWrapper<Void> importBudget(MultipartFile file, HttpServletRequest request, String token,Budget Budget) {
+	public DataWrapper<Void> importBudget(MultipartFile file, HttpServletRequest request, String token,Budget budget) {
 		// TODO Auto-generated method stub
 		DataWrapper<Void> result = new DataWrapper<Void>();
 		User userInMemory = SessionManager.getSession(token);
 		if(userInMemory!=null){
 			if(file!=null){
-				Budget.setUploadDate(new Date());
-				Budget.setUserId(userInMemory.getId());
+				budget.setUploadDate(new Date());
+				budget.setUserId(userInMemory.getId());
 				List<Budget> ms = new ArrayList<Budget>();
 				ReadBudgetExcel rm = new ReadBudgetExcel();
 				String newFileName = MD5Util.getMD5String(file.getOriginalFilename() + new Date() + UUID.randomUUID().toString()).replace(".","")
 	                    + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 				
-				ms=rm.getExcelInfo(newFileName, file);
+				ms=rm.getExcelInfo(newFileName, file,budget.getProjectId(),budget.getBudgetBuildingId());
 				if(ms.size()>0){
 					for(int i=0;i<ms.size();i++){
 						ms.get(i).setUploadDate(new Date());
-						ms.get(i).setProjectId(Budget.getProjectId());
 						ms.get(i).setUserId(userInMemory.getId());
 					}
 					if(ms.size()>0){

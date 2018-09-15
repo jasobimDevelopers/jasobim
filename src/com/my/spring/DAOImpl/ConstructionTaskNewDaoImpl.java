@@ -111,7 +111,7 @@ public class ConstructionTaskNewDaoImpl extends BaseDao<ConstructionTaskNew> imp
 
         // 真正取值
         criteria.setProjection(null);
-        if (pageSize > 0 && pageIndex > 0) {
+        if (pageSize > 0 && pageIndex >= 0) {
             criteria.setMaxResults(pageSize);// 最大显示记录数
             criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
         }

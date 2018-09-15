@@ -1,5 +1,6 @@
 package com.my.spring.model;
 
+import java.util.List;
 
 public class ProjectPojo {
 	
@@ -19,10 +20,14 @@ public class ProjectPojo {
     private String description;//項目工程描述
     private String designUnit;//设计单位
     private String designUnitUser;//设计单位负责人
+    private String designUnitUserTel;
     private String constructionUnitUser;///施工单位负责人
+    private String constructionUnitUserTel;
     private String buildingUnitUser;//建设单位负责人
+    private String buildingUnitUserTel;
     private String constructionControlUnit;//监理单位
     private String constructionControlUser;///监理单位负责人
+    private String constructionControlUserTel;
     private String version;//版本
     private String startDate;//施工時間
     private String finishedDate;
@@ -35,8 +40,10 @@ public class ProjectPojo {
     private String[] teamList;
     private String[] teamId;
     private Integer workHour;
+    private Integer nightWorkHour;
     private String fileId;
     private String cityCode;
+    private List<ProjectTender> projectTender;
     
 	public String getDesignUnitUser() {
 		return designUnitUser;
@@ -242,4 +249,41 @@ public class ProjectPojo {
 	public void setCityCode(String cityCode) {
 		this.cityCode = cityCode;
 	}
+	public List<ProjectTender> getProjectTender() {
+		return projectTender;
+	}
+	public void setProjectTender(List<ProjectTender> projectTender) {
+		this.projectTender = projectTender;
+	}
+	public Integer getNightWorkHour() {
+		return nightWorkHour;
+	}
+	public void setNightWorkHour(Integer nightWorkHour) {
+		this.nightWorkHour = nightWorkHour;
+	}
+	public String getDesignUnitUserTel() {
+		return designUnitUserTel;
+	}
+	public void setDesignUnitUserTel(String designUnitUserTel) {
+		this.designUnitUserTel = designUnitUserTel;
+	}
+	public String getConstructionUnitUserTel() {
+		return constructionUnitUserTel;
+	}
+	public void setConstructionUnitUserTel(String constructionUnitUserTel) {
+		this.constructionUnitUserTel = constructionUnitUserTel;
+	}
+	public String getBuildingUnitUserTel() {
+		return buildingUnitUserTel;
+	}
+	public void setBuildingUnitUserTel(String buildingUnitUserTel) {
+		this.buildingUnitUserTel = buildingUnitUserTel;
+	}
+	public String getConstructionControlUserTel() {
+		return constructionControlUserTel;
+	}
+	public void setConstructionControlUserTel(String constructionControlUserTel) {
+		this.constructionControlUserTel = constructionControlUserTel;
+	}
+	
 }

@@ -9,6 +9,7 @@ import com.my.spring.DAO.QualityQuestionDao;
 import com.my.spring.DAO.QuestionFileDao;
 import com.my.spring.DAO.RoleDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.controller.UserAvatar;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
@@ -909,13 +910,24 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 	        	if(users!=null){
 	        		String username=users.getRealName();
 	        		QualityQuestionpojo.setUserId(username);
-	        		if(users.getUserIcon()!=null){
+	        		if(users.getUserIconUrl()!=null){
+	        			QualityQuestionpojo.setCreateUserIcon(users.getUserIconUrl());
+	        			
+	        		}else if(users.getUserIcon()!=null){
 	        			Files files = fileService.getById(users.getUserIcon());
 	        			if(files!=null){
 	        				QualityQuestionpojo.setCreateUserIcon(files.getUrl());
 	        			}
 	        		}else{
-	        			QualityQuestionpojo.setCreateUserIcon(users.getUserIconUrl());
+	        			UserAvatar useravatar = new UserAvatar();
+	        			String realName=users.getRealName();
+	        			String name=realName.substring(realName.length()-2,realName.length());
+	        			String url=useravatar.CreateUserIcon(name);
+	        			QualityQuestionpojo.setCreateUserIcon(url);
+	        			if(url!=null){
+	        				users.setUserIconUrl(url);
+	        				userDao.updateUser(users);
+	        			}
 	        		}
 	        	}
 	        	QualityQuestionpojo.setModelFlag(dataWrappers.getData().get(i).getModelFlag());

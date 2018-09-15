@@ -62,7 +62,7 @@ public class ReadBudgetExcel {
    * @param fielName
    * @return
    */
-  public List<Budget> getExcelInfo(String fileName,MultipartFile Mfile){
+  public List<Budget> getExcelInfo(String fileName,MultipartFile Mfile,Long projectId,Long budgetBuildingId){
       
       //把spring文件上传的MultipartFile转换成CommonsMultipartFile类型
        CommonsMultipartFile cf= (CommonsMultipartFile)Mfile; //获取本地存储路径
@@ -84,7 +84,7 @@ public class ReadBudgetExcel {
           //根据新建的文件实例化输入流
           is = cf.getInputStream();
           //根据excel里面的内容读取客户信息
-          elementList = getExcelInfo(is, isExcel2003); 
+          elementList = getExcelInfo(is, isExcel2003,projectId,budgetBuildingId); 
           is.close();
       }catch(Exception e){
           e.printStackTrace();
@@ -164,7 +164,7 @@ public class ReadBudgetExcel {
    * @return
    * @throws IOException
    */
-  public  List<Budget> getExcelInfo(InputStream is,boolean isExcel2003){
+  public  List<Budget> getExcelInfo(InputStream is,boolean isExcel2003,Long projectId,Long budgetBuildingId){
        List<Budget> elementList=null;
        try{
            /** 根据版本选择创建Workbook的方式 */
@@ -177,7 +177,7 @@ public class ReadBudgetExcel {
                wb = new XSSFWorkbook(is); 
            }
            //读取Excel里面客户的信息
-           elementList=readExcelValue(wb);
+           elementList=readExcelValue(wb,projectId,budgetBuildingId);
        }
        catch (IOException e)  {  
            e.printStackTrace();  
@@ -189,7 +189,7 @@ public class ReadBudgetExcel {
    * @param wb
    * @return
    */
-  private List<Budget> readExcelValue(Workbook wb){ 
+  private List<Budget> readExcelValue(Workbook wb,Long projectId,Long budgetBuildingId){ 
       //得到第一个shell  
        Sheet sheet=wb.getSheetAt(0);
        
@@ -204,7 +204,7 @@ public class ReadBudgetExcel {
        List<Budget> elementList=new ArrayList<Budget>();
        Budget item;    
        //循环Excel行数,从第二行开始。标题不入库
-       for(int r=5;r<totalRows;r++){
+       for(int r=12;r<totalRows;r++){
     		   Row row = sheet.getRow(r);
                if (row == null) continue;
                item = new Budget();
@@ -235,26 +235,82 @@ public class ReadBudgetExcel {
                     	   String str=cell.getStringCellValue();
                     	   if(str==null || str.equals("")){
                     	   }
-                    	   item.setProjectDescription(str);
+                    	   item.setUnit(str);
                        }else if(c==4){
                     	   cell.setCellType(Cell.CELL_TYPE_STRING);
                     	   String str=cell.getStringCellValue();
-                    	   if(str==null || str.equals("")){
+                    	   if(!str.equals("")){
+                    		   item.setQuantity(Double.valueOf(str)); 
                     	   }
-                    	   item.setUnit(str);
+                    	   
                        }else if(c==5){
-                    	   item.setQuantity(cell.getNumericCellValue());
+                    	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                    	   String str=cell.getStringCellValue();
+                    	   if(!str.equals("")){
+                    		   item.setQuotaOne(Double.valueOf(str));
+                    	   }
                        }else if(c==6){
-                    	   item.setOnePrice(cell.getNumericCellValue());
+                    	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                    	   String str=cell.getStringCellValue();
+                    	   if(!str.equals("")){
+                    		   item.setQuotaNum(Double.valueOf(str));
+                    	   }
                        }else if(c==7){
-                    	   item.setPriceNum(cell.getNumericCellValue());
+                    	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                    	   String str=cell.getStringCellValue();
+                    	   if(!str.equals("")){
+                    		   item.setSumOfMoneyOne(Double.valueOf(str));
+                    	   }
                        }else if(c==8){
-                    	   item.setMaybePrice(cell.getNumericCellValue());
+                    	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                    	   String str=cell.getStringCellValue();
+                    	   if(!str.equals("")){
+                    		   item.setSumOfMoneyNum(Double.valueOf(str));
+                    	   }
+                       }else if(c==9){
+                    	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                    	   String str=cell.getStringCellValue();
+                    	   if(!str.equals("")){
+                    		   item.setArtificialCostOne(Double.valueOf(str));
+                    	   }
+                       }else if(c==10){
+                    	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                    	   String str=cell.getStringCellValue();
+                    	   if(!str.equals("")){
+                    		   item.setArtificialCostNum(Double.valueOf(str));
+                    	   }
+                       }else if(c==11){
+                    	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                    	   String str=cell.getStringCellValue();
+                    	   if(!str.equals("")){
+                    		   item.setMaterialsExpensesOne(Double.valueOf(str));
+                    	   }
+                       }else if(c==12){
+                    	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                    	   String str=cell.getStringCellValue();
+                    	   if(!str.equals("")){
+                    		   item.setMaterialsExpensesNum(Double.valueOf(str));
+                    	   }
+                       }else if(c==13){
+                    	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                    	   String str=cell.getStringCellValue();
+                    	   if(!str.equals("")){
+                    		   item.setMechanicalFeeOne(Double.valueOf(str));
+                    	   }
+                       }else if(c==14){
+                    	   cell.setCellType(Cell.CELL_TYPE_STRING);
+                    	   String str=cell.getStringCellValue();
+                    	   if(!str.equals("")){
+                    		   item.setMechanicalFeeNum(Double.valueOf(str));
+                    	   }
                        }
                    }
                }
                try{
             	   if(item!=null){
+            		   item.setProjectId(projectId);
+            		   item.setIndexs(r-11);
+            		   item.setBudgetBuildingId(budgetBuildingId);
             			elementList.add(item); 
             	   }
                }catch(Exception e){

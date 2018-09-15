@@ -1,5 +1,6 @@
 package com.my.spring.parameters;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
@@ -102,6 +103,30 @@ public class Parameters {
 		    }
 		    return flag;
 		}
+		 /**
+	     * 日期转星期
+	     * 
+	     * @param datetime
+	     * @return
+	     */
+	    public static String dateToWeek(String datetime) {
+	        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+	        String[] weekDays = { "日", "一", "二", "三", "四", "五", "六" };
+	        Calendar cal = Calendar.getInstance(); // 获得一个日历
+	        Date datet = null;
+            try {
+				datet = f.parse(datetime);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            cal.setTime(datet);
+	        int w = cal.get(Calendar.DAY_OF_WEEK) - 1; // 指示一个星期中的某天。
+	        if (w < 0)
+	            w = 0;
+	        return weekDays[w];
+	    }
+
 		public static void ListSort(List<CommonNotice> list) {
 		        Collections.sort(list, new Comparator<CommonNotice>() {
 		            @Override

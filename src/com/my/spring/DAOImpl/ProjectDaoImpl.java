@@ -217,7 +217,17 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 	public DataWrapper<List<Projectvs>> getProjectList(Integer pageSize, Integer pageIndex, Project project,
 			User userInMemory) {
 		DataWrapper<List<Projectvs>> retDataWrapper = new DataWrapper<List<Projectvs>>();
-		String sql = "select a.* from project a,user_project b where a.id=b.project_id and b.user_id="+userInMemory.getId();
+		String sql="";
+		if(project!=null){
+			if(project.getId()!=null){
+				sql = "select * from project where id="+project.getId();
+			}else{
+				sql = "select * from project where id in (select project_id from user_project where user_id="+userInMemory.getId()+")";
+			}
+		}else{
+			sql = "select * from project where id in (select project_id from user_project where user_id="+userInMemory.getId()+")";
+		}
+		
 		Session session=getSession();
 	    try{
 		    Query query = session.createSQLQuery(sql)
@@ -250,7 +260,6 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 				 .addScalar("create_date",StandardBasicTypes.DATE)
 				 .setResultTransformer(Transformers.aliasToBean(Projectvs.class)); 
 		    retDataWrapper.setData(query.list());
-            
         }catch(Exception e){
         	retDataWrapper.setErrorCode(ErrorCodeEnum.Error);
             e.printStackTrace();
@@ -270,7 +279,6 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
             e.printStackTrace();
         }
 		return ret;
-	
 	}
 
 }

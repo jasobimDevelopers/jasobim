@@ -1,12 +1,11 @@
 package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
-import com.my.spring.DAO.BudgetDao;
-import com.my.spring.model.Budget;
+import com.my.spring.DAO.BudgetBuildingDao;
+import com.my.spring.model.BudgetBuilding;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -16,40 +15,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class BudgetDaoImpl extends BaseDao<Budget> implements BudgetDao {
+public class BudgetBuildingDaoImpl extends BaseDao<BudgetBuilding> implements BudgetBuildingDao {
 
     @Override
-    public boolean addBudget(Budget m) {
+    public boolean addBudgetBuilding(BudgetBuilding m) {
         return save(m);
     }
 
     @Override
-    public boolean deleteBudget(Long id) {
+    public boolean deleteBudgetBuilding(Long id) {
         return delete(get(id));
     }
 
     @Override
-    public boolean updateBudget(Budget m) {
+    public boolean updateBudgetBuilding(BudgetBuilding m) {
         return update(m);
     }
 
-    @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<Budget>> getBudgetList( Integer pageIndex, Integer pageSize, Budget m) {
-        DataWrapper<List<Budget>> retDataWrapper = new DataWrapper<List<Budget>>();
-        List<Budget> ret = new ArrayList<Budget>();
+    public DataWrapper<List<BudgetBuilding>> getBudgetBuildingList( Integer pageIndex, Integer pageSize, BudgetBuilding m) {
+        DataWrapper<List<BudgetBuilding>> retDataWrapper = new DataWrapper<List<BudgetBuilding>>();
+        List<BudgetBuilding> ret = new ArrayList<BudgetBuilding>();
         Session session = getSession();
-        Criteria criteria = session.createCriteria(Budget.class);
-        criteria.addOrder(Order.asc("indexs"));
-       
-        if(m.getUserId()!=null){
-        	criteria.add(Restrictions.eq("userId", m.getUserId()));
-        }
+        Criteria criteria = session.createCriteria(BudgetBuilding.class);
+        criteria.addOrder(Order.asc("createDate"));
         if(m.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", m.getProjectId()));
-        }
-        if(m.getBudgetBuildingId()!=null){
-        	criteria.add(Restrictions.eq("budgetBuildingId", m.getBudgetBuildingId()));
         }
         /////////////////////////////////////
    
@@ -67,7 +58,7 @@ public class BudgetDaoImpl extends BaseDao<Budget> implements BudgetDao {
 
         // 真正取值
         criteria.setProjection(null);
-        if (pageSize > 0 && pageIndex >= 0) {
+        if (pageSize > 0 && pageIndex > 0) {
             criteria.setMaxResults(pageSize);// 最大显示记录数
             criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
         }
@@ -86,20 +77,10 @@ public class BudgetDaoImpl extends BaseDao<Budget> implements BudgetDao {
 
 
 	@Override
-	public Budget getById(Long id) {
+	public BudgetBuilding getById(Long id) {
 		// TODO Auto-generated method stub
 		return get(id);
 	}
 
-	@Override
-	public boolean addBudgetList(List<Budget> mst) {
-		// TODO Auto-generated method stub
-		return saveList(mst);
-	}
-
-
-	
-
-	
 
 }

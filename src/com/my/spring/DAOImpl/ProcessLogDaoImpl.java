@@ -32,6 +32,23 @@ public class ProcessLogDaoImpl extends BaseDao<ProcessLog> implements ProcessLog
     public boolean deleteProcessLog(Long id) {
         return delete(get(id));
     }
+    @Override
+    public boolean deleteProcessLogByAbout(Long id,Integer type) {
+    	String sql = "delete from process_log where about_id="+id+" and type="+type;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+        
+    }
 
     @SuppressWarnings("unchecked")
 	@Override

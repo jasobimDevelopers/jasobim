@@ -213,6 +213,8 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 				if(id!=null){
 					if(!constructionTaskNewDao.deleteConstructionTaskNew(id)){
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}else{
+						processLogDao.deleteProcessLogByAbout(id,0);
 					}
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
@@ -422,7 +424,11 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 								ConstructionTaskNewPojo.setCreateUser(user.getRealName());
 							}
 						}
-						ConstructionTaskNewPojo.setStatus(0);
+						if(status!=null){
+							ConstructionTaskNewPojo.setStatus(status);
+						}else{
+							ConstructionTaskNewPojo.setStatus(0);
+						}
 						ItemDataGet itemData =itemDataDao.getFirstItemByProcessDataId(dataWrapper.getData().get(i).getProcessDataId());
 						if(itemData!=null){
 							User appoveUser = userDao.getById(itemData.getApproveUser());
@@ -434,7 +440,6 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 						if(ConstructionTaskNewPojo!=null){
 							if(!itemDataList.isEmpty()){
 								/////查询任务单已有记录的所有节点信息
-									
 									List<ItemNodeList> gets = constructionTaskNewDao.getAllItemLog(dataWrapper.getData().get(i).getId());
 									if(!gets.isEmpty()){
 									////当前节点名称
@@ -477,7 +482,19 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 						}
 					}
 					if(ConstructionTaskNewPojoList!=null && ConstructionTaskNewPojoList.size()>0){
-						dataWrappers.setData(ConstructionTaskNewPojoList);
+						List<ConstructionTaskNewPojo> realResult = new ArrayList<ConstructionTaskNewPojo>();
+						if(status==null){
+							dataWrappers.setData(ConstructionTaskNewPojoList);
+						}else{
+							for(ConstructionTaskNewPojo item:ConstructionTaskNewPojoList){
+								
+								if(item.getStatus()==status){
+									realResult.add(item);
+								}
+							}
+							dataWrappers.setData(realResult);
+						}
+						
 						dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
 						dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
 						dataWrappers.setTotalPage(dataWrapper.getTotalPage());
@@ -655,7 +672,8 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 							}
 							double dayHour=gets.get(i).getDayWorkHours();
 							double nightHour=gets.get(i).getNightWorkHours();
-							Double day = dayHour/10+nightHour/6;
+							Project project = projectDao.getById(gets.get(0).getProjectId());
+							Double day = dayHour/project.getWorkHour()+nightHour/project.getNightWorkHour();
 							ConstructionTaskNewPojo.setNightWorkHours(gets.get(i).getNightWorkHours());
 							ConstructionTaskNewPojo.setDayNums(new BigDecimal(day).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
 							ConstructionTaskNewPojo.setProcessDataId(gets.get(i).getProcessDataId());
@@ -929,7 +947,7 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 			try {
 				fout = new FileOutputStream("D://jasobim/tomcat_8080/webapps/ROOT/constructionTask/taskLog.xls");
 				exportUtil.getValue(logList.getData(), taskList.getData(), project.getName(), fout);
-				result.setData("constructionTask/taskLog.xls");
+				result.setData("/constructionTask/taskLog.xls");
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

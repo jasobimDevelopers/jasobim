@@ -17,4 +17,5 @@ public interface ProcessLogDao {
 	List<ProcessLog> getProcessLogByAboutIds(Long id, Long processDataId);
 	List<ProcessLog> getProcessLogListByInfos(Long id, Long id2);
 	ProcessLog getProcessLogListByInfo(Long aboutId, Long id);
+	boolean deleteProcessLogByAbout(Long id, Integer type);
 }

@@ -42,7 +42,7 @@ public class UserAvatar {
 			 	//批量导入。参数：文件名，文件。
 			 	createImage(name, new Font("黑体", Font.PLAIN, 43), new File("D:/jasobim/tomcat_8080/webapps/userIcons/" +newFileName+ ".png"));
 			 	//createImage(name, new Font("黑体", Font.PLAIN, 43), new File("C:/Users/Han/Desktop/" +newFileName+ ".png"));
-	            return "userIcons/"+newFileName+".png";
+	            return "/userIcons/"+newFileName+".png";
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }

@@ -615,3 +615,13 @@ create table production_records(
 	user_name_list varchar(255),
 	user_id_list varchar(255)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+###预算栋号记录表
+create table budget_building(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	create_user bigint(20) unsigned not null,
+	name varchar(250),
+	create_date datetime
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
