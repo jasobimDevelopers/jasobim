@@ -1340,4 +1340,40 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+	@Override
+	public DataWrapper<Void> registerAppUserInfo(User user) {
+		DataWrapper<Void> result = new DataWrapper<Void>();
+		if(user!=null){
+			if(user.getTel()!=null){
+				User oldUser = userDao.getByUserTel(user.getTel());
+				if(oldUser!=null){
+					result.setErrorCode(ErrorCodeEnum.Phone_Existed_Error);
+					return result;
+				}
+			}
+			user.setUserType(UserTypeEnum.Visitor.getType());
+			user.setRegisterDate(new Date());
+			user.setRoleId((long)4);
+			user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
+			user.setMenuItemList("0,1,2,3,4,5,6,7,8");
+			user.setUserName(user.getTel());
+			if(user.getRealName()!=null){
+				String names=user.getRealName().substring(user.getRealName().length()-2, user.getRealName().length());
+				String url=UserAvatar.CreateUserIcon(names);
+				if(url!=null){
+					user.setUserIconUrl(url);
+				}
+			}
+			if(!userDao.addUser(user)){
+				result.setErrorCode(ErrorCodeEnum.Error);
+			}else{
+				result.setToken(SessionManager.newSession(user));
+			}
+			
+		}else{
+			result.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+		}
+		return result;
+	}
+
 }

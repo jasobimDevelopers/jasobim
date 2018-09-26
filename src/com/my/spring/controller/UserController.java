@@ -268,10 +268,16 @@ public class UserController {
 		return userService.registerUserInfo(user);
     }
 	/**
-	 * web端验证手机注册接口
+	 * 手机端端验证手机注册接口
 	 * 参数：mobile 手机号码; userName 昵称; realName 姓名; email 邮箱
 	 * 
 	 * */
+	@RequestMapping(value="/app/registerUserInfo" , method = RequestMethod.POST)
+	@ResponseBody
+	public DataWrapper<Void> registerAppUserInfo(
+			@ModelAttribute User user) {
+		return userService.registerAppUserInfo(user);
+    }
 	@RequestMapping(value="/getUserInfoSql" , method = RequestMethod.GET)
 	@ResponseBody
 	public DataWrapper<Void> getUserInfoSql(

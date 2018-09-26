@@ -3,7 +3,6 @@ package com.my.spring.DAO;
 import java.util.List;
 
 import com.my.spring.model.Mechanic;
-import com.my.spring.model.MechanicPrice;
 import com.my.spring.utils.DataWrapper;
 
 public interface MechanicDao {

@@ -1,7 +1,6 @@
 package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.AdvancedOrderCollectDao;
-import com.my.spring.DAO.AdvancedOrderDao;
 import com.my.spring.DAO.AdvancedOrderNewDao;
 import com.my.spring.DAO.NoticeDao;
 import com.my.spring.DAO.UserDao;
@@ -10,7 +9,6 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.AdvancedOrderNew;
 import com.my.spring.model.AdvancedOrderNewPojo;
 import com.my.spring.model.User;
-import com.my.spring.parameters.Parameters;
 import com.my.spring.service.AdvancedOrderNewService;
 import com.my.spring.service.FileService;
 import com.my.spring.utils.DataWrapper;
@@ -20,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,7 +37,6 @@ public class AdvancedOrderNewServiceImpl implements AdvancedOrderNewService {
     AdvancedOrderCollectDao advancedOrderCollectDao;
     @Autowired
     FileService filesService;
-    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
     @SuppressWarnings("unused")
 	private NumberToCN numberChange;
     @Override

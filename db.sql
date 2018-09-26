@@ -625,3 +625,30 @@ create table budget_building(
 	create_date datetime
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+####产值统计表（新版本）
+create table output_value(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	create_user bigint(20) unsigned not null,
+	month int,
+	year int,
+	armour_num double,
+	operating_income_num double,
+	last_month_armour_num double,
+	last_month_operating_income_num double,
+	all_operating_income_num double,
+	all_ope_armour_num double,
+	create_date datetime
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+####项目产值详情
+create table project_output_value(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	contract_price double,
+	contract_output_value double,
+	period_comparison varchar(255),
+	armour double,
+	visa_change double,
+	edit_date datetime
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

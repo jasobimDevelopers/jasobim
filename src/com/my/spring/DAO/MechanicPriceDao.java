@@ -3,7 +3,6 @@ package com.my.spring.DAO;
 import java.util.Date;
 import java.util.List;
 
-import com.my.spring.model.MechanicData;
 import com.my.spring.model.MechanicDataOfHour;
 import com.my.spring.model.MechanicDataPeople;
 import com.my.spring.model.MechanicPrice;

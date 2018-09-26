@@ -17,7 +17,7 @@ import com.my.spring.service.FeedBackService;
 import com.my.spring.utils.DataWrapper;
 
 @Controller
-@RequestMapping(value="api/feedback/addFeedback")
+@RequestMapping(value="api/feedback")
 public class FeedBackController {
 	@Autowired
 	FeedBackService feedBackService;

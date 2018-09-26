@@ -49,5 +49,6 @@ public interface UserService {
 	DataWrapper<List<ConstructionTaskNewPojo>> getConstructionTaskNewDetail(String token,
 			ConstructionTaskNew constructionTaskNew);
 	DataWrapper<List<ProcessLogPojo>> getProcessLogByConstructionId(String token, Long id, Long processDataId);
+	DataWrapper<Void> registerAppUserInfo(User user);
 	
 }

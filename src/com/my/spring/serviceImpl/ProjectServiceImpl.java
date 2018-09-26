@@ -621,7 +621,12 @@ public class ProjectServiceImpl implements ProjectService {
     			}
     		}else{
     			if(userInMemory.getUserType()==UserTypeEnum.Visitor.getType()){
-    				project.setId((long) 266);
+    				List<UserProject> projects = userProjectDao.getUserProjectListByUserId(userInMemory.getId());
+    				if(projects!=null){
+    					if(projects.isEmpty()){
+    						project.setId((long) 266);
+    					}
+    				}
     				dataWrappervs=projectDao.getProjectList(pageSize, pageIndex,project,userInMemory);
     			}else{
     				dataWrappervs=projectDao.getProjectList(pageSize, pageIndex,project,userInMemory);

@@ -1,6 +1,5 @@
 package com.my.spring.DAO;
 
-import com.my.spring.model.Item;
 import com.my.spring.model.SignUserInfo;
 import com.my.spring.utils.DataWrapper;
 
