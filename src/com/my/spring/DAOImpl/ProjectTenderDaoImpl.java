@@ -4,7 +4,9 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProjectTenderDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Mechanic;
+import com.my.spring.model.ProcessDataIndex;
 import com.my.spring.model.ProjectTender;
+import com.my.spring.model.ProjectTenderIndex;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
@@ -13,6 +15,8 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -115,4 +119,69 @@ public class ProjectTenderDaoImpl extends BaseDao<ProjectTender> implements Proj
 		 
 		return false;
 	}
+
+	@Override
+	public boolean deleteProjectTenderByUserId(Long id) {
+		String sql = "delete from item_data where user_id="+id;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+	}
+
+	@Override
+	public boolean addProjectTenderList(List<ProjectTender> newList2) {
+		// TODO Auto-generated method stub
+		return saveList(newList2);
+	}
+
+	@Override
+	public List<ProjectTenderIndex> getProjectTenderListByUserId(Long id, Long projectId, Integer pageSize,
+			Integer pageIndex) {
+		List<ProjectTenderIndex> gets=new ArrayList<ProjectTenderIndex>();
+		if(pageSize==null){
+			pageSize=10;
+		}
+		if(pageIndex==null){
+			pageIndex=0;
+		}
+		String sql = "select b.name,b.id,b.project_id as projectId,a.indexs,b.create_date as createDate,b.create_user as createUser from user_index a,user_team b where a.about_type=5 and a.about_id=b.id and a.user_id="
+		+id+" ORDER BY a.indexs asc limit"+ pageIndex+","+pageSize;
+		Session session=getSession();
+		try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("id", StandardBasicTypes.LONG)
+					 .addScalar("indexs", StandardBasicTypes.LONG)
+					 .addScalar("name", StandardBasicTypes.INTEGER)
+					 .addScalar("createDate",StandardBasicTypes.TIMESTAMP)
+					 .addScalar("createUser", StandardBasicTypes.LONG)
+					 .addScalar("projectId", StandardBasicTypes.LONG)
+					 .setResultTransformer(Transformers.aliasToBean(ProjectTenderIndex.class));
+			 	gets=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	    }
+		return gets;
+	}
+	@Override
+	public Integer getProjectTenderSizeByUserId(Long id) {
+		Integer total=0;
+		String sql = "select COUNT(*) as total from user_index where user_id="+id+" and about_type=5";
+		Session session=getSession();
+		try{
+			 Query query = session.createSQLQuery(sql);
+			 total=Integer.valueOf(query.getQueryString());
+	        }catch(Exception e){
+	            e.printStackTrace();
+	    }
+		return total;
+	}	
 }

@@ -7,6 +7,7 @@ public class RolePojo {
 	private String remark;
 	private String createDate;/////当时的时间
 	private String createUser;///用户id
+	private Long indexs;
 	private String updateDate;///修改时间
 	
 	public Long getId(){
@@ -71,6 +72,14 @@ public class RolePojo {
 
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	public Long getIndexs() {
+		return indexs;
+	}
+
+	public void setIndexs(Long indexs) {
+		this.indexs = indexs;
 	}
 	
 	

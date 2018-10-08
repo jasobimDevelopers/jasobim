@@ -1,5 +1,6 @@
 package com.my.spring.DAO;
 import com.my.spring.model.Department;
+import com.my.spring.model.UserIndexs;
 import com.my.spring.utils.DataWrapper;
 import java.util.List;
 public interface DepartmentDao {
@@ -9,4 +10,5 @@ public interface DepartmentDao {
 	boolean deleteDepartmentList(String[] ids);
 	DataWrapper<List<Department>> getDepartmentList(Integer pageIndex, Integer pageSize, Department department);
 	boolean updateDepartment(Department dp);
+	List<UserIndexs> getDepartmentListByUserId(Long userId);
 }

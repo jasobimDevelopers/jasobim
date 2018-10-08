@@ -652,3 +652,20 @@ create table project_output_value(
 	visa_change double,
 	edit_date datetime
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+##用户菜单锁定
+create table user_menu_log(
+	id serial primary key,
+	user_id bigint(20) unsigned not null,
+	menu_path varchar(255),
+	lock_status int
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+##用户模块数据排序
+create table user_index(
+	id serial primary key,
+	user_id bigint(20) unsigned not null,
+	about_id bigint(20) unsigned not null,
+	index_num bigint(20) unsigned not null,
+	about_type int 
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

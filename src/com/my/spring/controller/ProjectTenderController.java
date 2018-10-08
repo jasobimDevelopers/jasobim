@@ -1,5 +1,6 @@
 package com.my.spring.controller;
 
+import com.my.spring.model.DepartmentPojo;
 import com.my.spring.model.ProjectTender;
 import com.my.spring.model.ProjectTenderPojo;
 import com.my.spring.service.ProjectTenderService;
@@ -47,4 +48,5 @@ public class ProjectTenderController {
     		@RequestParam(value = "token",required = true) String token){
         return projectTenderService.getProjectTenderList(projectId,token,pageSize,pageIndex);
     }
+    
 }

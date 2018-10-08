@@ -20,9 +20,10 @@ public class MaterialLog {
 	private Integer logType;///0、入库  1、出库
 	private Integer num;///出库或如入库数量
 	private Integer sum;//出库或入库项，后台识别自动添加
+	private Long projectId;
 	
-	@GeneratedValue
 	@Id
+	@GeneratedValue
 	@Column(name = "id")
 	public Long getId() {
 		return id;
@@ -92,6 +93,15 @@ public class MaterialLog {
 	}
 	public void setSum(Integer sum) {
 		this.sum = sum;
+	}
+	
+	@Basic
+	@Column(name="project_id")
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 	
 	

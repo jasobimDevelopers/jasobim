@@ -13,4 +13,5 @@ public interface MenuListDao {
 	DataWrapper<List<MenuList>> getMenuLists();
 	boolean updateMenuList(MenuList ml);
 	List<MenuListCopy> getMenuParrentByChild(List<MenuListCopy> ml);
+	List<MenuList> getAllMenuList();
 }

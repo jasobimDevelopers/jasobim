@@ -8,6 +8,7 @@ public class UserTeamPojo {
 	private String remark;
 	private String teamUserName;
 	private Long projectId;
+	private Long indexs;
 	public Long getId() {
 		return id;
 	}
@@ -53,6 +54,12 @@ public class UserTeamPojo {
 	}
 	public void setTeamUserName(String teamUserName) {
 		this.teamUserName = teamUserName;
+	}
+	public Long getIndexs() {
+		return indexs;
+	}
+	public void setIndexs(Long indexs) {
+		this.indexs = indexs;
 	}
 	
 	

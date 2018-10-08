@@ -13,4 +13,5 @@ public interface OutputValueDao {
 	List<OutputValue> getBeOutputValueLists(OutputValue role);
 	DataWrapper<List<com.my.spring.model.OutputValue>> getOutputValueList(Integer pageIndex, Integer pageSize,
 			OutputValue outputValue, Date start, Date end);
+	List<OutputValue> getOutputValueListByProjectId(Long projectId);
 }

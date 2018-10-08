@@ -61,5 +61,4 @@ public class UserTeamController {
             @RequestParam(value = "token",required = false) String token){
         return userTeamService.getUserTeamList(pageIndex,pageSize,item,token);
     }
-   
 }

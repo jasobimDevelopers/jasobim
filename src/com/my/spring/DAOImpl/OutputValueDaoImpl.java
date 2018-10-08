@@ -104,7 +104,7 @@ public class OutputValueDaoImpl extends BaseDao<OutputValue> implements OutputVa
         	criteria.add(Restrictions.eq("year", role.getYear()));
         }
         if(role.getMonth()!=null){
-        	criteria.add(Restrictions.lt("month", role.getMonth()));
+        	criteria.add(Restrictions.eq("month", role.getMonth()));
         }
         try {
             ret = criteria.list();
@@ -125,6 +125,22 @@ public class OutputValueDaoImpl extends BaseDao<OutputValue> implements OutputVa
         Criteria criteria = session.createCriteria(OutputValue.class);
         if(role.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", role.getProjectId()));
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ret;
+	}
+	@Override
+	public List<OutputValue> getOutputValueListByProjectId(Long projectId) {
+		List<OutputValue> ret = new ArrayList<OutputValue>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(OutputValue.class);
+        criteria.addOrder(Order.desc("valueDate"));
+        if(projectId!=null){
+        	criteria.add(Restrictions.eq("projectId", projectId));
         }
         try {
             ret = criteria.list();

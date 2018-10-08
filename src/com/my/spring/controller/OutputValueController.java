@@ -38,7 +38,7 @@ public class OutputValueController {
         return OutputValueService.deleteOutputValueById(token,id);
     }
     
-    @RequestMapping(value="/admin/updateOutputValue",method=RequestMethod.GET)
+    @RequestMapping(value="/admin/updateOutputValue",method=RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateOutputValue(
     		@ModelAttribute OutputValue OutputValue,
@@ -64,6 +64,13 @@ public class OutputValueController {
     		@RequestParam(value = "id",required = true) Long id,
             @RequestParam(value = "token",required = false) String token){
         return OutputValueService.getOutputValueById(token,id);
+    }
+    @RequestMapping(value="/exportOutputValue",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<String> exportOutputValue(
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "token",required = true) String token){
+        return OutputValueService.exportOutputValue(token,projectId);
     }
 
 }

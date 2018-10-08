@@ -3,9 +3,14 @@ package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.RoleDao;
 import com.my.spring.model.Role;
+import com.my.spring.model.RoleIndex;
+import com.my.spring.model.UserIndexs;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,5 +60,48 @@ public class RoleDaoImpl extends BaseDao<Role> implements RoleDao {
 	public boolean deleteRoleList(String[] ids) {
 		// TODO Auto-generated method stub
 		return deleteList(ids);
+	}
+	@Override
+	public boolean deleteRoleByUserId(Long id) {
+		String sql = "delete from role where user_id="+id;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+	}
+	@Override
+	public boolean addRoleList(List<Role> newList2) {
+		// TODO Auto-generated method stub
+		return saveList(newList2);
+	}
+	@Override
+	public List<RoleIndex> getRoleListByUserId(Long id) {
+		List<RoleIndex> gets=new ArrayList<RoleIndex>();
+		String sql = "select b.name,b.id,b.menu_list as menuList,b.read_state as readState,a.indexs,b.create_date as createDate,b.create_user as createUser from user_index a,role b where a.about_type=1 and a.about_id=b.id and a.user_id="
+		+id+" ORDER BY a.indexs asc";
+		Session session=getSession();
+		try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("id", StandardBasicTypes.LONG)
+					 .addScalar("name", StandardBasicTypes.STRING)
+					 .addScalar("indexs", StandardBasicTypes.LONG)
+					 .addScalar("menuList", StandardBasicTypes.STRING)
+					 .addScalar("readState", StandardBasicTypes.INTEGER)
+					 .addScalar("createDate",StandardBasicTypes.TIMESTAMP)
+					 .addScalar("createUser", StandardBasicTypes.LONG)
+					 .setResultTransformer(Transformers.aliasToBean(RoleIndex.class));
+			 	gets=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	    }
+		return gets;
 	}
 }

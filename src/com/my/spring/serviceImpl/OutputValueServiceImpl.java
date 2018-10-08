@@ -1,4 +1,7 @@
 package com.my.spring.serviceImpl;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -6,20 +9,29 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.my.spring.DAO.OutputValueDao;
+import com.my.spring.DAO.ProjectDao;
+import com.my.spring.DAO.ProjectOutputValueDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.OutputValue;
 import com.my.spring.model.OutputValuePojo;
+import com.my.spring.model.Project;
+import com.my.spring.model.ProjectOutputValue;
 import com.my.spring.model.User;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.OutputValueService;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.ExportExcelOfOutputValue;
 import com.my.spring.utils.SessionManager;
 
 @Service("outputValueService")
 public class OutputValueServiceImpl implements OutputValueService  {
 	@Autowired
 	OutputValueDao OutputValueDao;
+	@Autowired
+	ProjectOutputValueDao projectOutputValueDao;
+	@Autowired
+	ProjectDao projectDao;
 	@Autowired
 	UserDao userDao;
 	@Override
@@ -64,44 +76,6 @@ public class OutputValueServiceImpl implements OutputValueService  {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					/*role.setLastMonthArmourNum(0.00);
-					role.setLastMonthOperatingIncomeNum(0.00);
-					role.setAllOpeArmourNum(role.getArmourNum());
-					role.setAllOperatingIncomeNum(role.getOperatingIncomeNum());
-					Double lastMonthArmourNum=0.00;
-					Double lastMonthOperatingIncomeNum=0.00;
-					Double allOperatingIncomeNum=0.00;
-					Double allOpeArmourNum=0.00;
-					List<OutputValue> gets=OutputValueDao.getOutputValueLists(role);
-					List<OutputValue> getsNow=OutputValueDao.getBeOutputValueLists(role);
-					if(!gets.isEmpty()){
-						for(int i=0;i<gets.size();i++){
-							if(gets.get(i).getMonth()<role.getMonth()){
-								lastMonthArmourNum=lastMonthArmourNum+gets.get(i).getArmourNum();
-								lastMonthOperatingIncomeNum=lastMonthOperatingIncomeNum+gets.get(i).getOperatingIncomeNum();
-								allOpeArmourNum=allOpeArmourNum+gets.get(i).getArmourNum();
-								allOperatingIncomeNum=allOperatingIncomeNum+gets.get(i).getOperatingIncomeNum();
-							}
-						}
-					}
-					if(!getsNow.isEmpty()){
-						for(int j=0;j<getsNow.size();j++){
-							allOpeArmourNum=allOpeArmourNum+getsNow.get(j).getArmourNum();
-							allOperatingIncomeNum=allOperatingIncomeNum+getsNow.get(j).getOperatingIncomeNum();
-						}
-					}
-					if(lastMonthArmourNum!=0.00){
-						role.setLastMonthArmourNum(lastMonthArmourNum);
-					}
-					if(lastMonthOperatingIncomeNum!=0.00){
-						role.setLastMonthOperatingIncomeNum(lastMonthOperatingIncomeNum);
-					}
-					if(allOperatingIncomeNum!=0.00){
-						role.setAllOperatingIncomeNum(role.getOperatingIncomeNum()+allOperatingIncomeNum);
-					}
-					if(allOpeArmourNum!=0.00){
-						role.setAllOpeArmourNum(role.getArmourNum()+allOpeArmourNum);
-					}*/
 					if(!OutputValueDao.addOutputValue(role)){
 						result.setErrorCode(ErrorCodeEnum.Error);
 					}else{
@@ -237,6 +211,79 @@ public class OutputValueServiceImpl implements OutputValueService  {
 			result.setErrorCode(ErrorCodeEnum.Error);
 		}
 		return null;
+	}
+
+	@Override
+	public DataWrapper<String> exportOutputValue(String token, Long projectId) {
+		// TODO Auto-generated method stub
+		DataWrapper<String> result = new DataWrapper<String>();
+		List<OutputValuePojo> list = new ArrayList<OutputValuePojo>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			List<OutputValue> getList = new ArrayList<OutputValue>();
+			getList = OutputValueDao.getOutputValueListByProjectId(projectId);
+			ProjectOutputValue pov = projectOutputValueDao.getByProjectId(projectId);
+			String projectName="";
+			Project project = projectDao.getById(projectId);
+			if(project!=null){
+				projectName=project.getName();
+			}
+			if(!getList.isEmpty()){
+				for(int i=0;i<getList.size();i++){
+					List<OutputValue> dps = new ArrayList<OutputValue>();
+					dps=OutputValueDao.getBeOutputValueLists(getList.get(i));
+					OutputValuePojo re = new OutputValuePojo();
+					re.setId(getList.get(i).getId());
+					re.setArmourNum(getList.get(i).getArmourNum());
+					re.setOperatingIncomeNum(getList.get(i).getOperatingIncomeNum());
+					re.setCreateDate(Parameters.getSdf().format(getList.get(i).getCreateDate()));
+					re.setCreateUser(getList.get(i).getCreateUser());
+					re.setMonth(getList.get(i).getMonth());
+					re.setYear(getList.get(i).getYear());
+					re.setProjectId(getList.get(i).getProjectId());
+					Double lastMonthArmourNum=0.00;
+					Double lastMonthOperatingIncomeNum=0.00;
+					Double allOperatingIncomeNum=0.00;
+					Double allOpeArmourNum=0.00;
+					for(int j=0;j<dps.size();j++){
+						if(getList.get(i).getYear()>dps.get(j).getYear()){
+							lastMonthArmourNum=lastMonthArmourNum+dps.get(j).getArmourNum();
+							lastMonthOperatingIncomeNum=lastMonthOperatingIncomeNum+dps.get(j).getOperatingIncomeNum();
+							allOperatingIncomeNum=allOperatingIncomeNum+dps.get(j).getOperatingIncomeNum();
+							allOpeArmourNum=allOpeArmourNum+dps.get(j).getArmourNum();
+						}
+						if(getList.get(i).getYear().equals(dps.get(j).getYear())){
+							if(getList.get(i).getMonth()>dps.get(j).getMonth()){
+								lastMonthArmourNum=lastMonthArmourNum+dps.get(j).getArmourNum();
+								lastMonthOperatingIncomeNum=lastMonthOperatingIncomeNum+dps.get(j).getOperatingIncomeNum();
+								allOperatingIncomeNum=allOperatingIncomeNum+dps.get(j).getOperatingIncomeNum();
+								allOpeArmourNum=allOpeArmourNum+dps.get(j).getArmourNum();
+							}
+						}
+					}
+					re.setLastMonthArmourNum(lastMonthArmourNum);
+					re.setLastMonthOperatingIncomeNum(lastMonthOperatingIncomeNum);
+					re.setAllOpeArmourNum(allOpeArmourNum+getList.get(i).getArmourNum());
+					re.setAllOperatingIncomeNum(allOperatingIncomeNum+getList.get(i).getOperatingIncomeNum());
+					list.add(re);
+				}
+			}
+			FileOutputStream fout;
+			try {
+				File outDir =new File("D://jasobim/tomcat_8080/webapps/ROOT/files/outputValueFiles/"+projectId+"-"+user.getId());
+				outDir.mkdirs();
+				fout = new FileOutputStream("D://jasobim/tomcat_8080/webapps/ROOT/files/outputValueFiles/"+projectId+"-"+user.getId()+"/outputValue.xls");
+				ExportExcelOfOutputValue util = new ExportExcelOfOutputValue();
+				util.getValue(list, fout,projectName,pov);
+				result.setData("/files/outputValueFiles/"+projectId+"-"+user.getId()+"/outputValue.xls");
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
 	}
 
 

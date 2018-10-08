@@ -2,6 +2,7 @@
 
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.DepartmentPojo;
 import com.my.spring.model.ItemData;
 import com.my.spring.model.ItemDataPojo;
 import com.my.spring.service.ItemDataService;

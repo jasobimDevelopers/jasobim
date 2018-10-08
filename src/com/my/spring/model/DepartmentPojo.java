@@ -12,7 +12,7 @@ public class DepartmentPojo {
 	private String createUser;
 	private String createDate;
 	private String remark;
-	
+	private Long indexs;
 	public Long getId() {
 		return id;
 	}
@@ -46,6 +46,12 @@ public class DepartmentPojo {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public Long getIndexs() {
+		return indexs;
+	}
+	public void setIndexs(Long indexs) {
+		this.indexs = indexs;
 	}
 	
 }

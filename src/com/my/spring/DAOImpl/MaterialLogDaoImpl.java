@@ -39,7 +39,7 @@ public class MaterialLogDaoImpl extends BaseDao<MaterialLog> implements Material
         List<MaterialLog> ret = new ArrayList<MaterialLog>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(MaterialLog.class);
-        criteria.addOrder(Order.asc("logDate"));
+        criteria.addOrder(Order.desc("id"));
        
         if(m.getUserId()!=null){
         	criteria.add(Restrictions.eq("userId", m.getUserId()));
@@ -49,6 +49,9 @@ public class MaterialLogDaoImpl extends BaseDao<MaterialLog> implements Material
         }
         if(m.getMaterialId()!=null){
         	criteria.add(Restrictions.eq("materialId", m.getMaterialId()));
+        }
+        if(m.getProjectId()!=null){
+        	criteria.add(Restrictions.eq("projectId", m.getProjectId()));
         }
         /////////////////////////////////////
    

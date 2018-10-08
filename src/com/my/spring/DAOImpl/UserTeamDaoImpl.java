@@ -2,14 +2,19 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.UserTeamDao;
+import com.my.spring.model.RoleIndex;
 import com.my.spring.model.UserTeam;
+import com.my.spring.model.UserTeamIndex;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -85,6 +90,52 @@ public class UserTeamDaoImpl extends BaseDao<UserTeam> implements UserTeamDao {
 	public boolean updateUserTeamList(UserTeam userTeam) {
 		// TODO Auto-generated method stub
 		return update(userTeam);
+	}
+
+	@Override
+	public boolean deleteUserTeamByUserId(Long id) {
+		String sql = "delete from user_team where user_id="+id;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+	}
+
+	@Override
+	public boolean addUserTeamList(List<UserTeam> newList2) {
+		// TODO Auto-generated method stub
+		return saveList(newList2);
+	}
+
+	@Override
+	public List<UserTeamIndex> getUserTeamListByUserId(Long id) {
+		List<UserTeamIndex> gets=new ArrayList<UserTeamIndex>();
+		String sql = "select b.name,b.id,b.team_user_name as teamUserName,b.project_id as projectId,a.indexs,b.create_date as createDate,b.create_user as createUser from user_index a,user_team b where a.about_type=2 and a.about_id=b.id and a.user_id="
+		+id+" ORDER BY a.indexs asc";
+		Session session=getSession();
+		try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("id", StandardBasicTypes.LONG)
+					 .addScalar("name", StandardBasicTypes.STRING)
+					 .addScalar("indexs", StandardBasicTypes.LONG)
+					 .addScalar("teamUserName", StandardBasicTypes.STRING)
+					 .addScalar("projectId", StandardBasicTypes.LONG)
+					 .addScalar("createDate",StandardBasicTypes.TIMESTAMP)
+					 .addScalar("createUser", StandardBasicTypes.LONG)
+					 .setResultTransformer(Transformers.aliasToBean(UserTeamIndex.class));
+			 	gets=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	    }
+		return gets;
 	}
 
 

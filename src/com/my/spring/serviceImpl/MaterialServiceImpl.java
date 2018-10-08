@@ -253,6 +253,7 @@ public class MaterialServiceImpl implements MaterialService {
 								ml.setNum(Integer.parseInt(im.getNums()));
 								ml.setUserId(userInMemory.getId());
 								ml.setIntro(finds.getMaterialName());
+								ml.setProjectId(material.getProjectId());
 								materialLogDao.addMaterialLog(ml);
 							}
 							
@@ -268,6 +269,7 @@ public class MaterialServiceImpl implements MaterialService {
 								ml.setNum(Integer.parseInt(im.getNums()));
 								ml.setUserId(userInMemory.getId());
 								ml.setIntro(m.getMaterialName());
+								ml.setProjectId(material.getProjectId());
 								materialLogDao.addMaterialLog(ml);
 							}
 						}
@@ -353,6 +355,7 @@ public class MaterialServiceImpl implements MaterialService {
 								ml.setNum(Integer.parseInt(im.getNums()));
 								ml.setUserId(userInMemory.getId());
 								ml.setIntro(finds.getMaterialName());
+								ml.setProjectId(material.getProjectId());
 								materialLogDao.addMaterialLog(ml);
 							}
 							
@@ -367,6 +370,7 @@ public class MaterialServiceImpl implements MaterialService {
 								ml.setNum(Integer.parseInt(im.getNums()));
 								ml.setUserId(userInMemory.getId());
 								ml.setIntro(m.getMaterialName());
+								ml.setProjectId(material.getProjectId());
 								materialLogDao.addMaterialLog(ml);
 							}
 						}

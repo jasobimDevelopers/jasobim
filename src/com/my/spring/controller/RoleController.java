@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.my.spring.model.Department;
 import com.my.spring.model.Role;
 import com.my.spring.model.RolePojo;
 import com.my.spring.service.RoleService;
@@ -53,6 +54,5 @@ public class RoleController {
             @RequestParam(value = "token",required = false) String token){
         return roleService.getRoleList(token);
     }
-   
 
 }

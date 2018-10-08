@@ -12,4 +12,5 @@ public interface OutputValueService {
 			String token,String dateStart,String dateFinished);
 	DataWrapper<OutputValue> getOutputValueById(String token, Long id);
 	DataWrapper<Void> updateOutputValue(String token, OutputValue outputValue);
+	DataWrapper<String> exportOutputValue(String token, Long projectId);
 }

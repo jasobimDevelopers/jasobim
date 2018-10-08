@@ -10,7 +10,7 @@ public class ProcessDataPojo {
 	private Long currentApproveUser;
 	private Integer state;
 	private String currentItemName;
-	
+	private Long indexs;
 	public Long getId() {
 		return id;
 	}
@@ -69,6 +69,12 @@ public class ProcessDataPojo {
 	}
 	public void setCurrentItemName(String currentItemName) {
 		this.currentItemName = currentItemName;
+	}
+	public Long getIndexs() {
+		return indexs;
+	}
+	public void setIndexs(Long indexs) {
+		this.indexs = indexs;
 	}
 	
 	

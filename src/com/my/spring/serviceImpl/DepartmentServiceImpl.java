@@ -8,13 +8,19 @@ import org.springframework.stereotype.Service;
 
 import com.my.spring.DAO.DepartmentDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.UserIndexDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Department;
 import com.my.spring.model.DepartmentPojo;
+import com.my.spring.model.MaxIndex;
 import com.my.spring.model.User;
+import com.my.spring.model.UserIndex;
+import com.my.spring.model.UserIndexUserId;
+import com.my.spring.model.UserIndexs;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.DepartmentService;
+import com.my.spring.service.UserIndexService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
@@ -22,6 +28,10 @@ import com.my.spring.utils.SessionManager;
 public class DepartmentServiceImpl implements DepartmentService  {
 	@Autowired
 	DepartmentDao departmentDao;
+	@Autowired
+	UserIndexService userIndexService;
+	@Autowired
+	UserIndexDao userIndexDao;
 	@Autowired
 	UserDao userDao;
 	@Override
@@ -31,6 +41,8 @@ public class DepartmentServiceImpl implements DepartmentService  {
 		if(user!=null){
 			if(!departmentDao.deleteDepartment(id)){
 				result.setErrorCode(ErrorCodeEnum.Error);
+			}else{
+				userIndexService.deleteUserIndexByAboutId(0, id);
 			}
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
@@ -49,6 +61,20 @@ public class DepartmentServiceImpl implements DepartmentService  {
 				if(!departmentDao.addDepartment(role)){
 					result.setErrorCode(ErrorCodeEnum.Error);
 				}else{
+					List<UserIndex> indexList = new ArrayList<UserIndex>();
+					List<UserIndexUserId> idList=userIndexDao.getUserIndexListByGroup();
+					if(!idList.isEmpty()){
+						for(int i=0;i<idList.size();i++){
+							MaxIndex max=userIndexDao.getIndexMaxByUserId(idList.get(i).getId());
+							UserIndex userIndex = new UserIndex();
+							userIndex.setAboutType(0);
+							userIndex.setIndexs(max.getIndexs()+1);
+							userIndex.setUserId(idList.get(i).getId());
+							userIndex.setAboutId(role.getId());
+							indexList.add(userIndex);
+						}
+						userIndexDao.addUserIndexList(indexList);
+					}
 					result.setData(role);
 				}
 			}
@@ -81,25 +107,36 @@ public class DepartmentServiceImpl implements DepartmentService  {
 		List<DepartmentPojo> dpp = new ArrayList<DepartmentPojo>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			DataWrapper<List<Department>> dt = departmentDao.getDepartmentList(pageIndex,pageSize,department);
-			if(dt!=null){
-				if(dt.getData().size()>0){
-					for(Department dpss:dt.getData()){
+			UserIndex userIndex = new UserIndex();
+			userIndex.setAboutType(0);
+			userIndex.setUserId(user.getId());
+			DataWrapper<List<Department>> dt = new DataWrapper<List<Department>>();
+			List<UserIndexs> get=departmentDao.getDepartmentListByUserId(user.getId());
+			if(get!=null){
+				if(get.isEmpty()){
+					dt = departmentDao.getDepartmentList(pageIndex,pageSize,department);
+					if(dt!=null){
+						if(dt.getData().size()>0){
+							for(int i=0;i<dt.getData().size();i++){
+								DepartmentPojo dps = new DepartmentPojo();
+								dps.setName(dt.getData().get(i).getName());
+								dps.setId(dt.getData().get(i).getId());
+								dps.setIndexs((long)(i+1));
+								dpp.add(dps);
+							}
+						}
+					}
+				}else{
+					for(UserIndexs dpss:get){
 						DepartmentPojo dps = new DepartmentPojo();
 						dps.setName(dpss.getName());
 						dps.setId(dpss.getId());
-						dps.setRemark(dpss.getRemark());
-						dps.setCreateDate(Parameters.getSdf().format(dpss.getCreateDate()));
-						if(dpss.getCreateUser()!=null){
-							User users = userDao.getById(dpss.getCreateUser());
-							if(users!=null){
-								dps.setCreateUser(users.getRealName());
-							}
-						}
+						dps.setIndexs(dpss.getIndexs());
 						dpp.add(dps);
 					}
 				}
 			}
+			
 			dp.setData(dpp);
 		}else{
 			dp.setErrorCode(ErrorCodeEnum.User_Not_Logined);

@@ -144,5 +144,18 @@ public class MenuListDaoImpl extends BaseDao<MenuList> implements MenuListDao {
 		 
         return dataWrapper;
 	}
+	@Override
+	public List<MenuList> getAllMenuList() {
+		List<MenuList> ret = new ArrayList<MenuList>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(MenuList.class);
+//        criteria.addOrder(Order.desc("publishDate"));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		return ret;
+	}
 	
 }

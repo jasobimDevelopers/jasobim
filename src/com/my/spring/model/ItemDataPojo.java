@@ -9,6 +9,8 @@ public class ItemDataPojo {
 	private String updateDate;
 	private String workName;
 	private String updateUser;
+	private Long indexs;
+	
 	public Long getId() {
 		return id;
 	}
@@ -63,6 +65,12 @@ public class ItemDataPojo {
 	}
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
+	}
+	public Long getIndexs() {
+		return indexs;
+	}
+	public void setIndexs(Long indexs) {
+		this.indexs = indexs;
 	}
 	
 }
