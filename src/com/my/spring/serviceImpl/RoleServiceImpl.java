@@ -75,7 +75,7 @@ public class RoleServiceImpl implements RoleService  {
 					List<UserIndexUserId> idList=userIndexDao.getUserIndexListByGroup();
 					if(!idList.isEmpty()){
 						for(int i=0;i<idList.size();i++){
-							MaxIndex max=userIndexDao.getIndexMaxByUserId(idList.get(i).getId());
+							MaxIndex max=userIndexDao.getIndexMaxByUserId(idList.get(i).getId(),1);
 							UserIndex userIndex = new UserIndex();
 							userIndex.setAboutType(1);
 							userIndex.setIndexs(max.getIndexs()+1);

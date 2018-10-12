@@ -11,7 +11,7 @@ public class UserIndex {
 	private Long id;
 	private Long userId;
 	private Long aboutId;
-	private Integer aboutType;////0.组织架构（department）1.职务权限（role）2.班组管理（userTeam）3.节点管理（itemDate）4.流程管理（processData）5.标段管理（projectTender）
+	private Integer aboutType;////0.组织架构（department）1.职务权限（role）2.班组管理（userTeam）3.节点管理（itemDate）4.流程管理（processData）5.标段管理（projectTender）6.项目
 	private Long indexs;
 	
 	@Id

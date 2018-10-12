@@ -3,7 +3,9 @@ package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.ProcessDataIndex;
 import com.my.spring.model.Project;
+import com.my.spring.model.ProjectIndex;
 import com.my.spring.model.UserProject;
 import com.my.spring.model.Projectvs;
 import com.my.spring.model.User;
@@ -279,6 +281,33 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
             e.printStackTrace();
         }
 		return ret;
+	}
+
+	@Override
+	public List<ProjectIndex> getProjectListByUserId(Long id, Integer pageSize, Integer pageIndex) {
+		List<ProjectIndex> gets=new ArrayList<ProjectIndex>();
+		if(pageSize==null){
+			pageSize=10;
+		}
+		if(pageIndex==null){
+			pageIndex=0;
+		}
+		String sql = "select b.name,b.id,b.pic_id as picUrl,b.leader,a.indexs from user_index a,project b where a.about_type=6 and a.about_id=b.id and a.user_id="
+		+id+" ORDER BY a.indexs asc";
+		Session session=getSession();
+		try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("id", StandardBasicTypes.LONG)
+					 .addScalar("indexs", StandardBasicTypes.LONG)
+					 .addScalar("name", StandardBasicTypes.STRING)
+					 .addScalar("leader", StandardBasicTypes.STRING)
+					 .addScalar("picUrl",StandardBasicTypes.STRING)
+					 .setResultTransformer(Transformers.aliasToBean(ProjectIndex.class));
+			 	gets=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	    }
+		return gets;
 	}
 
 }

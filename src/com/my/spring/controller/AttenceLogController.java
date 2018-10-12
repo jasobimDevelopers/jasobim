@@ -50,6 +50,15 @@ public class AttenceLogController {
     		@ModelAttribute AttenceLog ps){
         return amService.getAttenceLogList(token, ps, pageSize, pageIndex,year,month);
     }
+    @RequestMapping(value="/getAttenceLogListForEcharts", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<AttenceLogPojo>> getAttenceLogListForEcharts(
+            @RequestParam(value = "token",required = true) String token,
+    		@RequestParam(value="start",required=false) String start,
+    		@RequestParam(value="end",required=false) String end,
+    		@ModelAttribute AttenceLog ps){
+        return amService.getAttenceLogListForEcharts(token, ps,start,end);
+    }
     @RequestMapping(value="/getAttenceLogById", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<AttenceLog> getAttenceLogById(

@@ -12,4 +12,6 @@ public interface ProjectTenderService {
     DataWrapper<List<ProjectTender>> getProjectTenderList();
 	DataWrapper<List<ProjectTenderPojo>> getProjectTenderList(Long projectId, String token, Integer pageSize,
 			Integer pageIndex);
+	DataWrapper<List<ProjectTenderPojo>> getProjectTendersByProjectId(Long projectId, String token, Integer pageSize,
+			Integer pageIndex);
 }

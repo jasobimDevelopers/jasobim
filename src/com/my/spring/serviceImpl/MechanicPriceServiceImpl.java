@@ -325,16 +325,16 @@ public class MechanicPriceServiceImpl implements MechanicPriceService{
     		mvs=this.getMechanicPriceNum(token,projectId,date);
     		Project project = projectDao.getById(projectId);
     		if(mvs.getData()!=null){
+    			result.setData("/mechanicFiles/mechanicPrice.xls");
     			if(mvs.getData().size()>0){
     				try  
     		        {  
     					Calendar cal = Calendar.getInstance();
     					cal.setTime(Parameters.getSdfs().parse(date));
-    		            FileOutputStream fout = new FileOutputStream("D://jasobim/tomcat_8080/webapps/mechanicFiles/mechanicPrice.xls");
+    		            FileOutputStream fout = new FileOutputStream("D://jasobim/tomcat_8080/webapps/ROOT/mechanicFiles/mechanicPrice.xls");
     		            ExportExcelOfMenchainc aa = new ExportExcelOfMenchainc();
     		            aa.getValue(mvs.getData(), fout,project.getName(),cal.get(Calendar.MONTH) + 1);
     		            fout.close();  
-    		            result.setData("/mechanicFiles/mechanicPrice.xls");
     		        }  
     		        catch (Exception e)  
     		        {  

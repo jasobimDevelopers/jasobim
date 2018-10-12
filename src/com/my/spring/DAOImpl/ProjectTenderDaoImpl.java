@@ -153,14 +153,14 @@ public class ProjectTenderDaoImpl extends BaseDao<ProjectTender> implements Proj
 		if(pageIndex==null){
 			pageIndex=0;
 		}
-		String sql = "select b.name,b.id,b.project_id as projectId,a.indexs,b.create_date as createDate,b.create_user as createUser from user_index a,user_team b where a.about_type=5 and a.about_id=b.id and a.user_id="
-		+id+" ORDER BY a.indexs asc limit"+ pageIndex+","+pageSize;
+		String sql = "select b.name,b.id,b.project_id as projectId,a.indexs,b.create_date as createDate,b.create_user_id as createUser from user_index a,project_tender b where a.about_type=5 and a.about_id=b.id and a.user_id="
+		+id+" ORDER BY a.indexs asc limit "+ pageSize*pageIndex+","+pageSize*(pageIndex+1);
 		Session session=getSession();
 		try{
 			 Query query = session.createSQLQuery(sql)
 					 .addScalar("id", StandardBasicTypes.LONG)
 					 .addScalar("indexs", StandardBasicTypes.LONG)
-					 .addScalar("name", StandardBasicTypes.INTEGER)
+					 .addScalar("name", StandardBasicTypes.STRING)
 					 .addScalar("createDate",StandardBasicTypes.TIMESTAMP)
 					 .addScalar("createUser", StandardBasicTypes.LONG)
 					 .addScalar("projectId", StandardBasicTypes.LONG)

@@ -9,6 +9,7 @@ import com.my.spring.DAO.ProjectTenderDao;
 import com.my.spring.DAO.QuantityDao;
 import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.UserDao;
+import com.my.spring.DAO.UserIndexDao;
 import com.my.spring.DAO.UserProjectDao;
 import com.my.spring.DAO.VideoDao;
 import com.my.spring.enums.CallStatusEnum;
@@ -16,19 +17,24 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.Item;
+import com.my.spring.model.MaxIndex;
 import com.my.spring.model.Paper;
 import com.my.spring.model.Project;
 import com.my.spring.model.ProjectIds;
+import com.my.spring.model.ProjectIndex;
 import com.my.spring.model.ProjectPojo;
 import com.my.spring.model.ProjectTender;
 import com.my.spring.model.Projectvs;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.Question;
 import com.my.spring.model.User;
+import com.my.spring.model.UserIndex;
+import com.my.spring.model.UserIndexUserId;
 import com.my.spring.model.UserProject;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ProjectService;
+import com.my.spring.service.UserIndexService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,9 +71,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     UserProjectDao userProjectDao;
     @Autowired
+    UserIndexDao userIndexDao;
+    @Autowired
     ProjectTenderDao projectTenderDao;
     @Autowired
     FileService fileService;
+    @Autowired
+    UserIndexService userIndexService;
     private String filePath1="files";
     private Integer fileType=2;
     @SuppressWarnings("unused")
@@ -158,6 +168,20 @@ public class ProjectServiceImpl implements ProjectService {
 					project.setCreateDate(new Date(System.currentTimeMillis()));
 					if(projectDao.addProject(project))
 					{
+						List<UserIndex> indexList = new ArrayList<UserIndex>();
+						List<UserIndexUserId> idList=userIndexDao.getUserIndexListByGroup();
+						if(!idList.isEmpty()){
+							for(int i=0;i<idList.size();i++){
+								MaxIndex max=userIndexDao.getIndexMaxByUserId(idList.get(i).getId(),3);
+								UserIndex userIndex = new UserIndex();
+								userIndex.setAboutType(6);
+								userIndex.setIndexs(max.getIndexs()+1);
+								userIndex.setUserId(idList.get(i).getId());
+								userIndex.setAboutId(project.getId());
+								indexList.add(userIndex);
+							}
+							userIndexDao.addUserIndexList(indexList);
+						}
 						/////添加关联关系表记录
 						UserProject userProject = new UserProject();
 						userProject.setProjectId(project.getId());
@@ -244,6 +268,20 @@ public class ProjectServiceImpl implements ProjectService {
     					project.setUpdateDate(new Date(System.currentTimeMillis()));
     					if(projectDao.addProject(project))
     					{
+    						List<UserIndex> indexList = new ArrayList<UserIndex>();
+    						List<UserIndexUserId> idList=userIndexDao.getUserIndexListByGroup();
+    						if(!idList.isEmpty()){
+    							for(int i=0;i<idList.size();i++){
+    								MaxIndex max=userIndexDao.getIndexMaxByUserId(idList.get(i).getId(),3);
+    								UserIndex userIndex = new UserIndex();
+    								userIndex.setAboutType(6);
+    								userIndex.setIndexs(max.getIndexs()+1);
+    								userIndex.setUserId(idList.get(i).getId());
+    								userIndex.setAboutId(project.getId());
+    								indexList.add(userIndex);
+    							}
+    							userIndexDao.addUserIndexList(indexList);
+    						}
     						dataWrappers=projectDao.findProjectLike(project);
     						pojo.setBuildingUnit(dataWrappers.getData().getBuildingUnit());
     						pojo.setConstructionUnit(dataWrappers.getData().getConstructionUnit());
@@ -354,9 +392,9 @@ public class ProjectServiceImpl implements ProjectService {
 					if(!projectDao.deleteProject(id))
 					{
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}else{
+						userIndexService.deleteUserIndexByAboutId(5, id);
 					}
-					
-					
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}
@@ -527,97 +565,118 @@ public class ProjectServiceImpl implements ProjectService {
     	Integer isios=-1;
     	isios=userInMemory.getSystemId();
     	if (userInMemory != null) {
+    		List<ProjectIndex> get=projectDao.getProjectListByUserId(userInMemory.getId(),pageSize,pageIndex);
     		if(userInMemory.getUserType()==UserTypeEnum.Admin.getType() || userInMemory.getUserType()==UserTypeEnum.User.getType()){
     			dataWrapper=projectDao.getProjectList(pageSize, pageIndex, project,content, isios,null);
-    			if(dataWrapper.getData()!=null){
-    				for(int i=0;i<dataWrapper.getData().size();i++){
+    			if(get.isEmpty()){
+    				if(dataWrapper.getData()!=null){
+        				for(int i=0;i<dataWrapper.getData().size();i++){
+            				ProjectPojo projectpojo=new ProjectPojo();
+            				projectpojo.setIndexs((long)(i+1));
+            				projectpojo.setId(dataWrapper.getData().get(i).getId());
+            				projectpojo.setBuildingUnit(dataWrapper.getData().get(i).getBuildingUnit());
+            				projectpojo.setConstructionUnit(dataWrapper.getData().get(i).getConstructionUnit());
+            				projectpojo.setDescription(dataWrapper.getData().get(i).getDescription());
+            				projectpojo.setNightWorkHour(dataWrapper.getData().get(i).getNightWorkHour());
+            				projectpojo.setDesignUnit(dataWrapper.getData().get(i).getDesignUnit());
+            				projectpojo.setLeader(dataWrapper.getData().get(i).getLeader());
+            				projectpojo.setCityCode(dataWrapper.getData().get(i).getCityCode());
+            				projectpojo.setBuildingUnitUser(dataWrapper.getData().get(i).getBuildingUnitUser());
+            				projectpojo.setConstructionControlUser(dataWrapper.getData().get(i).getConstructionControlUser());
+            				projectpojo.setConstructionControlUnit(dataWrapper.getData().get(i).getConstructionControlUnit());
+            				projectpojo.setConstructionUnitUser(dataWrapper.getData().get(i).getConstructionUnitUser());
+            				projectpojo.setDesignUnitUser(dataWrapper.getData().get(i).getDesignUnitUser());
+            				projectpojo.setName(dataWrapper.getData().get(i).getName());
+            				projectpojo.setNum(dataWrapper.getData().get(i).getNum());
+            				projectpojo.setBuildingUnitUserTel(dataWrapper.getData().get(i).getBuildingUnitUserTel());
+            				projectpojo.setConstructionControlUserTel(dataWrapper.getData().get(i).getConstructionControlUserTel());
+            				projectpojo.setConstructionUnitUserTel(dataWrapper.getData().get(i).getConstructionUnitUserTel());
+            				projectpojo.setDesignUnitUserTel(dataWrapper.getData().get(i).getDesignUnitUserTel());
+            				projectpojo.setPhase(dataWrapper.getData().get(i).getPhase());
+            				projectpojo.setPlace(dataWrapper.getData().get(i).getPlace());
+            				projectpojo.setShortName(dataWrapper.getData().get(i).getShortName());
+            				projectpojo.setStartDate(dataWrapper.getData().get(i).getStartDate());
+            				projectpojo.setVersion(dataWrapper.getData().get(i).getVersion());
+            				projectpojo.setState(dataWrapper.getData().get(i).getState());
+            				projectpojo.setFinishedDate(dataWrapper.getData().get(i).getFinishedDate());
+            				projectpojo.setModelPart(dataWrapper.getData().get(i).getModelPart().split(","));
+            				String[] tests=null;
+            				if(dataWrapper.getData().get(i).getModelPart()!=null){
+            					if(!dataWrapper.getData().get(i).getModelPart().equals("")){
+            						tests=dataWrapper.getData().get(i).getModelPart().split(",");
+            					}
+            				}
+            				if(dataWrapper.getData().get(i).getModelId()!=null){
+            					if(!dataWrapper.getData().get(i).getModelId().equals("")){
+            						String[] temp=dataWrapper.getData().get(i).getModelId().split(",");
+                					String[] urlList=new String[temp.length];
+                					String[] nameList=new String[temp.length];
+                					Integer[] isIos = new Integer[temp.length];
+                					for(int k=0;k<temp.length;k++){
+                						String test="";
+                						Files files=fileDao.getById(Long.valueOf(temp[k]));
+                						urlList[k]=files.getUrl();
+                						if(files.getRealName()!=null){
+                							test=files.getRealName();
+                							String[] nameLists=test.split("_");   
+                							nameList[k]=nameLists[0];
+                							isIos[k]=Integer.valueOf(nameLists[1]);
+                						}
+                					}
+                					/////////
+                					for(int j=0;j<isIos.length;j++){
+                						if(isIos[j]==isios){
+                							projectpojo.setModelUrl(urlList[j]);
+                						}
+                					}
+            					}
+            				}
+            				if(userInMemory.getUserType()!=3){
+            					if(project.getTeamList()!=null){
+            						String[] teamNames=project.getTeamList().split(",");
+            						String[] teamIds=project.getTeamId().split(",");
+            						projectpojo.setTeamList(teamNames);
+            						projectpojo.setTeamId(teamIds);
+            					}
+            				}else{
+            					if(userInMemory.getTeamId()!=null){
+            						if(project.getTeamList()!=null){
+            							String[] teamNames=project.getTeamList().split(",");
+            							String[] teamIds=project.getTeamId().split(",");
+            						}
+            					}
+            				}
+            				if(dataWrapper.getData().get(i).getPicId()!=null){
+            					if(!dataWrapper.getData().get(i).getPicId().equals("")){
+            						Files filess=fileDao.getById(Long.valueOf(dataWrapper.getData().get(i).getPicId()));
+              					    //String newPath=ResizeImage.ResizeImages(request,filess.getUrl(),filess.getName());
+                					if(filess!=null){
+                						projectpojo.setPicUrl(filess.getUrl());
+                						projectpojo.setPicName(filess.getName());
+                					}
+            					}
+            				}
+            				projectpojo.setCreateDate(Parameters.getSdf().format(dataWrapper.getData().get(i).getCreateDate()));
+            				pojoproject.add(i, projectpojo);
+            			}
+        			}
+    			}else{
+    				for(int i=0;i<get.size();i++){
         				ProjectPojo projectpojo=new ProjectPojo();
-        				projectpojo.setId(dataWrapper.getData().get(i).getId());
-        				projectpojo.setBuildingUnit(dataWrapper.getData().get(i).getBuildingUnit());
-        				projectpojo.setConstructionUnit(dataWrapper.getData().get(i).getConstructionUnit());
-        				projectpojo.setDescription(dataWrapper.getData().get(i).getDescription());
-        				projectpojo.setNightWorkHour(dataWrapper.getData().get(i).getNightWorkHour());
-        				projectpojo.setDesignUnit(dataWrapper.getData().get(i).getDesignUnit());
-        				projectpojo.setLeader(dataWrapper.getData().get(i).getLeader());
-        				projectpojo.setCityCode(dataWrapper.getData().get(i).getCityCode());
-        				projectpojo.setBuildingUnitUser(dataWrapper.getData().get(i).getBuildingUnitUser());
-        				projectpojo.setConstructionControlUser(dataWrapper.getData().get(i).getConstructionControlUser());
-        				projectpojo.setConstructionControlUnit(dataWrapper.getData().get(i).getConstructionControlUnit());
-        				projectpojo.setConstructionUnitUser(dataWrapper.getData().get(i).getConstructionUnitUser());
-        				projectpojo.setDesignUnitUser(dataWrapper.getData().get(i).getDesignUnitUser());
-        				projectpojo.setName(dataWrapper.getData().get(i).getName());
-        				projectpojo.setNum(dataWrapper.getData().get(i).getNum());
-        				projectpojo.setBuildingUnitUserTel(dataWrapper.getData().get(i).getBuildingUnitUserTel());
-        				projectpojo.setConstructionControlUserTel(dataWrapper.getData().get(i).getConstructionControlUserTel());
-        				projectpojo.setConstructionUnitUserTel(dataWrapper.getData().get(i).getConstructionUnitUserTel());
-        				projectpojo.setDesignUnitUserTel(dataWrapper.getData().get(i).getDesignUnitUserTel());
-        				projectpojo.setPhase(dataWrapper.getData().get(i).getPhase());
-        				projectpojo.setPlace(dataWrapper.getData().get(i).getPlace());
-        				projectpojo.setShortName(dataWrapper.getData().get(i).getShortName());
-        				projectpojo.setStartDate(dataWrapper.getData().get(i).getStartDate());
-        				projectpojo.setVersion(dataWrapper.getData().get(i).getVersion());
-        				projectpojo.setState(dataWrapper.getData().get(i).getState());
-        				projectpojo.setFinishedDate(dataWrapper.getData().get(i).getFinishedDate());
-        				projectpojo.setModelPart(dataWrapper.getData().get(i).getModelPart().split(","));
-        				String[] tests=null;
-        				if(dataWrapper.getData().get(i).getModelPart()!=null){
-        					if(!dataWrapper.getData().get(i).getModelPart().equals("")){
-        						tests=dataWrapper.getData().get(i).getModelPart().split(",");
-        					}
-        				}
-        				if(dataWrapper.getData().get(i).getModelId()!=null){
-        					if(!dataWrapper.getData().get(i).getModelId().equals("")){
-        						String[] temp=dataWrapper.getData().get(i).getModelId().split(",");
-            					String[] urlList=new String[temp.length];
-            					String[] nameList=new String[temp.length];
-            					Integer[] isIos = new Integer[temp.length];
-            					for(int k=0;k<temp.length;k++){
-            						String test="";
-            						Files files=fileDao.getById(Long.valueOf(temp[k]));
-            						urlList[k]=files.getUrl();
-            						if(files.getRealName()!=null){
-            							test=files.getRealName();
-            							String[] nameLists=test.split("_");   
-            							nameList[k]=nameLists[0];
-            							isIos[k]=Integer.valueOf(nameLists[1]);
-            						}
-            					}
-            					/////////
-            					for(int j=0;j<isIos.length;j++){
-            						if(isIos[j]==isios){
-            							projectpojo.setModelUrl(urlList[j]);
-            						}
-            					}
-        					}
-        				}
-        				if(userInMemory.getUserType()!=3){
-        					if(project.getTeamList()!=null){
-        						String[] teamNames=project.getTeamList().split(",");
-        						String[] teamIds=project.getTeamId().split(",");
-        						projectpojo.setTeamList(teamNames);
-        						projectpojo.setTeamId(teamIds);
-        					}
-        				}else{
-        					if(userInMemory.getTeamId()!=null){
-        						if(project.getTeamList()!=null){
-        							String[] teamNames=project.getTeamList().split(",");
-        							String[] teamIds=project.getTeamId().split(",");
-        						}
-        					}
-        				}
-        				if(dataWrapper.getData().get(i).getPicId()!=null){
-        					if(!dataWrapper.getData().get(i).getPicId().equals("")){
-        						Files filess=fileDao.getById(Long.valueOf(dataWrapper.getData().get(i).getPicId()));
-          					    //String newPath=ResizeImage.ResizeImages(request,filess.getUrl(),filess.getName());
+        				projectpojo.setIndexs(get.get(i).getIndexs());
+        				projectpojo.setName(get.get(i).getName());
+        				projectpojo.setId(get.get(i).getId());
+        				projectpojo.setLeader(get.get(i).getLeader());
+        				if(get.get(i).getPicUrl()!=null){
+        					if(!get.get(i).getPicUrl().equals("")){
+        						Files filess=fileDao.getById(Long.valueOf(get.get(i).getPicUrl()));
             					if(filess!=null){
             						projectpojo.setPicUrl(filess.getUrl());
-            						projectpojo.setPicName(filess.getName());
             					}
         					}
         				}
-        				projectpojo.setCreateDate(Parameters.getSdf().format(dataWrapper.getData().get(i).getCreateDate()));
-        				pojoproject.add(i, projectpojo);
-        			}
+        				pojoproject.add(projectpojo);
+    				}
     			}
     		}else{
     			if(userInMemory.getUserType()==UserTypeEnum.Visitor.getType()){
@@ -631,96 +690,115 @@ public class ProjectServiceImpl implements ProjectService {
     			}else{
     				dataWrappervs=projectDao.getProjectList(pageSize, pageIndex,project,userInMemory);
     			}
-    			if(dataWrappervs.getData()!=null){
-    				for(int i=0;i<dataWrappervs.getData().size();i++){
+    			if(get.isEmpty()){
+    				if(dataWrappervs.getData()!=null){
+        				for(int i=0;i<dataWrappervs.getData().size();i++){
+            				ProjectPojo projectpojo=new ProjectPojo();
+            				projectpojo.setId(dataWrappervs.getData().get(i).getId());
+            				projectpojo.setBuildingUnit(dataWrappervs.getData().get(i).getBuilding_unit());
+            				projectpojo.setConstructionUnit(dataWrappervs.getData().get(i).getConstruction_unit());
+            				projectpojo.setDescription(dataWrappervs.getData().get(i).getDescription());
+            				projectpojo.setDesignUnit(dataWrappervs.getData().get(i).getDesign_unit());
+            				projectpojo.setLeader(dataWrappervs.getData().get(i).getLeader());
+            				projectpojo.setBuildingUnitUser(dataWrappervs.getData().get(i).getBuilding_unit_user());
+            				projectpojo.setConstructionControlUser(dataWrappervs.getData().get(i).getConstruction_control_user());
+            				projectpojo.setConstructionControlUnit(dataWrappervs.getData().get(i).getConstruction_control_unit());
+            				projectpojo.setConstructionUnitUser(dataWrappervs.getData().get(i).getConstruction_unit_user());
+            				projectpojo.setDesignUnitUser(dataWrappervs.getData().get(i).getDesign_unit_user());
+            				projectpojo.setName(dataWrappervs.getData().get(i).getName());
+            				projectpojo.setNum(dataWrappervs.getData().get(i).getNum());
+            				projectpojo.setPhase(dataWrappervs.getData().get(i).getPhase());
+            				projectpojo.setPlace(dataWrappervs.getData().get(i).getPlace());
+            				projectpojo.setShortName(dataWrappervs.getData().get(i).getShort_name());
+            				projectpojo.setStartDate(dataWrappervs.getData().get(i).getStart_date());
+            				projectpojo.setVersion(dataWrappervs.getData().get(i).getVersion());
+            				projectpojo.setState(dataWrappervs.getData().get(i).getState());
+            				projectpojo.setFinishedDate(dataWrappervs.getData().get(i).getFinished_date());
+            				projectpojo.setModelPart(dataWrappervs.getData().get(i).getModel_part().split(","));
+            				String[] tests=null;
+            				if(dataWrappervs.getData().get(i).getModel_part()!=null){
+            					if(!dataWrappervs.getData().get(i).getModel_part().equals("")){
+            						tests=dataWrappervs.getData().get(i).getModel_part().split(",");
+            					}
+            				}
+            				if(dataWrappervs.getData().get(i).getModel_id()!=null){
+            					if(!dataWrappervs.getData().get(i).getModel_id().equals("")){
+            						String[] temp=dataWrappervs.getData().get(i).getModel_id().split(",");
+                					String[] urlList=new String[temp.length];
+                					String[] nameList=new String[temp.length];
+                					Integer[] isIos = new Integer[temp.length];
+                					for(int k=0;k<temp.length;k++){
+                						String test="";
+                						Files files=fileDao.getById(Long.valueOf(temp[k]));
+                						urlList[k]=files.getUrl();
+                						if(files.getRealName()!=null){
+                							test=files.getRealName();
+                							String[] nameLists=test.split("_");   
+                							nameList[k]=nameLists[0];
+                							isIos[k]=Integer.valueOf(nameLists[1]);
+                						}
+                					}
+                					/////////
+                					for(int j=0;j<isIos.length;j++){
+                						if(isIos[j]==isios){
+                							projectpojo.setModelUrl(urlList[j]);
+                						}
+                					}
+            					}
+            				}
+            				if(userInMemory.getUserType()!=3){
+            					if(project.getTeamList()!=null){
+            						String[] teamNames=project.getTeamList().split(",");
+            						String[] teamIds=project.getTeamId().split(",");
+            						projectpojo.setTeamList(teamNames);
+            						projectpojo.setTeamId(teamIds);
+            					}
+            				}else{
+            					if(userInMemory.getTeamId()!=null){
+            						if(project.getTeamList()!=null){
+            							String[] teamNames=project.getTeamList().split(",");
+            							String[] teamIds=project.getTeamId().split(",");
+            						}
+            					}
+            				}
+            				if(dataWrappervs.getData().get(i).getPic_id()!=null){
+            					if(!dataWrappervs.getData().get(i).getPic_id().equals("")){
+            						Files filess=fileDao.getById(Long.valueOf(dataWrappervs.getData().get(i).getPic_id()));
+                					if(filess!=null){
+                						projectpojo.setPicUrl(filess.getUrl());
+                						projectpojo.setPicName(filess.getName());
+                					}
+            					}
+            				}
+            				projectpojo.setCreateDate(Parameters.getSdf().format(dataWrappervs.getData().get(i).getCreate_date()));
+            				pojoproject.add(i, projectpojo);
+            			}
+        			}
+    			}else{
+    				for(int i=0;i<get.size();i++){
         				ProjectPojo projectpojo=new ProjectPojo();
-        				projectpojo.setId(dataWrappervs.getData().get(i).getId());
-        				projectpojo.setBuildingUnit(dataWrappervs.getData().get(i).getBuilding_unit());
-        				projectpojo.setConstructionUnit(dataWrappervs.getData().get(i).getConstruction_unit());
-        				projectpojo.setDescription(dataWrappervs.getData().get(i).getDescription());
-        				projectpojo.setDesignUnit(dataWrappervs.getData().get(i).getDesign_unit());
-        				projectpojo.setLeader(dataWrappervs.getData().get(i).getLeader());
-        				projectpojo.setBuildingUnitUser(dataWrappervs.getData().get(i).getBuilding_unit_user());
-        				projectpojo.setConstructionControlUser(dataWrappervs.getData().get(i).getConstruction_control_user());
-        				projectpojo.setConstructionControlUnit(dataWrappervs.getData().get(i).getConstruction_control_unit());
-        				projectpojo.setConstructionUnitUser(dataWrappervs.getData().get(i).getConstruction_unit_user());
-        				projectpojo.setDesignUnitUser(dataWrappervs.getData().get(i).getDesign_unit_user());
-        				projectpojo.setName(dataWrappervs.getData().get(i).getName());
-        				projectpojo.setNum(dataWrappervs.getData().get(i).getNum());
-        				projectpojo.setPhase(dataWrappervs.getData().get(i).getPhase());
-        				projectpojo.setPlace(dataWrappervs.getData().get(i).getPlace());
-        				projectpojo.setShortName(dataWrappervs.getData().get(i).getShort_name());
-        				projectpojo.setStartDate(dataWrappervs.getData().get(i).getStart_date());
-        				projectpojo.setVersion(dataWrappervs.getData().get(i).getVersion());
-        				projectpojo.setState(dataWrappervs.getData().get(i).getState());
-        				projectpojo.setFinishedDate(dataWrappervs.getData().get(i).getFinished_date());
-        				projectpojo.setModelPart(dataWrappervs.getData().get(i).getModel_part().split(","));
-        				String[] tests=null;
-        				if(dataWrappervs.getData().get(i).getModel_part()!=null){
-        					if(!dataWrappervs.getData().get(i).getModel_part().equals("")){
-        						tests=dataWrappervs.getData().get(i).getModel_part().split(",");
-        					}
-        				}
-        				if(dataWrappervs.getData().get(i).getModel_id()!=null){
-        					if(!dataWrappervs.getData().get(i).getModel_id().equals("")){
-        						String[] temp=dataWrappervs.getData().get(i).getModel_id().split(",");
-            					String[] urlList=new String[temp.length];
-            					String[] nameList=new String[temp.length];
-            					Integer[] isIos = new Integer[temp.length];
-            					for(int k=0;k<temp.length;k++){
-            						String test="";
-            						Files files=fileDao.getById(Long.valueOf(temp[k]));
-            						urlList[k]=files.getUrl();
-            						if(files.getRealName()!=null){
-            							test=files.getRealName();
-            							String[] nameLists=test.split("_");   
-            							nameList[k]=nameLists[0];
-            							isIos[k]=Integer.valueOf(nameLists[1]);
-            						}
-            					}
-            					/////////
-            					for(int j=0;j<isIos.length;j++){
-            						if(isIos[j]==isios){
-            							projectpojo.setModelUrl(urlList[j]);
-            						}
-            					}
-        					}
-        				}
-        				if(userInMemory.getUserType()!=3){
-        					if(project.getTeamList()!=null){
-        						String[] teamNames=project.getTeamList().split(",");
-        						String[] teamIds=project.getTeamId().split(",");
-        						projectpojo.setTeamList(teamNames);
-        						projectpojo.setTeamId(teamIds);
-        					}
-        				}else{
-        					if(userInMemory.getTeamId()!=null){
-        						if(project.getTeamList()!=null){
-        							String[] teamNames=project.getTeamList().split(",");
-        							String[] teamIds=project.getTeamId().split(",");
-        						}
-        					}
-        				}
-        				if(dataWrappervs.getData().get(i).getPic_id()!=null){
-        					if(!dataWrappervs.getData().get(i).getPic_id().equals("")){
-        						Files filess=fileDao.getById(Long.valueOf(dataWrappervs.getData().get(i).getPic_id()));
+        				projectpojo.setIndexs(get.get(i).getIndexs());
+        				projectpojo.setName(get.get(i).getName());
+        				projectpojo.setId(get.get(i).getId());
+        				projectpojo.setLeader(get.get(i).getLeader());
+        				if(get.get(i).getPicUrl()!=null){
+        					if(!get.get(i).getPicUrl().equals("")){
+        						Files filess=fileDao.getById(Long.valueOf(get.get(i).getPicUrl()));
             					if(filess!=null){
             						projectpojo.setPicUrl(filess.getUrl());
-            						projectpojo.setPicName(filess.getName());
             					}
         					}
         				}
-        				projectpojo.setCreateDate(Parameters.getSdf().format(dataWrappervs.getData().get(i).getCreate_date()));
-        				pojoproject.add(i, projectpojo);
-        			}
+        				pojoproject.add(projectpojo);
+    				}
     			}
     		}
-    			dataWrappers.setData(pojoproject);
-    			dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
-    			dataWrappers.setCallStatus(dataWrapper.getCallStatus());
-    			dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
-    			dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
-    			dataWrappers.setTotalPage(dataWrapper.getTotalPage());
+			dataWrappers.setData(pojoproject);
+			dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
+			dataWrappers.setCallStatus(dataWrapper.getCallStatus());
+			dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
+			dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
+			dataWrappers.setTotalPage(dataWrapper.getTotalPage());
         	}else{
         		dataWrappers.setErrorCode(ErrorCodeEnum.User_Not_Logined);
         	}

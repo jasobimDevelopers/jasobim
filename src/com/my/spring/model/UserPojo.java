@@ -18,7 +18,8 @@ public class UserPojo {
     private String tel;
     private Long userIcon;
     private String userIconUrl;
-    private String[] projectName;
+    private String company;
+    private String[] projectName;///项目名称
     private String registerDate;
     private String workName;
     private String teamInformation;////班组信息
@@ -178,6 +179,12 @@ public class UserPojo {
 	}
 	public void setRoleId(Long roleId) {
 		this.roleId = roleId;
+	}
+	public String getCompany() {
+		return company;
+	}
+	public void setCompany(String company) {
+		this.company = company;
 	}
     
 }

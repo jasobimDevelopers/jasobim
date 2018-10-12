@@ -7,13 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.my.spring.model.AppLoginBackInfo;
 import com.my.spring.model.ConstructionTaskNew;
 import com.my.spring.model.ConstructionTaskNewPojo;
 import com.my.spring.model.ProcessLogPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
-import com.my.spring.model.UserSelect;
 import com.my.spring.model.UserSelectPojo;
 import com.my.spring.model.UserWebPojo;
 import com.my.spring.utils.DataWrapper;
@@ -22,7 +22,7 @@ import com.my.spring.utils.DataWrapper;
 public interface UserService {
 	
 	DataWrapper<Void> register(User user, HttpServletRequest request);
-	DataWrapper<Void> updateUser(User user,String token);
+	DataWrapper<AppLoginBackInfo> updateUser(User user,String token);
 	DataWrapper<User> getUserDetails(String token);
 	DataWrapper<UserPojo> getUserDetailsByAdmin(Long userId,String token);
 	DataWrapper<List<UserPojo>> getUserList(Integer pageIndex, Integer pageSize,User user,String token);

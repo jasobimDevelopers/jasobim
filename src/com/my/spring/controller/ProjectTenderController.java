@@ -1,6 +1,5 @@
 package com.my.spring.controller;
 
-import com.my.spring.model.DepartmentPojo;
 import com.my.spring.model.ProjectTender;
 import com.my.spring.model.ProjectTenderPojo;
 import com.my.spring.service.ProjectTenderService;
@@ -38,7 +37,9 @@ public class ProjectTenderController {
         return projectTenderService.deleteProjectTender(id,token);
     }
 
-
+    /*
+     * 设置标段获取接口
+     * */
     @RequestMapping(value="/admin/getProjectTenderList",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<ProjectTenderPojo>> getProjectTenderByProjectId(
@@ -47,6 +48,19 @@ public class ProjectTenderController {
     		@RequestParam(value = "pageIndex",required = false) Integer pageIndex,
     		@RequestParam(value = "token",required = true) String token){
         return projectTenderService.getProjectTenderList(projectId,token,pageSize,pageIndex);
+    }
+    
+    /*
+     * 施工日志标段获取
+     * */
+    @RequestMapping(value="/getProjectTenderList",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<ProjectTenderPojo>> getProjectTendersByProjectId(
+    		@RequestParam(value = "projectId",required = false) Long projectId,
+    		@RequestParam(value = "pageSize",required = false) Integer pageSize,
+    		@RequestParam(value = "pageIndex",required = false) Integer pageIndex,
+    		@RequestParam(value = "token",required = true) String token){
+        return projectTenderService.getProjectTendersByProjectId(projectId,token,pageSize,pageIndex);
     }
     
 }

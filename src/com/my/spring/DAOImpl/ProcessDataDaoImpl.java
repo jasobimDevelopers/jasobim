@@ -1,9 +1,6 @@
 package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProcessDataDao;
-import com.my.spring.model.Department;
-import com.my.spring.model.ItemDataIndex;
-import com.my.spring.model.Notice;
 import com.my.spring.model.ProcessData;
 import com.my.spring.model.ProcessDataIndex;
 import com.my.spring.utils.DaoUtil;
@@ -150,14 +147,14 @@ public class ProcessDataDaoImpl extends BaseDao<ProcessData> implements ProcessD
 		if(pageIndex==null){
 			pageIndex=0;
 		}
-		String sql = "select b.name,b.id,b.item_num as itemNum,b.project_id as projectId,b.type,a.indexs,b.create_date as createDate,b.create_user as createUser from user_index a,user_team b where a.about_type=4 and a.about_id=b.id and a.user_id="
-		+id+" ORDER BY a.indexs asc limit"+ pageIndex+","+pageSize;
+		String sql = "select b.name,b.id,b.item_num as itemNum,b.project_id as projectId,b.type,a.indexs,b.create_date as createDate,b.create_user as createUser from user_index a,process_data b where a.about_type=4 and a.about_id=b.id and a.user_id="
+		+id+" ORDER BY a.indexs asc limit "+ pageSize*pageIndex+","+pageSize*(pageIndex+1);
 		Session session=getSession();
 		try{
 			 Query query = session.createSQLQuery(sql)
 					 .addScalar("id", StandardBasicTypes.LONG)
 					 .addScalar("indexs", StandardBasicTypes.LONG)
-					 .addScalar("name", StandardBasicTypes.INTEGER)
+					 .addScalar("name", StandardBasicTypes.STRING)
 					 .addScalar("itemNum", StandardBasicTypes.INTEGER)
 					 .addScalar("createDate",StandardBasicTypes.TIMESTAMP)
 					 .addScalar("createUser", StandardBasicTypes.LONG)

@@ -146,8 +146,8 @@ public class ItemDataDaoImpl extends BaseDao<ItemData> implements ItemDataDao {
 		if(pageIndex==null){
 			pageIndex=0;
 		}
-		String sql = "select b.name,b.id,b.approve_user as approveUser,b.work_name as workName,a.indexs,b.create_date as createDate,b.create_user as createUser from user_index a,user_team b where a.about_type=3 and a.about_id=b.id and a.user_id="
-		+id+" ORDER BY a.indexs asc limit"+ pageIndex+","+pageSize;
+		String sql = "select b.name,b.id,b.approve_user as approveUser,b.work_name as workName,a.indexs,b.create_date as createDate,b.create_user as createUser from user_index a,item_data b where a.about_type=3 and a.about_id=b.id and a.user_id="
+		+id+" ORDER BY a.indexs asc limit "+ pageSize*pageIndex+","+pageSize*(pageIndex+1);
 		Session session=getSession();
 		try{
 			 Query query = session.createSQLQuery(sql)
@@ -168,7 +168,7 @@ public class ItemDataDaoImpl extends BaseDao<ItemData> implements ItemDataDao {
 	@Override
 	public Integer getItemDataSizeByUserId(Long id) {
 		Integer total=0;
-		String sql = "select COUNT(*) as total from user_index where user_id="+id+" and about_type=1";
+		String sql = "select COUNT(*) as total from user_index where user_id="+id+" and about_type=3";
 		Session session=getSession();
 		try{
 			 Query query = session.createSQLQuery(sql);

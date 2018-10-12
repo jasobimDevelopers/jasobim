@@ -12,7 +12,6 @@ import com.my.spring.model.ProjectTenderPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserIndex;
 import com.my.spring.model.UserIndexUserId;
-import com.my.spring.model.UserIndexs;
 import com.my.spring.service.ProjectTenderService;
 import com.my.spring.service.UserIndexService;
 import com.my.spring.utils.DataWrapper;
@@ -52,7 +51,7 @@ public class ProjectTenderServiceImpl implements ProjectTenderService {
 						List<UserIndexUserId> idList=userIndexDao.getUserIndexListByGroup();
 						if(!idList.isEmpty()){
 							for(int i=0;i<idList.size();i++){
-								MaxIndex max=userIndexDao.getIndexMaxByUserId(idList.get(i).getId());
+								MaxIndex max=userIndexDao.getIndexMaxByUserId(idList.get(i).getId(),5);
 								UserIndex userIndex = new UserIndex();
 								userIndex.setAboutType(5);
 								userIndex.setIndexs(max.getIndexs()+1);
@@ -149,13 +148,9 @@ public class ProjectTenderServiceImpl implements ProjectTenderService {
         User userInMemory = SessionManager.getSession(token);
         if(userInMemory != null) {
         		List<ProjectTenderIndex> get=projectTenderDao.getProjectTenderListByUserId(userInMemory.getId(),projectId,pageSize,pageIndex);
+    			getList=projectTenderDao.getProjectTenderByProjectId(projectId,pageSize,pageIndex);
         		if(get.isEmpty()){
-        			getList=projectTenderDao.getProjectTenderByProjectId(projectId,pageSize,pageIndex);
             		if(getList.getData()!=null){
-            			dataWrapper.setCurrentPage(getList.getCurrentPage());
-            			dataWrapper.setNumberPerPage(getList.getNumberPerPage());
-            			dataWrapper.setTotalNumber(getList.getTotalNumber());
-            			dataWrapper.setTotalPage(getList.getTotalPage());
             			if(!getList.getData().isEmpty()){
             				int indexs=1;
             				for(ProjectTender pt:getList.getData()){
@@ -179,8 +174,10 @@ public class ProjectTenderServiceImpl implements ProjectTenderService {
     					resultList.add(ptp);
     				}
         		}
-        		
-    			
+        		dataWrapper.setCurrentPage(getList.getCurrentPage());
+    			dataWrapper.setNumberPerPage(getList.getNumberPerPage());
+    			dataWrapper.setTotalNumber(getList.getTotalNumber());
+    			dataWrapper.setTotalPage(getList.getTotalPage());
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -188,6 +185,35 @@ public class ProjectTenderServiceImpl implements ProjectTenderService {
         dataWrapper.setData(resultList);
 		return dataWrapper;
 	}
-
+	@Override
+	public DataWrapper<List<ProjectTenderPojo>> getProjectTendersByProjectId(Long projectId,String token,Integer pageSize,Integer pageIndex) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<ProjectTenderPojo>> dataWrapper = new DataWrapper<List<ProjectTenderPojo>>();
+		List<ProjectTenderPojo> resultList = new ArrayList<ProjectTenderPojo>();
+		DataWrapper<List<ProjectTender>> getList = new DataWrapper<List<ProjectTender>>();
+        User userInMemory = SessionManager.getSession(token);
+        if(userInMemory != null) {
+    			getList=projectTenderDao.getProjectTenderByProjectId(projectId,pageSize,pageIndex);
+        		if(getList.getData()!=null){
+        			if(!getList.getData().isEmpty()){
+        				for(ProjectTender pt:getList.getData()){
+        					ProjectTenderPojo ptp = new ProjectTenderPojo();
+        					ptp.setId(pt.getId());
+        					ptp.setName(pt.getName());
+        					ptp.setProjectId(pt.getProjectId());
+        					resultList.add(ptp);
+        				}
+        			}
+        		}
+        		dataWrapper.setCurrentPage(getList.getCurrentPage());
+    			dataWrapper.setNumberPerPage(getList.getNumberPerPage());
+    			dataWrapper.setTotalNumber(getList.getTotalNumber());
+    			dataWrapper.setTotalPage(getList.getTotalPage());
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        dataWrapper.setData(resultList);
+		return dataWrapper;
+	}
 
 }

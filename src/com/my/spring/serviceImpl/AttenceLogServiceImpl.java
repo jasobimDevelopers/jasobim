@@ -215,6 +215,7 @@ public class AttenceLogServiceImpl implements AttenceLogService{
 					for(AttenceLogs am : amList.getData()){
 						AttenceLogPojo attenceModelPojo = new AttenceLogPojo();
 						if(am.getUser_id()!=null){
+							attenceModelPojo.setUserId(am.getUser_id());
 							User users = userDao.getById(am.getUser_id());
 							if(users!=null){
 								attenceModelPojo.setUserName(users.getRealName());
@@ -274,6 +275,105 @@ public class AttenceLogServiceImpl implements AttenceLogService{
         }
 		return result;
 	}
+	@Override
+	public DataWrapper<List<AttenceLogPojo>> getAttenceLogListForEcharts(String token, AttenceLog duct,String start,String end) {
+		DataWrapper<List<AttenceLogPojo>> result = new DataWrapper<List<AttenceLogPojo>>();
+		List<AttenceLogPojo> results = new ArrayList<AttenceLogPojo>();
+		DataWrapper<List<AttenceLogs>> amList = new DataWrapper<List<AttenceLogs>>();
+		DataWrapper<List<AttenceForgetFactLogs>> forgetFactNums = new DataWrapper<List<AttenceForgetFactLogs>>();
+		int day=0;
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");    
+        java.util.Date beginDate;
+        java.util.Date endDate;
+        try
+        {
+            beginDate = format.parse(start);
+            endDate= format.parse(end);    
+            day=(int) ((endDate.getTime()-beginDate.getTime())/(24*60*60*1000));    
+            //System.out.println("相隔的天数="+day);   
+        } catch (ParseException e)
+        {
+            // TODO 自动生成 catch 块
+            e.printStackTrace();
+        }   
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			
+			int weekds=0;
+			if(duct.getProjectId()!=null){
+				AttenceModel aml = attenceModelDao.getAttenceModelByProjectId(duct.getProjectId());
+				if(aml!=null){
+					weekds = aml.getAttenceDay().split("、").length;
+				}
+			}
+			amList = attenceLogDao.getAttenceLogsList(null, null, duct,start,end);
+			forgetFactNums =  attenceLogDao.getForgetFactNumsList(null, null, duct,start,end);
+			if(amList.getData()!=null)
+			{
+				if(!amList.getData().isEmpty()){
+					for(AttenceLogs am : amList.getData()){
+						AttenceLogPojo attenceModelPojo = new AttenceLogPojo();
+						if(am.getUser_id()!=null){
+							User users = userDao.getById(am.getUser_id());
+							if(users!=null){
+								attenceModelPojo.setUserName(users.getRealName());
+								if(users.getUserIcon()!=null){
+									Files file = fileservice.getById(users.getUserIcon());
+									if(file!=null){
+										attenceModelPojo.setUserIconurl(file.getUrl());
+									}
+								}else if(users.getUserIconUrl()!=null){
+									attenceModelPojo.setUserIconurl(user.getUserIconUrl());
+								}
+								Role role = roleDao.getById(users.getRoleId());
+								if(role!=null){
+									attenceModelPojo.setWorkName(role.getName());
+								}
+							}
+						}
+						if(forgetFactNums.getData()!=null){
+							if(!forgetFactNums.getData().isEmpty()){
+								for(int i=0;i<forgetFactNums.getData().size();i++){
+									if(am.getUser_id().equals(forgetFactNums.getData().get(i).getUser_id())){
+										attenceModelPojo.setForgetClockNum(forgetFactNums.getData().get(i).getForget_nums());
+										attenceModelPojo.setWorkDays(forgetFactNums.getData().get(i).getForget_nums()+forgetFactNums.getData().get(i).getFact_nums());
+										int flag = day-(day/weekds)*(7-weekds);
+										attenceModelPojo.setNotWorkNum(flag-forgetFactNums.getData().get(i).getForget_nums()-forgetFactNums.getData().get(i).getFact_nums());
+									}
+								}
+							}
+						}
+						/////迟到次数
+						attenceModelPojo.setLateNum(am.getLate_nums());
+						///早退次数
+						attenceModelPojo.setLeaveEarlyNum(am.getLeave_early_nums());
+						////忘打卡次数
+						
+						///出勤次数
+						if(attenceModelPojo.getForgetClockNum()==null){
+							attenceModelPojo.setForgetClockNum(0);
+						}
+						if(attenceModelPojo.getWorkDays()==null){
+							attenceModelPojo.setWorkDays(0);
+						}
+						//attenceModelPojo.setWorkDays(days-am.ge);
+						results.add(attenceModelPojo);
+					}
+					result.setData(results);
+				}
+			}else{
+				result.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+	   if(result.getCallStatus()==CallStatusEnum.SUCCEED && result.getData()==null){
+        	List<AttenceLogPojo> pas= new ArrayList<AttenceLogPojo>();
+        	result.setData(pas);
+        }
+		return result;
+	}
+
 
 	@Override
 	public DataWrapper<AttenceLog> getAttenceLogById(String token, AttenceLog ps) {

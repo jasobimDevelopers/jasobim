@@ -23,4 +23,8 @@ public interface AttenceLogDao {
 	AttenceLog getAttenceLogListByIds(AttenceLog ps);
 	DataWrapper<List<AttenceForgetFactLogs>> getForgetFactNumsList(Integer pageIndex, Integer pageSize, AttenceLog duct,
 			Integer year, Integer month);
+	DataWrapper<List<AttenceLogs>> getAttenceLogsList(Integer pageIndex, Integer pageSize, AttenceLog duct,
+			String start, String end);
+	DataWrapper<List<AttenceForgetFactLogs>> getForgetFactNumsList(Integer pageIndex, Integer pageSize, AttenceLog duct,
+			String start, String end);
 }

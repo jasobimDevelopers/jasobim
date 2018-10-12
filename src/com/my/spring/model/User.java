@@ -13,7 +13,7 @@ public class User {
     private String userName;
     private String password;
     private String realName;
-    private Integer userType;//0:超级管理员、1:普通用户、2:投资方、3:项目管理人员、4:游客 5:项目工匠（手机功能开放区域：图纸、交底、模型浏览、质量管理、安全管理、规范查阅）
+    private Integer userType;//0:管理员、1:普通用户、2:投资方、3:项目管理人员、4:游客 5:项目工匠（手机功能开放区域：图纸、交底、模型浏览、质量管理、安全管理、规范查阅）
     private String email;
     private String tel;
     private Long userIcon;
@@ -26,6 +26,7 @@ public class User {
     private Long roleId;
     private Long departmentId;
     private String menuItemList;
+    private String company;
     private String workName;//////施工员、资料员、项目负责人（负责考勤模板设置）、技术员、电工、管道工
     
     @Id
@@ -191,6 +192,16 @@ public class User {
 	public void setWorkName(String workName) {
 		this.workName = workName;
 	}
+	
+	@Basic
+	@Column(name="company")
+	public String getCompany() {
+		return company;
+	}
+	public void setCompany(String company) {
+		this.company = company;
+	}
+	
 	
     
 }

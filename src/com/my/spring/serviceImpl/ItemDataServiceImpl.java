@@ -6,7 +6,6 @@ import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserIndexDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
-import com.my.spring.model.Department;
 import com.my.spring.model.ItemData;
 import com.my.spring.model.ItemDataIndex;
 import com.my.spring.model.ItemDataPojo;
@@ -15,7 +14,6 @@ import com.my.spring.model.User;
 import com.my.spring.model.UserIndex;
 import com.my.spring.model.UserIndexUserId;
 import com.my.spring.model.UserLog;
-import com.my.spring.model.UserTeamIndex;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ItemDataService;
@@ -62,7 +60,7 @@ public class ItemDataServiceImpl implements ItemDataService {
 					List<UserIndexUserId> idList=userIndexDao.getUserIndexListByGroup();
 					if(!idList.isEmpty()){
 						for(int i=0;i<idList.size();i++){
-							MaxIndex max=userIndexDao.getIndexMaxByUserId(idList.get(i).getId());
+							MaxIndex max=userIndexDao.getIndexMaxByUserId(idList.get(i).getId(),3);
 							UserIndex userIndex = new UserIndex();
 							userIndex.setAboutType(3);
 							userIndex.setIndexs(max.getIndexs()+1);
@@ -119,11 +117,11 @@ public class ItemDataServiceImpl implements ItemDataService {
         		userLogSerivce.addUserLog(userLog, token);
         	}
         	List<ItemDataIndex> get=ItemDataDao.getItemDataListByUserId(userInMemory.getId(),pageSize,pageIndex);
+        	dataWrapper=ItemDataDao.getItemDataList(pageIndex,pageSize,ItemData);
+        	List<ItemDataPojo> ItemDataPojoList = new ArrayList<ItemDataPojo>();
         	if(get.isEmpty()){
-        		dataWrapper=ItemDataDao.getItemDataList(pageIndex,pageSize,ItemData);
 				if(dataWrapper.getData()!=null){
 					if(!dataWrapper.getData().isEmpty()){
-						List<ItemDataPojo> ItemDataPojoList = new ArrayList<ItemDataPojo>();
 						for(int i=0;i<dataWrapper.getData().size();i++){
 							ItemDataPojo ItemDataPojo =new ItemDataPojo();
 							ItemDataPojo.setApproveUser(userDao.getById(dataWrapper.getData().get(i).getApproveUser()).getRealName());
@@ -149,18 +147,10 @@ public class ItemDataServiceImpl implements ItemDataService {
 								ItemDataPojoList.add(ItemDataPojo);
 							}
 						}
-						if(ItemDataPojoList!=null && ItemDataPojoList.size()>0){
-							dataWrappers.setData(ItemDataPojoList);
-							dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
-							dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
-							dataWrappers.setTotalPage(dataWrapper.getTotalPage());
-							dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
-						}
+						
 					}
 				}
         	}else{
-        		Integer total = ItemDataDao.getItemDataSizeByUserId(userInMemory.getId());
-        		List<ItemDataPojo> ItemDataPojoList = new ArrayList<ItemDataPojo>();
 				for(int i=0;i<get.size();i++){
 					ItemDataPojo ItemDataPojo =new ItemDataPojo();
 					ItemDataPojo.setApproveUser(userDao.getById(get.get(i).getApproveUser()).getRealName());
@@ -180,11 +170,14 @@ public class ItemDataServiceImpl implements ItemDataService {
 						ItemDataPojoList.add(ItemDataPojo);
 					}
 				}
-				if(ItemDataPojoList!=null && ItemDataPojoList.size()>0){
-					dataWrappers.setData(ItemDataPojoList);
-					dataWrappers.setTotalNumber(total);
-				}
         	}
+        	if(ItemDataPojoList!=null && ItemDataPojoList.size()>0){
+				dataWrappers.setData(ItemDataPojoList);
+				dataWrappers.setTotalNumber(dataWrapper.getTotalNumber());
+				dataWrappers.setCurrentPage(dataWrapper.getCurrentPage());
+				dataWrappers.setTotalPage(dataWrapper.getTotalPage());
+				dataWrappers.setNumberPerPage(dataWrapper.getNumberPerPage());
+			}
 				
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);

@@ -8,12 +8,9 @@ import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.alibaba.fastjson.JSONArray;
 import com.my.spring.DAO.ConstructionTaskNewDao;
 import com.my.spring.DAO.DepartmentDao;
@@ -41,6 +38,7 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.example.jsms.api.JSMSExample;
 import com.my.spring.model.AllItemData;
+import com.my.spring.model.AppLoginBackInfo;
 import com.my.spring.model.ConstructionTaskNew;
 import com.my.spring.model.ConstructionTaskNewPojo;
 import com.my.spring.model.DepartmentUser;
@@ -51,7 +49,6 @@ import com.my.spring.model.MenuListCopy;
 import com.my.spring.model.ProcessLog;
 import com.my.spring.model.ProcessLogPojo;
 import com.my.spring.model.Project;
-import com.my.spring.model.ProjectPojo;
 import com.my.spring.model.ProjectTender;
 import com.my.spring.model.Role;
 import com.my.spring.model.SignUserInfo;
@@ -241,6 +238,7 @@ public class UserServiceImpl implements UserService {
 				users.setRealName(user.getRealName());
 				users.setUserType(user.getUserType());
 				users.setId(user.getId());
+				users.setCompany(user.getCompany());
 				if(user.getUserIcon()!=null){
 					Files file=new Files();
 					file=fileService.getById(user.getUserIcon());
@@ -259,9 +257,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataWrapper<Void> updateUser(User user, String token) {
+	public DataWrapper<AppLoginBackInfo> updateUser(User user, String token) {
 		// TODO Auto-generated method stub
-		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+		DataWrapper<AppLoginBackInfo> dataWrapper = new DataWrapper<AppLoginBackInfo>();
 		User userInMemory = SessionManager.getSession(token);
 		if (userInMemory != null) {
 			User userInDB = userDao.getById(userInMemory.getId());
@@ -278,8 +276,23 @@ public class UserServiceImpl implements UserService {
 				if(user.getMenuItemList()!=null){
 					userInDB.setMenuItemList(user.getMenuItemList());
 				}
+				if(user.getCompany()!=null){
+					userInDB.setCompany(user.getCompany());
+				}
+				if(user.getWorkName()!=null){
+					userInDB.setWorkName(user.getWorkName());
+				}
 				if (!userDao.updateUser(userInDB)) {
 					dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+				}else{
+					AppLoginBackInfo back = new AppLoginBackInfo();
+					back.setId(userInDB.getId());
+					back.setRealName(userInDB.getRealName());
+					back.setUserName(userInDB.getUserName());
+					back.setUserType(userInDB.getUserType());
+					back.setWorkName(userInDB.getWorkName());
+					back.setIconUrl(userInDB.getUserIconUrl());
+					dataWrapper.setData(back);
 				}
 			} else {
 				dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Existed);
@@ -891,7 +904,7 @@ public class UserServiceImpl implements UserService {
 				Date ss = newUserList.getData().get(0).getRegisterDate();
 				Date end= new Date();
 				long between=(end.getTime()-ss.getTime())/1000;//除以1000是为了转换成秒
-				if(between>0 && between<57){
+				if(between>0 && between<297){
 					result.setCallStatus(CallStatusEnum.SUCCEED);
 				}else{
 					result.setErrorInfo(ErrorCodeEnum.Phone_Time_Error.getLabel());
@@ -910,7 +923,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public DataWrapper<Void> registerUserInfo(User user) {
 		DataWrapper<Void> result = new DataWrapper<Void>();
-		UserPojo up = new UserPojo();
 		if(user!=null){
 			if(user.getTel()!=null){
 				User oldUser = userDao.getByUserTel(user.getTel());
@@ -1353,13 +1365,18 @@ public class UserServiceImpl implements UserService {
 			}
 			user.setUserType(UserTypeEnum.Visitor.getType());
 			user.setRegisterDate(new Date());
-			user.setRoleId((long)4);
+			user.setRoleId((long)1);
 			user.setPassword(MD5Util.getMD5String(MD5Util.getMD5String(user.getPassword()) + salt));
 			user.setMenuItemList("0,1,2,3,4,5,6,7,8");
 			user.setUserName(user.getTel());
 			if(user.getRealName()!=null){
 				String names=user.getRealName().substring(user.getRealName().length()-2, user.getRealName().length());
 				String url=UserAvatar.CreateUserIcon(names);
+				if(url!=null){
+					user.setUserIconUrl(url);
+				}
+			}else{
+				String url=UserAvatar.CreateUserIcon("游客");
 				if(url!=null){
 					user.setUserIconUrl(url);
 				}

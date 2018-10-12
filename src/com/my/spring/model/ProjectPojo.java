@@ -43,6 +43,7 @@ public class ProjectPojo {
     private Integer nightWorkHour;
     private String fileId;
     private String cityCode;
+    private Long indexs;
     private List<ProjectTender> projectTender;
     
 	public String getDesignUnitUser() {
@@ -284,6 +285,12 @@ public class ProjectPojo {
 	}
 	public void setConstructionControlUserTel(String constructionControlUserTel) {
 		this.constructionControlUserTel = constructionControlUserTel;
+	}
+	public Long getIndexs() {
+		return indexs;
+	}
+	public void setIndexs(Long indexs) {
+		this.indexs = indexs;
 	}
 	
 }

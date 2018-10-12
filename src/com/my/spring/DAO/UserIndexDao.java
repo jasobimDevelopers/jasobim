@@ -15,6 +15,6 @@ public interface UserIndexDao {
 	List<UserIndex> getUserIndexListOfAbout(Long userId,Integer aboutType);
 	boolean deleteUserIndexByAboutId(Long id, Integer type);
 	List<UserIndexUserId> getUserIndexListByGroup();
-	MaxIndex getIndexMaxByUserId(Long id);
-	boolean deleteUserIndexByAboutType(Long id, Integer type); 
+	boolean deleteUserIndexByAboutType(Long id, Integer type);
+	MaxIndex getIndexMaxByUserId(Long id, Integer type); 
 }

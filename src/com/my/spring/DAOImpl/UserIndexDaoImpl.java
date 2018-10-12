@@ -186,9 +186,9 @@ public class UserIndexDaoImpl extends BaseDao<UserIndex> implements UserIndexDao
 		return gets;
 	}
 	@Override
-	public MaxIndex getIndexMaxByUserId(Long id) {
+	public MaxIndex getIndexMaxByUserId(Long id,Integer type) {
 		List<MaxIndex> gets = new ArrayList<MaxIndex>();
-		String sql="select count(1) as indexs from user_index where user_id="+id;
+		String sql="select count(1) as indexs from user_index where user_id="+id+" and about_type="+type;
 		Session session=getSession();
 		 try{
 			 Query query = session.createSQLQuery(sql)

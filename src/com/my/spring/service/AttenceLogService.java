@@ -13,4 +13,5 @@ public interface AttenceLogService {
 	 DataWrapper<List<AttenceLogPojo>> getAttenceLogList(String token, AttenceLog duct, Integer pageSize,
 			Integer pageIndex, Integer year, Integer month);
 	DataWrapper<AttenceLog> getAttenceLogById(String token, AttenceLog ps);
+	DataWrapper<List<AttenceLogPojo>> getAttenceLogListForEcharts(String token, AttenceLog duct, String start, String end);
 }

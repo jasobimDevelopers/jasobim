@@ -33,8 +33,8 @@ public class JSMSExample {
 
 	protected static final Logger LOG = LoggerFactory.getLogger(JSMSExample.class);
 
-    private static final String appkey = "4bb64dc069ab2e6d9f705a93";
-    private static final String masterSecret = "c0360f93e544a51ee3e3a007";
+    private static final String appkey = "02dfa5b53a1c4e59b8da19bf";
+    private static final String masterSecret = "194740667b5d97847d902c8d";
 
     private static final String devKey = "dd076e3ce130c2e22de1e0d9";
     private static final String devSecret = "8c1aa69a930e54f4a94c121f";
@@ -47,6 +47,7 @@ public class JSMSExample {
         //testSendTemplateSMS();
     	//testGetAppSMSBalance();
     	//testSendBatchTemplateSMS();
+    	testSendBatchTemplateSMS("17612167237","123456");
     	System.out.println();//生成短信验证码);
     }
     

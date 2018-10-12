@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.model.AppLoginBackInfo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserPadPojo;
 import com.my.spring.model.UserPojo;
@@ -125,7 +126,7 @@ public class UserController {
 	 */
 	@RequestMapping(value="/update", method = RequestMethod.POST)
     @ResponseBody
-    public DataWrapper<Void> UpdateUser(
+    public DataWrapper<AppLoginBackInfo> UpdateUser(
     		@ModelAttribute User user,
     		@RequestParam(value="token",required=true) String token) {
         return userService.updateUser(user, token);
