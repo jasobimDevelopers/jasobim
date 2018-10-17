@@ -669,3 +669,28 @@ create table user_index(
 	index_num bigint(20) unsigned not null,
 	about_type int 
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+###合同放样量
+create table project_part_contract_lofting(
+	id serial primary key,
+	name varchar(255),
+	project_id bigint(20) unsigned not null,
+	create_date datetime,
+	create_user bigint(20) unsigned not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table contract_lofting(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	create_user bigint(20) unsigned not null,
+	project_part_id bigint(20) unsigned not null,
+	create_date datetime,
+	name varchar(255),
+	unit varchar(255),
+	project_part_value double,
+	sum double,
+	limit_coefficient double,
+	limit_num double,
+	pid bigint(20) unsigned not null,
+	remark varchar(255)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

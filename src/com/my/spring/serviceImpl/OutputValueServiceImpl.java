@@ -141,8 +141,6 @@ public class OutputValueServiceImpl implements OutputValueService  {
 						Double allOpeArmourNum=0.00;
 						for(int j=0;j<dps.size();j++){
 							if(dp.getData().get(i).getYear()>dps.get(j).getYear()){
-								lastMonthArmourNum=lastMonthArmourNum+dps.get(j).getArmourNum();
-								lastMonthOperatingIncomeNum=lastMonthOperatingIncomeNum+dps.get(j).getOperatingIncomeNum();
 								allOperatingIncomeNum=allOperatingIncomeNum+dps.get(j).getOperatingIncomeNum();
 								allOpeArmourNum=allOpeArmourNum+dps.get(j).getArmourNum();
 							}

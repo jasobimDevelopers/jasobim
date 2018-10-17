@@ -21,7 +21,7 @@ public class MaterialPlan {
 	private Date updateDate;
 	private Long userId;
 	private Long projectId;
-	
+	private String remark;
 	
 	@Id
 	@GeneratedValue
@@ -166,6 +166,15 @@ public class MaterialPlan {
 	}
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
+	}
+	
+	@Basic
+	@Column(name="remark")
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	
 	

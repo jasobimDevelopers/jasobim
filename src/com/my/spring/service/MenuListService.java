@@ -8,7 +8,6 @@ import com.my.spring.model.MenuListCopy;
 import com.my.spring.model.MenuListPojo;
 import com.my.spring.utils.DataWrapper;
 
-import net.sf.json.JSONArray;
 
 public interface MenuListService {
 	DataWrapper<MenuListPojo> getById(String token,Long id);

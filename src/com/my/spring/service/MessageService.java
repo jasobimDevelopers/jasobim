@@ -1,7 +1,6 @@
 package com.my.spring.service;
 
 import com.my.spring.model.Message;
-import com.my.spring.model.MessageCopy;
 import com.my.spring.model.MessageCopyPojo;
 import com.my.spring.model.MessagePojo;
 import com.my.spring.utils.DataWrapper;

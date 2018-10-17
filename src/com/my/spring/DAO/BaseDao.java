@@ -2,6 +2,7 @@ package com.my.spring.DAO;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -95,15 +96,20 @@ public class BaseDao<T> extends Thread{
     public boolean saveList(List<T> entityList) {
         Session session = getSession();
         try{
-            session.beginTransaction();
+        	Transaction tx=session.beginTransaction();
             for(int i=0;i<entityList.size();i++){
-            	session.save(entityList.get(i));
-            	if(i%500==0){
+            	 session.save(entityList.get(i) );
+                 if(i % 15 == 0) {
+                   session.flush();
+                   session.clear();
+                 }
+            	/*session.save(entityList.get(i));
+            	if(i%200==0){
             		session.flush();
-            		session.clear();
-            	}
+            		//session.clear();
+            	}*/
             }
-            session.getTransaction().commit();
+            tx.commit();
             session.flush();
             session.clear();
         }catch(Exception e){

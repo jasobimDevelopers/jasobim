@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.my.spring.model.PaperPojo;
 import com.my.spring.model.ProjectFiles;
 import com.my.spring.model.ProjectFilesPojo;
 import com.my.spring.utils.DataWrapper;

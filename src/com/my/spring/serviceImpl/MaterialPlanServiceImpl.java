@@ -57,6 +57,7 @@ public class MaterialPlanServiceImpl implements MaterialPlanService  {
 					HashMap dataRecord1 = new HashMap();  
 					dataRecord1.put("id", ss.getId().toString());
 					dataRecord1.put("name", ss.getName());
+					dataRecord1.put("remark", ss.getRemark());
 					if(ss.getModel()!=null){
 						dataRecord1.put("model", ss.getModel());
 					}else{

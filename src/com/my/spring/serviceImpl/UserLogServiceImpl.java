@@ -92,7 +92,7 @@ public class UserLogServiceImpl implements UserLogService {
 						UserLog.setUserId(users.getId());
 					}
 				}
-				SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd");
 	    		if(startDate!=null){
 	    			try {
 	    				dateStarts=sdfs.parse(startDate);
@@ -137,7 +137,9 @@ public class UserLogServiceImpl implements UserLogService {
 						/////质安管理文件跟踪
 						if(dataWrapper.getData().get(i).getProjectPart()==5){
 							if(dataWrapper.getData().get(i).getFileId()!=null){
-								UserLogpojos.setFileName(questionDao.getById(dataWrapper.getData().get(i).getFileId()).getName());
+								if(questionDao.getById(dataWrapper.getData().get(i).getFileId())!=null){
+									UserLogpojos.setFileName(questionDao.getById(dataWrapper.getData().get(i).getFileId()).getName());
+								}
 							}
 						}
 						UserLogpojos.setId(dataWrapper.getData().get(i).getId());

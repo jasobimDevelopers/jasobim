@@ -141,6 +141,7 @@ public class ConstructionLogServiceImpl implements ConstructionLogService {
 				e.printStackTrace();
 			}
 			constructionLog.setCreateDate(new Date());
+			constructionLog.setCityCode(cityNode);
 			constructionLog.setCreateUserId(userInMemory.getId());
 			constructionLog.setCreateUserName(userInMemory.getRealName());
 			if(!constructionLogDao.addConstructionLog(constructionLog)){

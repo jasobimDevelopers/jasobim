@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.gson.JsonArray;
+import com.my.spring.model.ProjectPartContractLofting;
 
 import net.sf.json.JSONArray;
 
@@ -17,7 +18,7 @@ import java.util.Collections;
 /** 
  * 多叉树类 
 */  
-public class MaterialPlanNodeUtil {  
+public class ContractLoftingNodeUtil {  
  
  public String getJasonStringOfMaterialPlan(List dataList) {  
 	  // 读取层次数据结果集列表   
@@ -34,15 +35,27 @@ public class MaterialPlanNodeUtil {
 		   NodeMaterialPlan node = new NodeMaterialPlan();  
 		   node.id = (String) dataRecord.get("id");  
 		   node.name = (String) dataRecord.get("name");
-		   node.model = (String) dataRecord.get("model");
-		   node.pid = (String) dataRecord.get("pid");  
-		   node.standard = (String) dataRecord.get("standard");
-		   node.unit = (String) dataRecord.get("unit"); 
-		   node.num = (String) dataRecord.get("num"); 
-		   node.getTime = (String) dataRecord.get("getTime"); 
 		   node.remark = (String) dataRecord.get("remark");
-		   node.outPlace = (String) dataRecord.get("outPlace"); 
-		   node.usePlace = (String) dataRecord.get("usePlace"); 
+		   node.pid = (String) dataRecord.get("pid");  
+		   node.sum = (Double) dataRecord.get("sum");
+		   node.unit = (String) dataRecord.get("unit"); 
+		   node.limitCoefficient = (Double) dataRecord.get("limitCoefficient"); 
+		   node.limitNum = (Double) dataRecord.get("limitNum"); 
+		   node.remark = (String) dataRecord.get("remark");
+		   node.createDate = (String) dataRecord.get("createDate"); 
+		   node.createUser = (Long) dataRecord.get("createUser"); 
+		   node.projectId = (Long) dataRecord.get("projectId");
+		   String str= "";
+		   List<ProjectPartContractLofting> getList = (List<ProjectPartContractLofting>) dataRecord.get("partList");
+		   for(int i=0;i<getList.size();i++){
+			   if(i<(getList.size()-1)){
+				   str=str+"'partName'"+":'"+getList.get(i).getName()+"',"+"'value':'"+getList.get(i).getValue()+"'"+',';
+			   }else{
+				   str=str+"'partName'"+":'"+getList.get(i).getName()+"',"+"'value':'"+getList.get(i).getValue()+"'";
+			   }
+			   
+		   }
+		   node.partList = str;
 		   nodeList.put(node.id, node);  
 	  }  
 	  // 构造无序的多叉树  
@@ -74,16 +87,17 @@ public class MaterialPlanNodeUtil {
 class NodeMaterialPlan {  
 
  public String id;  
+ public String partList;  
  public String name;  
- public String model;  
- public String standard;
- public String unit;
- public String num;
- public String getTime;
- public String outPlace;
- public String usePlace;
- public String pid;
  public String remark;
+ public Double limitCoefficient;
+ public String unit;
+ public Double sum;
+ public Long projectId;
+ public Double limitNum;
+ public Long createUser;
+ public String createDate;
+ public String pid;
  /** 
   * 孩子节点列表 
   */  
@@ -93,10 +107,11 @@ class NodeMaterialPlan {
  public String toString() {    
   String result = "{"  
    + "\"id\" : \"" + id + "\""+", \"name\" : \"" + name + "\""
-   + ", \"model\" : \"" + model + "\"" + ", \"standard\" : \"" 
-   + standard + "\"" +", \"unit\" : \"" + unit + "\""
-   +", \"num\" : \"" + num + "\""+", \"getTime\" : \"" + getTime + "\""
-   +", \"outPlace\" : \"" + outPlace + "\""+", \"usePlace\" : \"" + usePlace + "\""+", \"remark\" : \"" + remark + "\"";  
+   + ", \"limitCoefficient\" : \"" + limitCoefficient + "\"" + ", \"limitNum\" : \"" 
+   + limitNum + "\"" +", \"unit\" : \"" + unit + "\""
+   +", \"sum\" : \"" + sum + "\""+", \"createDate\" : \"" + createDate + "\""
+   +", \"createUser\" : \"" + createUser + "\""+", \"partList\" : \"" + partList + "\""
+   +", \"remark\" : \"" + remark + "\"";  
     
   if (children != null && children.getSize() != 0) {  
    result += ", \"children\" : " + children.toString();  
