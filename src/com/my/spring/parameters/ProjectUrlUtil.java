@@ -22,10 +22,18 @@ public class ProjectUrlUtil {
 		urlList.put("/api/constructionTaskNew/admin/addConstructionTaskNew", ProjectDatas.ConstructionTask_area.getCode());//施工任务单
 		urlList.put("/api/constructionTaskNew/admin/getConstructionTaskNewList", ProjectDatas.ConstructionTask_area.getCode());//施工任务单
 		urlList.put("/api/constructionTaskNew/getConstructionTaskNewDetail", ProjectDatas.ConstructionTask_area.getCode());//施工任务单
+		urlList.put("/api/constructionTaskNew/admin/updateConstructionTaskNew", ProjectDatas.ConstructionTask_area.getCode());//更新
+		urlList.put("api/constructionTaskNew/exportConstructionTask", ProjectDatas.ConstructionTask_area.getCode());///任务单导出
 		/*预付单*/
 		
 		/*安全管理*/
 		urlList.put("/api/question/addQuestion",ProjectDatas.Question_area.getCode());///安全问题添加
+		urlList.put("/api/question/addQuestionReal", ProjectDatas.Question_area.getCode());
+		urlList.put("/api/question/admin/getQuestionLists", ProjectDatas.Question_area.getCode());
+		urlList.put("/api/question/admin/getQuestionHash", ProjectDatas.Question_area.getCode());
+		urlList.put("/api/question/getQuestionDetails", ProjectDatas.Question_area.getCode());
+		urlList.put("/api/question/getQuestionsByLike", ProjectDatas.Question_area.getCode());
+		urlList.put("/api/question/updateQuestionState", ProjectDatas.Question_area.getCode());
 		urlList.put("/api/question/admin/getQuestionList",ProjectDatas.Question_area.getCode());///安全问题查找
 		/*质量管理*/
 		urlList.put("/api/quality/addQuality",ProjectDatas.Quality_area.getCode());/////质量问题添加
@@ -35,6 +43,10 @@ public class ProjectUrlUtil {
 		urlList.put("/api/attenceLog/addAttenceLog", ProjectDatas.AttenceLog_area.getCode());///考勤打卡
 		/*云盘协同*/
 		urlList.put("/api/folder/getFolderIndexList", ProjectDatas.FileManager_area.getCode());///文件云盘（云盘协同）
+		urlList.put("/api/folder/batchDownload",  ProjectDatas.FileManager_area.getCode());//下载文件夹
+		urlList.put("/api/folder/findFileLists", ProjectDatas.FileManager_area.getCode());//文件查找
+		urlList.put("/api/folder/uploadFiles",  ProjectDatas.FileManager_area.getCode());//上传文件
+		urlList.put("/api/folder/uploadFolders",  ProjectDatas.FileManager_area.getCode());///上传文件夹
 		/*图纸查看*/
 		urlList.put("/api/paper/admin/getPaperLists", ProjectDatas.Paper_area.getCode());///图纸查看
 		urlList.put("/api/paper/admin/uploadPaper", ProjectDatas.Paper_area.getCode());//图纸上传

@@ -3,6 +3,7 @@ package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ContractLoftingDao;
 import com.my.spring.model.ContractLofting;
+import com.my.spring.model.ContractLoftingMode;
 import com.my.spring.model.UserIndexs;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -114,4 +115,75 @@ public class ContractLoftingDaoImpl extends BaseDao<ContractLofting> implements 
 		return saveList(parrent1);
 	}
 	
+	@Override
+	public List<ContractLoftingMode> getAllContractLofting(Long projectId) {
+		List<ContractLoftingMode> gets=new ArrayList<ContractLoftingMode>();
+		String sql = "select id,name from contract_lofting where project_id="+projectId;
+		Session session=getSession();
+		try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("id", StandardBasicTypes.LONG)
+					 .addScalar("name", StandardBasicTypes.STRING)
+					 .setResultTransformer(Transformers.aliasToBean(ContractLoftingMode.class));
+			 	gets=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	    }
+		return gets;
+	}
+	@Override
+	public List<ContractLofting> getAllContractLoftings(Long projectId) {
+		List<ContractLofting> ret = new ArrayList<ContractLofting>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(ContractLofting.class);
+        criteria.add(Restrictions.eq("projectId", projectId));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ret;
+	}
+	@Override
+	public boolean deleteContractLoftingByName(String name) {
+		String sql = "delete from contract_lofting where name="+name;
+		Session session=getSession();
+		boolean test=false;
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 int temp=query.executeUpdate();
+			 if(temp!=0){
+				 test= true;
+			 }
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return test;
+	}
+	@Override
+	public boolean deleteContractLoftingByIds(List<Long> ids) {
+		String sql = "delete from contract_lofting where id=";
+		for(int i=0;i<ids.size();i++){
+			if(i==(ids.size()-1)){
+				sql=sql+ids.get(i);
+			}else{
+				sql=sql+ids.get(i)+" or id=";
+			}
+		}
+		
+		Session session=getSession();
+		boolean test=false;
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 int temp=query.executeUpdate();
+			 if(temp!=0){
+				 test= true;
+			 }
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return test;
+	}
 }

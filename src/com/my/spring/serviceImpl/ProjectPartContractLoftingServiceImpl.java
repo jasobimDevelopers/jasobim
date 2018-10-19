@@ -6,11 +6,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.my.spring.DAO.ContractLoftingDao;
 import com.my.spring.DAO.ProjectPartContractLoftingDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserIndexDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.ProjectPartContractLofting;
+import com.my.spring.model.ProjectPartContractLoftingPojo;
+import com.my.spring.model.ContractLoftingMode;
 import com.my.spring.model.MaxIndex;
 import com.my.spring.model.User;
 import com.my.spring.model.UserIndex;
@@ -30,6 +33,8 @@ public class ProjectPartContractLoftingServiceImpl implements ProjectPartContrac
 	UserIndexDao userIndexDao;
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	ContractLoftingDao contractLoftingDao;
 	@Override
 	public DataWrapper<Void> deleteProjectPartContractLoftingById(String token,Long id) {
 		DataWrapper<Void> result = new DataWrapper<Void>();
@@ -47,18 +52,49 @@ public class ProjectPartContractLoftingServiceImpl implements ProjectPartContrac
 	}
 
 	@Override
+	public DataWrapper<ProjectPartContractLofting> addProjectPartContractLoftingList(String token,ProjectPartContractLofting role) {
+		DataWrapper<ProjectPartContractLofting> result = new DataWrapper<ProjectPartContractLofting>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(role!=null){
+				
+				List<ProjectPartContractLofting> addList = new ArrayList<ProjectPartContractLofting>();
+				List<ContractLoftingMode> getids = contractLoftingDao.getAllContractLofting(role.getProjectId());
+				for(int i=0;i<getids.size();i++){
+					ProjectPartContractLofting pcl = new ProjectPartContractLofting();
+					pcl.setCreateUser(user.getId());
+					pcl.setCreateDate(new Date());
+					pcl.setProjectId(role.getProjectId());
+					pcl.setName(role.getName());
+					pcl.setContractLoftingId(getids.get(i).getId());
+					pcl.setpName(getids.get(i).getName());
+					addList.add(pcl);
+				}
+				if(!ProjectPartContractLoftingDao.addProjectPartContractLoftingList(addList)){
+					result.setErrorCode(ErrorCodeEnum.Error);
+				}else{
+					result.setData(role);
+				}
+			}
+			
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+	@Override
 	public DataWrapper<ProjectPartContractLofting> addProjectPartContractLofting(String token,ProjectPartContractLofting role) {
 		DataWrapper<ProjectPartContractLofting> result = new DataWrapper<ProjectPartContractLofting>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(role!=null){
-				role.setCreateUser(user.getId());
-				role.setCreateDate(new Date());
-				if(!ProjectPartContractLoftingDao.addProjectPartContractLofting(role)){
-					result.setErrorCode(ErrorCodeEnum.Error);
-				}else{
-					result.setData(role);
-				}
+					role.setCreateUser(user.getId());
+					role.setCreateDate(new Date());
+					if(!ProjectPartContractLoftingDao.addProjectPartContractLofting(role)){
+						result.setErrorCode(ErrorCodeEnum.Error);
+					}else{
+						result.setData(role);
+					}
 			}
 			
 		}else{
@@ -83,13 +119,13 @@ public class ProjectPartContractLoftingServiceImpl implements ProjectPartContrac
 
 
 	@Override
-	public DataWrapper<List<ProjectPartContractLofting>> getProjectPartContractLoftingList(Integer pageIndex, Integer pageSize, ProjectPartContractLofting ProjectPartContractLofting,
+	public DataWrapper<List<ProjectPartContractLoftingPojo>> getProjectPartContractLoftingList(Integer pageIndex, Integer pageSize, ProjectPartContractLofting ProjectPartContractLofting,
 			String token) {
-		DataWrapper<List<ProjectPartContractLofting>> dp = new DataWrapper<List<ProjectPartContractLofting>>();
-		List<ProjectPartContractLofting> gets = new ArrayList<ProjectPartContractLofting>();
+		DataWrapper<List<ProjectPartContractLoftingPojo>> dp = new DataWrapper<List<ProjectPartContractLoftingPojo>>();
+		List<ProjectPartContractLoftingPojo> gets = new ArrayList<ProjectPartContractLoftingPojo>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			gets = ProjectPartContractLoftingDao.getProjectPartContractLoftingList(pageIndex, pageSize, ProjectPartContractLofting);
+			gets = ProjectPartContractLoftingDao.getProjectPartContractLoftingList(ProjectPartContractLofting);
 			dp.setData(gets);
 		}else{
 			dp.setErrorCode(ErrorCodeEnum.User_Not_Logined);
@@ -111,21 +147,51 @@ public class ProjectPartContractLoftingServiceImpl implements ProjectPartContrac
 	}
 
 	@Override
-	public DataWrapper<Void> updateProjectPartContractLofting(String token, ProjectPartContractLofting ProjectPartContractLofting) {
-		DataWrapper<Void> result = new DataWrapper<Void>();
+	public DataWrapper<ProjectPartContractLofting> updateProjectPartContractLofting(String token, ProjectPartContractLofting ProjectPartContractLofting) {
+		DataWrapper<ProjectPartContractLofting> result = new DataWrapper<ProjectPartContractLofting>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(ProjectPartContractLofting!=null){
 				ProjectPartContractLofting dp = new ProjectPartContractLofting();
 				dp = ProjectPartContractLoftingDao.getById(ProjectPartContractLofting.getId());
-				if(ProjectPartContractLofting.getName()!=null){
-					dp.setName(ProjectPartContractLofting.getName());
+				if(ProjectPartContractLofting.getValue()!=null){
+					dp.setValue(ProjectPartContractLofting.getValue());
 				}
 				if(!ProjectPartContractLoftingDao.updateProjectPartContractLofting(dp)){
 					result.setErrorCode(ErrorCodeEnum.Error);
+				}else{
+					result.setData(dp);
 				}
 			}
 			
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+
+	@Override
+	public DataWrapper<List<ProjectPartContractLoftingPojo>> getDefaultList(Long projectId, String token) {
+		DataWrapper<List<ProjectPartContractLoftingPojo>> dp = new DataWrapper<List<ProjectPartContractLoftingPojo>>();
+		List<ProjectPartContractLoftingPojo> gets = new ArrayList<ProjectPartContractLoftingPojo>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			gets  = ProjectPartContractLoftingDao.getProjectPartContractLoftingList(projectId);
+			dp.setData(gets);
+		}else{
+			dp.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return dp;
+	}
+
+	@Override
+	public DataWrapper<Void> deleteProjectPartContractLoftingByName(String token, String name,Long projectId) {
+		DataWrapper<Void> result = new DataWrapper<Void>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(!ProjectPartContractLoftingDao.deleteProjectPartContractLoftingByName(name,projectId)){
+				result.setErrorCode(ErrorCodeEnum.Error);
+			}
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

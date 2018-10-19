@@ -34,8 +34,9 @@ public class ContractLoftingController {
     @ResponseBody
     public DataWrapper<Void> deleteContractLofting(
             @RequestParam(value = "id",required = true) Long id,
+            @RequestParam(value = "projectId",required = true) Long projectId,
             @RequestParam(value = "token",required = true) String token){
-        return contractLoftingService.deleteContractLoftingById(token,id);
+        return contractLoftingService.deleteContractLoftingById(token,id,projectId);
     }
 
     @RequestMapping(value="/admin/getContractLoftingList", method=RequestMethod.GET)
@@ -47,12 +48,12 @@ public class ContractLoftingController {
             @RequestParam(value = "token",required = true) String token){
         return contractLoftingService.getContractLoftingList(pageIndex,pageSize,contractLofting,token);
     }
-    @RequestMapping(value="/admin/getContractLoftingById",method=RequestMethod.GET)
+    @RequestMapping(value="/updateContractLofting",method=RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<ContractLofting> getContractLoftingById(
-    		@RequestParam(value = "id",required = true) Long id,
+    public DataWrapper<ContractLofting> updateContractLofting(
+    		@ModelAttribute ContractLofting contractLofting,
             @RequestParam(value = "token",required = true) String token){
-        return contractLoftingService.getContractLoftingById(token,id);
+        return contractLoftingService.updateContractLofting(token,contractLofting);
     }
     @RequestMapping(value="/importContractLoftingByProjectId",method=RequestMethod.POST)
     @ResponseBody

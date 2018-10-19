@@ -265,7 +265,7 @@ public class ProjectServiceImpl implements ProjectService {
     							pojo.setPicUrl(urlList2[0]);
     						}
     					}
-    					project.setUpdateDate(new Date(System.currentTimeMillis()));
+    					project.setCreateDate(new Date(System.currentTimeMillis()));
     					if(projectDao.addProject(project))
     					{
     						List<UserIndex> indexList = new ArrayList<UserIndex>();

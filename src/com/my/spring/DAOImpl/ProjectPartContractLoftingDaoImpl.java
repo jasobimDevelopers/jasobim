@@ -3,14 +3,12 @@ package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProjectPartContractLoftingDao;
 import com.my.spring.model.ProjectPartContractLofting;
+import com.my.spring.model.ProjectPartContractLoftingPojo;
 import com.my.spring.model.UserIndexs;
-import com.my.spring.utils.DaoUtil;
-import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
@@ -37,23 +35,58 @@ public class ProjectPartContractLoftingDaoImpl extends BaseDao<ProjectPartContra
 
     @SuppressWarnings("unchecked")
 	@Override
-    public List<ProjectPartContractLofting> getProjectPartContractLoftingList(Integer pageIndex, Integer pageSize, ProjectPartContractLofting ProjectPartContractLofting) {
-        List<ProjectPartContractLofting> ret2 = new ArrayList<ProjectPartContractLofting>();
-        Session session = getSession();
-        Criteria criteria = session.createCriteria(ProjectPartContractLofting.class);
-        criteria.add(Restrictions.eq("projectId", ProjectPartContractLofting.getProjectId()));
-        ProjectionList projectionList = Projections.projectionList();
-        projectionList.add(Projections.groupProperty("name"));
-        criteria.setProjection(projectionList);
-        criteria.addOrder(Order.asc("id"));
-        try {
-            ret2 = criteria.list();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-       
-        return ret2;
+    public List<ProjectPartContractLoftingPojo> getProjectPartContractLoftingList(ProjectPartContractLofting ProjectPartContractLofting) {
+        List<ProjectPartContractLoftingPojo> ret = new ArrayList<ProjectPartContractLoftingPojo>();
+		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+        String sql = "select id,p_name as name,name as partName,value,contract_lofting_id as loftingId "
+		+"from project_part_contract_lofting where contract_lofting_id in "
+		+"(select id from contract_lofting where project_id="+ProjectPartContractLofting.getProjectId()
+		+" and pid="+ProjectPartContractLofting.getContractLoftingId()+")";
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+				 .addScalar("id",StandardBasicTypes.LONG)
+				 .addScalar("loftingId", StandardBasicTypes.LONG)
+				 .addScalar("name",StandardBasicTypes.STRING)
+				 .addScalar("partName",StandardBasicTypes.STRING)
+				 .addScalar("value", StandardBasicTypes.DOUBLE)
+				 .setResultTransformer(Transformers.aliasToBean(ProjectPartContractLoftingPojo.class)); 
+		    ret=query.list();
+	        
+	    }catch(Exception e){
+	        e.printStackTrace();
+	        //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	    }
+
+		return ret;
     }
+    @SuppressWarnings("unchecked")
+	@Override
+    public List<ProjectPartContractLoftingPojo> getProjectPartContractLoftingList(Long projectId) {
+    	 List<ProjectPartContractLoftingPojo> ret = new ArrayList<ProjectPartContractLoftingPojo>();
+    		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+    		String sql = "select b.id,b.id as loftingId,a.name,b.name as partName,b.value "
+    		+"from contract_lofting a,project_part_contract_lofting b where a.pid is null "
+    		+"and a.id=b.contract_lofting_id and a.project_id="+projectId;
+    		Session session=getSession();
+    	    try{
+    		    Query query = session.createSQLQuery(sql)
+    				 .addScalar("id",StandardBasicTypes.LONG)
+    				 .addScalar("loftingId", StandardBasicTypes.LONG)
+    				 .addScalar("name",StandardBasicTypes.STRING)
+    				 .addScalar("partName",StandardBasicTypes.STRING)
+    				 .addScalar("value", StandardBasicTypes.DOUBLE)
+    				 .setResultTransformer(Transformers.aliasToBean(ProjectPartContractLoftingPojo.class)); 
+    		    ret=query.list();
+    	        
+    	    }catch(Exception e){
+    	        e.printStackTrace();
+    	        //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+    	    }
+
+    		return ret;
+    }
+   
 
 	@Override
 	public ProjectPartContractLofting getById(Long id) {
@@ -102,6 +135,23 @@ public class ProjectPartContractLoftingDaoImpl extends BaseDao<ProjectPartContra
         }
         
         return ret;
+	}
+	@Override
+	public boolean deleteProjectPartContractLoftingByName(String name,Long projectId) {
+		String sql = "delete from project_part_contract_lofting where name='"+name+"'"+" and project_id="+projectId;
+		Session session=getSession();
+		boolean test=false;
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 int temp=query.executeUpdate();
+			 if(temp!=0){
+				 test= true;
+			 }
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return test;
 	}
 	
 }

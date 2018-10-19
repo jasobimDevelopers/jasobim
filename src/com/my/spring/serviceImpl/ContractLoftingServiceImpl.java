@@ -31,6 +31,7 @@ import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.ReadContractLoftingExcel;
 import com.my.spring.utils.SessionManager;
+import com.my.spring.utils.TestUtil;
 
 @Service("contractLoftingService")
 public class ContractLoftingServiceImpl implements ContractLoftingService  {
@@ -44,15 +45,23 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 	UserIndexDao userIndexDao;
 	@Autowired
 	UserDao userDao;
+	
+	@SuppressWarnings("static-access")
 	@Override
-	public DataWrapper<Void> deleteContractLoftingById(String token,Long id) {
+	public DataWrapper<Void> deleteContractLoftingById(String token,Long id,Long projectId) {
 		DataWrapper<Void> result = new DataWrapper<Void>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			if(!ContractLoftingDao.deleteContractLofting(id)){
-				result.setErrorCode(ErrorCodeEnum.Error);
-			}else{
-				userIndexService.deleteUserIndexByAboutId(0, id);
+			if(id!=null){
+				List<ContractLofting> all = ContractLoftingDao.getAllContractLoftings(projectId);
+				List<ContractLofting> clist = new ArrayList<ContractLofting>();
+				ContractLofting pitem = new ContractLofting();
+				pitem.setId(id);
+				clist.add(pitem);
+				TestUtil util = new TestUtil(all);
+				List<Long> ids=util.getList(clist);
+				ids.add(id);
+				ContractLoftingDao.deleteContractLoftingByIds(ids);
 			}
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
@@ -121,8 +130,8 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 	}
 
 	@Override
-	public DataWrapper<Void> updateContractLofting(String token, ContractLofting ContractLofting) {
-		DataWrapper<Void> result = new DataWrapper<Void>();
+	public DataWrapper<ContractLofting> updateContractLofting(String token, ContractLofting ContractLofting) {
+		DataWrapper<ContractLofting> result = new DataWrapper<ContractLofting>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(ContractLofting!=null){
@@ -131,11 +140,18 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 				if(ContractLofting.getName()!=null){
 					dp.setName(ContractLofting.getName());
 				}
+				if(ContractLofting.getLimitCoefficient()!=null){
+					dp.setLimitCoefficient(ContractLofting.getLimitCoefficient());
+				}
+				if(ContractLofting.getLimitNum()!=null){
+					dp.setLimitNum(ContractLofting.getLimitNum());
+				}
 				if(!ContractLoftingDao.updateContractLofting(dp)){
 					result.setErrorCode(ErrorCodeEnum.Error);
+				}else{
+					result.setData(dp);
 				}
 			}
-			
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -251,6 +267,20 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 				pLoftingDao.addProjectPartContractLoftingList(addList);
 			}
 			
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+
+	@Override
+	public DataWrapper<Void> deleteContractLoftingById(String token, String name) {
+		DataWrapper<Void> result = new DataWrapper<Void>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(!ContractLoftingDao.deleteContractLoftingByName(name)){
+				result.setErrorCode(ErrorCodeEnum.Error);
+			}
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
