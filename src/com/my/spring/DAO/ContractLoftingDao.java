@@ -17,4 +17,5 @@ public interface ContractLoftingDao {
 	boolean deleteContractLoftingByName(String name);
 	List<ContractLofting> getAllContractLoftings(Long projectId);
 	boolean deleteContractLoftingByIds(List<Long> ids);
+	boolean deleteContractLoftingByProjectId(Long projectId);
 }

@@ -186,4 +186,21 @@ public class ContractLoftingDaoImpl extends BaseDao<ContractLofting> implements 
 		 
 		return test;
 	}
+	@Override
+	public boolean deleteContractLoftingByProjectId(Long projectId) {
+		String sql = "delete from contract_lofting where project_id="+projectId;
+		Session session=getSession();
+		boolean test=false;
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 int temp=query.executeUpdate();
+			 if(temp!=0){
+				 test= true;
+			 }
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return test;
+	}
 }

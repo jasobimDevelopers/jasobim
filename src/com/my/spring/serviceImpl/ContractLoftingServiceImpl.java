@@ -184,6 +184,7 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 			/*(6)存入ProjectPartContractLofting的contractLoftingId,ProjectPartContractLofting的实体集再存*/
 			List<ContractLofting> parrent1 = gets.subList(0, 4);
 			List<Integer> indexList = new ArrayList<Integer>();
+			ContractLoftingDao.deleteContractLoftingByProjectId(projectId);
 			if(ContractLoftingDao.addContractLoftingList(parrent1)){
 				for(int i=0;i<gets.size();i++){
 					if(i<4){
@@ -252,7 +253,7 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 				}
 			}
 			List<ProjectPartContractLofting> saveItems = new ArrayList<ProjectPartContractLofting>();
-			
+			pLoftingDao.deleteProjectPartContractLoftingByProjectId(projectId);
 			for(int i=0;i<gets.size();i++){
 				List<ProjectPartContractLofting> addList = new ArrayList<ProjectPartContractLofting>();
 				saveItems=gets2.get(gets.get(i).getName());
@@ -264,6 +265,7 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 					saveItems.get(j).setProjectId(projectId);
 					addList.add(saveItems.get(j));
 				}
+				
 				pLoftingDao.addProjectPartContractLoftingList(addList);
 			}
 			

@@ -8,8 +8,6 @@ import com.my.spring.model.UserIndexs;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
@@ -139,6 +137,23 @@ public class ProjectPartContractLoftingDaoImpl extends BaseDao<ProjectPartContra
 	@Override
 	public boolean deleteProjectPartContractLoftingByName(String name,Long projectId) {
 		String sql = "delete from project_part_contract_lofting where name='"+name+"'"+" and project_id="+projectId;
+		Session session=getSession();
+		boolean test=false;
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 int temp=query.executeUpdate();
+			 if(temp!=0){
+				 test= true;
+			 }
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return test;
+	}
+	@Override
+	public boolean deleteProjectPartContractLoftingByProjectId(Long projectId) {
+		String sql = "delete from project_part_contract_lofting where project_id="+projectId;
 		Session session=getSession();
 		boolean test=false;
 		 try{

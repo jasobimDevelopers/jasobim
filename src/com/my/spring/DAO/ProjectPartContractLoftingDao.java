@@ -16,4 +16,5 @@ public interface ProjectPartContractLoftingDao {
 	List<ProjectPartContractLoftingPojo> getProjectPartContractLoftingList(
 			ProjectPartContractLofting ProjectPartContractLofting);
 	boolean deleteProjectPartContractLoftingByName(String name, Long projectId);
+	boolean deleteProjectPartContractLoftingByProjectId(Long projectId);
 }
