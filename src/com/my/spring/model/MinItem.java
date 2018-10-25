@@ -28,7 +28,7 @@ public class MinItem {
     private Long selfId;  //模型中对应的id
     private String name;   //构件名称
     private String typeName;//类型名
-    private Integer professionType;//专业类型 0、电气 1、暖通 2、给水 3、排水 4.消防
+    private Integer professionType;//专业类型 0、电气 1、暖通 2、给排水 3.消防
 
     @Id
     @GeneratedValue

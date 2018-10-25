@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.BuildingInfo;
 import com.my.spring.model.Item;
+import com.my.spring.model.ItemStateData;
+import com.my.spring.model.ItemStatesData;
 import com.my.spring.model.MinItem;
 import com.my.spring.model.MinItemPojo;
 import com.my.spring.service.ItemService;
@@ -241,6 +243,23 @@ public class ItemController {
     		@ModelAttribute Item item
     		){
         return itemService.getCodeImg(item,request);
+    }
+    @RequestMapping(value="/getItemSelfPercent",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<ItemStateData>> getItemStateData(
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+    		@RequestParam(value = "professionType",required = false) Integer professionType,
+    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
+    		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@RequestParam(value = "token",required = true) String token){
+        return itemService.getItemStateData(projectId,token,pageIndex,pageSize,professionType);
+    }
+    @RequestMapping(value="/getItemsPercent",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<ItemStatesData> getItemsPercent(
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+    		@RequestParam(value = "token",required = true) String token){
+        return itemService.getItemStatesData(projectId,token);
     }
 
 }

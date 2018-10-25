@@ -453,5 +453,12 @@ create table production(
     date date
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
+create table item_state_log(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	user_id bigint(20) unsigned not null,
+	action_date datetime,
+	self_id bigint(20) unsigned not null,
+	status int
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 				 

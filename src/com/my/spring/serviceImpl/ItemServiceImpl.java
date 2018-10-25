@@ -16,6 +16,9 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Building;
 import com.my.spring.model.Item;
+import com.my.spring.model.ItemCount;
+import com.my.spring.model.ItemStateData;
+import com.my.spring.model.ItemStatesData;
 import com.my.spring.model.MinItem;
 import com.my.spring.model.MinItemPojo;
 import com.my.spring.model.Project;
@@ -37,6 +40,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -533,8 +537,6 @@ public class ItemServiceImpl implements ItemService {
 		}
 		return null;
 	}
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public String getCodeImg(Item item,HttpServletRequest request) {
 		MinItem test=minItemDao.getMinItemBySelfId(item.getSelfId());
@@ -569,6 +571,126 @@ public class ItemServiceImpl implements ItemService {
 			e.printStackTrace();
 		}
 		return realPath;
+	}
+
+	@Override
+	public DataWrapper<List<ItemStateData>> getItemStateData(Long projectId, String token,Integer pageIndex, Integer pageSize ,Integer professionType) {
+		DataWrapper<List<ItemStateData>> result = new DataWrapper<List<ItemStateData>>();
+		List<ItemStateData> resultDataList = new ArrayList<ItemStateData>();
+		List<ItemStateData> resultDataList2 = new ArrayList<ItemStateData>();
+		DataWrapper<List<Item>> itemList = new DataWrapper<List<Item>>();
+		List<ItemCount> gets = new ArrayList<ItemCount>();
+		List<ItemCount> gets2 = new ArrayList<ItemCount>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			gets = itemDao.getNumsGroupBy(projectId);
+			gets2 = itemDao.getNumsGroupByState(projectId);
+			Item empty = new Item();
+			empty.setProjectId(projectId);
+			//itemList=itemDao.getItemLists(projectId, pageIndex, pageSize, empty);
+			for(int i=0;i<gets.size();i++){
+				ItemStateData items = new ItemStateData();
+				items.setName(gets.get(i).getName());
+				items.setProfessionType(gets.get(i).getProfessionType());
+				items.setFamilyAndType(gets.get(i).getFamilyAndType());
+				items.setServiceType(gets.get(i).getServiceType());
+				items.setSystemType(gets.get(i).getSystemType());
+				items.setSize(gets.get(i).getSize());
+				items.setPercent("0%");
+				if(gets.get(i).getLength()>0){
+					items.setUnit("米");
+					items.setNum(gets.get(i).getLength()/100);
+				}else if(gets.get(i).getArea()>0){
+					items.setUnit("平方米");
+					items.setNum(gets.get(i).getArea());
+				}else{
+					items.setUnit("个");
+					items.setNum(Double.valueOf(gets.get(i).getNum()));
+				}
+				for(int j=0;j<gets2.size();j++){
+					if(gets.get(i).getName().equals(gets2.get(j).getName()) 
+							&& gets.get(i).getServiceType().equals(gets2.get(j).getServiceType())
+							&& gets.get(i).getSystemType().equals(gets2.get(j).getSystemType())
+							&& gets.get(i).getFamilyAndType().equals(gets2.get(j).getFamilyAndType())
+							&& gets.get(i).getSize().equals(gets2.get(j).getSize())){
+						NumberFormat numberFormat = NumberFormat.getInstance();
+						// 设置精确到小数点后2位
+						numberFormat.setMaximumFractionDigits(2);
+						if(gets.get(i).getLength()>0){
+							Double num1 =gets2.get(j).getLength();
+							Double num2 =gets.get(i).getLength();
+							items.setPercent(numberFormat.format(num1 / num2 * 100)+"%");
+							items.setIdList(gets2.get(j).getIdList());
+						}else if(gets.get(i).getArea()>0){
+							Double num1 =gets2.get(j).getArea();
+							Double num2 =gets.get(i).getArea();
+							items.setPercent(numberFormat.format(num1 / num2 * 100)+"%");
+							items.setIdList(gets2.get(j).getIdList());
+						}else{
+							float num1 =gets2.get(j).getNum();
+							float num2 =gets.get(i).getNum();
+							items.setPercent(numberFormat.format(num1 / num2 * 100)+"%");
+							items.setIdList(gets2.get(j).getIdList());
+						}
+					}
+				}
+				resultDataList.add(items);
+			}
+			if(professionType!=null){
+				for(int i=0;i<resultDataList.size();i++){
+					if(resultDataList.get(i).getProfessionType()==professionType){
+						resultDataList2.add(resultDataList.get(i));
+					}
+				}
+				result.setData(resultDataList2);
+			}else{
+				result.setData(resultDataList);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);;
+		}
+		return result;
+	}
+
+	@Override
+	public DataWrapper<ItemStatesData> getItemStatesData(Long projectId, String token) {
+		DataWrapper<ItemStatesData> result = new DataWrapper<ItemStatesData>();
+		List<ItemCount> gets = new ArrayList<ItemCount>();
+		List<ItemCount> gets2 = new ArrayList<ItemCount>();
+		List<Object> allgets = new ArrayList<Object>();
+		List<ItemCount> allgets2 = new ArrayList<ItemCount>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			gets2 = itemDao.getNumsGroupByProfesstionType(projectId);///按专业的总数
+			gets = itemDao.getNumsGroupByProfesstionTypeAndState(projectId);//安装业的完成总数
+			NumberFormat numberFormat = NumberFormat.getInstance();
+			// 设置精确到小数点后2位
+			numberFormat.setMaximumFractionDigits(2);
+			List<String> professionDatas = new ArrayList<String>();
+			for(int k=0;k<gets2.size();k++){
+				professionDatas.add("0");
+			}
+			ItemStatesData it = new ItemStatesData();
+			it.setProfessionDatas(professionDatas);
+			for(int i=0;i<gets2.size();i++){
+				it.setFinished("0");
+				for(int j=0;j<gets.size();j++){
+					if(gets2.get(i).getProfessionType()==gets.get(j).getProfessionType()){
+						float num1 = gets.get(j).getNum();
+						float num2 = gets2.get(i).getNum();
+						professionDatas.set(gets2.get(i).getProfessionType(),(numberFormat.format(num1 / num2 * 100)));
+					}
+				}
+			}
+			allgets = itemDao.getAllNumsGroupByStates(projectId);
+			float num3 = Float.valueOf(allgets.get(0).toString());
+			float num4 = Float.valueOf(allgets.get(1).toString());
+			it.setFinished(numberFormat.format(num3 / num4 * 100));
+			result.setData(it);
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);;
+		}
+		return result;
 	}
 
 }

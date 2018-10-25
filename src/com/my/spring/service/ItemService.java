@@ -1,6 +1,8 @@
 package com.my.spring.service;
 
 import com.my.spring.model.Item;
+import com.my.spring.model.ItemStateData;
+import com.my.spring.model.ItemStatesData;
 import com.my.spring.model.MinItem;
 import com.my.spring.model.MinItemPojo;
 import com.my.spring.utils.DataWrapper;
@@ -30,4 +32,7 @@ public interface ItemService {
 	DataWrapper<MinItemPojo> getMinItemById(Long id);
 	//public boolean batchImportss(String name,MultipartFile file,String token,HttpServletRequest request, Long projectId);
 	DataWrapper<Item> getItemBySelfId(Long projectId);
+	DataWrapper<List<ItemStateData>> getItemStateData(Long projectId, String token, Integer pageIndex,
+			Integer pageSize,Integer professionType);
+	DataWrapper<ItemStatesData> getItemStatesData(Long projectId, String token);
 }

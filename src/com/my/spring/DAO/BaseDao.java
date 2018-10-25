@@ -96,7 +96,7 @@ public class BaseDao<T>{
             session.beginTransaction();
             for(int i=0;i<entityList.size();i++){
             	session.save(entityList.get(i));
-            	if(i%100==0){
+            	if(i%15==0){
             		session.flush();
             		session.clear();
             	}
@@ -187,6 +187,28 @@ public class BaseDao<T>{
      * @param entity
      */
     public boolean update(T entity) {
+        Session session = getSession();
+        try{
+            session.beginTransaction();
+            session.clear();
+            session.update(entity);
+            session.getTransaction().commit();
+            session.flush();
+            session.clear();
+        }catch(Exception e){
+            e.printStackTrace();
+            session.getTransaction().rollback();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * 更改PO
+     *
+     * @param entity
+     */
+    public boolean updateList(List<T> entity) {
         Session session = getSession();
         try{
             session.beginTransaction();

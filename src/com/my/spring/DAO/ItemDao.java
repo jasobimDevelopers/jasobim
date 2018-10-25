@@ -1,6 +1,8 @@
 package com.my.spring.DAO;
 
 import com.my.spring.model.Item;
+import com.my.spring.model.ItemCount;
+import com.my.spring.model.ItemStateLog;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DataWrapper;
 
@@ -23,5 +25,14 @@ public interface ItemDao {
 	Long getItemByBuidlingNum(Long projectId, Long buildingId);
 	boolean addItemList(List<Item> itemList);
 	Item getItemBySelfId(Long projectId);
+	List<ItemCount> getNumsGroupBy(Long projectId);
+	List<ItemCount> getNumsGroupByState(Long projectId);
+	List<Item> getItemBySelfId(ItemStateLog itemStateLog,String idList);
+	Item getItemBySelfId(Long selfId, Long projectId);
+	DataWrapper<List<Item>> getItemLists(Long projectId, Integer pageIndex, Integer pageSize, Item empty);
+	List<ItemCount> getNumsGroupByProfesstionType(Long projectId);
+	List<ItemCount> getNumsGroupByProfesstionTypeAndState(Long projectId);
+	List<Object> getAllNumsGroupByStates(Long projectId);
+	boolean updateItemList(List<Item> item);
 	
 }

@@ -32,6 +32,7 @@ public class Item {
     private String installUnit;///安装单位
     private String installDate;///安装日期
     private String itemBrand;///构件品牌
+    private Integer state;//0、未安装  1、已安装
     
     
     @Id
@@ -290,9 +291,17 @@ public class Item {
 	public Integer getProfessionType() {
 		return professionType;
 	}
-
 	public void setProfessionType(Integer professionType) {
 		this.professionType = professionType;
+	}
+
+	@Basic
+	@Column(name="state")
+	public Integer getState() {
+		return state;
+	}
+	public void setState(Integer state) {
+		this.state = state;
 	}
 
    
