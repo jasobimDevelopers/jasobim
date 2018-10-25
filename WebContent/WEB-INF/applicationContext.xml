@@ -136,6 +136,7 @@
                	<value>com.my.spring.model.UserIndex</value>
                	<value>com.my.spring.model.ContractLofting</value>
                	<value>com.my.spring.model.ProjectPartContractLofting</value>
+               	<value>com.my.spring.model.ProjectProcess</value>
             </list>
         </property>
     </bean>

@@ -694,3 +694,17 @@ create table contract_lofting(
 	pid bigint(20) unsigned not null,
 	remark varchar(255)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table project_process(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	parent_id bigint(20) unsigned not null,
+	level int,
+	task_name varchar(255),
+	duration_date varchar(255),
+	start_date datetime,
+	end_date datetime,
+	pre_task int,
+	resource varchar(255),
+	import_time datetime
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

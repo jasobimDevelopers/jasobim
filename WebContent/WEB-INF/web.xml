@@ -60,6 +60,10 @@
     <servlet-name>default</servlet-name>
     <url-pattern>*.pdf</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.u3d</url-pattern>
+  </servlet-mapping>
    <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>*.stl</url-pattern>

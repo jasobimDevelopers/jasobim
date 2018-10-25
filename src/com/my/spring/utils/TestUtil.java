@@ -1,7 +1,14 @@
 package com.my.spring.utils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import com.my.spring.model.ContractLofting;
+import com.my.spring.parameters.Parameters;
+
+import net.sf.mpxj.MPXJException;
+import net.sf.mpxj.ProjectFile;
+import net.sf.mpxj.Task;
+import net.sf.mpxj.mpp.MPPReader;
 public class TestUtil {
 	/**
 	 * @param args
@@ -14,44 +21,36 @@ public class TestUtil {
 	public TestUtil(List<ContractLofting> plist){
 		this.setPlist(plist);
 	}
+	public static void getFileUploadModel() {//这个方法框架的方法，主要看下面这么获取文件
+		 MPPReader reader = new MPPReader();
+         ProjectFile  projectFile;
+         //projectFile = reader.read(sbs);
+        //读本地的.mpp文件，用于测试
+         try {
+			projectFile = reader.read("C:/Users/Han/Desktop/吉宝住宅进度9.13.mpp");
+			 List<Task> list = projectFile.getAllTasks();
+	         Task t = (Task) list.get(0);
+	         for(int i=1 ; i<list.size();i++){
+	             Task task = list.get(i);
+	             if(task.getParentTask() != null){
+	                 if(task.getParentTask().getUniqueID() == t.getUniqueID()){
+	                     String rowguid = UUID.randomUUID().toString();
+	                    /* Projectclass pc = new Projectclass();
+	                     pc.setRowguid(rowguid);*/
+	                     System.out.println("任务名称："+task.getName());
+	                     System.out.println("任务开始时间："+ Parameters.getSdfs().format(task.getStart())); 
+	                     System.out.println("任务完成时间："+Parameters.getSdfs().format(task.getFinish()));
+	                 }
+	             }
+	         }
+		} catch (MPXJException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+    }
 	public static void main(String[] args) {
-		/*ContractLofting pitem = new ContractLofting();
-		pitem.setId((long)4);
-		getClist().add(pitem);
-		ContractLofting pitem1 = new ContractLofting();
-		pitem1.setId((long)1);
-		getPlist().add(pitem);
-		ContractLofting pitem2 = new ContractLofting();
-		pitem2.setId((long)2);
-		getPlist().add(pitem2);
-		ContractLofting pitem3 = new ContractLofting();
-		pitem3.setId((long)3);
-		pitem3.setPid((long)1);
-		getPlist().add(pitem3);
-		ContractLofting pitem5 = new ContractLofting();
-		pitem5.setId((long)4);
-		pitem5.setPid((long)1);
-		getPlist().add(pitem5);
-		ContractLofting pitem6 = new ContractLofting();
-		pitem6.setId((long)5);
-		pitem6.setPid((long)3);
-		getPlist().add(pitem6);
-		ContractLofting pitem7 = new ContractLofting();
-		pitem7.setId((long)6);
-		pitem7.setPid((long)4);
-		getPlist().add(pitem7);
-		ContractLofting pitem8 = new ContractLofting();
-		pitem8.setId((long)7);
-		pitem8.setPid((long)4);
-		getPlist().add(pitem8);
-		ContractLofting pitem9 = new ContractLofting();
-		pitem9.setId((long)8);
-		pitem9.setPid((long)5);
-		getPlist().add(pitem9);
-		getList(getClist());
-		for(int i=0;i<idList.size();i++){
-			System.out.println(idList.get(i));
-		}*/
+		getFileUploadModel();
 	}
 	/*
 	 * 查找id=id的所有子级

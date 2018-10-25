@@ -151,7 +151,7 @@ public class BaseDao<T> extends Thread{
     		try{
                 session.beginTransaction();
                 for(int i=0;i<idList.length;i++){
-                	session.delete(Long.parseLong(idList[i]));
+                	session.delete(get(Long.valueOf(idList[i])));
                 	if(i%10==0){
                 		session.flush();
                 		session.clear();

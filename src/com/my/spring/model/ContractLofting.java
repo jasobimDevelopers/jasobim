@@ -21,8 +21,8 @@ public class ContractLofting {
 	private Long projectPartId;
 	private Double projectPartValue;
 	private Double sum;//合计
-	private Double LimitCoefficient;//限额系数
-	private Double LimitNum;///限额量
+	private Double limitCoefficient;//限额系数
+	private Double limitNum;///限额量
 	private Long pid;
 	private String remark;
 	
@@ -108,23 +108,8 @@ public class ContractLofting {
 		this.sum = sum;
 	}
 	
-	@Basic
-	@Column(name="limit_coefficient")
-	public Double getLimitCoefficient() {
-		return LimitCoefficient;
-	}
-	public void setLimitCoefficient(Double limitCoefficient) {
-		LimitCoefficient = limitCoefficient;
-	}
 	
-	@Basic
-	@Column(name="limit_num")
-	public Double getLimitNum() {
-		return LimitNum;
-	}
-	public void setLimitNum(Double limitNum) {
-		LimitNum = limitNum;
-	}
+	
 	
 	@Basic
 	@Column(name="pid")
@@ -133,6 +118,23 @@ public class ContractLofting {
 	}
 	public void setPid(Long pid) {
 		this.pid = pid;
+	}
+	@Basic
+	@Column(name="limit_coefficient")
+	public Double getLimitCoefficient() {
+		return limitCoefficient;
+	}
+	public void setLimitCoefficient(Double limitCoefficient) {
+		this.limitCoefficient = limitCoefficient;
+	}
+	
+	@Basic
+	@Column(name="limit_num")
+	public Double getLimitNum() {
+		return limitNum;
+	}
+	public void setLimitNum(Double limitNum) {
+		this.limitNum = limitNum;
 	}
 	
 	@Basic
