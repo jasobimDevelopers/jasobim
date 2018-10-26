@@ -15,4 +15,5 @@ public interface ItemStateLogDao {
 	ItemStateLog getItemStateLogByProjectIdAndSelfId(Long selfId, Long projectId);
 	List<ItemStateLog> getItemStateLogList(Long projectId, String idList);
 	boolean addList(List<ItemStateLog> gets);
+	List<ItemStateLog> getAllItemStateLogGroupBySelfId(Long projectId);
 }

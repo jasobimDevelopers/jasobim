@@ -193,20 +193,27 @@ public class ItemStateLogServiceImpl implements ItemStateLogService {
 	@Override
 	public DataWrapper<List<ItemStateLogPojo>> getAllItemStateLogList(String token, Long projectId) {
 		DataWrapper<List<ItemStateLogPojo>> result = new DataWrapper<List<ItemStateLogPojo>>();
+		List<ItemStateLog> getListw = new ArrayList<ItemStateLog>();
 		List<ItemStateLog> getList = new ArrayList<ItemStateLog>();
 		List<ItemStateLogPojo> resultList = new ArrayList<ItemStateLogPojo>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			ItemStateLog item = new ItemStateLog();
 			getList=ItemStateLogDao.getAllItemStateLogByProjectId(projectId);
-			if(!getList.isEmpty()){
-				for(int i=0;i<getList.size();i++){
-					ItemStateLogPojo pojo = new ItemStateLogPojo();
-					pojo.setSelfId(getList.get(i).getSelfId());
-					pojo.setStatus(getList.get(i).getStatus());
-					pojo.setId(getList.get(i).getId());
-					pojo.setActionDate(sdf.format(getList.get(i).getActionDate()));
-					resultList.add(pojo);
+			getListw = ItemStateLogDao.getAllItemStateLogGroupBySelfId(projectId);
+			if(!getListw.isEmpty()){
+				for(int i=0;i<getListw.size();i++){
+					for(int j=0;j<getList.size();j++){
+						if(getList.get(j).getSelfId().equals(getListw.get(i))){
+							ItemStateLogPojo pojo = new ItemStateLogPojo();
+							pojo.setSelfId(getList.get(j).getSelfId());
+							pojo.setStatus(getList.get(j).getStatus());
+							pojo.setId(getList.get(j).getId());
+							pojo.setActionDate(sdf.format(getList.get(j ).getActionDate()));
+							resultList.add(pojo);
+							break;
+						}
+					}
 				}
 				result.setData(resultList);
 			}

@@ -9,6 +9,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -153,4 +154,19 @@ public class ItemStateLogDaoImpl extends BaseDao<ItemStateLog> implements ItemSt
          }
          return ret;
 	}
+	@Override
+	public List<ItemStateLog> getAllItemStateLogGroupBySelfId(Long projectId) {
+		List<ItemStateLog> ret = new ArrayList<ItemStateLog>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(ItemStateLog.class);
+        criteria.add(Restrictions.eq("projectId", projectId));
+        criteria.setProjection(Projections.groupProperty("selfId"));
+        try {
+           ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ret;
+	}
+	
 }
