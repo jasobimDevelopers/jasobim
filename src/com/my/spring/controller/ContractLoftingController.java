@@ -27,8 +27,10 @@ public class ContractLoftingController {
     @ResponseBody
     public DataWrapper<ContractLofting> addContractLofting(
             @ModelAttribute ContractLofting contractLofting,
+            @RequestParam(value = "rowIdList",required = false) String rowIdList,
+            @RequestParam(value = "valueList",required = false) String valueList,
             @RequestParam(value = "token",required = true) String token){
-        return contractLoftingService.addContractLofting(token,contractLofting);
+        return contractLoftingService.addContractLofting(token,contractLofting,rowIdList,valueList);
     }
     @RequestMapping(value="/admin/deleteContractLofting",method=RequestMethod.GET)
     @ResponseBody
@@ -48,7 +50,7 @@ public class ContractLoftingController {
             @RequestParam(value = "token",required = true) String token){
         return contractLoftingService.getContractLoftingList(pageIndex,pageSize,contractLofting,token);
     }
-    @RequestMapping(value="/updateContractLofting",method=RequestMethod.GET)
+    @RequestMapping(value="/updateContractLofting",method=RequestMethod.POST)
     @ResponseBody
     public DataWrapper<ContractLofting> updateContractLofting(
     		@ModelAttribute ContractLofting contractLofting,

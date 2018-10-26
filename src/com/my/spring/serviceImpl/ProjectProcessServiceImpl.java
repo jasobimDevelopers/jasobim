@@ -122,7 +122,7 @@ public class ProjectProcessServiceImpl implements ProjectProcessService  {
 			if(file!=null){
 				Files files=fileSerivce.uploadFile(filePath, file, 6, request);
 				if(files!=null){
-					File filestr = new File("D:/jasobim/tomcat_8080/webapps/ROOT"+files.getUrl());
+					File filestr = new File("D:/jasobim/tomcat_8080/webapps/ROOT/"+files.getUrl());
 					//File filestr = new File("C:/Users/Han/Desktop/吉宝住宅进度9.13.mpp");
 					readMmpFileToDB(filestr,projectId);
 				}

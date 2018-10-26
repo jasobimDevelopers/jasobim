@@ -70,7 +70,7 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 	}
 
 	@Override
-	public DataWrapper<ContractLofting> addContractLofting(String token,ContractLofting role) {
+	public DataWrapper<ContractLofting> addContractLofting(String token,ContractLofting role,String rowIdList,String valueList) {
 		DataWrapper<ContractLofting> result = new DataWrapper<ContractLofting>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
@@ -79,6 +79,28 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 				role.setCreateDate(new Date());
 				if(!ContractLoftingDao.addContractLofting(role)){
 					result.setErrorCode(ErrorCodeEnum.Error);
+				}else{
+					List<ProjectPartContractLofting> pos = new ArrayList<ProjectPartContractLofting>();
+					if(rowIdList!=null && valueList!=null){
+						String[] ids = rowIdList.split(",");
+						String[] vas = valueList.split(",");
+						for(int i=0;i<ids.length;i++){
+							ProjectPartContractLofting po = new ProjectPartContractLofting();
+							po.setContractLoftingId(role.getId());
+							po.setCreateDate(new Date());
+							po.setCreateUser(user.getId());
+							po.setProjectId(role.getProjectId());
+							ProjectPartContractLofting names = pLoftingDao.getById(Long.valueOf(ids[i]));
+							if(names!=null){
+								po.setName(names.getName());
+								po.setpName(names.getpName());
+							}
+							po.setValue(Double.valueOf(vas[i]));
+							pos.add(po);
+						}
+						pLoftingDao.addProjectPartContractLoftingList(pos);
+					}
+					result.setData(role);
 				}
 			}
 			
@@ -145,6 +167,12 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 				}
 				if(ContractLofting.getLimitNum()!=null){
 					dp.setLimitNum(ContractLofting.getLimitNum());
+				}
+				if(ContractLofting.getSum()!=null){
+					dp.setSum(ContractLofting.getSum());
+				}
+				if(ContractLofting.getUnit()!=null){
+					dp.setUnit(ContractLofting.getUnit());
 				}
 				if(!ContractLoftingDao.updateContractLofting(dp)){
 					result.setErrorCode(ErrorCodeEnum.Error);
