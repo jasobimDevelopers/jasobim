@@ -34,6 +34,5 @@ public interface ItemDao {
 	List<ItemCount> getNumsGroupByProfesstionTypeAndState(Long projectId);
 	List<Object> getAllNumsGroupByStates(Long projectId);
 	boolean updateItemList(List<Item> item);
-	List<ItemStateLog> getAllItemStateLogGroupBySelfId(Long projectId);
 	
 }

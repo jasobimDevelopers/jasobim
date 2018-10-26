@@ -511,4 +511,5 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		return updateList(item);
 	}
 
+
 }
