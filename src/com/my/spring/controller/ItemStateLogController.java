@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping(value="api/itemStateLog/")
+@RequestMapping(value="api/itemStateLog")
 public class ItemStateLogController {
     @Autowired
     ItemStateLogService ItemStateLogService;
@@ -38,6 +38,13 @@ public class ItemStateLogController {
     		@RequestParam(value = "projectId",required = true) Long projectId,
     		@RequestParam(value = "idList",required = true) String idList){
         return ItemStateLogService.getItemStateLogList(token,projectId,idList);
+    }
+    @RequestMapping(value="/getAllItemStateLogList",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<ItemStateLogPojo>> getAllItemStateLogList(
+    		@RequestParam(value = "token",required = true) String token,
+    		@RequestParam(value = "projectId",required = true) Long projectId){
+        return ItemStateLogService.getAllItemStateLogList(token,projectId);
     }
     @RequestMapping(value="/admin/getItemStateLogByProjectId",method=RequestMethod.GET)
     @ResponseBody

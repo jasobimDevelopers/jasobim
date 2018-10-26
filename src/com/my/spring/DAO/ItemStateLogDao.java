@@ -10,6 +10,7 @@ public interface ItemStateLogDao {
     boolean updateItemStateLog(ItemStateLog ItemStateLog);
     DataWrapper<List<ItemStateLog>> getItemStateLogList();
 	DataWrapper<ItemStateLog> getItemStateLogByProjectId(Long projectId);
+	List<ItemStateLog> getAllItemStateLogByProjectId(Long projectId);
 	boolean deleteItemStateLogByProjectId(Long id);
 	ItemStateLog getItemStateLogByProjectIdAndSelfId(Long selfId, Long projectId);
 	List<ItemStateLog> getItemStateLogList(Long projectId, String idList);

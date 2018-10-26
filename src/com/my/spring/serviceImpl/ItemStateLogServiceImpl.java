@@ -51,9 +51,9 @@ public class ItemStateLogServiceImpl implements ItemStateLogService {
 						newone.setStatus(ItemStateLog.getStatus());
 						newone.setUserId(userInMemory.getId());
 						gets.add(newone);
+						itemDao.updateItem(item.get(i));
 					}
 				}
-				itemDao.updateItemList(item);
 				if(ItemStateLogDao.addList(gets)){
 					dataWrapper.setData(ItemStateLog);
 				} 
@@ -188,5 +188,31 @@ public class ItemStateLogServiceImpl implements ItemStateLogService {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<ItemStateLogPojo>> getAllItemStateLogList(String token, Long projectId) {
+		DataWrapper<List<ItemStateLogPojo>> result = new DataWrapper<List<ItemStateLogPojo>>();
+		List<ItemStateLog> getList = new ArrayList<ItemStateLog>();
+		List<ItemStateLogPojo> resultList = new ArrayList<ItemStateLogPojo>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			ItemStateLog item = new ItemStateLog();
+			getList=ItemStateLogDao.getAllItemStateLogByProjectId(projectId);
+			if(!getList.isEmpty()){
+				for(int i=0;i<getList.size();i++){
+					ItemStateLogPojo pojo = new ItemStateLogPojo();
+					pojo.setSelfId(getList.get(i).getSelfId());
+					pojo.setStatus(getList.get(i).getStatus());
+					pojo.setId(getList.get(i).getId());
+					pojo.setActionDate(sdf.format(getList.get(i).getActionDate()));
+					resultList.add(pojo);
+				}
+				result.setData(resultList);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
 	}
 }

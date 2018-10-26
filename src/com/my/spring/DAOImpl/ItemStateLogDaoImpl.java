@@ -138,4 +138,19 @@ public class ItemStateLogDaoImpl extends BaseDao<ItemStateLog> implements ItemSt
 		// TODO Auto-generated method stub
 		return saveList(gets);
 	}
+
+	@Override
+	public List<ItemStateLog> getAllItemStateLogByProjectId(Long projectId) {
+		 List<ItemStateLog> ret = new ArrayList<ItemStateLog>();
+         Session session = getSession();
+         Criteria criteria = session.createCriteria(ItemStateLog.class);
+	     criteria.addOrder(Order.desc("actionDate"));
+	     criteria.add(Restrictions.eq("projectId", projectId));
+         try {
+            ret = criteria.list();
+         }catch (Exception e){
+             e.printStackTrace();
+         }
+         return ret;
+	}
 }

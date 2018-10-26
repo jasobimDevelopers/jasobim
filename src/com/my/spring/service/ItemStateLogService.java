@@ -13,4 +13,5 @@ public interface ItemStateLogService {
     DataWrapper<List<ItemStateLog>> getItemStateLogList();
 	DataWrapper<ItemStateLog> getItemStateLogByProjectId(Long projectId,String token);
 	DataWrapper<List<ItemStateLogPojo>> getItemStateLogList(String token, Long projectId, String idList);
+	DataWrapper<List<ItemStateLogPojo>> getAllItemStateLogList(String token, Long projectId);
 }
