@@ -165,8 +165,8 @@ public class ProjectPartContractLoftingDaoImpl extends BaseDao<ProjectPartContra
 	        }catch(Exception e){
 	            e.printStackTrace();
 	        }
-		 
 		return test;
 	}
+	
 	
 }

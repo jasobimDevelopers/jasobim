@@ -50,6 +50,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>default</servlet-name>
+    <url-pattern>*.mpp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
     <url-pattern>*.excel</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

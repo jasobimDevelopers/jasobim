@@ -130,5 +130,24 @@ public class ProjectProcessDaoImpl extends BaseDao<ProjectProcess> implements Pr
 	    }
 		return gets;
 	}
+	@Override
+    public List<ProjectProcess> getProjectProcessList(ProjectProcess ProjectProcess) {
+        List<ProjectProcess> ret = new ArrayList<ProjectProcess>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(ProjectProcess.class);
+        criteria.add(Restrictions.eq("projectId", ProjectProcess.getProjectId()));
+        if(ProjectProcess.getId()!=null){
+        	 criteria.add(Restrictions.eq("parentId", ProjectProcess.getId()));
+        }else{
+        	criteria.add(Restrictions.isNull("parentId"));
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        
+        return ret;
+    }
 	
 }

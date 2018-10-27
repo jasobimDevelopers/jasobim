@@ -19,6 +19,5 @@ public interface ProjectProcessService {
 	/*DataWrapper<List<ProjectProcessPojo>> getProjectProcessList(Integer pageIndex, Integer pageSize, ProjectProcess ProjectProcess,
 			String token);*/
 	DataWrapper<Void> updateProjectProcess(String token, ProjectProcess ProjectProcess);
-	DataWrapper<List<ProjectProcessPojo>> getProjectProcessList(Integer pageIndex, Integer pageSize,
-			ProjectProcess projectProcess, String token);
+	DataWrapper<List<ProjectProcessPojo>> getProjectProcessList(ProjectProcess projectProcess, String token);
 }

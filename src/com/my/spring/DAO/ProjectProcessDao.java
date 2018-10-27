@@ -15,5 +15,6 @@ public interface ProjectProcessDao {
 	DataWrapper<List<ProjectProcess>> getProjectProcessList(Integer pageIndex, Integer pageSize, ProjectProcess ProjectProcess);
 	boolean updateProjectProcess(ProjectProcess dp);
 	List<UserIndexs> getProjectProcessListByUserId(Long userId);
+	List<ProjectProcess> getProjectProcessList(ProjectProcess projectProcess);
 	
 }

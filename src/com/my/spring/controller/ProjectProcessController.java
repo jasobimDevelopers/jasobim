@@ -49,11 +49,9 @@ public class ProjectProcessController {
     @RequestMapping(value="/admin/getprojectProcessList", method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<ProjectProcessPojo>> getprojectProcessList(
-    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
-    		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute ProjectProcess projectProcess,
             @RequestParam(value = "token",required = false) String token){
-        return projectProcessService.getProjectProcessList(pageIndex,pageSize,projectProcess,token);
+        return projectProcessService.getProjectProcessList(projectProcess,token);
     }
     @RequestMapping(value="/importProjectProcessByProjectId",method=RequestMethod.POST)
     @ResponseBody

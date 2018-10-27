@@ -27,10 +27,9 @@ public class ContractLoftingController {
     @ResponseBody
     public DataWrapper<ContractLofting> addContractLofting(
             @ModelAttribute ContractLofting contractLofting,
-            @RequestParam(value = "rowIdList",required = false) String rowIdList,
             @RequestParam(value = "valueList",required = false) String valueList,
             @RequestParam(value = "token",required = true) String token){
-        return contractLoftingService.addContractLofting(token,contractLofting,rowIdList,valueList);
+        return contractLoftingService.addContractLofting(token,contractLofting,valueList);
     }
     @RequestMapping(value="/admin/deleteContractLofting",method=RequestMethod.GET)
     @ResponseBody

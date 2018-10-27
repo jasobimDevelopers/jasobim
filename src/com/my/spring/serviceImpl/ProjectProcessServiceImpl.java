@@ -15,13 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.my.spring.DAO.ProjectProcessDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserIndexDao;
-import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
 import com.my.spring.model.ProjectProcess;
 import com.my.spring.model.ProjectProcessPojo;
 import com.my.spring.model.User;
-import com.my.spring.model.UserIndexUserId;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ProjectProcessService;
@@ -230,10 +228,34 @@ public class ProjectProcessServiceImpl implements ProjectProcessService  {
 	}
 
 	@Override
-	public DataWrapper<List<ProjectProcessPojo>> getProjectProcessList(Integer pageIndex, Integer pageSize,
-			ProjectProcess projectProcess, String token) {
-		// TODO Auto-generated method stub
-		return null;
+	public DataWrapper<List<ProjectProcessPojo>> getProjectProcessList(ProjectProcess projectProcess, String token) {
+		DataWrapper<List<ProjectProcessPojo>> result = new DataWrapper<List<ProjectProcessPojo>>();
+		List<ProjectProcess> size = new ArrayList<ProjectProcess>();
+		List<ProjectProcessPojo> resultPojo = new ArrayList<ProjectProcessPojo>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(projectProcess!=null){
+				size = projectProcessDao.getProjectProcessList(projectProcess);
+				for(int i=0;i<size.size();i++){
+					ProjectProcessPojo pojo = new ProjectProcessPojo();
+					pojo.setId(size.get(i).getId());
+					pojo.setParentId(size.get(i).getParentId());
+					pojo.setStartDate(Parameters.getSdf().format(size.get(i).getStartDate()));
+					pojo.setEndDate(Parameters.getSdf().format(size.get(i).getEndDate()));
+					pojo.setLevel(size.get(i).getLevel());
+					pojo.setImportTime(Parameters.getSdf().format(size.get(i).getImportTime()));
+					pojo.setTaskName(size.get(i).getTaskName());
+					  
+					int days = (int) ((size.get(i).getEndDate().getTime() - size.get(i).getStartDate().getTime()) / (1000*3600*24));
+					pojo.setDurationDate(days);
+					resultPojo.add(pojo);
+				}
+				result.setData(resultPojo);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
 	}
 	
 }

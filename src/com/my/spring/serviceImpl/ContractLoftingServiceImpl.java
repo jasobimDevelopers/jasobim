@@ -10,23 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import com.alibaba.fastjson.JSONArray;
 import com.my.spring.DAO.ContractLoftingDao;
 import com.my.spring.DAO.ProjectPartContractLoftingDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserIndexDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.ContractLofting;
-import com.my.spring.model.ContractLoftingPojo;
-import com.my.spring.model.MaxIndex;
 import com.my.spring.model.ProjectPartContractLofting;
+import com.my.spring.model.ProjectPartContractLoftingPojo;
 import com.my.spring.model.User;
-import com.my.spring.model.UserIndex;
-import com.my.spring.model.UserIndexUserId;
-import com.my.spring.parameters.Parameters;
 import com.my.spring.service.ContractLoftingService;
 import com.my.spring.service.UserIndexService;
-import com.my.spring.utils.ContractLoftingNodeUtil;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.ReadContractLoftingExcel;
@@ -70,7 +64,7 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 	}
 
 	@Override
-	public DataWrapper<ContractLofting> addContractLofting(String token,ContractLofting role,String rowIdList,String valueList) {
+	public DataWrapper<ContractLofting> addContractLofting(String token,ContractLofting role,String valueList) {
 		DataWrapper<ContractLofting> result = new DataWrapper<ContractLofting>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
@@ -81,20 +75,17 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 					result.setErrorCode(ErrorCodeEnum.Error);
 				}else{
 					List<ProjectPartContractLofting> pos = new ArrayList<ProjectPartContractLofting>();
-					if(rowIdList!=null && valueList!=null){
-						String[] ids = rowIdList.split(",");
+					List<ProjectPartContractLoftingPojo> idObjects = pLoftingDao.getProjectPartContractLoftingList(role.getProjectId());
+					if(!idObjects.isEmpty() && valueList!=null){
 						String[] vas = valueList.split(",");
-						for(int i=0;i<ids.length;i++){
+						for(int i=0;i<vas.length;i++){
 							ProjectPartContractLofting po = new ProjectPartContractLofting();
 							po.setContractLoftingId(role.getId());
 							po.setCreateDate(new Date());
 							po.setCreateUser(user.getId());
 							po.setProjectId(role.getProjectId());
-							ProjectPartContractLofting names = pLoftingDao.getById(Long.valueOf(ids[i]));
-							if(names!=null){
-								po.setName(names.getName());
-								po.setpName(names.getpName());
-							}
+							po.setName(idObjects.get(i).getPartName());
+							po.setpName(idObjects.get(i).getName());
 							po.setValue(Double.valueOf(vas[i]));
 							pos.add(po);
 						}
@@ -103,7 +94,6 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 					result.setData(role);
 				}
 			}
-			
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
