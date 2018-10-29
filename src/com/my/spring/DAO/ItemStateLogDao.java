@@ -1,5 +1,6 @@
 package com.my.spring.DAO;
 
+import com.my.spring.model.Item;
 import com.my.spring.model.ItemStateLog;
 import com.my.spring.utils.DataWrapper;
 
@@ -16,4 +17,5 @@ public interface ItemStateLogDao {
 	List<ItemStateLog> getItemStateLogList(Long projectId, String idList);
 	boolean addList(List<ItemStateLog> gets);
 	List<ItemStateLog> getAllItemStateLogGroupBySelfId(Long projectId);
+	boolean deleteItemStateLogByProjectIdAndSelfIds(Long projectId, String selfIdList);
 }

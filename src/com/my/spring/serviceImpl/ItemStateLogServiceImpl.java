@@ -40,24 +40,28 @@ public class ItemStateLogServiceImpl implements ItemStateLogService {
         List<ItemStateLog> gets = new ArrayList<ItemStateLog>();
         if (userInMemory != null) {
 			if(ItemStateLog!=null && selfIdList!=null){
-				List<Item> item =  itemDao.getItemBySelfId(ItemStateLog,selfIdList);
-				if(!item.isEmpty()){
-					for(int i=0;i<item.size();i++){
-						ItemStateLog newone = new ItemStateLog();
-						item.get(i).setState(ItemStateLog.getStatus());
-						newone.setActionDate(new Date());
-						newone.setProjectId(ItemStateLog.getProjectId());
-						newone.setSelfId(item.get(i).getSelfId());
-						newone.setStatus(ItemStateLog.getStatus());
-						newone.setUserId(userInMemory.getId());
-						gets.add(newone);
-						itemDao.updateItem(item.get(i));
+				if(ItemStateLog.getStatus()==0){
+					ItemStateLogDao.deleteItemStateLogByProjectIdAndSelfIds(ItemStateLog.getProjectId(),selfIdList);
+					itemDao.updateItemByProjectIdAndSelfIds(ItemStateLog.getProjectId(),selfIdList);
+				}else{
+					List<Item> item =  itemDao.getItemBySelfId(ItemStateLog,selfIdList);
+					if(!item.isEmpty()){
+						for(int i=0;i<item.size();i++){
+							ItemStateLog newone = new ItemStateLog();
+							item.get(i).setState(ItemStateLog.getStatus());
+							newone.setActionDate(new Date());
+							newone.setProjectId(ItemStateLog.getProjectId());
+							newone.setSelfId(item.get(i).getSelfId());
+							newone.setStatus(ItemStateLog.getStatus());
+							newone.setUserId(userInMemory.getId());
+							gets.add(newone);
+							itemDao.updateItem(item.get(i));
+						}
 					}
 				}
 				if(ItemStateLogDao.addList(gets)){
 					dataWrapper.setData(ItemStateLog);
 				} 
-				
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 			}
@@ -138,10 +142,12 @@ public class ItemStateLogServiceImpl implements ItemStateLogService {
 		DataWrapper<List<ItemStateLogPojo>> dataWrapper = new DataWrapper<List<ItemStateLogPojo>>();
 		List<ItemStateLogPojo> getList = new ArrayList<ItemStateLogPojo>();
 		List<ItemStateLog> gets = new ArrayList<ItemStateLog>();
+		List<Item> itemgets = new ArrayList<Item>();
 		User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
         	gets=ItemStateLogDao.getItemStateLogList(projectId,idList);
         	if(!gets.isEmpty()){
+        		itemgets = itemDao.getItemListsByIdList(projectId,idList);
         		List<ItemCount> getItems = itemDao.getNumsGroupBy(projectId);
         		for(int i=0;i<gets.size();i++){
         			ItemStateLogPojo pojo = new ItemStateLogPojo();
@@ -151,6 +157,7 @@ public class ItemStateLogServiceImpl implements ItemStateLogService {
         			if(user!=null){
         				pojo.setRealName(user.getRealName());
         			}
+        			Double num1=0.0;
         			Item mode = itemDao.getItemBySelfId(gets.get(i).getSelfId(),gets.get(i).getProjectId());
         			if(mode!=null){
         				if(!getItems.isEmpty()){
@@ -159,22 +166,30 @@ public class ItemStateLogServiceImpl implements ItemStateLogService {
         								&& getItems.get(j).getServiceType().equals(mode.getServiceType())
         								&& getItems.get(j).getSystemType().equals(mode.getSystemType())
         								&& getItems.get(j).getFamilyAndType().equals(mode.getFamilyAndType())
-        								&& getItems.get(j).getSize().equals(mode.getSize())){
+        								&& getItems.get(j).getSize().equals(mode.getSize())
+        								&& getItems.get(j).getProfessionType().equals(mode.getProfessionType())){
             						NumberFormat numberFormat = NumberFormat.getInstance();
             						// 设置精确到小数点后2位
             						numberFormat.setMaximumFractionDigits(2);
+            						
+            						for(int k=i;k<gets.size();k++){
+            							if(mode.getLength()>0){
+                							num1 =num1+itemgets.get(k).getLength();
+                						}else if(mode.getArea()>0){
+                							num1 =num1+itemgets.get(k).getArea();
+                						}else{
+                							num1 =num1+1.0;
+                						}
+            						}
             						if(mode.getLength()>0){
-            							Double num1 =mode.getLength();
                 						Double num2 =getItems.get(j).getLength();
-                						pojo.setPercent(numberFormat.format(num1 / num2 * 100)+"%");
+                						pojo.setPercent(Double.valueOf(numberFormat.format(num1 / num2 * 100)));
             						}else if(mode.getArea()>0){
-            							Double num1 =mode.getArea();
                 						Double num2 =getItems.get(j).getArea();
-                						pojo.setPercent(numberFormat.format(num1 / num2 * 100)+"%");
+                						pojo.setPercent(Double.valueOf(numberFormat.format(num1 / num2 * 100)));
             						}else{
-            							Double num1 =1.0;
                 						Integer num2 =getItems.get(j).getNum();
-                						pojo.setPercent(numberFormat.format(num1 / num2 * 100)+"%");
+                						pojo.setPercent(Double.valueOf(numberFormat.format(num1 / num2 * 100)));
             						}
             					}
             				}

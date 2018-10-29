@@ -511,5 +511,56 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 		return updateList(item);
 	}
 
+	@Override
+	public boolean updateItemByProjectIdAndSelfIds(Long projectId, String selfIdList) {
+		String sql = "update item set state=0 where project_id="+projectId+" and self_id=";
+		String[] selfIdLists = selfIdList.split(",");
+		for(int i=0;i<selfIdLists.length;i++){
+			if(i==(selfIdLists.length-1)){
+				sql=sql+selfIdLists[i];
+			}else{
+				sql=sql+selfIdLists[i]+" or self_id=";
+			}
+			
+		}
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+	}
+
+	@Override
+	public List<Item> getItemListsByIdList(Long projectId, String idList) {
+	        List<Item> ret = new ArrayList<Item>();
+	        Session session = getSession();
+	        Criteria criteria = session.createCriteria(Item.class);
+	        
+	        ///////////////////////////////
+	        criteria.add(Restrictions.eq("projectId", projectId));
+	        if(idList!=null){
+	        	String[] ids = idList.split(",");
+	        	List<Long> realids = new ArrayList<Long>();
+	        	for(int i=0;i<ids.length;i++){
+	        		realids.add(Long.valueOf(ids[i]));
+	        	}
+	        	criteria.add(Restrictions.in("selfId", realids));
+	        }
+	       
+	        try {
+	            ret = criteria.list();
+	        }catch (Exception e){
+	            e.printStackTrace();
+	        }
+	        return ret;
+	}
+
 
 }

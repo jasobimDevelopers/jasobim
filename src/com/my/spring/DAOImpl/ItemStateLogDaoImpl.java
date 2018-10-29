@@ -168,5 +168,31 @@ public class ItemStateLogDaoImpl extends BaseDao<ItemStateLog> implements ItemSt
         }
         return ret;
 	}
+
+	@Override
+	public boolean deleteItemStateLogByProjectIdAndSelfIds(Long projectId, String selfIdList) {
+		String[] selfIdLists = selfIdList.split(",");
+		String sql = "delete from item_state_log where project_id="+projectId+" and self_id=";
+		for(int i=0;i<selfIdLists.length;i++){
+			if(i==(selfIdLists.length-1)){
+				sql=sql+selfIdLists[i];
+			}else{
+				sql=sql+selfIdLists[i]+" or self_id=";
+			}
+			
+		}
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+	}
 	
 }

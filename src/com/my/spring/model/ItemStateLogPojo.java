@@ -11,7 +11,7 @@ public class ItemStateLogPojo {
 	private String actionDate;
 	private String realName;
 	private Long selfId;
-	private String percent;
+	private Double percent;
 	
 	public Long getId() {
 		return id;
@@ -54,10 +54,10 @@ public class ItemStateLogPojo {
 	public void setSelfId(Long selfId) {
 		this.selfId = selfId;
 	}
-	public String getPercent() {
+	public Double getPercent() {
 		return percent;
 	}
-	public void setPercent(String percent) {
+	public void setPercent(Double percent) {
 		this.percent = percent;
 	}
 	

@@ -34,5 +34,7 @@ public interface ItemDao {
 	List<ItemCount> getNumsGroupByProfesstionTypeAndState(Long projectId);
 	List<Object> getAllNumsGroupByStates(Long projectId);
 	boolean updateItemList(List<Item> item);
+	boolean updateItemByProjectIdAndSelfIds(Long projectId, String selfIdList);
+	List<Item> getItemListsByIdList(Long projectId, String idList);
 	
 }
