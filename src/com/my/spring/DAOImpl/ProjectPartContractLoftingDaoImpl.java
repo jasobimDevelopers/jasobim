@@ -63,7 +63,7 @@ public class ProjectPartContractLoftingDaoImpl extends BaseDao<ProjectPartContra
     public List<ProjectPartContractLoftingPojo> getProjectPartContractLoftingList(Long projectId) {
     	 List<ProjectPartContractLoftingPojo> ret = new ArrayList<ProjectPartContractLoftingPojo>();
     		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
-    		String sql = "select b.id,b.id as loftingId,a.name,b.name as partName,b.value "
+    		String sql = "select b.id,a.id as loftingId,a.name,b.name as partName,b.value "
     		+"from contract_lofting a,project_part_contract_lofting b where a.pid is null "
     		+"and a.id=b.contract_lofting_id and a.project_id="+projectId;
     		Session session=getSession();

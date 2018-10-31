@@ -654,9 +654,31 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 							QualityQuestionPojo.setId(QualityQuestion.getId());
 							QualityQuestionPojo.setCodeInformation(QualityQuestion.getCodeInformation());
 							QualityQuestionPojo.setIntro(QualityQuestion.getIntro());
+							if(QualityQuestion.getUserId()!=null){
+								User reUser = userDao.getById(QualityQuestion.getUserId());
+								if(reUser.getUserIconUrl()!=null){
+									QualityQuestionPojo.setCreateUserIcon(reUser.getUserIconUrl());
+								}else{
+									Files files = fileService.getById(reUser.getUserIcon());
+									if(files!=null){
+										QualityQuestionPojo.setCreateUserIcon(files.getUrl());
+									}
+								}
+							}
 							QualityQuestionPojo.setName(QualityQuestion.getName());
 							QualityQuestionPojo.setPriority(QualityQuestion.getPriority());
 							QualityQuestionPojo.setProjectId(QualityQuestion.getProjectId());
+							String userlist="";
+							if(QualityQuestion.getUserList()!=null){
+								for(int s=0;s<QualityQuestion.getUserList().split(",").length;s++){
+									if(s==0){
+										userlist=userDao.getById(Long.valueOf(QualityQuestion.getUserList().split(",")[s])).getRealName();
+									}else{
+										userlist=userlist+","+userDao.getById(Long.valueOf(QualityQuestion.getUserList().split(",")[s])).getRealName();
+									}
+								}
+							}
+							QualityQuestionPojo.setUserList(userlist);
 							if(QualityQuestion.getProjectId()!=null){
 								Project projects= new Project();
 								projects=projectDao.getById(QualityQuestion.getProjectId());

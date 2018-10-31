@@ -689,6 +689,19 @@ public class QuestionServiceImpl implements QuestionService {
 							questionPojo.setName(question.getName());
 							questionPojo.setPriority(question.getPriority());
 							questionPojo.setProjectId(question.getProjectId());
+							if(question.getUserId()!=null){
+								User users = userDao.getById(question.getUserId());
+								if(users!=null){
+									if(users.getUserIconUrl()!=null){
+										questionPojo.setCreateUserIcon(users.getUserIconUrl());
+									}else{
+										Files filess = fileService.getById(users.getUserIcon());
+										if(filess!=null){
+											questionPojo.setCreateUserIcon(filess.getUrl());
+										}
+									}
+								}
+							}
 							if(question.getProjectId()!=null){
 								Project projects= new Project();
 								projects=projectDao.getById(question.getProjectId());
@@ -709,14 +722,17 @@ public class QuestionServiceImpl implements QuestionService {
 							questionPojo.setQuestionDate(sdf.format(question.getQuestionDate()));
 							questionPojo.setState(question.getState());
 							questionPojo.setTrades(question.getTrades());
-							if(userInDB.getUserIconUrl()!=null){
-								questionPojo.setCreateUserIcon(userInDB.getUserIconUrl());
-							}else if(userInDB.getUserIcon()!=null){
-								Files file = fileService.getById(userInDB.getUserIcon());
-								if(file!=null){
-									questionPojo.setCreateUserIcon(file.getUrl());
+							String userlist="";
+							if(question.getUserList()!=null){
+								for(int s=0;s<question.getUserList().split(",").length;s++){
+									if(s==0){
+										userlist=userDao.getById(Long.valueOf(question.getUserList().split(",")[s])).getRealName();
+									}else{
+										userlist=userlist+","+userDao.getById(Long.valueOf(question.getUserList().split(",")[s])).getRealName();
+									}
 								}
 							}
+							questionPojo.setUserList(userlist);
 							questionPojo.setUserId(userDao.getById(question.getUserId()).getRealName());
 							/*if(userIdis==userInMemory.getId()){
 								questionPojo.setUserid(1);
