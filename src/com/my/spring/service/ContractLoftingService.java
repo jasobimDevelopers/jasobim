@@ -14,7 +14,7 @@ public interface ContractLoftingService {
 	DataWrapper<List<ContractLofting>> getContractLoftingList(Integer pageIndex, Integer pageSize, ContractLofting ContractLofting,
 			String token);
 	DataWrapper<ContractLofting> getContractLoftingById(String token, Long id);
-	DataWrapper<ContractLofting> updateContractLofting(String token, ContractLofting ContractLofting);
+	DataWrapper<ContractLofting> updateContractLofting(String token, ContractLofting ContractLofting,String valueList);
 	DataWrapper<Void> importContractLoftingByProjectId(String token, Long projectId, MultipartFile files,
 			HttpServletRequest request);
 	DataWrapper<Void> deleteContractLoftingById(String token, String name);

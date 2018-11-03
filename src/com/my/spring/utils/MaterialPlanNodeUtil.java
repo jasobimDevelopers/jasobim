@@ -41,6 +41,8 @@ public class MaterialPlanNodeUtil {
 		   node.num = (String) dataRecord.get("num"); 
 		   node.getTime = (String) dataRecord.get("getTime"); 
 		   node.remark = (String) dataRecord.get("remark");
+		   node.startTime = (String) dataRecord.get("startTime");
+		   node.endTime = (String) dataRecord.get("endTime");
 		   node.outPlace = (String) dataRecord.get("outPlace"); 
 		   node.usePlace = (String) dataRecord.get("usePlace"); 
 		   nodeList.put(node.id, node);  
@@ -84,6 +86,8 @@ class NodeMaterialPlan {
  public String usePlace;
  public String pid;
  public String remark;
+ public String startTime;
+ public String endTime;
  /** 
   * 孩子节点列表 
   */  
@@ -96,7 +100,9 @@ class NodeMaterialPlan {
    + ", \"model\" : \"" + model + "\"" + ", \"standard\" : \"" 
    + standard + "\"" +", \"unit\" : \"" + unit + "\""
    +", \"num\" : \"" + num + "\""+", \"getTime\" : \"" + getTime + "\""
-   +", \"outPlace\" : \"" + outPlace + "\""+", \"usePlace\" : \"" + usePlace + "\""+", \"remark\" : \"" + remark + "\"";  
+   +", \"outPlace\" : \"" + outPlace + "\""+", \"usePlace\" : \"" + usePlace + "\""
+   +", \"remark\" : \"" + remark + "\""+", \"startTime\" : \"" + startTime + "\""
+   +", \"endTime\" : \"" + endTime + "\"";  
     
   if (children != null && children.getSize() != 0) {  
    result += ", \"children\" : " + children.toString();  

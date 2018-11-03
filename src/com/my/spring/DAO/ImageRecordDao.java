@@ -3,6 +3,7 @@ package com.my.spring.DAO;
 import java.util.List;
 
 import com.my.spring.model.ImageRecord;
+import com.my.spring.model.ImageRecordData;
 
 /**
 * @author 徐雨祥
@@ -15,4 +16,6 @@ public interface ImageRecordDao {
 	boolean updateImageRecord(ImageRecord imageRecord);
 	ImageRecord getImageRecordById(Long id);
 	List<ImageRecord> getImageRecordList(ImageRecord imageRecord);
+	List<ImageRecord> getImageRecordListByProjectIdAndBuildingId(Long projectId, Long id);
+	List<ImageRecordData> getImageRecordBuildingInfoListByGroupBy(ImageRecord infos);
 }

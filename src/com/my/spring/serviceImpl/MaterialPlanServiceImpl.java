@@ -63,6 +63,15 @@ public class MaterialPlanServiceImpl implements MaterialPlanService  {
 					}else{
 						dataRecord1.put("model", "");
 					}
+					if(ss.getStartTime()!=null){
+						dataRecord1.put("startTime", Parameters.getSdfs().format(ss.getStartTime()));
+					}else{
+						dataRecord1.put("startTime", "");
+					}
+					
+					if(ss.getEndTime()!=null){
+						dataRecord1.put("endTime",Parameters.getSdfs().format( ss.getEndTime()));
+					}
 					if(ss.getStandard()!=null){
 						dataRecord1.put("standard", ss.getStandard());
 					}else{

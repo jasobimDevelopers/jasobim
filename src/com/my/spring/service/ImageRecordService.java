@@ -3,6 +3,7 @@ package com.my.spring.service;
 import java.util.List;
 
 import com.my.spring.model.ImageRecord;
+import com.my.spring.model.ImageRecordPojo;
 import com.my.spring.utils.DataWrapper;
 
 /**
@@ -12,7 +13,7 @@ import com.my.spring.utils.DataWrapper;
 */
 public interface ImageRecordService {
 	DataWrapper<Void> addImageRecord(String token,ImageRecord imageRecord);
-	DataWrapper<Void> updateImageRecord(String token,ImageRecord imageRecord);
+	DataWrapper<ImageRecord> updateImageRecord(String token,ImageRecord imageRecord);
 	DataWrapper<Void> deleteImageRecord(String token,Long id);
-	DataWrapper<List<ImageRecord>> getImageRecordList(String token,ImageRecord imageRecord);
+	DataWrapper<List<ImageRecordPojo>> getImageRecordList(String token,ImageRecord imageRecord);
 }

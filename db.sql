@@ -708,3 +708,25 @@ create table project_process(
 	resource varchar(255),
 	import_time datetime
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table image_record_building_info(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	create_user bigint(20) unsigned not null,
+	create_date datetime,
+	indexs int,
+	name varchar(255)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table image_record(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	create_user bigint(20) unsigned not null,
+	building_id bigint(20) unsigned not null,
+	create_date datetime,
+	project_part int,
+	unit_part int,
+	project_part_date varchar(255),
+	month int,
+	content varchar(255)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

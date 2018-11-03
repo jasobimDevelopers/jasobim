@@ -13,9 +13,12 @@ public class ImageRecord {
 	private Long id;
 	private Long createUser;
 	private Long projectId;
+	private Long buildingId;//楼栋信息id
 	private Date createDate;
-	private Integer part;
-	private String name;
+	private Integer projectPart;//分部工程
+	private Integer unitPart;//分项工程
+	private Date projectPartTime;
+	private String projectPartDate;
 	private Integer month;
 	private String content;
 	
@@ -57,22 +60,23 @@ public class ImageRecord {
 	}
 	
 	@Basic
-	@Column(name="part")
-	public Integer getPart() {
-		return part;
+	@Column(name="project_part")
+	public Integer getProjectPart() {
+		return projectPart;
 	}
-	public void setPart(Integer part) {
-		this.part = part;
+	public void setProjectPart(Integer projectPart) {
+		this.projectPart = projectPart;
 	}
 	
 	@Basic
-	@Column(name="name")
-	public String getName() {
-		return name;
+	@Column(name="unit_part")
+	public Integer getUnitPart() {
+		return unitPart;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setUnitPart(Integer unitPart) {
+		this.unitPart = unitPart;
 	}
+	
 	
 	@Basic
 	@Column(name="month")
@@ -90,6 +94,33 @@ public class ImageRecord {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	
+	@Basic
+	@Column(name="building_id")
+	public Long getBuildingId() {
+		return buildingId;
+	}
+	public void setBuildingId(Long buildingId) {
+		this.buildingId = buildingId;
+	}
+	
+	@Basic
+	@Column(name="project_part_date")
+	public String getProjectPartDate() {
+		return projectPartDate;
+	}
+	public void setProjectPartDate(String projectPartDate) {
+		this.projectPartDate = projectPartDate;
+	}
+	
+	@Basic
+	@Column(name="project_part_time")
+	public Date getProjectPartTime() {
+		return projectPartTime;
+	}
+	public void setProjectPartTime(Date projectPartTime) {
+		this.projectPartTime = projectPartTime;
 	}
 	
 	

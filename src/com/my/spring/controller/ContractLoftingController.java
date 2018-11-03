@@ -53,8 +53,9 @@ public class ContractLoftingController {
     @ResponseBody
     public DataWrapper<ContractLofting> updateContractLofting(
     		@ModelAttribute ContractLofting contractLofting,
+    		@RequestParam(value = "valueList",required = false) String valueList,
             @RequestParam(value = "token",required = true) String token){
-        return contractLoftingService.updateContractLofting(token,contractLofting);
+        return contractLoftingService.updateContractLofting(token,contractLofting,valueList);
     }
     @RequestMapping(value="/importContractLoftingByProjectId",method=RequestMethod.POST)
     @ResponseBody

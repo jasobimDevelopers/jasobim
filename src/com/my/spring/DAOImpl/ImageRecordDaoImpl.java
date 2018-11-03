@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ImageRecordDao;
 import com.my.spring.model.ImageRecord;
+import com.my.spring.model.ImageRecordBuildingInfo;
+import com.my.spring.model.ImageRecordData;
+import com.my.spring.model.UserTeamIndex;
 
 /**
 * @author 徐雨祥
@@ -59,6 +65,43 @@ public class ImageRecordDaoImpl extends BaseDao<ImageRecord> implements ImageRec
             e.printStackTrace();
         }
 		return ret;
+	}
+
+	@Override
+	public List<ImageRecord> getImageRecordListByProjectIdAndBuildingId(Long projectId, Long id) {
+		List<ImageRecord> ret = new ArrayList<ImageRecord>();
+		Session session = getSession();
+		Criteria criteria = session.createCriteria(ImageRecord.class);
+		if(projectId!=null){
+			criteria.add(Restrictions.eq("projectId", projectId));
+		}
+		if(id!=null){
+			criteria.add(Restrictions.eq("buildingId", id));
+		}
+		try {
+	            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		return ret;
+	}
+
+	@Override
+	public List<ImageRecordData> getImageRecordBuildingInfoListByGroupBy(ImageRecord infos) {
+		List<ImageRecordData> gets=new ArrayList<ImageRecordData>();
+		String sql = "select project_part as projectPart,unit_part as unitPart from image_record where project_id="
+		+infos.getProjectId()+" and building_id="+infos.getId()+" group by project_part,unit_part order by project_part_time desc";
+		Session session=getSession();
+		try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("projectPart", StandardBasicTypes.INTEGER)
+					 .addScalar("unitPart", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(ImageRecordData.class));
+			 	gets=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	    }
+		return gets;
 	}
 
 }

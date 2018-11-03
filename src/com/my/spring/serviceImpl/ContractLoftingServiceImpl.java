@@ -142,11 +142,20 @@ public class ContractLoftingServiceImpl implements ContractLoftingService  {
 	}
 
 	@Override
-	public DataWrapper<ContractLofting> updateContractLofting(String token, ContractLofting ContractLofting) {
+	public DataWrapper<ContractLofting> updateContractLofting(String token, ContractLofting ContractLofting,String valueList) {
 		DataWrapper<ContractLofting> result = new DataWrapper<ContractLofting>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(ContractLofting!=null){
+				List<ProjectPartContractLofting> idObjects = pLoftingDao.getProjectPartContractLoftingListByContractLoftingId(ContractLofting.getId());
+				if(!idObjects.isEmpty() && valueList!=null){
+					String[] vas = valueList.split(",");
+					for(int i=0;i<vas.length;i++){
+						idObjects.get(i).setValue(Double.valueOf(vas[i]));
+						pLoftingDao.updateProjectPartContractLofting(idObjects.get(i));
+					}
+					
+				}
 				ContractLofting dp = new ContractLofting();
 				dp = ContractLoftingDao.getById(ContractLofting.getId());
 				if(ContractLofting.getName()!=null){
