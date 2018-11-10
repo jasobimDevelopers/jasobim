@@ -210,6 +210,27 @@ public class BaseDao<T> extends Thread{
         }
         return true;
     }
+    /**
+     * 更改PO
+     *
+     * @param entity
+     */
+    public boolean updateList(List<T> entity) {
+        Session session = getSession();
+        try{
+            session.beginTransaction();
+            session.clear();
+            session.update(entity);
+            session.getTransaction().commit();
+            session.flush();
+            session.clear();
+        }catch(Exception e){
+            e.printStackTrace();
+            session.getTransaction().rollback();
+            return false;
+        }
+        return true;
+    }
 
     /**
      * 执行HQL查询

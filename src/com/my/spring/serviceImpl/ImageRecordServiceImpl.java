@@ -4,8 +4,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.my.spring.DAO.ImageRecordBuildingInfoDao;
 import com.my.spring.DAO.ImageRecordDao;
 import com.my.spring.DAO.UserDao;
@@ -19,12 +17,14 @@ import com.my.spring.parameters.Parameters;
 import com.my.spring.service.ImageRecordService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 /**
 * @author 徐雨祥
 * @version 创建时间：2018年10月31日 下午1:52:12
 * 类说明
 */
+@Service("imageRecordService")
 public class ImageRecordServiceImpl implements ImageRecordService{
 
 	@Autowired

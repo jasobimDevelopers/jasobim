@@ -10,6 +10,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
+import org.springframework.stereotype.Repository;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ImageRecordDao;
@@ -23,6 +24,7 @@ import com.my.spring.model.UserTeamIndex;
 * @version 创建时间：2018年10月31日 下午1:27:07
 * 类说明
 */
+@Repository
 public class ImageRecordDaoImpl extends BaseDao<ImageRecord> implements ImageRecordDao {
 
 	@Override

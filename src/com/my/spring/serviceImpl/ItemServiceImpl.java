@@ -1,5 +1,10 @@
 package com.my.spring.serviceImpl;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.ItemDao;
 import com.my.spring.DAO.MinItemDao;
@@ -10,16 +15,21 @@ import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Building;
-import com.my.spring.model.DuctPojo;
 import com.my.spring.model.Item;
+import com.my.spring.model.ItemCount;
+import com.my.spring.model.ItemStateData;
+import com.my.spring.model.ItemStatesData;
 import com.my.spring.model.MinItem;
 import com.my.spring.model.MinItemPojo;
 import com.my.spring.model.Project;
 import com.my.spring.model.Quantity;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.model.User;
+import com.my.spring.model.UserLog;
+import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
 import com.my.spring.service.ItemService;
+import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.QRCodeUtil2;
@@ -30,10 +40,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +67,8 @@ public class ItemServiceImpl implements ItemService {
     BuildingDao buildingDao;
     @Autowired
     FileService fileSerivce;
+    @Autowired
+    UserLogService userLogSerivce;
     @Override
     public DataWrapper<Void> addItem(Item item,String token) {
     	 DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
@@ -131,6 +146,18 @@ public class ItemServiceImpl implements ItemService {
     	DataWrapper<List<Item>> dataWrapper = new DataWrapper<List<Item>>();
         User adminInMemory = SessionManager.getSession(token);
         if (adminInMemory != null) {
+        	if(item.getId()!=null && projectId!=null){
+        		UserLog userLog = new UserLog();
+        		userLog.setActionDate(new Date());
+        		userLog.setFileId(item.getId());
+        		userLog.setProjectPart(ProjectDatas.Item_area.getCode());
+        		if(adminInMemory.getSystemId()!=null){
+        			userLog.setSystemType(adminInMemory.getSystemId());
+        		}
+        		userLog.setUserId(adminInMemory.getId());
+        		//userLog.setVersion("-1");
+        		userLogSerivce.addUserLog(userLog, token);
+        	}
         	dataWrapper =itemDao.getItemList(projectId,pageSize, pageIndex,item);
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
@@ -510,7 +537,6 @@ public class ItemServiceImpl implements ItemService {
 		}
 		return null;
 	}
-
 	@Override
 	public String getCodeImg(Item item,HttpServletRequest request) {
 		MinItem test=minItemDao.getMinItemBySelfId(item.getSelfId());
@@ -548,37 +574,123 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public DataWrapper<DuctPojo> getItemBySelfId(Long id, String selfId, Long projectId) {
-		DataWrapper<DuctPojo> dataWrapper = new DataWrapper<DuctPojo>();
-		Item duct = new Item();
-    	duct=itemDao.getItemBySelfId(selfId,id,projectId).getData();
-    	if(duct!=null){
-    		String projectName="";
-    		if(projectDao.getById(duct.getProjectId())!=null){
-    			projectName=projectDao.getById(duct.getProjectId()).getName();
-    		}
-    		
-			DuctPojo ductPojo=new DuctPojo();
-			ductPojo.setId(duct.getId().toString());
-    		ductPojo.setSize(duct.getSize());
-    		ductPojo.setName(duct.getName());
-    		ductPojo.setFamilyAndType(duct.getFamilyAndType());
-    		ductPojo.setLevel(duct.getLevel());
-    		ductPojo.setBuildingNum(duct.getBuildingNum().toString());
-    		ductPojo.setFloorNum(duct.getFloorNum().toString());
-    		ductPojo.setUnitNum(duct.getUnitNum().toString());
-    		ductPojo.setHouseholdNum(duct.getHouseholdNum().toString());
-    		ductPojo.setProjectId(duct.getProjectId().toString());
-    		ductPojo.setProjectName(projectName);
-    		ductPojo.setArea(duct.getArea()+"");
-    		ductPojo.setLength(duct.getLength()+"");
-    		ductPojo.setServiceType(duct.getServiceType());
-    		ductPojo.setSystemType(duct.getSystemType());
-        	dataWrapper.setData(ductPojo);
-    	}else{
-    		dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
-    	}
-        return dataWrapper;
+	public DataWrapper<List<ItemStateData>> getItemStateData(Long projectId, String token,Integer pageIndex, Integer pageSize ,Integer professionType) {
+		DataWrapper<List<ItemStateData>> result = new DataWrapper<List<ItemStateData>>();
+		List<ItemStateData> resultDataList = new ArrayList<ItemStateData>();
+		List<ItemStateData> resultDataList2 = new ArrayList<ItemStateData>();
+		DataWrapper<List<Item>> itemList = new DataWrapper<List<Item>>();
+		List<ItemCount> gets = new ArrayList<ItemCount>();
+		List<ItemCount> gets2 = new ArrayList<ItemCount>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			gets = itemDao.getNumsGroupBy(projectId);
+			gets2 = itemDao.getNumsGroupByState(projectId);
+			Item empty = new Item();
+			empty.setProjectId(projectId);
+			//itemList=itemDao.getItemLists(projectId, pageIndex, pageSize, empty);
+			for(int i=0;i<gets.size();i++){
+				ItemStateData items = new ItemStateData();
+				items.setName(gets.get(i).getName());
+				items.setProfessionType(gets.get(i).getProfessionType());
+				items.setFamilyAndType(gets.get(i).getFamilyAndType());
+				items.setServiceType(gets.get(i).getServiceType());
+				items.setSystemType(gets.get(i).getSystemType());
+				items.setSize(gets.get(i).getSize());
+				items.setPercent("0%");
+				if(gets.get(i).getLength()>0){
+					items.setUnit("米");
+					items.setNum(gets.get(i).getLength()/100);
+				}else if(gets.get(i).getArea()>0){
+					items.setUnit("平方米");
+					items.setNum(gets.get(i).getArea());
+				}else{
+					items.setUnit("个");
+					items.setNum(Double.valueOf(gets.get(i).getNum()));
+				}
+				for(int j=0;j<gets2.size();j++){
+					if(gets.get(i).getName().equals(gets2.get(j).getName()) 
+							&& gets.get(i).getServiceType().equals(gets2.get(j).getServiceType())
+							&& gets.get(i).getSystemType().equals(gets2.get(j).getSystemType())
+							&& gets.get(i).getFamilyAndType().equals(gets2.get(j).getFamilyAndType())
+							&& gets.get(i).getSize().equals(gets2.get(j).getSize())){
+						NumberFormat numberFormat = NumberFormat.getInstance();
+						// 设置精确到小数点后2位
+						numberFormat.setMaximumFractionDigits(2);
+						if(gets.get(i).getLength()>0){
+							Double num1 =gets2.get(j).getLength();
+							Double num2 =gets.get(i).getLength();
+							items.setPercent(numberFormat.format(num1 / num2 * 100)+"%");
+							items.setIdList(gets2.get(j).getIdList());
+						}else if(gets.get(i).getArea()>0){
+							Double num1 =gets2.get(j).getArea();
+							Double num2 =gets.get(i).getArea();
+							items.setPercent(numberFormat.format(num1 / num2 * 100)+"%");
+							items.setIdList(gets2.get(j).getIdList());
+						}else{
+							float num1 =gets2.get(j).getNum();
+							float num2 =gets.get(i).getNum();
+							items.setPercent(numberFormat.format(num1 / num2 * 100)+"%");
+							items.setIdList(gets2.get(j).getIdList());
+						}
+					}
+				}
+				resultDataList.add(items);
+			}
+			if(professionType!=null){
+				for(int i=0;i<resultDataList.size();i++){
+					if(resultDataList.get(i).getProfessionType()==professionType){
+						resultDataList2.add(resultDataList.get(i));
+					}
+				}
+				result.setData(resultDataList2);
+			}else{
+				result.setData(resultDataList);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);;
+		}
+		return result;
+	}
+
+	@Override
+	public DataWrapper<ItemStatesData> getItemStatesData(Long projectId, String token) {
+		DataWrapper<ItemStatesData> result = new DataWrapper<ItemStatesData>();
+		List<ItemCount> gets = new ArrayList<ItemCount>();
+		List<ItemCount> gets2 = new ArrayList<ItemCount>();
+		List<Object> allgets = new ArrayList<Object>();
+		List<ItemCount> allgets2 = new ArrayList<ItemCount>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			gets2 = itemDao.getNumsGroupByProfesstionType(projectId);///按专业的总数
+			gets = itemDao.getNumsGroupByProfesstionTypeAndState(projectId);//安装业的完成总数
+			NumberFormat numberFormat = NumberFormat.getInstance();
+			// 设置精确到小数点后2位
+			numberFormat.setMaximumFractionDigits(2);
+			List<String> professionDatas = new ArrayList<String>();
+			for(int k=0;k<gets2.size();k++){
+				professionDatas.add("0");
+			}
+			ItemStatesData it = new ItemStatesData();
+			it.setProfessionDatas(professionDatas);
+			for(int i=0;i<gets2.size();i++){
+				it.setFinished("0");
+				for(int j=0;j<gets.size();j++){
+					if(gets2.get(i).getProfessionType()==gets.get(j).getProfessionType()){
+						float num1 = gets.get(j).getNum();
+						float num2 = gets2.get(i).getNum();
+						professionDatas.set(gets2.get(i).getProfessionType(),(numberFormat.format(num1 / num2 * 100)));
+					}
+				}
+			}
+			allgets = itemDao.getAllNumsGroupByStates(projectId);
+			float num3 = Float.valueOf(allgets.get(0).toString());
+			float num4 = Float.valueOf(allgets.get(1).toString());
+			it.setFinished(numberFormat.format(num3 / num4 * 100));
+			result.setData(it);
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);;
+		}
+		return result;
 	}
 
 }

@@ -6,6 +6,8 @@ import com.my.spring.DAO.ItemDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Duct;
 import com.my.spring.model.Item;
+import com.my.spring.model.ItemCount;
+import com.my.spring.model.ItemStateLog;
 import com.my.spring.model.QuantityPojo;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
@@ -124,7 +126,7 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
         retDataWrapper.setNumberPerPage(pageSize);
         return retDataWrapper;
     }
-
+    
     //////////根据项目id删除构件和相应的工程量
 	@SuppressWarnings("unused")
 	@Override
@@ -307,34 +309,258 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 	}
 
 	@Override
-	public DataWrapper<Item> getItemBySelfId(String selfId, Long id, Long projectId) {
-		DataWrapper<Item> dataWrapper=new DataWrapper<Item>();
+	public List<ItemCount> getNumsGroupBy(Long projectId) {
+		String sql = "select name,profession_type as professionType,service_type as serviceType,family_and_type as familyAndType,"
+				+"system_type as systemType,size,sum(length) as length,sum(area) as area,count(id) as num,"
+				+"self_id as selfId from item where project_id="
+				+projectId+" GROUP BY service_type,system_type,family_and_type,size,profession_type";
+		List<ItemCount> dataWrapper=new ArrayList<ItemCount>();
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("name",StandardBasicTypes.STRING)
+					 .addScalar("serviceType",StandardBasicTypes.STRING)
+					 .addScalar("familyAndType",StandardBasicTypes.STRING)
+					 .addScalar("systemType",StandardBasicTypes.STRING)
+					 .addScalar("size",StandardBasicTypes.STRING)
+					 .addScalar("length", StandardBasicTypes.DOUBLE)
+					 .addScalar("area",StandardBasicTypes.DOUBLE)
+					 .addScalar("num",StandardBasicTypes.INTEGER)
+					 .addScalar("selfId", StandardBasicTypes.LONG)
+					 .addScalar("professionType", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(ItemCount.class)); 
+			 dataWrapper=query.list();
+	            
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	        }
+		return dataWrapper;
+	}
+	
+	@Override
+	public List<ItemCount> getNumsGroupByState(Long projectId) {
+		String sql = "select group_concat(self_id) as idList,name,profession_type as professionType,service_type as serviceType,family_and_type as familyAndType,"
+				+"system_type as systemType,size,sum(length) as length,sum(area) as area,count(id) as num,"
+				+"self_id as selfId from item where project_id="
+				+projectId+" and state=1 GROUP BY service_type,system_type,family_and_type,size,profession_type";
+		List<ItemCount> dataWrapper=new ArrayList<ItemCount>();
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("name",StandardBasicTypes.STRING)
+					 .addScalar("idList",StandardBasicTypes.STRING)
+					 .addScalar("serviceType",StandardBasicTypes.STRING)
+					 .addScalar("familyAndType",StandardBasicTypes.STRING)
+					 .addScalar("systemType",StandardBasicTypes.STRING)
+					 .addScalar("size",StandardBasicTypes.STRING)
+					 .addScalar("length", StandardBasicTypes.DOUBLE)
+					 .addScalar("area",StandardBasicTypes.DOUBLE)
+					 .addScalar("num",StandardBasicTypes.INTEGER)
+					 .addScalar("selfId", StandardBasicTypes.LONG)
+					 .addScalar("professionType", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(ItemCount.class)); 
+			 dataWrapper=query.list();
+	            
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	        }
+		return dataWrapper;
+	}
+
+	@Override
+	public List<Item> getItemBySelfId(ItemStateLog itemStateLog,String idList) {
 		List<Item> ret = new ArrayList<Item>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(Item.class);
-        if(selfId==null && (id==null && projectId==null)){
-        	return dataWrapper;
+        if(itemStateLog.getProjectId()!=null){
+        	criteria.add(Restrictions.eq("projectId",itemStateLog.getProjectId()));
         }
-        if(id!=null){
-        	criteria.add(Restrictions.eq("id",id));
-        }
-        if(selfId!=null){
-        	criteria.add(Restrictions.eq("selfId",selfId));
-        }
-        if(projectId!=null){
-        	criteria.add(Restrictions.eq("projectId",projectId));
+        if(idList!=null){
+        	List<Long> ids = new ArrayList<Long>();
+        	for(int i=0;i<idList.split(",").length;i++){
+        		ids.add(Long.valueOf(idList.split(",")[i]));
+        	}
+        	criteria.add(Restrictions.in("selfId",ids));
         }
         try {
             ret = criteria.list();
         }catch (Exception e){
             e.printStackTrace();
         }
-        if (ret != null && ret.size() > 0) {
-        	dataWrapper.setData(ret.get(0));
-		}else{
-			dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        return ret;
+	}
+
+	@Override
+	public Item getItemBySelfId(Long selfId, Long projectId) {
+		List<Item> ret = new ArrayList<Item>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Item.class);
+        if(projectId!=null){
+        	criteria.add(Restrictions.eq("projectId",projectId));
+        }
+        if(selfId!=null){
+        	criteria.add(Restrictions.eq("selfId",selfId));
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(!ret.isEmpty()){
+        	return ret.get(0);
+        }
+        return null;
+	}
+	@Override
+    public DataWrapper<List<Item>> getItemLists(Long projectId,Integer pageSize, Integer pageIndex,Item item) {
+        DataWrapper<List<Item>> retDataWrapper = new DataWrapper<List<Item>>();
+        List<Item> ret = new ArrayList<Item>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Item.class);      
+        ///////////////////////////////
+        criteria.add(Restrictions.eq("projectId", projectId));
+        /////////////////////////////////////
+        if (pageSize == null) {
+			pageSize = 1000;
 		}
+        if (pageIndex == null) {
+			pageIndex = 1;
+		}
+        // 取总页数      
+        criteria.setProjection(Projections.rowCount());      
+        int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
+        int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
+        // 真正取值
+        criteria.setProjection(null);
+        if (pageSize > 0 && pageIndex > 0) {
+            criteria.setMaxResults(pageSize);// 最大显示记录数
+            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        retDataWrapper.setData(ret);
+        retDataWrapper.setTotalNumber(totalItemNum);
+        retDataWrapper.setCurrentPage(pageIndex);
+        retDataWrapper.setTotalPage(totalPageNum);
+        retDataWrapper.setNumberPerPage(pageSize);
+        return retDataWrapper;
+    }
+
+	@Override
+	public List<ItemCount> getNumsGroupByProfesstionType(Long projectId) {
+		
+		String sql = "select count(id) as num,profession_type as professionType from item where project_id="
+		+projectId+" GROUP BY profession_type";
+		List<ItemCount> dataWrapper=new ArrayList<ItemCount>();
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql)
+					 .addScalar("num",StandardBasicTypes.INTEGER)
+					 .addScalar("professionType", StandardBasicTypes.INTEGER)
+					 .setResultTransformer(Transformers.aliasToBean(ItemCount.class)); 
+			 dataWrapper=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	        }
+		return dataWrapper;		
+	}
+
+	@Override
+	public List<ItemCount> getNumsGroupByProfesstionTypeAndState(Long projectId) {
+		String sql = "select count(id) as num,profession_type as professionType from item where project_id="
+				+projectId+" and state=1 GROUP BY profession_type";
+				List<ItemCount> dataWrapper=new ArrayList<ItemCount>();
+				Session session=getSession();
+				 try{
+					 Query query = session.createSQLQuery(sql)
+							 .addScalar("num",StandardBasicTypes.INTEGER)
+							 .addScalar("professionType", StandardBasicTypes.INTEGER)
+							 .setResultTransformer(Transformers.aliasToBean(ItemCount.class)); 
+					 dataWrapper=query.list();
+			        }catch(Exception e){
+			            e.printStackTrace();
+			            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+			        }
+				return dataWrapper;		
+	}
+	@Override
+	public List<Object> getAllNumsGroupByStates(Long projectId) {
+		String sql = "(select count(*) from item where project_id="
+				+projectId+" and state=1) UNION all (select count(*) from item where project_id="+projectId+")";
+		List<Object> dataWrapper=new ArrayList<Object>();
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 dataWrapper=query.list();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+	        }
 		return dataWrapper;
 	}
+
+	@Override
+	public boolean updateItemList(List<Item> item) {
+		// TODO Auto-generated method stub
+		return updateList(item);
+	}
+
+	@Override
+	public boolean updateItemByProjectIdAndSelfIds(Long projectId, String selfIdList) {
+		String sql = "update item set state=0 where project_id="+projectId+" and self_id=";
+		String[] selfIdLists = selfIdList.split(",");
+		for(int i=0;i<selfIdLists.length;i++){
+			if(i==(selfIdLists.length-1)){
+				sql=sql+selfIdLists[i];
+			}else{
+				sql=sql+selfIdLists[i]+" or self_id=";
+			}
+			
+		}
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+	}
+
+	@Override
+	public List<Item> getItemListsByIdList(Long projectId, String idList) {
+	        List<Item> ret = new ArrayList<Item>();
+	        Session session = getSession();
+	        Criteria criteria = session.createCriteria(Item.class);
+	        
+	        ///////////////////////////////
+	        criteria.add(Restrictions.eq("projectId", projectId));
+	        if(idList!=null){
+	        	String[] ids = idList.split(",");
+	        	List<Long> realids = new ArrayList<Long>();
+	        	for(int i=0;i<ids.length;i++){
+	        		realids.add(Long.valueOf(ids[i]));
+	        	}
+	        	criteria.add(Restrictions.in("selfId", realids));
+	        }
+	       
+	        try {
+	            ret = criteria.list();
+	        }catch (Exception e){
+	            e.printStackTrace();
+	        }
+	        return ret;
+	}
+
 
 }
