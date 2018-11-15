@@ -40,41 +40,23 @@ public class ContractLoftingDaoImpl extends BaseDao<ContractLofting> implements 
         criteria.add(Restrictions.eq("projectId", ContractLofting.getProjectId()));
         if(ContractLofting.getId()!=null){
         	criteria.add(Restrictions.eq("pid", ContractLofting.getId()));
+        }else if(ContractLofting.getName()!=null){
+        	criteria.add(Restrictions.like("name", "%"+ContractLofting.getName()+"%"));
         }else{
         	criteria.add(Restrictions.isNull("pid"));
         }
-        if(ContractLofting.getName()!=null){
-        	criteria.add(Restrictions.like("name", "%"+ContractLofting.getName()+"%"));
-        }
 //        criteria.addOrder(Order.desc("publishDate"));
-        if (pageSize == null) {
-			pageSize = 10;
-		}
-        if (pageIndex == null) {
-			pageIndex = 1;
-		}
-        
-        // 取总页数
-        criteria.setProjection(Projections.rowCount());
-        int totalItemNum = ((Long)criteria.uniqueResult()).intValue();
-        int totalPageNum = DaoUtil.getTotalPageNumber(totalItemNum, pageSize);
-
-        // 真正取值
-        criteria.setProjection(null);
-        if (pageSize > 0 && pageIndex > 0) {
-            criteria.setMaxResults(pageSize);// 最大显示记录数
-            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
-        }
+       
         try {
             ret = criteria.list();
         }catch (Exception e){
             e.printStackTrace();
         }
         dataWrapper.setData(ret);
-        dataWrapper.setTotalNumber(totalItemNum);
-        dataWrapper.setCurrentPage(pageIndex);
-        dataWrapper.setTotalPage(totalPageNum);
-        dataWrapper.setNumberPerPage(pageSize);
+        //dataWrapper.setTotalNumber(totalItemNum);
+        //dataWrapper.setCurrentPage(pageIndex);
+        //dataWrapper.setTotalPage(totalPageNum);
+       // dataWrapper.setNumberPerPage(pageSize);
         return dataWrapper;
     }
 
