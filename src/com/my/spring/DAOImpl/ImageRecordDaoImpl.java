@@ -92,7 +92,7 @@ public class ImageRecordDaoImpl extends BaseDao<ImageRecord> implements ImageRec
 	public List<ImageRecordData> getImageRecordBuildingInfoListByGroupBy(ImageRecord infos) {
 		List<ImageRecordData> gets=new ArrayList<ImageRecordData>();
 		String sql = "select project_part as projectPart,unit_part as unitPart from image_record where project_id="
-		+infos.getProjectId()+" and building_id="+infos.getId()+" group by project_part,unit_part order by project_part_time desc";
+		+infos.getProjectId()+" and building_id="+infos.getBuildingId()+" group by project_part,unit_part order by project_part_time desc";
 		Session session=getSession();
 		try{
 			 Query query = session.createSQLQuery(sql)
@@ -105,5 +105,6 @@ public class ImageRecordDaoImpl extends BaseDao<ImageRecord> implements ImageRec
 	    }
 		return gets;
 	}
+	
 
 }

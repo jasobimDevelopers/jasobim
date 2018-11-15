@@ -18,4 +18,5 @@ public interface ImageRecordDao {
 	List<ImageRecord> getImageRecordList(ImageRecord imageRecord);
 	List<ImageRecord> getImageRecordListByProjectIdAndBuildingId(Long projectId, Long id);
 	List<ImageRecordData> getImageRecordBuildingInfoListByGroupBy(ImageRecord infos);
+	//List<ImageRecordData> getImageRecordBuildingInfoLists(ImageRecord imageRecord);
 }

@@ -958,6 +958,4 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 		}
 		return result;
 	}
-
-
 }

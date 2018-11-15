@@ -5,19 +5,13 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.PageInfo;
 import com.my.spring.model.QualityQuestion;
 import com.my.spring.model.QualityQuestionPojo;
-import com.my.spring.model.Question;
-import com.my.spring.model.QuestionPojo;
 import com.my.spring.service.QualityQuestionService;
-import com.my.spring.service.QuestionService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.DataWrappern;
-
-import org.glassfish.jersey.message.internal.Quality;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.HashMap;
 import java.util.List;
 

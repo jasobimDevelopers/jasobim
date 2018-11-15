@@ -149,5 +149,36 @@ public class ProjectProcessDaoImpl extends BaseDao<ProjectProcess> implements Pr
         
         return ret;
     }
+	@Override
+    public List<ProjectProcess> getProjectProcessListByName(String name,Long projectId) {
+        List<ProjectProcess> ret = new ArrayList<ProjectProcess>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(ProjectProcess.class);
+        criteria.add(Restrictions.eq("projectId", projectId));
+        criteria.add(Restrictions.like("taskName", "%"+name+"%"));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        
+        return ret;
+    }
+	@Override
+    public boolean deleteProjectProcessByProjectId(Long projectId) {
+    	String sql = "delete from project_process where project_id="+projectId;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()>0){
+				 return true;
+			 }
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+        
+    }
 	
 }

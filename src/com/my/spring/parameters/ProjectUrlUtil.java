@@ -25,7 +25,6 @@ public class ProjectUrlUtil {
 		urlList.put("/api/constructionTaskNew/admin/updateConstructionTaskNew", ProjectDatas.ConstructionTask_area.getCode());//更新
 		urlList.put("api/constructionTaskNew/exportConstructionTask", ProjectDatas.ConstructionTask_area.getCode());///任务单导出
 		/*预付单*/
-		
 		/*安全管理*/
 		urlList.put("/api/question/addQuestion",ProjectDatas.Question_area.getCode());///安全问题添加
 		urlList.put("/api/question/addQuestionReal", ProjectDatas.Question_area.getCode());

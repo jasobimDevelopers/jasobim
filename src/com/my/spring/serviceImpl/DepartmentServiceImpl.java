@@ -195,6 +195,4 @@ public class DepartmentServiceImpl implements DepartmentService  {
 		}
 		return result;
 	}
-
-	
 }

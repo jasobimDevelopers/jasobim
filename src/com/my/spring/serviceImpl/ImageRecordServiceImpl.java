@@ -109,15 +109,16 @@ public class ImageRecordServiceImpl implements ImageRecordService{
 				ImageRecordBuildingInfo infos = new ImageRecordBuildingInfo();
 				infos.setProjectId(imageRecord.getProjectId());
 				buildingList=infoDao.getImageRecordBuildingInfoList(infos);
-				if(imageRecord.getBuildingId()!=null){
-					imageRecord.setBuildingId(buildingList.get(0).getId());
-				}
-				buildingList2=imageRecordDao.getImageRecordBuildingInfoListByGroupBy(imageRecord);
 				if(!buildingList.isEmpty()){
-					List<String> projectPartTimeList = new ArrayList<String>();
-					List<String> contents = new ArrayList<String>();
+					if(imageRecord.getBuildingId()==null){
+						imageRecord.setBuildingId(buildingList.get(0).getId());
+					}
+					buildingList2=imageRecordDao.getImageRecordBuildingInfoListByGroupBy(imageRecord);
+				}
+				if(!buildingList.isEmpty()){
 					ImageRecordPojo pojo = new ImageRecordPojo();
 					pojo.setBuildingName(buildingList.get(0).getName());
+					pojo.setBuildingId(buildingList.get(0).getId());
 					List<ImageRecordData> contentList = new ArrayList<ImageRecordData>();
 					List<ImageRecord> list = new ArrayList<ImageRecord>();
 					list = imageRecordDao.getImageRecordListByProjectIdAndBuildingId(imageRecord.getProjectId(),buildingList.get(0).getId());
@@ -125,8 +126,10 @@ public class ImageRecordServiceImpl implements ImageRecordService{
 						ImageRecordData datas = new ImageRecordData();
 						datas.setProjectPart(buildingList2.get(i).getProjectPart());
 						datas.setUnitPart(buildingList2.get(i).getUnitPart());
+						List<String> projectPartTimeList = new ArrayList<String>();
+						List<String> contents = new ArrayList<String>();
 						for(int j=0;j<list.size();j++){
-							if(list.get(j).getProjectPart()==buildingList2.get(i).getProjectPart() && list.get(j).getUnitPart()==buildingList2.get(i).getUnitPart()){
+							if((list.get(j).getProjectPart()).equals(buildingList2.get(i).getProjectPart()) && (list.get(j).getUnitPart()).equals(buildingList2.get(i).getUnitPart())){
 								projectPartTimeList.add(list.get(j).getProjectPartDate());
 								contents.add(list.get(j).getContent());
 							}
@@ -139,13 +142,48 @@ public class ImageRecordServiceImpl implements ImageRecordService{
 					ret.add(pojo);
 					for(int k=1;k<buildingList.size();k++){
 						ImageRecordPojo pojo1 = new ImageRecordPojo();
+						pojo1.setBuildingId(buildingList.get(k).getId());
 						pojo1.setBuildingName(buildingList.get(k).getName());
 						ret.add(pojo1);
 					}
 					result.setData(ret);
 				}
-				
 			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+
+	@Override
+	public DataWrapper<List<ImageRecordData>> getImageRecordListByBuildingId(String token, ImageRecord imageRecord) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<ImageRecordData>> result = new DataWrapper<List<ImageRecordData>>();
+		List<ImageRecordData> buildingList2 = new ArrayList<ImageRecordData>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			buildingList2=imageRecordDao.getImageRecordBuildingInfoListByGroupBy(imageRecord);
+			List<ImageRecordData> contentList = new ArrayList<ImageRecordData>();
+			List<ImageRecord> list = new ArrayList<ImageRecord>();
+			list = imageRecordDao.getImageRecordListByProjectIdAndBuildingId(imageRecord.getProjectId(),imageRecord.getBuildingId());
+			for(int i=0;i<buildingList2.size();i++){
+				ImageRecordData datas = new ImageRecordData();
+				datas.setProjectPart(buildingList2.get(i).getProjectPart());
+				datas.setUnitPart(buildingList2.get(i).getUnitPart());
+				List<String> projectPartTimeList = new ArrayList<String>();
+				List<String> contents = new ArrayList<String>();
+				for(int j=0;j<list.size();j++){
+					if((list.get(j).getProjectPart()).equals(buildingList2.get(i).getProjectPart()) && (list.get(j).getUnitPart()).equals(buildingList2.get(i).getUnitPart())){
+						projectPartTimeList.add(list.get(j).getProjectPartDate());
+						contents.add(list.get(j).getContent());
+					}
+				}
+				datas.setContent(contents);
+				datas.setProjectPartDate(projectPartTimeList);
+				contentList.add(datas);
+			}
+			result.setData(contentList);
+			
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

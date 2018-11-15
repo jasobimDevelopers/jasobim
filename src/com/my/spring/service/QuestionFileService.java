@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * Created by Administrator on 2016/6/22.
- */
 public interface QuestionFileService {
 	DataWrapper<Void> addQuestionFile(QuestionFile questionFile,String token, MultipartFile file,HttpServletRequest request);
     DataWrapper<List<QuestionFile>> getQuestionFileList(String token);

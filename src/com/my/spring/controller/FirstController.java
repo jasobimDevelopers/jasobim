@@ -1,6 +1,5 @@
 package com.my.spring.controller;
 
-import java.io.OutputStream;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,20 +19,6 @@ public class FirstController implements HandlerInterceptor {
 	@Autowired
 	UserLogService userLogService;
 	public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-		/*String url=httpServletRequest.getServletPath();
-		if(!url.contains("login")){
-			String token = httpServletRequest.getParameter("token");
-			User userInMemory = SessionManager.getSession(token);
-	    	if(userInMemory==null){
-	    		httpServletResponse.setHeader("Content-type","text/html;charset=UTF-8");//向浏览器发送一个响应头，设置浏览器的解码方式为UTF-8  
-	    		String data = "用户未登录";  
-	    		OutputStream stream  = httpServletResponse.getOutputStream();  
-	    		stream.write(data.getBytes("UTF-8"));  
-	    		return false;
-	    	}
-		}
-		System.out.println("url:"+url);*/
-		
         return true;
     }
 
@@ -76,17 +61,4 @@ public class FirstController implements HandlerInterceptor {
     	}
         System.out.println("afterCompletion run!");
     }
-    /*public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    	Object user = request.getSession().getAttribute("user");
-    	String url=request.getServletPath();
-    	
-    	String token=request.getParameter("token");
-    	User userInMemory=SessionManager.getSession(token);
-    	if(userInMemory!=null){
-    		request.getRequestDispatcher(url+"s").forward(request, response);
-    	}else{
-    		response.sendError(0, "用户未登录");
-    	}
-        return true;
-    }*/
 }

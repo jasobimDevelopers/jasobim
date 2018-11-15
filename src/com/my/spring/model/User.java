@@ -1,11 +1,6 @@
 package com.my.spring.model;
-
 import java.util.Date;
-
 import javax.persistence.*;
-
-
-
 @Entity
 @Table(name = "user")
 public class User {

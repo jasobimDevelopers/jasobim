@@ -1,7 +1,9 @@
 package com.my.spring.serviceImpl;
 import java.io.File;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,11 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONArray;
 import com.my.spring.DAO.ProjectProcessDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserIndexDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
+import com.my.spring.model.FolderPojo;
+import com.my.spring.model.MaterialPlan;
 import com.my.spring.model.ProjectProcess;
 import com.my.spring.model.ProjectProcessPojo;
 import com.my.spring.model.User;
@@ -25,6 +30,7 @@ import com.my.spring.service.FileService;
 import com.my.spring.service.ProjectProcessService;
 import com.my.spring.service.UserIndexService;
 import com.my.spring.utils.DataWrapper;
+import com.my.spring.utils.MaterialPlanNodeUtil;
 import com.my.spring.utils.SessionManager;
 import net.sf.mpxj.MPXJException;
 import net.sf.mpxj.ProjectFile;
@@ -62,16 +68,25 @@ public class ProjectProcessServiceImpl implements ProjectProcessService  {
 	}
 
 	@Override
-	public DataWrapper<ProjectProcess> addProjectProcess(String token,ProjectProcess role) {
+	public DataWrapper<ProjectProcess> addProjectProcess(String token,ProjectProcess role,String startTime,String endTime) {
 		DataWrapper<ProjectProcess> result = new DataWrapper<ProjectProcess>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(role!=null){
+				try {
+					role.setStartDate(Parameters.getSdfs().parse(startTime));
+					role.setEndDate(Parameters.getSdfs().parse(endTime));
+					role.setImportTime(new Date());
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(!projectProcessDao.addProjectProcess(role)){
 					result.setErrorCode(ErrorCodeEnum.Error);
+				}else{
+					result.setData(role);
 				}
 			}
-			
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -121,8 +136,12 @@ public class ProjectProcessServiceImpl implements ProjectProcessService  {
 				Files files=fileSerivce.uploadFile(filePath, file, 6, request);
 				if(files!=null){
 					File filestr = new File("D:/jasobim/tomcat_8080/webapps/ROOT/"+files.getUrl());
-					//File filestr = new File("C:/Users/Han/Desktop/吉宝住宅进度9.13.mpp");
-					readMmpFileToDB(filestr,projectId);
+					//File filestr = new File("C:/Users/Han/Desktop/processMode (2).mpp");
+					if(projectProcessDao.deleteProjectProcessByProjectId(projectId)){
+						readMmpFileToDB(filestr,projectId);
+					}else{
+						readMmpFileToDB(filestr,projectId);
+					}
 				}
 			}
 			
@@ -257,5 +276,122 @@ public class ProjectProcessServiceImpl implements ProjectProcessService  {
 		}
 		return result;
 	}
+
+	@Override
+	public DataWrapper<List<ProjectProcessPojo>> findProjectProcessList(String name, Long projectId, String token) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<ProjectProcessPojo>> result = new DataWrapper<List<ProjectProcessPojo>>();
+		List<ProjectProcessPojo> ret = new ArrayList<ProjectProcessPojo>();
+		List<ProjectProcess> lists = new ArrayList<ProjectProcess>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(projectId!=null){
+				lists = projectProcessDao.getProjectProcessListByName(name,projectId);
+				if(!lists.isEmpty()){
+					for(int i=0;i<lists.size();i++){
+						ProjectProcessPojo pojo = new ProjectProcessPojo();
+						pojo.setTaskName(lists.get(i).getTaskName());
+						pojo.setImportTime(Parameters.getSdf().format(lists.get(i).getImportTime()));
+						pojo.setStartDate(Parameters.getSdf().format(lists.get(i).getStartDate()));
+						pojo.setEndDate(Parameters.getSdf().format(lists.get(i).getEndDate()));
+						pojo.setLevel(lists.get(i).getLevel());
+						int days = (int) ((lists.get(i).getEndDate().getTime() - lists.get(i).getStartDate().getTime()) / (1000*3600*24));
+						pojo.setDurationDate(days);
+						pojo.setParentId(lists.get(i).getParentId());
+						pojo.setId(lists.get(i).getId());
+						ret.add(pojo);
+					}
+					result.setData(ret);
+				}
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+
+/*	@Override
+	public DataWrapper<Object> findProjectProcessList(Long projectId, String token) {
+		DataWrapper<Object> foldersList = new DataWrapper<Object>();
+		DataWrapper<List<MaterialPlan>> mps = new DataWrapper<List<MaterialPlan>>();
+		User userInMemory=SessionManager.getSession(token); 
+		if(userInMemory!=null){
+			mps=mpDao.getMaterialPlanList(floder,dates);
+			if(mps.getData()!=null)
+			{
+				List dataList = new ArrayList();  
+				for(MaterialPlan ss:mps.getData()){
+					HashMap dataRecord1 = new HashMap();  
+					dataRecord1.put("id", ss.getId().toString());
+					dataRecord1.put("name", ss.getName());
+					dataRecord1.put("remark", ss.getRemark());
+					if(ss.getModel()!=null){
+						dataRecord1.put("model", ss.getModel());
+					}else{
+						dataRecord1.put("model", "");
+					}
+					if(ss.getStartTime()!=null){
+						dataRecord1.put("startTime", Parameters.getSdfs().format(ss.getStartTime()));
+					}else{
+						dataRecord1.put("startTime", "");
+					}
+					
+					if(ss.getEndTime()!=null){
+						dataRecord1.put("endTime",Parameters.getSdfs().format( ss.getEndTime()));
+					}
+					if(ss.getStandard()!=null){
+						dataRecord1.put("standard", ss.getStandard());
+					}else{
+						dataRecord1.put("standard", "");
+					}
+					if(ss.getUnit()!=null){
+						dataRecord1.put("unit",ss.getUnit());
+					}else{
+						dataRecord1.put("unit","");
+					}
+					if(ss.getNum()!=null){
+						dataRecord1.put("num", ss.getNum()+"");
+					}else{
+						dataRecord1.put("num","");
+					}
+					if(ss.getGetTime()!=null){
+						dataRecord1.put("getTime", ss.getGetTime());
+					}else{
+						dataRecord1.put("getTime", "");
+					}
+					if(ss.getOutPlace()!=null){
+						dataRecord1.put("outPlace", ss.getOutPlace());
+					}else{
+						dataRecord1.put("outPlace", "");
+					}
+					if(ss.getUsePlace()!=null){
+						dataRecord1.put("usePlace", ss.getUsePlace());
+					}else{
+						dataRecord1.put("usePlace", "");
+					}
+					if(ss.getPid()==0){
+						dataRecord1.put("pid", "");
+					}else{
+						dataRecord1.put("pid", ss.getPid().toString());
+					}
+					dataList.add(dataRecord1);
+				}
+				MaterialPlanNodeUtil nodeUtil = new MaterialPlanNodeUtil();
+				
+				String resultString=nodeUtil.getJasonStringOfMaterialPlan(dataList);
+				if(resultString!=null){
+					foldersList.setData(JSONArray.parse(resultString));
+				}
+				
+			}
+			FolderPojo folderPojo = new FolderPojo();
+			
+			
+		}else{
+			foldersList.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		
+		return foldersList;  
+	}*/
 	
 }

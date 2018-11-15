@@ -14,10 +14,11 @@ import com.my.spring.utils.DataWrapper;
 public interface ProjectProcessService {
 	DataWrapper<Void> deleteProjectProcessById(String token,Long id);
 	DataWrapper<Void> importProjectProcess(String token,MultipartFile file,HttpServletRequest request,Long projectId);
-	DataWrapper<ProjectProcess> addProjectProcess(String token,ProjectProcess role);
+	DataWrapper<ProjectProcess> addProjectProcess(String token,ProjectProcess role,String startTime,String endTime);
 	DataWrapper<Void> deleteProjectProcessByIdList(String token,String[] id);
 	/*DataWrapper<List<ProjectProcessPojo>> getProjectProcessList(Integer pageIndex, Integer pageSize, ProjectProcess ProjectProcess,
 			String token);*/
 	DataWrapper<Void> updateProjectProcess(String token, ProjectProcess ProjectProcess);
 	DataWrapper<List<ProjectProcessPojo>> getProjectProcessList(ProjectProcess projectProcess, String token);
+	DataWrapper<List<ProjectProcessPojo>> findProjectProcessList(String name,Long projectId, String token);
 }

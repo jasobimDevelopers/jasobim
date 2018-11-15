@@ -27,8 +27,10 @@ public class ProjectProcessController {
     @ResponseBody
     public DataWrapper<ProjectProcess> addprojectProcess(
             @ModelAttribute ProjectProcess projectProcess,
+            @RequestParam(value = "startTime",required = true) String startTime,
+            @RequestParam(value = "endTime",required = true) String endTime,
             @RequestParam(value = "token",required = true) String token){
-        return projectProcessService.addProjectProcess(token,projectProcess);
+        return projectProcessService.addProjectProcess(token,projectProcess,startTime,endTime);
     }
     @RequestMapping(value="/admin/updateProjectProcess", method = RequestMethod.POST)
     @ResponseBody
@@ -50,16 +52,25 @@ public class ProjectProcessController {
     @ResponseBody
     public DataWrapper<List<ProjectProcessPojo>> getprojectProcessList(
     		@ModelAttribute ProjectProcess projectProcess,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return projectProcessService.getProjectProcessList(projectProcess,token);
     }
+    @RequestMapping(value="/findProjectProcessList", method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<ProjectProcessPojo>> findProjectProcessList(
+    		@RequestParam(value = "name",required = true) String name,
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "token",required = true) String token){
+        return projectProcessService.findProjectProcessList(name,projectId,token);
+    }
+    
     @RequestMapping(value="/importProjectProcessByProjectId",method=RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> importProjectProcessByProjectId(
     		@RequestParam(value = "projectId",required = true) Long projectId,
     		HttpServletRequest request,
             @RequestParam(value = "file", required = true) MultipartFile file,
-            @RequestParam(value = "token",required = false) String token){
+            @RequestParam(value = "token",required = true) String token){
         return projectProcessService.importProjectProcess(token,file,request,projectId);
     }
 

@@ -6,18 +6,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSONArray;
-import com.my.spring.DAO.AttenceLogDao;
 import com.my.spring.DAO.AttenceModelDao;
 import com.my.spring.DAO.MechanicDao;
 import com.my.spring.DAO.MechanicPriceDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.MechanicPrice;
@@ -25,16 +21,12 @@ import com.my.spring.model.MechanicPriceNum;
 import com.my.spring.model.MechanicPricePojo;
 import com.my.spring.model.MechanicPricePojos;
 import com.my.spring.model.Project;
-import com.my.spring.model.AttenceModel;
-import com.my.spring.model.Files;
 import com.my.spring.model.Mechanic;
 import com.my.spring.model.MechanicData;
 import com.my.spring.model.MechanicDataOfHour;
 import com.my.spring.model.MechanicDataPeople;
-import com.my.spring.model.MechanicPojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
-import com.my.spring.model.ValueOutput;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.parameters.ProjectDatas;
 import com.my.spring.service.FileService;
@@ -43,10 +35,7 @@ import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.DateDemo;
 import com.my.spring.utils.ExportExcelOfMenchainc;
-import com.my.spring.utils.InstanceUtil;
 import com.my.spring.utils.SessionManager;
-import com.my.spring.utils.WriteDataToExcel;
-import com.my.spring.utils.WriteMechanicDataToExcel;
 
 @Service("mechanicPriceService")
 public class MechanicPriceServiceImpl implements MechanicPriceService{
@@ -421,6 +410,5 @@ public class MechanicPriceServiceImpl implements MechanicPriceService{
 		
 		return result;
 	}
-
 
 }

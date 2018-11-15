@@ -6,6 +6,7 @@ import java.util.List;
 * 类说明
 */
 public class ImageRecordPojo {
+	private Long buildingId;
 	private String buildingName;//楼栋信息id
 	private List<ImageRecordData> contentList;
 	public String getBuildingName() {
@@ -19,6 +20,12 @@ public class ImageRecordPojo {
 	}
 	public void setContentList(List<ImageRecordData> contentList) {
 		this.contentList = contentList;
+	}
+	public Long getBuildingId() {
+		return buildingId;
+	}
+	public void setBuildingId(Long buildingId) {
+		this.buildingId = buildingId;
 	}
 	
 }

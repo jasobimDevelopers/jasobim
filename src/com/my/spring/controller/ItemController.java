@@ -261,5 +261,4 @@ public class ItemController {
     		@RequestParam(value = "token",required = true) String token){
         return itemService.getItemStatesData(projectId,token);
     }
-
 }

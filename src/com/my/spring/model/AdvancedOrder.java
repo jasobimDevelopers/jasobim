@@ -21,13 +21,11 @@ public class AdvancedOrder {
 	private String quantityDes;//工程量及应付款
 	private String nextApprovalPeopleType;//任务指派的下一个人的岗位
 	private String nextReceivePeopleId;////任务指派下一个人的姓名
-	
 	private String approvalPeopleType;///审批人职位
 	private String approvalPeopleName;///审批人姓名
 	private String approvalPeopleNote;///审批人批注
 	private String approvalPeopleIdea;///审批人意见
 	private String approvalUpdateDate;///审批更新时间
-	
 	private String userProjectIdList;
 	private String contentFilesId;///工程量描述图片idList
 	private String photoOfFinished;///预算员上传的图片

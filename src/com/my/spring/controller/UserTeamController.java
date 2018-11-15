@@ -31,7 +31,6 @@ public class UserTeamController {
             @RequestParam(value = "token",required = true) String token){
         return userTeamService.addUserTeam(token, userTeam);
     }
-    
     @RequestMapping(value="/admin/updateUserTeam", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateUserTeam(
@@ -39,9 +38,6 @@ public class UserTeamController {
             @RequestParam(value = "token",required = true) String token){
         return userTeamService.updateUserTeam(token, userTeam);
     }
-  
-    
-    
     @RequestMapping(value="/admin/deleteUserTeam")
     @ResponseBody
     public DataWrapper<Void> deleteUserTeam(
@@ -49,9 +45,6 @@ public class UserTeamController {
             @RequestParam(value = "token",required = true) String token){
         return userTeamService.deleteUserTeamById(token,id);
     }
-  
-
-
     @RequestMapping(value="/admin/getUserTeamList", method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<UserTeamPojo>> getItemList(

@@ -51,7 +51,7 @@ public class ImageRecordBuildingInfoDaoImpl extends BaseDao<ImageRecordBuildingI
 		List<ImageRecordBuildingInfo> ret = new ArrayList<ImageRecordBuildingInfo>();
 		Session session = getSession();
 		Criteria criteria = session.createCriteria(ImageRecordBuildingInfo.class);
-		criteria.addOrder(Order.desc("createDate"));
+		criteria.addOrder(Order.asc("indexs"));
 		if(info.getProjectId()!=null){
 			criteria.add(Restrictions.eq("projectId", info.getProjectId()));
 		}

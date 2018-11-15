@@ -137,8 +137,4 @@ public class UserTeamDaoImpl extends BaseDao<UserTeam> implements UserTeamDao {
 	    }
 		return gets;
 	}
-
-
-
-
 }

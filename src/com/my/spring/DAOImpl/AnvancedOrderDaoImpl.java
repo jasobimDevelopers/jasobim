@@ -192,9 +192,4 @@ public class AnvancedOrderDaoImpl extends BaseDao<AdvancedOrder> implements Adva
         }
 		return retDataWrapper;
 	}
-
-	
-
-	
-
 }

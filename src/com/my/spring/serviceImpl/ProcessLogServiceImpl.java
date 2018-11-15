@@ -7,7 +7,6 @@ import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.ItemData;
-import com.my.spring.model.ProcessItem;
 import com.my.spring.model.ProcessLog;
 import com.my.spring.model.ProcessLogPojo;
 import com.my.spring.model.User;
@@ -16,10 +15,8 @@ import com.my.spring.service.ProcessLogService;
 import com.my.spring.service.UserLogService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,8 +87,6 @@ public class ProcessLogServiceImpl implements ProcessLogService {
         return dataWrapper;
     }
 
-
-
     @Override
     public DataWrapper<List<ProcessLogPojo>> getProcessLogList(String token , Integer pageIndex, Integer pageSize, ProcessLog ProcessLog) {
     	DataWrapper<List<ProcessLogPojo>> dataWrappers = new DataWrapper<List<ProcessLogPojo>>();
@@ -132,8 +127,4 @@ public class ProcessLogServiceImpl implements ProcessLogService {
 			}
         return dataWrappers;
     }
-
-	
-
-	
 }

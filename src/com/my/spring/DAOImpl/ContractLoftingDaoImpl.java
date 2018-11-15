@@ -43,6 +43,9 @@ public class ContractLoftingDaoImpl extends BaseDao<ContractLofting> implements 
         }else{
         	criteria.add(Restrictions.isNull("pid"));
         }
+        if(ContractLofting.getName()!=null){
+        	criteria.add(Restrictions.like("name", "%"+ContractLofting.getName()+"%"));
+        }
 //        criteria.addOrder(Order.desc("publishDate"));
         if (pageSize == null) {
 			pageSize = 10;

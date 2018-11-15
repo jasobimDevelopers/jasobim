@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.my.spring.model.ImageRecord;
+import com.my.spring.model.ImageRecordData;
 import com.my.spring.model.ImageRecordPojo;
 import com.my.spring.service.ImageRecordService;
 import com.my.spring.utils.DataWrapper;
 
 @Controller
-@RequestMapping(value="api/ImageRecord")
+@RequestMapping(value="api/imageRecord")
 public class ImageRecordController {
     @Autowired
     ImageRecordService imageRecordService;  
@@ -47,11 +48,16 @@ public class ImageRecordController {
     @RequestMapping(value="/admin/getImageRecordList", method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<ImageRecordPojo>> getImageRecordList(
-    		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
-    		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute ImageRecord imageRecord,
             @RequestParam(value = "token",required = true) String token){
         return imageRecordService.getImageRecordList(token, imageRecord);
+    }
+    @RequestMapping(value="/getImageRecordListByBuildingId", method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<ImageRecordData>> getImageRecordListByBuildingId(
+    		@ModelAttribute ImageRecord imageRecord,
+            @RequestParam(value = "token",required = true) String token){
+        return imageRecordService.getImageRecordListByBuildingId(token, imageRecord);
     }
 
 }

@@ -1,8 +1,5 @@
 package com.my.spring.model;
-
 import javax.persistence.*;
-
-
 @Entity
 @Table(name = "item")
 public class Item {
@@ -33,8 +30,6 @@ public class Item {
     private String installDate;///安装日期
     private String itemBrand;///构件品牌
     private Integer state;
-    
-    
     
     @Id
     @GeneratedValue

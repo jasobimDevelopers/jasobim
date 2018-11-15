@@ -542,7 +542,6 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 	        List<Item> ret = new ArrayList<Item>();
 	        Session session = getSession();
 	        Criteria criteria = session.createCriteria(Item.class);
-	        
 	        ///////////////////////////////
 	        criteria.add(Restrictions.eq("projectId", projectId));
 	        if(idList!=null){
@@ -553,7 +552,6 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 	        	}
 	        	criteria.add(Restrictions.in("selfId", realids));
 	        }
-	       
 	        try {
 	            ret = criteria.list();
 	        }catch (Exception e){
@@ -561,6 +559,5 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 	        }
 	        return ret;
 	}
-
 
 }
