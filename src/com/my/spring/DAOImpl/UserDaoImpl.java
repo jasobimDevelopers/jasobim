@@ -2,23 +2,18 @@ package com.my.spring.DAOImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.MenuListCopy;
-import com.my.spring.model.Projectvs;
 import com.my.spring.model.User;
 import com.my.spring.model.UserCopy;
 import com.my.spring.model.UserId;

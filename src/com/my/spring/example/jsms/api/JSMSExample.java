@@ -18,15 +18,12 @@ import cn.jsms.api.template.TempSMSResult;
 import cn.jsms.api.template.TemplatePayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jsms.api.common.SMSClient;
 import cn.jsms.api.common.model.SMSPayload;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 
 public class JSMSExample {

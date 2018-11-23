@@ -1,4 +1,4 @@
- package com.my.spring.controller;
+package com.my.spring.controller;
 import com.my.spring.model.BudgetBuilding;
 import com.my.spring.service.BudgetBuildingService;
 import com.my.spring.utils.DataWrapper;

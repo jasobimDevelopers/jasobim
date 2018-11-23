@@ -57,6 +57,17 @@ public class ItemStateLogServiceImpl implements ItemStateLogService {
 							gets.add(newone);
 							itemDao.updateItem(item.get(i));
 						}
+					}else{
+						for(int i=0;i<selfIdList.split(",").length;i++){
+							ItemStateLog newone = new ItemStateLog();
+							newone.setStatus(ItemStateLog.getStatus());
+							newone.setActionDate(new Date());
+							newone.setProjectId(ItemStateLog.getProjectId());
+							newone.setSelfId(Long.valueOf(selfIdList.split(",")[i]));
+							newone.setStatus(ItemStateLog.getStatus());
+							newone.setUserId(userInMemory.getId());
+							gets.add(newone);
+						}
 					}
 				}
 				if(ItemStateLogDao.addList(gets)){

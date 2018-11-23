@@ -1,8 +1,6 @@
 package com.my.spring.controller;
-
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Duct;
-import com.my.spring.model.DuctApp;
 import com.my.spring.model.DuctAppPojo;
 import com.my.spring.model.DuctConfig;
 import com.my.spring.model.DuctPojo;
@@ -13,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 @Controller

@@ -7,26 +7,16 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import com.my.spring.DAO.AttenceLogDao;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.AttenceForgetFactLogs;
 import com.my.spring.model.AttenceLog;
 import com.my.spring.model.AttenceLogs;
-import com.my.spring.model.Department;
-import com.my.spring.model.DuctPojos;
-import com.my.spring.model.Material;
-import com.my.spring.model.MaterialType;
-import com.my.spring.model.MeasuredDatas;
-import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 @Repository
 public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLogDao {
@@ -54,6 +44,7 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 		return get(id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<AttenceLogs>> getAttenceLogsList(Integer pageIndex, Integer pageSize,AttenceLog am,Integer year,Integer month) {
 		// TODO Auto-generated method stub
@@ -97,15 +88,9 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
         result.setNumberPerPage(pageSize);*/
         return dataWrapper;
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<AttenceLogs>> getAttenceLogsList(Integer pageIndex, Integer pageSize,AttenceLog am,String start,String end) {
-		// TODO Auto-generated method stub
-		/*if(pageIndex==null){
-			pageIndex=1;
-		}
-		if(pageSize==null){
-			pageSize=10;
-		}*/
 		DataWrapper<List<AttenceLogs>> dataWrapper=new DataWrapper<List<AttenceLogs>>();
 		String sql = "select e.user_id,sum(e.late_num) as late_nums,sum(e.leave_early_num) as leave_early_nums from" 
 		+" (select sum(late) as late_num,sum(leave_early) as leave_early_num,1 as clock_flag,user_id from attence_log "
@@ -116,10 +101,6 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 		+" where (start_work_time is null or end_work_time is null) and project_id="
 		+am.getProjectId()+" and user_id="+am.getUserId()+" and create_date BETWEEN '"+start
 		+"' and '"+end+"' GROUP BY user_id) e GROUP BY e.user_id";
-		
-		/*if(pageIndex!=-1){
-			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
-		}*/
 		Session session=getSession();
 		 try{
 			 Query query = session.createSQLQuery(sql)
@@ -132,31 +113,16 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 	            e.printStackTrace();
 	        }
 		 
-	    
-       /* result.setData(ret);
-        result.setTotalNumber(totalItemNum);
-        result.setCurrentPage(pageIndex);
-        result.setTotalPage(totalPageNum);
-        result.setNumberPerPage(pageSize);*/
         return dataWrapper;
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<AttenceLogs>> getAttenceLogsUserList(Integer pageIndex, Integer pageSize,AttenceLog am,Integer year,Integer month) {
-		// TODO Auto-generated method stub
-		/*if(pageIndex==null){
-			pageIndex=1;
-		}
-		if(pageSize==null){
-			pageSize=10;
-		}*/
 		DataWrapper<List<AttenceLogs>> dataWrapper=new DataWrapper<List<AttenceLogs>>();
 		String sql = "select DATE_FORMAT(a.create_date,'%Y-%m') as month,a.* from attence_log a "
 		+" where project_id="+am.getProjectId()+" group by user_id";
-		/*if(pageIndex!=-1){
-			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
-		}*/
 		Session session=getSession();
 		 try{
 			 Query query = session.createSQLQuery(sql)
@@ -178,12 +144,6 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 	            e.printStackTrace();
 	        }
 		 
-	    
-       /* result.setData(ret);
-        result.setTotalNumber(totalItemNum);
-        result.setCurrentPage(pageIndex);
-        result.setTotalPage(totalPageNum);
-        result.setNumberPerPage(pageSize);*/
         return dataWrapper;
 	}
 	@Override
@@ -192,7 +152,8 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 		String sql="delete * from attence_log where project_id="+id;
 		Session session=getSession();
 		 try{
-	            Query query=session.createSQLQuery(sql);
+	            @SuppressWarnings("unused")
+				Query query=session.createSQLQuery(sql);
 	            session.getTransaction().commit();
 	            session.flush();
 	        }catch(Exception e){
@@ -210,6 +171,7 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public AttenceLog getAttenceLogByInfos(Long id, Date nowDate, Long projectId) {
         List<AttenceLog> ret = new ArrayList<AttenceLog>();
@@ -235,6 +197,7 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public AttenceLog getAttenceLogListByIds(AttenceLog ps) {
 		 List<AttenceLog> ret = new ArrayList<AttenceLog>();
@@ -263,17 +226,10 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 	        }
 			return null;
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<AttenceForgetFactLogs>> getForgetFactNumsList(Integer pageIndex, Integer pageSize,AttenceLog am,Integer year,Integer month) {
-		// TODO Auto-generated method stub
-		/*if(pageIndex==null){
-			pageIndex=1;
-		}
-		if(pageSize==null){
-			pageSize=10;
-		}*/
 		DataWrapper<List<AttenceForgetFactLogs>> dataWrapper=new DataWrapper<List<AttenceForgetFactLogs>>();
-		
 		String sql = "select e.user_id,sum(e.fact_num) as fact_nums,sum(e.forget_num) as forget_nums from "
 		+"(select count(1) as fact_num ,0 as forget_num,1 as clock_flag,user_id from attence_log" 
 	    +" where (start_work_time is not null and end_work_time is not null) and project_id="+
@@ -283,10 +239,6 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 		+" where (start_work_time is null or end_work_time is null) and project_id="
 		+am.getProjectId()+" and create_date BETWEEN '"+String.valueOf(year)+"-"+String.valueOf(month)+"-01"
 		+"' and '"+String.valueOf(year)+"-"+String.valueOf(month+1)+"-01"+"' GROUP BY user_id) e GROUP BY e.user_id";
-		
-		/*if(pageIndex!=-1){
-			sql = sql +" limit "+(pageSize*pageIndex-pageSize)+","+pageSize;
-		}*/
 		Session session=getSession();
 		 try{
 			 Query query = session.createSQLQuery(sql)
@@ -298,26 +250,12 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 	        }catch(Exception e){
 	            e.printStackTrace();
 	        }
-		 
-	    
-       /* result.setData(ret);
-        result.setTotalNumber(totalItemNum);
-        result.setCurrentPage(pageIndex);
-        result.setTotalPage(totalPageNum);
-        result.setNumberPerPage(pageSize);*/
         return dataWrapper;
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<AttenceForgetFactLogs>> getForgetFactNumsList(Integer pageIndex, Integer pageSize,AttenceLog am,String start,String end) {
-		// TODO Auto-generated method stub
-		/*if(pageIndex==null){
-			pageIndex=1;
-		}
-		if(pageSize==null){
-			pageSize=10;
-		}*/
 		DataWrapper<List<AttenceForgetFactLogs>> dataWrapper=new DataWrapper<List<AttenceForgetFactLogs>>();
-		
 		String sql = "select e.user_id,sum(e.fact_num) as fact_nums,sum(e.forget_num) as forget_nums from "
 		+"(select count(1) as fact_num ,0 as forget_num,1 as clock_flag,user_id from attence_log" 
 	    +" where (start_work_time is not null and end_work_time is not null) and project_id="+
@@ -342,13 +280,6 @@ public class AtttenceLogDaoImpl extends BaseDao<AttenceLog> implements AttenceLo
 	        }catch(Exception e){
 	            e.printStackTrace();
 	        }
-		 
-	    
-       /* result.setData(ret);
-        result.setTotalNumber(totalItemNum);
-        result.setCurrentPage(pageIndex);
-        result.setTotalPage(totalPageNum);
-        result.setNumberPerPage(pageSize);*/
         return dataWrapper;
 	}
 

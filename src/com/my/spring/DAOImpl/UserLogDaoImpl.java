@@ -3,12 +3,9 @@ package com.my.spring.DAOImpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -23,16 +20,13 @@ import org.hibernate.persister.entity.OuterJoinLoadable;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.UserLogDao;
-import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.model.UserLogCount;
 import com.my.spring.model.UserLogMonth;
 import com.my.spring.model.UserLogPart;
 import com.my.spring.model.UserLogPojos;
-import com.my.spring.model.ValueOutputPojo;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 

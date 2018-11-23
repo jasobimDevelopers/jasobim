@@ -15,5 +15,6 @@ public interface RedisCommonService {
 
     JSONArray findAll(String keySpace);
 
-    Page findAll(String keySpace, Pageable pageable);
+    @SuppressWarnings("rawtypes")
+	Page findAll(String keySpace, Pageable pageable);
 }

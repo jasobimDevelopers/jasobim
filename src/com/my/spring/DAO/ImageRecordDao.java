@@ -1,10 +1,8 @@
 package com.my.spring.DAO;
 
 import java.util.List;
-
 import com.my.spring.model.ImageRecord;
 import com.my.spring.model.ImageRecordData;
-
 /**
 * @author 徐雨祥
 * @version 创建时间：2018年10月31日 下午1:17:17

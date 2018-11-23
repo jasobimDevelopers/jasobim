@@ -4,7 +4,6 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.RoleDao;
 import com.my.spring.model.Role;
 import com.my.spring.model.RoleIndex;
-import com.my.spring.model.UserIndexs;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;

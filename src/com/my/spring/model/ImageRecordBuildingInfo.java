@@ -18,6 +18,7 @@ public class ImageRecordBuildingInfo {
 	private Integer indexs;
 	private Date createDate;
 	private Long createUser;
+	private Integer type;//0、普通楼栋  1、人防  2、主楼
 	
 	@Id
 	@GeneratedValue
@@ -72,6 +73,15 @@ public class ImageRecordBuildingInfo {
 	}
 	public void setCreateUser(Long createUser) {
 		this.createUser = createUser;
+	}
+	
+	@Basic
+	@Column(name="type")
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
 	}
 	
 }

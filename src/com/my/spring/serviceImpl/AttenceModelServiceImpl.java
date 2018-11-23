@@ -3,17 +3,13 @@ package com.my.spring.serviceImpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.my.spring.DAO.AttenceModelDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.UserLogDao;
 import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.AttenceLogPojo;
 import com.my.spring.model.AttenceModel;
 import com.my.spring.model.AttenceModelPojo;
 import com.my.spring.model.Project;

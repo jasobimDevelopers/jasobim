@@ -1,7 +1,5 @@
 package com.my.spring.model;
 
-import java.util.Date;
-
 public class NormativefilesPojo {
 	private Long id;
 	private String projectName;///项目id

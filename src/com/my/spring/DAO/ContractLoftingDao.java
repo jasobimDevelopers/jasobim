@@ -1,9 +1,11 @@
 package com.my.spring.DAO;
+
 import com.my.spring.model.ContractLofting;
 import com.my.spring.model.ContractLoftingMode;
 import com.my.spring.model.UserIndexs;
 import com.my.spring.utils.DataWrapper;
 import java.util.List;
+
 public interface ContractLoftingDao {
 	ContractLofting getById(Long id);
 	boolean deleteContractLofting(Long id);

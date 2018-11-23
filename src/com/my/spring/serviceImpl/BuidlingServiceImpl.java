@@ -9,10 +9,8 @@ import com.my.spring.model.User;
 import com.my.spring.service.BuildingService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 

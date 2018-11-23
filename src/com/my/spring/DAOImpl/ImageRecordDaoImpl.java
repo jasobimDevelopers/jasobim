@@ -2,7 +2,6 @@ package com.my.spring.DAOImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -11,13 +10,10 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ImageRecordDao;
 import com.my.spring.model.ImageRecord;
-import com.my.spring.model.ImageRecordBuildingInfo;
 import com.my.spring.model.ImageRecordData;
-import com.my.spring.model.UserTeamIndex;
 
 /**
 * @author 徐雨祥

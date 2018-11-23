@@ -1,8 +1,6 @@
 package com.my.spring.DAO;
 
-
 import java.util.List;
-
 import com.my.spring.model.Notice;
 import com.my.spring.model.NoticePojo;
 import com.my.spring.model.UserProject;

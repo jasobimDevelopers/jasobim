@@ -1,18 +1,14 @@
 package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
-import com.my.spring.DAO.AdvancedOrderDao;
 import com.my.spring.DAO.AdvancedOrderNewDao;
-import com.my.spring.model.AdvancedOrder;
 import com.my.spring.model.AdvancedOrderCopy;
 import com.my.spring.model.AdvancedOrderNew;
-import com.my.spring.model.QuestionCopy;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -130,6 +126,7 @@ public class AdvancedOrderNewDaoImpl extends BaseDao<AdvancedOrderNew> implement
 		return get(id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<AdvancedOrderCopy> getAdvancedOrderNewListNotRead(Long id, Integer pageSize, Integer pageIndex) {
 		if(pageIndex==null){

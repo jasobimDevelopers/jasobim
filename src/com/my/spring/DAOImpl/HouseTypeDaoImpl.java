@@ -8,7 +8,6 @@ import org.hibernate.criterion.Restrictions;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.HouseTypeDao;
 import com.my.spring.model.HouseType;
-
 public class HouseTypeDaoImpl extends BaseDao<HouseType> implements HouseTypeDao{
 
 	@SuppressWarnings("unchecked")

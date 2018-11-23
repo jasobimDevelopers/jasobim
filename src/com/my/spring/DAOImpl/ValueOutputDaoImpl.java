@@ -15,7 +15,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -280,6 +279,7 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
 		return dataWrapper;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ValueOutput getValueOutputByDate(Integer month, Integer year, Long projectId) {
 		 List<ValueOutput> ret = null;
@@ -300,10 +300,8 @@ public class ValueOutputDaoImpl extends BaseDao<ValueOutput> implements ValueOut
         }catch (Exception e){
             e.printStackTrace();
         }
-        if(ret!=null){
-        	if(ret.size()>=0){
-        		return ret.get(0);
-        	}
+        if(!ret.isEmpty()){
+        	return ret.get(0);
         }
         return null;
 	        

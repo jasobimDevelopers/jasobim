@@ -117,6 +117,7 @@ public class AnvancedOrderCollectDaoImpl extends BaseDao<AdvancedOrderCollect> i
 		return get(id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public AdvancedOrderCollect getAdvancedOrderById(Long id) {
 		AdvancedOrderCollect retDataWrapper = new AdvancedOrderCollect();

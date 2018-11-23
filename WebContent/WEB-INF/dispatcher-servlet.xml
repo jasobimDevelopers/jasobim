@@ -35,7 +35,7 @@
                      </list>
               </property>
        </bean>
-       <bean class="com.my.spring.utils.SwaggerConfig" />
+       <!-- <bean class="com.my.spring.utils.SwaggerConfig" /> -->
       <!--  <bean id="NewsService" class="com.my.spring.serviceImpl.NewsServiceImpl"></bean> -->
       <!--  <mvc:resources mapping="/api/**" location="/api/" />   -->
        <!-- <mvc:default-servlet-handler/> -->
@@ -43,7 +43,7 @@
          <!-- Direct static mappings -->
 		<!-- <mvc:resources mapping="*.html" location="/" />  -->
 		<!-- json Docs end -->
-	   <bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
+	   <!-- <bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" /> -->
        <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 
        <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

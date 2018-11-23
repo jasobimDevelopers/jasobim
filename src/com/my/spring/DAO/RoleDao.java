@@ -1,9 +1,10 @@
 package com.my.spring.DAO;
+
 import com.my.spring.model.Role;
 import com.my.spring.model.RoleIndex;
-import com.my.spring.model.UserIndexs;
 import com.my.spring.utils.DataWrapper;
 import java.util.List;
+
 public interface RoleDao {
 	Role getById(Long id);
 	boolean deleteRole(Long id);

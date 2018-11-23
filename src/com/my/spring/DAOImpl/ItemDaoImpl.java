@@ -4,7 +4,6 @@ import com.google.zxing.WriterException;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ItemDao;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.Duct;
 import com.my.spring.model.Item;
 import com.my.spring.model.ItemCount;
 import com.my.spring.model.ItemStateLog;
@@ -13,7 +12,6 @@ import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.QRUtil;
 import com.my.spring.utils.ReadTxt;
-
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -22,7 +20,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

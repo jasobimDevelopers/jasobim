@@ -2,7 +2,6 @@ package com.my.spring.DAO;
 
 import java.util.Date;
 import java.util.List;
-
 import com.my.spring.model.ConstructionLog;
 import com.my.spring.utils.DataWrapper;
 

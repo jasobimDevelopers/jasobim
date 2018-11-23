@@ -2,15 +2,12 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.UserProjectDao;
-import com.my.spring.model.User;
-import com.my.spring.model.UserPojo;
 import com.my.spring.model.UserProject;
-
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -69,6 +66,20 @@ public class UserProjectDaoImpl extends BaseDao<UserProject> implements UserProj
 			return null;
 		}
 		return ret;
+	}
+	@Override
+	public boolean deleteUserProjectByUserId(Long id) {
+		String sql = "delete from user_project where user_id="+id;
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()>0){
+				 return true;
+			 }
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 return false;
 	}
 	
 

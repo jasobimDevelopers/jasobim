@@ -2,9 +2,7 @@ package com.my.spring.DAO;
 
 import com.my.spring.model.Material;
 import com.my.spring.utils.DataWrapper;
-
 import java.util.List;
-
 
 public interface MaterialDao {
     Material getById(Long id);

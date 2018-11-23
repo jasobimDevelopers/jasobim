@@ -2,9 +2,7 @@ package com.my.spring.DAO;
 
 import com.my.spring.model.MaterialLog;
 import com.my.spring.utils.DataWrapper;
-
 import java.util.List;
-
 
 public interface MaterialLogDao {
 	boolean addMaterialLog(MaterialLog ml);

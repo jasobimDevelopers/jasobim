@@ -1,7 +1,5 @@
 package com.my.spring.serviceImpl;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,7 +21,6 @@ import com.my.spring.model.User;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.ConstructionLogService;
 import com.my.spring.service.FileService;
-import com.my.spring.utils.ConstructionLogExportUtil;
 import com.my.spring.utils.DataExportWordTest;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
@@ -193,8 +190,9 @@ public class ConstructionLogServiceImpl implements ConstructionLogService {
 			if(!clpsss.isEmpty()){
 				ConstructionLogPojo clp = clpsss.get(0);
 				Project project = projectDao.getById(clp.getProjectId());
+				@SuppressWarnings("unused")
 				DataExportWordTest exportUtil = new DataExportWordTest();
-				String url=exportUtil.exportConstructionLogToWord(clp, project.getLeader());
+				String url=DataExportWordTest.exportConstructionLogToWord(clp, project.getLeader());
 				result.setData(url);
 			}
 			

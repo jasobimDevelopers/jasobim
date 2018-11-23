@@ -2,7 +2,6 @@ package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.MaterialDao;
 import com.my.spring.model.Material;
-import com.my.spring.model.MaterialType;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;

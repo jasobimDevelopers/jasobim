@@ -18,11 +18,9 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 
 @Repository
 public class DuctDaoImpl extends BaseDao<Duct> implements DuctDao {

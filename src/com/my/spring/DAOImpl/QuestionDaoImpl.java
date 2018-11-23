@@ -5,9 +5,7 @@ import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.QuestionDao;
 import com.my.spring.DAO.QuestionFileDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
-import com.my.spring.model.Projectvs;
 import com.my.spring.model.Question;
 import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.QuestionFile;
@@ -27,7 +25,6 @@ import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;

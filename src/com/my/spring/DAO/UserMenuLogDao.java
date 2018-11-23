@@ -1,6 +1,8 @@
 package com.my.spring.DAO;
+
 import com.my.spring.model.UserMenuLog;
 import java.util.List;
+
 public interface UserMenuLogDao {
 	UserMenuLog getById(Long id);
 	boolean deleteUserMenuLog(Long id);

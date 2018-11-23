@@ -1,5 +1,4 @@
- package com.my.spring.controller;
-
+package com.my.spring.controller;
 import com.my.spring.model.ConstructionLog;
 import com.my.spring.model.ConstructionLogPojo;
 import com.my.spring.service.ConstructionLogService;
@@ -8,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
-
 
 @Controller
 @CrossOrigin

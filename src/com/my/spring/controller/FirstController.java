@@ -1,14 +1,11 @@
 package com.my.spring.controller;
 
 import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.my.spring.model.User;
 import com.my.spring.model.UserLog;
 import com.my.spring.parameters.ProjectUrlUtil;

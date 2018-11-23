@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
-
 @Controller
 @RequestMapping(value="api/safeFine")
 public class SafeFineController {

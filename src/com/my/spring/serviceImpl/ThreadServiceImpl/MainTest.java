@@ -1,8 +1,6 @@
 package com.my.spring.serviceImpl.ThreadServiceImpl;
 
 import java.util.Date;
-
-import com.my.spring.model.Notice;
 import com.my.spring.model.QualityQuestion;
 import com.my.spring.model.Question;
 
@@ -13,8 +11,6 @@ public class MainTest {
 		// TODO Auto-generated method stub
 		Question question = new Question();
 		QualityQuestion quality = new QualityQuestion();
-		Notice notice1 = new Notice();
-		Notice notice2 = new Notice();
 		
 		////
 		question.setIntro("线程异步测试");

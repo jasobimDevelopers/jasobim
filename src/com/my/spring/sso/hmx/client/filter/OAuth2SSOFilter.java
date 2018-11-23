@@ -2,11 +2,9 @@ package com.my.spring.sso.hmx.client.filter;
 
 import java.io.IOException;
 
-import javax.jws.WebParam;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.FilterRegistration;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -14,14 +12,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.error.OAuthError;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.my.spring.sso.hmx.client.OAuth2Credential;
 import com.my.spring.sso.hmx.client.exception.C2OAuth2Exception;
 import com.my.spring.sso.hmx.client.service.OAuth2SSOService;

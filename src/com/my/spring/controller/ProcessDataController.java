@@ -1,4 +1,4 @@
- package com.my.spring.controller;
+package com.my.spring.controller;
 
 import com.my.spring.model.ProcessData;
 import com.my.spring.model.ProcessDataPojo;
@@ -9,10 +9,7 @@ import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
-
 
 @Controller
 @RequestMapping(value="api/processData")

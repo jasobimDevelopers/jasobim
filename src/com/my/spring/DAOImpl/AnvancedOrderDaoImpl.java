@@ -3,21 +3,18 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.AdvancedOrderDao;
 import com.my.spring.model.AdvancedOrder;
 import com.my.spring.model.AdvancedOrderCopy;
-import com.my.spring.model.QuestionCopy;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,6 +151,7 @@ public class AnvancedOrderDaoImpl extends BaseDao<AdvancedOrder> implements Adva
 		 return update(ct);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<AdvancedOrderCopy> getAdvancedOrdersListNotRead(Long id, Integer pageSize, Integer pageIndex) {
 		if(pageIndex==null){

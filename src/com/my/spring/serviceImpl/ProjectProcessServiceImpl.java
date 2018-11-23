@@ -3,25 +3,18 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.alibaba.fastjson.JSONArray;
 import com.my.spring.DAO.ProjectProcessDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserIndexDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.Files;
-import com.my.spring.model.FolderPojo;
-import com.my.spring.model.MaterialPlan;
 import com.my.spring.model.ProjectProcess;
 import com.my.spring.model.ProjectProcessPojo;
 import com.my.spring.model.User;
@@ -30,7 +23,6 @@ import com.my.spring.service.FileService;
 import com.my.spring.service.ProjectProcessService;
 import com.my.spring.service.UserIndexService;
 import com.my.spring.utils.DataWrapper;
-import com.my.spring.utils.MaterialPlanNodeUtil;
 import com.my.spring.utils.SessionManager;
 import net.sf.mpxj.MPXJException;
 import net.sf.mpxj.ProjectFile;
@@ -58,8 +50,6 @@ public class ProjectProcessServiceImpl implements ProjectProcessService  {
 		if(user!=null){
 			if(!projectProcessDao.deleteProjectProcess(id)){
 				result.setErrorCode(ErrorCodeEnum.Error);
-			}else{
-				userIndexService.deleteUserIndexByAboutId(0, id);
 			}
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);

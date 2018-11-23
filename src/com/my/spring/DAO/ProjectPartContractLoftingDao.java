@@ -1,8 +1,10 @@
 package com.my.spring.DAO;
+
 import com.my.spring.model.ProjectPartContractLofting;
 import com.my.spring.model.ProjectPartContractLoftingPojo;
 import com.my.spring.model.UserIndexs;
 import java.util.List;
+
 public interface ProjectPartContractLoftingDao {
 	ProjectPartContractLofting getById(Long id);
 	boolean deleteProjectPartContractLofting(Long id);

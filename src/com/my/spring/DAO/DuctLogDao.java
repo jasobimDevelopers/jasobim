@@ -1,7 +1,6 @@
 package com.my.spring.DAO;
 
 import java.util.List;
-
 import com.my.spring.model.DuctLog;
 import com.my.spring.utils.DataWrapper;
 

@@ -2,17 +2,12 @@ package com.my.spring.controller;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.my.spring.DAO.FileDao;
 import com.my.spring.model.Files;
-import com.my.spring.service.FileService;
-import com.my.spring.serviceImpl.FileServiceImpl;
 import com.my.spring.utils.MD5Util;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;

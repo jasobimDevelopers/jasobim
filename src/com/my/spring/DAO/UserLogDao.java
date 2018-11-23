@@ -6,10 +6,8 @@ import com.my.spring.model.UserLogMonth;
 import com.my.spring.model.UserLogPart;
 import com.my.spring.model.UserLogPojos;
 import com.my.spring.utils.DataWrapper;
-
 import java.util.Date;
 import java.util.List;
-
 
 public interface UserLogDao {
 

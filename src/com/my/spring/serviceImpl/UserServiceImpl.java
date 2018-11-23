@@ -317,18 +317,30 @@ public class UserServiceImpl implements UserService {
 					if(projectList!=null){
 						if(!projectList.equals("") && projectList!=null){
 							String[] projectids = projectList.split(",");
-							for(int i=0;i<projectids.length;i++){
-								
-								UserProject up1 = new UserProject();
-								
-								up1 = userProjectDao.getUserProjectListByUserIdAndProjectId(user.getId(),Long.valueOf(projectids[i]));
-								if(up1==null){
+							if(userProjectDao.deleteUserProjectByUserId(user.getId())){
+								List<UserProject> addList = new ArrayList<UserProject>();
+								for(int i=0;i<projectids.length;i++){
 									UserProject up = new UserProject();
 									up.setProjectId(Long.valueOf(projectids[i]));
 									up.setUserId(user.getId());
-									userProjectDao.addUserProject(up);
+									addList.add(up);
+								}
+								if(!addList.isEmpty()){
+									userProjectDao.addUserProjectList(addList);
+								}
+							}else{
+								List<UserProject> addList = new ArrayList<UserProject>();
+								for(int i=0;i<projectids.length;i++){
+									UserProject up = new UserProject();
+									up.setProjectId(Long.valueOf(projectids[i]));
+									up.setUserId(user.getId());
+									addList.add(up);
+								}
+								if(!addList.isEmpty()){
+									userProjectDao.addUserProjectList(addList);
 								}
 							}
+							
 						}
 					}
 					if(file !=null){

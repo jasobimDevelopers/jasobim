@@ -1,13 +1,5 @@
 package com.my.spring.model;
 
-import java.util.Date;
-import java.util.List;
-
-
-import net.sf.json.JSONArray;
-
-
-
 public class UserPojo {
 	private Long id;
     private String userName;

@@ -3,10 +3,7 @@ package com.my.spring.serviceImpl.ThreadServiceImpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.glassfish.jersey.message.internal.Quality;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.my.spring.DAO.NoticeDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.model.Notice;

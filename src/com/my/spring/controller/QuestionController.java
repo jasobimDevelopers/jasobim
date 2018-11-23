@@ -8,15 +8,12 @@ import com.my.spring.model.QuestionPojo;
 import com.my.spring.service.QuestionService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.DataWrappern;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.HashMap;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 @CrossOrigin("http://jasobim.com:8080")

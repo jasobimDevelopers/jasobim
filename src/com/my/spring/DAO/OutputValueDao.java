@@ -1,9 +1,10 @@
 package com.my.spring.DAO;
+
 import com.my.spring.model.OutputValue;
 import com.my.spring.utils.DataWrapper;
-
 import java.util.Date;
 import java.util.List;
+
 public interface OutputValueDao {
 	OutputValue getById(Long id);
 	boolean deleteOutputValue(Long id);

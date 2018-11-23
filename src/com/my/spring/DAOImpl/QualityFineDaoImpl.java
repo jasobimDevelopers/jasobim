@@ -4,7 +4,6 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.QualityFineDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.QualityFine;
-import com.my.spring.model.SafeFine;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
@@ -14,7 +13,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 @Repository

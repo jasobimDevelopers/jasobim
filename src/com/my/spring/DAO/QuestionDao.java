@@ -4,9 +4,7 @@ import com.my.spring.model.Question;
 import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.QuestionPojo;
 import com.my.spring.utils.DataWrapper;
-
 import java.util.List;
-
 
 public interface QuestionDao {
     boolean addQuestion(Question question);

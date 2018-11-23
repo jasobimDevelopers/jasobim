@@ -2,12 +2,10 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.UserTeamDao;
-import com.my.spring.model.RoleIndex;
 import com.my.spring.model.UserTeam;
 import com.my.spring.model.UserTeamIndex;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
-
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -16,7 +14,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 

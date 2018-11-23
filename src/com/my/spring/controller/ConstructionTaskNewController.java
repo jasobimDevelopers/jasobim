@@ -1,5 +1,4 @@
- package com.my.spring.controller;
-
+package com.my.spring.controller;
 import com.my.spring.model.AllProcessLogPojo;
 import com.my.spring.model.ConstructionTaskNew;
 import com.my.spring.model.ConstructionTaskNewPojo;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-
-
 
 @Controller
 @RequestMapping(value="api/constructionTaskNew")

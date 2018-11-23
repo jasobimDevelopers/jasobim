@@ -1,12 +1,9 @@
 package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ItemDataDao;
-import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.ItemData;
 import com.my.spring.model.ItemDataGet;
 import com.my.spring.model.ItemDataIndex;
-import com.my.spring.model.MenuListCopy;
-import com.my.spring.model.UserTeamIndex;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
@@ -18,7 +15,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 
