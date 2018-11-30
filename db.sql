@@ -730,3 +730,10 @@ create table image_record(
 	month int,
 	content varchar(255)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table process_data_type(
+	id serial primary key,
+	create_user bigint(20) unsigned not null,
+	name varchar(255),
+	create_date datetime
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

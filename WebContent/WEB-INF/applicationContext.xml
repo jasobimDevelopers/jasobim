@@ -138,6 +138,7 @@
                	<value>com.my.spring.model.ImageRecordBuildingInfo</value>
                	<value>com.my.spring.model.ImageRecord</value>
                	<value>com.my.spring.model.ItemStateLog</value>
+               	<value>com.my.spring.model.ProcessDataType</value>
             </list>
         </property>
     </bean>

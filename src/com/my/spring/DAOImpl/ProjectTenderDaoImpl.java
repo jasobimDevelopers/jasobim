@@ -2,9 +2,6 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProjectTenderDao;
-import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.Mechanic;
-import com.my.spring.model.ProcessDataIndex;
 import com.my.spring.model.ProjectTender;
 import com.my.spring.model.ProjectTenderIndex;
 import com.my.spring.utils.DaoUtil;
@@ -18,7 +15,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 @Repository

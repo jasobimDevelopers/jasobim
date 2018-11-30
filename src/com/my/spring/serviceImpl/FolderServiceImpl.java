@@ -55,6 +55,7 @@ public class FolderServiceImpl implements FolderService  {
 
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<Object> getFolderList(String token, Folder floder) {
 		// TODO Auto-generated method stub
@@ -69,14 +70,17 @@ public class FolderServiceImpl implements FolderService  {
 				if(folderOld!=null){
 					folders=folderDao.getAllFolderss(floder.getProjectId());
 					MenuRecursion mr = new MenuRecursion();
+					@SuppressWarnings("static-access")
 					List<Folder> childrens = mr.treeChildList(folders, floder.getId());
 					childrens.add(floder);
 					if(!childrens.isEmpty()){
 						getfolders = folderDao.getFolderLists(childrens,floder.getProjectId());
 						if(!getfolders.isEmpty())
 						{
+							@SuppressWarnings("rawtypes")
 							List dataList = new ArrayList();  
 							for(Folder ss:getfolders){
+								@SuppressWarnings("rawtypes")
 								HashMap dataRecord1 = new HashMap();  
 								dataRecord1.put("id", ss.getId().toString());
 								dataRecord1.put("name", ss.getName());
@@ -119,8 +123,10 @@ public class FolderServiceImpl implements FolderService  {
 					}else{
 						if(!folders.isEmpty())
 						{
+							@SuppressWarnings("rawtypes")
 							List dataList = new ArrayList();  
 							for(Folder ss:folders){
+								@SuppressWarnings("rawtypes")
 								HashMap dataRecord1 = new HashMap();  
 								dataRecord1.put("id", ss.getId().toString());
 								dataRecord1.put("name", ss.getName());

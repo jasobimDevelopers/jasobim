@@ -67,7 +67,8 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
     FileService fileService;
     private String filePath = "files";
     private Integer fileType=2;
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public DataWrapper<Void> addQualityQuestion(QualityQuestion QualityQuestion,String token,MultipartFile[] fileList,HttpServletRequest request,MultipartFile fileCode,MultipartFile[] voices) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
@@ -175,12 +176,10 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 				hq.put("aboutId", QualityQuestion.getId().toString());
 				hq.put("createDate", Parameters.getSdfs().format(new Date()));
 				String content="";
-				if(po!=null){
+				if(po!=null)
 					content=userInMemory.getRealName()+"在"+po.getName()+"项目里提交了一个标题为："+QualityQuestion.getName()+"的问题";
-				}else{
+				else
 					content=userInMemory.getRealName()+"提交了一个标题为："+QualityQuestion.getName()+"的问题";
-				}
-				
 				////推送人包括自己
 				String[] userids=new String[userList.size()+1];
 				for(int b =0;b<userList.size();b++){
@@ -944,7 +943,8 @@ public class QualityQuestionServiceImpl implements QualityQuestionService {
 	        			UserAvatar useravatar = new UserAvatar();
 	        			String realName=users.getRealName();
 	        			String name=realName.substring(realName.length()-2,realName.length());
-	        			String url=useravatar.CreateUserIcon(name);
+	        			@SuppressWarnings("static-access")
+						String url=useravatar.CreateUserIcon(name);
 	        			QualityQuestionpojo.setCreateUserIcon(url);
 	        			if(url!=null){
 	        				users.setUserIconUrl(url);

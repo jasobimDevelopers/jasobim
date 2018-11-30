@@ -3,10 +3,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSONArray;
 import com.my.spring.DAO.MenuListDao;
 import com.my.spring.DAO.RoleDao;
@@ -14,9 +12,7 @@ import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserIndexDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
-import com.my.spring.model.Department;
 import com.my.spring.model.MaxIndex;
-import com.my.spring.model.MenuList;
 import com.my.spring.model.MenuListCopy;
 import com.my.spring.model.Role;
 import com.my.spring.model.RoleIndex;
@@ -24,7 +20,6 @@ import com.my.spring.model.RolePojo;
 import com.my.spring.model.User;
 import com.my.spring.model.UserIndex;
 import com.my.spring.model.UserIndexUserId;
-import com.my.spring.model.UserIndexs;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.RoleService;
 import com.my.spring.service.UserIndexService;
@@ -133,6 +128,7 @@ public class RoleServiceImpl implements RoleService  {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<List<RolePojo>> getRoleList(String token) {
 		DataWrapper<List<RolePojo>> result = new DataWrapper<List<RolePojo>>();
@@ -161,9 +157,11 @@ public class RoleServiceImpl implements RoleService  {
 							if(rs.getMenuList()!=null){
 								List<MenuListCopy> mp=menuDao.getMenuListByIdList(rs.getMenuList().split(",")).getData();
 								List<MenuListCopy> mpp=menuDao.getMenuParrentByChild(mp);
+								@SuppressWarnings("rawtypes")
 								List dataList = new ArrayList();  
 								if(mpp!=null){
 									for(MenuListCopy ssp:mpp){
+										@SuppressWarnings("rawtypes")
 										HashMap dataRecord1p = new HashMap();  
 										dataRecord1p.put("id", ssp.getId().toString());
 										dataRecord1p.put("menuPath", ssp.getMenuPath());
@@ -189,6 +187,7 @@ public class RoleServiceImpl implements RoleService  {
 								}
 								if(mp!=null){
 									for(MenuListCopy ss:mp){
+										@SuppressWarnings("rawtypes")
 										HashMap dataRecord1 = new HashMap();  
 										dataRecord1.put("id", ss.getId().toString());
 										dataRecord1.put("menuPath", ss.getMenuPath());
@@ -233,9 +232,11 @@ public class RoleServiceImpl implements RoleService  {
 					if(rs.getMenuList()!=null){
 						List<MenuListCopy> mp=menuDao.getMenuListByIdList(rs.getMenuList().split(",")).getData();
 						List<MenuListCopy> mpp=menuDao.getMenuParrentByChild(mp);
+						@SuppressWarnings("rawtypes")
 						List dataList = new ArrayList();  
 						if(mpp!=null){
 							for(MenuListCopy ssp:mpp){
+								@SuppressWarnings("rawtypes")
 								HashMap dataRecord1p = new HashMap();  
 								dataRecord1p.put("id", ssp.getId().toString());
 								dataRecord1p.put("menuPath", ssp.getMenuPath());
@@ -261,6 +262,7 @@ public class RoleServiceImpl implements RoleService  {
 						}
 						if(mp!=null){
 							for(MenuListCopy ss:mp){
+								@SuppressWarnings("rawtypes")
 								HashMap dataRecord1 = new HashMap();  
 								dataRecord1.put("id", ss.getId().toString());
 								dataRecord1.put("menuPath", ss.getMenuPath());

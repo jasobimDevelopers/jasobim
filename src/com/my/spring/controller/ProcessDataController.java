@@ -56,11 +56,10 @@ public class ProcessDataController {
     @ResponseBody
     public DataWrapper<List<ProcessDataPojo>> getProcessDataList(
             @RequestParam(value = "token",required = true) String token,
-            @RequestParam(value = "type",required = false) Integer type,
             @RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute ProcessData ProcessData){
-        return ProcessDataService.getProcessDataList(token,pageIndex,pageSize,ProcessData,type);
+        return ProcessDataService.getProcessDataList(token,pageIndex,pageSize,ProcessData);
     }
 
     @RequestMapping(value="/admin/getProcessItemListById", method = RequestMethod.GET)

@@ -451,6 +451,7 @@ public class MeasuredDataServiceImpl implements MeasuredDataService {
 		DataWrapper<MeasuredDataPojo> dataWrapper = new DataWrapper<MeasuredDataPojo>();
 		if(id!=null){
 			MeasuredDataPojo measuredDatapojo=new MeasuredDataPojo();
+			@SuppressWarnings("unused")
 			MeasuredData measuredData=new MeasuredData();
 			measuredData=measuredDataDao.getMeasuredDataById(id);
 			dataWrapper.setData(measuredDatapojo);

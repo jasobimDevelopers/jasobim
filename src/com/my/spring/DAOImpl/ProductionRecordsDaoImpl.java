@@ -2,13 +2,10 @@ package com.my.spring.DAOImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-
 import com.my.spring.DAO.ProductionRecordsDao;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.model.ProductionRecords;

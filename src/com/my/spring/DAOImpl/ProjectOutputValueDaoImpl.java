@@ -3,10 +3,7 @@ package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProjectOutputValueDao;
 import com.my.spring.model.ProjectOutputValue;
-import com.my.spring.model.ProjectStudy;
-
 import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;

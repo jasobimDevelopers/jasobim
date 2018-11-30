@@ -3,7 +3,6 @@ package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.ProcessDataIndex;
 import com.my.spring.model.Project;
 import com.my.spring.model.ProjectIndex;
 import com.my.spring.model.UserProject;
@@ -22,7 +21,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 

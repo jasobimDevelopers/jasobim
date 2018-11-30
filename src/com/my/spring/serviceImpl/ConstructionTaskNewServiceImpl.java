@@ -362,6 +362,7 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 											ConstructionTaskNewPojo.setCreateUserIcon(file.getUrl());
 										}else{
 											UserAvatar avatar= new UserAvatar();
+											@SuppressWarnings("static-access")
 											String url=avatar.CreateUserIcon(realName);
 											ConstructionTaskNewPojo.setCreateUserIcon(url);
 											user.setUserIconUrl(url);
@@ -369,6 +370,7 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 										}
 									}else{
 										UserAvatar avatar= new UserAvatar();
+										@SuppressWarnings("static-access")
 										String url=avatar.CreateUserIcon(realName);
 										ConstructionTaskNewPojo.setCreateUserIcon(url);
 										user.setUserIconUrl(url);
@@ -930,6 +932,7 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 		return result;
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public DataWrapper<String> exportConstructionTask(String token, Long id,Long processDataId,Long projectId) {
 		DataWrapper<String> result = new DataWrapper<String>();

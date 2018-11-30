@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.UserIndex;
-import com.my.spring.model.MechanicPrice;
 import com.my.spring.model.User;
 import com.my.spring.service.UserIndexService;
 import com.my.spring.utils.DataWrapper;

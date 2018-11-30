@@ -226,6 +226,7 @@ public class UserServiceImpl implements UserService {
 					List<UserProject> up = new ArrayList<UserProject>();
 					up=userProjectDao.getUserProjectListByUserId(user.getId());
 					Project projectsb = new Project();
+					@SuppressWarnings("unused")
 					DataWrapper<List<Project>> projects=projectDao.getProjectList(pageSize, pageIndex, projectsb,null,2,up);
 				}
 				if(user.getRoleId()!=null){
@@ -830,6 +831,7 @@ public class UserServiceImpl implements UserService {
 		return dataWrapper;
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public DataWrapper<Object> getUserInfo(String token) {
 		DataWrapper<Object> userPojo = new DataWrapper<Object>();
@@ -874,6 +876,7 @@ public class UserServiceImpl implements UserService {
 		return userPojo;
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public DataWrapper<Void> getIdentifyingCode(String mobile,Integer systemType) {
 		// TODO Auto-generated method stub
@@ -971,10 +974,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public DataWrapper<Void> getUserInfoSql(User user) {
 		// TODO Auto-generated method stub
+		@SuppressWarnings("unused")
 		DataWrapper<List<User>> test=userDao.getUserListForSql(null, null, user);
 		List<String> userIdList= new ArrayList<String>();
 		List<String> projectIdList= new ArrayList<String>();
-		String[] str = new String[userIdList.size()];
 		List<UserProject> up = new ArrayList<UserProject>();
 		for(int k=0;k<userIdList.size();k++){
 			UserProject strs = new UserProject();
@@ -985,7 +988,6 @@ public class UserServiceImpl implements UserService {
 		userProjectDao.addUserProjectList(up);
 		System.out.println("userIdLength:"+userIdList.size());
 		System.out.println("projectIdLength:"+projectIdList.size());
-		
 		return null;
 	}
 

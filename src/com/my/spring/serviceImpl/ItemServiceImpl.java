@@ -1,10 +1,5 @@
 package com.my.spring.serviceImpl;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
-//import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
 import com.my.spring.DAO.BuildingDao;
 import com.my.spring.DAO.ItemDao;
 import com.my.spring.DAO.MinItemDao;
@@ -34,21 +29,16 @@ import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MD5Util;
 import com.my.spring.utils.QRCodeUtil2;
 import com.my.spring.utils.SessionManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 
 @Service("ItemService")
@@ -578,7 +568,6 @@ public class ItemServiceImpl implements ItemService {
 		DataWrapper<List<ItemStateData>> result = new DataWrapper<List<ItemStateData>>();
 		List<ItemStateData> resultDataList = new ArrayList<ItemStateData>();
 		List<ItemStateData> resultDataList2 = new ArrayList<ItemStateData>();
-		DataWrapper<List<Item>> itemList = new DataWrapper<List<Item>>();
 		List<ItemCount> gets = new ArrayList<ItemCount>();
 		List<ItemCount> gets2 = new ArrayList<ItemCount>();
 		User user = SessionManager.getSession(token);
@@ -658,7 +647,6 @@ public class ItemServiceImpl implements ItemService {
 		List<ItemCount> gets = new ArrayList<ItemCount>();
 		List<ItemCount> gets2 = new ArrayList<ItemCount>();
 		List<Object> allgets = new ArrayList<Object>();
-		List<ItemCount> allgets2 = new ArrayList<ItemCount>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			gets2 = itemDao.getNumsGroupByProfesstionType(projectId);///按专业的总数

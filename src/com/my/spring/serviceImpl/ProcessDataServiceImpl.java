@@ -156,7 +156,7 @@ public class ProcessDataServiceImpl implements ProcessDataService {
     }
 
     @Override
-    public DataWrapper<List<ProcessDataPojo>> getProcessDataList(String token , Integer pageIndex, Integer pageSize, ProcessData ProcessData,Integer type) {
+    public DataWrapper<List<ProcessDataPojo>> getProcessDataList(String token , Integer pageIndex, Integer pageSize, ProcessData ProcessData) {
     	DataWrapper<List<ProcessDataPojo>> dataWrappers = new DataWrapper<List<ProcessDataPojo>>();
     	DataWrapper<List<ProcessData>> dataWrapper = new DataWrapper<List<ProcessData>>();
         User userInMemory = SessionManager.getSession(token);
@@ -170,74 +170,73 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 	        		userLog.setVersion("-1");
 	        		userLogSerivce.addUserLog(userLog, token);
 	        	}
-	        	List<ProcessDataIndex> get=ProcessDataDao.getProcessDataListByUserId(userInMemory.getId(),pageSize,pageIndex);
+	        	List<ProcessDataIndex> get=ProcessDataDao.getProcessDataListByUserId(userInMemory.getId(),ProcessData.getTypeId(),pageSize,pageIndex);
 	        	dataWrapper=ProcessDataDao.getProcessDataList(pageIndex,pageSize,ProcessData);
 	        	List<ProcessDataPojo> ProcessDataPojoList = new ArrayList<ProcessDataPojo>();
 	        	if(get.isEmpty()){
 					if(dataWrapper.getData()!=null){
-						for(int i=0;i<dataWrapper.getData().size();i++){
-							ProcessDataPojo ProcessDataPojo =new ProcessDataPojo();
-							ProcessDataPojo.setIndexs((long)(i+1));
-							ProcessDataPojo.setItemNum(dataWrapper.getData().get(i).getItemNum());
-							ProcessDataPojo.setProjectId(dataWrapper.getData().get(i).getProjectId().toString());
-							ProcessDataPojo.setName(dataWrapper.getData().get(i).getName());
-							ProcessDataPojo.setId(dataWrapper.getData().get(i).getId());
-							if(dataWrapper.getData().get(i).getCreateUser()!=null){
-								User user= new User();
-								user=userDao.getById(dataWrapper.getData().get(i).getCreateUser());
-								if(user!=null){
-									ProcessDataPojo.setCreateUser(user.getUserName());
+						if(dataWrapper.getData().size()>pageSize){
+							for(int i=pageSize*pageIndex;i<pageSize*(pageIndex+1);i++){
+								if(i<dataWrapper.getData().size()){
+									ProcessDataPojo ProcessDataPojo =new ProcessDataPojo();
+									ProcessDataPojo.setIndexs((long)(i+1));
+									ProcessDataPojo.setItemNum(dataWrapper.getData().get(i).getItemNum());
+									ProcessDataPojo.setProjectId(dataWrapper.getData().get(i).getProjectId().toString());
+									ProcessDataPojo.setName(dataWrapper.getData().get(i).getName());
+									ProcessDataPojo.setId(dataWrapper.getData().get(i).getId());
+									if(dataWrapper.getData().get(i).getCreateUser()!=null){
+										User user= new User();
+										user=userDao.getById(dataWrapper.getData().get(i).getCreateUser());
+										if(user!=null){
+											ProcessDataPojo.setCreateUser(user.getUserName());
+										}
+									}
+									ProcessDataPojo.setCreateDate(Parameters.getSdf().format(dataWrapper.getData().get(i).getCreateDate()));
+									if(ProcessDataPojo!=null){
+										ProcessDataPojoList.add(ProcessDataPojo);
+									}
 								}
 							}
-							ProcessDataPojo.setCreateDate(Parameters.getSdf().format(dataWrapper.getData().get(i).getCreateDate()));
-							if(ProcessDataPojo!=null){
-								ProcessDataPojoList.add(ProcessDataPojo);
+						}else{
+							for(int i=0;i<dataWrapper.getData().size();i++){
+								ProcessDataPojo ProcessDataPojo =new ProcessDataPojo();
+								ProcessDataPojo.setIndexs((long)(i+1));
+								ProcessDataPojo.setItemNum(dataWrapper.getData().get(i).getItemNum());
+								ProcessDataPojo.setProjectId(dataWrapper.getData().get(i).getProjectId().toString());
+								ProcessDataPojo.setName(dataWrapper.getData().get(i).getName());
+								ProcessDataPojo.setId(dataWrapper.getData().get(i).getId());
+								if(dataWrapper.getData().get(i).getCreateUser()!=null){
+									User user= new User();
+									user=userDao.getById(dataWrapper.getData().get(i).getCreateUser());
+									if(user!=null){
+										ProcessDataPojo.setCreateUser(user.getUserName());
+									}
+								}
+								ProcessDataPojo.setCreateDate(Parameters.getSdf().format(dataWrapper.getData().get(i).getCreateDate()));
+								if(ProcessDataPojo!=null){
+									ProcessDataPojoList.add(ProcessDataPojo);
+								}
 							}
 						}
 					}
 	        	}else{
 					for(int i=0;i<get.size();i++){
-						if(type==0){
-							if(get.get(i).getIndexs()%2==0){
-								ProcessDataPojo ProcessDataPojo =new ProcessDataPojo();
-								ProcessDataPojo.setItemNum(get.get(i).getItemNum());
-								ProcessDataPojo.setIndexs(get.get(i).getIndexs());
-								ProcessDataPojo.setProjectId(get.get(i).getProjectId().toString());
-								ProcessDataPojo.setName(get.get(i).getName());
-								ProcessDataPojo.setId(get.get(i).getId());
-								if(get.get(i).getCreateUser()!=null){
-									User user= new User();
-									user=userDao.getById(get.get(i).getCreateUser());
-									if(user!=null){
-										ProcessDataPojo.setCreateUser(user.getUserName());
-									}
-								}
-								ProcessDataPojo.setCreateDate(Parameters.getSdf().format(get.get(i).getCreateDate()));
-								if(ProcessDataPojo!=null){
-									ProcessDataPojoList.add(ProcessDataPojo);
-								}
+						ProcessDataPojo ProcessDataPojo =new ProcessDataPojo();
+						ProcessDataPojo.setItemNum(get.get(i).getItemNum());
+						ProcessDataPojo.setIndexs(get.get(i).getIndexs());
+						ProcessDataPojo.setProjectId(get.get(i).getProjectId().toString());
+						ProcessDataPojo.setName(get.get(i).getName());
+						ProcessDataPojo.setId(get.get(i).getId());
+						if(get.get(i).getCreateUser()!=null){
+							User user= new User();
+							user=userDao.getById(get.get(i).getCreateUser());
+							if(user!=null){
+								ProcessDataPojo.setCreateUser(user.getUserName());
 							}
 						}
-						if(type==1){
-							if(get.get(i).getIndexs()%2!=0){
-								ProcessDataPojo ProcessDataPojo =new ProcessDataPojo();
-								ProcessDataPojo.setItemNum(get.get(i).getItemNum());
-								ProcessDataPojo.setIndexs(get.get(i).getIndexs());
-								ProcessDataPojo.setProjectId(get.get(i).getProjectId().toString());
-								ProcessDataPojo.setName(get.get(i).getName());
-								ProcessDataPojo.setId(get.get(i).getId());
-								if(get.get(i).getCreateUser()!=null){
-									User user= new User();
-									user=userDao.getById(get.get(i).getCreateUser());
-									if(user!=null){
-										ProcessDataPojo.setCreateUser(user.getUserName());
-									}
-								}
-								ProcessDataPojo.setCreateDate(Parameters.getSdf().format(get.get(i).getCreateDate()));
-								if(ProcessDataPojo!=null){
-									ProcessDataPojoList.add(ProcessDataPojo);
-								}
-							}
+						ProcessDataPojo.setCreateDate(Parameters.getSdf().format(get.get(i).getCreateDate()));
+						if(ProcessDataPojo!=null){
+							ProcessDataPojoList.add(ProcessDataPojo);
 						}
 					}
 	        	}

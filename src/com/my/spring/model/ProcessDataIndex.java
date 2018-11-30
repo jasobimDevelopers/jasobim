@@ -14,7 +14,7 @@ public class ProcessDataIndex {
 	private Integer itemNum;
 	private Date createDate;
 	private Long projectId;
-	private Integer type;
+	private Long typeId;
 	private Long createUser;
 	public Long getId() {
 		return id;
@@ -52,11 +52,11 @@ public class ProcessDataIndex {
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
 	}
-	public Integer getType() {
-		return type;
+	public Long getTypeId() {
+		return typeId;
 	}
-	public void setType(Integer type) {
-		this.type = type;
+	public void setTypeId(Long typeId) {
+		this.typeId = typeId;
 	}
 	public Long getCreateUser() {
 		return createUser;

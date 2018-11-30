@@ -11,12 +11,9 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-
 import com.my.spring.DAO.MechanicDao;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.AttenceLog;
-import com.my.spring.model.DepartmentUser;
 import com.my.spring.model.Mechanic;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;

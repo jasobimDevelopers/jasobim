@@ -4,7 +4,6 @@ import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.MessageDao;
 import com.my.spring.model.Message;
 import com.my.spring.model.MessageCopy;
-import com.my.spring.model.QuestionCopy;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
@@ -16,7 +15,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 

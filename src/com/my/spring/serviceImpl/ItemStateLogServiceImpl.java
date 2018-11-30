@@ -224,7 +224,6 @@ public class ItemStateLogServiceImpl implements ItemStateLogService {
 		List<ItemStateLogPojo> resultList = new ArrayList<ItemStateLogPojo>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			ItemStateLog item = new ItemStateLog();
 			getList=ItemStateLogDao.getAllItemStateLogByProjectId(projectId);
 			getListw = ItemStateLogDao.getAllItemStateLogGroupBySelfId(projectId);
 			if(!getListw.isEmpty()){

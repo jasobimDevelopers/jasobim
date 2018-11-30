@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.alibaba.fastjson.JSONArray;
 import com.my.spring.DAO.MenuListDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
-import com.my.spring.model.Folder;
 import com.my.spring.model.MenuList;
 import com.my.spring.model.MenuListCopy;
 import com.my.spring.model.MenuListPojo;
@@ -22,7 +18,6 @@ import com.my.spring.parameters.Parameters;
 import com.my.spring.service.MenuListService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MenuNodeUtil;
-import com.my.spring.utils.NodeUtil;
 import com.my.spring.utils.SessionManager;
 
 @Service("menuListService")
@@ -114,6 +109,7 @@ public class MenuListServiceImpl implements MenuListService  {
 		}
 		return result;
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<String> getMenuListMapByIdList(String token,String[] id) {
 		DataWrapper<List<MenuList>> result = new DataWrapper<List<MenuList>>();
@@ -123,8 +119,10 @@ public class MenuListServiceImpl implements MenuListService  {
 			result=menuListDao.getMenuListByIdLists(id);
 			if(result.getData()!=null)
 			{
+				@SuppressWarnings("rawtypes")
 				List dataList = new ArrayList();  
 				for(MenuList ss:result.getData()){
+					@SuppressWarnings("rawtypes")
 					HashMap dataRecord1 = new HashMap();  
 					dataRecord1.put("id", ss.getId().toString());
 					dataRecord1.put("menuPath", ss.getMenuPath());
@@ -158,6 +156,7 @@ public class MenuListServiceImpl implements MenuListService  {
 		}
 		return results;
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<String> getMenuListMapByIdList(String[] id) {
 		DataWrapper<List<MenuList>> result = new DataWrapper<List<MenuList>>();
@@ -165,8 +164,10 @@ public class MenuListServiceImpl implements MenuListService  {
 		result=menuListDao.getMenuListByIdLists(id);
 		if(result.getData()!=null)
 		{
+			@SuppressWarnings("rawtypes")
 			List dataList = new ArrayList();  
 			for(MenuList ss:result.getData()){
+				@SuppressWarnings("rawtypes")
 				HashMap dataRecord1 = new HashMap();  
 				dataRecord1.put("id", ss.getId().toString());
 				dataRecord1.put("menuPath", ss.getMenuPath());
@@ -215,15 +216,18 @@ public class MenuListServiceImpl implements MenuListService  {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<String> getMenuListMapByIdList(List<MenuListCopy> menu) {
 		DataWrapper<String> result = new DataWrapper<String>();
 		List<MenuListCopy> mpp=menuListDao.getMenuParrentByChild(menu);
+		@SuppressWarnings("rawtypes")
 		List dataList = new ArrayList();  
 		if(menu.size()>0)
 		{
 			if(mpp!=null){
 				for(MenuListCopy ssp:mpp){
+					@SuppressWarnings("rawtypes")
 					HashMap dataRecord1p = new HashMap();  
 					dataRecord1p.put("id", ssp.getId().toString());
 					dataRecord1p.put("menuPath", ssp.getMenuPath());
@@ -248,6 +252,7 @@ public class MenuListServiceImpl implements MenuListService  {
 				}
 			}
 			for(MenuListCopy ss:menu){
+				@SuppressWarnings("rawtypes")
 				HashMap dataRecord1 = new HashMap();  
 				dataRecord1.put("id", ss.getId().toString());
 				dataRecord1.put("menuPath", ss.getMenuPath());

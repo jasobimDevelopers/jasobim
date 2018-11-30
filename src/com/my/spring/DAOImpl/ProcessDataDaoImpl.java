@@ -51,8 +51,8 @@ public class ProcessDataDaoImpl extends BaseDao<ProcessData> implements ProcessD
         if(ProcessData.getProjectId()!=null){
         	criteria.add(Restrictions.eq("projectId", ProcessData.getProjectId()));
         }
-        if(ProcessData.getType()!=null){
-        	criteria.add(Restrictions.eq("type", ProcessData.getType()));
+        if(ProcessData.getTypeId()!=null){
+        	criteria.add(Restrictions.eq("typeId", ProcessData.getTypeId()));
         }
         if(ProcessData.getName()!=null){
         	criteria.add(Restrictions.eq("name", ProcessData.getName()));
@@ -75,7 +75,7 @@ public class ProcessDataDaoImpl extends BaseDao<ProcessData> implements ProcessD
         criteria.setProjection(null);
         if (pageSize > 0 && pageIndex > 0) {
             criteria.setMaxResults(pageSize);// 最大显示记录数
-            criteria.setFirstResult((pageIndex - 1) * pageSize);// 从第几条开始
+            criteria.setFirstResult(pageIndex * pageSize);// 从第几条开始
         }
         try {
             ret = criteria.list();
@@ -139,7 +139,7 @@ public class ProcessDataDaoImpl extends BaseDao<ProcessData> implements ProcessD
 	}
 
 	@Override
-	public List<ProcessDataIndex> getProcessDataListByUserId(Long id, Integer pageSize, Integer pageIndex) {
+	public List<ProcessDataIndex> getProcessDataListByUserId(Long id,Long typeId, Integer pageSize, Integer pageIndex) {
 		List<ProcessDataIndex> gets=new ArrayList<ProcessDataIndex>();
 		if(pageSize==null){
 			pageSize=10;
@@ -147,8 +147,9 @@ public class ProcessDataDaoImpl extends BaseDao<ProcessData> implements ProcessD
 		if(pageIndex==null){
 			pageIndex=0;
 		}
-		String sql = "select b.name,b.id,b.item_num as itemNum,b.project_id as projectId,b.type,a.indexs,b.create_date as createDate,b.create_user as createUser from user_index a,process_data b where a.about_type=4 and a.about_id=b.id and a.user_id="
-		+id+" ORDER BY a.indexs asc limit "+ pageSize*pageIndex+","+pageSize*(pageIndex+1);
+		String sql = "select b.name,b.id,b.item_num as itemNum,b.project_id as projectId,b.type_id as typeId,a.indexs,b.create_date as createDate,b.create_user as createUser from user_index a,process_data b "
+		+"where a.about_type=4 and a.about_id=b.id and a.user_id="+id+" and b.type_id="+typeId
+	    +" ORDER BY a.indexs asc limit "+ pageSize*pageIndex+","+pageSize*(pageIndex+1);
 		Session session=getSession();
 		try{
 			 Query query = session.createSQLQuery(sql)
@@ -159,7 +160,7 @@ public class ProcessDataDaoImpl extends BaseDao<ProcessData> implements ProcessD
 					 .addScalar("createDate",StandardBasicTypes.TIMESTAMP)
 					 .addScalar("createUser", StandardBasicTypes.LONG)
 					 .addScalar("projectId", StandardBasicTypes.LONG)
-					 .addScalar("type", StandardBasicTypes.INTEGER)
+					 .addScalar("typeId", StandardBasicTypes.LONG)
 					 .setResultTransformer(Transformers.aliasToBean(ProcessDataIndex.class));
 			 	gets=query.list();
 	        }catch(Exception e){

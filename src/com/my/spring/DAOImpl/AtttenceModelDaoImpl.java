@@ -106,8 +106,6 @@ public class AtttenceModelDaoImpl extends BaseDao<AttenceModel> implements Atten
 
 	@Override
 	public AttenceModel getAttenceModelByProjectId(Long projectId) {
-		AttenceModel retDataWrapper = new AttenceModel();
-        
 		List<AttenceModel> ret = null;
 	    Session session = getSession();
 	    Criteria criteria = session.createCriteria(AttenceModel.class);

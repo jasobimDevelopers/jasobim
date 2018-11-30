@@ -14,7 +14,7 @@ public interface ProcessDataService {
 	DataWrapper<Void> deleteProcessData(Long id, String token);
 	DataWrapper<Void> updateProcessData(ProcessData ProcessData, String token);
 	DataWrapper<List<ProcessDataPojo>> getProcessDataList(String token, Integer pageIndex, Integer pageSize,
-			ProcessData ProcessData, Integer type);
+			ProcessData ProcessData);
 	DataWrapper<ProcessData> addProcessData(ProcessData ProcessData, String token);
 	DataWrapper<Void> addProcessItem(ProcessItem processItem, String token);
 	DataWrapper<List<ProcessItemPojo>> getProcessItemListById(String token, Long id);

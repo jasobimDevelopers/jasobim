@@ -240,7 +240,6 @@ public class MechanicPriceServiceImpl implements MechanicPriceService{
 	public DataWrapper<List<MechanicPricePojos>> getMechanicPriceNum(String token, Long projectId,String date) {
 		DataWrapper<List<MechanicPricePojos>> result = new DataWrapper<List<MechanicPricePojos>>();
 		List<MechanicPricePojos> results = new ArrayList<MechanicPricePojos>();
-		DataWrapper<List<MechanicPrice>> amList = new DataWrapper<List<MechanicPrice>>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			if(projectId!=null){

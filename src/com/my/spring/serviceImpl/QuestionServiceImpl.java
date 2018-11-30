@@ -32,21 +32,15 @@ import com.my.spring.service.QuestionService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.DataWrappern;
 import com.my.spring.utils.SessionManager;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.Date;
 import java.util.HashMap;
-import java.awt.Font;
-import java.io.File;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 @Service("questionService")
@@ -75,7 +69,8 @@ public class QuestionServiceImpl implements QuestionService {
     UserProjectDao upDao;
     private String filePath = "files";
     private Integer fileType=2;
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public DataWrapper<Void> addQuestion(Question question,String token,MultipartFile[] fileList,HttpServletRequest request,MultipartFile fileCode,MultipartFile[] voices) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
@@ -545,7 +540,8 @@ public class QuestionServiceImpl implements QuestionService {
 		        				if(files==null){
 		        					UserAvatar userAvatar = new UserAvatar();
 		        					try {
-		        						String newUserIcon=userAvatar.CreateUserIcon(users.getRealName().substring(users.getRealName().length() -2,users.getRealName().length()));
+		        						@SuppressWarnings("static-access")
+										String newUserIcon=userAvatar.CreateUserIcon(users.getRealName().substring(users.getRealName().length() -2,users.getRealName().length()));
 		        						users.setUserIconUrl(newUserIcon);
 		        						userDao.updateUser(users);
 		        						questionpojo.setCreateUserIcon(newUserIcon);
@@ -982,7 +978,8 @@ public class QuestionServiceImpl implements QuestionService {
 	        			UserAvatar useravatar = new UserAvatar();
 	        			String realName=users.getRealName();
 	        			String name=realName.substring(realName.length()-2,realName.length());
-	        			String url=useravatar.CreateUserIcon(name);
+	        			@SuppressWarnings("static-access")
+						String url=useravatar.CreateUserIcon(name);
 	        			questionpojo.setCreateUserIcon(url);
 	        			if(url!=null){
 	        				users.setUserIconUrl(url);

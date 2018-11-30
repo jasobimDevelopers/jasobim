@@ -6,7 +6,6 @@ import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
-import com.my.spring.model.ProjectPojo;
 import com.my.spring.model.QualityFine;
 import com.my.spring.model.QualityFinePojo;
 import com.my.spring.model.User;

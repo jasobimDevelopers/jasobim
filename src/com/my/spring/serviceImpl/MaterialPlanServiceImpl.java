@@ -7,12 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSONArray;
 import com.my.spring.DAO.MaterialPlanDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.FolderPojo;
 import com.my.spring.model.MaterialPlan;
 import com.my.spring.model.MaterialPlanPojo;
 import com.my.spring.model.User;
@@ -22,7 +20,6 @@ import com.my.spring.service.MaterialPlanService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.MaterialPlanNodeUtil;
 import com.my.spring.utils.MenuRecursion;
-import com.my.spring.utils.NodeUtil;
 import com.my.spring.utils.SessionManager;
 
 @Service("materialPlanService")
@@ -42,6 +39,7 @@ public class MaterialPlanServiceImpl implements MaterialPlanService  {
 
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataWrapper<Object> getMaterialPlanList(String token, MaterialPlan floder,String dates) {
 		// TODO Auto-generated method stub
@@ -52,8 +50,10 @@ public class MaterialPlanServiceImpl implements MaterialPlanService  {
 			mps=mpDao.getMaterialPlanList(floder,dates);
 			if(mps.getData()!=null)
 			{
+				@SuppressWarnings("rawtypes")
 				List dataList = new ArrayList();  
 				for(MaterialPlan ss:mps.getData()){
+					@SuppressWarnings("rawtypes")
 					HashMap dataRecord1 = new HashMap();  
 					dataRecord1.put("id", ss.getId().toString());
 					dataRecord1.put("name", ss.getName());
@@ -117,13 +117,9 @@ public class MaterialPlanServiceImpl implements MaterialPlanService  {
 				}
 				
 			}
-			FolderPojo folderPojo = new FolderPojo();
-			
-			
 		}else{
 			foldersList.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
-		
 		return foldersList;  
 		  
 	}

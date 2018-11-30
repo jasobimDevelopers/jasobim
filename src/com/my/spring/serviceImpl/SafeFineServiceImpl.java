@@ -6,9 +6,6 @@ import com.my.spring.enums.CallStatusEnum;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.Files;
-import com.my.spring.model.QualityFine;
-import com.my.spring.model.QualityFinePojo;
-import com.my.spring.model.QualityQuestionPojo;
 import com.my.spring.model.SafeFine;
 import com.my.spring.model.SafeFinePojo;
 import com.my.spring.model.User;
@@ -17,15 +14,12 @@ import com.my.spring.service.FileService;
 import com.my.spring.service.SafeFineService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 

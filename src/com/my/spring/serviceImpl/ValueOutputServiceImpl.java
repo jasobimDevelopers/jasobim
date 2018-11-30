@@ -116,7 +116,8 @@ public class ValueOutputServiceImpl implements ValueOutputService {
         return dataWrapper;
     }
 
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public DataWrapper<List<ValueOutputPojo>> getValueOutputList(String token) {
     	List<ValueOutputPojo> dataWrapperPojo = new ArrayList<ValueOutputPojo>();
     	DataWrapper<List<ValueOutputPojo>> dataWrappers = new DataWrapper<List<ValueOutputPojo>>();
@@ -372,7 +373,8 @@ public class ValueOutputServiceImpl implements ValueOutputService {
     		if(projectId!=null){
     			project = projectDao.getById(projectId);
     			WriteDataToExcel wd = new WriteDataToExcel();
-    			String url=wd.WriteData(dataWrapperspojo.getData(), project.getPrice());
+    			@SuppressWarnings("static-access")
+				String url=wd.WriteData(dataWrapperspojo.getData(), project.getPrice());
     			result.setData(url);
     		}
     	}else{

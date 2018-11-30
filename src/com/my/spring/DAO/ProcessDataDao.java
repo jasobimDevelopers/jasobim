@@ -14,6 +14,6 @@ public interface ProcessDataDao {
 	ProcessData getProcessDataByProjectId(Long projectId, Integer i);
 	boolean deleteProcessDataByUserId(Long id);
 	boolean addProcessDataList(List<ProcessData> newList2);
-	List<ProcessDataIndex> getProcessDataListByUserId(Long id, Integer pageSize, Integer pageIndex);
+	List<ProcessDataIndex> getProcessDataListByUserId(Long id,Long typeId, Integer pageSize, Integer pageIndex);
 	Integer getProcessDataSizeByUserId(Long id);
 }

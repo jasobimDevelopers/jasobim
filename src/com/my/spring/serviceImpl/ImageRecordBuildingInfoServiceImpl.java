@@ -3,12 +3,9 @@ package com.my.spring.serviceImpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.my.spring.DAO.ImageRecordBuildingInfoDao;
-import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.ImageRecordBuildingInfo;
 import com.my.spring.model.User;
@@ -25,8 +22,6 @@ import com.my.spring.utils.SessionManager;
 public class ImageRecordBuildingInfoServiceImpl implements ImageRecordBuildingInfoService{
 	@Autowired
 	private ImageRecordBuildingInfoDao infoDao;
-	@Autowired
-	private UserDao userDao;
 	@Override
 	public DataWrapper<ImageRecordBuildingInfo> addImageRecordBuildingInfo(String token, ImageRecordBuildingInfo info) {
 		DataWrapper<ImageRecordBuildingInfo> result = new DataWrapper<ImageRecordBuildingInfo>();

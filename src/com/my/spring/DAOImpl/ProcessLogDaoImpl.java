@@ -1,10 +1,8 @@
 package com.my.spring.DAOImpl;
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.ProcessLogDao;
-import com.my.spring.model.Folder;
 import com.my.spring.model.ProcessLog;
 import com.my.spring.model.ProcessLogSql;
-import com.my.spring.model.UserLogPojos;
 import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
