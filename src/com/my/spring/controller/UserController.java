@@ -51,7 +51,10 @@ public class UserController {
     		@RequestParam(value="projectList",required=true) String projectList) {
          return userService.addUser(user,token,file,request,projectList);
     }
-	/////网页端忘记密码，重置密码接口
+	/**
+	 * 
+	 * 网页端忘记密码，重置密码接口
+	 * */
 	@RequestMapping(value="/findUserLike", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<User> findUserLike(
@@ -59,7 +62,10 @@ public class UserController {
     		@RequestParam(value="token",required=true) String token) {
         return userService.findUserLike(user, token);
     }
-	
+	/**
+	 * 
+	 * 登录接口
+	 * */
 	@RequestMapping(value="/login", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<UserPojo> Login(
@@ -69,6 +75,11 @@ public class UserController {
 		DataWrapper<UserPojo> test=userService.login(username, password,systemId);
 		return test;
     }
+	
+	/**
+	 * 
+	 * 登出接口
+	 * */
 	@RequestMapping(value="/loginOut", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> LoginOut(
@@ -78,6 +89,11 @@ public class UserController {
 		DataWrapper<Void> test=userService.loginOut(id, token,systemId);
 		return test;
     }
+	
+	/**
+	 * 
+	 * 密码找回接口
+	 * */
 	@RequestMapping(value="/findPass", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<User> FindPs(

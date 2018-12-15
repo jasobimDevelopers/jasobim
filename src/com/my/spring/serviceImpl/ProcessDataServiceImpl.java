@@ -175,9 +175,31 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 	        	List<ProcessDataPojo> ProcessDataPojoList = new ArrayList<ProcessDataPojo>();
 	        	if(get.isEmpty()){
 					if(dataWrapper.getData()!=null){
-						if(dataWrapper.getData().size()>pageSize){
-							for(int i=pageSize*pageIndex;i<pageSize*(pageIndex+1);i++){
-								if(i<dataWrapper.getData().size()){
+						if(!dataWrapper.getData().isEmpty()){
+							if(dataWrapper.getData().size()>pageSize){
+								for(int i=pageSize*pageIndex;i<pageSize*(pageIndex+1);i++){
+									if(i<dataWrapper.getData().size()){
+										ProcessDataPojo ProcessDataPojo =new ProcessDataPojo();
+										ProcessDataPojo.setIndexs((long)(i+1));
+										ProcessDataPojo.setItemNum(dataWrapper.getData().get(i).getItemNum());
+										ProcessDataPojo.setProjectId(dataWrapper.getData().get(i).getProjectId().toString());
+										ProcessDataPojo.setName(dataWrapper.getData().get(i).getName());
+										ProcessDataPojo.setId(dataWrapper.getData().get(i).getId());
+										if(dataWrapper.getData().get(i).getCreateUser()!=null){
+											User user= new User();
+											user=userDao.getById(dataWrapper.getData().get(i).getCreateUser());
+											if(user!=null){
+												ProcessDataPojo.setCreateUser(user.getUserName());
+											}
+										}
+										ProcessDataPojo.setCreateDate(Parameters.getSdf().format(dataWrapper.getData().get(i).getCreateDate()));
+										if(ProcessDataPojo!=null){
+											ProcessDataPojoList.add(ProcessDataPojo);
+										}
+									}
+								}
+							}else{
+								for(int i=0;i<dataWrapper.getData().size();i++){
 									ProcessDataPojo ProcessDataPojo =new ProcessDataPojo();
 									ProcessDataPojo.setIndexs((long)(i+1));
 									ProcessDataPojo.setItemNum(dataWrapper.getData().get(i).getItemNum());
@@ -195,26 +217,6 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 									if(ProcessDataPojo!=null){
 										ProcessDataPojoList.add(ProcessDataPojo);
 									}
-								}
-							}
-						}else{
-							for(int i=0;i<dataWrapper.getData().size();i++){
-								ProcessDataPojo ProcessDataPojo =new ProcessDataPojo();
-								ProcessDataPojo.setIndexs((long)(i+1));
-								ProcessDataPojo.setItemNum(dataWrapper.getData().get(i).getItemNum());
-								ProcessDataPojo.setProjectId(dataWrapper.getData().get(i).getProjectId().toString());
-								ProcessDataPojo.setName(dataWrapper.getData().get(i).getName());
-								ProcessDataPojo.setId(dataWrapper.getData().get(i).getId());
-								if(dataWrapper.getData().get(i).getCreateUser()!=null){
-									User user= new User();
-									user=userDao.getById(dataWrapper.getData().get(i).getCreateUser());
-									if(user!=null){
-										ProcessDataPojo.setCreateUser(user.getUserName());
-									}
-								}
-								ProcessDataPojo.setCreateDate(Parameters.getSdf().format(dataWrapper.getData().get(i).getCreateDate()));
-								if(ProcessDataPojo!=null){
-									ProcessDataPojoList.add(ProcessDataPojo);
 								}
 							}
 						}
