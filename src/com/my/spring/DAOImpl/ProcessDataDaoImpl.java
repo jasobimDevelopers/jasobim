@@ -89,6 +89,31 @@ public class ProcessDataDaoImpl extends BaseDao<ProcessData> implements ProcessD
         retDataWrapper.setNumberPerPage(pageSize);
         return retDataWrapper;
     }
+    @Override
+    public List<ProcessData> getProcessDataListByTypeId(ProcessData ProcessData) {
+        DataWrapper<List<ProcessData>> retDataWrapper = new DataWrapper<List<ProcessData>>();
+        List<ProcessData> ret = new ArrayList<ProcessData>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(ProcessData.class);
+//      criteria.add(Restrictions.eq("projectId", projectId));
+        criteria.addOrder(Order.desc("createDate"));
+        if(ProcessData.getCreateUser()!=null){
+        	criteria.add(Restrictions.eq("createUser", ProcessData.getCreateUser()));
+        }
+        if(ProcessData.getProjectId()!=null){
+        	criteria.add(Restrictions.eq("projectId", ProcessData.getProjectId()));
+        }
+        if(ProcessData.getTypeId()!=null){
+        	criteria.add(Restrictions.eq("typeId", ProcessData.getTypeId()));
+        }      
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
 
 	@Override
 	public ProcessData getById(Long id) {

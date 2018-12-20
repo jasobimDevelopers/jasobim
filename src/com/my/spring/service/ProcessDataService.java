@@ -18,4 +18,5 @@ public interface ProcessDataService {
 	DataWrapper<ProcessData> addProcessData(ProcessData ProcessData, String token);
 	DataWrapper<Void> addProcessItem(ProcessItem processItem, String token);
 	DataWrapper<List<ProcessItemPojo>> getProcessItemListById(String token, Long id);
+	DataWrapper<List<ProcessDataPojo>> getProcessDataByType(String token, ProcessData processData);
 }

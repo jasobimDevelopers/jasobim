@@ -12,11 +12,11 @@ public class InstanceUtil {
 	
 	public static void main(String[] arg){
 		System.out.println(Parameters.getDaysByYearMonth(2017, 2));
-		/*double lat1=31.2855400000;
+		double lat1=31.2855400000;
 		double lng1=121.2147500000;
 		double lat2=31.2879582297;
 		double lng2=121.2046051025;
-		System.out.println(distanceSimplifyMore(lat1,lng1,lat2,lng2));*/
+		System.out.println(distanceSimplifyMore(lat1,lng1,lat2,lng2));
 	}
 
 	public static double distanceSimplifyMore(double lat1, double lng1, double lat2, double lng2) {

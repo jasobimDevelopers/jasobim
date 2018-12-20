@@ -70,4 +70,12 @@ public class ProcessDataController {
         return ProcessDataService.getProcessItemListById(token,id);
     }
     
+    @RequestMapping(value="/getProcessDataByType", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<ProcessDataPojo>> getProcessDataByType(
+            @RequestParam(value = "token",required = true) String token,
+    		@ModelAttribute ProcessData ProcessData){
+        return ProcessDataService.getProcessDataByType(token,ProcessData);
+    }
+    
 }

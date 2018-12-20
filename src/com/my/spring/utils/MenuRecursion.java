@@ -16,12 +16,12 @@ public class MenuRecursion {
     static String childPaths="";
     static String parrentNames;
     public MenuRecursion(String parrentName){
-    	this.childPaths="";
-    	this.childFolder.clear();
-    	this.parrentNames=parrentName;
+    	MenuRecursion.childPaths="";
+    	MenuRecursion.childFolder.clear();
+    	MenuRecursion.parrentNames=parrentName;
     }
     public MenuRecursion(){
-    	this.childFolder.clear();
+    	MenuRecursion.childFolder.clear();
     }
     /** 
      * 获取某个父节点下面的所有子节点 

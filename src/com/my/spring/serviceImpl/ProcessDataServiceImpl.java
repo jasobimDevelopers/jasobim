@@ -280,6 +280,33 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 		result.setData(results);
 		return result;
 	}
+	@Override
+	public DataWrapper<List<ProcessDataPojo>> getProcessDataByType(String token, ProcessData mode) {
+		DataWrapper<List<ProcessDataPojo>> result = new DataWrapper<List<ProcessDataPojo>>();
+		List<ProcessDataPojo> results = new ArrayList<ProcessDataPojo>();
+		List<ProcessData> gets = new ArrayList<ProcessData>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			gets=ProcessDataDao.getProcessDataListByTypeId(mode);
+			if(!gets.isEmpty()){
+				for(int i=0;i<gets.size();i++){
+					ProcessDataPojo demo = new ProcessDataPojo();
+					demo.setCreateDate(Parameters.getSdf().format(gets.get(i).getCreateDate()));
+					demo.setCreateUser(userDao.getById(gets.get(i).getCreateUser()).getRealName());
+					demo.setName(gets.get(i).getName());
+					demo.setItemNum(gets.get(i).getItemNum());
+					demo.setId(gets.get(i).getId());
+					results.add(demo);
+				}
+				result.setData(results);
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		result.setData(results);
+		return result;
+	}
+
 
 
 }

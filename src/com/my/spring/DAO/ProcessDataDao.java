@@ -16,4 +16,5 @@ public interface ProcessDataDao {
 	boolean addProcessDataList(List<ProcessData> newList2);
 	List<ProcessDataIndex> getProcessDataListByUserId(Long id,Long typeId, Integer pageSize, Integer pageIndex);
 	Integer getProcessDataSizeByUserId(Long id);
+	List<ProcessData> getProcessDataListByTypeId(ProcessData mode);
 }
