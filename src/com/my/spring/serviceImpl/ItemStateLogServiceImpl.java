@@ -40,8 +40,8 @@ public class ItemStateLogServiceImpl implements ItemStateLogService {
         List<ItemStateLog> gets = new ArrayList<ItemStateLog>();
         if (userInMemory != null) {
 			if(ItemStateLog!=null && selfIdList!=null){
+				ItemStateLogDao.deleteItemStateLogByProjectIdAndSelfIds(ItemStateLog.getProjectId(),selfIdList);
 				if(ItemStateLog.getStatus()==0){
-					ItemStateLogDao.deleteItemStateLogByProjectIdAndSelfIds(ItemStateLog.getProjectId(),selfIdList);
 					itemDao.updateItemByProjectIdAndSelfIds(ItemStateLog.getProjectId(),selfIdList);
 				}else{
 					List<Item> item =  itemDao.getItemBySelfId(ItemStateLog,selfIdList);
