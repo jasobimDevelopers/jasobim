@@ -191,7 +191,7 @@ public class ItemStateLogDaoImpl extends BaseDao<ItemStateLog> implements ItemSt
 	            e.printStackTrace();
 	        }
 		 
-		return false;
+		return true;
 	}
 	
 }

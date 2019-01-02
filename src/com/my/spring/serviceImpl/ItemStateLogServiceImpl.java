@@ -40,39 +40,29 @@ public class ItemStateLogServiceImpl implements ItemStateLogService {
         List<ItemStateLog> gets = new ArrayList<ItemStateLog>();
         if (userInMemory != null) {
 			if(ItemStateLog!=null && selfIdList!=null){
-				ItemStateLogDao.deleteItemStateLogByProjectIdAndSelfIds(ItemStateLog.getProjectId(),selfIdList);
-				if(ItemStateLog.getStatus()==0){
-					itemDao.updateItemByProjectIdAndSelfIds(ItemStateLog.getProjectId(),selfIdList);
-				}else{
-					List<Item> item =  itemDao.getItemBySelfId(ItemStateLog,selfIdList);
-					if(!item.isEmpty()){
-						for(int i=0;i<item.size();i++){
-							ItemStateLog newone = new ItemStateLog();
-							item.get(i).setState(ItemStateLog.getStatus());
-							newone.setActionDate(new Date());
-							newone.setProjectId(ItemStateLog.getProjectId());
-							newone.setSelfId(item.get(i).getSelfId());
-							newone.setStatus(ItemStateLog.getStatus());
-							newone.setUserId(userInMemory.getId());
-							gets.add(newone);
-							itemDao.updateItem(item.get(i));
-						}
+				if(ItemStateLogDao.deleteItemStateLogByProjectIdAndSelfIds(ItemStateLog.getProjectId(),selfIdList)){
+					if(ItemStateLog.getStatus()==0){
+						itemDao.updateItemByProjectIdAndSelfIds(ItemStateLog.getProjectId(),selfIdList);
 					}else{
-						for(int i=0;i<selfIdList.split(",").length;i++){
-							ItemStateLog newone = new ItemStateLog();
-							newone.setStatus(ItemStateLog.getStatus());
-							newone.setActionDate(new Date());
-							newone.setProjectId(ItemStateLog.getProjectId());
-							newone.setSelfId(Long.valueOf(selfIdList.split(",")[i]));
-							newone.setStatus(ItemStateLog.getStatus());
-							newone.setUserId(userInMemory.getId());
-							gets.add(newone);
+						itemDao.updateItemByProjectIdAndSelfIdsToZ(ItemStateLog.getProjectId(),selfIdList);
+						List<Item> item =  itemDao.getItemBySelfId(ItemStateLog,selfIdList);
+						if(!item.isEmpty()){
+							for(int i=0;i<item.size();i++){
+								ItemStateLog newone = new ItemStateLog();
+								item.get(i).setState(ItemStateLog.getStatus());
+								newone.setActionDate(new Date());
+								newone.setProjectId(ItemStateLog.getProjectId());
+								newone.setSelfId(item.get(i).getSelfId());
+								newone.setStatus(ItemStateLog.getStatus());
+								newone.setUserId(userInMemory.getId());
+								gets.add(newone);
+							}
 						}
 					}
+					if(ItemStateLogDao.addList(gets)){
+						dataWrapper.setData(ItemStateLog);
+					} 
 				}
-				if(ItemStateLogDao.addList(gets)){
-					dataWrapper.setData(ItemStateLog);
-				} 
 			}else{
 				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 			}

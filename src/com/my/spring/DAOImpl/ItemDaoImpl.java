@@ -510,11 +510,36 @@ public class ItemDaoImpl extends BaseDao<Item> implements ItemDao {
 
 	@Override
 	public boolean updateItemByProjectIdAndSelfIds(Long projectId, String selfIdList) {
-		String sql = "update item set state=0 where project_id="+projectId+" and self_id=";
+		String sql = "update item set state=0 where project_id="+projectId+" and (self_id=";
 		String[] selfIdLists = selfIdList.split(",");
 		for(int i=0;i<selfIdLists.length;i++){
 			if(i==(selfIdLists.length-1)){
-				sql=sql+selfIdLists[i];
+				sql=sql+selfIdLists[i]+")";
+			}else{
+				sql=sql+selfIdLists[i]+" or self_id=";
+			}
+			
+		}
+		Session session=getSession();
+		 try{
+			 Query query = session.createSQLQuery(sql);
+			 if(query.executeUpdate()==1){
+				 return true;
+			 }
+			 
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }
+		 
+		return false;
+	}
+	@Override
+	public boolean updateItemByProjectIdAndSelfIdsToZ(Long projectId, String selfIdList) {
+		String sql = "update item set state=1 where project_id="+projectId+" and (self_id=";
+		String[] selfIdLists = selfIdList.split(",");
+		for(int i=0;i<selfIdLists.length;i++){
+			if(i==(selfIdLists.length-1)){
+				sql=sql+selfIdLists[i]+")";
 			}else{
 				sql=sql+selfIdLists[i]+" or self_id=";
 			}

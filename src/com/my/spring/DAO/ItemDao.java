@@ -35,5 +35,6 @@ public interface ItemDao {
 	boolean updateItemList(List<Item> item);
 	boolean updateItemByProjectIdAndSelfIds(Long projectId, String selfIdList);
 	List<Item> getItemListsByIdList(Long projectId, String idList);
+	boolean updateItemByProjectIdAndSelfIdsToZ(Long projectId, String selfIdList);
 	
 }
