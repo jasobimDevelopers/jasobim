@@ -283,3 +283,118 @@ create table department_user(
 	update_user bigint(20) unsigned not null,
 	project_id bigint(20) unsigned not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+####新版质量管理——质量整改单
+create table quality_rectification(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	create_user bigint(20) unsigned not null,
+	nature_id varchar(255),/*检查性质id,id*/
+	notice_type int,/*0、通过  1、口头警告 2、书面整改*/
+	rectification_content text,/*整改要求（当notice_type为书面整改时，设置值）*/
+	check_list varchar(255),/*检查项*/
+	check_content text,/*检查结果*/
+	status int,/*0、待整改（默认值，提交时设置 ） 1、待复检  2、已通过*/
+	pictures varchar(50),/*图片id,id*/
+	copy_user varchar(50),/*抄送人id,id*/
+	voices varchar(50),/*语音文件*/
+	level int,/*情况程度*/
+	create_date date,/*创建时间*/
+	finished_date date,/*限制完成时间*/	
+	update_date datetime,
+	score int/*评分（-1默认值）*/
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+####新版质量管理——质量检查单
+create table quality_check(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	quality_rectification_id bigint(20),
+	create_user bigint(20) unsigned not null,
+	nature_id varchar(255),/*检查性质id,id*/
+	notice_type int,/*0、通过  1、口头警告 2、书面整改*/
+	check_list varchar(255),/*检查项*/
+	check_content text,/*检查结果*/
+	status int,/*-1、待定（默认值，提交时设置 ） 1、未发整改  2、空*/
+	pictures varchar(50),/*图片id,id*/
+	inform_user varchar(50),/*通知人id,id*/
+	voices varchar(50),/*语音文件*/
+	create_date date,/*创建时间*/
+	update_date datetime
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+####新版质量管理状态记录表
+create table manage_log(
+	id serial primary key,
+	action_type int,/* 0、整改  1、复检*/
+	action_date datetime,/*操作时间*/
+	operate_user bigint(20) unsigned not null,/*操作人*/
+	about_id bigint(20) unsigned not null/*实体*/
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+###新版质量管理——指定人员、质量安全关系表
+create table relation(
+	id serial primary key,
+	relation_type int,/*0、质量 1、安全*/
+	quality_type int,/*0、整改单 1、检查单*/
+	about_id bigint(20) unsigned not null,
+	user_id bigint(20) unsigned not null
+	state int/*-1、不处理 0、待整改（默认值） 1、已整改（当回复进度为100%时设置这个参数）*/
+)ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+###新版质量管理——检查项
+create table check_lists(
+	id serial primary key,
+	check_type int,/*0、质量 1、安全*/
+	content varchar(255),
+	project_id bigint(20) unsigned not null,
+	create_date datetime,
+	create_user bigint(20) unsigned not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+###新版质量管理——性质
+create table nature(
+	id serial primary key,
+	create_user bigint(20) unsigned not null,
+	content varchar(255),
+	create_date datetime
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+###新版质量管理——评论
+create table comment(
+	id serial primary key,
+	pictures varchar(50),/*图片id,id*/
+	voices varchar(50),/*语音文件*/
+	reply_type int,/*0、质量整改单评论 1、质量检查单评论 2、安全整改单评论 3、安全检查单评论*/
+	about_id bigint(20) unsigned not null,
+	comment_user bigint(20) unsigned not null,
+	create_date datetime,
+	comment_content text
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+###新版质量管理——回复
+create table reply(
+	id serial primary key,
+	reply_user bigint(20) unsigned not null,
+	create_date datetime,
+	reply_content text,
+	reply_type int,/*0、质量 1、安全*/
+	about_id bigint(20) unsigned not null,
+	schedule int,/*进度*/
+	pictures varchar(50),/*图片id,id*/
+	voices varchar(50),/*语音文件*/
+)ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+###新版质量管理——奖惩
+create table award_ticket(
+	id serial primary key,
+	award_type int,/*奖罚类型：0、质量 1、安全*/
+	ticket_type int,/*0、处罚 1、奖励 */
+	about_id bigint(20) unsigned not null,/*奖惩事由关联实体id*/
+	create_user bigint(20) unsigned not null,/*提交人*/
+	award_date date,/*奖惩日期*/
+	create_date datetime,/*创建时间*/
+	person_liable varchar(255),/*责任人*/
+	remark text,/*备注*/
+	award_num int,/*奖罚金额*/
+	pictures varchar(255),
+	voices varchar(255)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

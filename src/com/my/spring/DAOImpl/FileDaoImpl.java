@@ -8,6 +8,8 @@ import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,5 +70,25 @@ public class FileDaoImpl extends BaseDao<Files> implements FileDao {
 	public boolean deleteFilesList(String[] ids) {
 		// TODO Auto-generated method stub
 		return deleteList(ids);
+	}
+	@Override
+	public List<Files> getByIds(String pictures) {
+        List<Files> ret = new ArrayList<Files>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(Files.class);
+        if(pictures!=null){
+        	Disjunction dis = Restrictions.disjunction();
+        	String[] ids = pictures.split(",");
+        	for (int i = 0; i < ids.length; i++) {
+        	    dis.add(Restrictions.eq("id",Long.valueOf(ids[i])));
+        	}
+        	criteria .add(dis);
+        }
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ret;
 	}
 }

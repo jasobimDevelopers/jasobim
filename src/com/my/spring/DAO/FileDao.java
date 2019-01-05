@@ -11,4 +11,5 @@ public interface FileDao {
 	boolean addFiles(Files file);
 	DataWrapper<List<Files>> getFilesList();
 	boolean deleteFilesList(String[] ids);
+	List<Files> getByIds(String pictures);
 }
