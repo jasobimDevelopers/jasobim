@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-@CrossOrigin("http://jasobim.com:8080")
+//@CrossOrigin("http://jasobim.com:8080")
 @Controller
 @RequestMapping(value="api/question")
 public class QuestionController {

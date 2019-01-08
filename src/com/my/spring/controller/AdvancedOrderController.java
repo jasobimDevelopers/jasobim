@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-@CrossOrigin("http://jasobim.com:8080")
+//@CrossOrigin("http://jasobim.com:8080")
 @Controller
 @RequestMapping(value="api/advancedOrder")
 public class AdvancedOrderController {
