@@ -11,6 +11,7 @@ import com.my.spring.DAO.ManageLogDao;
 import com.my.spring.DAO.NatureDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QualityCheckDao;
+import com.my.spring.DAO.QualityCheckReadStateDao;
 import com.my.spring.DAO.RelationDao;
 import com.my.spring.DAO.ReplyDao;
 import com.my.spring.DAO.UserDao;
@@ -19,10 +20,12 @@ import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.QualityCheck;
 import com.my.spring.model.QualityCheckPartPojo;
 import com.my.spring.model.QualityCheckPojo;
+import com.my.spring.model.QualityCheckReadState;
 import com.my.spring.model.Files;
 import com.my.spring.model.Nature;
 import com.my.spring.model.Project;
 import com.my.spring.model.User;
+import com.my.spring.model.UserId;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.FileService;
 import com.my.spring.service.QualityCheckService;
@@ -43,6 +46,8 @@ public class QualityCheckServiceImpl implements QualityCheckService  {
 	FileDao fileDao;
 	@Autowired
 	ManageLogDao manageLogDao;
+	@Autowired
+	QualityCheckReadStateDao readDao;
 	@Autowired
 	NatureDao natureDao;
 	@Autowired
@@ -105,6 +110,19 @@ public class QualityCheckServiceImpl implements QualityCheckService  {
 					result.setErrorCode(ErrorCodeEnum.Error);
 				}else{
 					result.setData(role.getId());
+					List<QualityCheckReadState> nl = new ArrayList<QualityCheckReadState>();
+					List<UserId> userIdList = userDao.getAllUserIdListByProjectId(role.getProjectId());
+					if(!userIdList.isEmpty()){
+						for(UserId s:userIdList){
+							QualityCheckReadState nl2 = new QualityCheckReadState();
+							nl2.setQualityCheckId(role.getId());
+							nl2.setUserId(s.getId());
+							nl2.setState(0);
+							nl.add(nl2);
+						}
+						
+					}
+					readDao.addQualityCheckReadStateList(nl);
 				}
 			}
 			
@@ -191,6 +209,7 @@ public class QualityCheckServiceImpl implements QualityCheckService  {
 				dp.setTotalNumber(dataWrapper.getTotalNumber());
 				dp.setTotalPage(dataWrapper.getTotalPage());
 				dp.setErrorCode(dataWrapper.getErrorCode());
+				readDao.updateAllQualityCheckReadStateByUserId(user.getId());
 			}
 		}else{
 			dp.setErrorCode(ErrorCodeEnum.User_Not_Logined);

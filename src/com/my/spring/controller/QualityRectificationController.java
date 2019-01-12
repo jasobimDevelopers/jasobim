@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.my.spring.model.ManageStates;
 import com.my.spring.model.QualityRectification;
 import com.my.spring.model.QualityRectificationPojo;
 import com.my.spring.service.QualityRectificationService;
@@ -61,8 +63,9 @@ public class QualityRectificationController {
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute QualityRectification QualityManage,
+    		@RequestParam(value="ids",required=false) String ids,
             @RequestParam(value = "token",required = false) String token){
-        return QualityManageService.getQualityRectificationList(pageIndex,pageSize,QualityManage,token);
+        return QualityManageService.getQualityRectificationList(pageIndex,pageSize,QualityManage,token,ids);
     }
     
     /*
@@ -95,6 +98,16 @@ public class QualityRectificationController {
             @RequestParam(value = "token",required = true) String token){
         return QualityManageService.qualityRectificationCheck(token,qualityId,schedule,content,pics,vois,request);
     }
-    
+    /*
+     * 待我复检、待我整改数据条数查找接口
+     * **/
+    @RequestMapping(value="/getAboutMeNums", method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<ManageStates> getAboutMeNums(
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+    		@RequestParam(value = "type",required = true) Integer type,//0、质量 1、安全
+            @RequestParam(value = "token",required = true) String token){
+        return QualityManageService.getAboutMeNums(token,projectId,type);
+    }
 
 }

@@ -11,15 +11,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.my.spring.DAO.AwardReadStateDao;
 import com.my.spring.DAO.AwardTicketDao;
 import com.my.spring.DAO.FileDao;
+import com.my.spring.DAO.QualityCheckDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.DAO.UserIndexDao;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.AwardReadState;
 import com.my.spring.model.AwardTicket;
 import com.my.spring.model.AwardTicketPojo;
 import com.my.spring.model.Files;
+import com.my.spring.model.Notice;
+import com.my.spring.model.QualityCheck;
 import com.my.spring.model.User;
+import com.my.spring.model.UserId;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.AwardTicketService;
 import com.my.spring.service.FileService;
@@ -32,13 +38,13 @@ public class AwardTicketServiceImpl implements AwardTicketService  {
 	@Autowired
 	AwardTicketDao AwardTicketDao;
 	@Autowired
-	UserIndexService userIndexService;
-	@Autowired
-	UserIndexDao userIndexDao;
+	QualityCheckDao qualityCheckDao;
 	@Autowired
 	UserDao userDao;
 	@Autowired
     FileDao fileDao;
+	@Autowired
+	AwardReadStateDao arsDao;
 	@Autowired
 	FileService fileService;
 	private String filePath = "/files/awardTicket";
@@ -98,6 +104,25 @@ public class AwardTicketServiceImpl implements AwardTicketService  {
 				}
 				if(!AwardTicketDao.addAwardTicket(role)){
 					result.setErrorCode(ErrorCodeEnum.Error);
+				}else{
+					List<AwardReadState> nl = new ArrayList<AwardReadState>();
+					if(role.getAwardType()==0){
+						QualityCheck qc = new QualityCheck();
+						qc=qualityCheckDao.getById(role.getAboutId());
+						List<UserId> userIdList = userDao.getAllUserIdListByProjectId(qc.getProjectId());
+						if(!userIdList.isEmpty()){
+							for(UserId s:userIdList){
+								AwardReadState nl2 = new AwardReadState();
+								nl2.setAwardId(role.getId());
+								nl2.setUserId(s.getId());
+								nl2.setState(0);
+								nl.add(nl2);
+							}
+							
+						}
+						arsDao.addAwardReadStateList(nl);
+					}
+					
 				}
 			}
 			
@@ -185,6 +210,7 @@ public class AwardTicketServiceImpl implements AwardTicketService  {
 				result.setTotalNumber(dataWrapper.getTotalNumber());
 				result.setTotalPage(dataWrapper.getTotalPage());
 				result.setErrorCode(dataWrapper.getErrorCode());
+				arsDao.updateAllAwardReadStateByUserId(user.getId());
 			}
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);

@@ -7,6 +7,7 @@ import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -28,7 +29,7 @@ public class QualityRectificationDaoImpl extends BaseDao<QualityRectification> i
 
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<QualityRectification>> getQualityRectificationList(Integer pageIndex, Integer pageSize, QualityRectification qualityManage) {
+    public DataWrapper<List<QualityRectification>> getQualityRectificationList(Integer pageIndex, Integer pageSize, QualityRectification qualityManage,String ids) {
         DataWrapper<List<QualityRectification>> dataWrapper = new DataWrapper<List<QualityRectification>>();
         List<QualityRectification> ret = new ArrayList<QualityRectification>();
         Session session = getSession();
@@ -41,6 +42,14 @@ public class QualityRectificationDaoImpl extends BaseDao<QualityRectification> i
         }
         if(qualityManage.getStatus()!=null){
         	criteria.add(Restrictions.eq("status", qualityManage.getStatus()));
+        }
+        if(ids!=null){
+        	String[] bars = ids.split(",");
+        	Disjunction disjunction = Restrictions.disjunction();			
+        	for(String bar : bars){
+        	    disjunction.add(Restrictions.eq("id", Long.valueOf(bar)));
+        	}
+        	criteria.add(disjunction);
         }
         if (pageSize == null) {
 			pageSize = 10;
@@ -74,6 +83,32 @@ public class QualityRectificationDaoImpl extends BaseDao<QualityRectification> i
         
         return dataWrapper;
     }
+    @SuppressWarnings("unchecked")
+   	@Override
+       public List<QualityRectification> getQualityRectificationList(QualityRectification qualityManage) {
+           List<QualityRectification> ret = new ArrayList<QualityRectification>();
+           Session session = getSession();
+           Criteria criteria = session.createCriteria(QualityRectification.class);
+           criteria.addOrder(Order.desc("createDate"));
+           criteria.add(Restrictions.eq("projectId", qualityManage.getProjectId()));
+           if(qualityManage.getId()!=null){
+           	criteria.add(Restrictions.eq("id", qualityManage.getId()));
+           }
+           if(qualityManage.getStatus()!=null){
+           	criteria.add(Restrictions.eq("status", qualityManage.getStatus()));
+           }
+           if(qualityManage.getCreateUser()!=null){
+        	   criteria.add(Restrictions.eq("createUser", qualityManage.getCreateUser()));
+           }
+           try {
+               ret = criteria.list();
+           }catch (Exception e){
+               e.printStackTrace();
+           }
+           
+           
+           return ret;
+       }
 
 	@Override
 	public QualityRectification getById(Long id) {

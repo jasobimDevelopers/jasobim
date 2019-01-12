@@ -337,6 +337,7 @@ create table relation(
 	quality_type int,/*0、整改单 1、检查单*/
 	about_id bigint(20) unsigned not null,
 	user_id bigint(20) unsigned not null
+	project_id bigint(20) unsigned not null,
 	state int/*-1、不处理 0、待整改（默认值） 1、已整改（当回复进度为100%时设置这个参数）*/
 )ENGINE=InnoDB DEFAULT CHARSET=utf8
 
@@ -398,3 +399,28 @@ create table award_ticket(
 	pictures varchar(255),
 	voices varchar(255)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+###新版质量管理——已读未读(检查单)
+create table quality_check_read_state(
+	id serial primary key,
+	user_id bigint(20) unsigned not null,
+	quality_check_id bigint(20) unsigned not null,
+	state int//0、未读 1、已读
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+###新版质量管理——已读未读(整改单)
+create table quality_rectification_read_state(
+	id serial primary key,
+	user_id bigint(20) unsigned not null,
+	quality_rectification_id bigint(20) unsigned not null,
+	state int//0、未读 1、已读
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+###新版质量管理——已读未读（奖惩）
+create table award_read_state(
+	id serial primary key,
+	user_id bigint(20) unsigned not null,
+	award_id bigint(20) unsigned not null,
+	state int//0、未读 1、已读
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

@@ -9,6 +9,7 @@ public interface QualityRectificationDao {
 	boolean deleteQualityRectification(Long id);
 	boolean addQualityRectification(QualityRectification role);
 	boolean deleteQualityRectificationList(String[] ids);
-	DataWrapper<List<QualityRectification>> getQualityRectificationList(Integer pageIndex, Integer pageSize, QualityRectification QualityManage);
+	DataWrapper<List<QualityRectification>> getQualityRectificationList(Integer pageIndex, Integer pageSize, QualityRectification QualityManage,String ids);
 	boolean updateQualityRectification(QualityRectification dp);
+	List<QualityRectification> getQualityRectificationList(QualityRectification qualityManage);
 }

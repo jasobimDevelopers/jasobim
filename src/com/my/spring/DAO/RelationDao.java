@@ -7,4 +7,6 @@ public interface RelationDao {
 	List<Relation> getRelationListsByIds(Integer relationType,Long aboutId,Long userId);
 	boolean deleteRelation(Relation role);
 	boolean addRelationList(List<Relation> sendUserList);
+	boolean updateRelation(Relation relations2);
+	List<Relation> getRelationLists(Relation relation);
 }

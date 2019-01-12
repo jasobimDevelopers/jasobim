@@ -7,12 +7,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.my.spring.DAO.AwardReadStateDao;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.ManageLogDao;
 import com.my.spring.DAO.NatureDao;
 import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.QualityCheckDao;
+import com.my.spring.DAO.QualityCheckReadStateDao;
 import com.my.spring.DAO.QualityRectificationDao;
+import com.my.spring.DAO.QualityRectificationReadStateDao;
 import com.my.spring.DAO.RelationDao;
 import com.my.spring.DAO.ReplyDao;
 import com.my.spring.DAO.UserDao;
@@ -20,14 +24,19 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.QualityRectification;
 import com.my.spring.model.QualityRectificationPojo;
+import com.my.spring.model.QualityRectificationReadState;
 import com.my.spring.model.Relation;
 import com.my.spring.model.Reply;
+import com.my.spring.model.AwardReadState;
 import com.my.spring.model.Files;
 import com.my.spring.model.ManageLog;
+import com.my.spring.model.ManageStates;
 import com.my.spring.model.Nature;
 import com.my.spring.model.Project;
 import com.my.spring.model.QualityCheck;
+import com.my.spring.model.QualityCheckReadState;
 import com.my.spring.model.User;
+import com.my.spring.model.UserId;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.FileService;
 import com.my.spring.service.QualityRectificationService;
@@ -50,6 +59,12 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 	ManageLogDao manageLogDao;
 	@Autowired
 	NatureDao natureDao;
+	@Autowired
+	QualityRectificationReadStateDao readDao;
+	@Autowired
+	QualityCheckReadStateDao readDao2;
+	@Autowired
+	AwardReadStateDao readDao3;
 	@Autowired
 	RelationDao relationDao;
 	@Autowired
@@ -134,9 +149,24 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 						relation.setUserId(Long.valueOf(users[i]));
 						relation.setAboutId(role.getId());
 						relation.setState(0);
+						relation.setProjectId(role.getProjectId());
 						sendUserList.add(relation);
 					}
-					relationDao.addRelationList(sendUserList);
+					if(relationDao.addRelationList(sendUserList)){
+						List<QualityRectificationReadState> nl = new ArrayList<QualityRectificationReadState>();
+						List<UserId> userIdList = userDao.getAllUserIdListByProjectId(role.getProjectId());
+						if(!userIdList.isEmpty()){
+							for(UserId s:userIdList){
+								QualityRectificationReadState nl2 = new QualityRectificationReadState();
+								nl2.setQualityRectificationId(role.getId());
+								nl2.setUserId(s.getId());
+								nl2.setState(0);
+								nl.add(nl2);
+							}
+							
+						}
+						readDao.addQualityRectificationReadStateList(nl);
+					}
 				}
 			}
 			
@@ -163,13 +193,13 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 
 	@Override
 	public DataWrapper<List<QualityRectificationPojo>> getQualityRectificationList(Integer pageIndex, Integer pageSize, QualityRectification qualityManage,
-			String token) {
+			String token,String ids) {
 		DataWrapper<List<QualityRectificationPojo>> dp = new DataWrapper<List<QualityRectificationPojo>>();
 		List<QualityRectificationPojo> dpp = new ArrayList<QualityRectificationPojo>();
 		DataWrapper<List<QualityRectification>> dataWrapper = new DataWrapper<List<QualityRectification>>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			dataWrapper=QualityManageDao.getQualityRectificationList(pageIndex, pageSize, qualityManage);
+			dataWrapper=QualityManageDao.getQualityRectificationList(pageIndex, pageSize, qualityManage,ids);
 			if(dataWrapper.getData()!=null){
 				for(int i=0;i<dataWrapper.getData().size();i++){
 					QualityRectificationPojo pojo=new QualityRectificationPojo();
@@ -240,6 +270,7 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 				dp.setTotalNumber(dataWrapper.getTotalNumber());
 				dp.setTotalPage(dataWrapper.getTotalPage());
 				dp.setErrorCode(dataWrapper.getErrorCode());
+				readDao.updateAllQualityRectifitionReadStateByUserId(user.getId());
 			}
 		}else{
 			dp.setErrorCode(ErrorCodeEnum.User_Not_Logined);
@@ -394,14 +425,104 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 				}
 				if(replyDao.addReply(reply)){
 					if(schedule==100){
+						List<Relation> relations = new ArrayList<Relation>();
+						relations=relationDao.getRelationListsByIds(0, qualityId, null);
+						for(Relation re:relations){
+							re.setState(1);
+							relationDao.updateRelation(re);
+						}
 						QualityRectification qm = QualityManageDao.getById(qualityId);
-						qm.setStatus(1);
+						qm.setStatus(1);//待复检
 						QualityManageDao.updateQualityRectification(qm);
 					}
 				}
 			}else{
 				result.setErrorCode(ErrorCodeEnum.AUTH_Error);
 			}
+		}
+		return result;
+	}
+
+	@Override
+	public DataWrapper<ManageStates> getAboutMeNums(String token, Long projectId, Integer type) {
+		// TODO Auto-generated method stub
+		DataWrapper<ManageStates> result = new DataWrapper<ManageStates>();
+		User user = SessionManager.getSession(token);
+		
+		if(user!=null){
+			ManageStates ms=new ManageStates();
+			if(type==0){
+				///待复检查找
+				List<QualityRectification> gets = new ArrayList<QualityRectification>();
+				QualityRectification qr = new QualityRectification();
+				qr.setProjectId(projectId);
+				qr.setCreateUser(user.getId());
+				qr.setStatus(1);
+				gets=QualityManageDao.getQualityRectificationList(qr);
+				String ids1="";
+				for(int i=0;i<gets.size();i++){
+					if(i==(gets.size()-1)){
+						ids1=ids1+gets.get(i).getId();
+					}else{
+						ids1=ids1+gets.get(i).getId()+",";
+					}
+				}
+				ms.setCheckIds(ids1);
+				ms.setCheckNum(gets.size());
+				///待整改查找
+				List<Relation> res = new ArrayList<Relation>();
+				Relation rl = new Relation();
+				rl.setUserId(user.getId());
+				rl.setState(0);
+				rl.setProjectId(projectId);
+				res = relationDao.getRelationLists(rl);
+				String ids2="";
+				for(int j=0;j<res.size();j++){
+					if(j==(res.size()-1)){
+						ids2=ids2+res.get(j).getId();
+					}else{
+						ids2=ids2+res.get(j).getId()+",";
+					}
+				}
+				ms.setRectifyNum(res.size());
+				ms.setRectifyIds(ids2);
+				///////未读整改单确认
+				List<QualityRectificationReadState> aec = new ArrayList<QualityRectificationReadState>();
+				QualityRectificationReadState qs = new QualityRectificationReadState();
+				qs.setUserId(user.getId());
+				qs.setState(0);;
+				aec = readDao.getQualityRectificationReadStateLists(qs);
+				if(aec.isEmpty()){
+					ms.setQualityState(0);//无小红点
+				}else{
+					ms.setQualityState(1);//有小红点
+				}
+				///////未读检查单确认
+				List<QualityCheckReadState> aec2 = new ArrayList<QualityCheckReadState>();
+				QualityCheckReadState qs2 = new QualityCheckReadState();
+				qs2.setUserId(user.getId());
+				qs2.setState(0);;
+				aec2 = readDao2.getQualityCheckReadStateLists(qs2);
+				if(aec2.isEmpty()){
+					ms.setCheckState(0);
+				}else{
+					ms.setCheckState(1);
+				}
+				///////未读奖惩单确认
+				List<AwardReadState> aec3 = new ArrayList<AwardReadState>();
+				AwardReadState qs3 = new AwardReadState();
+				qs3.setUserId(user.getId());
+				qs3.setState(0);;
+				aec3 = readDao3.getAwardReadStateLists(qs3);
+				if(aec3.isEmpty()){
+					ms.setAwardState(0);
+				}else{
+					ms.setAwardState(1);
+				}
+			}
+			result.setData(ms);
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
 		return result;
 	}
