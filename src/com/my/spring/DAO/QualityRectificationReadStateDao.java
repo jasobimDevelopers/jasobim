@@ -1,0 +1,13 @@
+package com.my.spring.DAO;
+
+import java.util.List;
+import com.my.spring.model.QualityRectificationReadState;
+public interface QualityRectificationReadStateDao {
+	boolean addQualityRectificationReadState(QualityRectificationReadState role);
+	List<QualityRectificationReadState> getQualityRectificationReadStateListsByIds(Integer QualityRectificationReadStateType,Long aboutId,Long userId);
+	boolean deleteQualityRectificationReadState(QualityRectificationReadState role);
+	boolean addQualityRectificationReadStateList(List<QualityRectificationReadState> sendUserList);
+	boolean updateQualityRectificationReadState(QualityRectificationReadState QualityRectificationReadStates2);
+	List<QualityRectificationReadState> getQualityRectificationReadStateLists(QualityRectificationReadState QualityRectificationReadState);
+	boolean updateAllQualityRectifitionReadStateByUserId(Long id);
+}
