@@ -11,6 +11,7 @@ public class CheckLists {
 	private Long projectId;
 	private Date createDate;
 	private Long createUser;
+	private Long pid;
 	
 	@Id
 	@GeneratedValue
@@ -65,6 +66,15 @@ public class CheckLists {
 	}
 	public void setCreateUser(Long createUser) {
 		this.createUser = createUser;
+	}
+	
+	@Basic
+	@Column(name="pid")
+	public Long getPid() {
+		return pid;
+	}
+	public void setPid(Long pid) {
+		this.pid = pid;
 	}
 	
 }

@@ -57,22 +57,34 @@ public class CommentServiceImpl implements CommentService {
 						User user =userDao.getById(dataWrapper.getData().get(i).getCommentUser());
 						if(user!=null){
 							Commentpojos.setCommentUserName(user.getRealName());
-						}
-						List<Files> files1=fileDao.getByIds(dataWrapper.getData().get(i).getPictures());
-						if(!files1.isEmpty()){
-							List<String> pics = new ArrayList<String>();
-							for(Files f:files1){
-								pics.add(f.getUrl());
+							if(user.getUserIconUrl()!=null){
+								Commentpojos.setCommentUserIcon(user.getUserIconUrl());
+							}else if(user.getUserIcon()!=null){
+								Files usericon = fileService.getById(user.getUserIcon());
+								if(usericon!=null){
+									Commentpojos.setCommentUserIcon(usericon.getUrl());
+								}
 							}
-							Commentpojos.setPictures(pics);
 						}
-						List<Files> files2=fileDao.getByIds(dataWrapper.getData().get(i).getVoices());
-						if(!files2.isEmpty()){
-							List<String> vs = new ArrayList<String>();
-							for(Files f:files2){
-								vs.add(f.getUrl());
+						if(dataWrapper.getData().get(i).getPictures()!=null && !dataWrapper.getData().get(i).getPictures().equals("")){
+							List<Files> files1=fileDao.getByIds(dataWrapper.getData().get(i).getPictures());
+							if(!files1.isEmpty()){
+								List<String> pics = new ArrayList<String>();
+								for(Files f:files1){
+									pics.add(f.getUrl());
+								}
+								Commentpojos.setPictures(pics);
 							}
-							Commentpojos.setVoices(vs);
+						}
+						if(dataWrapper.getData().get(i).getVoices()!=null && !dataWrapper.getData().get(i).getVoices().equals("")){
+							List<Files> files2=fileDao.getByIds(dataWrapper.getData().get(i).getVoices());
+							if(!files2.isEmpty()){
+								List<String> vs = new ArrayList<String>();
+								for(Files f:files2){
+									vs.add(f.getUrl());
+								}
+								Commentpojos.setVoices(vs);
+							}
 						}
 						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 	    	    		String str=sdf.format(dataWrapper.getData().get(i).getCreateDate()); 

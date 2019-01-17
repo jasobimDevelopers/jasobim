@@ -17,6 +17,7 @@ public class QualityRectificationPojo {
 	private String createDate;
 	private String finishedDate;
 	private String rectificationContent;
+	private List<String> rectifyUser;//整改人
 	private List<String> copyUser;/*抄送人*/
 	private String updateDate;
 	private Integer score;/*评分（默认-1）*/
@@ -122,6 +123,12 @@ public class QualityRectificationPojo {
 	}
 	public void setFinishedDate(String finishedDate) {
 		this.finishedDate = finishedDate;
+	}
+	public List<String> getRectifyUser() {
+		return rectifyUser;
+	}
+	public void setRectifyUser(List<String> rectifyUser) {
+		this.rectifyUser = rectifyUser;
 	}
 	
 }

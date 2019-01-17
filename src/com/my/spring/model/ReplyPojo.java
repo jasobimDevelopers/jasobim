@@ -5,6 +5,7 @@ import java.util.List;
 public class ReplyPojo {
 	private Long id;
 	private String replyUserName;
+	private String replyUserIcon;
 	private Long aboutId;
 	private Integer replyType;
 	private String createDate;
@@ -67,6 +68,12 @@ public class ReplyPojo {
 	}
 	public void setSchedule(Integer schedule) {
 		this.schedule = schedule;
+	}
+	public String getReplyUserIcon() {
+		return replyUserIcon;
+	}
+	public void setReplyUserIcon(String replyUserIcon) {
+		this.replyUserIcon = replyUserIcon;
 	}
 	
 	

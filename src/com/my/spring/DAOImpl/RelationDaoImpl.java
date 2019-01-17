@@ -2,11 +2,16 @@ package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.DAO.RelationDao;
+import com.my.spring.model.QuestionCopy;
+import com.my.spring.model.RectifyPojo;
 import com.my.spring.model.Relation;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +67,9 @@ public class RelationDaoImpl extends BaseDao<Relation> implements RelationDao {
         if(relation.getState()!=null){
         	criteria.add(Restrictions.eq("state", relation.getState()));
         }
+        if(relation.getAboutId()!=null){
+        	criteria.add(Restrictions.eq("aboutId", relation.getAboutId()));
+        }
         try {
             gets = criteria.list();
         }catch (Exception e){
@@ -79,6 +87,26 @@ public class RelationDaoImpl extends BaseDao<Relation> implements RelationDao {
 	public boolean updateRelation(Relation relation) {
 		// TODO Auto-generated method stub
 		return update(relation);
+	}
+	@Override
+	public List<RectifyPojo> getRelationListsByAboutId(Relation relation) {
+		
+		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
+		List<RectifyPojo> retDataWrapper = new ArrayList<RectifyPojo>();
+		String sql = "select real_name as userName from user where id in(select user_id from relation where about_id="
+		+relation.getAboutId()+" and relation_type=0 and project_id="+relation.getProjectId()+")";
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+				 .addScalar("userName",StandardBasicTypes.STRING)
+				 .setResultTransformer(Transformers.aliasToBean(RectifyPojo.class)); 
+		    retDataWrapper=query.list();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            //dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        }
+		return retDataWrapper;
 	}
 	
 }

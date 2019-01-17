@@ -5,6 +5,7 @@ import java.util.List;
 public class CommentPojo {
 	private Long id;
 	private String commentUserName;
+	private String commentUserIcon;
 	private String createDate;
 	private String commentContent;
 	private List<String> pictures;
@@ -46,6 +47,12 @@ public class CommentPojo {
 	}
 	public void setVoices(List<String> voices) {
 		this.voices = voices;
+	}
+	public String getCommentUserIcon() {
+		return commentUserIcon;
+	}
+	public void setCommentUserIcon(String commentUserIcon) {
+		this.commentUserIcon = commentUserIcon;
 	}
 	
 	

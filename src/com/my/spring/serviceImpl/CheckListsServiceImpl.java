@@ -58,7 +58,7 @@ public class CheckListsServiceImpl implements CheckListsService  {
 		DataWrapper<List<CheckLists>> dp = new DataWrapper<List<CheckLists>>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			dp = CheckListsDao.getCheckListsListByProjectId(pageIndex,pageSize,CheckLists.getProjectId(),CheckLists.getCheckType());
+			dp = CheckListsDao.getCheckListsListByProjectId(pageIndex,pageSize,CheckLists.getProjectId(),CheckLists.getCheckType(),CheckLists.getPid());
 		}else{
 			dp.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

@@ -1,6 +1,8 @@
 package com.my.spring.DAO;
 
 import java.util.List;
+
+import com.my.spring.model.RectifyPojo;
 import com.my.spring.model.Relation;
 public interface RelationDao {
 	boolean addRelation(Relation role);
@@ -9,4 +11,5 @@ public interface RelationDao {
 	boolean addRelationList(List<Relation> sendUserList);
 	boolean updateRelation(Relation relations2);
 	List<Relation> getRelationLists(Relation relation);
+	List<RectifyPojo> getRelationListsByAboutId(Relation relation);
 }

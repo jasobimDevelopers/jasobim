@@ -10,5 +10,5 @@ public interface CheckListsDao {
 	boolean addCheckLists(CheckLists role);
 	boolean updateCheckLists(CheckLists dp);
 	DataWrapper<List<CheckLists>> getCheckListsListByProjectId(Integer pageIndex, Integer pageSize, Long projectId,
-			Integer type);
+			Integer type, Long pid);
 }

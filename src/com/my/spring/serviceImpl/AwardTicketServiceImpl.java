@@ -168,21 +168,25 @@ public class AwardTicketServiceImpl implements AwardTicketService  {
 					if(users!=null){
 						pojo.setCreateUserName(user.getRealName());
 					}
-					List<Files> files1=fileDao.getByIds(dataWrapper.getData().get(i).getPictures());
-					if(!files1.isEmpty()){
-						List<String> pics = new ArrayList<String>();
-						for(Files f:files1){
-							pics.add(f.getUrl());
+					if(dataWrapper.getData().get(i).getPictures()!=null && !dataWrapper.getData().get(i).getPictures().equals("")){
+						List<Files> files1=fileDao.getByIds(dataWrapper.getData().get(i).getPictures());
+						if(!files1.isEmpty()){
+							List<String> pics = new ArrayList<String>();
+							for(Files f:files1){
+								pics.add(f.getUrl());
+							}
+							pojo.setPictures(pics);
 						}
-						pojo.setPictures(pics);
 					}
-					List<Files> files2=fileDao.getByIds(dataWrapper.getData().get(i).getVoices());
-					if(!files2.isEmpty()){
-						List<String> vs = new ArrayList<String>();
-						for(Files f:files2){
-							vs.add(f.getUrl());
+					if(dataWrapper.getData().get(i).getVoices()!=null && !dataWrapper.getData().get(i).getVoices().equals("")){
+						List<Files> files2=fileDao.getByIds(dataWrapper.getData().get(i).getVoices());
+						if(!files2.isEmpty()){
+							List<String> vs = new ArrayList<String>();
+							for(Files f:files2){
+								vs.add(f.getUrl());
+							}
+							pojo.setVoices(vs);
 						}
-						pojo.setVoices(vs);
 					}
 					List<String> personLiables = new ArrayList<String>();
 					if(dataWrapper.getData().get(i).getPersonLiable()!=null){

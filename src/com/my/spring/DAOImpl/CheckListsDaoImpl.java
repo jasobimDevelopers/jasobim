@@ -37,7 +37,7 @@ public class CheckListsDaoImpl extends BaseDao<CheckLists> implements CheckLists
 		return update(dp);
 	}
 	@Override
-	public DataWrapper<List<CheckLists>> getCheckListsListByProjectId(Integer pageIndex,Integer pageSize,Long projectId,Integer type) {
+	public DataWrapper<List<CheckLists>> getCheckListsListByProjectId(Integer pageIndex,Integer pageSize,Long projectId,Integer type,Long pid) {
 		DataWrapper<List<CheckLists>> dataWrapper=new DataWrapper<List<CheckLists>>();
 		List<CheckLists> gets=new ArrayList<CheckLists>();
 		Session session=getSession();
@@ -45,6 +45,11 @@ public class CheckListsDaoImpl extends BaseDao<CheckLists> implements CheckLists
         criteria.addOrder(Order.desc("createDate"));
         criteria.add(Restrictions.eq("checkType", type));
         criteria.add(Restrictions.eq("projectId", projectId));
+        if(pid!=null){
+        	criteria.add(Restrictions.eq("pid",pid));
+        }else{
+        	criteria.add(Restrictions.isNull("pid"));
+        }
         if (pageSize == null) {
 			pageSize = 10;
 		}

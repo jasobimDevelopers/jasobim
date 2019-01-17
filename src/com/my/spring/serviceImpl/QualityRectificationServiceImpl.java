@@ -25,6 +25,7 @@ import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.QualityRectification;
 import com.my.spring.model.QualityRectificationPojo;
 import com.my.spring.model.QualityRectificationReadState;
+import com.my.spring.model.RectifyPojo;
 import com.my.spring.model.Relation;
 import com.my.spring.model.Reply;
 import com.my.spring.model.AwardReadState;
@@ -201,6 +202,7 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 		if(user!=null){
 			dataWrapper=QualityManageDao.getQualityRectificationList(pageIndex, pageSize, qualityManage,ids);
 			if(dataWrapper.getData()!=null){
+				Relation relation = new Relation();
 				for(int i=0;i<dataWrapper.getData().size();i++){
 					QualityRectificationPojo pojo=new QualityRectificationPojo();
 					pojo.setCheckContent(dataWrapper.getData().get(i).getCheckContent());
@@ -217,25 +219,42 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 					pojo.setScore(dataWrapper.getData().get(i).getScore());
 					pojo.setStatus(dataWrapper.getData().get(i).getStatus());/*0、待整改（默认值，提交时设置 ） 0、待复检  1、已通过*/
 					pojo.setNoticeType(dataWrapper.getData().get(i).getNoticeType());
+					List<RectifyPojo> relations = new ArrayList<RectifyPojo>();
+					relation.setAboutId(dataWrapper.getData().get(i).getId());
+					relation.setRelationType(0);
+					relation.setProjectId(dataWrapper.getData().get(i).getProjectId());
+					relations = relationDao.getRelationListsByAboutId(relation);
+					if(!relations.isEmpty()){
+						List<String> names = new ArrayList<String>();
+						for(RectifyPojo re:relations){
+							names.add(re.getUserName());
+						}
+						pojo.setRectifyUser(names);
+					}
+					
 					User users =userDao.getById(dataWrapper.getData().get(i).getCreateUser());
 					if(users!=null){
 						pojo.setCreateUserName(users.getRealName());
 					}
-					List<Files> files1=fileDao.getByIds(dataWrapper.getData().get(i).getPictures());
-					if(!files1.isEmpty()){
-						List<String> pics = new ArrayList<String>();
-						for(Files f:files1){
-							pics.add(f.getUrl());
+					if(dataWrapper.getData().get(i).getPictures()!=null && !dataWrapper.getData().get(i).getPictures().equals("")){
+						List<Files> files1=fileDao.getByIds(dataWrapper.getData().get(i).getPictures());
+						if(!files1.isEmpty()){
+							List<String> pics = new ArrayList<String>();
+							for(Files f:files1){
+								pics.add(f.getUrl());
+							}
+							pojo.setPictures(pics);
 						}
-						pojo.setPictures(pics);
 					}
-					List<Files> files2=fileDao.getByIds(dataWrapper.getData().get(i).getVoices());
-					if(!files2.isEmpty()){
-						List<String> vs = new ArrayList<String>();
-						for(Files f:files2){
-							vs.add(f.getUrl());
+					if(dataWrapper.getData().get(i).getVoices()!=null && !dataWrapper.getData().get(i).getVoices().equals("")){
+						List<Files> files2=fileDao.getByIds(dataWrapper.getData().get(i).getVoices());
+						if(!files2.isEmpty()){
+							List<String> vs = new ArrayList<String>();
+							for(Files f:files2){
+								vs.add(f.getUrl());
+							}
+							pojo.setVoices(vs);
 						}
-						pojo.setVoices(vs);
 					}
 					if(dataWrapper.getData().get(i).getNatureId()!=null){
 						List<String> natures = new ArrayList<String>();
@@ -479,9 +498,9 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 				String ids2="";
 				for(int j=0;j<res.size();j++){
 					if(j==(res.size()-1)){
-						ids2=ids2+res.get(j).getId();
+						ids2=ids2+res.get(j).getAboutId();
 					}else{
-						ids2=ids2+res.get(j).getId()+",";
+						ids2=ids2+res.get(j).getAboutId()+",";
 					}
 				}
 				ms.setRectifyNum(res.size());
