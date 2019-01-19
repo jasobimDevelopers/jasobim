@@ -21,6 +21,7 @@ public class MenuRecursion {
     	MenuRecursion.parrentNames=parrentName;
     }
     public MenuRecursion(){
+    	MenuRecursion.childPaths="";
     	MenuRecursion.childFolder.clear();
     }
     /** 
@@ -46,7 +47,7 @@ public class MenuRecursion {
      * @param pid 
      * @return 
      */  
-    public static List<Folder> treeChildList( List<Folder> menuList, Long pid){  
+    public List<Folder> treeChildList( List<Folder> menuList, Long pid){  
         for(Folder mu: menuList){  
             //遍历出父id等于参数的id，add进子节点集合  
             if(mu.getParrentId().equals(pid)){  
@@ -64,7 +65,7 @@ public class MenuRecursion {
      * @param pid 
      * @return 
      */  
-    public static List<Folder> treeChildList( List<Folder> menuList, Long pid,String parrentName){  
+    public List<Folder> treeChildList( List<Folder> menuList, Long pid,String parrentName){  
     	if(childPaths.equals("")){
     		childPaths=parrentName;
     	}

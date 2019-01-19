@@ -23,6 +23,7 @@ import com.my.spring.model.Files;
 import com.my.spring.model.Folder;
 import com.my.spring.model.FolderPojo;
 import com.my.spring.model.User;
+import com.my.spring.parameters.DeFiles;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.FileService;
 import com.my.spring.service.FolderService;
@@ -277,7 +278,8 @@ public class FolderServiceImpl implements FolderService  {
 							}
 						}else{
 							List<Folder> getall = folderDao.getAllFolder();
-							List<Folder> childrens = MenuRecursion.treeChildList(getall, Long.valueOf(s));
+							MenuRecursion men = new MenuRecursion();
+							List<Folder> childrens = men.treeChildList(getall, Long.valueOf(s));
 							if(!childrens.isEmpty()){
 								String[] ids =null;
 								ids=new String[childrens.size()+1];
@@ -552,136 +554,142 @@ public class FolderServiceImpl implements FolderService  {
 		List<File> fileLists = new ArrayList<File>();
 		String outpaths="";
 		if(!lists.isEmpty()){
-			for(Folder folder:lists){
-				if(folder.getFileType()==1){
-					Files files=fileService.getById(folder.getFileId());
-					if(files!=null){
-						String[] test = rootPath.split("\\\\");
-						String[] test1 = files.getUrl().split("/");
-						String pathss="";
-						String outpaths2="";
-						for(String s:test){
-							if(pathss.equals("")){
-								pathss=s;
-							}else{
-								pathss=pathss+"\\"+"\\"+s;
-							}
-						}
-						for(String sb:test1){
-							if(pathss.equals("")){
-								pathss=sb;
-							}else{
-								pathss=pathss+"\\"+"\\"+sb;
-							}
-						}
-						File source = new File(pathss);
-						
-						for(String ss:test){
-							if(outpaths2.equals("")){
-								outpaths2=ss;
-							}else{
-								outpaths2=outpaths2+"\\"+"\\"+ss;
-							}
-						}
-						outpaths2=outpaths2+"\\"+"\\"+"downloadFolderFiles\\\\"+token+currentTimemils+"\\\\"+folder.getName()+"."+folder.getRemark();
-						File dest = new File(outpaths2);
-						CopyFilesExample.copyFileUsingFileChannels(source, dest);
-						fileLists.add(dest);
-					}
-				}else{
-					/////获取单个文件夹的所有子
-					//Folder father = MenuRecursion.treeParrentList(alllists, folder.getParrentId());
-					List<Folder> childrens=MenuRecursion.treeChildList(alllists, folder.getId(),folder.getName());
-					childrens.add(folder);
-					for(int i=0;i<childrens.size();i++){
-						File file=null;
-						if(childrens.get(i).getFileType()==1){
-							Files files=fileService.getById(childrens.get(i).getFileId());
-							if(files!=null){
-								String[] test = rootPath.split("\\\\");
-								String[] test1 = files.getUrl().split("/");
-								String pathss="";
-								outpaths="";
-								for(String s:test){
-									if(pathss.equals("")){
-										pathss=s;
-									}else{
-										pathss=pathss+"\\"+"\\"+s;
-									}
-								}
-								for(String sb:test1){
-									if(pathss.equals("")){
-										pathss=sb;
-									}else{
-										pathss=pathss+"\\"+"\\"+sb;
-									}
-								}
-								File source = new File(pathss);
-							
-								for(String ss:test){
-									if(outpaths.equals("")){
-										outpaths=ss;
-									}else{
-										outpaths=outpaths+"\\"+"\\"+ss;
-									}
-								}
-								outpaths=outpaths+"\\"+"\\"+"downloadFolderFiles\\\\"+token+currentTimemils+"\\\\";
-								String[] out2 = childrens.get(i).getRemark().split("/");
-								String outFiles="";
-								outFiles=outpaths;
-								for(String sb1:out2){
-									if(outFiles.equals("")){
-										outFiles=sb1;
-									}else{
-										outFiles=outFiles+"\\"+"\\"+sb1;
-									}
-								}
-								file = new File(outFiles);
-								if(file.exists()){
-									file.delete();
+			DeFiles  defiles = new DeFiles();
+			if(defiles.deletefile(rootPath+"/downloadFolderFiles")){
+				for(Folder folder:lists){
+					if(folder.getFileType()==1){
+						Files files=fileService.getById(folder.getFileId());
+						if(files!=null){
+							String[] test = rootPath.split("\\\\");
+							String[] test1 = files.getUrl().split("/");
+							String pathss="";
+							String outpaths2="";
+							for(String s:test){
+								if(pathss.equals("")){
+									pathss=s;
 								}else{
-									String[] trys = outFiles.split("\\\\");
-					        		String tests="";
-					        		for(int p=0;p<trys.length-1;p++){
-					        			if(tests.equals("")){
-					        				tests=trys[p];
-					        			}else{
-					        				tests=tests+"\\\\"+trys[p];
-					        			}
-					        			
-					        		}
-					        		File stry = new File(tests);
-					        		stry.mkdirs();
+									pathss=pathss+"\\"+"\\"+s;
 								}
-								CopyFilesExample.copyFileUsingFileChannels(source, file);
+							}
+							for(String sb:test1){
+								if(pathss.equals("")){
+									pathss=sb;
+								}else{
+									pathss=pathss+"\\"+"\\"+sb;
+								}
+							}
+							File source = new File(pathss);
+							
+							for(String ss:test){
+								if(outpaths2.equals("")){
+									outpaths2=ss;
+								}else{
+									outpaths2=outpaths2+"\\"+"\\"+ss;
+								}
+							}
+							outpaths2=outpaths2+"\\"+"\\"+"downloadFolderFiles\\\\"+token+currentTimemils+"\\\\"+folder.getName()+"."+folder.getRemark();
+							File dest = new File(outpaths2);
+							CopyFilesExample.copyFileUsingFileChannels(source, dest);
+							fileLists.add(dest);
+						}
+					}else{
+						/////获取单个文件夹的所有子
+						//Folder father = MenuRecursion.treeParrentList(alllists, folder.getParrentId());
+						List<Folder> childrens = new ArrayList<Folder>();
+						MenuRecursion men = new MenuRecursion();
+						childrens=men.treeChildList(alllists, folder.getId(),folder.getName());
+						if(!childrens.isEmpty()){
+							childrens.add(folder);
+							for(int i=0;i<childrens.size();i++){
+								File file=null;
+								if(childrens.get(i).getFileType()==1){
+									Files files=fileService.getById(childrens.get(i).getFileId());
+									if(files!=null){
+										String[] test = rootPath.split("\\\\");
+										String[] test1 = files.getUrl().split("/");
+										String pathss="";
+										outpaths="";
+										for(String s:test){
+											if(pathss.equals("")){
+												pathss=s;
+											}else{
+												pathss=pathss+"\\"+"\\"+s;
+											}
+										}
+										for(String sb:test1){
+											if(pathss.equals("")){
+												pathss=sb;
+											}else{
+												pathss=pathss+"\\"+"\\"+sb;
+											}
+										}
+										File source = new File(pathss);
+									
+										for(String ss:test){
+											if(outpaths.equals("")){
+												outpaths=ss;
+											}else{
+												outpaths=outpaths+"\\"+"\\"+ss;
+											}
+										}
+										outpaths=outpaths+"\\"+"\\"+"downloadFolderFiles\\\\"+token+currentTimemils+"\\\\";
+										String[] out2 = childrens.get(i).getRemark().split("/");
+										String outFiles="";
+										outFiles=outpaths;
+										for(String sb1:out2){
+											if(outFiles.equals("")){
+												outFiles=sb1;
+											}else{
+												outFiles=outFiles+"\\"+"\\"+sb1;
+											}
+										}
+										file = new File(outFiles);
+										if(file.exists()){
+											file.delete();
+										}else{
+											String[] trys = outFiles.split("\\\\");
+							        		String tests="";
+							        		for(int p=0;p<trys.length-1;p++){
+							        			if(tests.equals("")){
+							        				tests=trys[p];
+							        			}else{
+							        				tests=tests+"\\\\"+trys[p];
+							        			}
+							        			
+							        		}
+							        		File stry = new File(tests);
+							        		stry.mkdirs();
+										}
+										CopyFilesExample.copyFileUsingFileChannels(source, file);
+										fileLists.add(file);
+									}
+								}else{
+									if(childrens.size()==1 || (childrens.size()>1 && i==(childrens.size()-1))){
+										file = new File(path+childrens.get(i).getName());
+										if(!file.exists() && !file.isDirectory()) {
+										    file.mkdirs();
+										}
+									}else{
+										file = new File(path+childrens.get(i).getRemark());
+										if(!file.exists() && !file.isDirectory()) {
+										    file.mkdirs();
+										}
+									}
+									
+								}
+								//如果路径不存在，新建
 								fileLists.add(file);
 							}
-						}else{
-							if(childrens.size()==1 || (childrens.size()>1 && i==(childrens.size()-1))){
-								file = new File(path+childrens.get(i).getName());
-								if(!file.exists() && !file.isDirectory()) {
-								    file.mkdirs();
-								}
-							}else{
-								file = new File(path+childrens.get(i).getRemark());
-								if(!file.exists() && !file.isDirectory()) {
-								    file.mkdirs();
-								}
 							}
-							
 						}
-						//如果路径不存在，新建
-						fileLists.add(file);
+						}
 					}
-					}
-				}
-				}
-			
+			}
 			if(lists.size()==1){
     		   fileName =lists.get(0).getName()+".zip";
 			}
-		ScatterSampleTest test = new ScatterSampleTest();
-		if(outpaths.equals("")){
+			ScatterSampleTest test = new ScatterSampleTest();
+			if(outpaths.equals("")){
 			String[] test1 = path.split("/");
 			String pathss="";
 			for(String s:test1){
@@ -693,11 +701,11 @@ public class FolderServiceImpl implements FolderService  {
 			}
 			outpaths=pathss;
 		}
-	    final File results = new File(outpaths+"\\"+fileName);  
+	    File results = new File(outpaths+"\\"+fileName);  
 	    test.createZipFile(outpaths, results);  
-	    File files = new File(outpaths+"\\"+fileName);
-	    CustomFileUtil.downloadFile(files, response, true); 
-	    file_path.delete();
+	    if(CustomFileUtil.downloadFile(results, response, true)){
+	    	
+	    }
         return result;
 	}
 	public List<File> getFileLists(File file){

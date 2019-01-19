@@ -85,9 +85,9 @@ public class UserMenuLogServiceImpl implements UserMenuLogService  {
 		User user = SessionManager.getSession(toke);
 		List<UserMenuLog> getDatas = new ArrayList<UserMenuLog>();
 		if(user!=null){
+			List<MenuList> menuList = new ArrayList<MenuList>(); 
 			gets = UserMenuLogDao.getUserMenuLogListByUserId(user.getId());
 			if(gets.isEmpty()){
-				List<MenuList> menuList = new ArrayList<MenuList>(); 
 				menuList=menuListDao.getAllMenuList();
 				for(int i=0;i<menuList.size();i++){
 					UserMenuLog um = new UserMenuLog();
@@ -105,6 +105,7 @@ public class UserMenuLogServiceImpl implements UserMenuLogService  {
 					result.setData(getDatas);
 				}
 			}else{
+				
 				result.setData(gets);
 			}
 			

@@ -294,6 +294,7 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 					demo.setCreateDate(Parameters.getSdf().format(gets.get(i).getCreateDate()));
 					demo.setCreateUser(userDao.getById(gets.get(i).getCreateUser()).getRealName());
 					demo.setName(gets.get(i).getName());
+					demo.setProjectId(gets.get(i).getProjectId().toString());
 					demo.setItemNum(gets.get(i).getItemNum());
 					demo.setId(gets.get(i).getId());
 					results.add(demo);
