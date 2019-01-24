@@ -587,7 +587,11 @@ public class FolderServiceImpl implements FolderService  {
 									outpaths2=outpaths2+"\\"+"\\"+ss;
 								}
 							}
-							outpaths2=outpaths2+"\\"+"\\"+"downloadFolderFiles\\\\"+token+currentTimemils+"\\\\"+folder.getName()+"."+folder.getRemark();
+							String strname = token+currentTimemils;
+							String downloadUrl =outpaths2+"\\"+"\\"+"downloadFolderFiles\\\\"+strname; 
+							outpaths2=outpaths2+"\\"+"\\"+"downloadFolderFiles\\\\"+strname+"\\\\"+folder.getName()+"."+folder.getRemark();
+							File downs = new File(downloadUrl);
+							downs.mkdirs();
 							File dest = new File(outpaths2);
 							CopyFilesExample.copyFileUsingFileChannels(source, dest);
 							fileLists.add(dest);

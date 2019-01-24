@@ -9,6 +9,8 @@ public class Nature {
 	private Long createUser;
 	private Date createDate;
 	private String content;
+	private Long projectId;
+	private Integer natureType;
 	
 	@Id
 	@GeneratedValue
@@ -45,6 +47,24 @@ public class Nature {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	
+	@Basic
+	@Column(name="nature_type")
+	public Integer getNatureType() {
+		return natureType;
+	}
+	public void setNatureType(Integer natureType) {
+		this.natureType = natureType;
+	}
+	
+	@Basic
+	@Column(name="project_id")
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 	
 }

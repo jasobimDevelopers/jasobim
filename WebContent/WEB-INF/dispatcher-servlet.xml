@@ -13,7 +13,6 @@
        http://www.springframework.org/schema/task
        http://www.springframework.org/schema/task/spring-task-3.1.xsd ">
 	   <context:annotation-config/>  
-	  
 	   <mvc:interceptors>
 	        <mvc:interceptor>
 	            <mvc:mapping path="/**"/>

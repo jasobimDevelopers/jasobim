@@ -9,5 +9,5 @@ public interface NatureDao {
 	boolean deleteNature(Long id);
 	boolean addNature(Nature role);
 	boolean updateNature(Nature dp);
-	DataWrapper<List<Nature>> getNatureListByProjectId(Integer pageIndex,Integer pageSize);
+	DataWrapper<List<Nature>> getNatureListByProjectId(Integer pageIndex,Integer pageSize, Nature nature);
 }

@@ -9,6 +9,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +37,18 @@ public class NatureDaoImpl extends BaseDao<Nature> implements NatureDao {
 		return update(dp);
 	}
 	@Override
-	public DataWrapper<List<Nature>> getNatureListByProjectId(Integer pageIndex,Integer pageSize) {
+	public DataWrapper<List<Nature>> getNatureListByProjectId(Integer pageIndex,Integer pageSize,Nature nature) {
 		DataWrapper<List<Nature>> dataWrapper=new DataWrapper<List<Nature>>();
 		List<Nature> gets=new ArrayList<Nature>();
 		Session session=getSession();
         Criteria criteria = session.createCriteria(Nature.class);
         criteria.addOrder(Order.desc("createDate"));
+        if(nature.getNatureType()!=null){
+        	criteria.add(Restrictions.eq("natureType", nature.getNatureType()));
+        }
+        if(nature.getProjectId()!=null){
+        	criteria.add(Restrictions.eq("projectId", nature.getProjectId()));
+        }
         if (pageSize == null) {
 			pageSize = 10;
 		}
@@ -73,5 +80,6 @@ public class NatureDaoImpl extends BaseDao<Nature> implements NatureDao {
         
         return dataWrapper;
 	}
+	
 	
 }

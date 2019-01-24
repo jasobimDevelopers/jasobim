@@ -356,6 +356,8 @@ create table nature(
 	id serial primary key,
 	create_user bigint(20) unsigned not null,
 	content varchar(255),
+	project_id bigint(20) unsigned not null,
+	nature_type int,
 	create_date datetime
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -1,6 +1,7 @@
 package com.my.spring.serviceImpl;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.my.spring.DAO.ReplyDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.jpush.PushExample;
 import com.my.spring.model.QualityCheck;
 import com.my.spring.model.QualityCheckPartPojo;
 import com.my.spring.model.QualityCheckPojo;
@@ -123,6 +125,34 @@ public class QualityCheckServiceImpl implements QualityCheckService  {
 						
 					}
 					readDao.addQualityCheckReadStateList(nl);
+					HashMap<String,String> hq = new HashMap<String,String>();
+					List<User> userListCopyUser = new ArrayList<User>();
+					if(role.getInformUser()!=null){
+						List<String> aa = new ArrayList<String>();
+						for(String s:role.getInformUser().split(",")){
+							aa.add(s);
+						}
+						userListCopyUser=userDao.findUserLikeProjct(aa);
+					}
+					
+					Project po = projectDao.getById(role.getProjectId());
+					hq.put("projectName",po.getName());
+					hq.put("aboutId", role.getId().toString());
+					hq.put("createDate", Parameters.getSdfs().format(new Date()));
+					String content="";
+					if(po!=null)
+						content=user.getRealName()+"在"+po.getName()+"项目里提交了一个整改单";
+					else
+						content=user.getRealName()+"提交了一个整改单";
+					////推送人包括自己
+					String[] userids=new String[userListCopyUser.size()+1];
+					for(int b =0;b<userListCopyUser.size();b++){
+						userids[b]=userListCopyUser.get(b).getId().toString();
+					}
+					userids[userids.length-1]=user.getId().toString();
+					///0、质量   1、安全   2、施工任务单  3、 预付单  4、留言
+					PushExample.testSendPushWithCustomConfig_ios(userids, content,0,hq);
+					PushExample.testSendPushWithCustomConfig_android(userids, content,0,hq);
 				}
 			}
 			

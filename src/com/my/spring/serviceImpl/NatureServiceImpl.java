@@ -58,7 +58,7 @@ public class NatureServiceImpl implements NatureService  {
 		DataWrapper<List<Nature>> dp = new DataWrapper<List<Nature>>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			dp = NatureDao.getNatureListByProjectId(pageIndex,pageSize);
+			dp = NatureDao.getNatureListByProjectId(pageIndex,pageSize,Nature);
 		}else{
 			dp.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
