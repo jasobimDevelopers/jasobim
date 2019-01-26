@@ -466,7 +466,7 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 				if(voices!=null){
 					String voisStr="";
 					for(int i=0;i<voices.length;i++){
-						Files file=fileService.uploadFile(filePath+"/voices", pics[i], 3, request);
+						Files file=fileService.uploadFile(filePath+"/voices", voices[i], 3, request);
 						if(i==(voices.length-1)){
 							voisStr=voisStr+file.getId();
 						}else{

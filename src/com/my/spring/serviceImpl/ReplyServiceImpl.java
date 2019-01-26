@@ -52,6 +52,7 @@ public class ReplyServiceImpl implements ReplyService {
 					Replypojos.setReplyContent(dataWrapper.getData().get(i).getReplyContent());
 					Replypojos.setId(dataWrapper.getData().get(i).getId());
 					User user =userDao.getById(dataWrapper.getData().get(i).getReplyUser());
+					Replypojos.setSchedule(dataWrapper.getData().get(i).getSchedule());
 					if(user!=null){
 						Replypojos.setReplyUserName(user.getRealName());
 						if(user.getUserIconUrl()!=null){
