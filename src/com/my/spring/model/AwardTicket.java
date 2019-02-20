@@ -17,6 +17,7 @@ public class AwardTicket {
 	private String remark;
 	private String pictures;
 	private String voices;
+	private Long projectId;
 	
 	@Id
 	@GeneratedValue
@@ -125,6 +126,15 @@ public class AwardTicket {
 	}
 	public void setVoices(String voices) {
 		this.voices = voices;
+	}
+	
+	@Basic
+	@Column(name="project_id")
+	public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 	
 }

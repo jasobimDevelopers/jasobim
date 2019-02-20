@@ -58,8 +58,11 @@ public class QualityCheckController {
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute QualityCheck QualityManage,
+    		@RequestParam(value="start",required=false) String start,
+    		@RequestParam(value="end",required=false) String end,
+    		@RequestParam(value="find",required=false) String find,
             @RequestParam(value = "token",required = false) String token){
-        return QualityManageService.getQualityCheckList(pageIndex,pageSize,QualityManage,token);
+        return QualityManageService.getQualityCheckList(pageIndex,pageSize,QualityManage,token,start,end,find);
     }
     
     /*

@@ -49,9 +49,12 @@ public class AwardTicketController {
     public DataWrapper<List<AwardTicketPojo>> getAwardTicketList(
     		@RequestParam(value="pageIndex",required=false) Integer pageIndex,
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
+    		@RequestParam(value="start",required=false) String start,
+    		@RequestParam(value="end",required=false) String end,
+    		@RequestParam(value="find",required=false) String find,
     		@ModelAttribute AwardTicket AwardTicket,
             @RequestParam(value = "token",required = false) String token){
-        return awardTicketService.getAwardTicketList(pageIndex,pageSize,AwardTicket,token);
+        return awardTicketService.getAwardTicketList(pageIndex,pageSize,AwardTicket,token,start,end,find);
     }
 
 }

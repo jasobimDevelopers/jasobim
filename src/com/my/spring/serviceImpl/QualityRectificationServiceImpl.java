@@ -97,8 +97,9 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 			if(role!=null){
 				role.setCreateUser(user.getId());
 				if(fDate!=null){
+					fDate=fDate+" 00:00:00";
 					try {
-						role.setFinishedDate(Parameters.getSdfs().parse(fDate));
+						role.setFinishedDate(Parameters.getSdf().parse(fDate));
 					} catch (ParseException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -135,6 +136,7 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 				}else{
 					role.setStatus(2);
 				}
+				role.setQualityCheckId(qualityCheckId);
 				if(!QualityManageDao.addQualityRectification(role)){
 					result.setErrorCode(ErrorCodeEnum.Error);
 				}else if(sendUsers!=null){
@@ -227,13 +229,18 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 
 	@Override
 	public DataWrapper<List<QualityRectificationPojo>> getQualityRectificationList(Integer pageIndex, Integer pageSize, QualityRectification qualityManage,
-			String token,String ids) {
+			String token,String ids,String start,String end,String find) {
 		DataWrapper<List<QualityRectificationPojo>> dp = new DataWrapper<List<QualityRectificationPojo>>();
 		List<QualityRectificationPojo> dpp = new ArrayList<QualityRectificationPojo>();
 		DataWrapper<List<QualityRectification>> dataWrapper = new DataWrapper<List<QualityRectification>>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			dataWrapper=QualityManageDao.getQualityRectificationList(pageIndex, pageSize, qualityManage,ids);
+			List<User> userss = userDao.getByUserNames(find);
+			if(userss!=null){
+				dataWrapper=QualityManageDao.getQualityRectificationList(pageIndex, pageSize, qualityManage,ids,start,end,userss);
+			}else{
+				dataWrapper=QualityManageDao.getQualityRectificationLists(pageIndex, pageSize, qualityManage,ids,start,end,find);
+			}
 			if(dataWrapper.getData()!=null){
 				Relation relation = new Relation();
 				for(int i=0;i<dataWrapper.getData().size();i++){

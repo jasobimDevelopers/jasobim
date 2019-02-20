@@ -64,8 +64,11 @@ public class QualityRectificationController {
     		@RequestParam(value="pageSize",required=false) Integer pageSize,
     		@ModelAttribute QualityRectification QualityManage,
     		@RequestParam(value="ids",required=false) String ids,
+    		@RequestParam(value="start",required=false) String start,
+    		@RequestParam(value="end",required=false) String end,
+    		@RequestParam(value="find",required=false) String find,
             @RequestParam(value = "token",required = false) String token){
-        return QualityManageService.getQualityRectificationList(pageIndex,pageSize,QualityManage,token,ids);
+        return QualityManageService.getQualityRectificationList(pageIndex,pageSize,QualityManage,token,ids,start,end,find);
     }
     
     /*

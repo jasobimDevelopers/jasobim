@@ -93,7 +93,7 @@ public class AwardTicketServiceImpl implements AwardTicketService  {
 				if(vois!=null){
 					String voisStr="";
 					for(int i=0;i<vois.length;i++){
-						Files file=fileService.uploadFile(filePath+"/voices", pics[i], 3, request);
+						Files file=fileService.uploadFile(filePath+"/voices", vois[i], 3, request);
 						if(i==(vois.length-1)){
 							voisStr=voisStr+file.getId();
 						}else{
@@ -149,13 +149,19 @@ public class AwardTicketServiceImpl implements AwardTicketService  {
 
 	@Override
 	public DataWrapper<List<AwardTicketPojo>> getAwardTicketList(Integer pageIndex, Integer pageSize, AwardTicket AwardTicket,
-			String token) {
+			String token,String start,String end,String find) {
 		DataWrapper<List<AwardTicketPojo>> result = new DataWrapper<List<AwardTicketPojo>>();
 		DataWrapper<List<AwardTicket>> dataWrapper = new DataWrapper<List<AwardTicket>>();
 		List<AwardTicketPojo> dpp = new ArrayList<AwardTicketPojo>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			dataWrapper=AwardTicketDao.getAwardTicketList(pageIndex, pageSize, AwardTicket);
+			List<User> aboutUsers = userDao.getByUserNames(find);
+			if(aboutUsers==null){
+				List<QualityCheck> aboutChecks = qualityCheckDao.getQualityCheckLists(AwardTicket,find);
+				dataWrapper=AwardTicketDao.getAwardTicketLists(pageIndex, pageSize, AwardTicket,start,end,aboutChecks);//奖惩事由查找
+			}else{
+				dataWrapper=AwardTicketDao.getAwardTicketList(pageIndex, pageSize, AwardTicket,start,end,aboutUsers);//奖惩人查找
+			}
 			if(dataWrapper.getData()!=null){
 				for(int i=0;i<dataWrapper.getData().size();i++){
 					AwardTicketPojo pojo=new AwardTicketPojo();

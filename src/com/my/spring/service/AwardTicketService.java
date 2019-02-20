@@ -14,5 +14,5 @@ public interface AwardTicketService {
 	DataWrapper<AwardTicket> addAwardTicket(String token,String dDate,AwardTicket role,MultipartFile[] pics, MultipartFile[] vois, HttpServletRequest request);
 	DataWrapper<Void> deleteAwardTicketByIdList(String token,String[] id);
 	DataWrapper<List<AwardTicketPojo>> getAwardTicketList(Integer pageIndex, Integer pageSize, AwardTicket AwardTicket,
-			String token);
+			String token,String start,String end,String find);
 }

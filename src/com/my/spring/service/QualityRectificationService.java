@@ -14,7 +14,7 @@ public interface QualityRectificationService {
 	DataWrapper<Void> deleteQualityRectificationById(String token,Long id);
 	DataWrapper<Void> deleteQualityRectificationByIdList(String token,String[] id);
 	DataWrapper<List<QualityRectificationPojo>> getQualityRectificationList(Integer pageIndex, Integer pageSize, QualityRectification QualityManage,
-			String token, String ids);
+			String token, String ids,String start,String end,String find);
 	DataWrapper<Void> qualityRectificationCheckAgain(String token, Long qualityId, Integer score, Integer state);
 	DataWrapper<QualityRectification> addQualityRectification(String token, String fDate, String sendUsers, MultipartFile[] pics,
 			MultipartFile[] vois, HttpServletRequest request, QualityRectification role,Long qualityCheckId);

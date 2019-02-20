@@ -14,7 +14,7 @@ public interface QualityCheckService {
 	DataWrapper<Void> deleteQualityCheckById(String token,Long id);
 	DataWrapper<Void> deleteQualityCheckByIdList(String token,String[] id);
 	DataWrapper<List<QualityCheckPojo>> getQualityCheckList(Integer pageIndex, Integer pageSize, QualityCheck QualityManage,
-			String token);
+			String token,String start,String end,String find);
 	DataWrapper<Void> updateQualityCheck(String token, MultipartFile[] pics, MultipartFile[] vois,
 			HttpServletRequest request, QualityCheck QualityManage);
 	DataWrapper<Long> addQualityCheck(String token, MultipartFile[] pics, MultipartFile[] vois,

@@ -22,6 +22,7 @@ public class QualityRectification {
 	private Date finishedDate;
 	private Date updateDate;
 	private Integer score;/*评分（默认-1）*/
+	private Long qualityCheckId;
 	@Id
 	@GeneratedValue
 	@Column(name="id")
@@ -174,6 +175,14 @@ public class QualityRectification {
 	}
 	public void setRectificationContent(String rectificationContent) {
 		this.rectificationContent = rectificationContent;
+	}
+	@Basic
+	@Column(name="quality_check_id")
+	public Long getQualityCheckId() {
+		return qualityCheckId;
+	}
+	public void setQualityCheckId(Long qualityCheckId) {
+		this.qualityCheckId = qualityCheckId;
 	}
 
 	

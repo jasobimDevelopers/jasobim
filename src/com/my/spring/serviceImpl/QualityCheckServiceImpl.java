@@ -179,13 +179,18 @@ public class QualityCheckServiceImpl implements QualityCheckService  {
 
 	@Override
 	public DataWrapper<List<QualityCheckPojo>> getQualityCheckList(Integer pageIndex, Integer pageSize, QualityCheck qualityManage,
-			String token) {
+			String token,String start,String end,String find) {
 		DataWrapper<List<QualityCheckPojo>> dp = new DataWrapper<List<QualityCheckPojo>>();
 		List<QualityCheckPojo> dpp = new ArrayList<QualityCheckPojo>();
 		DataWrapper<List<QualityCheck>> dataWrapper = new DataWrapper<List<QualityCheck>>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			dataWrapper=QualityManageDao.getQualityCheckList(pageIndex, pageSize, qualityManage);
+			List<User> userss = userDao.getByUserNames(find);
+			if(userss!=null){
+				dataWrapper=QualityManageDao.getQualityCheckList(pageIndex, pageSize, qualityManage,start,end,userss);
+			}else{
+				dataWrapper=QualityManageDao.getQualityCheckLists(pageIndex, pageSize, qualityManage,start,end,find);
+			}
 			if(dataWrapper.getData()!=null){
 				for(int i=0;i<dataWrapper.getData().size();i++){
 					QualityCheckPojo pojo=new QualityCheckPojo();
