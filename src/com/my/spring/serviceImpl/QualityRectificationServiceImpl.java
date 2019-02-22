@@ -235,10 +235,14 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 		DataWrapper<List<QualityRectification>> dataWrapper = new DataWrapper<List<QualityRectification>>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			List<User> userss = userDao.getByUserNames(find);
+			List<User> userss = new ArrayList<User>();
+			userss=userDao.getByUserNames(find);
 			if(userss!=null){
-				dataWrapper=QualityManageDao.getQualityRectificationList(pageIndex, pageSize, qualityManage,ids,start,end,userss);
-			}else{
+				if(!userss.isEmpty()){
+					dataWrapper=QualityManageDao.getQualityRectificationList(pageIndex, pageSize, qualityManage,ids,start,end,userss);
+				}
+			}
+			else{
 				dataWrapper=QualityManageDao.getQualityRectificationLists(pageIndex, pageSize, qualityManage,ids,start,end,find);
 			}
 			if(dataWrapper.getData()!=null){

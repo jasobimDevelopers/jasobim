@@ -146,8 +146,9 @@ public class QualityCheckDaoImpl extends BaseDao<QualityCheck> implements Qualit
         if(!users.isEmpty()){
         	Disjunction disjunction = Restrictions.disjunction();			
         	for(User bar : users){
-        	    disjunction.add(Restrictions.eq("createUser", bar));
+        	    disjunction.add(Restrictions.eq("createUser", bar.getId()));
         	}
+        	criteria.add(disjunction);
         }
         criteria.add(Restrictions.eq("projectId", qualityManage.getProjectId()));
         if(qualityManage.getId()!=null){

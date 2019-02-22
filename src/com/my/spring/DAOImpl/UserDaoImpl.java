@@ -33,7 +33,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 		List<User> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
-        criteria.add(Restrictions.like("userName",'%'+userName+'%'));
+        criteria.add(Restrictions.like("realName",'%'+userName+'%'));
         try {
             ret = criteria.list();
         }catch (Exception e){

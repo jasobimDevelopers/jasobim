@@ -69,8 +69,9 @@ public class AwardTicketDaoImpl extends BaseDao<AwardTicket> implements AwardTic
         if(!find.isEmpty()){
         	Disjunction disjunction = Restrictions.disjunction();			
         	for(QualityCheck bar : find){
-        	    disjunction.add(Restrictions.eq("aboutId", bar));
+        	    disjunction.add(Restrictions.eq("aboutId", bar.getId()));
         	}//奖惩事由
+        	criteria.add(disjunction);
         }
         if(at.getTicketType()!=null){
         	criteria.add(Restrictions.eq("ticketType", at.getTicketType()));

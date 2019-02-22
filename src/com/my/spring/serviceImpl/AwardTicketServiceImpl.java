@@ -155,10 +155,13 @@ public class AwardTicketServiceImpl implements AwardTicketService  {
 		List<AwardTicketPojo> dpp = new ArrayList<AwardTicketPojo>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			List<User> aboutUsers = userDao.getByUserNames(find);
-			if(aboutUsers==null){
-				List<QualityCheck> aboutChecks = qualityCheckDao.getQualityCheckLists(AwardTicket,find);
-				dataWrapper=AwardTicketDao.getAwardTicketLists(pageIndex, pageSize, AwardTicket,start,end,aboutChecks);//奖惩事由查找
+			List<User> aboutUsers = new ArrayList<User>();
+			aboutUsers=userDao.getByUserNames(find);
+			if(aboutUsers!=null){
+				if(!aboutUsers.isEmpty()){
+					List<QualityCheck> aboutChecks = qualityCheckDao.getQualityCheckLists(AwardTicket,find);
+					dataWrapper=AwardTicketDao.getAwardTicketLists(pageIndex, pageSize, AwardTicket,start,end,aboutChecks);//奖惩事由查找
+				}
 			}else{
 				dataWrapper=AwardTicketDao.getAwardTicketList(pageIndex, pageSize, AwardTicket,start,end,aboutUsers);//奖惩人查找
 			}
@@ -170,9 +173,19 @@ public class AwardTicketServiceImpl implements AwardTicketService  {
 					pojo.setAwardNum(dataWrapper.getData().get(i).getAwardNum());
 					pojo.setAboutId(dataWrapper.getData().get(i).getAboutId());
 					pojo.setAwardType(dataWrapper.getData().get(i).getAwardType());
+					pojo.setTicketType(dataWrapper.getData().get(i).getTicketType());
 					User users =userDao.getById(dataWrapper.getData().get(i).getCreateUser());
 					if(users!=null){
-						pojo.setCreateUserName(user.getRealName());
+						pojo.setCreateUserName(users.getRealName());
+						if(users.getUserIconUrl()!=null){
+							pojo.setUserIcon(users.getUserIconUrl());
+						}else{
+							Files file = new Files();
+							file=fileService.getById(users.getUserIcon());
+							if(file!=null){
+								pojo.setUserIcon(file.getUrl());
+							}
+						}
 					}
 					if(dataWrapper.getData().get(i).getPictures()!=null && !dataWrapper.getData().get(i).getPictures().equals("")){
 						List<Files> files1=fileDao.getByIds(dataWrapper.getData().get(i).getPictures());

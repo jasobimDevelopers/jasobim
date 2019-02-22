@@ -15,6 +15,7 @@ public class AwardTicketPojo {
 	private String remark;
 	private List<String> pictures;
 	private List<String> voices;
+	private String userIcon;
 	public Long getId() {
 		return id;
 	}
@@ -86,6 +87,12 @@ public class AwardTicketPojo {
 	}
 	public void setVoices(List<String> voices) {
 		this.voices = voices;
+	}
+	public String getUserIcon() {
+		return userIcon;
+	}
+	public void setUserIcon(String userIcon) {
+		this.userIcon = userIcon;
 	}
 	
 	

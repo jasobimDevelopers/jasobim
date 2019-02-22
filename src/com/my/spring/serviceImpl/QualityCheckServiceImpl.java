@@ -185,9 +185,12 @@ public class QualityCheckServiceImpl implements QualityCheckService  {
 		DataWrapper<List<QualityCheck>> dataWrapper = new DataWrapper<List<QualityCheck>>();
 		User user = SessionManager.getSession(token);
 		if(user!=null){
-			List<User> userss = userDao.getByUserNames(find);
+			List<User> userss = new ArrayList<User>();
+			userss=userDao.getByUserNames(find);
 			if(userss!=null){
-				dataWrapper=QualityManageDao.getQualityCheckList(pageIndex, pageSize, qualityManage,start,end,userss);
+				if(!userss.isEmpty()){
+					dataWrapper=QualityManageDao.getQualityCheckList(pageIndex, pageSize, qualityManage,start,end,userss);
+				}
 			}else{
 				dataWrapper=QualityManageDao.getQualityCheckLists(pageIndex, pageSize, qualityManage,start,end,find);
 			}
@@ -204,6 +207,14 @@ public class QualityCheckServiceImpl implements QualityCheckService  {
 					pojo.setId(dataWrapper.getData().get(i).getId());
 					pojo.setStatus(dataWrapper.getData().get(i).getStatus());/*0、待整改（默认值，提交时设置 ） 0、待复检  1、已通过*/
 					pojo.setNoticeType(dataWrapper.getData().get(i).getNoticeType());
+					if(dataWrapper.getData().get(i).getInformUser()!=null){
+						List<String> informUsers = new ArrayList<String>();
+						for(String s:dataWrapper.getData().get(i).getInformUser().split(",")){
+							User user1=userDao.getById(Long.valueOf(s));
+							informUsers.add(user1.getRealName());
+						}
+						pojo.setInformUser(informUsers);
+					}
 					User users =userDao.getById(dataWrapper.getData().get(i).getCreateUser());
 					if(users!=null){
 						pojo.setCreateUserName(users.getRealName());

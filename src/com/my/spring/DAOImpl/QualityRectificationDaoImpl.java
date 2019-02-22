@@ -176,8 +176,9 @@ public class QualityRectificationDaoImpl extends BaseDao<QualityRectification> i
         if(!userss.isEmpty()){
         	Disjunction disjunction = Restrictions.disjunction();			
         	for(User bar : userss){
-        	    disjunction.add(Restrictions.eq("createUser", bar));
+        	    disjunction.add(Restrictions.eq("createUser", bar.getId()));
         	}//创建人
+        	criteria.add(disjunction);
         }
         if(ids!=null){
         	String[] bars = ids.split(",");
