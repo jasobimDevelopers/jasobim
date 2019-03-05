@@ -7,6 +7,7 @@ public class AwardReadState {
 	private Long userId;
 	private Long awardId;
 	private Integer state;
+	private Integer qualityType;//0、质量 1、安全
 	
 	@Id
 	@GeneratedValue
@@ -43,6 +44,15 @@ public class AwardReadState {
 	}
 	public void setState(Integer state) {
 		this.state = state;
+	}
+	
+	@Basic
+	@Column(name="quality_type")
+	public Integer getQualityType() {
+		return qualityType;
+	}
+	public void setQualityType(Integer qualityType) {
+		this.qualityType = qualityType;
 	}
 	
 }

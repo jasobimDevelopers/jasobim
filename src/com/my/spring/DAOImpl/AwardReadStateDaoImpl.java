@@ -53,6 +53,9 @@ public class AwardReadStateDaoImpl extends BaseDao<AwardReadState> implements Aw
         if(AwardReadState.getAwardId()!=null){
         	criteria.add(Restrictions.eq("awardId", AwardReadState.getAwardId()));
         }
+        if(AwardReadState.getQualityType()!=null){
+        	criteria.add(Restrictions.eq("qualityType", AwardReadState.getQualityType()));
+        }
         if(AwardReadState.getState()!=null){
         	 criteria.add(Restrictions.eq("state", AwardReadState.getState()));
         }

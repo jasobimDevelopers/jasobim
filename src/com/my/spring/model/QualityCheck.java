@@ -18,6 +18,7 @@ public class QualityCheck {
 	private String informUser;/*通知人*/
 	private Date createDate;
 	private Date updateDate;
+	private Integer qualityType;//0、质量 1、安全
 	private Long qualityRectificationId;//整改单id
 	
 	@Id
@@ -146,6 +147,15 @@ public class QualityCheck {
 	}
 	public void setQualityRectificationId(Long qualityRectificationId) {
 		this.qualityRectificationId = qualityRectificationId;
+	}
+	
+	@Basic
+	@Column(name="quality_type")
+	public Integer getQualityType() {
+		return qualityType;
+	}
+	public void setQualityType(Integer qualityType) {
+		this.qualityType = qualityType;
 	}
 	
 	

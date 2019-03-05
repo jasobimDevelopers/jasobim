@@ -155,6 +155,9 @@ public class QualityRectificationDaoImpl extends BaseDao<QualityRectification> i
         if(qualityManage.getQualityCheckId()!=null){
         	criteria.add(Restrictions.eq("qualityCheckId", qualityManage.getQualityCheckId()));
         }
+        if(qualityManage.getQualityType()!=null){
+        	criteria.add(Restrictions.eq("qualityType", qualityManage.getQualityType()));
+        }
         if(start!=null){
         	try {
 				Date startTime = Parameters.getSdfs().parse(start);
@@ -238,6 +241,9 @@ public class QualityRectificationDaoImpl extends BaseDao<QualityRectification> i
         }
         if(qualityManage.getQualityCheckId()!=null){
         	criteria.add(Restrictions.eq("qualityCheckId", qualityManage.getQualityCheckId()));
+        }
+        if(qualityManage.getQualityType()!=null){
+        	criteria.add(Restrictions.eq("qualityType", qualityManage.getQualityType()));
         }
         if(start!=null){
         	try {

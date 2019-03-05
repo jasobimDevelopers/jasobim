@@ -7,6 +7,7 @@ public class QualityRectificationReadState {
 	private Long qualityRectificationId;
 	private Long userId;
 	private Integer state;//0、未读 1、已读
+	private Integer qualityType;
 	
 	@Id
 	@GeneratedValue
@@ -43,6 +44,15 @@ public class QualityRectificationReadState {
 	}
 	public void setState(Integer state) {
 		this.state = state;
+	}
+	
+	@Basic
+	@Column(name="quality_type")
+	public Integer getQualityType() {
+		return qualityType;
+	}
+	public void setQualityType(Integer qualityType) {
+		this.qualityType = qualityType;
 	}
 	
 }

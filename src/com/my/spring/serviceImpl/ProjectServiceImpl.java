@@ -539,6 +539,9 @@ public class ProjectServiceImpl implements ProjectService {
 						if(project.getPlace()!=null){
 							projects.setPlace(project.getPlace());
 						}
+						if(project.getModelType()!=null){
+							projects.setModelType(project.getModelType());
+						}
 						projects.setUpdateDate(new Date(System.currentTimeMillis()));
 						if(!projectDao.updateProject(projects)) 
 				            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -886,6 +889,7 @@ public class ProjectServiceImpl implements ProjectService {
 					projectPojo.setConstructionControlUserTel(project.getConstructionControlUserTel());
 					projectPojo.setConstructionUnitUserTel(project.getConstructionUnitUserTel());
 					projectPojo.setDesignUnitUserTel(project.getDesignUnitUserTel());
+					projectPojo.setModelType(project.getModelType());
 					projectPojo.setCityCode(project.getCityCode());
 					projectPojo.setModelPart(project.getModelPart().split(","));
 					projectPojo.setWorkHour(project.getWorkHour());

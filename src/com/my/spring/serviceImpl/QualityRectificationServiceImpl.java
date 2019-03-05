@@ -165,6 +165,7 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 								QualityRectificationReadState nl2 = new QualityRectificationReadState();
 								nl2.setQualityRectificationId(role.getId());
 								nl2.setUserId(s.getId());
+								nl2.setQualityType(0);
 								nl2.setState(0);
 								nl.add(nl2);
 							}
@@ -236,13 +237,10 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			List<User> userss = new ArrayList<User>();
-			userss=userDao.getByUserNames(find);
-			if(userss!=null){
-				if(!userss.isEmpty()){
-					dataWrapper=QualityManageDao.getQualityRectificationList(pageIndex, pageSize, qualityManage,ids,start,end,userss);
-				}
-			}
-			else{
+			userss=userDao.getByUserRealNames(find);
+			if(userss!=null && !userss.isEmpty()){
+				dataWrapper=QualityManageDao.getQualityRectificationList(pageIndex, pageSize, qualityManage,ids,start,end,userss);
+			}else{
 				dataWrapper=QualityManageDao.getQualityRectificationLists(pageIndex, pageSize, qualityManage,ids,start,end,find);
 			}
 			if(dataWrapper.getData()!=null){
@@ -340,6 +338,7 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 		}
 		return dp;
 	}
+		
 
 
 	@Override
@@ -553,7 +552,8 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 				List<QualityRectificationReadState> aec = new ArrayList<QualityRectificationReadState>();
 				QualityRectificationReadState qs = new QualityRectificationReadState();
 				qs.setUserId(user.getId());
-				qs.setState(0);;
+				qs.setQualityType(0);
+				qs.setState(0);
 				aec = readDao.getQualityRectificationReadStateLists(qs);
 				if(aec.isEmpty()){
 					ms.setQualityState(0);//无小红点
@@ -564,7 +564,8 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 				List<QualityCheckReadState> aec2 = new ArrayList<QualityCheckReadState>();
 				QualityCheckReadState qs2 = new QualityCheckReadState();
 				qs2.setUserId(user.getId());
-				qs2.setState(0);;
+				qs2.setState(0);
+				qs2.setQualityType(0);
 				aec2 = readDao2.getQualityCheckReadStateLists(qs2);
 				if(aec2.isEmpty()){
 					ms.setCheckState(0);
@@ -575,7 +576,8 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 				List<AwardReadState> aec3 = new ArrayList<AwardReadState>();
 				AwardReadState qs3 = new AwardReadState();
 				qs3.setUserId(user.getId());
-				qs3.setState(0);;
+				qs3.setState(0);
+				qs3.setQualityType(0);
 				aec3 = readDao3.getAwardReadStateLists(qs3);
 				if(aec3.isEmpty()){
 					ms.setAwardState(0);

@@ -45,8 +45,9 @@ public class BimfaceController {
     		@RequestParam(value="modelFile",required=true) MultipartFile[] modelFile,
     		@RequestParam(value="token",required=true) String token,
     		@RequestParam(value="projectId",required=true) Long projectId,
+    		@RequestParam(value="modeType",required=true) Integer modeType,
     		HttpServletRequest request){
-        return bimfaceService.uploadModelFile(modelFile[0],request,token,projectId);
+        return bimfaceService.uploadModelFile(modelFile[0],request,token,projectId,modeType);
     }
     
     /*

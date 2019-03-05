@@ -124,16 +124,35 @@ public class AwardTicketDaoImpl extends BaseDao<AwardTicket> implements AwardTic
         criteria.addOrder(Order.desc("createDate"));
         /*条件查询*/
         if(start!=null){
-        	criteria.add(Restrictions.ge("awardDate", start));
+        	try {
+				Date starts = Parameters.getSdf().parse(start);
+				criteria.add(Restrictions.ge("awardDate", starts));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	
         }
         if(end!=null){
-        	criteria.add(Restrictions.le("awardDate", end));
+        	try {
+				Date ends = Parameters.getSdf().parse(end);
+				criteria.add(Restrictions.le("awardDate", ends));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	
         }
-        if(!aboutUsers.isEmpty()){
-        	Disjunction disjunction = Restrictions.disjunction();			
-        	for(User bar : aboutUsers){
-        	    disjunction.add(Restrictions.eq("createUser", bar));
-        	}//奖惩人
+        if(aboutUsers!=null){
+        	if(!aboutUsers.isEmpty()){
+            	Disjunction disjunction = Restrictions.disjunction();			
+            	for(User bar : aboutUsers){
+            	    disjunction.add(Restrictions.eq("createUser", bar));
+            	}//奖惩人
+            }
+        }
+        if(at.getProjectId()!=null){
+        	criteria.add(Restrictions.eq("projectId",at.getProjectId()));
         }
         if(at.getAwardType()!=null){
         	criteria.add(Restrictions.eq("awardType", at.getAwardType()));

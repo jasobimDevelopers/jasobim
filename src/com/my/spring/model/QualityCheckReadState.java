@@ -7,6 +7,8 @@ public class QualityCheckReadState {
 	private Long userId;
 	private Long qualityCheckId;
 	private Integer state;
+	private Integer qualityType;
+	
 	
 	@Id
 	@GeneratedValue
@@ -43,6 +45,15 @@ public class QualityCheckReadState {
 	}
 	public void setState(Integer state) {
 		this.state = state;
+	}
+	
+	@Basic
+	@Column(name="quality_type")
+	public Integer getQualityType() {
+		return qualityType;
+	}
+	public void setQualityType(Integer qualityType) {
+		this.qualityType = qualityType;
 	}
 	
 	

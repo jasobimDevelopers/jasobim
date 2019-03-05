@@ -45,6 +45,7 @@ public class ProjectPojo {
     private String cityCode;
     private Long indexs;
     private List<ProjectTender> projectTender;
+    private Integer modelType;
     
 	public String getDesignUnitUser() {
 		return designUnitUser;
@@ -291,6 +292,12 @@ public class ProjectPojo {
 	}
 	public void setIndexs(Long indexs) {
 		this.indexs = indexs;
+	}
+	public Integer getModelType() {
+		return modelType;
+	}
+	public void setModelType(Integer modelType) {
+		this.modelType = modelType;
 	}
 	
 }

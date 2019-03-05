@@ -53,6 +53,9 @@ public class QualityRectificationReadStateDaoImpl extends BaseDao<QualityRectifi
         if(QualityRectificationReadState.getQualityRectificationId()!=null){
         	criteria.add(Restrictions.eq("qualityRectificationId", QualityRectificationReadState.getQualityRectificationId()));
         }
+        if(QualityRectificationReadState.getQualityType()!=null){
+        	 criteria.add(Restrictions.eq("qualityType", QualityRectificationReadState.getQualityType()));
+        }
         if(QualityRectificationReadState.getState()!=null){
         	 criteria.add(Restrictions.eq("state", QualityRectificationReadState.getState()));
         }

@@ -156,14 +156,12 @@ public class AwardTicketServiceImpl implements AwardTicketService  {
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			List<User> aboutUsers = new ArrayList<User>();
-			aboutUsers=userDao.getByUserNames(find);
-			if(aboutUsers!=null){
-				if(!aboutUsers.isEmpty()){
-					List<QualityCheck> aboutChecks = qualityCheckDao.getQualityCheckLists(AwardTicket,find);
-					dataWrapper=AwardTicketDao.getAwardTicketLists(pageIndex, pageSize, AwardTicket,start,end,aboutChecks);//奖惩事由查找
-				}
-			}else{
+			aboutUsers=userDao.getByUserRealNames(find);
+			if(aboutUsers!=null && !aboutUsers.isEmpty()){
 				dataWrapper=AwardTicketDao.getAwardTicketList(pageIndex, pageSize, AwardTicket,start,end,aboutUsers);//奖惩人查找
+			}else{
+				List<QualityCheck> aboutChecks = qualityCheckDao.getQualityCheckLists(AwardTicket,find);
+				dataWrapper=AwardTicketDao.getAwardTicketLists(pageIndex, pageSize, AwardTicket,start,end,aboutChecks);//奖惩事由查找
 			}
 			if(dataWrapper.getData()!=null){
 				for(int i=0;i<dataWrapper.getData().size();i++){

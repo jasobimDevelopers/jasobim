@@ -523,8 +523,12 @@ public class QualityQuestionDaoImpl extends BaseDao<QualityQuestion> implements 
     /////通过创建人搜索
     if(searchType!=null){
     	 if(searchType==0){
+    		
 	    	if(content!=null && !content.equals("")){
-	            criteria.add(Restrictions.eq("userId", Long.valueOf(content)));
+	    		User users=userDao.getByUserRealName("%"+content+"%");
+	    		if(users!=null){
+	    			criteria.add(Restrictions.eq("userId", users.getId()));
+	    		}
 	        } 
 	    }
 	    /////通过问题名称

@@ -8,7 +8,7 @@ import com.bimface.sdk.bean.response.CategoryBean;
 import com.my.spring.utils.DataWrapper;
 public interface BimfaceService {
 	DataWrapper<String> getViewTokenByFileId(Long fileId);
-	DataWrapper<Long> uploadModelFile(MultipartFile file, HttpServletRequest requestion, String token, Long projectId);
+	DataWrapper<Long> uploadModelFile(MultipartFile file, HttpServletRequest requestion, String token, Long projectId,Integer modeType);
 	DataWrapper<String> getModeViewTokenByIntegrateId(Long integrateId, HttpServletRequest request, String token,
 			Long projectId);
 	DataWrapper<List<CategoryBean>> getCategory(Long fileId, String token, Long projectId);

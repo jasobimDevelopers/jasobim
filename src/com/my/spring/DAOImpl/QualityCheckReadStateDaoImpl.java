@@ -55,6 +55,9 @@ public class QualityCheckReadStateDaoImpl extends BaseDao<QualityCheckReadState>
         if(QualityCheckReadState.getQualityCheckId()!=null){
         	criteria.add(Restrictions.eq("qualityCheckId", QualityCheckReadState.getQualityCheckId()));
         }
+        if(QualityCheckReadState.getQualityType()!=null){
+        	 criteria.add(Restrictions.eq("qualityType", QualityCheckReadState.getQualityType()));
+        }
         if(QualityCheckReadState.getState()!=null){
         	 criteria.add(Restrictions.eq("state", QualityCheckReadState.getState()));
         }

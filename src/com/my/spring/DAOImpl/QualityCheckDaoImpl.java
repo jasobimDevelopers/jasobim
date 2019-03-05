@@ -107,7 +107,7 @@ public class QualityCheckDaoImpl extends BaseDao<QualityCheck> implements Qualit
 	        criteria.addOrder(Order.desc("createDate"));
 	        criteria.add(Restrictions.eq("projectId", awardTicket.getProjectId()));
 	        if(find!=null){
-	        	criteria.add(Restrictions.eq("checkList", find));
+	        	criteria.add(Restrictions.like("checkList", "%"+find+"%"));
 	        }
 	        try {
 	            ret = criteria.list();
@@ -142,6 +142,9 @@ public class QualityCheckDaoImpl extends BaseDao<QualityCheck> implements Qualit
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+        }
+        if(qualityManage.getQualityType()!=null){
+        	criteria.add(Restrictions.eq("qualityType", qualityManage.getQualityType()));
         }
         if(!users.isEmpty()){
         	Disjunction disjunction = Restrictions.disjunction();			
@@ -215,6 +218,9 @@ public class QualityCheckDaoImpl extends BaseDao<QualityCheck> implements Qualit
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+        }
+        if(qualityManage.getQualityType()!=null){
+        	criteria.add(Restrictions.eq("qualityType", qualityManage.getQualityType()));
         }
         if(find!=null){
         	criteria.add(Restrictions.like("checkList", '%'+find+'%'));

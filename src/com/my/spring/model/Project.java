@@ -46,6 +46,7 @@ public class Project {
     private Long createUser;
     private String modeFileId;
     private String cityCode;//城市编号
+    private Integer modelType;//0、单体模型 1、集成模型
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -424,6 +425,16 @@ public class Project {
 
 	public void setConstructionControlUserTel(String constructionControlUserTel) {
 		this.constructionControlUserTel = constructionControlUserTel;
+	}
+
+	@Basic
+	@Column(name="model_type")
+	public Integer getModelType() {
+		return modelType;
+	}
+
+	public void setModelType(Integer modelType) {
+		this.modelType = modelType;
 	}
 	
     

@@ -28,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class BimfaceServiceImpl implements BimfaceService {
 	
-	Config config;
+	Config config = new Config();
 	@Autowired
 	FileService filesService;
 	@Autowired
@@ -48,7 +48,7 @@ public class BimfaceServiceImpl implements BimfaceService {
 		return test;
 	}
 	@Override
-	public DataWrapper<Long> uploadModelFile(MultipartFile file,HttpServletRequest requestion,String token,Long projectId) {
+	public DataWrapper<Long> uploadModelFile(MultipartFile file,HttpServletRequest requestion,String token,Long projectId,Integer modeType) {
 		DataWrapper<Long> test = new DataWrapper<Long>();
 		
 		String filepath="bimface/file";
@@ -70,6 +70,7 @@ public class BimfaceServiceImpl implements BimfaceService {
         if(fileId!=null){
         	Project project = projectDao.getById(projectId);
         	if(project!=null){
+        		project.setModelType(modeType);
         		project.setModeFileId(fileId.toString());
             	projectDao.updateProject(project);
         	}else{

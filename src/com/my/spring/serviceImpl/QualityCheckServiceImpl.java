@@ -117,6 +117,7 @@ public class QualityCheckServiceImpl implements QualityCheckService  {
 					if(!userIdList.isEmpty()){
 						for(UserId s:userIdList){
 							QualityCheckReadState nl2 = new QualityCheckReadState();
+							nl2.setQualityType(role.getQualityType());
 							nl2.setQualityCheckId(role.getId());
 							nl2.setUserId(s.getId());
 							nl2.setState(0);
@@ -186,11 +187,9 @@ public class QualityCheckServiceImpl implements QualityCheckService  {
 		User user = SessionManager.getSession(token);
 		if(user!=null){
 			List<User> userss = new ArrayList<User>();
-			userss=userDao.getByUserNames(find);
-			if(userss!=null){
-				if(!userss.isEmpty()){
-					dataWrapper=QualityManageDao.getQualityCheckList(pageIndex, pageSize, qualityManage,start,end,userss);
-				}
+			userss=userDao.getByUserRealNames(find);
+			if(userss!=null && !userss.isEmpty()){
+				dataWrapper=QualityManageDao.getQualityCheckList(pageIndex, pageSize, qualityManage,start,end,userss);
 			}else{
 				dataWrapper=QualityManageDao.getQualityCheckLists(pageIndex, pageSize, qualityManage,start,end,find);
 			}

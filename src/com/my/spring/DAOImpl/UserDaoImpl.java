@@ -33,16 +33,13 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 		List<User> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
-        criteria.add(Restrictions.like("realName",'%'+userName+'%'));
+        criteria.add(Restrictions.like("userName",'%'+userName+'%'));
         try {
             ret = criteria.list();
         }catch (Exception e){
             e.printStackTrace();
         }
-        if (ret != null && ret.size() > 0) {
-			return ret;
-		}
-		return null;
+		return ret;
 	}
 	@Override
 	public User getByUserRealName(String userName) {
@@ -50,7 +47,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 		List<User> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
-        criteria.add(Restrictions.eq("realName",userName));
+        criteria.add(Restrictions.like("realName","%"+userName+"%"));
         try {
             ret = criteria.list();
         }catch (Exception e){
@@ -60,6 +57,20 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 			return ret.get(0);
 		}
 		return null;
+	}
+	@Override
+	public List<User> getByUserRealNames(String userName) {
+		// TODO Auto-generated method stub
+		List<User> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.like("realName","%"+userName+"%"));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		return ret;
 	}
 	@Override
 	public User getByUserName(String userName) {
