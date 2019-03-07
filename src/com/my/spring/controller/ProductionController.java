@@ -43,7 +43,7 @@ public class ProductionController {
 	        return productionService.deleteProduction(ProductionId,token);
     }
 
-	//管理员获取用户列表
+	
 	@RequestMapping(value="/admin/getProductionList", method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<ProductionPojo>> getProductionListByAdmin(
