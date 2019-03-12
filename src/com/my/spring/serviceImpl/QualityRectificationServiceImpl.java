@@ -442,7 +442,7 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 		}else{
 			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
-		return null;
+		return result;
 	}
 
 	@Override

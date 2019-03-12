@@ -66,9 +66,6 @@ public class FeedBackDaoImpl extends BaseDao<FeedBack> implements FeedBackDao {
         	if(feedBack.getContent()!=null && !feedBack.getContent().equals("")){
         		criteria.add(Restrictions.like("content", "%"+feedBack.getContent()+"%"));
         	}
-        	if(feedBack.getDate()!=null){
-        		criteria.add(Restrictions.like("date", "%"+feedBack.getDate()+"%"));
-        	}
         }
         
         if (pageSize == null) {

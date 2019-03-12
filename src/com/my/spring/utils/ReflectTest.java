@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.my.spring.model.User;
 public class ReflectTest {  
-	public static void main(){
+	public static void main(String[] args){
 		User user = new User();
 		user.setUserName("username");
 		user.setRealName("ceshi");
