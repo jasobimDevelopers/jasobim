@@ -42,7 +42,7 @@ public class FeedBackDaoImpl extends BaseDao<FeedBack> implements FeedBackDao {
         List<FeedBack> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(FeedBack.class);
-        criteria.addOrder(Order.asc("date"));
+        criteria.addOrder(Order.desc("date"));
         if(dates!=null && !dates.equals("")){
         	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
     		try {
@@ -65,6 +65,9 @@ public class FeedBackDaoImpl extends BaseDao<FeedBack> implements FeedBackDao {
         	}
         	if(feedBack.getContent()!=null && !feedBack.getContent().equals("")){
         		criteria.add(Restrictions.like("content", "%"+feedBack.getContent()+"%"));
+        	}
+        	if(feedBack.getTel()!=null && !feedBack.getTel().equals("")){
+        		criteria.add(Restrictions.like("tel", "%"+feedBack.getTel()+"%"));
         	}
         }
         
