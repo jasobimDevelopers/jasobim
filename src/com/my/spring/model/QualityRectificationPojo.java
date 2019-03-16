@@ -6,6 +6,7 @@ public class QualityRectificationPojo {
 	private Long id;
 	private String projectName;
 	private String createUserName;
+	private Long createUserId;
 	private List<String> nature;
 	private Integer noticeType;
 	private String checkList;
@@ -17,6 +18,7 @@ public class QualityRectificationPojo {
 	private String createDate;
 	private String finishedDate;
 	private String rectificationContent;
+	private List<Long> rectifyUserIds;
 	private List<String> rectifyUser;//整改人
 	private List<String> copyUser;/*抄送人*/
 	private String updateDate;
@@ -129,6 +131,18 @@ public class QualityRectificationPojo {
 	}
 	public void setRectifyUser(List<String> rectifyUser) {
 		this.rectifyUser = rectifyUser;
+	}
+	public Long getCreateUserId() {
+		return createUserId;
+	}
+	public void setCreateUserId(Long createUserId) {
+		this.createUserId = createUserId;
+	}
+	public List<Long> getRectifyUserIds() {
+		return rectifyUserIds;
+	}
+	public void setRectifyUserIds(List<Long> rectifyUserIds) {
+		this.rectifyUserIds = rectifyUserIds;
 	}
 	
 }

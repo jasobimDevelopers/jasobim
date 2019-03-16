@@ -343,6 +343,8 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 					List<ConstructionTaskNewPojo> ConstructionTaskNewPojoList = new ArrayList<ConstructionTaskNewPojo>();
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						List<AllItemData> itemDataList = constructionTaskNewDao.getAllItemData(dataWrapper.getData().get(i).getId());	
+						ProcessData processData = new ProcessData();
+						processData=processDataDao.getById(dataWrapper.getData().get(i).getProcessDataId());
 						ConstructionTaskNewPojo ConstructionTaskNewPojo =new ConstructionTaskNewPojo();
 						ProjectTender tender = projectTenderDao.getProjectTenderById(dataWrapper.getData().get(i).getTendersId());
 						if(tender!=null){
@@ -445,25 +447,33 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 									List<ItemNodeList> gets = constructionTaskNewDao.getAllItemLog(dataWrapper.getData().get(i).getId());
 									if(!gets.isEmpty()){
 									////当前节点名称
+										int nums=gets.size();
+										if(processData!=null){
+											if(gets.size()>processData.getItemNum()){
+												nums=(gets.size())%(processData.getItemNum());
+											}
+										}
 										Integer currentNode=gets.get(gets.size()-1).getCurrent_node();
-										ConstructionTaskNewPojo.setCurrentNodeName(itemDataList.get(currentNode-1).getName());
+										if(currentNode!=itemDataList.size()){
+											ConstructionTaskNewPojo.setCurrentNodeName(itemDataList.get(currentNode).getName());
+										}
+										ConstructionTaskNewPojo.setApprovalUserId(itemDataList.get(currentNode).getApprove_user());
 										/////0、同意  1、不同意
 										if(gets.get(gets.size()-1).getEnd_flag()==2){
 											ConstructionTaskNewPojo.setStatus(2);////不同意，即待修改
-											User user = userDao.getById(itemDataList.get(0).getApprove_user());///修改人为节点第一个人，即创建人
+											User user = userDao.getById(dataWrapper.getData().get(i).getCreateUser());///修改人为节点第一个人，即创建人
 											if(user!=null){
 												ConstructionTaskNewPojo.setApprovalUser(user.getRealName());///当前审批人的姓名
 											}
 										}else if(gets.get(gets.size()-1).getEnd_flag()==1){
 											ConstructionTaskNewPojo.setStatus(1);///已完成，下一审批人为空
 										}else if(gets.get(gets.size()-1).getEnd_flag()==0){
-											ConstructionTaskNewPojo.setStatus(0);////不同意，即待修改
-											User user = userDao.getById(itemDataList.get(currentNode-1).getApprove_user());///修改人为节点第一个人，即创建人
+											ConstructionTaskNewPojo.setStatus(0);//
+											User user = userDao.getById(itemDataList.get(currentNode).getApprove_user());//
 											if(user!=null){
 												ConstructionTaskNewPojo.setApprovalUser(user.getRealName());///当前审批人的姓名
 											}
 										}
-										ConstructionTaskNewPojo.setApprovalUserId(itemDataList.get(currentNode-1).getApprove_user());
 									}
 									List<ProcessLog> getsNot = processLogDao.getProcessLogByAboutIds(dataWrapper.getData().get(i).getProcessDataId(),dataWrapper.getData().get(i).getId());//获取待修改的节点审批记录
 									List<ProcessLog> afterGets = new ArrayList<ProcessLog>();

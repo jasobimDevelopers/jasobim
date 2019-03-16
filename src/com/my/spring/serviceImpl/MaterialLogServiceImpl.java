@@ -69,7 +69,11 @@ public class MaterialLogServiceImpl implements MaterialLogService {
 							if(material.getLeaveNum()!=null){
 								if(m.getNum()!=null){
 									if(m.getNum()<=material.getLeaveNum()){
-										material.setOutNum(material.getOutNum()+m.getNum());
+										if(material.getOutNum()==null){
+											material.setOutNum(m.getNum());
+										}else{
+											material.setOutNum(material.getOutNum()+m.getNum());
+										}
 										material.setLeaveNum(material.getLeaveNum()-m.getNum());
 									}else{
 										dataWrapper.setErrorCode(ErrorCodeEnum.Error);

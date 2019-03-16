@@ -178,7 +178,7 @@ public class ConstructionTaskNewDaoImpl extends BaseDao<ConstructionTaskNew> imp
 	public List<ItemNodeList> getAllItemLog(Long id) {
 		List<ItemNodeList> dataWrapper=new ArrayList<ItemNodeList>();
 		String sql = "select item_state,current_node,end_flag from process_log where about_id="
-		+id+" and type=0 ORDER BY current_node asc";
+		+id+" and type=0 ORDER BY create_date asc";
 		Session session=getSession();
 		 try{
 			 Query query = session.createSQLQuery(sql)

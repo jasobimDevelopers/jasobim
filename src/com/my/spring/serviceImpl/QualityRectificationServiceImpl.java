@@ -268,13 +268,17 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 					relations = relationDao.getRelationListsByAboutId(relation);
 					if(!relations.isEmpty()){
 						List<String> names = new ArrayList<String>();
+						List<Long> rectifyIds = new ArrayList<Long>();
 						for(RectifyPojo re:relations){
 							names.add(re.getUserName());
+							rectifyIds.add(re.getRectifyUserId());
 						}
+						pojo.setRectifyUserIds(rectifyIds);
 						pojo.setRectifyUser(names);
 					}
 					
 					User users =userDao.getById(dataWrapper.getData().get(i).getCreateUser());
+					pojo.setCreateUserId(dataWrapper.getData().get(i).getCreateUser());
 					if(users!=null){
 						pojo.setCreateUserName(users.getRealName());
 					}

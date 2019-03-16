@@ -111,12 +111,23 @@ public class MaterialServiceImpl implements MaterialService {
         	if(m!=null){
         		Material ms = materialDao.getById(m.getId());
         		if(ms!=null){
-        			m.setCreateDate(ms.getCreateDate());
+        			if(m.getMaterialName()!=null){
+            			ms.setMaterialName(m.getMaterialName());
+            		}
+        			if(m.getUnit()!=null){
+        				ms.setUnit(m.getUnit());
+        			}
+        			if(m.getSize()!=null){
+        				ms.setSize(m.getSize());
+        			}
+        			if(m.getRemark()!=null && !m.getRemark().equals("")){
+        				ms.setRemark(m.getRemark());
+        			}
+        			if(!materialDao.updateMaterial(ms)) {
+        			    dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+        			}
         		}
         	}
-			if(!materialDao.updateMaterial(m)) {
-			    dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

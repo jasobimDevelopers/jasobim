@@ -280,6 +280,9 @@ public class UserServiceImpl implements UserService {
 				if(user.getCompany()!=null){
 					userInDB.setCompany(user.getCompany());
 				}
+				if(user.getRoleId()!=null){
+					userInDB.setRoleId(user.getRoleId());
+				}
 				if(user.getWorkName()!=null){
 					userInDB.setWorkName(user.getWorkName());
 				}

@@ -141,6 +141,7 @@ public class ProjectServiceImpl implements ProjectService {
 						project.setModelId(temp);
 						project.setModelPart(modelName);
 					}
+					
 					if(picfile!=null){
 						String temp="";
 						String picName = "";
@@ -166,6 +167,7 @@ public class ProjectServiceImpl implements ProjectService {
 						}
 					}
 					project.setCreateDate(new Date(System.currentTimeMillis()));
+					project.setCityCode("1");
 					if(projectDao.addProject(project))
 					{
 						List<UserIndex> indexList = new ArrayList<UserIndex>();
@@ -266,6 +268,7 @@ public class ProjectServiceImpl implements ProjectService {
     						}
     					}
     					project.setCreateDate(new Date(System.currentTimeMillis()));
+    					project.setCityCode("1");
     					if(projectDao.addProject(project))
     					{
     						List<UserIndex> indexList = new ArrayList<UserIndex>();

@@ -93,12 +93,13 @@ public class RelationDaoImpl extends BaseDao<Relation> implements RelationDao {
 		
 		//select a.* from question a where a.project_id in (select c.project_id from user_project c where c.user_id=33)
 		List<RectifyPojo> retDataWrapper = new ArrayList<RectifyPojo>();
-		String sql = "select real_name as userName from user where id in(select user_id from relation where about_id="
+		String sql = "select real_name as userName,id as rectifyUserId from user where id in(select user_id from relation where about_id="
 		+relation.getAboutId()+" and relation_type=0 and project_id="+relation.getProjectId()+")";
 		Session session=getSession();
 	    try{
 		    Query query = session.createSQLQuery(sql)
 				 .addScalar("userName",StandardBasicTypes.STRING)
+				 .addScalar("rectifyUserId", StandardBasicTypes.LONG)
 				 .setResultTransformer(Transformers.aliasToBean(RectifyPojo.class)); 
 		    retDataWrapper=query.list();
             

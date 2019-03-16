@@ -1011,12 +1011,10 @@ public class QuestionServiceImpl implements QuestionService {
 	        	pojo.add(i, questionpojo);
 	        }
 			if(pojo.size()>0){
-				 
 				pageInfos.setCurrentPage(dataWrappers.getCurrentPage());
 				pageInfos.setNumberPerPage(dataWrappers.getNumberPerPage());
 				pageInfos.setTotalNumber(dataWrappers.getTotalNumber());
 				pageInfos.setTotalPage(dataWrappers.getTotalPage());
-		
 				Long questionSort=questionDao.getQuestionListOfSort();
 				Long questionImportant=questionDao.getQuestionListOfImportant();
 				Long questionAll=questionDao.getQuestionList();
