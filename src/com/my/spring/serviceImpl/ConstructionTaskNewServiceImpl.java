@@ -456,15 +456,28 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 										Integer currentNode=gets.get(gets.size()-1).getCurrent_node();
 										if(currentNode!=itemDataList.size()){
 											ConstructionTaskNewPojo.setCurrentNodeName(itemDataList.get(currentNode).getName());
+										}else{
+											currentNode=currentNode-1;
 										}
 										ConstructionTaskNewPojo.setApprovalUserId(itemDataList.get(currentNode).getApprove_user());
 										/////0、同意  1、不同意
 										if(gets.get(gets.size()-1).getEnd_flag()==2){
-											ConstructionTaskNewPojo.setStatus(2);////不同意，即待修改
-											User user = userDao.getById(dataWrapper.getData().get(i).getCreateUser());///修改人为节点第一个人，即创建人
-											if(user!=null){
-												ConstructionTaskNewPojo.setApprovalUser(user.getRealName());///当前审批人的姓名
+											if(dataWrapper.getData().get(i).getUpdateDate()==null){
+												ConstructionTaskNewPojo.setStatus(2);////不同意，即待修改
+												User user = userDao.getById(dataWrapper.getData().get(i).getCreateUser());///修改人为节点第一个人，即创建人
+												if(user!=null){
+													ConstructionTaskNewPojo.setApprovalUser(user.getRealName());///当前审批人的姓名
+												}
+											}else{
+												ConstructionTaskNewPojo.setStatus(0);////不同意，已修改
+												ConstructionTaskNewPojo.setCurrentNodeName(itemDataList.get(0).getName());
+												ConstructionTaskNewPojo.setApprovalUserId(itemDataList.get(0).getApprove_user());
+												User user = userDao.getById(itemDataList.get(0).getApprove_user());///修改人为节点第一个人
+												if(user!=null){
+													ConstructionTaskNewPojo.setApprovalUser(user.getRealName());///当前审批流程第一个人
+												}
 											}
+											
 										}else if(gets.get(gets.size()-1).getEnd_flag()==1){
 											ConstructionTaskNewPojo.setStatus(1);///已完成，下一审批人为空
 										}else if(gets.get(gets.size()-1).getEnd_flag()==0){
@@ -819,7 +832,7 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 							plp.setCurrentNode(afterGets.get(i).getCurrentNode());
 							plp.setApproveDate(Parameters.getSdf().format(afterGets.get(i).getCreateDate()));
 							if(afterGets.get(i).getItemState()==1){
-								plp.setNextApproveUser(itemList.get(0).getName());
+								plp.setNextApproveUser("创建人");
 								plp.setEndFlag(2);
 							}else if(j<(itemList.size()-1)){
 								plp.setNextApproveUser(itemList.get(j+1).getName());
@@ -861,7 +874,7 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 								plp.setCurrentNode(processLog.getCurrentNode());
 								plp.setApproveDate(Parameters.getSdf().format(processLog.getCreateDate()));
 								if(processLog.getItemState()==1){
-									plp.setNextApproveUser(itemList.get(0).getName());
+									plp.setNextApproveUser("创建人");
 									plp.setEndFlag(2);
 								}else if(j<(itemList.size()-1)){
 									plp.setNextApproveUser(itemList.get(j+1).getName());
@@ -880,7 +893,7 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 							plp.setCurrentNode(processLog.getCurrentNode());
 							plp.setApproveDate(Parameters.getSdf().format(processLog.getCreateDate()));
 							if(processLog.getItemState()==1){
-								plp.setNextApproveUser(itemList.get(0).getName());
+								plp.setNextApproveUser("创建人");
 								plp.setEndFlag(2);
 							}else if(j<(itemList.size()-1)){
 								plp.setNextApproveUser(itemList.get(j+1).getName());
