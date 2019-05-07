@@ -425,4 +425,12 @@ create table award_read_state(
 	award_id bigint(20) unsigned not null,
 	state int//0、未读 1、已读
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+###检查项类型集合表单
+create table check_list_types(
+	check_id serial primary key,
+	create_user bigint(20) unsigned not null,
+	create_date datetime,
+	check_name text,
+	check_type int,
+	remark varchar(255)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
