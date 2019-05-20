@@ -434,3 +434,21 @@ create table check_list_types(
 	check_type int,
 	remark varchar(255)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+###图纸测点信息表
+create table paper_point_info(
+	point_id serial primary key,
+	project_id bigint(20) unsigned not null,
+	apartment_name varchar(255),
+	paper_url varchar(255),
+	abscissa int,
+	ordinate int,
+	proportion double,
+	paper_length double,
+	paper_width double,
+	point_num int,	
+	standrd int,
+	create_date datetime,
+	error_upper_limit int,
+	error_lower_limit int,
+	create_user bigint(20) unsigned not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

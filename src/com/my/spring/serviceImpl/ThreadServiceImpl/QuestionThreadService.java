@@ -1,20 +1,22 @@
 package com.my.spring.serviceImpl.ThreadServiceImpl;
+
 import com.my.spring.DAO.BaseDao;
 import com.my.spring.model.Question;
-
 public class QuestionThreadService extends BaseDao<Question>{
 	
 	private Question question;
 	
 	public QuestionThreadService(Question question){
 		this.setQuestion(question);
+		this.start();
 	}
-	/*public void run() {
+
+	public void run() {
 		if(save(this.question)){
 			System.out.println("添加安全问题完成！");
 		}
 		
-	}*/
+	}
 	public Question getQuestion() {
 		return question;
 	}

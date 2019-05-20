@@ -7,6 +7,7 @@ public class QualityThreadService extends BaseDao<QualityQuestion>{
 	
 	public QualityThreadService(QualityQuestion quality){
 		this.quality=quality;
+		this.start();
 	}
 	public void run() {
 		if(save(this.quality)){

@@ -283,6 +283,9 @@ public class MechanicPriceServiceImpl implements MechanicPriceService{
 							MechanicPricePojos mps = new MechanicPricePojos();
 							mps.setUserName(mp.getReal_name());
 							mps.setDaySalary(mp.getDay_salary());
+							if(mp.getNum()==null){
+								mp.setNum(0);
+							}
 							mps.setDayNum((mp.getNum()/ss));
 							mps.setHourNum(mp.getNum());
 							mps.setWorkName(mp.getWork_name());

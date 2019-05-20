@@ -1,6 +1,9 @@
 package com.my.spring.serviceImpl.ThreadServiceImpl;
 
 import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.my.spring.model.QualityQuestion;
 import com.my.spring.model.Question;
 
@@ -23,7 +26,6 @@ public class MainTest {
 		question.setTrades("测试");
 		question.setUserList("124,111");
 		questionService = new QuestionThreadService(question);
-		questionService.start();
 		/////////
 		quality.setIntro("线程异步测试");
 		quality.setName("线程异步测试");
@@ -35,7 +37,6 @@ public class MainTest {
 		quality.setTrades("测试");
 		quality.setUserList("124,111");
 		qualityService = new QualityThreadService(quality);
-		qualityService.start();
 	}
 
 }

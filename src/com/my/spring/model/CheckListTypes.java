@@ -66,4 +66,5 @@ public class CheckListTypes {
 		this.remark = remark;
 	}
 	
+	
 }
