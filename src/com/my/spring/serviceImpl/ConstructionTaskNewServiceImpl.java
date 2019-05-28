@@ -447,6 +447,7 @@ public class ConstructionTaskNewServiceImpl implements ConstructionTaskNewServic
 									List<ItemNodeList> gets = constructionTaskNewDao.getAllItemLog(dataWrapper.getData().get(i).getId());
 									if(!gets.isEmpty()){
 									////当前节点名称
+										@SuppressWarnings("unused")
 										int nums=gets.size();
 										if(processData!=null){
 											if(gets.size()>processData.getItemNum()){

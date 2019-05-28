@@ -11,12 +11,9 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.util.CellRangeAddress;
-
 import com.my.spring.model.UserLogCount;
 import com.my.spring.model.UserLogMonth;
 import com.my.spring.model.UserLogPart;
-import com.my.spring.model.UserLogPojos;
-import com.my.spring.parameters.ProjectDatas;
 
 public class UserLogEchartsToExcel {
 	public static void main(String[] arg){

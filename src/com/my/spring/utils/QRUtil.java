@@ -11,9 +11,7 @@ import java.io.File;
 import java.io.IOException;  
 import java.util.HashMap;  
 import java.util.Map;  
-  
 import javax.imageio.ImageIO;  
-  
 import com.google.zxing.BarcodeFormat;  
 import com.google.zxing.EncodeHintType;  
 import com.google.zxing.MultiFormatWriter;  
@@ -21,7 +19,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;  
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.my.spring.model.Item;
-import com.my.spring.service.ItemService;  
   
 /*** <p>Title: QRUtil</p> 
 * <p>Description:生成二维码 </p> 

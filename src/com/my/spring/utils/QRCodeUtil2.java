@@ -7,12 +7,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-
 import javax.imageio.ImageIO;
-
 import org.apache.commons.lang3.StringUtils;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;

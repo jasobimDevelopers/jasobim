@@ -89,6 +89,7 @@ public class QualityRectificationServiceImpl implements QualityRectificationServ
 		return result;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public DataWrapper<QualityRectification> addQualityRectification(String token, String fDate,String sendUsers,MultipartFile[] pics, MultipartFile[] vois, HttpServletRequest request,QualityRectification role,Long qualityCheckId) {
 		DataWrapper<QualityRectification> result = new DataWrapper<QualityRectification>();

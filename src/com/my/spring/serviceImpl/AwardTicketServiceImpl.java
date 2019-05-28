@@ -4,32 +4,26 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.my.spring.DAO.AwardReadStateDao;
 import com.my.spring.DAO.AwardTicketDao;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.QualityCheckDao;
 import com.my.spring.DAO.UserDao;
-import com.my.spring.DAO.UserIndexDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.AwardReadState;
 import com.my.spring.model.AwardTicket;
 import com.my.spring.model.AwardTicketPojo;
 import com.my.spring.model.Files;
-import com.my.spring.model.Notice;
 import com.my.spring.model.QualityCheck;
 import com.my.spring.model.User;
 import com.my.spring.model.UserId;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.AwardTicketService;
 import com.my.spring.service.FileService;
-import com.my.spring.service.UserIndexService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 

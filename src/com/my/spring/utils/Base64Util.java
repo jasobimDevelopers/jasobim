@@ -1,6 +1,5 @@
 package com.my.spring.utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 
 public class Base64Util {

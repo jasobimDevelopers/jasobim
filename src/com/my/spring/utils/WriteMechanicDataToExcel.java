@@ -6,19 +6,13 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-
-import com.alibaba.druid.mock.MockParameterMetaData.Parameter;
 import com.my.spring.model.MechanicPricePojos;
 import com.my.spring.model.ValueOutput;
-import com.my.spring.parameters.Parameters;
 
 public class WriteMechanicDataToExcel{
 	private static String[] months = {"一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"};

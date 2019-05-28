@@ -1,13 +1,6 @@
 package com.my.spring.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.math3.fitting.PolynomialCurveFitter;
-import org.apache.commons.math3.fitting.WeightedObservedPoint;
-
 import com.my.spring.parameters.Parameters;
-
 public class InstanceUtil {
 	
 	public static void main(String[] arg){

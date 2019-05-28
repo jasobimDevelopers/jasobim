@@ -40,7 +40,7 @@ public class QualityFineController {
     		@RequestParam(value="token",required=true) String token){
         return fineService.getQualityFineList(pageIndex,pageSize,duct,token);
     }
-    
+    //05 06 11 15 23 28 15
     
     @RequestMapping(value="/admin/updateQualityFine",method = RequestMethod.POST)
     @ResponseBody

@@ -1,10 +1,5 @@
 package com.my.spring.utils;
 
-import java.text.ParseException;
-import java.util.Date;
-
-import com.my.spring.parameters.Parameters;
-
 public class Timetest {
 
 	public static void main(String[] args) {

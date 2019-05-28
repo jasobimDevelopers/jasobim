@@ -71,6 +71,7 @@ public class QualityCheckServiceImpl implements QualityCheckService  {
 		return result;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public DataWrapper<Long> addQualityCheck(String token,MultipartFile[] pics, MultipartFile[] vois, HttpServletRequest request,QualityCheck role) {
 		DataWrapper<Long> result = new DataWrapper<Long>();

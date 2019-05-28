@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
@@ -186,6 +187,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         List<User> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(User.class);
+        criteria.addOrder(Order.desc("registerDate"));
     	if(user.getUserName() != null && !user.getUserName().equals("")) {
         	criteria.add(Restrictions.like("userName", "%" + user.getUserName() + "%"));
         }

@@ -71,7 +71,7 @@ public class FolderServiceImpl implements FolderService  {
 				if(folderOld!=null){
 					folders=folderDao.getAllFolderss(floder.getProjectId());
 					MenuRecursion mr = new MenuRecursion();
-					@SuppressWarnings("static-access")
+					//@SuppressWarnings("static-access")
 					List<Folder> childrens = mr.treeChildList(folders, floder.getId());
 					childrens.add(floder);
 					if(!childrens.isEmpty()){

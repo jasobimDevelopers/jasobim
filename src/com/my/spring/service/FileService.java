@@ -1,11 +1,8 @@
 package com.my.spring.service;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.web.multipart.MultipartFile;
-
 import com.my.spring.model.Files;
 
 public interface FileService {

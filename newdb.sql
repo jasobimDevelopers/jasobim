@@ -438,8 +438,7 @@ create table check_list_types(
 create table paper_point_info(
 	point_id serial primary key,
 	project_id bigint(20) unsigned not null,
-	apartment_name varchar(255),
-	paper_url varchar(255),
+	paper_of_measured_id bigint(20) unsigned not null,
 	abscissa int,
 	ordinate int,
 	proportion double,
@@ -450,5 +449,17 @@ create table paper_point_info(
 	create_date datetime,
 	error_upper_limit int,
 	error_lower_limit int,
+	create_user bigint(20) unsigned not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+###标点图纸管理表
+create table paper_of_measured(
+	paper_id serial primary key,
+	project_id bigint(20) unsigned not null,
+	paper_name varchar(255),
+	check_type_id bigint(20) unsigned not null,
+	file_id bigint(20) unsigned not null,
+	measured_num int,
+	paper_status int,
+	create_date datetime,
 	create_user bigint(20) unsigned not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
