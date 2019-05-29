@@ -6,7 +6,8 @@ public class QualityCheckPojo {
 	private Long id;
 	private String projectName;
 	private String createUserName;
-	private List<String> natureId;
+	private List<String> natureNames;
+	private String naureIds;
 	private Integer noticeType;
 	private String checkList;
 	private String checkContent;
@@ -78,10 +79,10 @@ public class QualityCheckPojo {
 		this.createUserName = createUserName;
 	}
 	public List<String> getNatureId() {
-		return natureId;
+		return natureNames;
 	}
-	public void setNatureId(List<String> natureId) {
-		this.natureId = natureId;
+	public void setNatureNames(List<String> natureNames) {
+		this.natureNames = natureNames;
 	}
 	public List<String> getPictures() {
 		return pictures;
@@ -94,6 +95,13 @@ public class QualityCheckPojo {
 	}
 	public void setVoices(List<String> voices) {
 		this.voices = voices;
+	}
+
+	public String getNaureIds() {
+		return naureIds;
+	}
+	public void setNaureIds(String naureIds) {
+		this.naureIds = naureIds;
 	}
 	public List<String> getInformUser() {
 		return informUser;

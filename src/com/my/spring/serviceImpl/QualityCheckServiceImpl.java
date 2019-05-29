@@ -240,6 +240,7 @@ public class QualityCheckServiceImpl implements QualityCheckService  {
 						}
 					}
 					if(dataWrapper.getData().get(i).getNatureId()!=null){
+						pojo.setNaureIds(dataWrapper.getData().get(i).getNatureId());
 						List<String> natures = new ArrayList<String>();
 						for(String s:dataWrapper.getData().get(i).getNatureId().split(",")){
 							Nature nature = new Nature();
@@ -248,7 +249,7 @@ public class QualityCheckServiceImpl implements QualityCheckService  {
 								natures.add(nature.getContent());
 							}
 						}
-						pojo.setNatureId(natures);
+						pojo.setNatureNames(natures);
 					}
 					dpp.add(pojo);
 				}
