@@ -6,9 +6,9 @@ import javax.persistence.*;
 @Table(name="comment")
 public class Comment {
 	private Long id;
-	private Long commentUser;
+	private Long commentUser;//评论人
 	private Long aboutId;
-	private Integer replyType;
+	private Integer replyType;//0、质量 1、安全 2、实测实量
 	private Date createDate;
 	private String commentContent;
 	private String pictures;

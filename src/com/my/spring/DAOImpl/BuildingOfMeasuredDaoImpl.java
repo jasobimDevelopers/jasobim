@@ -50,8 +50,8 @@ public class BuildingOfMeasuredDaoImpl extends BaseDao<BuildingOfMeasured> imple
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<BuildingOfMeasured> getBuildingOfMeasuredByProjectId(Long projectId) {
-		DataWrapper<BuildingOfMeasured> dataWrapper=new DataWrapper<BuildingOfMeasured>();
+	public DataWrapper<List<BuildingOfMeasured>> getBuildingOfMeasuredByProjectId(Long projectId) {
+		DataWrapper<List<BuildingOfMeasured>> dataWrapper=new DataWrapper<List<BuildingOfMeasured>>();
 		List<BuildingOfMeasured> ret = new ArrayList<BuildingOfMeasured>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(BuildingOfMeasured.class);
@@ -61,12 +61,15 @@ public class BuildingOfMeasuredDaoImpl extends BaseDao<BuildingOfMeasured> imple
         }catch (Exception e){
             e.printStackTrace();
         }
-        if (ret != null && ret.size() > 0) {
-        	dataWrapper.setData(ret.get(0));
-		}else{
-			dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+        if (ret != null) {
+        	dataWrapper.setData(ret);
 		}
 		return dataWrapper;
+	}
+
+	@Override
+	public BuildingOfMeasured getBuildingOfMeasuredById(Long bfmId) {
+		 return get(bfmId);
 	}
 
 }

@@ -44,7 +44,7 @@ public class CheckListsDaoImpl extends BaseDao<CheckLists> implements CheckLists
         Criteria criteria = session.createCriteria(CheckLists.class);
         criteria.addOrder(Order.desc("createDate"));
         criteria.add(Restrictions.eq("checkType", type));
-        criteria.add(Restrictions.eq("projectId", projectId));
+        //criteria.add(Restrictions.eq("projectId", projectId));
         if(pid!=null){
         	criteria.add(Restrictions.eq("pid",pid));
         }else{

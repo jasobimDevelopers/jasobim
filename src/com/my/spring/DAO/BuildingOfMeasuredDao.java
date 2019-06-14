@@ -9,5 +9,6 @@ public interface BuildingOfMeasuredDao {
     boolean deleteBuildingOfMeasured(Long id);
     boolean updateBuildingOfMeasured(BuildingOfMeasured building);
     DataWrapper<List<BuildingOfMeasured>> getBuildingOfMeasuredList();
-	DataWrapper<BuildingOfMeasured> getBuildingOfMeasuredByProjectId(Long projectId);
+	DataWrapper<List<BuildingOfMeasured>> getBuildingOfMeasuredByProjectId(Long projectId);
+	BuildingOfMeasured getBuildingOfMeasuredById(Long bfmId);
 }

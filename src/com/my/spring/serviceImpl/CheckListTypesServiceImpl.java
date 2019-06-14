@@ -54,6 +54,25 @@ public class CheckListTypesServiceImpl implements CheckListTypesService {
 		}
 		return result;
 	}
+	@Override
+	public DataWrapper<Void> updateCheckListTypes(String token, CheckListTypes role) {
+		DataWrapper<Void> result = new DataWrapper<Void>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(role.getCheckId()!=null){
+				CheckListTypes newOne = checkListTypesDao.getById(role.getCheckId());
+				if(role.getCheckName()!=null){
+					newOne.setCheckName(role.getCheckName());
+				}
+				if(!checkListTypesDao.updateCheckListTypes(newOne)){
+					result.setErrorCode(ErrorCodeEnum.Error);
+				}
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
 
 	@Override
 	public DataWrapper<List<CheckListTypes>> getCheckListTypesList(Integer pageIndex, Integer pageSize,

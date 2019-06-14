@@ -9,7 +9,7 @@ public class Reply {
 	private Long replyUser;
 	private Date createDate;
 	private String replyContent;
-	private Integer replyType;//0、质量 1、安全
+	private Integer replyType;//0、质量 1、安全 2、实测实量
 	private Long aboutId;
 	private Integer schedule;
 	private String pictures;

@@ -6,7 +6,13 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>jasobim</name>
-
+	<repositories>
+        <repository>
+            <id>com.e-iceblue</id>
+            <name>e-iceblue</name>
+            <url>http://repo.e-iceblue.com/nexus/content/groups/public/</url>
+        </repository>
+	</repositories>
 <!-- ////////////////////////////////////////////////////////////// -->
 	 <dependencyManagement>
         <dependencies>
@@ -21,6 +27,12 @@
     </dependencyManagement>
  <!-- ////////////////////////////////////////////////////////////// -->   
 	<dependencies>
+		<!-- pdf read active -->
+	    <dependency>
+	        <groupId> e-iceblue </groupId>
+	        <artifactId>spire.pdf</artifactId>
+	        <version>2.2.0</version>
+	    </dependency>
 	<!-- ////////////////////////////////////////////////////////////// -->  
 		<dependency>
             <groupId>org.springframework.data</groupId>
@@ -198,7 +210,7 @@
 		<dependency>
             <groupId>cn.jpush.api</groupId>
             <artifactId>jiguang-common</artifactId>
-            <version>1.0.8</version>
+            <version>1.1.6</version>
         </dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>

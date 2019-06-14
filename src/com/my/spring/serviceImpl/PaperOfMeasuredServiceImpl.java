@@ -88,10 +88,11 @@ public class PaperOfMeasuredServiceImpl implements PaperOfMeasuredService {
     }
 
 	@Override
-	public DataWrapper<PaperOfMeasuredPojo> getPaperOfMeasuredByProjectId(Long projectId,String token) {
+	public DataWrapper<List<PaperOfMeasuredPojo>> getPaperOfMeasuredByProjectId(Long projectId,String token) {
 		// TODO Auto-generated method stub
-		DataWrapper<PaperOfMeasuredPojo> dataWrapper = new DataWrapper<PaperOfMeasuredPojo>();
+		DataWrapper<List<PaperOfMeasuredPojo>> dataWrapper = new DataWrapper<List<PaperOfMeasuredPojo>>();
 		List<PaperOfMeasured> getList = new ArrayList<PaperOfMeasured>();
+		List<PaperOfMeasuredPojo> resultList = new ArrayList<PaperOfMeasuredPojo>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
         	getList=buildingDao.getPaperOfMeasuredByProjectId(projectId);
@@ -110,7 +111,9 @@ public class PaperOfMeasuredServiceImpl implements PaperOfMeasuredService {
 						pojo.setFileUrl(paperFiles.getUrl());
 					}
 				}
+				resultList.add(pojo);
 			}
+			dataWrapper.setData(resultList);
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

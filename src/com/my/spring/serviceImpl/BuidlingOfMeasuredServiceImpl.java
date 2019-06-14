@@ -9,6 +9,10 @@ import com.my.spring.model.User;
 import com.my.spring.service.BuildingOfMeasuredService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
+
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +28,9 @@ public class BuidlingOfMeasuredServiceImpl implements BuildingOfMeasuredService 
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(building!=null){
+					building.setCreateUser(userInMemory.getId());
+					building.setCreateDate(new Date());
 					if(!buildingDao.addBuildingOfMeasured(building)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else
@@ -34,9 +39,6 @@ public class BuidlingOfMeasuredServiceImpl implements BuildingOfMeasuredService 
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -70,19 +72,18 @@ public class BuidlingOfMeasuredServiceImpl implements BuildingOfMeasuredService 
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
- 				if(building!=null){
-					if(!buildingDao.updateBuildingOfMeasured(building)) 
-			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-					else
-						return dataWrapper;
-			        
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
-				}
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
+	 				if(building!=null){
+	 					BuildingOfMeasured newOne = buildingDao.getBuildingOfMeasuredById(building.getBfmId());
+						if(newOne!=null){
+							newOne.setbName(building.getbName());
+							if(!buildingDao.updateBuildingOfMeasured(newOne)) 
+					            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+							else
+								return dataWrapper;
+						}
+					}else{
+						dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
+					}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -90,9 +91,9 @@ public class BuidlingOfMeasuredServiceImpl implements BuildingOfMeasuredService 
     }
 
 	@Override
-	public DataWrapper<BuildingOfMeasured> getBuildingOfMeasuredByProjectId(Long projectId,String token) {
+	public DataWrapper<List<BuildingOfMeasured>> getBuildingOfMeasuredByProjectId(Long projectId,String token) {
 		// TODO Auto-generated method stub
-		DataWrapper<BuildingOfMeasured> dataWrapper = new DataWrapper<BuildingOfMeasured>();
+		DataWrapper<List<BuildingOfMeasured>> dataWrapper = new DataWrapper<List<BuildingOfMeasured>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 				dataWrapper=buildingDao.getBuildingOfMeasuredByProjectId(projectId);

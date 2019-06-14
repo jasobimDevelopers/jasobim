@@ -9,4 +9,5 @@ public interface CheckListTypesDao {
 	boolean deleteCheckListTypes(Long id);
 	boolean addCheckListTypes(CheckListTypes role);
 	DataWrapper<List<CheckListTypes>> getCheckListTypesListByType(Integer pageIndex, Integer pageSize, Integer type);
+	boolean updateCheckListTypes(CheckListTypes newOne);
 }

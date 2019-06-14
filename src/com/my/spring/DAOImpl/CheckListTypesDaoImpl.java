@@ -36,6 +36,12 @@ public class CheckListTypesDaoImpl extends BaseDao<CheckListTypes> implements Ch
 	}
 
 	@Override
+	public boolean updateCheckListTypes(CheckListTypes role) {
+		// TODO Auto-generated method stub
+		return update(role);
+	}
+
+	@Override
 	public DataWrapper<List<CheckListTypes>> getCheckListTypesListByType(Integer pageIndex, Integer pageSize,
 			Integer type) {
 		// TODO Auto-generated method stub

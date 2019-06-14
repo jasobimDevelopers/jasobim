@@ -333,8 +333,7 @@ create table manage_log(
 ###新版质量管理——指定人员、质量安全关系表
 create table relation(
 	id serial primary key,
-	relation_type int,/*0、质量 1、安全*/
-	quality_type int,/*0、整改单 1、检查单*/
+	relation_type int,/*0、质量 1、安全 2、实测实量*/
 	about_id bigint(20) unsigned not null,
 	user_id bigint(20) unsigned not null
 	project_id bigint(20) unsigned not null,
@@ -462,4 +461,42 @@ create table paper_of_measured(
 	paper_status int,
 	create_date datetime,
 	create_user bigint(20) unsigned not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+###实测实量楼栋表管理
+create table building_of_measured(
+	bfm_id serial primary key,
+	b_name varchar(255),
+	create_date datetime,
+	
+	project_id bigint(20) unsigned not null,
+	create_user bigint(20) unsigned not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+###实测实量楼层户型表
+create table measured_site(
+	site_id serial primary key,
+	bfm_id bigint(20) unsigned not null,
+	project_id bigint(20) unsigned not null,
+	check_user bigint(20) unsigned,
+	create_user bigint(20) unsigned not null,
+	paper_of_measured_id bigint(20) unsigned not null,
+	site_name varchar(255),
+	create_date datetime
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+###爆点表
+create table measured_problem(
+	id serial primary key,
+	check_site varchar(255),
+	check_date date,
+	check_user bigint(20) unsigned,
+	check_lists varchar(255),
+	detail varchar(255),
+	rectify_user bigint(20) unsigned,
+	finished_date date,
+	status int,
+	process int,
+	files varchar(255),
+	score int,
+	create_user bigint(20) unsigned not null,
+	create_date datetime,
+	project_id bigint(20) unsigned not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

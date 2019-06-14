@@ -4,7 +4,7 @@ import javax.persistence.*;
 @Table(name="relation")
 public class Relation {
 	private Long id;
-	private Integer relationType;
+	private Integer relationType;/*0、质量 1、安全 2、实测实量*/
 	private Long aboutId;
 	private Long userId;
 	private Integer state;

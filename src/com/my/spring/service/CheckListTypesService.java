@@ -10,4 +10,5 @@ public interface CheckListTypesService {
 	DataWrapper<CheckListTypes> addCheckListTypes(String token,CheckListTypes role);
 	DataWrapper<List<CheckListTypes>> getCheckListTypesList(Integer pageIndex, Integer pageSize, CheckListTypes CheckLists,
 			String token);
+	DataWrapper<Void> updateCheckListTypes(String token, CheckListTypes checkLists);
 }

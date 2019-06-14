@@ -18,10 +18,12 @@ import cn.jsms.api.template.TempSMSResult;
 import cn.jsms.api.template.TemplatePayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jsms.api.common.SMSClient;
 import cn.jsms.api.common.model.SMSPayload;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,31 +35,25 @@ public class JSMSExample {
     private static final String appkey = "02dfa5b53a1c4e59b8da19bf";
     private static final String masterSecret = "194740667b5d97847d902c8d";
 
-    private static final String devKey = "dd076e3ce130c2e22de1e0d9";
-    private static final String devSecret = "8c1aa69a930e54f4a94c121f";
+    private static final String devKey = "242780bfdd7315dc1989fedb";
+    private static final String devSecret = "2f5ced2bef64167950e63d13";
     
     public static void main(String[] args) {
-    	//testSendSMSCode();
+//    	testSendSMSCode();
     	//testSendValidSMSCode();
-//        testSendVoiceSMSCode();
-    	//testCreateTemplate();
-        //testSendTemplateSMS();
-    	//testGetAppSMSBalance();
-    	//testSendBatchTemplateSMS();
     	testSendBatchTemplateSMS("17612167237","123456");
-    	System.out.println();//生成短信验证码);
+//        testSendVoiceSMSCode();
+//        testSendTemplateSMS();
     }
     
     public static void testSendSMSCode() {
     	SMSClient client = new SMSClient(masterSecret, appkey);
     	SMSPayload payload = SMSPayload.newBuilder()
-				.setMobileNumber("17612167237")
-				.addTempPara("code", "112333")
-				.setTempId(2)
+				.setMobileNumber("13800138000")
+				.setTempId(1)
 				.build();
     	try {
 			SendSMSResult res = client.sendSMSCode(payload);
-			//return res.getResponseCode();
             System.out.println(res.toString());
 			LOG.info(res.toString());
 		} catch (APIConnectionException e) {
@@ -142,7 +138,7 @@ public class JSMSExample {
 	public static void testSendTemplateSMS() {
 	    SMSClient client = new SMSClient(masterSecret, appkey);
         SMSPayload payload = SMSPayload.newBuilder()
-                .setMobileNumber("17612167237")
+                .setMobileNumber("13800138000")
                 .setTempId(1)
                 .addTempPara("test", "jpush")
                 .build();
@@ -165,12 +161,7 @@ public class JSMSExample {
                 .setMobile(mobile)
                 .addTempPara("code", code)
                 .build();
-        /*RecipientPayload recipientPayload2 = new RecipientPayload.Builder()
-                .setMobile("13800138000")
-                .addTempPara("code", "829302")
-                .build();*/
         list.add(recipientPayload1);
-        //list.add(recipientPayload2);
         RecipientPayload[] recipientPayloads = new RecipientPayload[list.size()];
         BatchSMSPayload smsPayload = BatchSMSPayload.newBuilder()
                 .setTempId(1)
@@ -178,17 +169,18 @@ public class JSMSExample {
                 .build();
         try {
             BatchSMSResult result = client.sendBatchTemplateSMS(smsPayload);
+            if(result.isResultOK()){
+            	return true;
+            }
             LOG.info("Got result: " + result);
-            return true;
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            return false;
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            return false;
         }
+		return false;
     }
 
     public static void testSendScheduleSMS() {
@@ -336,7 +328,7 @@ public class JSMSExample {
     }
 
 
-    public static void testCreateTemplate() {
+    public void testCreateTemplate() {
         try {
             SMSClient client = new SMSClient(masterSecret, appkey);
             TemplatePayload payload = TemplatePayload.newBuilder()

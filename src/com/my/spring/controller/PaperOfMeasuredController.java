@@ -4,6 +4,8 @@ import com.my.spring.model.PaperOfMeasuredPojo;
 import com.my.spring.service.PaperOfMeasuredService;
 import com.my.spring.utils.DataWrapper;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,7 @@ public class PaperOfMeasuredController {
 
     @RequestMapping(value="/getPaperOfMeasuredByProjectId",method=RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<PaperOfMeasuredPojo> getPaperOfMeasuredByProjectId(
+    public DataWrapper<List<PaperOfMeasuredPojo>> getPaperOfMeasuredByProjectId(
     		@RequestParam(value = "projectId",required = true) Long projectId,
     		@RequestParam(value = "token",required = true) String token){
         return paperService.getPaperOfMeasuredByProjectId(projectId,token);

@@ -11,6 +11,7 @@ import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,19 @@ public class MeasuredSiteServiceImpl implements MeasuredSiteService {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(building!=null){
 					if(siteDetail!=null){
 						String[] nameList = siteDetail.split(",");
 						List<MeasuredSite> saveList = new ArrayList<MeasuredSite>();
 						for(int i=0;i<nameList.length;i++){
-							building.setSiteName(nameList[i]);
-							saveList.add(building);
+							MeasuredSite site = new MeasuredSite();
+							site.setBfmId(building.getBfmId());
+							site.setProjectId(building.getProjectId());
+							site.setPaperOfMeasuredId(building.getPaperOfMeasuredId());
+							site.setSiteName(nameList[i]);
+							site.setCreateUser(userInMemory.getId());
+							site.setCreateDate(new Date());
+							saveList.add(site);
 						}
 						if(!buildingDao.addMeasuredSiteList(saveList)){
 							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -44,9 +50,6 @@ public class MeasuredSiteServiceImpl implements MeasuredSiteService {
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -78,22 +81,29 @@ public class MeasuredSiteServiceImpl implements MeasuredSiteService {
     }
 
     @Override
-    public DataWrapper<Void> updateMeasuredSite(MeasuredSite building,String token) {
+    public DataWrapper<Void> updateMeasuredSite(Long id, String token, String siteNewName, Long paperOfMeasuredId,Long checkUser) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
- 				if(building!=null){
-					if(!buildingDao.updateMeasuredSite(building)) 
+			if(id!=null){
+				MeasuredSite newMeasuredSite = buildingDao.getById(id);
+				if(newMeasuredSite!=null){
+					if(siteNewName!=null){
+						newMeasuredSite.setSiteName(siteNewName);
+					}
+					if(paperOfMeasuredId!=null){
+						newMeasuredSite.setPaperOfMeasuredId(paperOfMeasuredId);
+					}
+					if(checkUser!=null){
+						newMeasuredSite.setCheckUser(checkUser);
+					}
+					if(!buildingDao.updateMeasuredSite(newMeasuredSite)) 
 			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					else
 						return dataWrapper;
-			        
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}
 			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
+				dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 			}
 		} else {
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
@@ -102,9 +112,9 @@ public class MeasuredSiteServiceImpl implements MeasuredSiteService {
     }
 
 	@Override
-	public DataWrapper<MeasuredSite> getMeasuredSiteListByBuildingId(Long buildingId,String token) {
+	public DataWrapper<List<MeasuredSite>> getMeasuredSiteListByBuildingId(Long buildingId,String token) {
 		// TODO Auto-generated method stub
-		DataWrapper<MeasuredSite> dataWrapper = new DataWrapper<MeasuredSite>();
+		DataWrapper<List<MeasuredSite>> dataWrapper = new DataWrapper<List<MeasuredSite>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
 			dataWrapper=buildingDao.getMeasuredSiteListByBuildingId(buildingId);

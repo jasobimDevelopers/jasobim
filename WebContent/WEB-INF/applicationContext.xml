@@ -150,6 +150,11 @@
                	<value>com.my.spring.model.QualityRectificationReadState</value>
                	<value>com.my.spring.model.QualityCheckReadState</value>
                	<value>com.my.spring.model.CheckListTypes</value>
+               	<value>com.my.spring.model.BuildingOfMeasured</value>
+               	<value>com.my.spring.model.MeasuredSite</value>
+               	<value>com.my.spring.model.PaperOfMeasured</value>
+               	<value>com.my.spring.model.PaperPointInfo</value>
+               	<value>com.my.spring.model.MeasuredProblem</value>
             </list>
         </property>
     </bean>
@@ -157,7 +162,7 @@
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://10.3.103.20:3306/bimdatas_test?characterEncoding=utf-8" />
-       <!--  <property name="url" value="jdbc:mysql://localhost:3306/bimdatas_test?characterEncoding=utf-8" /> -->
+        <!-- <property name="url" value="jdbc:mysql://localhost:3306/bimdatas_test?characterEncoding=utf-8" /> -->
         <property name="username" value="root" />
         <property name="password" value="108158" />
     </bean>

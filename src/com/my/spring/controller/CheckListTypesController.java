@@ -27,6 +27,14 @@ public class CheckListTypesController {
             @RequestParam(value = "token",required = true) String token){
         return checkListTypesService.addCheckListTypes(token,CheckLists);
     }
+    @RequestMapping(value="/admin/updateCheckListTypes", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> updateCheckListTypes(
+            @ModelAttribute CheckListTypes CheckLists,
+            @RequestParam(value = "token",required = true) String token){
+        return checkListTypesService.updateCheckListTypes(token,CheckLists);
+    }
+    
     @RequestMapping(value="/admin/deleteCheckListTypes",method=RequestMethod.GET)
     @ResponseBody
     public DataWrapper<Void> deleteCheckListTypes(

@@ -6,8 +6,8 @@ import javax.persistence.*;
 @Table(name="manage_log")
 public class ManageLog {
 	private Long id;
-	private Integer manageType;
-	private Integer actionType;
+	private Integer manageType;//0、质量 1、安全 2、实测实量
+	private Integer actionType;//0、整改回复  1、复检
 	private Date actionDate;
 	private Long operateUser;
 	private Long aboutId;

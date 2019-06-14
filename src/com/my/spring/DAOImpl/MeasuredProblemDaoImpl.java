@@ -1,43 +1,44 @@
 package com.my.spring.DAOImpl;
 
 import com.my.spring.DAO.BaseDao;
-import com.my.spring.DAO.MeasuredSiteDao;
+import com.my.spring.DAO.MeasuredProblemDao;
 import com.my.spring.enums.ErrorCodeEnum;
-import com.my.spring.model.MeasuredSite;
+import com.my.spring.model.MeasuredProblem;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 @Repository
-public class MeasuredSiteDaoImpl extends BaseDao<MeasuredSite> implements MeasuredSiteDao {
+public class MeasuredProblemDaoImpl extends BaseDao<MeasuredProblem> implements MeasuredProblemDao {
 
     @Override
-    public boolean addMeasuredSite(MeasuredSite building) {
+    public boolean addMeasuredProblem(MeasuredProblem building) {
         return save(building);
     }
 
     @Override
-    public boolean deleteMeasuredSite(Long id) {
+    public boolean deleteMeasuredProblem(Long id) {
         return delete(get(id));
     }
 
     @Override
-    public boolean updateMeasuredSite(MeasuredSite building) {
+    public boolean updateMeasuredProblem(MeasuredProblem building) {
         return update(building);
     }
 
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<MeasuredSite>> getMeasuredSiteListByBuildingId(Long buildingId) {
-		DataWrapper<List<MeasuredSite>> dataWrapper=new DataWrapper<List<MeasuredSite>>();
-		List<MeasuredSite> ret = new ArrayList<MeasuredSite>();
+	public DataWrapper<List<MeasuredProblem>> getMeasuredProblemByProjectId(Long projectId) {
+		DataWrapper<List<MeasuredProblem>> dataWrapper=new DataWrapper<List<MeasuredProblem>>();
+		List<MeasuredProblem> ret = new ArrayList<MeasuredProblem>();
         Session session = getSession();
-        Criteria criteria = session.createCriteria(MeasuredSite.class);
-        criteria.add(Restrictions.eq("bfmId",buildingId));
+        Criteria criteria = session.createCriteria(MeasuredProblem.class);
+        criteria.add(Restrictions.eq("projectId",projectId));
         try {
             ret = criteria.list();
         }catch (Exception e){
@@ -52,15 +53,10 @@ public class MeasuredSiteDaoImpl extends BaseDao<MeasuredSite> implements Measur
 	}
 
 	@Override
-	public boolean addMeasuredSiteList(List<MeasuredSite> building) {
+	public MeasuredProblem getById(Long measuredId) {
 		// TODO Auto-generated method stub
-		return saveList(building);
+		return get(measuredId);
 	}
 
-	@Override
-	public MeasuredSite getById(Long id) {
-		// TODO Auto-generated method stub
-		return get(id);
-	}
-
+	
 }
