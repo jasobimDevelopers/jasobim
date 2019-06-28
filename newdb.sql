@@ -443,12 +443,10 @@ create table paper_point_info(
 	proportion double,
 	paper_length double,
 	paper_width double,
-	point_num int,	
-	standrd int,
-	create_date datetime,
-	error_upper_limit int,
-	error_lower_limit int,
-	create_user bigint(20) unsigned not null
+	create_date timestamp DEFAULT CURRENT_TIMESTAMP not null,
+	create_user bigint(20) unsigned not null,
+	tag int,
+	status int
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ###标点图纸管理表
 create table paper_of_measured(
@@ -457,7 +455,7 @@ create table paper_of_measured(
 	paper_name varchar(255),
 	check_type_id bigint(20) unsigned not null,
 	file_id bigint(20) unsigned not null,
-	measured_num int,
+	measured_num int default 0,
 	paper_status int,
 	create_date datetime,
 	create_user bigint(20) unsigned not null
@@ -500,3 +498,58 @@ create table measured_problem(
 	create_date datetime,
 	project_id bigint(20) unsigned not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+####测量点位单条数据表模板表
+create table paper_point_info_item(
+	id serial primary key,
+	point_id bigint(20) unsigned not null,
+	project_id bigint(20) unsigned not null,
+	check_type_id bigint(20) unsigned not null,
+	standard_num int,
+	flag varchar(255),
+	error_upper_limit int,
+	error_lower_limit int
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+####测量点位数据录入表
+create table point_data_input_log(
+	id serial primary key,
+	point_id bigint(20) unsigned not null,
+	bfm_id bigint(20) unsigned not null,
+	measured_site_id bigint(20) unsigned not null,
+	project_id bigint(20) unsigned not null,
+	check_type_id bigint(20) unsigned not null,
+	create_user bigint(20) unsigned not null,
+	create_date timestamp DEFAULT CURRENT_TIMESTAMP not null,
+	input_data int,
+	flag varchar(255),
+	status int
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+###检查项图纸关系表
+create table paper_point_relation(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	paper_of_measured_id bigint(20) unsigned not null,
+	check_type_id bigint(20) unsigned not null,
+	point_id bigint(20) unsigned not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8
+###区域和图纸的关系表
+create table site_paper_relation(
+	id serial primary key,
+	project_id bigint(20) unsigned not null,
+	site_id bigint(20) unsigned not null,
+	bfm_id bigint(20) unsigned not null,
+	paper_of_measured_id bigint(20) unsigned not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8
+###用户操作记录表
+create table paper_point_nums_log(
+	id serial primary key,
+	user_id bigint(20) unsigned not null,
+	project_id bigint(20) unsigned not null,
+	point_nums int default 0,
+	done_nums int default 0,
+	problem_nums int default 0,
+	building_names varchar(255),
+	check_types varchar(255),
+	create_date timestamp DEFAULT CURRENT_TIMESTAMP not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8

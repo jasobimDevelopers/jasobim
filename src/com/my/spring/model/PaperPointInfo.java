@@ -4,7 +4,7 @@ import java.util.Date;
 import javax.persistence.*;
 @Entity
 @Table(name="paper_point_info")
-public class PaperPointInfo {
+public class PaperPointInfo {///测量点位具体信息表
 	private Long pointId;
 	private Long projectId;
 	private Long paperOfMeasuredId;//户型名称
@@ -13,12 +13,10 @@ public class PaperPointInfo {
 	private Double proportion;//比例
 	private Double paperLength;//图纸长度
 	private Double paperWidth;//图纸宽度
-	private Integer errorUpperLimit;//误差上限
-	private Integer errorLowerLimit;//误差下限
-	private Integer pointNum;//测量点位总数
-	private Integer standard;//测量标准
 	private Date createDate;
 	private Long createUser;
+	private Integer tag;//序列号
+	private Integer status;//0、正常  1、爆点（当传过来的数据中有一个不正常时）
 	
 	@Id
 	@GeneratedValue
@@ -78,23 +76,6 @@ public class PaperPointInfo {
 		this.paperWidth = paperWidth;
 	}
 	@Basic
-	@Column(name="point_num")
-	public Integer getPointNum() {
-		return pointNum;
-	}
-	public void setPointNum(Integer pointNum) {
-		this.pointNum = pointNum;
-	}
-	
-	@Basic
-	@Column(name="standard")
-	public Integer getStandard() {
-		return standard;
-	}
-	public void setStandard(Integer standard) {
-		this.standard = standard;
-	}
-	@Basic
 	@Column(name="create_date")
 	public Date getCreateDate() {
 		return createDate;
@@ -111,28 +92,26 @@ public class PaperPointInfo {
 		this.createUser = createUser;
 	}
 	@Basic
-	@Column(name="error_upper_limit")
-	public Integer getErrorUpperLimit() {
-		return errorUpperLimit;
-	}
-	public void setErrorUpperLimit(Integer errorUpperLimit) {
-		this.errorUpperLimit = errorUpperLimit;
-	}
-	@Basic
-	@Column(name="error_lower_limit")
-	public Integer getErrorLowerLimit() {
-		return errorLowerLimit;
-	}
-	public void setErrorLowerLimit(Integer errorLowerLimit) {
-		this.errorLowerLimit = errorLowerLimit;
-	}
-	@Basic
 	@Column(name="paper_of_measured_id")
 	public Long getPaperOfMeasuredId() {
 		return paperOfMeasuredId;
 	}
 	public void setPaperOfMeasuredId(Long paperOfMeasuredId) {
 		this.paperOfMeasuredId = paperOfMeasuredId;
+	}
+	@Basic
+	@Column(name="tag")
+	public Integer getTag() {
+		return tag;
+	}
+	public void setTag(Integer tag) {
+		this.tag = tag;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	
 }

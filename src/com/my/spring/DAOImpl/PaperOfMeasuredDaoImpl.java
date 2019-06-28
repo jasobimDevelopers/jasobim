@@ -81,4 +81,10 @@ public class PaperOfMeasuredDaoImpl extends BaseDao<PaperOfMeasured> implements 
 		 
 		return false;
 	}
+
+	@Override
+	public PaperOfMeasured getById(Long paperOfMeasuredId) {
+		// TODO Auto-generated method stub
+		return get(paperOfMeasuredId);
+	}
 }

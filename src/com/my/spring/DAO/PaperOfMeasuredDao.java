@@ -11,4 +11,5 @@ public interface PaperOfMeasuredDao {
     DataWrapper<List<PaperOfMeasured>> getPaperOfMeasuredList();
 	List<PaperOfMeasured> getPaperOfMeasuredByProjectId(Long projectId);
 	boolean deletePaperOfMeasuredByProjectId(Long id);
+	PaperOfMeasured getById(Long paperOfMeasuredId);
 }

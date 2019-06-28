@@ -9,6 +9,7 @@ public class Comment {
 	private Long commentUser;//评论人
 	private Long aboutId;
 	private Integer replyType;//0、质量 1、安全 2、实测实量
+	private Integer type;//内容底色（0、白色或者是无色 1、主题色 2、红色）
 	private Date createDate;
 	private String commentContent;
 	private String pictures;
@@ -81,5 +82,13 @@ public class Comment {
 		this.voices = voices;
 	}
 	
+	@Basic
+	@Column(name="type")
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
+	}
 	
 }

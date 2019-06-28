@@ -15,6 +15,10 @@ public class MeasuredProblemPojo {
 	private Integer process;//进度百分比
 	private List<String> files;
 	private List<String> voices;
+	private String content;
+	private String contentDetail;
+	private String title;
+	private Long pointId;
 	private Integer score;
 	private String createUser;
 	private String createDate;
@@ -113,6 +117,32 @@ public class MeasuredProblemPojo {
 	}
 	public void setVoices(List<String> voices) {
 		this.voices = voices;
+	}
+	
+	public Long getPointId() {
+		return pointId;
+	}
+	public void setPointId(Long pointId) {
+		this.pointId = pointId;
+	}
+	
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getContentDetail() {
+		return contentDetail;
+	}
+	public void setContentDetail(String contentDetail) {
+		this.contentDetail = contentDetail;
 	}
 	
 }

@@ -7,13 +7,16 @@ import javax.persistence.*;
 public class MeasuredProblem {
 	private Long id;
 	private String checkSite;//检查部位
+	private Long bfmId;
+	private Long siteId;
 	private Date checkDate;//检查日期
+	private Long inputUserId;//测量人
 	private Long checkUser;//检查人
-	private String checkLists;//检查项
+	private Long checkListId;//检查项
 	private String detail;//问题描述
 	private Long rectifyUser;//整改人
 	private Date finishedDate;//限定完成时间
-	private Integer status;//0、待指派 1、进行中 2、待销项
+	private Integer status;//0、待指派 1、进行中 2、待验收
 	private Integer process;//进度百分比
 	private String files;
 	private String voices;
@@ -21,7 +24,7 @@ public class MeasuredProblem {
 	private Integer score;
 	private Long createUser;
 	private Date createDate;
-	
+	private Long pointId;	
 	@Id
 	@GeneratedValue
 	@Column(name="id")
@@ -57,12 +60,12 @@ public class MeasuredProblem {
 		this.checkUser = checkUser;
 	}
 	@Basic
-	@Column(name="check_lists")
-	public String getCheckLists() {
-		return checkLists;
+	@Column(name="check_list_id")
+	public Long getCheckListId() {
+		return checkListId;
 	}
-	public void setCheckLists(String checkLists) {
-		this.checkLists = checkLists;
+	public void setCheckListId(Long checkListId) {
+		this.checkListId = checkListId;
 	}
 	@Basic
 	@Column(name="detail")
@@ -156,5 +159,37 @@ public class MeasuredProblem {
 	public void setVoices(String voices) {
 		this.voices = voices;
 	}
+	@Basic
+	@Column(name="site_id")
+	public Long getSiteId() {
+		return siteId;
+	}
+	public void setSiteId(Long siteId) {
+		this.siteId = siteId;
+	}
+	@Basic
+	@Column(name="bfm_id")
+	public Long getBfmId() {
+		return bfmId;
+	}
+	public void setBfmId(Long bfmId) {
+		this.bfmId = bfmId;
+	}
+	@Basic
+	@Column(name="point_id")
+	public Long getPointId() {
+		return pointId;
+	}
+	public void setPointId(Long pointId) {
+		this.pointId = pointId;
+	}
 	
+	@Basic
+	@Column(name="input_user_id")
+	public Long getInputUserId() {
+		return inputUserId;
+	}
+	public void setInputUserId(Long inputUserId) {
+		this.inputUserId = inputUserId;
+	}
 }

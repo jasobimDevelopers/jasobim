@@ -32,6 +32,9 @@
     </bean>   -->
 	<!-- 配置RestTemplate -->
     <!--Http client Factory -->
+    
+    <!-- 注解事物 -->
+    <!-- <tx:annotation-driven transaction-manager="transactionManager"/> -->
     <bean id="httpClientFactory"
         class="org.springframework.http.client.SimpleClientHttpRequestFactory">
         <property name="connectTimeout" value="10000" />
@@ -56,8 +59,8 @@
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hiberante.format_sql">true</prop>
                 <prop key="hiberante.connection.autocommit">true</prop>
-                <prop key="hibernate.connection.url">jdbc:mysql://10.3.103.20:3306/bimdatas_test</prop>
-                <!-- <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas_test</prop> -->
+                <!-- <prop key="hibernate.connection.url">jdbc:mysql://10.3.103.20:3306/bimdatas_test</prop>
+ -->                <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/bimdatas_test</prop>
             </props>
         </property>
         <property name="annotatedClasses">
@@ -86,8 +89,6 @@
                	<value>com.my.spring.model.AdvancedOrder</value>
                	<value>com.my.spring.model.AdvancedOrderCollect</value>
                	<value>com.my.spring.model.Normativefiles</value>
-               	<value>com.my.spring.model.MeasuredData</value>
-               	<value>com.my.spring.model.MeasuredDatas</value>
                	<value>com.my.spring.model.HouseType</value>
                	<value>com.my.spring.model.ProjectFiles</value>
                	<value>com.my.spring.model.Folder</value>
@@ -154,15 +155,20 @@
                	<value>com.my.spring.model.MeasuredSite</value>
                	<value>com.my.spring.model.PaperOfMeasured</value>
                	<value>com.my.spring.model.PaperPointInfo</value>
-               	<value>com.my.spring.model.MeasuredProblem</value>
+               	<value>com.my.spring.model.MeasuredProblem</value>               	
+               	<value>com.my.spring.model.PointDataInputLog</value>               	
+               	<value>com.my.spring.model.PaperPointInfoItem</value>
+               	<value>com.my.spring.model.PaperPointRelation</value>
+               	<value>com.my.spring.model.SitePaperRelation</value>
+               	<value>com.my.spring.model.PaperPointNumsLog</value>
             </list>
         </property>
     </bean>
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://10.3.103.20:3306/bimdatas_test?characterEncoding=utf-8" />
-        <!-- <property name="url" value="jdbc:mysql://localhost:3306/bimdatas_test?characterEncoding=utf-8" /> -->
+<!--         <property name="url" value="jdbc:mysql://10.3.103.20:3306/bimdatas_test?characterEncoding=utf-8" />
+ -->        <property name="url" value="jdbc:mysql://localhost:3306/bimdatas_test?characterEncoding=utf-8" />
         <property name="username" value="root" />
         <property name="password" value="108158" />
     </bean>

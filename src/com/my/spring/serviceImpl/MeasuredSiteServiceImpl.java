@@ -1,10 +1,12 @@
 package com.my.spring.serviceImpl;
 
 import com.my.spring.DAO.MeasuredSiteDao;
+import com.my.spring.DAO.SitePaperRelationDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.MeasuredSite;
+import com.my.spring.model.SitePaperRelation;
 import com.my.spring.model.User;
 import com.my.spring.service.MeasuredSiteService;
 import com.my.spring.utils.DataWrapper;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Service;
 public class MeasuredSiteServiceImpl implements MeasuredSiteService {
     @Autowired
     MeasuredSiteDao buildingDao;
+    @Autowired
+    SitePaperRelationDao sprDao;
     @Autowired
     UserDao userDao;
     @Override
@@ -45,6 +49,17 @@ public class MeasuredSiteServiceImpl implements MeasuredSiteService {
 						}
 						if(!buildingDao.addMeasuredSiteList(saveList)){
 							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+						}else{
+							List<SitePaperRelation> sprList = new ArrayList<SitePaperRelation>();
+							for(int j=0;j<saveList.size();j++){
+								SitePaperRelation spr = new SitePaperRelation();
+								spr.setBfmId(saveList.get(j).getBfmId());
+								spr.setSiteId(saveList.get(j).getSiteId());
+								spr.setProjectId(saveList.get(j).getProjectId());
+								spr.setPaperOfMeasuredId(saveList.get(j).getPaperOfMeasuredId());
+								sprList.add(spr);
+							}
+							sprDao.addSitePaperRelation(sprList);
 						}
 					}
 				}else{
@@ -65,9 +80,13 @@ public class MeasuredSiteServiceImpl implements MeasuredSiteService {
 			if(userInMemory.getUserType()==UserTypeEnum.Admin.getType()){
 				if(id!=null){
 					if(!buildingDao.deleteMeasuredSite(id)) 
-			            dataWrapper.setErrorCode(ErrorCodeEnum.Error);
-					else
+					{
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}
+					else{
+						sprDao.deleteSitePaperRelationBySiteId(id);
 						return dataWrapper;
+					}
 				}else{
 					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
 				}

@@ -29,6 +29,24 @@ public class MeasuredProblemController {
             @RequestParam(value = "fDate",required = true) String fDate){
         return buildingService.addMeasuredProblem(building,token,files,vois,request,fDate);
     }
+    @RequestMapping(value="/updateMeasuredProblem", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> updateMeasuredProblem(
+            @ModelAttribute MeasuredProblem building,
+            @RequestParam(value = "files", required = true) MultipartFile[] files,
+            @RequestParam(value = "vois", required = true) MultipartFile[] vois,
+            HttpServletRequest request,
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "fDate",required = true) String fDate){
+        return buildingService.updateMeasuredProblem(building,token,files,vois,request,fDate);
+    }
+    @RequestMapping(value="/updateMeasuredProblemList", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> updateMeasuredProblemList(
+            @RequestParam(value = "token",required = true) String token,
+            @RequestParam(value = "editString",required = true) String editString){
+        return buildingService.updateMeasuredProblemList(token,editString);
+    }
     @RequestMapping(value="/deleteMeasuredProblem")
     @ResponseBody
     public DataWrapper<Void> deleteMeasuredProblem(
@@ -42,8 +60,19 @@ public class MeasuredProblemController {
     @ResponseBody
     public DataWrapper<List<MeasuredProblemPojo>> getMeasuredProblemByProjectId(
     		@RequestParam(value = "projectId",required = true) Long projectId,
+    		@RequestParam(value = "id",required = false) Long id,
+    		@RequestParam(value = "status",required = false) Integer status,
+    		@RequestParam(value = "bfmIds",required = false) String bfmIds,
+    		@RequestParam(value = "checkTypeIds",required = false) String checkTypeIds,
     		@RequestParam(value = "token",required = true) String token){
-        return buildingService.getMeasuredProblemByProjectId(projectId,token);
+        return buildingService.getMeasuredProblemByProjectId(id,projectId,token,status,bfmIds,checkTypeIds);
+    }
+    @RequestMapping(value="/getMeasuredProblemByPointId",method=RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<MeasuredProblemPojo> getMeasuredProblemByPointId(
+    		@RequestParam(value = "pointId",required = true) Long pointId,
+    		@RequestParam(value = "token",required = true) String token){
+        return buildingService.getMeasuredProblemByPointId(pointId,token);
     }
     
     /*
