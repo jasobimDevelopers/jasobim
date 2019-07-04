@@ -45,6 +45,9 @@ public class NewsInfoServiceImpl implements NewsInfoService {
         if (userInMemory != null) {
 			if(NewsInfo!=null){
 				NewsInfo.setCreateUserId(userInMemory.getId());
+				NewsInfo.setReadNum(0);
+				NewsInfo.setReadState(0);
+				NewsInfo.setReadStatus(0);
 				NewsInfo.setCreateDate(new Date(System.currentTimeMillis()));
 				if(!NewsInfoDao.addNewsInfo(NewsInfo)) 
 				{
@@ -89,9 +92,53 @@ public class NewsInfoServiceImpl implements NewsInfoService {
     	DataWrapper<List<NewsInfo>> dataWrapper = new DataWrapper<List<NewsInfo>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-				dataWrapper=NewsInfoDao.getNewsInfoList(pageIndex,pageSize,NewsInfo);
+        		/*设置阅读数记录*/
+        		if(NewsInfo!=null){
+        			if(NewsInfo.getId()!=null){
+        				NewsInfo ne = NewsInfoDao.getById(NewsInfo.getId());
+        				if(ne!=null){
+        					ne.setReadNum(ne.getReadNum()+1);
+        					NewsInfoDao.updateNewsInfo(ne);
+        				}
+        			}
+        		}
+        		/*获取的时候单独查询阅读量最多的即热门的、置顶的两条资讯*/
+        		List<NewsInfo> headList = NewsInfoDao.getNewsInfoListByOptions();
+				dataWrapper=NewsInfoDao.getNewsInfoList(pageIndex,pageSize,NewsInfo,headList);
 				if(!dataWrapper.getData().isEmpty()){
 					List<NewsInfoPojo> NewsInfoPojoList = new ArrayList<NewsInfoPojo>();
+					if(!headList.isEmpty()){
+						for(int j=0;j<headList.size();j++){
+							NewsInfoPojo NewsInfoPojo =new NewsInfoPojo();
+							if(NewsInfo.getId()!=null){
+								NewsInfoPojo.setContent(headList.get(j).getContent());
+								if(headList.get(j).getCreateUserId()!=null){
+									NewsInfoPojo.setCreateUserId(headList.get(j).getCreateUserId());
+									User user=userDao.getById(headList.get(j).getCreateUserId());
+									NewsInfoPojo.setCreateUserName(user.getRealName());
+								}
+							}
+							NewsInfoPojo.setCreateDate(Parameters.getSdf().format(headList.get(j).getCreateDate()));
+							NewsInfoPojo.setId(headList.get(j).getId());
+							NewsInfoPojo.setRemark(headList.get(j).getRemark());
+							NewsInfoPojo.setTopic(headList.get(j).getTopic());
+							if(headList.get(j).getRemark()!=null){
+								if(headList.get(j).getRemark().equals("from-url")){
+									NewsInfoPojo.setContent(headList.get(j).getContent());
+								}
+							}
+							if(headList.get(j).getCreateUserId()!=null){
+								User user= new User();
+								user=userDao.getById(headList.get(j).getCreateUserId());
+								if(user!=null){
+									NewsInfoPojo.setCreateUserName(user.getRealName());
+								}
+							}
+							if(NewsInfoPojo!=null){
+								NewsInfoPojoList.add(NewsInfoPojo);
+							}
+						}
+	        		}
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						NewsInfoPojo NewsInfoPojo =new NewsInfoPojo();
 						if(NewsInfo.getId()!=null){

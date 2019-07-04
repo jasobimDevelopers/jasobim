@@ -20,6 +20,7 @@ import com.my.spring.model.ManageLog;
 import com.my.spring.model.MeasuredProblem;
 import com.my.spring.model.MeasuredProblemEditPojo;
 import com.my.spring.model.MeasuredProblemPojo;
+import com.my.spring.model.MeasuredUserInfo;
 import com.my.spring.model.PointDataInputLog;
 import com.my.spring.model.PointInputLog;
 import com.my.spring.model.Relation;
@@ -143,33 +144,6 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
         return dataWrapper;
     }
 
-    @Override
-    public DataWrapper<Void> updateMeasuredProblem(MeasuredProblem building,String token) {
-        DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
-        User userInMemory = SessionManager.getSession(token);
-        if (userInMemory != null) {
- 				if(building!=null){
-					if(!mpDao.updateMeasuredProblem(building)) 
-					{ dataWrapper.setErrorCode(ErrorCodeEnum.Error);}
-					else{
-						/*添加相关人员记录表*/
-						Relation relation2 = new Relation();
-						relation2.setAboutId(building.getId());
-						relation2.setProjectId(building.getProjectId());
-						relation2.setRelationType(2);
-						relation2.setUserId(building.getRectifyUser());
-						relationDao.addRelation(relation2);
-						return dataWrapper;
-					}
-				}else{
-					dataWrapper.setErrorCode(ErrorCodeEnum.Empty_Inputs);
-				}
-			}else{
-				dataWrapper.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
-        return dataWrapper;
-    }
-
 	@Override
 	public DataWrapper<List<MeasuredProblemPojo>> getMeasuredProblemByProjectId(Long id,Long projectId,String token,Integer status,String bfmIds,String checkTypeIds) {
 		DataWrapper<List<MeasuredProblemPojo>> dataWrapper = new DataWrapper<List<MeasuredProblemPojo>>();
@@ -212,7 +186,6 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
         					pojo.setCheckLists(clt.getCheckName());
         				}
         			}
-        			test();
         			if(results.getData().get(i).getPointId()!=null){
         				pojo.setPointId(results.getData().get(i).getPointId());
         				PointDataInputLog dataLogs = dataDao.getPointDataInputLogListByOptions(results.getData().get(i).getPointId(),results.getData().get(i).getCheckListId(),results.getData().get(i).getInputUserId());
@@ -247,48 +220,51 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
         			}
         			String createDate = Parameters.getSdfs().format(results.getData().get(i).getCreateDate());
     				pojo.setCreateDate(createDate);
-        			if(results.getData().get(i).getCheckUser()!=null){
-        				User checkUser = userDao.getById(results.getData().get(i).getCheckUser());
-        				if(checkUser!=null){
-        					pojo.setCheckUser(checkUser.getRealName());
-        				}
+    				if(id!=null){
+        				List<MeasuredUserInfo> users = mpDao.getAboutUserIcons(id);
+        				pojo.setAboutIcons(users);
+        				if(results.getData().get(i).getCheckUser()!=null){
+            				User checkUser = userDao.getById(results.getData().get(i).getCheckUser());
+            				if(checkUser!=null){
+            					pojo.setCheckUser(checkUser.getRealName());
+            				}
+            			}
+            			if(results.getData().get(i).getCreateUser()!=null){
+            				User createUser = userDao.getById(results.getData().get(i).getCreateUser());
+            				if(createUser!=null){
+            					pojo.setCreateUser(createUser.getRealName());
+            				}
+            			}
+            			if(results.getData().get(i).getFiles()!=null){
+            				List<String> files = new ArrayList<String>();
+            				String[] filesstr=results.getData().get(i).getFiles().split(",");
+            				for(int j=0;j<filesstr.length;j++)
+            				{
+            					Files file1 = fileService.getById(Long.valueOf(filesstr[j]));
+            					if(file1!=null){
+            						files.add(file1.getUrl());
+            					}
+            				}
+            				pojo.setFiles(files);
+            			}
+            			if(results.getData().get(i).getVoices()!=null){
+            				List<String> files = new ArrayList<String>();
+            				String[] filesstr=results.getData().get(i).getVoices().split(",");
+            				for(int j=0;j<filesstr.length;j++)
+            				{
+            					Files file1 = fileService.getById(Long.valueOf(filesstr[j]));
+            					if(file1!=null){
+            						files.add(file1.getUrl());
+            					}
+            				}
+            				pojo.setVoices(files);
+            			}
         			}
-        			if(results.getData().get(i).getCreateUser()!=null){
-        				User createUser = userDao.getById(results.getData().get(i).getCreateUser());
-        				if(createUser!=null){
-        					pojo.setCreateUser(createUser.getRealName());
-        				}
-        			}
-        			if(results.getData().get(i).getFiles()!=null){
-        				List<String> files = new ArrayList<String>();
-        				String[] filesstr=results.getData().get(i).getFiles().split(",");
-        				for(int j=0;j<filesstr.length;j++)
-        				{
-        					Files file1 = fileService.getById(Long.valueOf(filesstr[j]));
-        					if(file1!=null){
-        						files.add(file1.getUrl());
-        					}
-        				}
-        				pojo.setFiles(files);
-        			}
-        			if(results.getData().get(i).getVoices()!=null){
-        				List<String> files = new ArrayList<String>();
-        				String[] filesstr=results.getData().get(i).getVoices().split(",");
-        				for(int j=0;j<filesstr.length;j++)
-        				{
-        					Files file1 = fileService.getById(Long.valueOf(filesstr[j]));
-        					if(file1!=null){
-        						files.add(file1.getUrl());
-        					}
-        				}
-        				pojo.setVoices(files);
-        			}
+        			
         			if(results.getData().get(i).getRectifyUser()!=null){
-        				User rectifyUser = userDao.getById(results.getData().get(i).getRectifyUser());
-        				if(rectifyUser!=null){
-        					pojo.setRectifyUser(rectifyUser.getRealName());
-        				}
+        				pojo.setRectifyUser(results.getData().get(i).getRectifyUser());
         			}
+        			
         			datas.add(pojo);
         		}
         		dataWrapper.setData(datas);
@@ -446,6 +422,7 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
 							mps.setVoices(filesStr);;
 						}
 						mps.setDetail(building.getDetail());
+						mps.setStatus(1);
 						mps.setRectifyUser(building.getRectifyUser());
 						if(!mpDao.updateMeasuredProblem(mps)){
 							dataWrapper.setErrorCode(ErrorCodeEnum.Error);
@@ -453,13 +430,18 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
 						else{
 							/*添加相关人员记录表*/
 							List<Relation> relationList = new ArrayList<Relation>();
-							Relation relation2 = new Relation();
-							relation2.setAboutId(building.getId());
-							relation2.setProjectId(building.getProjectId());
-							relation2.setRelationType(2);
-							relation2.setUserId(building.getRectifyUser());
-							relationList.add(relation2);
-							relationDao.addRelationList(relationList);
+							if(building.getRectifyUser()!=null){
+								String[] rectifyUsers = building.getRectifyUser().split(",");
+								for(int n=0;n<rectifyUsers.length;n++){
+									Relation relation2 = new Relation();
+									relation2.setAboutId(building.getId());
+									relation2.setProjectId(building.getProjectId());
+									relation2.setRelationType(2);
+									relation2.setUserId(Long.valueOf(rectifyUsers[n]));
+									relationList.add(relation2);
+								}
+								relationDao.addRelationList(relationList);
+							}
 							return dataWrapper;
 						}
 					}else{
@@ -523,27 +505,36 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
 				if(!getList.isEmpty()){
 					for(int i=0;i<getList.size();i++){
 						try {
-							getList.get(i).setFinishedDate(Parameters.getSdfday().parse(gets.get(i).getFinishedDate()));
-							getList.get(i).setRectifyUser(gets.get(i).getRectifyUserId());
+							if(gets.get(i).getFinishedDate()!=null){
+								getList.get(i).setFinishedDate(Parameters.getSdfday().parse(gets.get(i).getFinishedDate()));
+							}
+							if(gets.get(i).getRectifyUserId()!=null){
+								getList.get(i).setRectifyUser(gets.get(i).getRectifyUserId());
+							}
+							if(gets.get(i).getFinishedDate()!=null && gets.get(i).getRectifyUserId()!=null){
+								getList.get(i).setStatus(1);
+							}
 						} catch (ParseException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
 					}
 					if(!mpDao.updateMeasuredProblemList(getList)){
 						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
 					}else{
 						List<Relation> relationList = new ArrayList<Relation>();
-						for(int j=0;j<getList.size();j++){
-							Relation relation2 = new Relation();
-							relation2.setAboutId(getList.get(j).getId());
-							relation2.setProjectId(getList.get(j).getProjectId());
-							relation2.setRelationType(2);
-							relation2.setUserId(getList.get(j).getRectifyUser());
-							relationList.add(relation2);
+						for(int i=0;i<gets.size();i++){
+							if(gets.get(i).getRectifyUserId()!=null){
+								String[] rectifyUsers = gets.get(i).getRectifyUserId().split(",");
+								for(int j=0;j<rectifyUsers.length;j++){
+									Relation relation2 = new Relation();
+									relation2.setAboutId(getList.get(j).getId());
+									relation2.setProjectId(getList.get(j).getProjectId());
+									relation2.setRelationType(2);
+									relation2.setUserId(Long.valueOf(rectifyUsers[j]));
+									relationList.add(relation2);
+								}
+							}
 						}
-						
 						relationDao.addRelationList(relationList);
 					}
 				}

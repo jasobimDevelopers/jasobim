@@ -9,6 +9,7 @@ public class MeasuredProblemPojo {
 	private String checkUser;//检查人
 	private String checkLists;//检查项
 	private String detail;//问题描述
+	private List<MeasuredUserInfo> aboutIcons;
 	private String rectifyUser;//整改人
 	private String finishedDate;//限定完成时间
 	private Integer status;//0、待指派 1、进行中 2、待销项
@@ -143,6 +144,12 @@ public class MeasuredProblemPojo {
 	}
 	public void setContentDetail(String contentDetail) {
 		this.contentDetail = contentDetail;
+	}
+	public List<MeasuredUserInfo> getAboutIcons() {
+		return aboutIcons;
+	}
+	public void setAboutIcons(List<MeasuredUserInfo> aboutIcons) {
+		this.aboutIcons = aboutIcons;
 	}
 	
 }

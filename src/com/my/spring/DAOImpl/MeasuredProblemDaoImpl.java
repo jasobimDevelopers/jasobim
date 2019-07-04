@@ -6,13 +6,18 @@ import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
 import com.my.spring.model.MeasuredProblem;
 import com.my.spring.model.MeasuredProblemEditPojo;
+import com.my.spring.model.MeasuredUserInfo;
 import com.my.spring.model.QualityCheck;
+import com.my.spring.model.QuestionCopy;
 import com.my.spring.model.User;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -140,5 +145,22 @@ public class MeasuredProblemDaoImpl extends BaseDao<MeasuredProblem> implements 
 		return updateList(getList);
 	}
 
-	
+	@Override
+	public List<MeasuredUserInfo> getAboutUserIcons(Long id) {
+		// TODO Auto-generated method stub
+		List<MeasuredUserInfo> retDataWrapper = new ArrayList<MeasuredUserInfo>();
+		String sql = "select a.url,b.id from file a,user b where a.id=b.user_icon and b.id "
+		+"in(select user_id from relation where relation_type=2 and about_id="+id+")";
+		Session session=getSession();
+	    try{
+		    Query query = session.createSQLQuery(sql)
+		    		.addScalar("id",StandardBasicTypes.LONG)
+					 .addScalar("url", StandardBasicTypes.STRING)
+				 .setResultTransformer(Transformers.aliasToBean(MeasuredUserInfo.class)); 
+		    retDataWrapper=query.list();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+		return retDataWrapper;
+	}	
 }

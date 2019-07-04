@@ -14,7 +14,7 @@ public class MeasuredProblem {
 	private Long checkUser;//检查人
 	private Long checkListId;//检查项
 	private String detail;//问题描述
-	private Long rectifyUser;//整改人
+	private String rectifyUser;//整改人
 	private Date finishedDate;//限定完成时间
 	private Integer status;//0、待指派 1、进行中 2、待验收
 	private Integer process;//进度百分比
@@ -77,10 +77,10 @@ public class MeasuredProblem {
 	}
 	@Basic
 	@Column(name="rectify_user")
-	public Long getRectifyUser() {
+	public String getRectifyUser() {
 		return rectifyUser;
 	}
-	public void setRectifyUser(Long rectifyUser) {
+	public void setRectifyUser(String rectifyUser) {
 		this.rectifyUser = rectifyUser;
 	}
 	@Basic

@@ -5,6 +5,7 @@ import javax.persistence.*;
 public class Relation {
 	private Long id;
 	private Integer relationType;/*0、质量 1、安全 2、实测实量*/
+	private Integer actionType;/*0、创建人 1、参与人 2*/
 	private Long aboutId;
 	private Long userId;
 	private Integer state;

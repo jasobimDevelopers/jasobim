@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 public interface MeasuredProblemService {
     DataWrapper<Void> addMeasuredProblem(MeasuredProblem building, String token,MultipartFile[] files,MultipartFile[] vois,HttpServletRequest request,String fDate);
     DataWrapper<Void> deleteMeasuredProblem(Long id,String token);
-    DataWrapper<Void> updateMeasuredProblem(MeasuredProblem building,String token);
 	DataWrapper<Void> qualityRectificationCheckAgain(String token, Long measuredId, Integer score, Integer state);
 	DataWrapper<Void> qualityRectificationCheck(String token, Long measuredId, Integer schedule, String content,
 			MultipartFile[] pics, MultipartFile[] vois, HttpServletRequest request);

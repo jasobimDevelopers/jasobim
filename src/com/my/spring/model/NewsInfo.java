@@ -11,6 +11,9 @@ public class NewsInfo {
 	private Date createDate;
 	private Long createUserId;
 	private String remark;
+	private Integer readNum;//阅读量（默认值0）
+	private Integer readState;//1、热门  0、一般状态
+	private Integer readStatus;//1、置顶、 0、一般的状态
 	
 	@Id
 	@GeneratedValue
@@ -65,6 +68,33 @@ public class NewsInfo {
 	}
 	public void setTopic(String topic) {
 		this.topic = topic;
+	}
+	
+	@Basic
+	@Column(name="read_num")
+	public Integer getReadNum() {
+		return readNum;
+	}
+	public void setReadNum(Integer readNum) {
+		this.readNum = readNum;
+	}
+	
+	@Basic
+	@Column(name="read_state")
+	public Integer getReadState() {
+		return readState;
+	}
+	public void setReadState(Integer readState) {
+		this.readState = readState;
+	}
+	
+	@Basic
+	@Column(name="read_status")
+	public Integer getReadStatus() {
+		return readStatus;
+	}
+	public void setReadStatus(Integer readStatus) {
+		this.readStatus = readStatus;
 	}
 	
 

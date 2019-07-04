@@ -6,6 +6,7 @@ import com.my.spring.utils.DaoUtil;
 import com.my.spring.utils.DataWrapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -30,7 +31,7 @@ public class NewsInfoDaoImpl extends BaseDao<NewsInfo> implements NewsInfoDao {
    
     @SuppressWarnings("unchecked")
 	@Override
-    public DataWrapper<List<NewsInfo>> getNewsInfoList( Integer pageIndex, Integer pageSize, NewsInfo News) {
+    public DataWrapper<List<NewsInfo>> getNewsInfoList( Integer pageIndex, Integer pageSize, NewsInfo News,List<NewsInfo> nes) {
         DataWrapper<List<NewsInfo>> retDataWrapper = new DataWrapper<List<NewsInfo>>();
         List<NewsInfo> ret = new ArrayList<NewsInfo>();
         Session session = getSession();
@@ -41,6 +42,13 @@ public class NewsInfoDaoImpl extends BaseDao<NewsInfo> implements NewsInfoDao {
         	if(News.getId()!=null){
         		criteria.add(Restrictions.eq("id", News.getId()));
         	}
+        }
+        if(!nes.isEmpty()){
+        	List<Long> ids = new ArrayList<Long>();
+        	for(NewsInfo neitem:nes){
+        		ids.add(neitem.getId());
+        	}
+        	criteria.add(Restrictions.not(Restrictions.in("id",ids)));
         }
         if (pageSize == null) {
 			pageSize = 10;
@@ -104,6 +112,24 @@ public class NewsInfoDaoImpl extends BaseDao<NewsInfo> implements NewsInfoDao {
 	public boolean updateNewsInfo(NewsInfo newsInfoNew) {
 		// TODO Auto-generated method stub
 		return update(newsInfoNew);
+	}
+
+	@Override
+	public List<NewsInfo> getNewsInfoListByOptions() {
+		// TODO Auto-generated method stub
+		List<NewsInfo> ret = null;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(NewsInfo.class);
+        Disjunction disjunction = Restrictions.disjunction();
+        disjunction.add(Restrictions.eq("readState", 1));
+        disjunction.add(Restrictions.eq("readStatus", 1));
+        criteria.add(disjunction);
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		return ret;
 	}
 
 	
