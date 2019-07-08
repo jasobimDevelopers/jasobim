@@ -38,7 +38,7 @@ public class CommentDaoImpl extends BaseDao<Comment> implements CommentDao {
         List<Comment> ret = null;
         Session session = getSession();
         Criteria criteria = session.createCriteria(Comment.class);
-        criteria.addOrder(Order.asc("createDate"));
+        criteria.addOrder(Order.desc("createDate"));
         if(Comment!=null){
         	if(Comment.getReplyType()!=null){
         		criteria.add(Restrictions.eq("replyType", Comment.getReplyType()));

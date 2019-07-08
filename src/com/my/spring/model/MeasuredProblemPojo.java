@@ -11,6 +11,7 @@ public class MeasuredProblemPojo {
 	private String detail;//问题描述
 	private List<MeasuredUserInfo> aboutIcons;
 	private String rectifyUser;//整改人
+	private List<String> rectifyUserNames;
 	private String finishedDate;//限定完成时间
 	private Integer status;//0、待指派 1、进行中 2、待销项
 	private Integer process;//进度百分比
@@ -23,7 +24,36 @@ public class MeasuredProblemPojo {
 	private Integer score;
 	private String createUser;
 	private String createDate;
+	private Integer abscissa;//横坐标
+	private Integer ordinate;//纵坐标
+	private String paperUrl;
+	private String projectName;
 	
+	
+	public Integer getAbscissa() {
+		return abscissa;
+	}
+	public void setAbscissa(Integer abscissa) {
+		this.abscissa = abscissa;
+	}
+	public Integer getOrdinate() {
+		return ordinate;
+	}
+	public void setOrdinate(Integer ordinate) {
+		this.ordinate = ordinate;
+	}
+	public String getPaperUrl() {
+		return paperUrl;
+	}
+	public void setPaperUrl(String paperUrl) {
+		this.paperUrl = paperUrl;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -150,6 +180,12 @@ public class MeasuredProblemPojo {
 	}
 	public void setAboutIcons(List<MeasuredUserInfo> aboutIcons) {
 		this.aboutIcons = aboutIcons;
+	}
+	public List<String> getRectifyUserNames() {
+		return rectifyUserNames;
+	}
+	public void setRectifyUserNames(List<String> rectifyUserNames) {
+		this.rectifyUserNames = rectifyUserNames;
 	}
 	
 }

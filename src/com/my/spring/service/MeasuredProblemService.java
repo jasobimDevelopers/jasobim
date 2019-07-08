@@ -17,10 +17,13 @@ public interface MeasuredProblemService {
 	DataWrapper<Void> qualityRectificationCheck(String token, Long measuredId, Integer schedule, String content,
 			MultipartFile[] pics, MultipartFile[] vois, HttpServletRequest request);
 	DataWrapper<List<MeasuredProblemPojo>> getMeasuredProblemByProjectId(Long id,Long projectId, String token, Integer status,
-			String bfmIds, String checkTypeIds);
+			String bfmIds, String checkTypeIds,Long siteId);
 	DataWrapper<Void> updateMeasuredProblem(MeasuredProblem building, String token, MultipartFile[] files,
 			MultipartFile[] vois, HttpServletRequest request, String fDate);
 	DataWrapper<Void> addMeasuredProblemList(List<MeasuredProblem> mpList);
 	DataWrapper<MeasuredProblemPojo> getMeasuredProblemByPointId(Long pointId, String token);
 	DataWrapper<Void> updateMeasuredProblemList(String token, String editString);
+	DataWrapper<Void> measuredProblemSend(String aboutIds, String token,Long projectId);
+	DataWrapper<List<String>> measuredProblemAddUser(String aboutIds, String token, Long measuredProblemId,Long projectId);
+	DataWrapper<Void> measuredProblemListCheckAgain(String token, String checkString);
 }

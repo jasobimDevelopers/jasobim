@@ -92,7 +92,7 @@ public class NewsInfoServiceImpl implements NewsInfoService {
     	DataWrapper<List<NewsInfo>> dataWrapper = new DataWrapper<List<NewsInfo>>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
-        		/*设置阅读数记录*/
+        		//设置阅读数记录
         		if(NewsInfo!=null){
         			if(NewsInfo.getId()!=null){
         				NewsInfo ne = NewsInfoDao.getById(NewsInfo.getId());
@@ -102,8 +102,9 @@ public class NewsInfoServiceImpl implements NewsInfoService {
         				}
         			}
         		}
-        		/*获取的时候单独查询阅读量最多的即热门的、置顶的两条资讯*/
-        		List<NewsInfo> headList = NewsInfoDao.getNewsInfoListByOptions();
+        		//获取的时候单独查询阅读量最多的即热门的、置顶的两条资讯
+        		List<NewsInfo> headList = new ArrayList<NewsInfo>();
+        		headList=NewsInfoDao.getNewsInfoListByOptions();
 				dataWrapper=NewsInfoDao.getNewsInfoList(pageIndex,pageSize,NewsInfo,headList);
 				if(!dataWrapper.getData().isEmpty()){
 					List<NewsInfoPojo> NewsInfoPojoList = new ArrayList<NewsInfoPojo>();

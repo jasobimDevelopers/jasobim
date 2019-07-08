@@ -2,17 +2,20 @@ package com.my.spring.serviceImpl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.my.spring.DAO.CheckListTypesDao;
-import com.my.spring.DAO.CheckListsDao;
 import com.my.spring.DAO.CommentDao;
 import com.my.spring.DAO.FileDao;
 import com.my.spring.DAO.ManageLogDao;
 import com.my.spring.DAO.MeasuredProblemDao;
+import com.my.spring.DAO.PaperOfMeasuredDao;
+import com.my.spring.DAO.PaperPointInfoDao;
 import com.my.spring.DAO.PointDataInputLogDao;
+import com.my.spring.DAO.ProjectDao;
 import com.my.spring.DAO.RelationDao;
 import com.my.spring.DAO.ReplyDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.enums.UserTypeEnum;
+import com.my.spring.jpush.PushExample;
 import com.my.spring.model.CheckListTypes;
 import com.my.spring.model.Comment;
 import com.my.spring.model.Files;
@@ -21,11 +24,14 @@ import com.my.spring.model.MeasuredProblem;
 import com.my.spring.model.MeasuredProblemEditPojo;
 import com.my.spring.model.MeasuredProblemPojo;
 import com.my.spring.model.MeasuredUserInfo;
+import com.my.spring.model.PaperOfMeasured;
+import com.my.spring.model.PaperPointInfo;
 import com.my.spring.model.PointDataInputLog;
-import com.my.spring.model.PointInputLog;
+import com.my.spring.model.Project;
 import com.my.spring.model.Relation;
 import com.my.spring.model.Reply;
 import com.my.spring.model.User;
+import com.my.spring.model.pojo.MeasuredCheckData;
 import com.my.spring.parameters.Parameters;
 import com.my.spring.service.FileService;
 import com.my.spring.service.MeasuredProblemService;
@@ -34,10 +40,10 @@ import com.my.spring.utils.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,9 +51,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service("measuredProblemService")
 public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnable {
-	public MeasuredProblemServiceImpl(){
-		
-	}
     @Autowired
     MeasuredProblemDao mpDao;
     @Autowired
@@ -56,6 +59,12 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
     CheckListTypesDao checkDao;
     @Autowired
     UserDao userDao;
+    @Autowired
+    ProjectDao projectDao;
+    @Autowired
+    PaperPointInfoDao paperPointInfoDao;
+    @Autowired
+    PaperOfMeasuredDao mopDao;
     @Autowired
     ReplyDao replyDao;
     @Autowired
@@ -145,9 +154,9 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
     }
 
 	@Override
-	public DataWrapper<List<MeasuredProblemPojo>> getMeasuredProblemByProjectId(Long id,Long projectId,String token,Integer status,String bfmIds,String checkTypeIds) {
+	public DataWrapper<List<MeasuredProblemPojo>> getMeasuredProblemByProjectId(Long id,Long projectId,String token,Integer status,String bfmIds,String checkTypeIds,Long siteId) {
 		DataWrapper<List<MeasuredProblemPojo>> dataWrapper = new DataWrapper<List<MeasuredProblemPojo>>();
-		DataWrapper<List<MeasuredProblem>> results = new DataWrapper<List<MeasuredProblem>>();
+		List<MeasuredProblem> results = new ArrayList<MeasuredProblem>();
 		List<MeasuredProblemPojo> datas = new ArrayList<MeasuredProblemPojo>();
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
@@ -169,28 +178,42 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
         			}
         		}
         	}
-        	results=mpDao.getMeasuredProblemByProjectId(id,projectId,userInMemory,status,bids,cids);
-        	if(results.getData()!=null){
-        		for(int i=0;i<results.getData().size();i++){
+        	results=mpDao.getMeasuredProblemByProjectId(id,projectId,userInMemory,status,bids,cids,siteId);
+        	if(!results.isEmpty()){
+        		for(int i=0;i<results.size();i++){
         			MeasuredProblemPojo pojo = new MeasuredProblemPojo();
-        			pojo.setId(results.getData().get(i).getId());
-        			pojo.setCheckSite(results.getData().get(i).getCheckSite());
-        			pojo.setDetail(results.getData().get(i).getDetail());
-        			pojo.setStatus(results.getData().get(i).getStatus());
-        			pojo.setScore(results.getData().get(i).getScore());
-        			pojo.setProcess(results.getData().get(i).getProcess());
+        			pojo.setId(results.get(i).getId());
+        			pojo.setCheckSite(results.get(i).getCheckSite());
+        			pojo.setDetail(results.get(i).getDetail());
+        			pojo.setStatus(results.get(i).getStatus());
+        			pojo.setScore(results.get(i).getScore());
+        			pojo.setProcess(results.get(i).getProcess());
         			CheckListTypes clt = new CheckListTypes();
-        			if(results.getData().get(i).getCheckListId()!=null){
-        				clt = checkDao.getById(results.getData().get(i).getCheckListId());
+        			Project project = new Project();
+            		project = projectDao.getById(results.get(i).getProjectId());
+            		pojo.setProjectName(project.getName());
+        			if(results.get(i).getCheckListId()!=null){
+        				clt = checkDao.getById(results.get(i).getCheckListId());
         				if(clt!=null){
         					pojo.setCheckLists(clt.getCheckName());
         				}
         			}
-        			if(results.getData().get(i).getPointId()!=null){
-        				pojo.setPointId(results.getData().get(i).getPointId());
-        				PointDataInputLog dataLogs = dataDao.getPointDataInputLogListByOptions(results.getData().get(i).getPointId(),results.getData().get(i).getCheckListId(),results.getData().get(i).getInputUserId());
+        			if(results.get(i).getPointId()!=null){
+        				PaperPointInfo pointInfo = new PaperPointInfo();
+        				pointInfo = paperPointInfoDao.getById(results.get(i).getPointId());
+        				if(pointInfo!=null){
+        					pojo.setAbscissa(pointInfo.getAbscissa());
+        					pojo.setOrdinate(pointInfo.getOrdinate());
+        					PaperOfMeasured pom = new PaperOfMeasured();
+        					pom=mopDao.getById(pointInfo.getPaperOfMeasuredId());
+        					if(pom!=null){
+        						pojo.setPaperUrl(fileService.getById(pom.getFileId()).getUrl());
+        					}
+        				}
+        				pojo.setPointId(results.get(i).getPointId());
+        				PointDataInputLog dataLogs = dataDao.getPointDataInputLogListByOptions(results.get(i).getPointId(),results.get(i).getCheckListId(),results.get(i).getInputUserId());
         				if(dataLogs!=null){
-        					String logString=results.getData().get(i).getCheckSite()+" 实测实量-设备安装-";
+        					String logString=results.get(i).getCheckSite()+" 实测实量-设备安装-";
     						String checkNames= clt.getCheckName();
     						logString=logString+checkNames;
     						pojo.setTitle(logString);
@@ -210,68 +233,85 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
         				}
         			}
         		    
-        			if(results.getData().get(i).getCheckDate()!=null){
-        				String checkDates = Parameters.getSdfs().format(results.getData().get(i).getCheckDate());
+        			if(results.get(i).getCheckDate()!=null){
+        				String checkDates = Parameters.getSdfs().format(results.get(i).getCheckDate());
         				pojo.setCheckDate(checkDates);
         			}
-        			if(results.getData().get(i).getFinishedDate()!=null){
-        				String finishedDates = Parameters.getSdfs().format(results.getData().get(i).getFinishedDate());
+        			if(results.get(i).getFinishedDate()!=null){
+        				String finishedDates = Parameters.getSdfs().format(results.get(i).getFinishedDate());
         				pojo.setFinishedDate(finishedDates);
         			}
-        			String createDate = Parameters.getSdfs().format(results.getData().get(i).getCreateDate());
+        			String createDate = Parameters.getSdfs().format(results.get(i).getCreateDate());
     				pojo.setCreateDate(createDate);
+    				if(results.get(i).getCreateUser()!=null){
+        				User createUser = userDao.getById(results.get(i).getCreateUser());
+        				if(createUser!=null){
+        					pojo.setCreateUser(createUser.getRealName());
+        				}
+        			}
     				if(id!=null){
         				List<MeasuredUserInfo> users = mpDao.getAboutUserIcons(id);
         				pojo.setAboutIcons(users);
-        				if(results.getData().get(i).getCheckUser()!=null){
-            				User checkUser = userDao.getById(results.getData().get(i).getCheckUser());
+        				if(results.get(i).getCheckUser()!=null){
+            				User checkUser = userDao.getById(results.get(i).getCheckUser());
             				if(checkUser!=null){
             					pojo.setCheckUser(checkUser.getRealName());
             				}
             			}
-            			if(results.getData().get(i).getCreateUser()!=null){
-            				User createUser = userDao.getById(results.getData().get(i).getCreateUser());
-            				if(createUser!=null){
-            					pojo.setCreateUser(createUser.getRealName());
+            			if(results.get(i).getFiles()!=null){
+            				if(!results.get(i).getFiles().equals("")){
+            					List<String> files = new ArrayList<String>();
+                				String[] filesstr=results.get(i).getFiles().split(",");
+                				for(int j=0;j<filesstr.length;j++)
+                				{
+                					Files file1 = fileService.getById(Long.valueOf(filesstr[j]));
+                					if(file1!=null){
+                						files.add(file1.getUrl());
+                					}
+                				}
+                				pojo.setFiles(files);
             				}
+            				
             			}
-            			if(results.getData().get(i).getFiles()!=null){
-            				List<String> files = new ArrayList<String>();
-            				String[] filesstr=results.getData().get(i).getFiles().split(",");
-            				for(int j=0;j<filesstr.length;j++)
-            				{
-            					Files file1 = fileService.getById(Long.valueOf(filesstr[j]));
-            					if(file1!=null){
-            						files.add(file1.getUrl());
-            					}
+            			if(results.get(i).getVoices()!=null){
+            				if(!results.get(i).getVoices().equals("")){
+            					List<String> files = new ArrayList<String>();
+                				String[] filesstr=results.get(i).getVoices().split(",");
+                				for(int j=0;j<filesstr.length;j++)
+                				{
+                					Files file1 = fileService.getById(Long.valueOf(filesstr[j]));
+                					if(file1!=null){
+                						files.add(file1.getUrl());
+                					}
+                				}
+                				pojo.setVoices(files);
             				}
-            				pojo.setFiles(files);
-            			}
-            			if(results.getData().get(i).getVoices()!=null){
-            				List<String> files = new ArrayList<String>();
-            				String[] filesstr=results.getData().get(i).getVoices().split(",");
-            				for(int j=0;j<filesstr.length;j++)
-            				{
-            					Files file1 = fileService.getById(Long.valueOf(filesstr[j]));
-            					if(file1!=null){
-            						files.add(file1.getUrl());
-            					}
-            				}
-            				pojo.setVoices(files);
             			}
         			}
         			
-        			if(results.getData().get(i).getRectifyUser()!=null){
-        				pojo.setRectifyUser(results.getData().get(i).getRectifyUser());
+        			if(results.get(i).getRectifyUser()!=null){
+        				pojo.setRectifyUser(results.get(i).getRectifyUser());
+        				if(!results.get(i).getRectifyUser().equals("")){
+        					List<Long> userids = new ArrayList<Long>();
+        					for(int m=0;m<results.get(i).getRectifyUser().split(",").length;m++){
+        						userids.add(Long.valueOf(results.get(i).getRectifyUser().split(",")[m]));
+        					}
+        					List<User> users = userDao.getUserIconListByIds(userids);
+        					List<String> userNames = new ArrayList<String>();
+        					for(User useritem:users){
+        						userNames.add(useritem.getRealName());
+        					}
+        					pojo.setRectifyUserNames(userNames);
+        				}
         			}
         			
         			datas.add(pojo);
         		}
-        		dataWrapper.setData(datas);
         	}
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
+        dataWrapper.setData(datas);
 		return dataWrapper;
 	}
 	@Override
@@ -292,10 +332,10 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
 					manageLog.setManageType(2);
 					manageLog.setActionType(1);
 					if(state==1){
-						qm.setStatus(2);//已通过
+						qm.setStatus(3);//已完成
 					}
 					if(state==0){
-						qm.setStatus(0);//待整改
+						qm.setStatus(1);//进行时
 					}
 					if(mpDao.updateMeasuredProblem(qm)){
 						manageLogDao.addManageLog(manageLog);
@@ -369,7 +409,7 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
 					if(schedule==100){
 						comment.setCommentContent("工作已完成"+schedule+"%,请尽快验收！");
 						MeasuredProblem qm = mpDao.getById(measuredId);
-						qm.setStatus(1);//进行中
+						qm.setStatus(2);//待验收
 						mpDao.updateMeasuredProblem(qm);
 					}
 					commentDao.addComment(comment);
@@ -545,5 +585,132 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
 		
 		
 		return dataWrapper;
+	}
+	@Override
+	public DataWrapper<Void> measuredProblemSend(String aboutIds, String token,Long projectId) {
+		DataWrapper<Void> dataWrapper = new DataWrapper<Void>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			if(aboutIds!=null){
+				HashMap<String,String> hq = new HashMap<String,String>();
+				Project po = projectDao.getById(projectId);
+				hq.put("projectName",po.getName());
+				hq.put("createDate", Parameters.getSdfs().format(new Date()));
+				String content="实测实量爆点整改情况需要你督办！";
+				////推送人包括自己
+				///0、质量   1、安全   2、施工任务单  3、 预付单  4、留言
+				PushExample.testSendPushWithCustomConfig_ios(aboutIds.split(","), content,0,hq);
+				PushExample.testSendPushWithCustomConfig_android(aboutIds.split(","), content,0,hq);
+			}
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+        return dataWrapper;
+	}
+	@Override
+	public DataWrapper<List<String>> measuredProblemAddUser(String aboutIds, String token, Long measuredProblemId,Long projectId) {
+		// TODO Auto-generated method stub
+		DataWrapper<List<String>> result = new DataWrapper<List<String>>();
+		List<String> urls = new ArrayList<String>();
+		User userInMemory = SessionManager.getSession(token);
+		if(userInMemory!=null){
+			if(measuredProblemId!=null){
+				if(aboutIds!=null){
+					if(!aboutIds.equals("")){
+						List<Relation> relations = new ArrayList<Relation>();
+						List<Long> userIds = new ArrayList<Long>();
+						for(int i=0;i<aboutIds.split(",").length;i++){
+							userIds.add(Long.valueOf(aboutIds.split(",")[i]));
+							Relation relation = new Relation();
+							relation.setAboutId(measuredProblemId);
+							relation.setRelationType(2);
+							relation.setUserId(Long.valueOf(aboutIds.split(",")[i]));
+							relation.setProjectId(projectId);
+							relation.setState(0);
+							relations.add(relation);
+						}
+						if(relationDao.addRelationList(relations)){
+							List<User> userList = new ArrayList<User>();
+							userList = userDao.getUserIconListByIds(userIds);
+							if(!userList.isEmpty()){
+								for(int n=0;n<userList.size();n++){
+									if(userList.get(n).getUserIconUrl()!=null){
+										if(!userList.get(n).getUserIconUrl().equals("")){
+											urls.add(userList.get(n).getUserIconUrl());
+										}else if(userList.get(n).getUserIcon()!=null){
+											Files file = fileService.getById(userList.get(n).getUserIcon());
+											if(file!=null){
+												urls.add(file.getUrl());
+											}
+										}
+									}else{
+										if(userList.get(n).getUserIcon()!=null){
+											Files file = fileService.getById(userList.get(n).getUserIcon());
+											if(file!=null){
+												urls.add(file.getUrl());
+											}
+										}
+									}
+								}
+								result.setData(urls);
+							}
+						}
+					}
+				}
+			}
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
+	}
+	@Override
+	public DataWrapper<Void> measuredProblemListCheckAgain(String token, String checkString) {
+		DataWrapper<Void> result = new DataWrapper<Void>();
+		User user = SessionManager.getSession(token);
+		if(user!=null){
+			List<MeasuredCheckData> getDatas = JSONObject.parseArray(checkString, MeasuredCheckData.class);
+			if(getDatas!=null){
+				for(int i=0;i<getDatas.size();i++){
+					MeasuredProblem qm = mpDao.getById(getDatas.get(i).getMeasuredId());
+					if(qm!=null){
+						if(user.getId().equals(qm.getCreateUser()) || user.getUserType().equals(UserTypeEnum.Admin.getType())){
+							qm.setScore(getDatas.get(i).getScore());
+							Comment comment = new Comment();
+							ManageLog manageLog = new ManageLog();
+							manageLog.setAboutId(getDatas.get(i).getMeasuredId());
+							manageLog.setActionDate(new Date());
+							manageLog.setOperateUser(user.getId());
+							manageLog.setManageType(2);
+							manageLog.setActionType(1);
+							if(getDatas.get(i).getState()==1){
+								qm.setStatus(3);//已完成
+							}
+							if(getDatas.get(i).getState()==0){
+								qm.setStatus(1);//进行时
+							}
+							if(mpDao.updateMeasuredProblem(qm)){
+								manageLogDao.addManageLog(manageLog);
+								comment.setCommentUser(user.getId());;
+								comment.setAboutId(getDatas.get(i).getMeasuredId());
+								comment.setReplyType(2);
+								comment.setType(2);
+								comment.setCreateDate(new Date());
+								comment.setCommentContent("验收通过");
+								comment.setCommentContent("验收不通过");
+								commentDao.addComment(comment);
+							}
+						}else{
+							result.setErrorCode(ErrorCodeEnum.AUTH_Error);
+						}
+					}else{
+						result.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
+					}
+				}
+			}
+			
+		}else{
+			result.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return result;
 	}
 }

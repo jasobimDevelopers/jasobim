@@ -46,12 +46,12 @@ public class CommentServiceImpl implements CommentService {
 		DataWrapper<List<CommentPojo>> dataWrapperpojo = new DataWrapper<List<CommentPojo>>();
 		User adminInMemory = SessionManager.getSession(token);
 		if (adminInMemory != null) {
-			User adminInDB = userDao.getById(adminInMemory.getId());
-			if (adminInDB.getUserType() == UserTypeEnum.Admin.getType()) {
 				dataWrapper=CommentDao.getCommentList(pageSize, pageIndex,Comment);
 				if(dataWrapper.getData()!=null){
 					for(int i=0;i<dataWrapper.getData().size();i++){
 						CommentPojo Commentpojos=new CommentPojo();
+						Commentpojos.setType(dataWrapper.getData().get(i).getType());
+						Commentpojos.setCreateUserId(dataWrapper.getData().get(i).getCommentUser());
 						Commentpojos.setCommentContent(dataWrapper.getData().get(i).getCommentContent());
 						Commentpojos.setId(dataWrapper.getData().get(i).getId());
 						User user =userDao.getById(dataWrapper.getData().get(i).getCommentUser());
@@ -99,9 +99,6 @@ public class CommentServiceImpl implements CommentService {
 					dataWrapperpojo.setTotalPage(dataWrapper.getTotalPage());
 					dataWrapperpojo.setErrorCode(dataWrapper.getErrorCode());
 				}
-			} else {
-				dataWrapperpojo.setErrorCode(ErrorCodeEnum.AUTH_Error);
-			}
 		} else {
 			dataWrapperpojo.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}
@@ -122,6 +119,7 @@ public class CommentServiceImpl implements CommentService {
 			Comment.setCommentUser(userInMemory.getId());
 			Comment.setAboutId(comment.getAboutId());
 			Comment.setReplyType(comment.getReplyType());
+			Comment.setType(0);
 			if(pics!=null){
 				String picsStr="";
 				for(int i=0;i<pics.length;i++){

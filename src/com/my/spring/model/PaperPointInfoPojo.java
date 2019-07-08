@@ -4,6 +4,7 @@ import java.util.List;
 
 public class PaperPointInfoPojo {///测量点位具体信息表
 	private String paperUrl;
+	private Long paperOfMeasuredId;
 	private List<PointInfoPojo> info;
 	public String getPaperUrl() {
 		return paperUrl;
@@ -16,6 +17,12 @@ public class PaperPointInfoPojo {///测量点位具体信息表
 	}
 	public void setInfo(List<PointInfoPojo> info) {
 		this.info = info;
+	}
+	public Long getPaperOfMeasuredId() {
+		return paperOfMeasuredId;
+	}
+	public void setPaperOfMeasuredId(Long paperOfMeasuredId) {
+		this.paperOfMeasuredId = paperOfMeasuredId;
 	}
 	
 }

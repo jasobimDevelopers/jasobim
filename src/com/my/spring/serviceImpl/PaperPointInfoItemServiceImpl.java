@@ -1,14 +1,21 @@
 package com.my.spring.serviceImpl;
 
+import com.my.spring.DAO.CheckListTypesDao;
 import com.my.spring.DAO.PaperPointInfoDao;
 import com.my.spring.DAO.PaperPointInfoItemDao;
 import com.my.spring.DAO.PaperPointRelationDao;
+import com.my.spring.DAO.PointDataInputLogDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
+import com.my.spring.model.CheckListTypes;
+import com.my.spring.model.InputLog;
 import com.my.spring.model.PaperPointInfo;
 import com.my.spring.model.PaperPointInfoItem;
+import com.my.spring.model.PaperPointInfoItemPojo;
 import com.my.spring.model.PaperPointRelation;
+import com.my.spring.model.PointDataInputLog;
 import com.my.spring.model.User;
+import com.my.spring.parameters.Parameters;
 import com.my.spring.service.PaperPointInfoItemService;
 import com.my.spring.utils.DataWrapper;
 import com.my.spring.utils.SessionManager;
@@ -23,9 +30,13 @@ public class PaperPointInfoItemServiceImpl implements PaperPointInfoItemService 
     @Autowired
     PaperPointInfoItemDao pDao;
     @Autowired
+    PointDataInputLogDao logDao;
+    @Autowired
     PaperPointInfoDao ppiDao;
     @Autowired
     PaperPointRelationDao pprDao;
+    @Autowired
+    CheckListTypesDao ctDao;
     @Autowired
     UserDao userDao;
     @Override
@@ -110,6 +121,46 @@ public class PaperPointInfoItemServiceImpl implements PaperPointInfoItemService 
         User userInMemory = SessionManager.getSession(token);
         if (userInMemory != null) {
         	results=pDao.getPaperPointInfoItemByPointId(pointId);
+        	dataWrapper.setData(results);
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<PaperPointInfoItemPojo>> getPaperPointInfoItemListsByPointId(Long pointId, String token) {
+		DataWrapper<List<PaperPointInfoItemPojo>> dataWrapper = new DataWrapper<List<PaperPointInfoItemPojo>>();
+		List<PaperPointInfoItemPojo> results = new ArrayList<PaperPointInfoItemPojo>();
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+        	List<PaperPointInfoItem> gets = new ArrayList<PaperPointInfoItem>();
+        	List<PointDataInputLog> gets2 = new ArrayList<PointDataInputLog>();
+        	gets=pDao.getPaperPointInfoItemByPointId(pointId);
+        	gets2=logDao.getPointDataInputLogListByPointId(userInMemory,pointId);
+        	if(!gets.isEmpty()){
+        		for(int i=0;i<gets.size();i++){
+        			PaperPointInfoItemPojo pojo = new PaperPointInfoItemPojo();
+        			pojo.setPointItemId(gets.get(i).getId());
+        			CheckListTypes ct = ctDao.getById(gets.get(i).getCheckTypeId());
+        			pojo.setTitle("实测实量-设备安装-"+ct.getCheckName());
+        			pojo.setContent(ct.getCheckName());
+        			List<InputLog> logs = new ArrayList<InputLog>();
+        			for(int j=0;j<gets2.size();j++){
+        				if(gets.get(i).getCheckTypeId().equals(gets2.get(j).getCheckTypeId())){
+        					InputLog log = new InputLog();
+        					log.setCreateDate(Parameters.getSdf().format(gets2.get(j).getCreateDate()));
+        					log.setLogId(gets2.get(j).getId());
+        					log.setInputData(gets2.get(j).getInputData());
+        					log.setUserName(userDao.getById(gets2.get(j).getCreateUser()).getRealName());
+        					log.setState(gets2.get(j).getStatus());
+        					logs.add(log);
+        				}
+        			}
+        			pojo.setLogList(logs);
+        			results.add(pojo);
+        		}
+        	}
         	dataWrapper.setData(results);
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);

@@ -22,23 +22,23 @@ public class MeasuredProblemController {
     @ResponseBody
     public DataWrapper<Void> addMeasuredProblem(
             @ModelAttribute MeasuredProblem building,
-            @RequestParam(value = "files", required = true) MultipartFile[] files,
+            @RequestParam(value = "pics", required = true) MultipartFile[] pics,
             @RequestParam(value = "vois", required = true) MultipartFile[] vois,
             HttpServletRequest request,
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value = "fDate",required = true) String fDate){
-        return buildingService.addMeasuredProblem(building,token,files,vois,request,fDate);
+        return buildingService.addMeasuredProblem(building,token,pics,vois,request,fDate);
     }
     @RequestMapping(value="/updateMeasuredProblem", method = RequestMethod.POST)
     @ResponseBody
     public DataWrapper<Void> updateMeasuredProblem(
             @ModelAttribute MeasuredProblem building,
-            @RequestParam(value = "files", required = true) MultipartFile[] files,
+            @RequestParam(value = "pics", required = true) MultipartFile[] pics,
             @RequestParam(value = "vois", required = true) MultipartFile[] vois,
             HttpServletRequest request,
             @RequestParam(value = "token",required = true) String token,
             @RequestParam(value = "fDate",required = true) String fDate){
-        return buildingService.updateMeasuredProblem(building,token,files,vois,request,fDate);
+        return buildingService.updateMeasuredProblem(building,token,pics,vois,request,fDate);
     }
     @RequestMapping(value="/updateMeasuredProblemList", method = RequestMethod.POST)
     @ResponseBody
@@ -61,11 +61,12 @@ public class MeasuredProblemController {
     public DataWrapper<List<MeasuredProblemPojo>> getMeasuredProblemByProjectId(
     		@RequestParam(value = "projectId",required = true) Long projectId,
     		@RequestParam(value = "id",required = false) Long id,
+    		@RequestParam(value = "siteId",required = false) Long siteId,
     		@RequestParam(value = "status",required = false) Integer status,
     		@RequestParam(value = "bfmIds",required = false) String bfmIds,
     		@RequestParam(value = "checkTypeIds",required = false) String checkTypeIds,
     		@RequestParam(value = "token",required = true) String token){
-        return buildingService.getMeasuredProblemByProjectId(id,projectId,token,status,bfmIds,checkTypeIds);
+        return buildingService.getMeasuredProblemByProjectId(id,projectId,token,status,bfmIds,checkTypeIds,siteId);
     }
     @RequestMapping(value="/getMeasuredProblemByPointId",method=RequestMethod.GET)
     @ResponseBody
@@ -76,7 +77,7 @@ public class MeasuredProblemController {
     }
     
     /*
-     * 复检接口
+     * 验收接口
      * state(0、不通过 1、通过 )
      * score(评分)
      * */
@@ -89,7 +90,16 @@ public class MeasuredProblemController {
             @RequestParam(value = "token",required = true) String token){
         return buildingService.qualityRectificationCheckAgain(token,measuredId,score,state);
     }
-    
+    /**
+     *批量验收接口 
+     **/
+    @RequestMapping(value="/measuredProblemListCheckAgain", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> measuredProblemListCheckAgain(
+    		@RequestParam(value = "checkString",required = true) String checkString,
+            @RequestParam(value = "token",required = true) String token){
+        return buildingService.measuredProblemListCheckAgain(token,checkString);
+    }
     /*
      * 整改回复接口
      * **/
@@ -104,5 +114,28 @@ public class MeasuredProblemController {
             @RequestParam(value = "vois",required = false) MultipartFile[] vois,
             @RequestParam(value = "token",required = true) String token){
         return buildingService.qualityRectificationCheck(token,measuredId,schedule,content,pics,vois,request);
+    }
+    /**
+     *催办接口 
+     */
+    @RequestMapping(value="/measuredProblemSend", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<Void> measuredProblemSend(
+    		@RequestParam(value = "aboutIds",required = true) String aboutIds,
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "token",required = true) String token){
+        return buildingService.measuredProblemSend(aboutIds,token,projectId);
+    }
+    /*
+     * 详情添加相关人员接口
+     * */
+    @RequestMapping(value="/measuredProblemAddUser", method = RequestMethod.POST)
+    @ResponseBody
+    public DataWrapper<List<String>> measuredProblemAddUser(
+    		@RequestParam(value = "aboutIds",required = true) String aboutIds,
+    		@RequestParam(value = "measuredProblemId",required = true) Long measuredProblemId,
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+            @RequestParam(value = "token",required = true) String token){
+        return buildingService.measuredProblemAddUser(aboutIds,token,measuredProblemId,projectId);
     }
 }

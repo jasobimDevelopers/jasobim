@@ -43,12 +43,14 @@ public class NewsInfoDaoImpl extends BaseDao<NewsInfo> implements NewsInfoDao {
         		criteria.add(Restrictions.eq("id", News.getId()));
         	}
         }
-        if(!nes.isEmpty()){
-        	List<Long> ids = new ArrayList<Long>();
-        	for(NewsInfo neitem:nes){
-        		ids.add(neitem.getId());
-        	}
-        	criteria.add(Restrictions.not(Restrictions.in("id",ids)));
+        if(nes!=null){
+        	 if(!nes.isEmpty()){
+             	List<Long> ids = new ArrayList<Long>();
+             	for(NewsInfo neitem:nes){
+             		ids.add(neitem.getId());
+             	}
+             	criteria.add(Restrictions.not(Restrictions.in("id",ids)));
+             }
         }
         if (pageSize == null) {
 			pageSize = 10;

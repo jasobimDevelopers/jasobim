@@ -39,9 +39,10 @@ public class PointDataInputLogDaoImpl extends BaseDao<PointDataInputLog> impleme
 		List<PointDataInputLog> ret = new ArrayList<PointDataInputLog>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(PointDataInputLog.class);
-        if(user.getUserType()!=UserTypeEnum.Admin.getType()){
+        /*if(user.getUserType()!=UserTypeEnum.Admin.getType()){
         	criteria.add(Restrictions.eq("createUser",user.getId()));
-        }
+        }*/
+        criteria.add(Restrictions.eq("createUser",user.getId()));
         criteria.add(Restrictions.eq("pointId",pointId));
         try {
             ret = criteria.list();

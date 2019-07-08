@@ -170,28 +170,28 @@ public class PaperPointInfoDaoImpl extends BaseDao<PaperPointInfo> implements Pa
 		// TODO Auto-generated method stub
 		Session session = getSession();
 		String sql="select IFNULL(sum(m.measured_num),0) as nums from (select b.paper_id,b.measured_num from site_paper_relation a,paper_of_measured b where a.paper_of_measured_id=b.paper_id";
-		if(buildingNames!=null){
+		if(buildingNames!=null && !buildingNames.equals("")){
 			sql=sql+" and a.bfm_id in("+buildingNames+") ";
 		}
 		sql=sql+" and a.project_id="+projectId+" and a.paper_of_measured_id in"
 		+"(select paper_of_measured_id from paper_point_relation where project_id="+projectId;
-		if(checkTypes!=null){
+		if(checkTypes!=null && !checkTypes.equals("")){
 			sql=sql+" and check_type_id in("+checkTypes+")";
 		}
 		sql=sql+") GROUP BY b.paper_id) m union all select count(a.id) as nums from (select id from point_data_input_log where project_id="+projectId;
-		if(checkTypes!=null){
+		if(checkTypes!=null && !checkTypes.equals("")){
 			sql=sql+" and check_type_id in("+checkTypes+")";
 		}
-		if(buildingNames!=null){
+		if(buildingNames!=null && !buildingNames.equals("")){
 			sql=sql+" and bfm_id in("+buildingNames+") ";
 		}
 		sql=sql+"GROUP BY point_id) a"				
 				+" union all "
 				+"select count(a.point_id) as nums from (select point_id from point_data_input_log where project_id="+projectId;
-		if(buildingNames!=null){
+		if(buildingNames!=null && !buildingNames.equals("")){
 			sql=sql+" and bfm_id in("+buildingNames+")";
 		}
-		if(checkTypes!=null){
+		if(checkTypes!=null && !checkTypes.equals("")){
 			sql=sql+" and check_type_id in("+checkTypes+")";
 		}
 		sql=sql+" and status=1 GROUP BY point_id) a";
@@ -206,32 +206,32 @@ public class PaperPointInfoDaoImpl extends BaseDao<PaperPointInfo> implements Pa
 		Session session = getSession();
 		String sql = "select sum(c.nums) as nums,c.bid,d.b_name as bname,0 as state from (select b.measured_num as nums,a.bfm_id as bid from site_paper_relation a,paper_of_measured b where a.project_id="
 		+projectId;
-		if(buildingNames!=null){
+		if(buildingNames!=null && !buildingNames.equals("")){
 			sql=sql+" and a.bfm_id in("+buildingNames+") ";
 		}
 		sql=sql+" and a.paper_of_measured_id in(select paper_of_measured_id from paper_point_relation where project_id="
 		+projectId;
-		if(checkTypes!=null){
+		if(checkTypes!=null && !checkTypes.equals("")){
 			sql=sql+" and check_type_id in("+checkTypes+")";
 		}
 		sql=sql+" GROUP BY paper_of_measured_id) and a.paper_of_measured_id=b.paper_id) c,building_of_measured d where d.bfm_id=c.bid GROUP BY c.bid"
 				+" union all "
 				+"select count(a.id) as nums,a.bfm_id as bid,b.b_name as bname,1 as state from (select id,bfm_id from point_data_input_log where project_id="
 				+projectId;
-		if(checkTypes!=null){
+		if(checkTypes!=null && !checkTypes.equals("")){
 			sql=sql+" and check_type_id in("+checkTypes+")";
 		}
-		if(buildingNames!=null){
+		if(buildingNames!=null && !buildingNames.equals("")){
 			sql=sql+" and bfm_id in("+buildingNames+") ";
 		}
 		sql=sql+ " GROUP BY point_id) a,building_of_measured b where a.bfm_id = b.bfm_id GROUP BY a.bfm_id"
 				+" union all "
 				+" select count(a.point_id) as nums,a.bfm_id as bid,b.b_name as bname,2 as state from (select point_id,bfm_id from point_data_input_log where project_id="
 				+ projectId;
-		if(checkTypes!=null){
+		if(checkTypes!=null && !checkTypes.equals("")){
 			sql=sql+" and check_type_id in("+checkTypes+")";
 		}
-		if(buildingNames!=null){
+		if(buildingNames!=null && !buildingNames.equals("")){
 			sql=sql+" and bfm_id in("+buildingNames+") ";
 		}		
 		sql=sql+" and status=1 GROUP BY point_id) a,building_of_measured b where a.bfm_id = b.bfm_id GROUP BY a.bfm_id";
@@ -249,32 +249,32 @@ public class PaperPointInfoDaoImpl extends BaseDao<PaperPointInfo> implements Pa
 		Session session = getSession();
 		String sql = "select sum(c.nums) as nums,c.bid,d.site_name as bname,0 as state from (select b.measured_num as nums,a.site_id as bid from site_paper_relation a,paper_of_measured b where a.project_id="
 		+projectId;
-		if(bfmId!=null){
+		if(bfmId!=null && !bfmId.equals("")){
 			sql=sql+" and a.bfm_id="+bfmId;
 		}
 		sql=sql+" and a.paper_of_measured_id in(select paper_of_measured_id from paper_point_relation where project_id="
 		+projectId;
-		if(checkTypes!=null){
+		if(checkTypes!=null && !checkTypes.equals("")){
 			sql=sql+" and check_type_id in("+checkTypes+")";
 		}
 		sql=sql+")and a.paper_of_measured_id=b.paper_id) c,measured_site d where d.site_id=c.bid GROUP BY c.bid"
 				+" union all "
 				+"select count(a.id) as nums,a.measured_site_id as bid,b.site_name as bname,1 as state from (select id,measured_site_id from point_data_input_log where project_id="
 				+projectId;
-		if(checkTypes!=null){
+		if(checkTypes!=null && !checkTypes.equals("")){
 			sql=sql+" and check_type_id in("+checkTypes+")";
 		}
-		if(bfmId!=null){
+		if(bfmId!=null && !bfmId.equals("")){
 			sql=sql+" and bfm_id="+bfmId;
 		}
 		sql=sql+ " GROUP BY point_id) a,measured_site b where a.measured_site_id = b.site_id GROUP BY a.measured_site_id"
 				+" union all "
 				+" select count(a.point_id) as nums,a.measured_site_id as bid,b.site_name as bname,2 as state from (select point_id,measured_site_id from point_data_input_log where project_id="
 				+ projectId;
-		if(checkTypes!=null){
+		if(checkTypes!=null && !checkTypes.equals("")){
 			sql=sql+" and check_type_id in("+checkTypes+")";
 		}
-		if(bfmId!=null){
+		if(bfmId!=null && !bfmId.equals("")){
 			sql=sql+" and bfm_id ="+bfmId;
 		}		
 		sql=sql+" and status=1 GROUP BY point_id) a,measured_site b where a.measured_site_id = b.site_id GROUP BY a.measured_site_id";

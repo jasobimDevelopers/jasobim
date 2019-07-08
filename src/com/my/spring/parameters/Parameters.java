@@ -28,6 +28,7 @@ public class Parameters {
 	public static final String[] projectFilesType={"图纸会审 ","施工组织设计","专项方案","签证资料","人员备案（特殊工种）","花名册","施工日志","图纸深化及翻样","施工资料","竣工验收资料","竣工图","材料复检报告","第三方强制检测","样板实施计划","材料进度计划"};
 	public static final String[][] projectDatas={{"",},{}};
 	public static final String[] professionList={"电气","给排水","其他","消防","地  库 通 风 安 装 工 程"};
+	/*空字符串过滤方法*/
 	private static final SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	//private static final 
 	public static SimpleDateFormat getSdf() {

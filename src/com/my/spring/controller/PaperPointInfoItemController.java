@@ -1,6 +1,7 @@
 package com.my.spring.controller;
 
 import com.my.spring.model.PaperPointInfoItem;
+import com.my.spring.model.PaperPointInfoItemPojo;
 import com.my.spring.service.PaperPointInfoItemService;
 import com.my.spring.utils.DataWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,18 @@ public class PaperPointInfoItemController {
         return paperPointInfoItemService.deletePaperPointInfoItem(id,token);
     }
 
-    @RequestMapping(value="/getPaperPointInfoItemListByPointId",method = RequestMethod.GET)
+  /*  @RequestMapping(value="/getPaperPointInfoItemListByPointId",method = RequestMethod.GET)
     @ResponseBody
     public DataWrapper<List<PaperPointInfoItem>> getPaperPointInfoItemByProjectId(
     		@RequestParam(value = "pointId",required = true) Long pointId,
     		@RequestParam(value = "token",required = true) String token){
         return paperPointInfoItemService.getPaperPointInfoItemByPointId(pointId,token);
+    }*/
+    @RequestMapping(value="/getPaperPointInfoItemListByPointId",method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<PaperPointInfoItemPojo>> getPaperPointInfoItemListByPointId(
+    		@RequestParam(value = "pointId",required = true) Long pointId,
+    		@RequestParam(value = "token",required = true) String token){
+        return paperPointInfoItemService.getPaperPointInfoItemListsByPointId(pointId,token);
     }
 }

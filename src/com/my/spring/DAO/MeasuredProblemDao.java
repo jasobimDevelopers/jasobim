@@ -13,7 +13,7 @@ public interface MeasuredProblemDao {
     boolean updateMeasuredProblem(MeasuredProblem building);
 	DataWrapper<List<MeasuredProblem>> getMeasuredProblemByProjectId(Long projectId);
 	MeasuredProblem getById(Long measuredId);
-	DataWrapper<List<MeasuredProblem>> getMeasuredProblemByProjectId(Long id,Long projectId, User userInMemory,Integer status,List<Long> bfmIds,List<Long> checkTypeIds);
+	List<MeasuredProblem> getMeasuredProblemByProjectId(Long id,Long projectId, User userInMemory,Integer status,List<Long> bfmIds,List<Long> checkTypeIds,Long siteId);
 	boolean addMeasuredProblemList(List<MeasuredProblem> mpList);
 	List<MeasuredProblem> getMeasuredProblemByIds(List<MeasuredProblemEditPojo> gets);
 	boolean updateMeasuredProblemList(List<MeasuredProblem> getList);

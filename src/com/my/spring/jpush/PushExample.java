@@ -46,8 +46,8 @@ public class PushExample {
     protected static final Logger LOG = LoggerFactory.getLogger(PushExample.class);
 
     // demo App defined in resources/jpush-api.conf 
-    protected static final String APP_KEY ="aa0c699b7a99f8f4426ceaec";
-    protected static final String MASTER_SECRET = "25a243c6fcd8dfb8fe377fde";
+    protected static final String APP_KEY ="944541bdc12092312cb99b0d";
+    protected static final String MASTER_SECRET = "8e0333a55176c8a02ecaf8b0";
     protected static final String GROUP_PUSH_KEY = "2c88a01e073a0fe4fc7b167c";
     protected static final String GROUP_MASTER_SECRET = "b11314807507e2bcfdeebe2e";
 	

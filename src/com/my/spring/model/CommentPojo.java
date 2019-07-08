@@ -6,10 +6,12 @@ public class CommentPojo {
 	private Long id;
 	private String commentUserName;
 	private String commentUserIcon;
+	private Long createUserId;
 	private String createDate;
 	private String commentContent;
 	private List<String> pictures;
 	private List<String> voices;
+	private Integer type;
 	
 	public Long getId() {
 		return id;
@@ -53,6 +55,18 @@ public class CommentPojo {
 	}
 	public void setCommentUserIcon(String commentUserIcon) {
 		this.commentUserIcon = commentUserIcon;
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	public Long getCreateUserId() {
+		return createUserId;
+	}
+	public void setCreateUserId(Long createUserId) {
+		this.createUserId = createUserId;
 	}
 	
 	

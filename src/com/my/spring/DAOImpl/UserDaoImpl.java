@@ -609,5 +609,18 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         }
 	    return ret;
 	}
+	@Override
+	public List<User> getUserIconListByIds(List<Long> userIds) {
+		List<User> ret = new ArrayList<User>();;
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.in("id",userIds));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		return ret;
+	}
 
 }

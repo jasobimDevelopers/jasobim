@@ -16,7 +16,7 @@ public class MeasuredProblem {
 	private String detail;//问题描述
 	private String rectifyUser;//整改人
 	private Date finishedDate;//限定完成时间
-	private Integer status;//0、待指派 1、进行中 2、待验收
+	private Integer status;//0、待指派 1、进行中 2、待验收 3、已完成
 	private Integer process;//进度百分比
 	private String files;
 	private String voices;

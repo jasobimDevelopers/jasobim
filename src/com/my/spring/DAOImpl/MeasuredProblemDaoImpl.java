@@ -63,14 +63,16 @@ public class MeasuredProblemDaoImpl extends BaseDao<MeasuredProblem> implements 
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<List<MeasuredProblem>> getMeasuredProblemByProjectId(Long id,Long projectId,User user,Integer status,List<Long> bfmIds,List<Long> checkTypeIds) {
-		DataWrapper<List<MeasuredProblem>> dataWrapper=new DataWrapper<List<MeasuredProblem>>();
+	public List<MeasuredProblem> getMeasuredProblemByProjectId(Long id,Long projectId,User user,Integer status,List<Long> bfmIds,List<Long> checkTypeIds,Long siteId) {
 		List<MeasuredProblem> ret = new ArrayList<MeasuredProblem>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(MeasuredProblem.class);
         criteria.add(Restrictions.eq("projectId",projectId));
         if(status!=null){
         	 criteria.add(Restrictions.eq("status",status));
+        }
+        if(siteId!=null){
+        	criteria.add(Restrictions.eq("siteId",siteId));
         }
         if(id!=null){
         	criteria.add(Restrictions.eq("id", id));
@@ -101,12 +103,7 @@ public class MeasuredProblemDaoImpl extends BaseDao<MeasuredProblem> implements 
         }catch (Exception e){
             e.printStackTrace();
         }
-        if (ret != null) {
-        	dataWrapper.setData(ret);
-		}else{
-			dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
-		}
-		return dataWrapper;
+		return ret;
 	}
 
 	@Override

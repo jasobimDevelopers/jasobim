@@ -389,6 +389,7 @@ public class PaperPointInfoServiceImpl implements PaperPointInfoService,Runnable
         	List<PointInfoPojo> getlist = new ArrayList<PointInfoPojo>();
         	if(!resultList.isEmpty()){
         		Long paperFileId=resultList.get(0).getPaperOfMeasuredId();
+        		resultPojo.setPaperOfMeasuredId(paperFileId);
         		PaperOfMeasured mop = pmDao.getById(paperFileId);
         		if(mop.getFileId()!=null){
         			Files files = fileservice.getById(mop.getFileId());
