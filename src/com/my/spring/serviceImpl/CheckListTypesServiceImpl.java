@@ -2,7 +2,6 @@ package com.my.spring.serviceImpl;
 
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.my.spring.DAO.CheckListTypesDao;
@@ -76,7 +75,7 @@ public class CheckListTypesServiceImpl implements CheckListTypesService {
 
 	@Override
 	public DataWrapper<List<CheckListTypes>> getCheckListTypesList(Integer pageIndex, Integer pageSize,
-			CheckListTypes CheckLists, String token) {
+		CheckListTypes CheckLists, String token) {
 		// TODO Auto-generated method stub
 		DataWrapper<List<CheckListTypes>> result = new DataWrapper<List<CheckListTypes>>();
 		User user = SessionManager.getSession(token);

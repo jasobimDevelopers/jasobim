@@ -142,15 +142,20 @@ public class PaperPointInfoItemServiceImpl implements PaperPointInfoItemService 
         		for(int i=0;i<gets.size();i++){
         			PaperPointInfoItemPojo pojo = new PaperPointInfoItemPojo();
         			pojo.setPointItemId(gets.get(i).getId());
+        			pojo.setFlag(gets.get(i).getFlag());
         			CheckListTypes ct = ctDao.getById(gets.get(i).getCheckTypeId());
         			pojo.setTitle("实测实量-设备安装-"+ct.getCheckName());
         			pojo.setContent(ct.getCheckName());
+        			pojo.setErrorLowerLimit(gets.get(i).getErrorLowerLimit());
+        			pojo.setErrorUpperLimit(gets.get(i).getErrorUpperLimit());
+        			pojo.setStandardNum(gets.get(i).getStandardNum());
         			List<InputLog> logs = new ArrayList<InputLog>();
         			for(int j=0;j<gets2.size();j++){
         				if(gets.get(i).getCheckTypeId().equals(gets2.get(j).getCheckTypeId())){
         					InputLog log = new InputLog();
         					log.setCreateDate(Parameters.getSdf().format(gets2.get(j).getCreateDate()));
         					log.setLogId(gets2.get(j).getId());
+        					log.setCheckTypeId(gets.get(i).getCheckTypeId());
         					log.setInputData(gets2.get(j).getInputData());
         					log.setUserName(userDao.getById(gets2.get(j).getCreateUser()).getRealName());
         					log.setState(gets2.get(j).getStatus());
@@ -162,6 +167,20 @@ public class PaperPointInfoItemServiceImpl implements PaperPointInfoItemService 
         		}
         	}
         	dataWrapper.setData(results);
+		}else{
+			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
+		}
+		return dataWrapper;
+	}
+
+	@Override
+	public DataWrapper<List<PaperPointInfoItem>> getPaperPointInfoItemModelListByPointId(Long pointId, String token) {
+		DataWrapper<List<PaperPointInfoItem>> dataWrapper = new DataWrapper<List<PaperPointInfoItem>>();
+        User userInMemory = SessionManager.getSession(token);
+        if (userInMemory != null) {
+        	List<PaperPointInfoItem> gets = new ArrayList<PaperPointInfoItem>();
+        	gets=pDao.getPaperPointInfoItemByPointId(pointId);
+        	dataWrapper.setData(gets);
 		}else{
 			dataWrapper.setErrorCode(ErrorCodeEnum.User_Not_Logined);
 		}

@@ -546,12 +546,14 @@ public class MeasuredProblemServiceImpl implements MeasuredProblemService,Runnab
 					for(int i=0;i<getList.size();i++){
 						try {
 							if(gets.get(i).getFinishedDate()!=null){
-								getList.get(i).setFinishedDate(Parameters.getSdfday().parse(gets.get(i).getFinishedDate()));
+								getList.get(i).setFinishedDate(Parameters.getSdfs().parse(gets.get(i).getFinishedDate()));
 							}
 							if(gets.get(i).getRectifyUserId()!=null){
 								getList.get(i).setRectifyUser(gets.get(i).getRectifyUserId());
 							}
-							if(gets.get(i).getFinishedDate()!=null && gets.get(i).getRectifyUserId()!=null){
+							if(gets.get(i).getFinishedDate()!=null && getList.get(i).getRectifyUser()!=null){
+								getList.get(i).setStatus(1);
+							}else if(gets.get(i).getRectifyUserId()!=null && getList.get(i).getFinishedDate()!=null){
 								getList.get(i).setStatus(1);
 							}
 						} catch (ParseException e) {

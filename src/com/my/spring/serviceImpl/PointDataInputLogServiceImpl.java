@@ -68,7 +68,7 @@ public class PointDataInputLogServiceImpl implements PointDataInputLogService {
 							///当发现不正常数据是设置爆点
 							if(addList.get(j).getStatus()==1){
 								MeasuredProblem mp = new MeasuredProblem();
-								mp.setCheckSite(addList.get(j).getSiteInfo());
+								mp.setCheckSite(addList.get(j).getFlag());
 								mp.setStatus(0);
 								mp.setBfmId(addList.get(j).getBfmId());
 								mp.setSiteId(addList.get(j).getMeasuredSiteId());

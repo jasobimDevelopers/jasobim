@@ -44,4 +44,11 @@ public class PaperPointInfoItemController {
     		@RequestParam(value = "token",required = true) String token){
         return paperPointInfoItemService.getPaperPointInfoItemListsByPointId(pointId,token);
     }
+    @RequestMapping(value="/getPaperPointInfoItemModelListByPointId",method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<PaperPointInfoItem>> getPaperPointInfoItemModelListByPointId(
+    		@RequestParam(value = "pointId",required = true) Long pointId,
+    		@RequestParam(value = "token",required = true) String token){
+        return paperPointInfoItemService.getPaperPointInfoItemModelListByPointId(pointId,token);
+    }
 }

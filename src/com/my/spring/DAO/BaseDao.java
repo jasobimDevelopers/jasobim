@@ -225,12 +225,17 @@ public class BaseDao<T> extends Thread{
     public boolean updateList(List<T> entity) {
         Session session = getSession();
         try{
-            session.beginTransaction();
-            session.clear();
-            session.update(entity);
-            session.getTransaction().commit();
-            session.flush();
-            session.clear();
+        	Transaction tx=session.beginTransaction();
+        	 for(int i=0;i<entity.size();i++){
+             	session.update(entity.get(i));
+              	if(i%10==0){
+              		session.flush();
+              		session.clear();
+              	}
+             }
+        	 tx.commit();
+             session.flush();
+             session.clear();
         }catch(Exception e){
             e.printStackTrace();
             session.getTransaction().rollback();

@@ -6,6 +6,8 @@ public class InputLog {
 	private String userName;
 	private String createDate;
 	private Integer state;//0、正常 1、异常
+	private Long checkTypeId;//检查项id
+	
 	public Long getLogId() {
 		return logId;
 	}
@@ -35,6 +37,12 @@ public class InputLog {
 	}
 	public void setState(Integer state) {
 		this.state = state;
+	}
+	public Long getCheckTypeId() {
+		return checkTypeId;
+	}
+	public void setCheckTypeId(Long checkTypeId) {
+		this.checkTypeId = checkTypeId;
 	}
 	
 }

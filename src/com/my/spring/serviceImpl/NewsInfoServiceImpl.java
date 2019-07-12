@@ -119,6 +119,9 @@ public class NewsInfoServiceImpl implements NewsInfoService {
 									NewsInfoPojo.setCreateUserName(user.getRealName());
 								}
 							}
+							NewsInfoPojo.setReadNum(headList.get(j).getReadNum());
+							NewsInfoPojo.setReadState(headList.get(j).getReadState());
+							NewsInfoPojo.setReadStatus(headList.get(j).getReadStatus());
 							NewsInfoPojo.setCreateDate(Parameters.getSdf().format(headList.get(j).getCreateDate()));
 							NewsInfoPojo.setId(headList.get(j).getId());
 							NewsInfoPojo.setRemark(headList.get(j).getRemark());
@@ -150,6 +153,9 @@ public class NewsInfoServiceImpl implements NewsInfoService {
 								NewsInfoPojo.setCreateUserName(user.getRealName());
 							}
 						}
+						NewsInfoPojo.setReadNum(dataWrapper.getData().get(i).getReadNum());
+						NewsInfoPojo.setReadState(dataWrapper.getData().get(i).getReadState());
+						NewsInfoPojo.setReadStatus(dataWrapper.getData().get(i).getReadStatus());
 						NewsInfoPojo.setCreateDate(Parameters.getSdf().format(dataWrapper.getData().get(i).getCreateDate()));
 						NewsInfoPojo.setId(dataWrapper.getData().get(i).getId());
 						NewsInfoPojo.setRemark(dataWrapper.getData().get(i).getRemark());

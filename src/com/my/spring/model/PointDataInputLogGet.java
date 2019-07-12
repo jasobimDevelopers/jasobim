@@ -6,7 +6,7 @@ public class PointDataInputLogGet {//测量点位数据录入表
 	private Long projectId;//项目id
 	private Long measuredSiteId;//具体区域id
 	private Long bfmId;//楼栋id
-	private Integer stag;//序号
+	private Integer tag;//序号
 	private String siteInfo;//区域名称（1#-101）
 	private String flag;//唯一性标签（楼栋名称+房间号+测点序列号）
 	private Long pointId;//测点id
@@ -79,11 +79,11 @@ public class PointDataInputLogGet {//测量点位数据录入表
 	public void setState(Integer state) {
 		this.state = state;
 	}
-	public Integer getStag() {
-		return stag;
+	public Integer getTag() {
+		return tag;
 	}
-	public void setStag(Integer stag) {
-		this.stag = stag;
+	public void setTag(Integer tag) {
+		this.tag = tag;
 	}
 	public String getSiteInfo() {
 		return siteInfo;

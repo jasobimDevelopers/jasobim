@@ -10,4 +10,5 @@ public interface PaperPointInfoItemService {
     DataWrapper<Void> updatePaperPointInfoItem(PaperPointInfoItem paperPointInfoItem,String token);
 	DataWrapper<List<PaperPointInfoItem>> getPaperPointInfoItemByPointId(Long pointId,String token);
 	DataWrapper<List<PaperPointInfoItemPojo>> getPaperPointInfoItemListsByPointId(Long pointId, String token);
+	DataWrapper<List<PaperPointInfoItem>> getPaperPointInfoItemModelListByPointId(Long pointId, String token);
 }
