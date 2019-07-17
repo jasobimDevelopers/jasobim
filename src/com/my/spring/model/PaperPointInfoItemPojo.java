@@ -7,6 +7,7 @@ public class PaperPointInfoItemPojo {
 	private String flag;//唯一性标签（楼栋名称+房间号+测点序列号）
 	private String title;
 	private String content;
+	private Long checkTypeId;//检查项id
 	private List<InputLog> logList;
 	private Integer errorUpperLimit;//误差上限
 	private Integer errorLowerLimit;//误差下限
@@ -60,6 +61,12 @@ public class PaperPointInfoItemPojo {
 	}
 	public void setLogList(List<InputLog> logList) {
 		this.logList = logList;
+	}
+	public Long getCheckTypeId() {
+		return checkTypeId;
+	}
+	public void setCheckTypeId(Long checkTypeId) {
+		this.checkTypeId = checkTypeId;
 	}
 	
 }

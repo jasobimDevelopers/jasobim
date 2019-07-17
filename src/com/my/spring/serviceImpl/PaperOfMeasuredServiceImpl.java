@@ -33,7 +33,7 @@ public class PaperOfMeasuredServiceImpl implements PaperOfMeasuredService {
     FileService filesService;
     @Autowired
     UserDao userDao;
-    private static String filePath="/paperOfMeasuredFiles";
+    private static String filePath="paperOfMeasuredFiles";
     @Override
     public DataWrapper<Void> addPaperOfMeasured(PaperOfMeasured building,String token,MultipartFile file, HttpServletRequest request) {
         DataWrapper<Void> dataWrapper = new DataWrapper<Void>();

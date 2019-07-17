@@ -149,13 +149,13 @@ public class PaperPointInfoItemServiceImpl implements PaperPointInfoItemService 
         			pojo.setErrorLowerLimit(gets.get(i).getErrorLowerLimit());
         			pojo.setErrorUpperLimit(gets.get(i).getErrorUpperLimit());
         			pojo.setStandardNum(gets.get(i).getStandardNum());
+        			pojo.setCheckTypeId(gets.get(i).getCheckTypeId());
         			List<InputLog> logs = new ArrayList<InputLog>();
         			for(int j=0;j<gets2.size();j++){
         				if(gets.get(i).getCheckTypeId().equals(gets2.get(j).getCheckTypeId())){
         					InputLog log = new InputLog();
         					log.setCreateDate(Parameters.getSdf().format(gets2.get(j).getCreateDate()));
         					log.setLogId(gets2.get(j).getId());
-        					log.setCheckTypeId(gets.get(i).getCheckTypeId());
         					log.setInputData(gets2.get(j).getInputData());
         					log.setUserName(userDao.getById(gets2.get(j).getCreateUser()).getRealName());
         					log.setState(gets2.get(j).getStatus());

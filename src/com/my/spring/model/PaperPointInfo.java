@@ -10,11 +10,10 @@ public class PaperPointInfo {///测量点位具体信息表
 	private Long paperOfMeasuredId;//户型名称
 	private Integer abscissa;//横坐标
 	private Integer ordinate;//纵坐标
-	private Double proportion;//比例
-	private Double paperLength;//图纸长度
-	private Double paperWidth;//图纸宽度
 	private Date createDate;
 	private Long createUser;
+	private Integer pointType;//0、在图纸内设置的（默认） 1、房间设置的 
+	private Long measuredSiteId;//房间id  （默认null,当pointType=1时传值，移动端在房间里设置描点施填值）
 	private Integer tag;//序列号
 	private Integer status;//0、正常  1、爆点（当传过来的数据中有一个不正常时）
 	
@@ -52,30 +51,6 @@ public class PaperPointInfo {///测量点位具体信息表
 		this.ordinate = ordinate;
 	}
 	@Basic
-	@Column(name="proportion")
-	public Double getProportion() {
-		return proportion;
-	}
-	public void setProportion(Double proportion) {
-		this.proportion = proportion;
-	}
-	@Basic
-	@Column(name="paper_length")
-	public Double getPaperLength() {
-		return paperLength;
-	}
-	public void setPaperLength(Double paperLength) {
-		this.paperLength = paperLength;
-	}
-	@Basic
-	@Column(name="paper_width")
-	public Double getPaperWidth() {
-		return paperWidth;
-	}
-	public void setPaperWidth(Double paperWidth) {
-		this.paperWidth = paperWidth;
-	}
-	@Basic
 	@Column(name="create_date")
 	public Date getCreateDate() {
 		return createDate;
@@ -107,11 +82,31 @@ public class PaperPointInfo {///测量点位具体信息表
 	public void setTag(Integer tag) {
 		this.tag = tag;
 	}
+	@Basic
+	@Column(name="status")
 	public Integer getStatus() {
 		return status;
 	}
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	
+	@Basic
+	@Column(name="point_type")
+	public Integer getPointType() {
+		return pointType;
+	}
+	public void setPointType(Integer pointType) {
+		this.pointType = pointType;
+	}
+	
+	@Basic
+	@Column(name="measured_site_id")
+	public Long getMeasuredSiteId() {
+		return measuredSiteId;
+	}
+	public void setMeasuredSiteId(Long measuredSiteId) {
+		this.measuredSiteId = measuredSiteId;
 	}
 	
 }

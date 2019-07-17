@@ -11,7 +11,7 @@ public interface PaperPointInfoDao {
     boolean deletePaperPointInfo(Long id);
     boolean updatePaperPointInfo(PaperPointInfo building);
     DataWrapper<List<PaperPointInfo>> getPaperPointInfoList();
-	DataWrapper<PaperPointInfo> getPaperPointInfoByProjectId(Long projectId);
+	List<PaperPointInfo> getPaperPointInfoByProjectId(Long projectId,Long paperId);
 	boolean deletePaperPointInfoByProjectId(Long id);
 	DataWrapper<List<PaperPointNumsLog>> getCountPointNumsList(PaperPointNumsLog countLog,Long userId);
 	PaperPointNumsLog findCountPointNumsList(PaperPointNumsLog countLog);
@@ -22,4 +22,5 @@ public interface PaperPointInfoDao {
 	List<BuildingPointNums> getCountPointNumsListGroupBySite(Long bfmId, String checkTypes, Long projectId);
 	List<PaperPointInfo> getPaperPointInfoBySiteId(Long siteId, String checkTypes, Long projectId);
 	boolean addPaperPointInfoList(List<PaperPointInfo> ppi);
+	DataWrapper<List<PaperPointNumsLog>> getCountPointNumsListByConditions(Long projectId, Long id);
 }

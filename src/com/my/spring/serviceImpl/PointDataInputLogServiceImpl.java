@@ -6,6 +6,7 @@ import com.my.spring.DAO.PointDataInputLogDao;
 import com.my.spring.DAO.UserDao;
 import com.my.spring.enums.ErrorCodeEnum;
 import com.my.spring.model.MeasuredProblem;
+import com.my.spring.model.PaperPointInfo;
 import com.my.spring.model.PointDataInputItem;
 import com.my.spring.model.PointDataInputLog;
 import com.my.spring.model.PointDataInputLogGet;
@@ -25,6 +26,8 @@ public class PointDataInputLogServiceImpl implements PointDataInputLogService {
     @Autowired
     PointDataInputLogDao pointDataInputLogDao;
     @Autowired
+    PaperPointInfoDao pointDao;
+    @Autowired
     MeasuredProblemService measuredProblemService;
     @Autowired
     PaperPointInfoDao ppiDao;
@@ -38,30 +41,70 @@ public class PointDataInputLogServiceImpl implements PointDataInputLogService {
 				if(jsonString!=null){
 					List<PointDataInputLogGet> pd=JSONObject.parseArray(jsonString, PointDataInputLogGet.class);
 					List<PointDataInputLog> addList = new ArrayList<PointDataInputLog>();
+					List<PaperPointInfo> pointList = new ArrayList<PaperPointInfo>();
+					List<PointDataInputLogGet> pdNew = new ArrayList<PointDataInputLogGet>();
 					for(int i=0;i<pd.size();i++){
-						if(!pd.get(i).getInputItemList().isEmpty()){
-							for(PointDataInputItem item:pd.get(i).getInputItemList()){
-								PointDataInputLog pdg = new PointDataInputLog();
-								pdg.setBfmId(pd.get(i).getBfmId());
-								pdg.setSiteInfo(pd.get(i).getSiteInfo());
-								pdg.setCreateUser(userInMemory.getId());
-								pdg.setFlag(pd.get(i).getFlag());
-								pdg.setMeasuredSiteId(pd.get(i).getMeasuredSiteId());
-								pdg.setPointId(pd.get(i).getPointId());
-								pdg.setProjectId(pd.get(i).getProjectId());
-								pdg.setCheckTypeId(item.getCheckTypeId());
-								pdg.setInputData(item.getInputData());
-								pdg.setStatus(item.getState());
-								if(item.getState()==1){
-									pd.get(i).setState(1);
+						if(pd.get(i).getPointId()==null){
+							pdNew.add(pd.get(i));
+							PaperPointInfo ppi = new PaperPointInfo();
+							ppi.setAbscissa(pd.get(i).getAbscissa());
+							ppi.setOrdinate(pd.get(i).getOrdinate());
+							ppi.setCreateUser(userInMemory.getId());
+							ppi.setPointType(1);
+							ppi.setMeasuredSiteId(pd.get(i).getMeasuredSiteId());
+							ppi.setPaperOfMeasuredId(pd.get(i).getPaperOfMeasuredId());
+							ppi.setProjectId(pd.get(i).getProjectId());
+							ppi.setStatus(0);
+							ppi.setTag(pd.get(i).getTag());
+							pointList.add(ppi);
+						}else{
+							if(!pd.get(i).getInputItemList().isEmpty()){
+								for(PointDataInputItem item:pd.get(i).getInputItemList()){
+									PointDataInputLog pdg = new PointDataInputLog();
+									pdg.setBfmId(pd.get(i).getBfmId());
+									pdg.setSiteInfo(pd.get(i).getSiteInfo());
+									pdg.setCreateUser(userInMemory.getId());
+									pdg.setFlag(pd.get(i).getFlag());
+									pdg.setMeasuredSiteId(pd.get(i).getMeasuredSiteId());
+									pdg.setPointId(pd.get(i).getPointId());
+									pdg.setProjectId(pd.get(i).getProjectId());
+									pdg.setCheckTypeId(item.getCheckTypeId());
+									pdg.setInputData(item.getInputData());
+									pdg.setStatus(item.getState());
+									if(item.getState()==1){
+										pd.get(i).setState(1);
+									}
+									addList.add(pdg);
 								}
-								addList.add(pdg);
+							}
+						}
+					}
+					if(!pointList.isEmpty()){
+						if(pointDao.addPaperPointInfoList(pointList)){
+							for(int i=0;i<pdNew.size();i++){
+								if(!pdNew.get(i).getInputItemList().isEmpty()){
+									for(PointDataInputItem item:pdNew.get(i).getInputItemList()){
+										PointDataInputLog pdg = new PointDataInputLog();
+										pdg.setBfmId(pdNew.get(i).getBfmId());
+										pdg.setSiteInfo(pdNew.get(i).getSiteInfo());
+										pdg.setCreateUser(userInMemory.getId());
+										pdg.setFlag(pdNew.get(i).getFlag());
+										pdg.setMeasuredSiteId(pdNew.get(i).getMeasuredSiteId());
+										pdg.setPointId(pointList.get(i).getPointId());
+										pdg.setProjectId(pdNew.get(i).getProjectId());
+										pdg.setCheckTypeId(item.getCheckTypeId());
+										pdg.setInputData(item.getInputData());
+										pdg.setStatus(item.getState());
+										addList.add(pdg);
+									}
+								}
 							}
 						}
 					}
 					if(!pointDataInputLogDao.addPointDataInputLogList(addList)) 
-					{ dataWrapper.setErrorCode(ErrorCodeEnum.Error);}
-					else{
+					{ 
+						dataWrapper.setErrorCode(ErrorCodeEnum.Error);
+					}else{
 						////新增点位测量记录时，发现有问题点位的同时生成爆点
 						List<MeasuredProblem> mpList = new ArrayList<MeasuredProblem>();
 						for(int j=0;j<addList.size();j++){

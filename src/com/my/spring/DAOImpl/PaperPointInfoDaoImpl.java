@@ -57,23 +57,20 @@ public class PaperPointInfoDaoImpl extends BaseDao<PaperPointInfo> implements Pa
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DataWrapper<PaperPointInfo> getPaperPointInfoByProjectId(Long projectId) {
-		DataWrapper<PaperPointInfo> dataWrapper=new DataWrapper<PaperPointInfo>();
+	public List<PaperPointInfo> getPaperPointInfoByProjectId(Long projectId,Long paperId) {
 		List<PaperPointInfo> ret = new ArrayList<PaperPointInfo>();
         Session session = getSession();
         Criteria criteria = session.createCriteria(PaperPointInfo.class);
         criteria.add(Restrictions.eq("projectId",projectId));
+        criteria.addOrder(Order.asc("tag"));
+        criteria.add(Restrictions.eq("pointType", 0));
+        criteria.add(Restrictions.eq("paperOfMeasuredId", paperId));
         try {
             ret = criteria.list();
         }catch (Exception e){
             e.printStackTrace();
         }
-        if (ret != null && ret.size() > 0) {
-        	dataWrapper.setData(ret.get(0));
-		}else{
-			dataWrapper.setErrorCode(ErrorCodeEnum.Target_Not_Existed);
-		}
-		return dataWrapper;
+		return ret;
 	}
 
 	@Override
@@ -291,18 +288,15 @@ public class PaperPointInfoDaoImpl extends BaseDao<PaperPointInfo> implements Pa
 	public List<PaperPointInfo> getPaperPointInfoBySiteId(Long siteId, String checkTypes, Long projectId) {
 		Session session = getSession();
 		String sql = "select point_id as pointId,project_id as projectId,paper_of_measured_id as paperOfMeasuredId,"
-				+"abscissa,ordinate,proportion,paper_length as paperLength,paper_width as paperWidth,create_date as createDate,"
+				+"abscissa,ordinate,create_date as createDate,"
 				+"create_user as createUser,tag,status as status"
-				+" from paper_point_info where paper_of_measured_id in(select paper_of_measured_id from measured_site where site_id="+siteId+" and project_id="+projectId+")";
+				+" from paper_point_info where paper_of_measured_id in(select paper_of_measured_id from measured_site where site_id="+siteId+" and project_id="+projectId+") ORDER BY tag ASC ";
 		Query query = session.createSQLQuery(sql)
 				 .addScalar("pointId", StandardBasicTypes.LONG)
 				 .addScalar("projectId", StandardBasicTypes.LONG)
 				 .addScalar("paperOfMeasuredId", StandardBasicTypes.LONG)
 				 .addScalar("abscissa", StandardBasicTypes.INTEGER)
 				 .addScalar("ordinate", StandardBasicTypes.INTEGER)
-				 .addScalar("proportion", StandardBasicTypes.DOUBLE)
-				 .addScalar("paperLength", StandardBasicTypes.DOUBLE)
-				 .addScalar("paperWidth", StandardBasicTypes.DOUBLE)
 				 .addScalar("createUser", StandardBasicTypes.LONG)
 				 .addScalar("createDate", StandardBasicTypes.TIMESTAMP)
 				 .addScalar("tag", StandardBasicTypes.INTEGER)
@@ -315,6 +309,24 @@ public class PaperPointInfoDaoImpl extends BaseDao<PaperPointInfo> implements Pa
 	public boolean addPaperPointInfoList(List<PaperPointInfo> ppi) {
 		// TODO Auto-generated method stub
 		return saveList(ppi);
+	}
+
+	@Override
+	public DataWrapper<List<PaperPointNumsLog>> getCountPointNumsListByConditions(Long projectId, Long userId) {
+		DataWrapper<List<PaperPointNumsLog>> dataWrapper=new DataWrapper<List<PaperPointNumsLog>>();
+		List<PaperPointNumsLog> ret = new ArrayList<PaperPointNumsLog>();
+        Session session = getSession();
+        Criteria criteria = session.createCriteria(PaperPointNumsLog.class);
+        criteria.add(Restrictions.eq("projectId",projectId));
+        criteria.add(Restrictions.eq("userId",userId));
+        criteria.addOrder(Order.desc("createDate"));
+        try {
+            ret = criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        dataWrapper.setData(ret);
+		return dataWrapper;
 	}
 
 }

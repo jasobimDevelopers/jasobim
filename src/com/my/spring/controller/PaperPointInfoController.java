@@ -1,5 +1,6 @@
 package com.my.spring.controller;
 
+import com.my.spring.model.MeasuredInfoPojo;
 import com.my.spring.model.PaperPointInfo;
 import com.my.spring.model.PaperPointInfoPojo;
 import com.my.spring.model.PaperPointNumsLog;
@@ -38,12 +39,15 @@ public class PaperPointInfoController {
     public DataWrapper<List<PaperPointInfo>> getPaperPointInfoList(){
         return infoService.getPaperPointInfoList();
     }
+    
+    /*网页端获取测点列表*/
     @RequestMapping(value="/getPaperPointInfoByProjectId",method=RequestMethod.GET)
     @ResponseBody
-    public DataWrapper<PaperPointInfo> getPaperPointInfoByProjectId(
+    public DataWrapper<List<PaperPointInfo>> getPaperPointInfoByProjectId(
     		@RequestParam(value = "projectId",required = true) Long projectId,
+    		@RequestParam(value = "measuredPaperId",required = true) Long measuredPaperId,
     		@RequestParam(value = "token",required = true) String token){
-        return infoService.getPaperPointInfoByProjectId(projectId,token);
+        return infoService.getPaperPointInfoByProjectId(projectId,measuredPaperId,token);
     }
     /*点位统计接口*/
     /*
@@ -98,5 +102,18 @@ public class PaperPointInfoController {
     		@RequestParam(value = "token",required = true) String token)
     {
     	return infoService.getPaperPointInfoList(token,countLog,siteId);
+    }
+    
+    /**
+     * 实测实量返回数据实体整合
+     * 
+     ***/
+    @RequestMapping(value="/getMeasuredInfoList",method = RequestMethod.GET)
+    @ResponseBody
+    public DataWrapper<List<MeasuredInfoPojo>> getMeasuredInfoList(
+    		@RequestParam(value = "projectId",required = true) Long projectId,
+    		@RequestParam(value = "token",required = true) String token)
+    {
+    	return infoService.getMeasuredInfoList(token,projectId);
     }
 }
