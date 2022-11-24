@@ -698,7 +698,7 @@
 		<spring-data-jpa.version>1.7.0.RELEASE</spring-data-jpa.version>
 		<springspring-security-web.version>3.2.5.RELEASE</springspring-security-web.version>
 		<spring-security-jwt.version>1.0.2.RELEASE</spring-security-jwt.version>
-		<hibernate.version>4.3.6.Final</hibernate.version>
+		<hibernate.version>5.3.20.Final</hibernate.version>
 		<hibernate-entitymanager.version>4.3.6.Final</hibernate-entitymanager.version>
 		<hibernate-commons-annotations.version>3.2.0.Final</hibernate-commons-annotations.version>
 		<hibernate-annotations.version>3.5.6-Final</hibernate-annotations.version>
