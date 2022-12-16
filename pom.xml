@@ -694,7 +694,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- 主要依赖库的版本定义 -->
-		<spring.version>4.3.4.RELEASE</spring.version>
+		<spring.version>5.2.20.RELEASE</spring.version>
 		<spring-data-jpa.version>1.7.0.RELEASE</spring-data-jpa.version>
 		<springspring-security-web.version>3.2.5.RELEASE</springspring-security-web.version>
 		<spring-security-jwt.version>1.0.2.RELEASE</spring-security-jwt.version>
